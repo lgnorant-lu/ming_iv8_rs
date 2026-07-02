@@ -73,7 +73,7 @@ pub fn create_media_capabilities_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_device_info_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_device_info_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -119,7 +119,7 @@ unsafe extern "C" fn media_device_info_get_1(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn media_device_info_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_device_info_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -165,7 +165,7 @@ unsafe extern "C" fn media_device_info_get_2(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn media_device_info_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_device_info_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -211,7 +211,7 @@ unsafe extern "C" fn media_device_info_get_3(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn media_device_info_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_device_info_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -357,7 +357,7 @@ pub fn create_media_device_info_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_error_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_error_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -403,7 +403,7 @@ unsafe extern "C" fn media_error_get_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn media_error_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_error_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -512,7 +512,7 @@ pub fn create_media_error_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_key_status_map_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_key_status_map_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -704,7 +704,7 @@ pub fn create_media_key_status_map_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_key_system_access_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_key_system_access_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -959,7 +959,7 @@ pub fn create_media_keys_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_metadata_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_metadata_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1005,7 +1005,7 @@ unsafe extern "C" fn media_metadata_get_1(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_metadata_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_metadata_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1049,97 +1049,7 @@ unsafe extern "C" fn media_metadata_set_1(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_metadata_get_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "MediaMetadata").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(crate::type_conv::v8_str(scope, ""));
-    }));
-}
-
-unsafe extern "C" fn media_metadata_set_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "MediaMetadata").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }));
-}
-
-unsafe extern "C" fn media_metadata_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_metadata_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1185,7 +1095,7 @@ unsafe extern "C" fn media_metadata_get_3(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_metadata_set_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_metadata_set_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1229,7 +1139,97 @@ unsafe extern "C" fn media_metadata_set_3(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_metadata_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_metadata_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "MediaMetadata").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+pub(crate) unsafe extern "C" fn media_metadata_set_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "MediaMetadata").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
+pub(crate) unsafe extern "C" fn media_metadata_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1275,7 +1275,7 @@ unsafe extern "C" fn media_metadata_get_4(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_metadata_set_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_metadata_set_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1319,7 +1319,7 @@ unsafe extern "C" fn media_metadata_set_4(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_metadata_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_metadata_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1427,7 +1427,7 @@ pub fn create_media_metadata_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_session_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_session_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1473,7 +1473,7 @@ unsafe extern "C" fn media_session_get_1(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn media_session_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_session_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1517,7 +1517,7 @@ unsafe extern "C" fn media_session_set_1(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn media_session_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_session_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1563,7 +1563,7 @@ unsafe extern "C" fn media_session_get_2(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn media_session_set_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_session_set_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1867,7 +1867,7 @@ pub fn create_media_stream_track_handle_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_stream_track_processor_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_processor_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1913,7 +1913,7 @@ unsafe extern "C" fn media_stream_track_processor_get_1(_info: *const v8::Functi
     }));
 }
 
-unsafe extern "C" fn media_stream_track_processor_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_processor_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1959,7 +1959,7 @@ unsafe extern "C" fn media_stream_track_processor_get_2(_info: *const v8::Functi
     }));
 }
 
-unsafe extern "C" fn media_stream_track_processor_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_processor_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2136,7 +2136,7 @@ pub fn create_permissions_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_devices_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_devices_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2182,7 +2182,7 @@ unsafe extern "C" fn media_devices_get_1(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn media_devices_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_devices_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2345,7 +2345,7 @@ unsafe extern "C" fn media_devices_op_5(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_devices_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_devices_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2391,7 +2391,7 @@ unsafe extern "C" fn media_devices_get_6(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn media_devices_set_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_devices_set_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2607,7 +2607,7 @@ pub fn create_media_devices_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_key_session_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_key_session_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2653,7 +2653,7 @@ unsafe extern "C" fn media_key_session_get_1(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn media_key_session_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_key_session_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2699,7 +2699,7 @@ unsafe extern "C" fn media_key_session_get_2(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn media_key_session_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_key_session_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2745,7 +2745,7 @@ unsafe extern "C" fn media_key_session_get_3(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn media_key_session_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_key_session_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2791,7 +2791,7 @@ unsafe extern "C" fn media_key_session_get_4(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn media_key_session_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_key_session_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2837,7 +2837,7 @@ unsafe extern "C" fn media_key_session_get_5(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn media_key_session_set_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_key_session_set_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2881,7 +2881,7 @@ unsafe extern "C" fn media_key_session_set_5(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn media_key_session_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_key_session_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2927,7 +2927,7 @@ unsafe extern "C" fn media_key_session_get_6(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn media_key_session_set_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_key_session_set_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3154,7 +3154,7 @@ fn install_media_key_session_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: 
 }
 
 
-unsafe extern "C" fn media_query_list_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_query_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3200,7 +3200,7 @@ unsafe extern "C" fn media_query_list_get_1(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn media_query_list_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_query_list_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3352,7 +3352,7 @@ unsafe extern "C" fn media_query_list_op_4(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-unsafe extern "C" fn media_query_list_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_query_list_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3398,7 +3398,7 @@ unsafe extern "C" fn media_query_list_get_5(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn media_query_list_set_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_query_list_set_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3501,7 +3501,7 @@ pub fn create_media_query_list_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_recorder_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3547,7 +3547,7 @@ unsafe extern "C" fn media_recorder_get_1(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_recorder_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3593,7 +3593,7 @@ unsafe extern "C" fn media_recorder_get_2(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_recorder_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3639,7 +3639,7 @@ unsafe extern "C" fn media_recorder_get_3(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_recorder_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3685,7 +3685,7 @@ unsafe extern "C" fn media_recorder_get_4(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_recorder_set_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_set_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3729,97 +3729,7 @@ unsafe extern "C" fn media_recorder_set_4(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_recorder_get_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "MediaRecorder").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
-}
-
-unsafe extern "C" fn media_recorder_set_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "MediaRecorder").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }));
-}
-
-unsafe extern "C" fn media_recorder_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3865,7 +3775,7 @@ unsafe extern "C" fn media_recorder_get_6(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_recorder_set_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_set_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3909,97 +3819,7 @@ unsafe extern "C" fn media_recorder_set_6(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_recorder_get_7(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "MediaRecorder").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
-}
-
-unsafe extern "C" fn media_recorder_set_7(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "MediaRecorder").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }));
-}
-
-unsafe extern "C" fn media_recorder_get_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4045,7 +3865,7 @@ unsafe extern "C" fn media_recorder_get_8(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_recorder_set_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_set_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4089,7 +3909,7 @@ unsafe extern "C" fn media_recorder_set_8(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_recorder_get_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4135,7 +3955,7 @@ unsafe extern "C" fn media_recorder_get_9(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_recorder_set_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_set_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4179,7 +3999,187 @@ unsafe extern "C" fn media_recorder_set_9(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn media_recorder_get_10(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "MediaRecorder").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn media_recorder_set_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "MediaRecorder").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
+pub(crate) unsafe extern "C" fn media_recorder_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "MediaRecorder").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn media_recorder_set_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "MediaRecorder").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
+pub(crate) unsafe extern "C" fn media_recorder_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4225,7 +4225,7 @@ unsafe extern "C" fn media_recorder_get_10(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-unsafe extern "C" fn media_recorder_get_11(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4271,7 +4271,7 @@ unsafe extern "C" fn media_recorder_get_11(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-unsafe extern "C" fn media_recorder_get_12(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_recorder_get_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4769,7 +4769,7 @@ fn install_media_recorder_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
 }
 
 
-unsafe extern "C" fn media_source_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_source_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4815,7 +4815,7 @@ unsafe extern "C" fn media_source_get_1(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_source_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_source_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4861,7 +4861,7 @@ unsafe extern "C" fn media_source_get_2(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_source_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_source_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4907,7 +4907,7 @@ unsafe extern "C" fn media_source_get_3(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_source_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_source_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4953,7 +4953,7 @@ unsafe extern "C" fn media_source_get_4(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_source_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_source_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4999,7 +4999,7 @@ unsafe extern "C" fn media_source_get_5(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_source_set_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_source_set_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5043,97 +5043,7 @@ unsafe extern "C" fn media_source_set_5(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_source_get_6(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "MediaSource").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
-}
-
-unsafe extern "C" fn media_source_set_6(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "MediaSource").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }));
-}
-
-unsafe extern "C" fn media_source_get_7(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_source_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5179,7 +5089,7 @@ unsafe extern "C" fn media_source_get_7(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_source_set_7(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_source_set_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5223,7 +5133,7 @@ unsafe extern "C" fn media_source_set_7(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_source_get_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_source_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5269,7 +5179,7 @@ unsafe extern "C" fn media_source_get_8(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_source_set_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_source_set_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5313,7 +5223,97 @@ unsafe extern "C" fn media_source_set_8(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_source_get_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_source_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "MediaSource").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn media_source_set_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "MediaSource").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
+pub(crate) unsafe extern "C" fn media_source_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5807,7 +5807,7 @@ fn install_media_source_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
 }
 
 
-unsafe extern "C" fn media_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6196,7 +6196,7 @@ unsafe extern "C" fn media_stream_op_8(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn media_stream_get_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6242,7 +6242,7 @@ unsafe extern "C" fn media_stream_get_9(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn media_stream_get_10(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6288,7 +6288,7 @@ unsafe extern "C" fn media_stream_get_10(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn media_stream_set_10(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_set_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6332,7 +6332,7 @@ unsafe extern "C" fn media_stream_set_10(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn media_stream_get_11(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6378,7 +6378,7 @@ unsafe extern "C" fn media_stream_get_11(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn media_stream_set_11(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_set_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6534,7 +6534,7 @@ fn install_media_stream_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
 }
 
 
-unsafe extern "C" fn media_stream_track_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6580,7 +6580,7 @@ unsafe extern "C" fn media_stream_track_get_1(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6626,7 +6626,7 @@ unsafe extern "C" fn media_stream_track_get_2(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6672,7 +6672,7 @@ unsafe extern "C" fn media_stream_track_get_3(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6718,7 +6718,7 @@ unsafe extern "C" fn media_stream_track_get_4(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_set_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_set_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6762,7 +6762,7 @@ unsafe extern "C" fn media_stream_track_set_4(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6808,7 +6808,7 @@ unsafe extern "C" fn media_stream_track_get_5(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6854,7 +6854,7 @@ unsafe extern "C" fn media_stream_track_get_6(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_set_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_set_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6898,97 +6898,7 @@ unsafe extern "C" fn media_stream_track_set_6(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_get_7(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "MediaStreamTrack").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
-}
-
-unsafe extern "C" fn media_stream_track_set_7(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "MediaStreamTrack").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }));
-}
-
-unsafe extern "C" fn media_stream_track_get_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7034,7 +6944,51 @@ unsafe extern "C" fn media_stream_track_get_8(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_get_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_set_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "MediaStreamTrack").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
+pub(crate) unsafe extern "C" fn media_stream_track_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7080,7 +7034,53 @@ unsafe extern "C" fn media_stream_track_get_9(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_set_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "MediaStreamTrack").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn media_stream_track_set_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7410,7 +7410,7 @@ unsafe extern "C" fn media_stream_track_op_16(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_get_17(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_17(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7456,7 +7456,7 @@ unsafe extern "C" fn media_stream_track_get_17(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn media_stream_track_set_17(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_set_17(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7563,7 +7563,7 @@ unsafe extern "C" fn media_stream_track_op_19(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn media_stream_track_get_20(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_20(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7609,7 +7609,7 @@ unsafe extern "C" fn media_stream_track_get_20(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn media_stream_track_set_20(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_set_20(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7653,7 +7653,7 @@ unsafe extern "C" fn media_stream_track_set_20(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn media_stream_track_get_21(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_21(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7699,7 +7699,7 @@ unsafe extern "C" fn media_stream_track_get_21(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn media_stream_track_get_22(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_get_22(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7745,7 +7745,7 @@ unsafe extern "C" fn media_stream_track_get_22(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn media_stream_track_set_22(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_track_set_22(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7992,7 +7992,7 @@ fn install_media_stream_track_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto:
 }
 
 
-unsafe extern "C" fn permission_status_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn permission_status_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8038,7 +8038,7 @@ unsafe extern "C" fn permission_status_get_1(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn permission_status_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn permission_status_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8084,7 +8084,7 @@ unsafe extern "C" fn permission_status_get_2(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn permission_status_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn permission_status_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8130,7 +8130,7 @@ unsafe extern "C" fn permission_status_get_3(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn permission_status_set_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn permission_status_set_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8219,7 +8219,7 @@ pub fn create_permission_status_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_element_audio_source_node_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_element_audio_source_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8294,7 +8294,7 @@ pub fn create_media_element_audio_source_node_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_stream_audio_destination_node_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_audio_destination_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8369,7 +8369,7 @@ pub fn create_media_stream_audio_destination_node_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn media_stream_audio_source_node_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn media_stream_audio_source_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8589,7 +8589,7 @@ pub fn create_browser_capture_media_stream_track_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn canvas_capture_media_stream_track_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn canvas_capture_media_stream_track_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8715,5 +8715,753 @@ pub fn create_canvas_capture_media_stream_track_template<'s>(
     }
 
     tmpl
+}
+
+pub fn fix_accessors_media_apis(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    {
+        let ctor_key = v8::String::new(scope, "MediaMetadata").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "title").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_metadata_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get title").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_metadata_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set title").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaMetadata").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "artist").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_metadata_get_2).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get artist").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_metadata_set_2).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set artist").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaMetadata").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "album").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_metadata_get_3).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get album").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_metadata_set_3).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set album").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaMetadata").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "artwork").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_metadata_get_4).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get artwork").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_metadata_set_4).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set artwork").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaSession").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "metadata").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_session_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get metadata").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_session_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set metadata").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaSession").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "playbackState").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_session_get_2).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get playbackState").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_session_set_2).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set playbackState").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaDevices").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "ondevicechange").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_devices_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get ondevicechange").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_devices_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set ondevicechange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaDevices").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "oncaptureaction").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_devices_get_6).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get oncaptureaction").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_devices_set_6).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set oncaptureaction").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaKeySession").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onkeystatuseschange").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_key_session_get_5).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onkeystatuseschange").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_key_session_set_5).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onkeystatuseschange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaKeySession").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onmessage").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_key_session_get_6).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_key_session_set_6).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaQueryList").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onchange").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_query_list_get_5).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onchange").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_query_list_set_5).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onchange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaRecorder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onstart").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_recorder_get_4).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onstart").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_recorder_set_4).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onstart").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaRecorder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onstop").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_recorder_get_5).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onstop").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_recorder_set_5).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onstop").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaRecorder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "ondataavailable").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_recorder_get_6).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get ondataavailable").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_recorder_set_6).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set ondataavailable").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaRecorder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onpause").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_recorder_get_7).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onpause").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_recorder_set_7).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onpause").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaRecorder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onresume").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_recorder_get_8).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onresume").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_recorder_set_8).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onresume").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaRecorder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onerror").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_recorder_get_9).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_recorder_set_9).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onerror").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaSource").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "duration").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_source_get_5).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get duration").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_source_set_5).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set duration").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaSource").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onsourceopen").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_source_get_6).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onsourceopen").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_source_set_6).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onsourceopen").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaSource").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onsourceended").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_source_get_7).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onsourceended").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_source_set_7).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onsourceended").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaSource").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onsourceclose").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_source_get_8).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onsourceclose").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_source_set_8).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onsourceclose").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaStream").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onaddtrack").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_stream_get_10).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onaddtrack").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_stream_set_10).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onaddtrack").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaStream").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onremovetrack").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_stream_get_11).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onremovetrack").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_stream_set_11).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onremovetrack").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaStreamTrack").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "enabled").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_stream_track_get_4).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get enabled").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_stream_track_set_4).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set enabled").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaStreamTrack").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onmute").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_stream_track_get_6).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onmute").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_stream_track_set_6).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onmute").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaStreamTrack").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onunmute").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_stream_track_get_7).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onunmute").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_stream_track_set_7).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onunmute").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaStreamTrack").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onended").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_stream_track_get_9).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onended").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_stream_track_set_9).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onended").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaStreamTrack").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "oncapturehandlechange").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_stream_track_get_17).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get oncapturehandlechange").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_stream_track_set_17).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set oncapturehandlechange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaStreamTrack").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "contentHint").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_stream_track_get_20).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get contentHint").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_stream_track_set_20).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set contentHint").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "MediaStreamTrack").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onisolationchange").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(media_stream_track_get_22).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onisolationchange").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(media_stream_track_set_22).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onisolationchange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "PermissionStatus").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onchange").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(permission_status_get_3).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onchange").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(permission_status_set_3).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onchange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    // fixed 31 accessors
 }
 

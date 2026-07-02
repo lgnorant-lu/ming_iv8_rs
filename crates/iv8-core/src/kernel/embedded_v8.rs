@@ -504,6 +504,8 @@ impl EmbeddedV8Kernel {
             let move_js = crate::v8_utils::v8_string(scope, iv8_surface::generated::install_all::GLOBAL_MOVE_JS);
             let _ = v8::Script::compile(scope, move_js, None).and_then(|s| s.run(scope));
 
+            iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
+
             let js = crate::v8_utils::v8_string(scope, r#"
                 (function() {
                     var workerOnly = ['WorkerGlobalScope','DedicatedWorkerGlobalScope',

@@ -6,7 +6,7 @@ use super::{construct_only, illegal_constructor};
 use v8::Local;
 use v8::FunctionTemplate;
 
-unsafe extern "C" fn hid_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn hid_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -52,7 +52,7 @@ unsafe extern "C" fn hid_get_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn hid_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn hid_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -96,7 +96,7 @@ unsafe extern "C" fn hid_set_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn hid_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn hid_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -142,7 +142,7 @@ unsafe extern "C" fn hid_get_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn hid_set_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn hid_set_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -267,7 +267,7 @@ pub fn create_hid_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn hid_device_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn hid_device_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -313,7 +313,7 @@ unsafe extern "C" fn hid_device_get_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn hid_device_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn hid_device_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -357,7 +357,7 @@ unsafe extern "C" fn hid_device_set_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn hid_device_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn hid_device_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -403,7 +403,7 @@ unsafe extern "C" fn hid_device_get_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn hid_device_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn hid_device_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -449,7 +449,7 @@ unsafe extern "C" fn hid_device_get_3(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn hid_device_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn hid_device_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -495,7 +495,7 @@ unsafe extern "C" fn hid_device_get_4(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn hid_device_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn hid_device_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -541,7 +541,7 @@ unsafe extern "C" fn hid_device_get_5(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn hid_device_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn hid_device_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -784,4 +784,80 @@ fn install_hid_device_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     }
 }
 
+
+pub fn fix_accessors_hid(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    {
+        let ctor_key = v8::String::new(scope, "HID").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onconnect").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(hid_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onconnect").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(hid_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onconnect").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "HID").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "ondisconnect").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(hid_get_2).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get ondisconnect").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(hid_set_2).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set ondisconnect").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "HIDDevice").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "oninputreport").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(hid_device_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get oninputreport").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(hid_device_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set oninputreport").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    // fixed 3 accessors
+}
 

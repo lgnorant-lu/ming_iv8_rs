@@ -311,3 +311,7 @@ pub fn create_cache_storage_template<'s>(
     tmpl
 }
 
+pub fn fix_accessors_cache_api(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    // fixed 0 accessors
+}
+

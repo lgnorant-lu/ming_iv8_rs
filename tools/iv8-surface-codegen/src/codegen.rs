@@ -208,7 +208,6 @@ fn generate_domain_file(
         let fn_name = type_mapper::idl_name_to_rust(name);
         let ea = process_interface_ea(def);
 
-        // Callback functions first (must be defined before template functions that reference them)
         let callbacks = generate_callbacks(def, &fn_name);
         if !callbacks.is_empty() {
             out.push_str(&callbacks);
@@ -216,6 +215,55 @@ fn generate_domain_file(
         out.push_str(&generate_template_function(def, &ea, &fn_name));
         out.push('\n');
     }
+
+    let module_name = domain.replace('-', "_");
+    out.push_str(&format!("pub fn fix_accessors_{}(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {{\n", module_name));
+    let mut fix_count = 0;
+    for def in defs {
+        let name = match &def.name { Some(n) => n, None => continue };
+        let fn_name = type_mapper::idl_name_to_rust(name);
+        let ea = process_interface_ea(def);
+        if ea.is_global || ea.no_interface_object { continue; }
+        let mut idx = 0;
+        for m in &def.members {
+            if m.kind != "attribute" {
+                if m.kind == "operation" { idx += 1; }
+                continue;
+            }
+            let attr_name = match &m.name { Some(n) => n, None => continue };
+            if should_skip_attribute(name, attr_name) { continue; }
+            idx += 1;
+            let has_setter = !m.readonly || m.has_put_forwards || m.has_replaceable;
+            if !has_setter { continue; }
+            out.push_str("    {\n");
+            out.push_str(&format!("        let ctor_key = v8::String::new(scope, \"{}\").unwrap();\n", name));
+            out.push_str("        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {\n");
+            out.push_str("            if ctor_val.is_function() {\n");
+            out.push_str("                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };\n");
+            out.push_str("                let proto_key = v8::String::new(scope, \"prototype\").unwrap();\n");
+            out.push_str("                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {\n");
+            out.push_str("                    if let Some(proto_obj) = proto_val.to_object(scope) {\n");
+            out.push_str(&format!("                        let attr_key = v8::String::new(scope, \"{}\").unwrap();\n", attr_name));
+            out.push_str(&format!("                        let g = v8::FunctionTemplate::builder_raw({}_get_{}).length(0).build(scope);\n", fn_name, idx));
+            out.push_str(&format!("                        g.set_class_name(v8::String::new(scope, \"get {}\").unwrap());\n", attr_name));
+            out.push_str(&format!("                        let s = v8::FunctionTemplate::builder_raw({}_set_{}).length(1).build(scope);\n", fn_name, idx));
+            out.push_str(&format!("                        s.set_class_name(v8::String::new(scope, \"set {}\").unwrap());\n", attr_name));
+            out.push_str("                        let gf = g.get_function(scope).unwrap();\n");
+            out.push_str("                        let sf = s.get_function(scope).unwrap();\n");
+            out.push_str("                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());\n");
+            out.push_str("                        d.set_enumerable(true);\n");
+            out.push_str("                        d.set_configurable(true);\n");
+            out.push_str("                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);\n");
+            out.push_str("                    }\n");
+            out.push_str("                }\n");
+            out.push_str("            }\n");
+            out.push_str("        }\n");
+            out.push_str("    }\n");
+            fix_count += 1;
+        }
+    }
+    out.push_str(&format!("    // fixed {} accessors\n", fix_count));
+    out.push_str("}\n\n");
 
     out
 }
@@ -353,7 +401,7 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
 
             // Getter — receiver check for null-this (accessor properties pass raw receiver)
             out.push_str(&format!(
-                "unsafe extern \"C\" fn {}_get_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
+                "pub(crate) unsafe extern \"C\" fn {}_get_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                 fn_name, idx
             ));
             out.push_str(
@@ -372,7 +420,7 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             // Setter — generated for non-readonly OR readonly-with-PutForwards/Replaceable
             if !m.readonly || m.has_put_forwards || m.has_replaceable {
                 out.push_str(&format!(
-                    "unsafe extern \"C\" fn {}_set_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
+                    "pub(crate) unsafe extern \"C\" fn {}_set_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                     fn_name, idx
                 ));
                 out.push_str(
@@ -896,6 +944,15 @@ pub fn generate_install_all(
         ));
     }
     global_move_js.push_str("})();");
+
+    out.push_str("\npub fn fix_accessor_properties(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {\n");
+    let mut domains_set: std::collections::BTreeSet<&str> = std::collections::BTreeSet::new();
+    for d in domain_of.values() { domains_set.insert(d.as_str()); }
+    for domain in &domains_set {
+        let module = domain.replace('-', "_");
+        out.push_str(&format!("    super::{}::fix_accessors_{}(scope, global);\n", module, module));
+    }
+    out.push_str("}\n");
 
     out.push_str(&format!("\npub const GLOBAL_MOVE_JS: &str = {:?};\n", global_move_js));
     out

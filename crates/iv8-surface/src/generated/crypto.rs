@@ -6,7 +6,7 @@ use super::{construct_only, illegal_constructor};
 use v8::Local;
 use v8::FunctionTemplate;
 
-unsafe extern "C" fn crypto_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn crypto_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -191,7 +191,7 @@ pub fn create_crypto_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn crypto_key_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn crypto_key_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -237,7 +237,7 @@ unsafe extern "C" fn crypto_key_get_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn crypto_key_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn crypto_key_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -283,7 +283,7 @@ unsafe extern "C" fn crypto_key_get_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn crypto_key_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn crypto_key_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -329,7 +329,7 @@ unsafe extern "C" fn crypto_key_get_3(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn crypto_key_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn crypto_key_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -977,4 +977,8 @@ fn install_subtle_crypto_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::
     }
 }
 
+
+pub fn fix_accessors_crypto(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    // fixed 0 accessors
+}
 

@@ -6,7 +6,7 @@ use super::{construct_only, illegal_constructor};
 use v8::Local;
 use v8::FunctionTemplate;
 
-unsafe extern "C" fn byte_length_queuing_strategy_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn byte_length_queuing_strategy_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -52,7 +52,7 @@ unsafe extern "C" fn byte_length_queuing_strategy_get_1(_info: *const v8::Functi
     }));
 }
 
-unsafe extern "C" fn byte_length_queuing_strategy_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn byte_length_queuing_strategy_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -131,7 +131,7 @@ pub fn create_byte_length_queuing_strategy_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn count_queuing_strategy_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn count_queuing_strategy_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -177,7 +177,7 @@ unsafe extern "C" fn count_queuing_strategy_get_1(_info: *const v8::FunctionCall
     }));
 }
 
-unsafe extern "C" fn count_queuing_strategy_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn count_queuing_strategy_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -256,7 +256,7 @@ pub fn create_count_queuing_strategy_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn readable_byte_stream_controller_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn readable_byte_stream_controller_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -302,7 +302,7 @@ unsafe extern "C" fn readable_byte_stream_controller_get_1(_info: *const v8::Fun
     }));
 }
 
-unsafe extern "C" fn readable_byte_stream_controller_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn readable_byte_stream_controller_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -600,7 +600,7 @@ unsafe extern "C" fn readable_stream_op_1(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn readable_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn readable_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -949,7 +949,7 @@ unsafe extern "C" fn readable_stream_byob_reader_op_2(_info: *const v8::Function
     }));
 }
 
-unsafe extern "C" fn readable_stream_byob_reader_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn readable_stream_byob_reader_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1052,7 +1052,7 @@ pub fn create_readable_stream_byob_reader_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn readable_stream_byob_request_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn readable_stream_byob_request_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1244,7 +1244,7 @@ pub fn create_readable_stream_byob_request_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn readable_stream_default_controller_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn readable_stream_default_controller_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1531,7 +1531,7 @@ unsafe extern "C" fn readable_stream_default_reader_op_2(_info: *const v8::Funct
     }));
 }
 
-unsafe extern "C" fn readable_stream_default_reader_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn readable_stream_default_reader_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1634,7 +1634,7 @@ pub fn create_readable_stream_default_reader_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn transform_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn transform_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1680,7 +1680,7 @@ unsafe extern "C" fn transform_stream_get_1(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn transform_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn transform_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1759,7 +1759,7 @@ pub fn create_transform_stream_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn transform_stream_default_controller_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn transform_stream_default_controller_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1990,7 +1990,7 @@ pub fn create_transform_stream_default_controller_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn writable_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn writable_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2149,7 +2149,7 @@ pub fn create_writable_stream_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn writable_stream_default_controller_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn writable_stream_default_controller_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2274,7 +2274,7 @@ pub fn create_writable_stream_default_controller_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn writable_stream_default_writer_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn writable_stream_default_writer_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2320,7 +2320,7 @@ unsafe extern "C" fn writable_stream_default_writer_get_1(_info: *const v8::Func
     }));
 }
 
-unsafe extern "C" fn writable_stream_default_writer_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn writable_stream_default_writer_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2366,7 +2366,7 @@ unsafe extern "C" fn writable_stream_default_writer_get_2(_info: *const v8::Func
     }));
 }
 
-unsafe extern "C" fn writable_stream_default_writer_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn writable_stream_default_writer_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2554,5 +2554,9 @@ pub fn create_writable_stream_default_writer_template<'s>(
     }
 
     tmpl
+}
+
+pub fn fix_accessors_streams(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    // fixed 0 accessors
 }
 

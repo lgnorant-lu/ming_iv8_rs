@@ -52,7 +52,7 @@ unsafe extern "C" fn text_decoder_op_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn text_decoder_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_decoder_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -98,7 +98,7 @@ unsafe extern "C" fn text_decoder_get_2(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn text_decoder_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_decoder_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -144,7 +144,7 @@ unsafe extern "C" fn text_decoder_get_3(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn text_decoder_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_decoder_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -237,7 +237,7 @@ pub fn create_text_decoder_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn text_decoder_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_decoder_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -283,7 +283,7 @@ unsafe extern "C" fn text_decoder_stream_get_1(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn text_decoder_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_decoder_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -329,7 +329,7 @@ unsafe extern "C" fn text_decoder_stream_get_2(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn text_decoder_stream_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_decoder_stream_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -375,7 +375,7 @@ unsafe extern "C" fn text_decoder_stream_get_3(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn text_decoder_stream_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_decoder_stream_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -421,7 +421,7 @@ unsafe extern "C" fn text_decoder_stream_get_4(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn text_decoder_stream_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_decoder_stream_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -620,7 +620,7 @@ unsafe extern "C" fn text_encoder_op_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn text_encoder_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_encoder_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -706,7 +706,7 @@ pub fn create_text_encoder_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn text_encoder_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_encoder_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -752,7 +752,7 @@ unsafe extern "C" fn text_encoder_stream_get_1(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn text_encoder_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_encoder_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -798,7 +798,7 @@ unsafe extern "C" fn text_encoder_stream_get_2(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn text_encoder_stream_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn text_encoder_stream_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -882,5 +882,9 @@ pub fn create_text_encoder_stream_template<'s>(
     }
 
     tmpl
+}
+
+pub fn fix_accessors_encoding(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    // fixed 0 accessors
 }
 

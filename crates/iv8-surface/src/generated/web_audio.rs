@@ -6,7 +6,7 @@ use super::{construct_only, illegal_constructor};
 use v8::Local;
 use v8::FunctionTemplate;
 
-unsafe extern "C" fn audio_buffer_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_buffer_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -52,7 +52,7 @@ unsafe extern "C" fn audio_buffer_get_1(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn audio_buffer_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_buffer_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -98,7 +98,7 @@ unsafe extern "C" fn audio_buffer_get_2(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn audio_buffer_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_buffer_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -144,7 +144,7 @@ unsafe extern "C" fn audio_buffer_get_3(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn audio_buffer_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_buffer_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -417,7 +417,7 @@ pub fn create_audio_buffer_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_data_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_data_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -463,7 +463,7 @@ unsafe extern "C" fn audio_data_get_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_data_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_data_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -509,7 +509,7 @@ unsafe extern "C" fn audio_data_get_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_data_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_data_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -555,7 +555,7 @@ unsafe extern "C" fn audio_data_get_3(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_data_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_data_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -601,7 +601,7 @@ unsafe extern "C" fn audio_data_get_4(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_data_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_data_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -647,7 +647,7 @@ unsafe extern "C" fn audio_data_get_5(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_data_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_data_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -980,7 +980,7 @@ pub fn create_audio_data_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_listener_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_listener_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1026,7 +1026,7 @@ unsafe extern "C" fn audio_listener_get_1(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn audio_listener_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_listener_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1072,7 +1072,7 @@ unsafe extern "C" fn audio_listener_get_2(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn audio_listener_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_listener_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1118,7 +1118,7 @@ unsafe extern "C" fn audio_listener_get_3(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn audio_listener_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_listener_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1164,7 +1164,7 @@ unsafe extern "C" fn audio_listener_get_4(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn audio_listener_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_listener_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1210,7 +1210,7 @@ unsafe extern "C" fn audio_listener_get_5(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn audio_listener_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_listener_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1256,7 +1256,7 @@ unsafe extern "C" fn audio_listener_get_6(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn audio_listener_get_7(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_listener_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1302,7 +1302,7 @@ unsafe extern "C" fn audio_listener_get_7(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn audio_listener_get_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_listener_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1348,7 +1348,7 @@ unsafe extern "C" fn audio_listener_get_8(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn audio_listener_get_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_listener_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1605,7 +1605,7 @@ fn install_audio_listener_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
 }
 
 
-unsafe extern "C" fn audio_param_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_param_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1651,7 +1651,7 @@ unsafe extern "C" fn audio_param_get_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_param_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_param_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1695,7 +1695,7 @@ unsafe extern "C" fn audio_param_set_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_param_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_param_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1741,7 +1741,7 @@ unsafe extern "C" fn audio_param_get_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_param_set_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_param_set_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1785,53 +1785,7 @@ unsafe extern "C" fn audio_param_set_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_param_get_3(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "AudioParam").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Number::new(scope, 0.0).into());
-    }));
-}
-
-unsafe extern "C" fn audio_param_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_param_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1877,7 +1831,53 @@ unsafe extern "C" fn audio_param_get_4(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_param_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_param_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "AudioParam").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn audio_param_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2429,7 +2429,7 @@ pub fn create_audio_param_map_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_playback_stats_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_playback_stats_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2475,7 +2475,7 @@ unsafe extern "C" fn audio_playback_stats_get_1(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn audio_playback_stats_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_playback_stats_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2521,7 +2521,7 @@ unsafe extern "C" fn audio_playback_stats_get_2(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn audio_playback_stats_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_playback_stats_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2567,7 +2567,7 @@ unsafe extern "C" fn audio_playback_stats_get_3(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn audio_playback_stats_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_playback_stats_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2613,7 +2613,7 @@ unsafe extern "C" fn audio_playback_stats_get_4(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn audio_playback_stats_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_playback_stats_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2659,7 +2659,7 @@ unsafe extern "C" fn audio_playback_stats_get_5(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn audio_playback_stats_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_playback_stats_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2872,7 +2872,7 @@ pub fn create_audio_playback_stats_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_sink_info_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_sink_info_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2944,7 +2944,7 @@ pub fn create_audio_sink_info_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_track_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2990,7 +2990,7 @@ unsafe extern "C" fn audio_track_get_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_track_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3036,7 +3036,7 @@ unsafe extern "C" fn audio_track_get_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_track_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3082,7 +3082,7 @@ unsafe extern "C" fn audio_track_get_3(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_track_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3128,7 +3128,7 @@ unsafe extern "C" fn audio_track_get_4(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_track_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3174,7 +3174,7 @@ unsafe extern "C" fn audio_track_get_5(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_track_set_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_set_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3218,7 +3218,7 @@ unsafe extern "C" fn audio_track_set_5(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_track_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3327,7 +3327,7 @@ pub fn create_audio_track_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_worklet_processor_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_worklet_processor_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3399,7 +3399,7 @@ pub fn create_audio_worklet_processor_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_decoder_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_decoder_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3445,7 +3445,7 @@ unsafe extern "C" fn audio_decoder_get_1(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_decoder_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_decoder_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3491,7 +3491,7 @@ unsafe extern "C" fn audio_decoder_get_2(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_decoder_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_decoder_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3537,7 +3537,7 @@ unsafe extern "C" fn audio_decoder_get_3(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_decoder_set_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_decoder_set_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3893,7 +3893,7 @@ pub fn create_audio_decoder_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_encoder_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_encoder_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3939,7 +3939,7 @@ unsafe extern "C" fn audio_encoder_get_1(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_encoder_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_encoder_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3985,7 +3985,7 @@ unsafe extern "C" fn audio_encoder_get_2(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_encoder_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_encoder_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4031,7 +4031,7 @@ unsafe extern "C" fn audio_encoder_get_3(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_encoder_set_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_encoder_set_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4857,7 +4857,7 @@ unsafe extern "C" fn audio_node_op_9(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_node_get_10(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_node_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4903,7 +4903,7 @@ unsafe extern "C" fn audio_node_get_10(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_node_get_11(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_node_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4949,7 +4949,7 @@ unsafe extern "C" fn audio_node_get_11(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_node_get_12(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_node_get_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4995,7 +4995,7 @@ unsafe extern "C" fn audio_node_get_12(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_node_get_13(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_node_get_13(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5041,7 +5041,7 @@ unsafe extern "C" fn audio_node_get_13(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_node_set_13(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_node_set_13(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5085,7 +5085,7 @@ unsafe extern "C" fn audio_node_set_13(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_node_get_14(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_node_get_14(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5131,7 +5131,7 @@ unsafe extern "C" fn audio_node_get_14(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_node_set_14(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_node_set_14(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5175,7 +5175,7 @@ unsafe extern "C" fn audio_node_set_14(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_node_get_15(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_node_get_15(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5221,7 +5221,7 @@ unsafe extern "C" fn audio_node_get_15(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn audio_node_set_15(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_node_set_15(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5407,7 +5407,7 @@ fn install_audio_node_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
 }
 
 
-unsafe extern "C" fn audio_session_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_session_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5453,7 +5453,7 @@ unsafe extern "C" fn audio_session_get_1(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_session_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_session_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5497,53 +5497,7 @@ unsafe extern "C" fn audio_session_set_1(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_session_get_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "AudioSession").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
-}
-
-unsafe extern "C" fn audio_session_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_session_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5589,7 +5543,53 @@ unsafe extern "C" fn audio_session_get_3(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_session_set_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_session_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "AudioSession").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn audio_session_set_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5680,7 +5680,7 @@ pub fn create_audio_session_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_track_list_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5832,7 +5832,7 @@ unsafe extern "C" fn audio_track_list_op_3(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-unsafe extern "C" fn audio_track_list_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_list_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5878,7 +5878,7 @@ unsafe extern "C" fn audio_track_list_get_4(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn audio_track_list_set_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_list_set_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5922,97 +5922,7 @@ unsafe extern "C" fn audio_track_list_set_4(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn audio_track_list_get_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "AudioTrackList").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
-}
-
-unsafe extern "C" fn audio_track_list_set_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "AudioTrackList").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }));
-}
-
-unsafe extern "C" fn audio_track_list_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_list_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6058,7 +5968,97 @@ unsafe extern "C" fn audio_track_list_get_6(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn audio_track_list_set_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_track_list_set_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "AudioTrackList").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
+pub(crate) unsafe extern "C" fn audio_track_list_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "AudioTrackList").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn audio_track_list_set_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6172,7 +6172,7 @@ pub fn create_audio_track_list_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn base_audio_context_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn base_audio_context_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6218,7 +6218,7 @@ unsafe extern "C" fn base_audio_context_get_1(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn base_audio_context_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn base_audio_context_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6264,7 +6264,7 @@ unsafe extern "C" fn base_audio_context_get_2(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn base_audio_context_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn base_audio_context_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6310,7 +6310,7 @@ unsafe extern "C" fn base_audio_context_get_3(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn base_audio_context_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn base_audio_context_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6356,7 +6356,7 @@ unsafe extern "C" fn base_audio_context_get_4(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn base_audio_context_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn base_audio_context_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6402,7 +6402,7 @@ unsafe extern "C" fn base_audio_context_get_5(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn base_audio_context_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn base_audio_context_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6448,7 +6448,7 @@ unsafe extern "C" fn base_audio_context_get_6(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn base_audio_context_get_7(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn base_audio_context_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6494,7 +6494,7 @@ unsafe extern "C" fn base_audio_context_get_7(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn base_audio_context_get_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn base_audio_context_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6540,7 +6540,7 @@ unsafe extern "C" fn base_audio_context_get_8(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn base_audio_context_set_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn base_audio_context_set_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7676,7 +7676,7 @@ fn install_base_audio_context_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto:
 }
 
 
-unsafe extern "C" fn audio_worklet_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_worklet_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7804,7 +7804,7 @@ unsafe extern "C" fn audio_worklet_global_scope_op_1(_info: *const v8::FunctionC
     }));
 }
 
-unsafe extern "C" fn audio_worklet_global_scope_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_worklet_global_scope_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7850,7 +7850,7 @@ unsafe extern "C" fn audio_worklet_global_scope_get_2(_info: *const v8::Function
     }));
 }
 
-unsafe extern "C" fn audio_worklet_global_scope_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_worklet_global_scope_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7896,7 +7896,7 @@ unsafe extern "C" fn audio_worklet_global_scope_get_3(_info: *const v8::Function
     }));
 }
 
-unsafe extern "C" fn audio_worklet_global_scope_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_worklet_global_scope_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7942,7 +7942,7 @@ unsafe extern "C" fn audio_worklet_global_scope_get_4(_info: *const v8::Function
     }));
 }
 
-unsafe extern "C" fn audio_worklet_global_scope_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_worklet_global_scope_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7988,7 +7988,7 @@ unsafe extern "C" fn audio_worklet_global_scope_get_5(_info: *const v8::Function
     }));
 }
 
-unsafe extern "C" fn audio_worklet_global_scope_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_worklet_global_scope_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8098,7 +8098,7 @@ pub fn create_audio_worklet_global_scope_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_destination_node_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_destination_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8173,7 +8173,7 @@ pub fn create_audio_destination_node_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_scheduled_source_node_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_scheduled_source_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8219,7 +8219,7 @@ unsafe extern "C" fn audio_scheduled_source_node_get_1(_info: *const v8::Functio
     }));
 }
 
-unsafe extern "C" fn audio_scheduled_source_node_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_scheduled_source_node_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8400,7 +8400,7 @@ pub fn create_audio_scheduled_source_node_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_worklet_node_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_worklet_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8446,7 +8446,7 @@ unsafe extern "C" fn audio_worklet_node_get_1(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn audio_worklet_node_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_worklet_node_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8492,7 +8492,7 @@ unsafe extern "C" fn audio_worklet_node_get_2(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn audio_worklet_node_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_worklet_node_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8538,7 +8538,7 @@ unsafe extern "C" fn audio_worklet_node_get_3(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn audio_worklet_node_set_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_worklet_node_set_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8627,7 +8627,7 @@ pub fn create_audio_worklet_node_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn biquad_filter_node_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn biquad_filter_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8673,7 +8673,7 @@ unsafe extern "C" fn biquad_filter_node_get_1(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn biquad_filter_node_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn biquad_filter_node_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8717,53 +8717,7 @@ unsafe extern "C" fn biquad_filter_node_set_1(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn biquad_filter_node_get_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "BiquadFilterNode").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
-}
-
-unsafe extern "C" fn biquad_filter_node_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn biquad_filter_node_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8809,7 +8763,7 @@ unsafe extern "C" fn biquad_filter_node_get_3(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn biquad_filter_node_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn biquad_filter_node_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8855,7 +8809,53 @@ unsafe extern "C" fn biquad_filter_node_get_4(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn biquad_filter_node_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn biquad_filter_node_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "BiquadFilterNode").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn biquad_filter_node_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9020,7 +9020,7 @@ pub fn create_biquad_filter_node_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn delay_node_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn delay_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9095,7 +9095,7 @@ pub fn create_delay_node_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gain_node_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gain_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9170,7 +9170,7 @@ pub fn create_gain_node_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_context_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_context_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9216,7 +9216,7 @@ unsafe extern "C" fn audio_context_get_1(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_context_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_context_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9262,7 +9262,7 @@ unsafe extern "C" fn audio_context_get_2(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_context_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_context_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9308,7 +9308,7 @@ unsafe extern "C" fn audio_context_get_3(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_context_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_context_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9354,7 +9354,7 @@ unsafe extern "C" fn audio_context_get_4(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_context_set_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_context_set_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9398,7 +9398,7 @@ unsafe extern "C" fn audio_context_set_4(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_context_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_context_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9444,7 +9444,7 @@ unsafe extern "C" fn audio_context_get_5(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_context_set_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_context_set_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9488,7 +9488,7 @@ unsafe extern "C" fn audio_context_set_5(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn audio_context_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_context_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10009,7 +10009,7 @@ unsafe extern "C" fn offline_audio_context_op_3(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn offline_audio_context_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn offline_audio_context_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10055,7 +10055,7 @@ unsafe extern "C" fn offline_audio_context_get_4(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn offline_audio_context_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn offline_audio_context_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10101,7 +10101,7 @@ unsafe extern "C" fn offline_audio_context_get_5(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn offline_audio_context_set_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn offline_audio_context_set_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10204,7 +10204,7 @@ pub fn create_offline_audio_context_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn audio_buffer_source_node_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_buffer_source_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10250,7 +10250,7 @@ unsafe extern "C" fn audio_buffer_source_node_get_1(_info: *const v8::FunctionCa
     }));
 }
 
-unsafe extern "C" fn audio_buffer_source_node_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_buffer_source_node_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10294,53 +10294,7 @@ unsafe extern "C" fn audio_buffer_source_node_set_1(_info: *const v8::FunctionCa
     }));
 }
 
-unsafe extern "C" fn audio_buffer_source_node_get_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
-}
-
-unsafe extern "C" fn audio_buffer_source_node_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_buffer_source_node_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10386,7 +10340,53 @@ unsafe extern "C" fn audio_buffer_source_node_get_3(_info: *const v8::FunctionCa
     }));
 }
 
-unsafe extern "C" fn audio_buffer_source_node_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_buffer_source_node_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn audio_buffer_source_node_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10432,7 +10432,7 @@ unsafe extern "C" fn audio_buffer_source_node_get_4(_info: *const v8::FunctionCa
     }));
 }
 
-unsafe extern "C" fn audio_buffer_source_node_set_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_buffer_source_node_set_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10476,97 +10476,7 @@ unsafe extern "C" fn audio_buffer_source_node_set_4(_info: *const v8::FunctionCa
     }));
 }
 
-unsafe extern "C" fn audio_buffer_source_node_get_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Number::new(scope, 0.0).into());
-    }));
-}
-
-unsafe extern "C" fn audio_buffer_source_node_set_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }));
-}
-
-unsafe extern "C" fn audio_buffer_source_node_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_buffer_source_node_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10612,7 +10522,97 @@ unsafe extern "C" fn audio_buffer_source_node_get_6(_info: *const v8::FunctionCa
     }));
 }
 
-unsafe extern "C" fn audio_buffer_source_node_set_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn audio_buffer_source_node_set_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
+pub(crate) unsafe extern "C" fn audio_buffer_source_node_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn audio_buffer_source_node_set_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10781,7 +10781,7 @@ pub fn create_audio_buffer_source_node_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn oscillator_node_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn oscillator_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10827,7 +10827,7 @@ unsafe extern "C" fn oscillator_node_get_1(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-unsafe extern "C" fn oscillator_node_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn oscillator_node_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10871,7 +10871,7 @@ unsafe extern "C" fn oscillator_node_set_1(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-unsafe extern "C" fn oscillator_node_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn oscillator_node_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10917,7 +10917,7 @@ unsafe extern "C" fn oscillator_node_get_2(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-unsafe extern "C" fn oscillator_node_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn oscillator_node_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -11066,5 +11066,609 @@ pub fn create_oscillator_node_template<'s>(
     }
 
     tmpl
+}
+
+pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    {
+        let ctor_key = v8::String::new(scope, "AudioParam").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "value").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_param_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get value").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_param_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set value").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioParam").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "automationRate").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_param_get_2).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get automationRate").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_param_set_2).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set automationRate").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioTrack").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "enabled").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_track_get_5).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get enabled").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_track_set_5).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set enabled").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioDecoder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "ondequeue").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_decoder_get_3).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get ondequeue").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_decoder_set_3).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set ondequeue").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioEncoder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "ondequeue").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_encoder_get_3).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get ondequeue").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_encoder_set_3).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set ondequeue").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioNode").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "channelCount").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_node_get_13).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get channelCount").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_node_set_13).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set channelCount").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioNode").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "channelCountMode").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_node_get_14).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get channelCountMode").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_node_set_14).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set channelCountMode").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioNode").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "channelInterpretation").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_node_get_15).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get channelInterpretation").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_node_set_15).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set channelInterpretation").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioSession").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "type").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_session_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get type").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_session_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set type").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioSession").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onstatechange").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_session_get_3).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onstatechange").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_session_set_3).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onstatechange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioTrackList").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onchange").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_track_list_get_4).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onchange").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_track_list_set_4).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onchange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioTrackList").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onaddtrack").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_track_list_get_5).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onaddtrack").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_track_list_set_5).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onaddtrack").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioTrackList").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onremovetrack").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_track_list_get_6).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onremovetrack").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_track_list_set_6).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onremovetrack").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "BaseAudioContext").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onstatechange").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(base_audio_context_get_8).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onstatechange").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(base_audio_context_set_8).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onstatechange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioScheduledSourceNode").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onended").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_scheduled_source_node_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onended").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_scheduled_source_node_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onended").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioWorkletNode").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onprocessorerror").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_worklet_node_get_3).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onprocessorerror").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_worklet_node_set_3).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onprocessorerror").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "BiquadFilterNode").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "type").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(biquad_filter_node_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get type").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(biquad_filter_node_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set type").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioContext").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onsinkchange").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_context_get_4).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onsinkchange").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_context_set_4).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onsinkchange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioContext").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onerror").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_context_get_5).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_context_set_5).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onerror").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "OfflineAudioContext").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "oncomplete").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(offline_audio_context_get_5).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get oncomplete").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(offline_audio_context_set_5).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set oncomplete").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "buffer").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get buffer").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set buffer").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "loop").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_4).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get loop").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_4).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set loop").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "loopStart").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_5).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get loopStart").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_5).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set loopStart").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "loopEnd").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_6).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get loopEnd").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_6).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set loopEnd").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "OscillatorNode").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "type").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(oscillator_node_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get type").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(oscillator_node_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set type").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    // fixed 25 accessors
 }
 

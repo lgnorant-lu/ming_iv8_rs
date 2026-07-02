@@ -6,7 +6,7 @@ use super::{construct_only, illegal_constructor};
 use v8::Local;
 use v8::FunctionTemplate;
 
-unsafe extern "C" fn intersection_observer_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -52,7 +52,7 @@ unsafe extern "C" fn intersection_observer_get_1(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn intersection_observer_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -98,7 +98,7 @@ unsafe extern "C" fn intersection_observer_get_2(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn intersection_observer_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -144,7 +144,7 @@ unsafe extern "C" fn intersection_observer_get_3(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn intersection_observer_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -190,7 +190,7 @@ unsafe extern "C" fn intersection_observer_get_4(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn intersection_observer_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -236,7 +236,7 @@ unsafe extern "C" fn intersection_observer_get_5(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn intersection_observer_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -569,7 +569,7 @@ pub fn create_intersection_observer_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn intersection_observer_entry_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_entry_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -615,7 +615,7 @@ unsafe extern "C" fn intersection_observer_entry_get_1(_info: *const v8::Functio
     }));
 }
 
-unsafe extern "C" fn intersection_observer_entry_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_entry_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -661,7 +661,7 @@ unsafe extern "C" fn intersection_observer_entry_get_2(_info: *const v8::Functio
     }));
 }
 
-unsafe extern "C" fn intersection_observer_entry_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_entry_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -707,7 +707,7 @@ unsafe extern "C" fn intersection_observer_entry_get_3(_info: *const v8::Functio
     }));
 }
 
-unsafe extern "C" fn intersection_observer_entry_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_entry_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -753,7 +753,7 @@ unsafe extern "C" fn intersection_observer_entry_get_4(_info: *const v8::Functio
     }));
 }
 
-unsafe extern "C" fn intersection_observer_entry_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_entry_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -799,7 +799,7 @@ unsafe extern "C" fn intersection_observer_entry_get_5(_info: *const v8::Functio
     }));
 }
 
-unsafe extern "C" fn intersection_observer_entry_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_entry_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -845,7 +845,7 @@ unsafe extern "C" fn intersection_observer_entry_get_6(_info: *const v8::Functio
     }));
 }
 
-unsafe extern "C" fn intersection_observer_entry_get_7(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_entry_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -891,7 +891,7 @@ unsafe extern "C" fn intersection_observer_entry_get_7(_info: *const v8::Functio
     }));
 }
 
-unsafe extern "C" fn intersection_observer_entry_get_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn intersection_observer_entry_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1150,7 +1150,7 @@ unsafe extern "C" fn performance_observer_op_3(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn performance_observer_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn performance_observer_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1405,7 +1405,7 @@ unsafe extern "C" fn pressure_observer_op_4(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn pressure_observer_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn pressure_observer_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1875,7 +1875,7 @@ pub fn create_resize_observer_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn resize_observer_entry_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn resize_observer_entry_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1921,7 +1921,7 @@ unsafe extern "C" fn resize_observer_entry_get_1(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn resize_observer_entry_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn resize_observer_entry_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1967,7 +1967,7 @@ unsafe extern "C" fn resize_observer_entry_get_2(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn resize_observer_entry_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn resize_observer_entry_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2013,7 +2013,7 @@ unsafe extern "C" fn resize_observer_entry_get_3(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn resize_observer_entry_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn resize_observer_entry_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2059,7 +2059,7 @@ unsafe extern "C" fn resize_observer_entry_get_4(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn resize_observer_entry_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn resize_observer_entry_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2159,7 +2159,7 @@ pub fn create_resize_observer_entry_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn resize_observer_size_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn resize_observer_size_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2205,7 +2205,7 @@ unsafe extern "C" fn resize_observer_size_get_1(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn resize_observer_size_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn resize_observer_size_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2282,5 +2282,9 @@ pub fn create_resize_observer_size_template<'s>(
     }
 
     tmpl
+}
+
+pub fn fix_accessors_observers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    // fixed 0 accessors
 }
 

@@ -62,7 +62,7 @@ unsafe extern "C" fn gpu_op_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -148,7 +148,7 @@ pub fn create_gpu_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_adapter_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_adapter_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -194,7 +194,7 @@ unsafe extern "C" fn gpu_adapter_get_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_adapter_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_adapter_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -240,7 +240,7 @@ unsafe extern "C" fn gpu_adapter_get_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_adapter_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_adapter_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -343,7 +343,7 @@ pub fn create_gpu_adapter_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_adapter_info_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_adapter_info_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -389,7 +389,7 @@ unsafe extern "C" fn gpu_adapter_info_get_1(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn gpu_adapter_info_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_adapter_info_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -435,7 +435,7 @@ unsafe extern "C" fn gpu_adapter_info_get_2(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn gpu_adapter_info_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_adapter_info_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -481,7 +481,7 @@ unsafe extern "C" fn gpu_adapter_info_get_3(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn gpu_adapter_info_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_adapter_info_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -527,7 +527,7 @@ unsafe extern "C" fn gpu_adapter_info_get_4(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn gpu_adapter_info_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_adapter_info_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -573,7 +573,7 @@ unsafe extern "C" fn gpu_adapter_info_get_5(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn gpu_adapter_info_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_adapter_info_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -619,7 +619,7 @@ unsafe extern "C" fn gpu_adapter_info_get_6(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn gpu_adapter_info_get_7(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_adapter_info_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -733,7 +733,7 @@ pub fn create_gpu_adapter_info_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_bind_group_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_bind_group_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -779,7 +779,7 @@ unsafe extern "C" fn gpu_bind_group_get_1(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
-unsafe extern "C" fn gpu_bind_group_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_bind_group_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -851,7 +851,7 @@ pub fn create_gpu_bind_group_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_bind_group_layout_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_bind_group_layout_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -897,7 +897,7 @@ unsafe extern "C" fn gpu_bind_group_layout_get_1(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_bind_group_layout_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_bind_group_layout_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -969,7 +969,7 @@ pub fn create_gpu_bind_group_layout_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_buffer_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_buffer_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1015,7 +1015,7 @@ unsafe extern "C" fn gpu_buffer_get_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_buffer_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_buffer_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1061,7 +1061,7 @@ unsafe extern "C" fn gpu_buffer_get_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_buffer_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_buffer_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1262,7 +1262,7 @@ unsafe extern "C" fn gpu_buffer_op_7(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_buffer_get_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_buffer_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1308,7 +1308,7 @@ unsafe extern "C" fn gpu_buffer_get_8(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_buffer_set_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_buffer_set_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1429,7 +1429,7 @@ pub fn create_gpu_buffer_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_canvas_context_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_canvas_context_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1720,7 +1720,7 @@ pub fn create_gpu_canvas_context_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_command_buffer_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_command_buffer_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1766,7 +1766,7 @@ unsafe extern "C" fn gpu_command_buffer_get_1(_info: *const v8::FunctionCallback
     }));
 }
 
-unsafe extern "C" fn gpu_command_buffer_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_command_buffer_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2354,7 +2354,7 @@ unsafe extern "C" fn gpu_command_encoder_op_10(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn gpu_command_encoder_get_11(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_command_encoder_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2400,7 +2400,7 @@ unsafe extern "C" fn gpu_command_encoder_get_11(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_command_encoder_set_11(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_command_encoder_set_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2724,7 +2724,7 @@ fn install_gpu_command_encoder_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
 }
 
 
-unsafe extern "C" fn gpu_compilation_info_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_compilation_info_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2796,7 +2796,7 @@ pub fn create_gpu_compilation_info_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_compilation_message_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_compilation_message_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2842,7 +2842,7 @@ unsafe extern "C" fn gpu_compilation_message_get_1(_info: *const v8::FunctionCal
     }));
 }
 
-unsafe extern "C" fn gpu_compilation_message_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_compilation_message_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2888,7 +2888,7 @@ unsafe extern "C" fn gpu_compilation_message_get_2(_info: *const v8::FunctionCal
     }));
 }
 
-unsafe extern "C" fn gpu_compilation_message_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_compilation_message_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2934,7 +2934,7 @@ unsafe extern "C" fn gpu_compilation_message_get_3(_info: *const v8::FunctionCal
     }));
 }
 
-unsafe extern "C" fn gpu_compilation_message_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_compilation_message_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -2980,7 +2980,7 @@ unsafe extern "C" fn gpu_compilation_message_get_4(_info: *const v8::FunctionCal
     }));
 }
 
-unsafe extern "C" fn gpu_compilation_message_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_compilation_message_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3026,7 +3026,7 @@ unsafe extern "C" fn gpu_compilation_message_get_5(_info: *const v8::FunctionCal
     }));
 }
 
-unsafe extern "C" fn gpu_compilation_message_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_compilation_message_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3338,7 +3338,7 @@ unsafe extern "C" fn gpu_compute_pass_encoder_op_4(_info: *const v8::FunctionCal
     }));
 }
 
-unsafe extern "C" fn gpu_compute_pass_encoder_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_compute_pass_encoder_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3384,7 +3384,7 @@ unsafe extern "C" fn gpu_compute_pass_encoder_get_5(_info: *const v8::FunctionCa
     }));
 }
 
-unsafe extern "C" fn gpu_compute_pass_encoder_set_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_compute_pass_encoder_set_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3777,7 +3777,7 @@ pub fn create_gpu_compute_pass_encoder_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_compute_pipeline_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_compute_pipeline_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3823,7 +3823,7 @@ unsafe extern "C" fn gpu_compute_pipeline_get_1(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_compute_pipeline_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_compute_pipeline_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3955,7 +3955,7 @@ pub fn create_gpu_compute_pipeline_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_device_lost_info_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_device_lost_info_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4001,7 +4001,7 @@ unsafe extern "C" fn gpu_device_lost_info_get_1(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_device_lost_info_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_device_lost_info_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4080,7 +4080,7 @@ pub fn create_gpu_device_lost_info_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_error_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_error_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4152,7 +4152,7 @@ pub fn create_gpu_error_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_external_texture_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_external_texture_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4198,7 +4198,7 @@ unsafe extern "C" fn gpu_external_texture_get_1(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_external_texture_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_external_texture_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4270,7 +4270,7 @@ pub fn create_gpu_external_texture_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_pipeline_layout_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_pipeline_layout_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4316,7 +4316,7 @@ unsafe extern "C" fn gpu_pipeline_layout_get_1(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn gpu_pipeline_layout_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_pipeline_layout_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4434,7 +4434,7 @@ unsafe extern "C" fn gpu_query_set_op_1(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn gpu_query_set_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_query_set_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4480,7 +4480,7 @@ unsafe extern "C" fn gpu_query_set_get_2(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn gpu_query_set_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_query_set_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4526,7 +4526,7 @@ unsafe extern "C" fn gpu_query_set_get_3(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn gpu_query_set_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_query_set_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4572,7 +4572,7 @@ unsafe extern "C" fn gpu_query_set_get_4(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn gpu_query_set_set_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_query_set_set_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4887,7 +4887,7 @@ unsafe extern "C" fn gpu_queue_op_5(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_queue_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_queue_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4933,7 +4933,7 @@ unsafe extern "C" fn gpu_queue_get_6(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_queue_set_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_queue_set_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5040,7 +5040,7 @@ pub fn create_gpu_queue_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_render_bundle_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_render_bundle_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5086,7 +5086,7 @@ unsafe extern "C" fn gpu_render_bundle_get_1(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn gpu_render_bundle_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_render_bundle_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5204,7 +5204,7 @@ unsafe extern "C" fn gpu_render_bundle_encoder_op_1(_info: *const v8::FunctionCa
     }));
 }
 
-unsafe extern "C" fn gpu_render_bundle_encoder_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5250,7 +5250,7 @@ unsafe extern "C" fn gpu_render_bundle_encoder_get_2(_info: *const v8::FunctionC
     }));
 }
 
-unsafe extern "C" fn gpu_render_bundle_encoder_set_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_set_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6461,7 +6461,7 @@ unsafe extern "C" fn gpu_render_pass_encoder_op_8(_info: *const v8::FunctionCall
     }));
 }
 
-unsafe extern "C" fn gpu_render_pass_encoder_get_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -6507,7 +6507,7 @@ unsafe extern "C" fn gpu_render_pass_encoder_get_9(_info: *const v8::FunctionCal
     }));
 }
 
-unsafe extern "C" fn gpu_render_pass_encoder_set_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_set_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7361,7 +7361,7 @@ fn install_gpu_render_pass_encoder_members_3<'s>(scope: &v8::PinScope<'s, '_>, p
 }
 
 
-unsafe extern "C" fn gpu_render_pipeline_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_render_pipeline_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7407,7 +7407,7 @@ unsafe extern "C" fn gpu_render_pipeline_get_1(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn gpu_render_pipeline_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_render_pipeline_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7539,7 +7539,7 @@ pub fn create_gpu_render_pipeline_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_sampler_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_sampler_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7585,7 +7585,7 @@ unsafe extern "C" fn gpu_sampler_get_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_sampler_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_sampler_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7667,7 +7667,7 @@ unsafe extern "C" fn gpu_shader_module_op_1(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn gpu_shader_module_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_shader_module_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7713,7 +7713,7 @@ unsafe extern "C" fn gpu_shader_module_get_2(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn gpu_shader_module_set_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_shader_module_set_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7811,7 +7811,7 @@ pub fn create_gpu_supported_features_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7857,7 +7857,7 @@ unsafe extern "C" fn gpu_supported_limits_get_1(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7903,7 +7903,7 @@ unsafe extern "C" fn gpu_supported_limits_get_2(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7949,7 +7949,7 @@ unsafe extern "C" fn gpu_supported_limits_get_3(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -7995,7 +7995,7 @@ unsafe extern "C" fn gpu_supported_limits_get_4(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8041,7 +8041,7 @@ unsafe extern "C" fn gpu_supported_limits_get_5(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8087,7 +8087,7 @@ unsafe extern "C" fn gpu_supported_limits_get_6(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_7(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8133,7 +8133,7 @@ unsafe extern "C" fn gpu_supported_limits_get_7(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8179,7 +8179,7 @@ unsafe extern "C" fn gpu_supported_limits_get_8(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8225,7 +8225,7 @@ unsafe extern "C" fn gpu_supported_limits_get_9(_info: *const v8::FunctionCallba
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_10(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8271,7 +8271,7 @@ unsafe extern "C" fn gpu_supported_limits_get_10(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_11(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8317,7 +8317,7 @@ unsafe extern "C" fn gpu_supported_limits_get_11(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_12(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8363,7 +8363,7 @@ unsafe extern "C" fn gpu_supported_limits_get_12(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_13(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_13(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8409,7 +8409,7 @@ unsafe extern "C" fn gpu_supported_limits_get_13(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_14(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_14(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8455,7 +8455,7 @@ unsafe extern "C" fn gpu_supported_limits_get_14(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_15(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_15(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8501,7 +8501,7 @@ unsafe extern "C" fn gpu_supported_limits_get_15(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_16(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_16(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8547,7 +8547,7 @@ unsafe extern "C" fn gpu_supported_limits_get_16(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_17(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_17(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8593,7 +8593,7 @@ unsafe extern "C" fn gpu_supported_limits_get_17(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_18(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_18(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8639,7 +8639,7 @@ unsafe extern "C" fn gpu_supported_limits_get_18(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_19(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_19(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8685,7 +8685,7 @@ unsafe extern "C" fn gpu_supported_limits_get_19(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_20(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_20(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8731,7 +8731,7 @@ unsafe extern "C" fn gpu_supported_limits_get_20(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_21(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_21(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8777,7 +8777,7 @@ unsafe extern "C" fn gpu_supported_limits_get_21(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_22(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_22(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8823,7 +8823,7 @@ unsafe extern "C" fn gpu_supported_limits_get_22(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_23(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_23(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8869,7 +8869,7 @@ unsafe extern "C" fn gpu_supported_limits_get_23(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_24(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_24(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8915,7 +8915,7 @@ unsafe extern "C" fn gpu_supported_limits_get_24(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_25(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_25(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -8961,7 +8961,7 @@ unsafe extern "C" fn gpu_supported_limits_get_25(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_26(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_26(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9007,7 +9007,7 @@ unsafe extern "C" fn gpu_supported_limits_get_26(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_27(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_27(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9053,7 +9053,7 @@ unsafe extern "C" fn gpu_supported_limits_get_27(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_28(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_28(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9099,7 +9099,7 @@ unsafe extern "C" fn gpu_supported_limits_get_28(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_29(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_29(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9145,7 +9145,7 @@ unsafe extern "C" fn gpu_supported_limits_get_29(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_30(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_30(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9191,7 +9191,7 @@ unsafe extern "C" fn gpu_supported_limits_get_30(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_31(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_31(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9237,7 +9237,7 @@ unsafe extern "C" fn gpu_supported_limits_get_31(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_32(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_32(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9283,7 +9283,7 @@ unsafe extern "C" fn gpu_supported_limits_get_32(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_33(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_33(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9329,7 +9329,7 @@ unsafe extern "C" fn gpu_supported_limits_get_33(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_34(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_34(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9375,7 +9375,7 @@ unsafe extern "C" fn gpu_supported_limits_get_34(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_35(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_35(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9421,7 +9421,7 @@ unsafe extern "C" fn gpu_supported_limits_get_35(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn gpu_supported_limits_get_36(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_supported_limits_get_36(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9847,7 +9847,7 @@ unsafe extern "C" fn gpu_texture_op_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_texture_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9893,7 +9893,7 @@ unsafe extern "C" fn gpu_texture_get_3(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_texture_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9939,7 +9939,7 @@ unsafe extern "C" fn gpu_texture_get_4(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_texture_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -9985,7 +9985,7 @@ unsafe extern "C" fn gpu_texture_get_5(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_texture_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10031,7 +10031,7 @@ unsafe extern "C" fn gpu_texture_get_6(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_texture_get_7(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10077,7 +10077,7 @@ unsafe extern "C" fn gpu_texture_get_7(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_texture_get_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10123,7 +10123,7 @@ unsafe extern "C" fn gpu_texture_get_8(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_texture_get_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10169,7 +10169,7 @@ unsafe extern "C" fn gpu_texture_get_9(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_texture_get_10(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10215,7 +10215,7 @@ unsafe extern "C" fn gpu_texture_get_10(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn gpu_texture_get_11(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10261,7 +10261,7 @@ unsafe extern "C" fn gpu_texture_get_11(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn gpu_texture_get_12(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_get_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10307,7 +10307,7 @@ unsafe extern "C" fn gpu_texture_get_12(_info: *const v8::FunctionCallbackInfo) 
     }));
 }
 
-unsafe extern "C" fn gpu_texture_set_12(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_set_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10465,7 +10465,7 @@ fn install_gpu_texture_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
 }
 
 
-unsafe extern "C" fn gpu_texture_view_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_view_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10511,7 +10511,7 @@ unsafe extern "C" fn gpu_texture_view_get_1(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn gpu_texture_view_set_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_texture_view_set_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10583,7 +10583,7 @@ pub fn create_gpu_texture_view_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_pipeline_error_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_pipeline_error_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10658,7 +10658,7 @@ pub fn create_gpu_pipeline_error_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gpu_device_get_1(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_device_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10704,7 +10704,7 @@ unsafe extern "C" fn gpu_device_get_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_device_get_2(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_device_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10750,7 +10750,7 @@ unsafe extern "C" fn gpu_device_get_2(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_device_get_3(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_device_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -10796,7 +10796,7 @@ unsafe extern "C" fn gpu_device_get_3(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_device_get_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_device_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -11597,7 +11597,7 @@ unsafe extern "C" fn gpu_device_op_20(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_device_get_21(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_device_get_21(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -11706,7 +11706,7 @@ unsafe extern "C" fn gpu_device_op_23(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_device_get_24(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_device_get_24(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -11752,7 +11752,7 @@ unsafe extern "C" fn gpu_device_get_24(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_device_set_24(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_device_set_24(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -11796,7 +11796,7 @@ unsafe extern "C" fn gpu_device_set_24(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_device_get_25(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_device_get_25(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -11842,7 +11842,7 @@ unsafe extern "C" fn gpu_device_get_25(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-unsafe extern "C" fn gpu_device_set_25(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn gpu_device_set_25(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -12164,5 +12164,513 @@ pub fn create_gpu_validation_error_template<'s>(
     }
 
     tmpl
+}
+
+pub fn fix_accessors_gpu(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    {
+        let ctor_key = v8::String::new(scope, "GPUBindGroup").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_bind_group_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_bind_group_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUBindGroupLayout").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_bind_group_layout_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_bind_group_layout_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUBuffer").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_buffer_get_8).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_buffer_set_8).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUCommandBuffer").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_command_buffer_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_command_buffer_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUCommandEncoder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_command_encoder_get_11).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_command_encoder_set_11).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUComputePassEncoder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_compute_pass_encoder_get_5).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_compute_pass_encoder_set_5).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUComputePipeline").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_compute_pipeline_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_compute_pipeline_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUExternalTexture").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_external_texture_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_external_texture_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUPipelineLayout").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_pipeline_layout_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_pipeline_layout_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUQuerySet").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_query_set_get_4).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_query_set_set_4).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUQueue").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_queue_get_6).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_queue_set_6).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPURenderBundle").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_render_bundle_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_render_bundle_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPURenderBundleEncoder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_render_bundle_encoder_get_2).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_render_bundle_encoder_set_2).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPURenderPassEncoder").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_render_pass_encoder_get_9).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_render_pass_encoder_set_9).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPURenderPipeline").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_render_pipeline_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_render_pipeline_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUSampler").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_sampler_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_sampler_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUShaderModule").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_shader_module_get_2).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_shader_module_set_2).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUTexture").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_texture_get_12).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_texture_set_12).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUTextureView").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_texture_view_get_1).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_texture_view_set_1).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUDevice").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "onuncapturederror").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_device_get_24).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get onuncapturederror").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_device_set_24).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set onuncapturederror").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    {
+        let ctor_key = v8::String::new(scope, "GPUDevice").unwrap();
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        let attr_key = v8::String::new(scope, "label").unwrap();
+                        let g = v8::FunctionTemplate::builder_raw(gpu_device_get_25).length(0).build(scope);
+                        g.set_class_name(v8::String::new(scope, "get label").unwrap());
+                        let s = v8::FunctionTemplate::builder_raw(gpu_device_set_25).length(1).build(scope);
+                        s.set_class_name(v8::String::new(scope, "set label").unwrap());
+                        let gf = g.get_function(scope).unwrap();
+                        let sf = s.get_function(scope).unwrap();
+                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
+                        d.set_enumerable(true);
+                        d.set_configurable(true);
+                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                    }
+                }
+            }
+        }
+    }
+    // fixed 21 accessors
 }
 
