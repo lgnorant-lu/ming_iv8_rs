@@ -603,6 +603,38 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     } catch(e) {}
 
     try {
+        if (typeof Document !== 'undefined' && Document.prototype) {
+            var _docProps = {
+                domain: '', referrer: '', cookie: '', lastModified: '',
+                readyState: 'complete', title: '', currentScript: null,
+                defaultView: null, hidden: false, visibilityState: 'visible',
+                URL: '', documentURI: '', compatMode: 'CSS1Compat',
+                characterSet: 'UTF-8', charset: 'UTF-8', contentType: 'text/html',
+                fullscreenEnabled: false, fullscreenElement: null,
+                scrollingElement: null
+            };
+            Object.keys(_docProps).forEach(function(prop) {
+                if (prop in Document.prototype) return;
+                var dv = _docProps[prop];
+                Object.defineProperty(Document.prototype, prop, {
+                    get: function() {
+                        if (this === Document.prototype) return dv;
+                        var ownDesc = Object.getOwnPropertyDescriptor(this, prop);
+                        if (ownDesc && 'value' in ownDesc) return ownDesc.value;
+                        if (this['_' + prop] !== undefined) return this['_' + prop];
+                        if (prop === 'defaultView') return typeof window !== 'undefined' ? window : null;
+                        if (prop === 'URL' || prop === 'documentURI') return typeof location !== 'undefined' ? location.href : '';
+                        return dv;
+                    },
+                    set: function(v) { this['_' + prop] = v; },
+                    enumerable: true,
+                    configurable: true
+                });
+            });
+        }
+    } catch(e) {}
+
+    try {
         if (typeof HTMLElement !== 'undefined' && HTMLElement.prototype) {
             var _heProps = {
                 innerText: '', offsetTop: 0, offsetLeft: 0,
