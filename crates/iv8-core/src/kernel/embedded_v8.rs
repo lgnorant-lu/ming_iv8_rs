@@ -506,6 +506,39 @@ impl EmbeddedV8Kernel {
 
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
 
+            let fix_proto_js = crate::v8_utils::v8_string(scope, r#"
+                (function() {
+                    var shimEvent = globalThis.Event;
+                    var shimMouseEvent = globalThis.MouseEvent;
+                    var fixes = [
+                        ['TrackEvent','Event'], ['SubmitEvent','Event'], ['FormDataEvent','Event'],
+                        ['ToggleEvent','Event'], ['CommandEvent','Event'],
+                        ['DragEvent','MouseEvent'],
+                        ['AudioTrackList','EventTarget'], ['VideoTrackList','EventTarget'],
+                        ['TextTrackList','EventTarget'], ['TextTrack','EventTarget'],
+                        ['TextTrackCue','EventTarget'], ['OffscreenCanvas','EventTarget'],
+                        ['CloseWatcher','EventTarget'], ['Navigation','EventTarget'],
+                        ['RadioNodeList','NodeList'],
+                    ];
+                    for (var i = 0; i < fixes.length; i++) {
+                        var child = fixes[i][0], parent = fixes[i][1];
+                        try {
+                            var childCtor = globalThis[child];
+                            var parentCtor = globalThis[parent];
+                            if (childCtor && parentCtor) {
+                                Object.setPrototypeOf(childCtor, parentCtor);
+                                var childProto = childCtor.prototype;
+                                var parentProto = parentCtor.prototype;
+                                if (childProto && parentProto) {
+                                    Object.setPrototypeOf(childProto, parentProto);
+                                }
+                            }
+                        } catch(e) {}
+                    }
+                })();
+            "#);
+            let _ = v8::Script::compile(scope, fix_proto_js, None).and_then(|s| s.run(scope));
+
             let js = crate::v8_utils::v8_string(scope, r#"
                 (function() {
                     var workerOnly = ['WorkerGlobalScope','DedicatedWorkerGlobalScope',
