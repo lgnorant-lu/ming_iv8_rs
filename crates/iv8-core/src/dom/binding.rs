@@ -72,6 +72,7 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
         get_elements_by_class_name,
     );
     install_method(scope, doc_obj, "createElement", create_element);
+    install_method(scope, doc_obj, "createElementNS", create_element_ns);
 
     // EventTarget methods on document (v0.2: L-03 fix).
     //
@@ -860,6 +861,57 @@ unsafe extern "C" fn create_element(info: *const v8::FunctionCallbackInfo) {
     }));
     if result.is_err() {
         tracing::error!("panic in createElement callback");
+    }
+}
+
+/// document.createElementNS(namespace, qualifiedName) callback
+unsafe extern "C" fn create_element_ns(info: *const v8::FunctionCallbackInfo) {
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+
+        if args.length() < 2 {
+            return;
+        }
+
+        let ns_arg = args.get(0);
+        let ns_str = ns_arg.to_rust_string_lossy(scope);
+        let tag_arg = args.get(1);
+        let tag_str = tag_arg.to_rust_string_lossy(scope);
+        let tag_str = tag_str.to_ascii_lowercase();
+
+        let ns = if ns_str.is_empty() || ns_str == "null" {
+            "http://www.w3.org/1999/xhtml"
+        } else {
+            Box::leak(ns_str.into_boxed_str())
+        };
+
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+
+        let node_id = {
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut doc) = *doc {
+                let root_id = doc.root_id();
+                let data = NodeData::element(&tag_str, ns, vec![]);
+                let nid = doc.append_child(root_id, data);
+                doc.detach(nid);
+                Some(nid)
+            } else {
+                None
+            }
+        };
+
+        if let Some(nid) = node_id {
+            if let Some(obj) = node_to_v8_object(scope, state, nid) {
+                rv.set(obj);
+            }
+        }
+    }));
+    if result.is_err() {
+        tracing::error!("panic in createElementNS callback");
     }
 }
 
