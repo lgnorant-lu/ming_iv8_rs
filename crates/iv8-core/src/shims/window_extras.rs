@@ -8,36 +8,32 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     if (typeof window === 'undefined') return;
 
     var _winOps = {
-        stop: function stop() {},
-        focus: function focus() {},
-        blur: function blur() {},
-        open: function open(url, target, features) { return null; },
-        alert: function alert(message) {},
-        confirm: function confirm(message) { return false; },
-        prompt: function prompt(message, defaultValue) { return null; },
-        print: function print() {},
-        captureEvents: function captureEvents() {},
-        releaseEvents: function releaseEvents() {},
-        getSelection: function getSelection() { return { rangeCount: 0, toString: function() { return ''; } }; },
-        requestIdleCallback: function requestIdleCallback(cb) { if (typeof cb === 'function') cb({ didTimeout: false, timeRemaining: function() { return 50; } }); return 0; },
-        cancelIdleCallback: function cancelIdleCallback(id) {},
-        requestAnimationFrame: function requestAnimationFrame(cb) { if (typeof cb === 'function') cb(Date.now()); return 0; },
-        cancelAnimationFrame: function cancelAnimationFrame(id) {},
-        reportError: function reportError(e) { if (typeof console !== 'undefined' && console.error) console.error(e); },
-        createImageBitmap: function createImageBitmap() { return Promise.reject(new TypeError('Not supported')); },
-        moveTo: function moveTo(x, y) {},
-        moveBy: function moveBy(dx, dy) {},
-        resizeTo: function resizeTo(w, h) {},
-        resizeBy: function resizeBy(dw, dh) {},
-        scroll: function scroll(x, y) {},
-        scrollTo: function scrollTo(x, y) {},
-        scrollBy: function scrollBy(dx, dy) {},
-        getComputedStyle: function getComputedStyle(el, pseudo) {
-            return { getPropertyValue: function(prop) { return ''; }, getPropertyPriority: function(prop) { return ''; }, length: 0, item: function(i) { return ''; } };
-        },
-        matchMedia: function matchMedia(query) {
-            return { matches: false, media: query, addListener: function() {}, removeListener: function() {}, addEventListener: function() {}, removeEventListener: function() {}, dispatchEvent: function() { return true; }, onchange: null };
-        }
+        stop: function stop() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        focus: function focus() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        blur: function blur() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        open: function open(url, target, features) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return null; },
+        alert: function alert(message) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        confirm: function confirm(message) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return false; },
+        prompt: function prompt(message, defaultValue) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return null; },
+        print: function print() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        captureEvents: function captureEvents() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        releaseEvents: function releaseEvents() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        getSelection: function getSelection() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return { rangeCount: 0, toString: function() { return ''; } }; },
+        requestIdleCallback: function requestIdleCallback(cb) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (typeof cb === 'function') cb({ didTimeout: false, timeRemaining: function() { return 50; } }); return 0; },
+        cancelIdleCallback: function cancelIdleCallback(id) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        requestAnimationFrame: function requestAnimationFrame(cb) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (typeof cb === 'function') cb(Date.now()); return 0; },
+        cancelAnimationFrame: function cancelAnimationFrame(id) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        reportError: function reportError(e) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (typeof console !== 'undefined' && console.error) console.error(e); },
+        createImageBitmap: function createImageBitmap() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return Promise.reject(new TypeError('Not supported')); },
+        moveTo: function moveTo(x, y) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        moveBy: function moveBy(dx, dy) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        resizeTo: function resizeTo(w, h) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        resizeBy: function resizeBy(dw, dh) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        scroll: function scroll(x, y) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        scrollTo: function scrollTo(x, y) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        scrollBy: function scrollBy(dx, dy) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        getComputedStyle: function getComputedStyle(el, pseudo) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return { getPropertyValue: function(prop) { return ''; }, getPropertyPriority: function(prop) { return ''; }, length: 0, item: function(i) { return ''; } }; },
+        matchMedia: function matchMedia(query) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return { matches: false, media: query, addListener: function() {}, removeListener: function() {}, addEventListener: function() {}, removeEventListener: function() {}, dispatchEvent: function() { return true; }, onchange: null }; }
     };
     Object.keys(_winOps).forEach(function(k) {
         if (typeof globalThis[k] === 'undefined') {
