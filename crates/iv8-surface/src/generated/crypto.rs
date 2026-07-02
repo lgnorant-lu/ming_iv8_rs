@@ -971,7 +971,7 @@ fn install_subtle_crypto_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::
     // method: supports()
     {
         let name = v8::String::new(scope, "supports").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(subtle_crypto_op_19).length(3).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(subtle_crypto_op_19).length(2).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }

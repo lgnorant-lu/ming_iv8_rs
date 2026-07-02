@@ -30130,7 +30130,7 @@ fn install_document_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     // method: open()
     {
         let name = v8::String::new(scope, "open").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_51).length(3).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_51).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -42903,7 +42903,7 @@ fn install_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<
     // method: scroll()
     {
         let name = v8::String::new(scope, "scroll").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(element_op_52).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(element_op_52).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -42917,7 +42917,7 @@ fn install_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<
     // method: scrollTo()
     {
         let name = v8::String::new(scope, "scrollTo").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(element_op_54).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(element_op_54).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -42931,7 +42931,7 @@ fn install_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<
     // method: scrollBy()
     {
         let name = v8::String::new(scope, "scrollBy").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(element_op_56).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(element_op_56).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }

@@ -16228,22 +16228,575 @@ pub fn fix_global_accessor_properties(scope: &v8::PinScope<'_, '_>, global: v8::
     // Fixed 194 global accessor properties
 }
 
+pub fn fix_global_operation_lengths(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    {
+        let key = v8::String::new(scope, "registerProcessor").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 2 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "registerAnimator").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 2 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "postMessage").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "close").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "requestAnimationFrame").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "cancelAnimationFrame").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "skipWaiting").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "registerPaint").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 2 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "registerLayout").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 2 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "stop").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "focus").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "blur").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "open").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "alert").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "confirm").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "prompt").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "print").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "navigate").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "requestResize").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "matchMedia").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "moveTo").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 2 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "moveBy").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 2 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "resizeTo").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 2 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "resizeBy").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 2 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "scroll").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "scrollTo").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "scrollBy").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "getComputedStyle").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "getDigitalGoodsService").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "fetchLater").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "showOpenFilePicker").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "showSaveFilePicker").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "showDirectoryPicker").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "captureEvents").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "releaseEvents").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "queryLocalFonts").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "requestIdleCallback").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "cancelIdleCallback").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "getSelection").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "getScreenDetails").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "reportError").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "btoa").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "atob").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "setTimeout").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "clearTimeout").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "setInterval").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "clearInterval").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "queueMicrotask").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "createImageBitmap").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "structuredClone").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+}
+
 pub const GLOBAL_ATTR_NAMES: &[&str] = &[
     "currentFrame",
     "currentTime",
     "sampleRate",
     "renderQuantumSize",
     "port",
-    "rtcIdentityProvider",
-    "devicePixelRatio",
+    "name",
+    "onrtctransform",
+    "onmessage",
+    "onmessageerror",
     "clients",
     "registration",
     "serviceWorker",
     "oninstall",
     "onactivate",
     "onfetch",
-    "onmessage",
-    "onmessageerror",
     "onbackgroundfetchsuccess",
     "onbackgroundfetchfail",
     "onbackgroundfetchabort",
@@ -16259,7 +16812,8 @@ pub const GLOBAL_ATTR_NAMES: &[&str] = &[
     "onpushsubscriptionchange",
     "oncanmakepayment",
     "onpaymentrequest",
-    "name",
+    "rtcIdentityProvider",
+    "devicePixelRatio",
     "onconnect",
     "window",
     "self",
@@ -16414,7 +16968,6 @@ pub const GLOBAL_ATTR_NAMES: &[&str] = &[
     "sessionStorage",
     "localStorage",
     "pushManager",
-    "onrtctransform",
 ];
 
 pub const GLOBAL_MOVE_JS: &str = "(function(){});";

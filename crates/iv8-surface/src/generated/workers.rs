@@ -2669,7 +2669,7 @@ pub fn create_message_port_template<'s>(
     // method: postMessage()
     {
         let name = v8::String::new(scope, "postMessage").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(message_port_op_1).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(message_port_op_1).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -3138,7 +3138,7 @@ pub fn create_service_worker_template<'s>(
     // method: postMessage()
     {
         let name = v8::String::new(scope, "postMessage").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(service_worker_op_3).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(service_worker_op_3).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -5051,7 +5051,7 @@ pub fn create_worker_template<'s>(
     // method: postMessage()
     {
         let name = v8::String::new(scope, "postMessage").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_op_2).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_op_2).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }

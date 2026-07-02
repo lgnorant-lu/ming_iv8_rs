@@ -506,6 +506,7 @@ impl EmbeddedV8Kernel {
 
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
+            iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);
 
             // Post-fix: convert [Global] data properties to accessor properties.
             // Shims install real values as data properties (history, customElements, etc.).

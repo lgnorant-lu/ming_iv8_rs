@@ -10022,21 +10022,21 @@ fn install_rtc_peer_connection_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto
     // method: createOffer()
     {
         let name = v8::String::new(scope, "createOffer").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_28).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_28).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: setLocalDescription()
     {
         let name = v8::String::new(scope, "setLocalDescription").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_29).length(3).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_29).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: createAnswer()
     {
         let name = v8::String::new(scope, "createAnswer").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_30).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_30).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -10046,14 +10046,14 @@ fn install_rtc_peer_connection_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto
     // method: setRemoteDescription()
     {
         let name = v8::String::new(scope, "setRemoteDescription").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_31).length(3).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_31).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: addIceCandidate()
     {
         let name = v8::String::new(scope, "addIceCandidate").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_32).length(3).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_32).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }

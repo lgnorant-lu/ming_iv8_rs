@@ -638,7 +638,17 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
 
         if m.kind == "operation" {
             let op_name = m.name.as_deref().unwrap_or("unknown");
-            let arg_count = m.required_arg_count;
+            // Calculate minOverloadLength: min required_arg_count across all
+            // overloads with the same name. WebIDL spec: interface object
+            // .length = minOverloadLength for overloaded operations.
+            let min_arg_count = def
+                .members
+                .iter()
+                .filter(|m2| m2.kind == "operation" && m2.name.as_deref() == Some(op_name))
+                .map(|m2| m2.required_arg_count)
+                .min()
+                .unwrap_or(m.required_arg_count);
+            let arg_count = min_arg_count;
             let mut block = String::new();
             block.push_str(&format!("    // method: {}()\n", op_name));
             block.push_str("    {\n");
@@ -1011,6 +1021,46 @@ pub fn generate_install_all(
         }
     }
     out.push_str(&format!("    // Fixed {} global accessor properties\n", global_fix_count));
+    out.push_str("}\n");
+
+    // Generate fix_global_operation_lengths: fix .length of [Global] operations
+    // on globalThis to match WebIDL minOverloadLength.
+    // Shim-installed operations (window_extras.rs) have wrong .length.
+    // This function uses Object.defineProperty to set correct .length.
+    out.push_str("\npub fn fix_global_operation_lengths(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {\n");
+    {
+        let mut seen = std::collections::BTreeSet::new();
+        for def in definitions {
+            if def.kind != "interface" { continue; }
+            let ea = process_interface_ea(def);
+            if !ea.is_global { continue; }
+            for m in &def.members {
+                if m.kind != "operation" { continue; }
+                let name = m.name.as_deref().unwrap_or("");
+                if name.is_empty() || seen.contains(name) { continue; }
+                seen.insert(name.to_string());
+                // Calculate minOverloadLength across all overloads with same name
+                let min_args = def
+                    .members
+                    .iter()
+                    .filter(|m2| m2.kind == "operation" && m2.name.as_deref() == Some(name))
+                    .map(|m2| m2.required_arg_count)
+                    .min()
+                    .unwrap_or(0);
+                out.push_str(&format!("    {{\n"));
+                out.push_str(&format!("        let key = v8::String::new(scope, \"{}\").unwrap();\n", name));
+                out.push_str(&format!("        if let Some(fn_val) = global.get(scope, key.into()) {{\n"));
+                out.push_str(&format!("            if fn_val.is_function() {{\n"));
+                out.push_str(&format!("                let len_key = v8::String::new(scope, \"length\").unwrap();\n"));
+                out.push_str(&format!("                let len_val = v8::Number::new(scope, {} as f64);\n", min_args));
+                out.push_str(&format!("                let fn_obj: v8::Local<v8::Object> = unsafe {{ v8::Local::cast_unchecked(fn_val) }};\n"));
+                out.push_str(&format!("                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());\n"));
+                out.push_str(&format!("            }}\n"));
+                out.push_str(&format!("        }}\n"));
+                out.push_str(&format!("    }}\n"));
+            }
+        }
+    }
     out.push_str("}\n");
 
     // Generate GLOBAL_ATTR_NAMES — list of all [Global] attribute names.

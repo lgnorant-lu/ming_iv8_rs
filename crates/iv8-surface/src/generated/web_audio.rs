@@ -5314,42 +5314,42 @@ fn install_audio_node_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     // method: disconnect()
     {
         let name = v8::String::new(scope, "disconnect").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_4).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_4).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: disconnect()
     {
         let name = v8::String::new(scope, "disconnect").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_5).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_5).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: disconnect()
     {
         let name = v8::String::new(scope, "disconnect").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_6).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_6).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: disconnect()
     {
         let name = v8::String::new(scope, "disconnect").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_7).length(3).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_7).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: disconnect()
     {
         let name = v8::String::new(scope, "disconnect").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_8).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_8).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: disconnect()
     {
         let name = v8::String::new(scope, "disconnect").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_9).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(audio_node_op_9).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }

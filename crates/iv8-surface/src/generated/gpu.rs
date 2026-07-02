@@ -2642,7 +2642,7 @@ fn install_gpu_command_encoder_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     // method: copyBufferToBuffer()
     {
         let name = v8::String::new(scope, "copyBufferToBuffer").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(gpu_command_encoder_op_4).length(4).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(gpu_command_encoder_op_4).length(2).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
