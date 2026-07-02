@@ -688,7 +688,60 @@ impl EmbeddedV8Kernel {
                             }
                         }
                     } catch(e) {}
-                    // Wrap accessor getters on prototypes with receiver check.
+                    // Wrap operations (methods) on prototypes with null/undefined receiver check.
+                    // Only wrap JS shim functions (not [native code] codegen functions).
+                    // codegen operations already have receiver check (R3).
+                    // idlharness requires: calling operation with this=null must throw TypeError.
+                    // NOTE: Currently disabled — causes regressions with codegen functions
+                    // that use [native code] toString. TODO: implement per-shim receiver
+                    // check in each shim file instead of global wrapper.
+                    /*
+                    var opCheckInterfaces = [
+                        'HTMLElement', 'HTMLFormElement', 'HTMLInputElement',
+                        'HTMLTextAreaElement', 'HTMLCanvasElement', 'Navigator',
+                        'MessagePort', 'Worker', 'Storage', 'Node', 'Event',
+                        'EventTarget', 'NodeList', 'MutationObserver', 'DOMTokenList',
+                        'Window', 'CustomEvent',
+                    ];
+                    for (var i = 0; i < opCheckInterfaces.length; i++) {
+                        try {
+                            var ifaceName = opCheckInterfaces[i];
+                            var ctor = globalThis[ifaceName];
+                            if (!ctor || !ctor.prototype) continue;
+                            var proto = ctor.prototype;
+                            var names = Object.getOwnPropertyNames(proto);
+                            for (var j = 0; j < names.length; j++) {
+                                var pname = names[j];
+                                if (pname === 'constructor') continue;
+                                try {
+                                    var desc = Object.getOwnPropertyDescriptor(proto, pname);
+                                    if (!desc || typeof desc.value !== 'function') continue;
+                                    if (desc.value.__iv8_op_wrapped) continue;
+                                    var fnStr = '';
+                                    try { fnStr = desc.value.toString(); } catch(e) {}
+                                    if (fnStr.indexOf('[native code]') !== -1) continue;
+                                    var origFn = desc.value;
+                                    var thisIface = ifaceName;
+                                    var wrappedFn = function() {
+                                        if (this === null || this === undefined) {
+                                            throw new TypeError('Illegal invocation');
+                                        }
+                                        return origFn.apply(this, arguments);
+                                    };
+                                    wrappedFn.__iv8_op_wrapped = true;
+                                    try { Object.defineProperty(wrappedFn, 'name', { value: origFn.name || pname }); } catch(e) {}
+                                    try { Object.defineProperty(wrappedFn, 'length', { value: origFn.length }); } catch(e) {}
+                                    Object.defineProperty(proto, pname, {
+                                        value: wrappedFn,
+                                        writable: desc.writable,
+                                        enumerable: desc.enumerable,
+                                        configurable: true
+                                    });
+                                } catch(e) {}
+                            }
+                        } catch(e) {}
+                    }
+                    */
                     // idlharness requires: calling getter on prototype object
                     // (or wrong-type receiver) must throw TypeError.
                     // codegen getters already have this check, but shim-installed
