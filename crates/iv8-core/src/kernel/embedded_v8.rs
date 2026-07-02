@@ -505,6 +505,7 @@ impl EmbeddedV8Kernel {
             let _ = v8::Script::compile(scope, move_js, None).and_then(|s| s.run(scope));
 
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
+            iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
 
             let fix_proto_js = crate::v8_utils::v8_string(scope, r#"
                 (function() {
@@ -538,6 +539,8 @@ impl EmbeddedV8Kernel {
                         ['Navigator','Object'],
                         ['EventTarget','Object'],
                         ['Storage','Function'],
+                        ['MediaQueryList','EventTarget'],
+                        ['MediaQueryListEvent','Event'],
                     ];
                     for (var i = 0; i < fixes.length; i++) {
                         var child = fixes[i][0], parent = fixes[i][1];

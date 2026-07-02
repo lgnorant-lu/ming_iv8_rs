@@ -954,7 +954,65 @@ pub fn generate_install_all(
     }
     out.push_str("}\n");
 
-    out.push_str(&format!("\npub const GLOBAL_MOVE_JS: &str = {:?};\n", global_move_js));
+    // Generate fix_global_accessor_properties: for [Global] interfaces,
+    // define accessor properties directly on globalThis using Object::define_property.
+    // This replaces GLOBAL_MOVE_JS and avoids V8 FunctionTemplate accessor limitation.
+    out.push_str("\npub fn fix_global_accessor_properties(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {\n");
+    let mut global_fix_count = 0;
+    for name in sorted {
+        let def = match by_name.get(name.as_str()) {
+            Some(d) => d,
+            None => continue,
+        };
+        let ea = process_interface_ea(def);
+        if !ea.is_global { continue; }
+        let fn_name = type_mapper::idl_name_to_rust(name);
+        let domain = domain_of.get(name.as_str()).map(|s| s.as_str()).unwrap_or("web_apis");
+        let module = domain.replace('-', "_");
+        let mut idx = 0;
+        for m in &def.members {
+            if m.kind != "attribute" {
+                if m.kind == "operation" { idx += 1; }
+                continue;
+            }
+            let attr_name = match &m.name { Some(n) => n, None => continue };
+            if should_skip_attribute(name, attr_name) { continue; }
+            idx += 1;
+            let has_setter = !m.readonly || m.has_put_forwards || m.has_replaceable;
+
+            // For global attributes, define on globalThis directly
+            // Only if not already a data property with a value (shim-set)
+            out.push_str("    {\n");
+            out.push_str(&format!("        let attr_key = v8::String::new(scope, \"{}\").unwrap();\n", attr_name));
+            out.push_str("        let should_skip = {\n");
+            out.push_str("            let desc = global.get_own_property_descriptor(scope, attr_key.into());\n");
+            out.push_str("            desc.is_some()\n");
+            out.push_str("        };\n");
+            out.push_str("        if should_skip { /* skip shim-set property */ } else {\n");
+            out.push_str(&format!("        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::{}::{}_get_{}).length(0).build(scope);\n", module, fn_name, idx));
+            out.push_str(&format!("        getter_tmpl.set_class_name(v8::String::new(scope, \"get {}\").unwrap());\n", attr_name));
+            out.push_str("        let getter_fn = getter_tmpl.get_function(scope).unwrap();\n");
+            if has_setter {
+                out.push_str(&format!("        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::{}::{}_set_{}).length(1).build(scope);\n", module, fn_name, idx));
+                out.push_str(&format!("        setter_tmpl.set_class_name(v8::String::new(scope, \"set {}\").unwrap());\n", attr_name));
+                out.push_str("        let setter_fn = setter_tmpl.get_function(scope).unwrap();\n");
+                out.push_str("        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());\n");
+            } else {
+                out.push_str("        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());\n");
+            }
+            out.push_str("        desc.set_enumerable(true);\n");
+            out.push_str("        desc.set_configurable(true);\n");
+            out.push_str("        let _ = global.define_property(scope, attr_key.into(), &desc);\n");
+            out.push_str("        }\n");
+            out.push_str("    }\n");
+            global_fix_count += 1;
+        }
+    }
+    out.push_str(&format!("    // Fixed {} global accessor properties\n", global_fix_count));
+    out.push_str("}\n");
+
+    // GLOBAL_MOVE_JS is now empty — replaced by fix_global_accessor_properties
+    out.push_str("\npub const GLOBAL_MOVE_JS: &str = \"(function(){});\";\n");
     out
 }
 

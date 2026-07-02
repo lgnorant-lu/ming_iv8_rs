@@ -12640,4 +12640,3592 @@ pub fn fix_accessor_properties(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
     super::workers::fix_accessors_workers(scope, global);
 }
 
-pub const GLOBAL_MOVE_JS: &str = "(function(){try{var p=Window.prototype;var names=['window','self','document','name','location','history','navigation','customElements','locationbar','menubar','personalbar','scrollbars','statusbar','toolbar','status','close','closed','stop','focus','blur','frames','length','top','opener','parent','frameElement','open','navigator','clientInformation','originAgentCluster','alert','alert','confirm','prompt','print','postMessage','postMessage','credentialless','orientation','onorientationchange','cookieStore','crashReport','navigate','requestResize','viewport','matchMedia','screen','visualViewport','moveTo','moveBy','resizeTo','resizeBy','innerWidth','innerHeight','scrollX','pageXOffset','scrollY','pageYOffset','scroll','scroll','scrollTo','scrollTo','scrollBy','scrollBy','screenX','screenLeft','screenY','screenTop','outerWidth','outerHeight','devicePixelRatio','getComputedStyle','getDigitalGoodsService','documentPictureInPicture','event','fence','fetchLater','showOpenFilePicker','showSaveFilePicker','showDirectoryPicker','captureEvents','releaseEvents','external','queryLocalFonts','onappinstalled','onbeforeinstallprompt','ondeviceorientation','ondeviceorientationabsolute','ondevicemotion','portalHost','requestIdleCallback','cancelIdleCallback','getSelection','speechSynthesis','launchQueue','getScreenDetails','onabort','onauxclick','onbeforeinput','onbeforematch','onbeforetoggle','onblur','oncancel','oncanplay','oncanplaythrough','onchange','onclick','onclose','oncommand','oncontextlost','oncontextmenu','oncontextrestored','oncopy','oncuechange','oncut','ondblclick','ondrag','ondragend','ondragenter','ondragleave','ondragover','ondragstart','ondrop','ondurationchange','onemptied','onended','onerror','onfocus','onformdata','oninput','oninvalid','onkeydown','onkeypress','onkeyup','onload','onloadeddata','onloadedmetadata','onloadstart','onmousedown','onmouseenter','onmouseleave','onmousemove','onmouseout','onmouseover','onmouseup','onpaste','onpause','onplay','onplaying','onprogress','onratechange','onreset','onresize','onscroll','onscrollend','onsecuritypolicyviolation','onseeked','onseeking','onselect','onslotchange','onstalled','onsubmit','onsuspend','ontimeupdate','ontoggle','onvolumechange','onwaiting','onwebkitanimationend','onwebkitanimationiteration','onwebkitanimationstart','onwebkittransitionend','onwheel','onafterprint','onbeforeprint','onbeforeunload','onhashchange','onlanguagechange','onmessage','onmessageerror','onoffline','ononline','onpagehide','onpagereveal','onpageshow','onpageswap','onpopstate','onrejectionhandled','onstorage','onunhandledrejection','onunload','origin','isSecureContext','crossOriginIsolated','reportError','btoa','atob','setTimeout','clearTimeout','setInterval','clearInterval','queueMicrotask','createImageBitmap','structuredClone','requestAnimationFrame','cancelAnimationFrame','sessionStorage','localStorage','pushManager'];for(var i=0;i<names.length;i++){try{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d){Object.defineProperty(globalThis,names[i],d);delete p[names[i]];}}catch(e){}}}catch(e){}try{var p=AnimationWorkletGlobalScope.prototype;var names=['registerAnimator'];for(var i=0;i<names.length;i++){try{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d){Object.defineProperty(globalThis,names[i],d);delete p[names[i]];}}catch(e){}}}catch(e){}try{var p=AudioWorkletGlobalScope.prototype;var names=['registerProcessor','currentFrame','currentTime','sampleRate','renderQuantumSize','port'];for(var i=0;i<names.length;i++){try{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d){Object.defineProperty(globalThis,names[i],d);delete p[names[i]];}}catch(e){}}}catch(e){}try{var p=LayoutWorkletGlobalScope.prototype;var names=['registerLayout'];for(var i=0;i<names.length;i++){try{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d){Object.defineProperty(globalThis,names[i],d);delete p[names[i]];}}catch(e){}}}catch(e){}try{var p=PaintWorkletGlobalScope.prototype;var names=['registerPaint','devicePixelRatio'];for(var i=0;i<names.length;i++){try{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d){Object.defineProperty(globalThis,names[i],d);delete p[names[i]];}}catch(e){}}}catch(e){}try{var p=DedicatedWorkerGlobalScope.prototype;var names=['name','postMessage','postMessage','close','onrtctransform','requestAnimationFrame','cancelAnimationFrame','onmessage','onmessageerror'];for(var i=0;i<names.length;i++){try{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d){Object.defineProperty(globalThis,names[i],d);delete p[names[i]];}}catch(e){}}}catch(e){}try{var p=RTCIdentityProviderGlobalScope.prototype;var names=['rtcIdentityProvider'];for(var i=0;i<names.length;i++){try{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d){Object.defineProperty(globalThis,names[i],d);delete p[names[i]];}}catch(e){}}}catch(e){}try{var p=ServiceWorkerGlobalScope.prototype;var names=['clients','registration','serviceWorker','skipWaiting','oninstall','onactivate','onfetch','onmessage','onmessageerror','onbackgroundfetchsuccess','onbackgroundfetchfail','onbackgroundfetchabort','onbackgroundfetchclick','onsync','oncontentdelete','cookieStore','oncookiechange','onnotificationclick','onnotificationclose','onperiodicsync','onpush','onpushsubscriptionchange','oncanmakepayment','onpaymentrequest'];for(var i=0;i<names.length;i++){try{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d){Object.defineProperty(globalThis,names[i],d);delete p[names[i]];}}catch(e){}}}catch(e){}try{var p=SharedWorkerGlobalScope.prototype;var names=['name','close','onconnect'];for(var i=0;i<names.length;i++){try{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d){Object.defineProperty(globalThis,names[i],d);delete p[names[i]];}}catch(e){}}}catch(e){}})();";
+pub fn fix_global_accessor_properties(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    {
+        let attr_key = v8::String::new(scope, "window").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_1).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get window").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "self").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_2).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get self").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_2).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set self").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "document").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_3).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get document").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "name").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_4).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_4).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set name").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "location").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_5).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get location").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_5).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set location").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "history").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_6).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get history").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "navigation").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_7).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get navigation").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_7).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set navigation").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "customElements").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_8).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get customElements").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "locationbar").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_9).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get locationbar").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_9).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set locationbar").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "menubar").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_10).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get menubar").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_10).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set menubar").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "personalbar").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_11).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get personalbar").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_11).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set personalbar").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "scrollbars").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_12).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get scrollbars").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_12).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set scrollbars").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "statusbar").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_13).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get statusbar").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_13).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set statusbar").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "toolbar").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_14).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get toolbar").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_14).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set toolbar").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "status").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_15).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get status").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_15).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set status").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "closed").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_17).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get closed").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "frames").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_21).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get frames").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_21).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set frames").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "length").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_22).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get length").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_22).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set length").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "top").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_23).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get top").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "opener").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_24).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get opener").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_24).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set opener").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "parent").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_25).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get parent").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_25).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set parent").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "frameElement").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_26).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get frameElement").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "navigator").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_29).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get navigator").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "clientInformation").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_30).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get clientInformation").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_30).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set clientInformation").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "originAgentCluster").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_31).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get originAgentCluster").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "credentialless").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_39).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get credentialless").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "orientation").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_40).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get orientation").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onorientationchange").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_41).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onorientationchange").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_41).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onorientationchange").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "cookieStore").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_42).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get cookieStore").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "crashReport").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_43).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get crashReport").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "viewport").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_46).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get viewport").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_46).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set viewport").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "screen").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_48).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get screen").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_48).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set screen").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "visualViewport").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_49).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get visualViewport").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_49).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set visualViewport").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "innerWidth").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_54).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get innerWidth").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_54).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set innerWidth").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "innerHeight").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_55).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get innerHeight").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_55).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set innerHeight").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "scrollX").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_56).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get scrollX").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_56).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set scrollX").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "pageXOffset").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_57).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get pageXOffset").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_57).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set pageXOffset").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "scrollY").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_58).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get scrollY").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_58).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set scrollY").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "pageYOffset").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_59).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get pageYOffset").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_59).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set pageYOffset").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "screenX").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_66).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get screenX").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_66).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set screenX").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "screenLeft").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_67).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get screenLeft").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_67).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set screenLeft").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "screenY").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_68).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get screenY").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_68).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set screenY").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "screenTop").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_69).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get screenTop").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_69).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set screenTop").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "outerWidth").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_70).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get outerWidth").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_70).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set outerWidth").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "outerHeight").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_71).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get outerHeight").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_71).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set outerHeight").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "devicePixelRatio").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_72).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get devicePixelRatio").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_72).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set devicePixelRatio").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "documentPictureInPicture").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_75).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get documentPictureInPicture").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "event").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_76).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get event").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_76).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set event").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "fence").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_77).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get fence").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "external").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_84).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get external").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_84).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set external").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onappinstalled").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_86).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onappinstalled").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_86).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onappinstalled").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onbeforeinstallprompt").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_87).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onbeforeinstallprompt").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_87).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onbeforeinstallprompt").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondeviceorientation").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_88).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondeviceorientation").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_88).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondeviceorientation").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondeviceorientationabsolute").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_89).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondeviceorientationabsolute").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_89).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondeviceorientationabsolute").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondevicemotion").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_90).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondevicemotion").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_90).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondevicemotion").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "portalHost").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_91).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get portalHost").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "speechSynthesis").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_95).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get speechSynthesis").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "launchQueue").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_96).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get launchQueue").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onabort").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_98).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onabort").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_98).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onabort").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onauxclick").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_99).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onauxclick").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_99).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onauxclick").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onbeforeinput").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_100).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onbeforeinput").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_100).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onbeforeinput").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onbeforematch").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_101).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onbeforematch").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_101).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onbeforematch").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onbeforetoggle").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_102).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onbeforetoggle").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_102).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onbeforetoggle").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onblur").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_103).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onblur").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_103).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onblur").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncancel").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_104).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncancel").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_104).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncancel").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncanplay").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_105).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncanplay").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_105).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncanplay").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncanplaythrough").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_106).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncanplaythrough").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_106).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncanplaythrough").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onchange").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_107).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onchange").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_107).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onchange").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onclick").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_108).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onclick").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_108).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onclick").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onclose").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_109).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onclose").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_109).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onclose").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncommand").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_110).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncommand").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_110).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncommand").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncontextlost").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_111).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncontextlost").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_111).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncontextlost").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncontextmenu").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_112).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncontextmenu").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_112).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncontextmenu").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncontextrestored").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_113).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncontextrestored").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_113).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncontextrestored").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncopy").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_114).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncopy").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_114).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncopy").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncuechange").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_115).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncuechange").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_115).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncuechange").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncut").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_116).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncut").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_116).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncut").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondblclick").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_117).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondblclick").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_117).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondblclick").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondrag").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_118).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondrag").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_118).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondrag").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondragend").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_119).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondragend").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_119).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondragend").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondragenter").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_120).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondragenter").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_120).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondragenter").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondragleave").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_121).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondragleave").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_121).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondragleave").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondragover").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_122).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondragover").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_122).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondragover").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondragstart").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_123).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondragstart").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_123).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondragstart").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondrop").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_124).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondrop").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_124).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondrop").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ondurationchange").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_125).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ondurationchange").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_125).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ondurationchange").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onemptied").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_126).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onemptied").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_126).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onemptied").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onended").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_127).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onended").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_127).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onended").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onerror").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_128).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_128).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onerror").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onfocus").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_129).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onfocus").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_129).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onfocus").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onformdata").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_130).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onformdata").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_130).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onformdata").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oninput").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_131).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oninput").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_131).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oninput").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oninvalid").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_132).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oninvalid").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_132).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oninvalid").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onkeydown").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_133).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onkeydown").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_133).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onkeydown").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onkeypress").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_134).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onkeypress").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_134).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onkeypress").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onkeyup").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_135).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onkeyup").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_135).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onkeyup").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onload").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_136).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onload").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_136).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onload").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onloadeddata").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_137).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onloadeddata").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_137).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onloadeddata").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onloadedmetadata").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_138).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onloadedmetadata").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_138).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onloadedmetadata").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onloadstart").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_139).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onloadstart").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_139).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onloadstart").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmousedown").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_140).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmousedown").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_140).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmousedown").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmouseenter").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_141).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmouseenter").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_141).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmouseenter").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmouseleave").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_142).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmouseleave").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_142).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmouseleave").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmousemove").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_143).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmousemove").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_143).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmousemove").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmouseout").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_144).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmouseout").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_144).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmouseout").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmouseover").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_145).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmouseover").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_145).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmouseover").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmouseup").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_146).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmouseup").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_146).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmouseup").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onpaste").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_147).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onpaste").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_147).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onpaste").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onpause").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_148).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onpause").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_148).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onpause").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onplay").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_149).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onplay").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_149).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onplay").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onplaying").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_150).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onplaying").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_150).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onplaying").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onprogress").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_151).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onprogress").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_151).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onprogress").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onratechange").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_152).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onratechange").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_152).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onratechange").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onreset").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_153).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onreset").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_153).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onreset").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onresize").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_154).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onresize").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_154).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onresize").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onscroll").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_155).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onscroll").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_155).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onscroll").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onscrollend").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_156).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onscrollend").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_156).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onscrollend").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onsecuritypolicyviolation").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_157).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onsecuritypolicyviolation").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_157).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onsecuritypolicyviolation").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onseeked").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_158).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onseeked").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_158).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onseeked").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onseeking").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_159).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onseeking").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_159).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onseeking").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onselect").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_160).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onselect").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_160).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onselect").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onslotchange").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_161).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onslotchange").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_161).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onslotchange").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onstalled").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_162).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onstalled").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_162).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onstalled").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onsubmit").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_163).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onsubmit").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_163).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onsubmit").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onsuspend").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_164).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onsuspend").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_164).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onsuspend").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ontimeupdate").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_165).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ontimeupdate").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_165).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ontimeupdate").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ontoggle").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_166).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ontoggle").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_166).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ontoggle").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onvolumechange").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_167).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onvolumechange").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_167).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onvolumechange").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onwaiting").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_168).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onwaiting").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_168).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onwaiting").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onwebkitanimationend").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_169).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onwebkitanimationend").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_169).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onwebkitanimationend").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onwebkitanimationiteration").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_170).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onwebkitanimationiteration").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_170).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onwebkitanimationiteration").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onwebkitanimationstart").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_171).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onwebkitanimationstart").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_171).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onwebkitanimationstart").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onwebkittransitionend").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_172).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onwebkittransitionend").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_172).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onwebkittransitionend").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onwheel").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_173).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onwheel").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_173).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onwheel").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onafterprint").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_174).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onafterprint").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_174).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onafterprint").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onbeforeprint").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_175).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onbeforeprint").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_175).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onbeforeprint").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onbeforeunload").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_176).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onbeforeunload").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_176).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onbeforeunload").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onhashchange").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_177).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onhashchange").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_177).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onhashchange").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onlanguagechange").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_178).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onlanguagechange").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_178).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onlanguagechange").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmessage").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_179).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_179).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmessageerror").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_180).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmessageerror").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_180).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmessageerror").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onoffline").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_181).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onoffline").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_181).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onoffline").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "ononline").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_182).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get ononline").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_182).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set ononline").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onpagehide").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_183).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onpagehide").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_183).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onpagehide").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onpagereveal").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_184).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onpagereveal").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_184).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onpagereveal").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onpageshow").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_185).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onpageshow").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_185).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onpageshow").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onpageswap").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_186).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onpageswap").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_186).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onpageswap").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onpopstate").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_187).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onpopstate").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_187).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onpopstate").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onrejectionhandled").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_188).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onrejectionhandled").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_188).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onrejectionhandled").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onstorage").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_189).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onstorage").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_189).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onstorage").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onunhandledrejection").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_190).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onunhandledrejection").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_190).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onunhandledrejection").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onunload").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_191).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onunload").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_191).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onunload").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "origin").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_192).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get origin").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_set_192).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set origin").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "isSecureContext").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_193).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get isSecureContext").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "crossOriginIsolated").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_194).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get crossOriginIsolated").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "sessionStorage").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_207).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get sessionStorage").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "localStorage").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_208).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get localStorage").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "pushManager").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::window_get_209).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get pushManager").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "currentFrame").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_audio::audio_worklet_global_scope_get_2).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get currentFrame").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "currentTime").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_audio::audio_worklet_global_scope_get_3).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get currentTime").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "sampleRate").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_audio::audio_worklet_global_scope_get_4).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get sampleRate").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "renderQuantumSize").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_audio::audio_worklet_global_scope_get_5).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get renderQuantumSize").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "port").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_audio::audio_worklet_global_scope_get_6).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get port").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "devicePixelRatio").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::paint_worklet_global_scope_get_2).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get devicePixelRatio").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "name").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::dedicated_worker_global_scope_get_1).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::dedicated_worker_global_scope_set_1).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set name").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onrtctransform").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::dedicated_worker_global_scope_get_5).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onrtctransform").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::dedicated_worker_global_scope_set_5).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onrtctransform").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmessage").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::dedicated_worker_global_scope_get_8).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::dedicated_worker_global_scope_set_8).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmessageerror").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::dedicated_worker_global_scope_get_9).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmessageerror").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::dedicated_worker_global_scope_set_9).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmessageerror").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "rtcIdentityProvider").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::webrtc::rtc_identity_provider_global_scope_get_1).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get rtcIdentityProvider").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "clients").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_1).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get clients").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "registration").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_2).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get registration").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "serviceWorker").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_3).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get serviceWorker").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oninstall").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_5).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oninstall").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_5).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oninstall").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onactivate").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_6).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onactivate").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_6).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onactivate").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onfetch").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_7).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onfetch").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_7).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onfetch").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmessage").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_8).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_8).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onmessageerror").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_9).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onmessageerror").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_9).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onmessageerror").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onbackgroundfetchsuccess").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_10).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onbackgroundfetchsuccess").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_10).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onbackgroundfetchsuccess").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onbackgroundfetchfail").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_11).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onbackgroundfetchfail").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_11).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onbackgroundfetchfail").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onbackgroundfetchabort").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_12).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onbackgroundfetchabort").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_12).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onbackgroundfetchabort").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onbackgroundfetchclick").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_13).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onbackgroundfetchclick").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_13).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onbackgroundfetchclick").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onsync").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_14).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onsync").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_14).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onsync").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncontentdelete").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_15).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncontentdelete").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_15).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncontentdelete").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "cookieStore").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_16).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get cookieStore").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), v8::undefined(scope).into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncookiechange").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_17).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncookiechange").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_17).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncookiechange").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onnotificationclick").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_18).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onnotificationclick").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_18).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onnotificationclick").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onnotificationclose").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_19).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onnotificationclose").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_19).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onnotificationclose").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onperiodicsync").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_20).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onperiodicsync").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_20).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onperiodicsync").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onpush").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_21).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onpush").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_21).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onpush").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onpushsubscriptionchange").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_22).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onpushsubscriptionchange").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_22).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onpushsubscriptionchange").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "oncanmakepayment").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_23).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get oncanmakepayment").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_23).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set oncanmakepayment").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onpaymentrequest").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_get_24).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onpaymentrequest").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::workers::service_worker_global_scope_set_24).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onpaymentrequest").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "name").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::shared_worker_global_scope_get_1).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::shared_worker_global_scope_set_1).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set name").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    {
+        let attr_key = v8::String::new(scope, "onconnect").unwrap();
+        let should_skip = {
+            let desc = global.get_own_property_descriptor(scope, attr_key.into());
+            desc.is_some()
+        };
+        if should_skip { /* skip shim-set property */ } else {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::shared_worker_global_scope_get_3).length(0).build(scope);
+        getter_tmpl.set_class_name(v8::String::new(scope, "get onconnect").unwrap());
+        let getter_fn = getter_tmpl.get_function(scope).unwrap();
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(super::web_apis::shared_worker_global_scope_set_3).length(1).build(scope);
+        setter_tmpl.set_class_name(v8::String::new(scope, "set onconnect").unwrap());
+        let setter_fn = setter_tmpl.get_function(scope).unwrap();
+        let mut desc = v8::PropertyDescriptor::new_from_get_set(getter_fn.into(), setter_fn.into());
+        desc.set_enumerable(true);
+        desc.set_configurable(true);
+        let _ = global.define_property(scope, attr_key.into(), &desc);
+        }
+    }
+    // Fixed 194 global accessor properties
+}
+
+pub const GLOBAL_MOVE_JS: &str = "(function(){});";
