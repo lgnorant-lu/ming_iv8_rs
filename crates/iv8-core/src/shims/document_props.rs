@@ -569,12 +569,10 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // Window and EventTarget. See TODO.
 
     // MediaQueryList: wrap matchMedia so returned objects get the correct
-    // toStringTag. The geometry.rs shim returns a plain object without
-    // Symbol.toStringTag, causing "[object Object]" instead of "[object MediaQueryList]".
-    // Note: We only set toStringTag, not the prototype chain, because the
-    // geometry.rs shim puts properties directly on the object (matches, media,
-    // etc.) and setting __proto__ to MediaQueryList.prototype would cause
-    // assert_inherits to fail ("property found on object, expected in prototype chain").
+    // toStringTag and prototype chain. The window_extras.rs shim returns a
+    // plain object. We set __proto__ to MediaQueryList.prototype so that
+    // instanceof works, and keep own properties (matches, media, etc.) so
+    // they shadow codegen prototype getters.
     try {
         if (typeof matchMedia !== 'undefined' && !matchMedia.__iv8MqlPatched && typeof MediaQueryList !== 'undefined') {
             var _origMatchMedia = matchMedia;
@@ -582,15 +580,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                 var mql = _origMatchMedia.call(this, query);
                 if (mql && typeof mql === 'object' && typeof MediaQueryList !== 'undefined') {
                     try {
-                        var ownProps = {};
-                        var pnames = Object.getOwnPropertyNames(mql);
-                        for (var i = 0; i < pnames.length; i++) {
-                            ownProps[pnames[i]] = mql[pnames[i]];
-                        }
                         Object.setPrototypeOf(mql, MediaQueryList.prototype);
-                        for (var k in ownProps) {
-                            try { delete mql[k]; } catch(e) {}
-                        }
                     } catch(e) {}
                 }
                 return mql;

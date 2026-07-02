@@ -647,8 +647,7 @@ impl EmbeddedV8Kernel {
                     // have wrong __proto__. Must be Function.prototype per WebIDL.
                     var functionProto = Function.prototype;
                     var protoFixes = [
-                        'Location', 'Navigator', 'Storage', 'EventTarget', 'Screen',
-                        'BroadcastChannel', 'MessagePort', 'Worker', 'SharedWorker',
+                        'Location', 'Navigator', 'Storage', 'Screen',
                     ];
                     for (var i = 0; i < protoFixes.length; i++) {
                         try {
@@ -658,6 +657,27 @@ impl EmbeddedV8Kernel {
                             }
                         } catch(e) {}
                     }
+                    // EventTarget inheritors: constructor __proto__ must be EventTarget
+                    var etCtor = globalThis.EventTarget;
+                    var etInheritors = [
+                        'MessagePort', 'BroadcastChannel', 'Worker', 'SharedWorker',
+                        'EventSource', 'AbortSignal', 'Navigation',
+                    ];
+                    for (var i = 0; i < etInheritors.length; i++) {
+                        try {
+                            var ctor = globalThis[etInheritors[i]];
+                            if (ctor && typeof ctor === 'function' && etCtor) {
+                                Object.setPrototypeOf(ctor, etCtor);
+                            }
+                        } catch(e) {}
+                    }
+                    // Storage.prototype.__proto__ must be Object.prototype (not Function)
+                    try {
+                        var storageCtor = globalThis.Storage;
+                        if (storageCtor && storageCtor.prototype) {
+                            Object.setPrototypeOf(storageCtor.prototype, Object.prototype);
+                        }
+                    } catch(e) {}
                     // WindowProperties: Window.prototype.__proto__ must be WindowProperties.prototype
                     try {
                         var wp = globalThis.WindowProperties;
@@ -817,7 +837,12 @@ impl EmbeddedV8Kernel {
                         try { delete globalThis[workerOnly[i]]; } catch(e) {}
                     }
                     try {
-                        var nf = function NodeFilter(node) { return 3; };
+                        // NodeFilter is a callback interface.
+                        // Per WebIDL spec: interface object [[Prototype]] must be
+                        // Function.prototype, but must NOT have a "prototype" property.
+                        // We use Object.create(Function.prototype) so __proto__ is
+                        // correct and no "prototype" own property exists.
+                        var nf = Object.create(Function.prototype);
                         var consts = {
                             FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3,
                             SHOW_ALL: 4294967295, SHOW_ELEMENT: 1, SHOW_ATTRIBUTE: 2,
