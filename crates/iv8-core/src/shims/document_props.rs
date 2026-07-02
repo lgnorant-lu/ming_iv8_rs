@@ -616,9 +616,15 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             Object.keys(_docProps).forEach(function(prop) {
                 if (prop in Document.prototype) return;
                 var dv = _docProps[prop];
-                Object.defineProperty(Document.prototype, prop, {
+                var docProto = Document.prototype;
+                Object.defineProperty(docProto, prop, {
                     get: function() {
-                        if (this === Document.prototype) return dv;
+                        if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+                        if (this === docProto) return dv;
+                        var cur = Object.getPrototypeOf(this);
+                        var found = false;
+                        while (cur) { if (cur === docProto) { found = true; break; } cur = Object.getPrototypeOf(cur); }
+                        if (!found) throw new TypeError('Illegal invocation');
                         var ownDesc = Object.getOwnPropertyDescriptor(this, prop);
                         if (ownDesc && 'value' in ownDesc) return ownDesc.value;
                         if (this['_' + prop] !== undefined) return this['_' + prop];
@@ -626,7 +632,10 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                         if (prop === 'URL' || prop === 'documentURI') return typeof location !== 'undefined' ? location.href : '';
                         return dv;
                     },
-                    set: function(v) { this['_' + prop] = v; },
+                    set: function(v) {
+                        if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+                        this['_' + prop] = v;
+                    },
                     enumerable: true,
                     configurable: true
                 });

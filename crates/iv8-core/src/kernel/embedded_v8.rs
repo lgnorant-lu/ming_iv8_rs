@@ -569,6 +569,16 @@ impl EmbeddedV8Kernel {
                     for (var i = 0; i < workerOnly.length; i++) {
                         try { delete globalThis[workerOnly[i]]; } catch(e) {}
                     }
+                    try {
+                        var nf = {};
+                        nf.FILTER_ACCEPT = 1; nf.FILTER_REJECT = 2; nf.FILTER_SKIP = 3;
+                        nf.SHOW_ALL = 4294967295; nf.SHOW_ELEMENT = 1; nf.SHOW_ATTRIBUTE = 2;
+                        nf.SHOW_TEXT = 4; nf.SHOW_CDATA_SECTION = 8; nf.SHOW_PROCESSING_INSTRUCTION = 64;
+                        nf.SHOW_COMMENT = 128; nf.SHOW_DOCUMENT = 256; nf.SHOW_DOCUMENT_TYPE = 512;
+                        nf.SHOW_DOCUMENT_FRAGMENT = 1024; nf.SHOW_NOTATION = 2048;
+                        nf.acceptNode = function(node) { return 3; };
+                        Object.defineProperty(globalThis, 'NodeFilter', {value: nf, writable: true, configurable: true, enumerable: false});
+                    } catch(e) {}
                     var names = Object.getOwnPropertyNames(globalThis);
                     for (var i = 0; i < names.length; i++) {
                         try {
