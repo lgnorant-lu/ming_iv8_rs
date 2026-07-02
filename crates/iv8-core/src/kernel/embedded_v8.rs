@@ -518,6 +518,16 @@ impl EmbeddedV8Kernel {
                         ['TextTrackList','EventTarget'], ['TextTrack','EventTarget'],
                         ['TextTrackCue','EventTarget'], ['OffscreenCanvas','EventTarget'],
                         ['CloseWatcher','EventTarget'], ['Navigation','EventTarget'],
+                        ['NavigationHistoryEntry','EventTarget'],
+                        ['NavigateEvent','Event'], ['NavigationCurrentEntryChangeEvent','Event'],
+                        ['PopStateEvent','Event'], ['HashChangeEvent','Event'],
+                        ['PageSwapEvent','Event'], ['PageRevealEvent','Event'],
+                        ['PageTransitionEvent','Event'], ['BeforeUnloadEvent','Event'],
+                        ['ErrorEvent','Event'], ['PromiseRejectionEvent','Event'],
+                        ['MessageEvent','Event'], ['StorageEvent','Event'],
+                        ['EventSource','EventTarget'], ['MessagePort','EventTarget'],
+                        ['BroadcastChannel','EventTarget'], ['Worker','EventTarget'],
+                        ['SharedWorker','EventTarget'], ['Storage','Object'],
                         ['RadioNodeList','NodeList'],
                     ];
                     for (var i = 0; i < fixes.length; i++) {
