@@ -246,7 +246,10 @@ globalThis.GLOBAL = globalThis;
 globalThis.GLOBAL.isWindow = function() {{ return true; }};
 globalThis.GLOBAL.isWorker = function() {{ return false; }};
 globalThis.GLOBAL.isShadowRealm = function() {{ return false; }};
-globalThis.location = {{ search: {json.dumps(variant_query)} }};
+Object.defineProperty(globalThis, 'location', {{
+    value: {{ search: {json.dumps(variant_query)}, href: 'about:blank' }},
+    writable: true, configurable: true, enumerable: true
+}});
 globalThis.fetch_spec = function(spec) {{
     return fetch("/interfaces/" + spec + ".idl").then(function(r) {{
         if (!r.ok) throw new Error("Error fetching " + spec);
