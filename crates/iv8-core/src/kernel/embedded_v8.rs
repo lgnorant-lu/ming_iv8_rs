@@ -529,6 +529,15 @@ impl EmbeddedV8Kernel {
                         ['BroadcastChannel','EventTarget'], ['Worker','EventTarget'],
                         ['SharedWorker','EventTarget'], ['Storage','Object'],
                         ['RadioNodeList','NodeList'],
+                        ['CustomEvent','Event'],
+                        ['AbortSignal','EventTarget'],
+                        ['XMLDocument','Document'],
+                        ['DocumentType','Node'],
+                        ['DocumentFragment','Node'],
+                        ['Attr','Node'],
+                        ['Navigator','Object'],
+                        ['EventTarget','Object'],
+                        ['Storage','Function'],
                     ];
                     for (var i = 0; i < fixes.length; i++) {
                         var child = fixes[i][0], parent = fixes[i][1];
