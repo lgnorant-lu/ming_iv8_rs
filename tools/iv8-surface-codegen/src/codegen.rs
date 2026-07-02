@@ -638,18 +638,23 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
         }
 
         if m.kind == "operation" {
-            let op_name = m.name.as_deref().unwrap_or("unknown");
+            let is_stringifier = m.special.as_deref() == Some("stringifier");
+            let op_name = if is_stringifier { "toString" } else { m.name.as_deref().unwrap_or("unknown") };
             let is_static = m.special.as_deref() == Some("static");
             // Calculate minOverloadLength: min required_arg_count across all
             // overloads with the same name. WebIDL spec: interface object
             // .length = minOverloadLength for overloaded operations.
-            let min_arg_count = def
-                .members
-                .iter()
-                .filter(|m2| m2.kind == "operation" && m2.name.as_deref() == Some(op_name))
-                .map(|m2| m2.required_arg_count)
-                .min()
-                .unwrap_or(m.required_arg_count);
+            let min_arg_count = if is_stringifier {
+                0
+            } else {
+                def
+                    .members
+                    .iter()
+                    .filter(|m2| m2.kind == "operation" && m2.name.as_deref() == Some(op_name))
+                    .map(|m2| m2.required_arg_count)
+                    .min()
+                    .unwrap_or(m.required_arg_count)
+            };
             let arg_count = min_arg_count;
             let mut block = String::new();
             block.push_str(&format!("    // method: {}()\n", op_name));

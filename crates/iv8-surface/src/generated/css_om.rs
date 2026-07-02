@@ -1981,9 +1981,9 @@ pub fn create_css_style_value_template<'s>(
         let tag_val = v8::String::new(scope, "CSSStyleValue").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    // method: unknown()
+    // method: toString()
     {
-        let name = v8::String::new(scope, "unknown").unwrap();
+        let name = v8::String::new(scope, "toString").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_style_value_op_1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
@@ -2207,9 +2207,9 @@ pub fn create_css_transform_component_template<'s>(
         let tag_val = v8::String::new(scope, "CSSTransformComponent").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    // method: unknown()
+    // method: toString()
     {
-        let name = v8::String::new(scope, "unknown").unwrap();
+        let name = v8::String::new(scope, "toString").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_transform_component_op_1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
@@ -4135,9 +4135,9 @@ pub fn create_css_parser_at_rule_template<'s>(
         getter.set_class_name(v8::String::new(scope, "get body").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: unknown()
+    // method: toString()
     {
-        let name = v8::String::new(scope, "unknown").unwrap();
+        let name = v8::String::new(scope, "toString").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_parser_at_rule_op_4).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
@@ -4316,9 +4316,9 @@ pub fn create_css_parser_declaration_template<'s>(
         getter.set_class_name(v8::String::new(scope, "get body").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: unknown()
+    // method: toString()
     {
-        let name = v8::String::new(scope, "unknown").unwrap();
+        let name = v8::String::new(scope, "toString").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_parser_declaration_op_3).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
@@ -4497,9 +4497,9 @@ pub fn create_css_parser_qualified_rule_template<'s>(
         getter.set_class_name(v8::String::new(scope, "get body").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: unknown()
+    // method: toString()
     {
-        let name = v8::String::new(scope, "unknown").unwrap();
+        let name = v8::String::new(scope, "toString").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_parser_qualified_rule_op_3).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
@@ -4678,9 +4678,9 @@ pub fn create_css_parser_block_template<'s>(
         getter.set_class_name(v8::String::new(scope, "get body").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: unknown()
+    // method: toString()
     {
-        let name = v8::String::new(scope, "unknown").unwrap();
+        let name = v8::String::new(scope, "toString").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_parser_block_op_3).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
@@ -4859,9 +4859,9 @@ pub fn create_css_parser_function_template<'s>(
         getter.set_class_name(v8::String::new(scope, "get args").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: unknown()
+    // method: toString()
     {
-        let name = v8::String::new(scope, "unknown").unwrap();
+        let name = v8::String::new(scope, "toString").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_parser_function_op_3).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());

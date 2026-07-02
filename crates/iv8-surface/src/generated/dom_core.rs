@@ -3087,9 +3087,9 @@ fn install_dom_matrix_read_only_members_4<'s>(scope: &v8::PinScope<'s, '_>, prot
 }
 
 fn install_dom_matrix_read_only_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
-    // method: unknown()
+    // method: toString()
     {
-        let name = v8::String::new(scope, "unknown").unwrap();
+        let name = v8::String::new(scope, "toString").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_read_only_op_44).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
@@ -9201,9 +9201,9 @@ fn install_range_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-    // method: unknown()
+    // method: toString()
     {
-        let name = v8::String::new(scope, "unknown").unwrap();
+        let name = v8::String::new(scope, "toString").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(range_op_22).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());

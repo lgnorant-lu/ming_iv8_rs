@@ -16230,6 +16230,17 @@ pub fn fix_global_accessor_properties(scope: &v8::PinScope<'_, '_>, global: v8::
 
 pub fn fix_global_operation_lengths(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     {
+        let key = v8::String::new(scope, "close").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 0 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
         let key = v8::String::new(scope, "registerAnimator").unwrap();
         if let Some(fn_val) = global.get(scope, key.into()) {
             if fn_val.is_function() {
@@ -16241,7 +16252,7 @@ pub fn fix_global_operation_lengths(scope: &v8::PinScope<'_, '_>, global: v8::Lo
         }
     }
     {
-        let key = v8::String::new(scope, "registerPaint").unwrap();
+        let key = v8::String::new(scope, "registerProcessor").unwrap();
         if let Some(fn_val) = global.get(scope, key.into()) {
             if fn_val.is_function() {
                 let len_key = v8::String::new(scope, "length").unwrap();
@@ -16252,11 +16263,44 @@ pub fn fix_global_operation_lengths(scope: &v8::PinScope<'_, '_>, global: v8::Lo
         }
     }
     {
-        let key = v8::String::new(scope, "close").unwrap();
+        let key = v8::String::new(scope, "postMessage").unwrap();
         if let Some(fn_val) = global.get(scope, key.into()) {
             if fn_val.is_function() {
                 let len_key = v8::String::new(scope, "length").unwrap();
-                let len_val = v8::Number::new(scope, 0 as f64);
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "requestAnimationFrame").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "cancelAnimationFrame").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 1 as f64);
+                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
+            }
+        }
+    }
+    {
+        let key = v8::String::new(scope, "registerLayout").unwrap();
+        if let Some(fn_val) = global.get(scope, key.into()) {
+            if fn_val.is_function() {
+                let len_key = v8::String::new(scope, "length").unwrap();
+                let len_val = v8::Number::new(scope, 2 as f64);
                 let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
                 let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
             }
@@ -16345,17 +16389,6 @@ pub fn fix_global_operation_lengths(scope: &v8::PinScope<'_, '_>, global: v8::Lo
             if fn_val.is_function() {
                 let len_key = v8::String::new(scope, "length").unwrap();
                 let len_val = v8::Number::new(scope, 0 as f64);
-                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
-                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
-            }
-        }
-    }
-    {
-        let key = v8::String::new(scope, "postMessage").unwrap();
-        if let Some(fn_val) = global.get(scope, key.into()) {
-            if fn_val.is_function() {
-                let len_key = v8::String::new(scope, "length").unwrap();
-                let len_val = v8::Number::new(scope, 1 as f64);
                 let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
                 let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
             }
@@ -16725,29 +16758,7 @@ pub fn fix_global_operation_lengths(scope: &v8::PinScope<'_, '_>, global: v8::Lo
         }
     }
     {
-        let key = v8::String::new(scope, "requestAnimationFrame").unwrap();
-        if let Some(fn_val) = global.get(scope, key.into()) {
-            if fn_val.is_function() {
-                let len_key = v8::String::new(scope, "length").unwrap();
-                let len_val = v8::Number::new(scope, 1 as f64);
-                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
-                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
-            }
-        }
-    }
-    {
-        let key = v8::String::new(scope, "cancelAnimationFrame").unwrap();
-        if let Some(fn_val) = global.get(scope, key.into()) {
-            if fn_val.is_function() {
-                let len_key = v8::String::new(scope, "length").unwrap();
-                let len_val = v8::Number::new(scope, 1 as f64);
-                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
-                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
-            }
-        }
-    }
-    {
-        let key = v8::String::new(scope, "registerProcessor").unwrap();
+        let key = v8::String::new(scope, "registerPaint").unwrap();
         if let Some(fn_val) = global.get(scope, key.into()) {
             if fn_val.is_function() {
                 let len_key = v8::String::new(scope, "length").unwrap();
@@ -16768,25 +16779,23 @@ pub fn fix_global_operation_lengths(scope: &v8::PinScope<'_, '_>, global: v8::Lo
             }
         }
     }
-    {
-        let key = v8::String::new(scope, "registerLayout").unwrap();
-        if let Some(fn_val) = global.get(scope, key.into()) {
-            if fn_val.is_function() {
-                let len_key = v8::String::new(scope, "length").unwrap();
-                let len_val = v8::Number::new(scope, 2 as f64);
-                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };
-                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());
-            }
-        }
-    }
 }
 
 pub const GLOBAL_ATTR_NAMES: &[&str] = &[
-    "devicePixelRatio",
+    "name",
+    "onconnect",
+    "rtcIdentityProvider",
+    "currentFrame",
+    "currentTime",
+    "sampleRate",
+    "renderQuantumSize",
+    "port",
+    "onrtctransform",
+    "onmessage",
+    "onmessageerror",
     "window",
     "self",
     "document",
-    "name",
     "location",
     "history",
     "navigation",
@@ -16828,6 +16837,7 @@ pub const GLOBAL_ATTR_NAMES: &[&str] = &[
     "screenTop",
     "outerWidth",
     "outerHeight",
+    "devicePixelRatio",
     "documentPictureInPicture",
     "event",
     "fence",
@@ -16921,8 +16931,6 @@ pub const GLOBAL_ATTR_NAMES: &[&str] = &[
     "onbeforeunload",
     "onhashchange",
     "onlanguagechange",
-    "onmessage",
-    "onmessageerror",
     "onoffline",
     "ononline",
     "onpagehide",
@@ -16940,12 +16948,6 @@ pub const GLOBAL_ATTR_NAMES: &[&str] = &[
     "sessionStorage",
     "localStorage",
     "pushManager",
-    "currentFrame",
-    "currentTime",
-    "sampleRate",
-    "renderQuantumSize",
-    "port",
-    "rtcIdentityProvider",
     "clients",
     "registration",
     "serviceWorker",
@@ -16966,8 +16968,6 @@ pub const GLOBAL_ATTR_NAMES: &[&str] = &[
     "onpushsubscriptionchange",
     "oncanmakepayment",
     "onpaymentrequest",
-    "onconnect",
-    "onrtctransform",
 ];
 
 pub const GLOBAL_MOVE_JS: &str = "(function(){});";

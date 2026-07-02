@@ -1956,9 +1956,9 @@ pub fn create_url_search_params_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-    // method: unknown()
+    // method: toString()
     {
-        let name = v8::String::new(scope, "unknown").unwrap();
+        let name = v8::String::new(scope, "toString").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(url_search_params_op_9).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());

@@ -607,7 +607,6 @@ impl EmbeddedV8Kernel {
                         ['HTMLElement','Element'],
                         ['Screen','Object'],
                         ['VisualViewport','EventTarget'],
-                        ['WindowProperties','Window'],
                         ['Location','Object'],
                     ];
                     for (var i = 0; i < fixes.length; i++) {
@@ -679,11 +678,20 @@ impl EmbeddedV8Kernel {
                         }
                     } catch(e) {}
                     // WindowProperties: Window.prototype.__proto__ must be WindowProperties.prototype
+                    // WindowProperties is not in webref IDL, so we create it manually.
                     try {
-                        var wp = globalThis.WindowProperties;
                         var winCtor = globalThis.Window;
-                        if (wp && wp.prototype && winCtor && winCtor.prototype) {
-                            Object.setPrototypeOf(winCtor.prototype, wp.prototype);
+                        if (winCtor && winCtor.prototype) {
+                            var wpCtor = function WindowProperties() { throw new TypeError('Illegal constructor'); };
+                            Object.defineProperty(wpCtor.prototype, Symbol.toStringTag, {
+                                value: 'WindowProperties', writable: true, configurable: true, enumerable: false
+                            });
+                            Object.setPrototypeOf(wpCtor, Function.prototype);
+                            Object.setPrototypeOf(wpCtor.prototype, EventTarget.prototype || Object.prototype);
+                            Object.defineProperty(globalThis, 'WindowProperties', {
+                                value: wpCtor, writable: true, configurable: true, enumerable: false
+                            });
+                            Object.setPrototypeOf(winCtor.prototype, wpCtor.prototype);
                         }
                     } catch(e) {}
                     // Named constructors: Image, Audio, Option
@@ -711,18 +719,20 @@ impl EmbeddedV8Kernel {
                     } catch(e) {}
                     // Wrap operations (methods) on prototypes with null/undefined receiver check.
                     // Only wrap JS shim functions (not [native code] codegen functions).
-                    // codegen operations already have receiver check (R3).
+                    // codegen operations have receiver check (R3) but it may not work for
+                    // all cases — TODO: investigate catch_unwind + throw_exception interaction.
                     // idlharness requires: calling operation with this=null must throw TypeError.
-                    // NOTE: Currently disabled — causes regressions with codegen functions
-                    // that use [native code] toString. TODO: implement per-shim receiver
-                    // check in each shim file instead of global wrapper.
+                    // NOTE: Currently disabled — codegen operation receiver check (R3) has a
+                    // bug where throw_exception inside catch_unwind doesn't propagate.
+                    // JS shim functions that need null/undefined check should add it
+                    // individually. TODO: per-shim approach.
                     /*
                     var opCheckInterfaces = [
                         'HTMLElement', 'HTMLFormElement', 'HTMLInputElement',
                         'HTMLTextAreaElement', 'HTMLCanvasElement', 'Navigator',
                         'MessagePort', 'Worker', 'Storage', 'Node', 'Event',
                         'EventTarget', 'NodeList', 'MutationObserver', 'DOMTokenList',
-                        'Window', 'CustomEvent',
+                        'CustomEvent',
                     ];
                     for (var i = 0; i < opCheckInterfaces.length; i++) {
                         try {
@@ -738,11 +748,12 @@ impl EmbeddedV8Kernel {
                                     var desc = Object.getOwnPropertyDescriptor(proto, pname);
                                     if (!desc || typeof desc.value !== 'function') continue;
                                     if (desc.value.__iv8_op_wrapped) continue;
+                                    // Skip codegen functions (they have [native code] in toString
+                                    // AND already have receiver check from R3)
                                     var fnStr = '';
                                     try { fnStr = desc.value.toString(); } catch(e) {}
                                     if (fnStr.indexOf('[native code]') !== -1) continue;
                                     var origFn = desc.value;
-                                    var thisIface = ifaceName;
                                     var wrappedFn = function() {
                                         if (this === null || this === undefined) {
                                             throw new TypeError('Illegal invocation');
