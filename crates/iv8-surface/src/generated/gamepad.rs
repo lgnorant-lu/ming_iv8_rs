@@ -894,10 +894,9 @@ pub(crate) unsafe extern "C" fn gamepad_haptic_actuator_get_1(_info: *const v8::
     }));
 }
 
-unsafe extern "C" fn gamepad_haptic_actuator_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn gamepad_haptic_actuator_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "GamepadHapticActuator") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
@@ -906,25 +905,21 @@ unsafe extern "C" fn gamepad_haptic_actuator_op_2(_info: *const v8::FunctionCall
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn gamepad_haptic_actuator_op_3(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn gamepad_haptic_actuator_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "GamepadHapticActuator") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn gamepad_haptic_actuator_op_4(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn gamepad_haptic_actuator_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "GamepadHapticActuator") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
@@ -933,9 +928,8 @@ unsafe extern "C" fn gamepad_haptic_actuator_op_4(_info: *const v8::FunctionCall
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for GamepadHapticActuator.

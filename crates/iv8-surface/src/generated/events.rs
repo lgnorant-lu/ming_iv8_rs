@@ -6,10 +6,9 @@ use super::{construct_only, illegal_constructor};
 use v8::Local;
 use v8::FunctionTemplate;
 
-unsafe extern "C" fn chrome_event_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_event_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -54,15 +53,13 @@ unsafe extern "C" fn chrome_event_op_1(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_event_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_event_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -107,15 +104,13 @@ unsafe extern "C" fn chrome_event_op_2(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_event_op_3(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_event_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -160,15 +155,13 @@ unsafe extern "C" fn chrome_event_op_3(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Boolean::new(scope, false).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
-unsafe extern "C" fn chrome_event_op_4(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_event_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -206,15 +199,13 @@ unsafe extern "C" fn chrome_event_op_4(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Boolean::new(scope, false).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
-unsafe extern "C" fn chrome_event_op_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_event_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -259,15 +250,13 @@ unsafe extern "C" fn chrome_event_op_5(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_event_op_6(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_event_op_6(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -305,9 +294,8 @@ unsafe extern "C" fn chrome_event_op_6(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for ChromeEvent.
@@ -555,10 +543,9 @@ pub(crate) unsafe extern "C" fn event_get_4(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn event_op_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn event_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -596,9 +583,8 @@ unsafe extern "C" fn event_op_5(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Array::new(scope, 0).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Array::new(scope, 0).into());
 }
 
 pub(crate) unsafe extern "C" fn event_get_6(_info: *const v8::FunctionCallbackInfo) {
@@ -647,10 +633,9 @@ pub(crate) unsafe extern "C" fn event_get_6(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn event_op_7(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn event_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -688,9 +673,8 @@ unsafe extern "C" fn event_op_7(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn event_get_8(_info: *const v8::FunctionCallbackInfo) {
@@ -783,10 +767,9 @@ pub(crate) unsafe extern "C" fn event_set_8(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-unsafe extern "C" fn event_op_9(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn event_op_9(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -824,9 +807,8 @@ unsafe extern "C" fn event_op_9(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn event_get_10(_info: *const v8::FunctionCallbackInfo) {
@@ -1011,10 +993,9 @@ pub(crate) unsafe extern "C" fn event_set_12(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn event_op_13(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn event_op_13(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -1052,9 +1033,8 @@ unsafe extern "C" fn event_op_13(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn event_get_14(_info: *const v8::FunctionCallbackInfo) {
@@ -1241,10 +1221,9 @@ pub(crate) unsafe extern "C" fn event_get_17(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn event_op_18(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn event_op_18(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -1289,9 +1268,8 @@ unsafe extern "C" fn event_op_18(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for Event.
@@ -1505,10 +1483,9 @@ pub fn create_event_counts_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn event_listener_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn event_listener_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -1553,9 +1530,8 @@ unsafe extern "C" fn event_listener_op_1(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for EventListener.
@@ -2274,14 +2250,12 @@ pub fn create_autofill_event_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn before_install_prompt_event_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn before_install_prompt_event_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "BeforeInstallPromptEvent") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for BeforeInstallPromptEvent.
@@ -4228,10 +4202,9 @@ pub(crate) unsafe extern "C" fn custom_event_get_1(_info: *const v8::FunctionCal
     }));
 }
 
-unsafe extern "C" fn custom_event_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn custom_event_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -4276,9 +4249,8 @@ unsafe extern "C" fn custom_event_op_2(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for CustomEvent.
@@ -4629,14 +4601,12 @@ pub(crate) unsafe extern "C" fn device_motion_event_get_4(_info: *const v8::Func
     }));
 }
 
-unsafe extern "C" fn device_motion_event_op_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn device_motion_event_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "DeviceMotionEvent") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for DeviceMotionEvent.
@@ -4883,14 +4853,12 @@ pub(crate) unsafe extern "C" fn device_orientation_event_get_4(_info: *const v8:
     }));
 }
 
-unsafe extern "C" fn device_orientation_event_op_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn device_orientation_event_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "DeviceOrientationEvent") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for DeviceOrientationEvent.
@@ -5315,10 +5283,9 @@ pub fn create_error_event_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn extendable_event_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn extendable_event_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -5363,9 +5330,8 @@ unsafe extern "C" fn extendable_event_op_1(_info: *const v8::FunctionCallbackInf
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for ExtendableEvent.
@@ -7123,10 +7089,9 @@ pub(crate) unsafe extern "C" fn message_event_get_5(_info: *const v8::FunctionCa
     }));
 }
 
-unsafe extern "C" fn message_event_op_6(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn message_event_op_6(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -7171,9 +7136,8 @@ unsafe extern "C" fn message_event_op_6(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for MessageEvent.
@@ -7874,10 +7838,9 @@ pub(crate) unsafe extern "C" fn navigate_event_get_11(_info: *const v8::Function
     }));
 }
 
-unsafe extern "C" fn navigate_event_op_12(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn navigate_event_op_12(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -7915,15 +7878,13 @@ unsafe extern "C" fn navigate_event_op_12(_info: *const v8::FunctionCallbackInfo
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn navigate_event_op_13(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn navigate_event_op_13(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -7961,9 +7922,8 @@ unsafe extern "C" fn navigate_event_op_13(_info: *const v8::FunctionCallbackInfo
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for NavigateEvent.
@@ -8569,10 +8529,9 @@ pub fn create_page_transition_event_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn payment_request_update_event_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn payment_request_update_event_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -8617,9 +8576,8 @@ unsafe extern "C" fn payment_request_update_event_op_1(_info: *const v8::Functio
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for PaymentRequestUpdateEvent.
@@ -8900,10 +8858,9 @@ pub(crate) unsafe extern "C" fn portal_activate_event_get_1(_info: *const v8::Fu
     }));
 }
 
-unsafe extern "C" fn portal_activate_event_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn portal_activate_event_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -8941,9 +8898,8 @@ unsafe extern "C" fn portal_activate_event_op_2(_info: *const v8::FunctionCallba
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Object::new(scope).into());
 }
 
 /// Create FunctionTemplate for PortalActivateEvent.
@@ -12267,10 +12223,9 @@ pub(crate) unsafe extern "C" fn storage_event_get_5(_info: *const v8::FunctionCa
     }));
 }
 
-unsafe extern "C" fn storage_event_op_6(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn storage_event_op_6(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -12315,9 +12270,8 @@ unsafe extern "C" fn storage_event_op_6(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for StorageEvent.
@@ -12534,10 +12488,9 @@ pub fn create_task_priority_change_event_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn text_format_update_event_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn text_format_update_event_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -12575,9 +12528,8 @@ unsafe extern "C" fn text_format_update_event_op_1(_info: *const v8::FunctionCal
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Array::new(scope, 0).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Array::new(scope, 0).into());
 }
 
 /// Create FunctionTemplate for TextFormatUpdateEvent.
@@ -12988,10 +12940,9 @@ pub(crate) unsafe extern "C" fn time_event_get_2(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn time_event_op_3(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn time_event_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -13036,9 +12987,8 @@ unsafe extern "C" fn time_event_op_3(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for TimeEvent.
@@ -13712,10 +13662,9 @@ pub(crate) unsafe extern "C" fn ui_event_get_3(_info: *const v8::FunctionCallbac
     }));
 }
 
-unsafe extern "C" fn ui_event_op_4(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn ui_event_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -13760,9 +13709,8 @@ unsafe extern "C" fn ui_event_op_4(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn ui_event_get_5(_info: *const v8::FunctionCallbackInfo) {
@@ -14629,10 +14577,9 @@ pub(crate) unsafe extern "C" fn event_source_set_6(_info: *const v8::FunctionCal
     }));
 }
 
-unsafe extern "C" fn event_source_op_7(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn event_source_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -14670,9 +14617,8 @@ unsafe extern "C" fn event_source_op_7(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for EventSource.
@@ -14850,10 +14796,9 @@ pub fn create_background_fetch_event_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn can_make_payment_event_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn can_make_payment_event_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -14898,9 +14843,8 @@ unsafe extern "C" fn can_make_payment_event_op_1(_info: *const v8::FunctionCallb
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for CanMakePaymentEvent.
@@ -15698,10 +15642,9 @@ pub(crate) unsafe extern "C" fn fetch_event_get_6(_info: *const v8::FunctionCall
     }));
 }
 
-unsafe extern "C" fn fetch_event_op_7(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn fetch_event_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -15746,9 +15689,8 @@ unsafe extern "C" fn fetch_event_op_7(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for FetchEvent.
@@ -15822,10 +15764,9 @@ pub fn create_fetch_event_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn install_event_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn install_event_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "InstallEvent") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
@@ -15834,9 +15775,8 @@ unsafe extern "C" fn install_event_op_1(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for InstallEvent.
@@ -16364,10 +16304,9 @@ pub(crate) unsafe extern "C" fn payment_request_event_get_8(_info: *const v8::Fu
     }));
 }
 
-unsafe extern "C" fn payment_request_event_op_9(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn payment_request_event_op_9(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequestEvent") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
@@ -16376,15 +16315,13 @@ unsafe extern "C" fn payment_request_event_op_9(_info: *const v8::FunctionCallba
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn payment_request_event_op_10(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn payment_request_event_op_10(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequestEvent") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
@@ -16393,25 +16330,21 @@ unsafe extern "C" fn payment_request_event_op_10(_info: *const v8::FunctionCallb
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn payment_request_event_op_11(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn payment_request_event_op_11(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequestEvent") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn payment_request_event_op_12(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn payment_request_event_op_12(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequestEvent") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
@@ -16420,15 +16353,13 @@ unsafe extern "C" fn payment_request_event_op_12(_info: *const v8::FunctionCallb
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn payment_request_event_op_13(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn payment_request_event_op_13(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -16473,9 +16404,8 @@ unsafe extern "C" fn payment_request_event_op_13(_info: *const v8::FunctionCallb
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for PaymentRequestEvent.
@@ -17308,10 +17238,9 @@ pub(crate) unsafe extern "C" fn composition_event_get_1(_info: *const v8::Functi
     }));
 }
 
-unsafe extern "C" fn composition_event_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn composition_event_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -17356,9 +17285,8 @@ unsafe extern "C" fn composition_event_op_2(_info: *const v8::FunctionCallbackIn
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for CompositionEvent.
@@ -17656,10 +17584,9 @@ pub(crate) unsafe extern "C" fn input_event_get_4(_info: *const v8::FunctionCall
     }));
 }
 
-unsafe extern "C" fn input_event_op_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn input_event_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -17697,9 +17624,8 @@ unsafe extern "C" fn input_event_op_5(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Array::new(scope, 0).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Array::new(scope, 0).into());
 }
 
 /// Create FunctionTemplate for InputEvent.
@@ -18173,10 +18099,9 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_9(_info: *const v8::FunctionC
     }));
 }
 
-unsafe extern "C" fn keyboard_event_op_10(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn keyboard_event_op_10(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -18221,15 +18146,13 @@ unsafe extern "C" fn keyboard_event_op_10(_info: *const v8::FunctionCallbackInfo
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Boolean::new(scope, false).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
-unsafe extern "C" fn keyboard_event_op_11(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn keyboard_event_op_11(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -18274,9 +18197,8 @@ unsafe extern "C" fn keyboard_event_op_11(_info: *const v8::FunctionCallbackInfo
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn keyboard_event_get_12(_info: *const v8::FunctionCallbackInfo) {
@@ -19121,10 +19043,9 @@ pub(crate) unsafe extern "C" fn mouse_event_get_13(_info: *const v8::FunctionCal
     }));
 }
 
-unsafe extern "C" fn mouse_event_op_14(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn mouse_event_op_14(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -19169,9 +19090,8 @@ unsafe extern "C" fn mouse_event_op_14(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Boolean::new(scope, false).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
 pub(crate) unsafe extern "C" fn mouse_event_get_15(_info: *const v8::FunctionCallbackInfo) {
@@ -19450,10 +19370,9 @@ pub(crate) unsafe extern "C" fn mouse_event_get_20(_info: *const v8::FunctionCal
     }));
 }
 
-unsafe extern "C" fn mouse_event_op_21(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn mouse_event_op_21(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -19498,9 +19417,8 @@ unsafe extern "C" fn mouse_event_op_21(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn mouse_event_get_22(_info: *const v8::FunctionCallbackInfo) {
@@ -19965,10 +19883,9 @@ pub(crate) unsafe extern "C" fn text_event_get_1(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn text_event_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn text_event_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -20013,9 +19930,8 @@ unsafe extern "C" fn text_event_op_2(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for TextEvent.
@@ -20376,10 +20292,9 @@ pub(crate) unsafe extern "C" fn touch_event_get_7(_info: *const v8::FunctionCall
     }));
 }
 
-unsafe extern "C" fn touch_event_op_8(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn touch_event_op_8(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -20424,9 +20339,8 @@ unsafe extern "C" fn touch_event_op_8(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Boolean::new(scope, false).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
 /// Create FunctionTemplate for TouchEvent.
@@ -20507,14 +20421,12 @@ pub fn create_touch_event_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn background_fetch_update_ui_event_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn background_fetch_update_ui_event_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "BackgroundFetchUpdateUIEvent") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for BackgroundFetchUpdateUIEvent.
@@ -21219,10 +21131,9 @@ pub(crate) unsafe extern "C" fn pointer_event_get_13(_info: *const v8::FunctionC
     }));
 }
 
-unsafe extern "C" fn pointer_event_op_14(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn pointer_event_op_14(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -21260,15 +21171,13 @@ unsafe extern "C" fn pointer_event_op_14(_info: *const v8::FunctionCallbackInfo)
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Array::new(scope, 0).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Array::new(scope, 0).into());
 }
 
-unsafe extern "C" fn pointer_event_op_15(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn pointer_event_op_15(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -21306,9 +21215,8 @@ unsafe extern "C" fn pointer_event_op_15(_info: *const v8::FunctionCallbackInfo)
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Array::new(scope, 0).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Array::new(scope, 0).into());
 }
 
 /// Create FunctionTemplate for PointerEvent.

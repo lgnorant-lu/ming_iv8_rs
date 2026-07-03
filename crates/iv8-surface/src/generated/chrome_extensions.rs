@@ -63,10 +63,9 @@ pub fn create_chrome_alarms_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_app_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_app_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -104,15 +103,13 @@ unsafe extern "C" fn chrome_app_op_1(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Boolean::new(scope, false).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
-unsafe extern "C" fn chrome_app_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_app_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -150,15 +147,13 @@ unsafe extern "C" fn chrome_app_op_2(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_app_op_3(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_app_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -196,15 +191,13 @@ unsafe extern "C" fn chrome_app_op_3(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_app_op_4(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_app_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -242,15 +235,13 @@ unsafe extern "C" fn chrome_app_op_4(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(crate::type_conv::v8_str(scope, ""));
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
-unsafe extern "C" fn chrome_app_op_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_app_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -288,9 +279,8 @@ unsafe extern "C" fn chrome_app_op_5(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(crate::type_conv::v8_str(scope, ""));
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
 /// Create FunctionTemplate for ChromeApp.
@@ -897,10 +887,9 @@ pub(crate) unsafe extern "C" fn chrome_csi_set_4(_info: *const v8::FunctionCallb
     }));
 }
 
-unsafe extern "C" fn chrome_csi_op_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_csi_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -938,9 +927,8 @@ unsafe extern "C" fn chrome_csi_op_5(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn chrome_csi_get_6(_info: *const v8::FunctionCallbackInfo) {
@@ -2005,10 +1993,9 @@ pub fn create_chrome_hotword_private_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_i18n_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_i18n_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -2053,15 +2040,13 @@ unsafe extern "C" fn chrome_i18n_op_1(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(crate::type_conv::v8_str(scope, ""));
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
-unsafe extern "C" fn chrome_i18n_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_i18n_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -2099,25 +2084,21 @@ unsafe extern "C" fn chrome_i18n_op_2(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(crate::type_conv::v8_str(scope, ""));
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
-unsafe extern "C" fn chrome_i18n_op_3(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_i18n_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeI18n") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_i18n_op_4(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_i18n_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeI18n") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
@@ -2126,9 +2107,8 @@ unsafe extern "C" fn chrome_i18n_op_4(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for ChromeI18n.
@@ -4295,10 +4275,9 @@ pub(crate) unsafe extern "C" fn chrome_port_set_3(_info: *const v8::FunctionCall
     }));
 }
 
-unsafe extern "C" fn chrome_port_op_4(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_port_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -4343,15 +4322,13 @@ unsafe extern "C" fn chrome_port_op_4(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_port_op_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_port_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -4389,9 +4366,8 @@ unsafe extern "C" fn chrome_port_op_5(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for ChromePort.
@@ -5544,10 +5520,9 @@ pub(crate) unsafe extern "C" fn chrome_runtime_set_10(_info: *const v8::Function
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_11(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_runtime_op_11(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
@@ -5556,15 +5531,13 @@ unsafe extern "C" fn chrome_runtime_op_11(_info: *const v8::FunctionCallbackInfo
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_runtime_op_12(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_runtime_op_12(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -5602,114 +5575,13 @@ unsafe extern "C" fn chrome_runtime_op_12(_info: *const v8::FunctionCallbackInfo
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Object::new(scope).into());
 }
 
-unsafe extern "C" fn chrome_runtime_op_13(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "ChromeRuntime").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if __args.length() < 1 {
-            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
-            let exc = v8::Exception::type_error(scope, msg);
-            scope.throw_exception(exc);
-            return;
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(crate::type_conv::v8_str(scope, ""));
-    }));
-}
-
-unsafe extern "C" fn chrome_runtime_op_14(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "ChromeRuntime").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
-}
-
-unsafe extern "C" fn chrome_runtime_op_15(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_runtime_op_13(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -5754,25 +5626,13 @@ unsafe extern "C" fn chrome_runtime_op_15(_info: *const v8::FunctionCallbackInfo
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
-unsafe extern "C" fn chrome_runtime_op_16(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
-}
-
-unsafe extern "C" fn chrome_runtime_op_17(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_runtime_op_14(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -5810,144 +5670,13 @@ unsafe extern "C" fn chrome_runtime_op_17(_info: *const v8::FunctionCallbackInfo
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Object::new(scope).into());
 }
 
-unsafe extern "C" fn chrome_runtime_op_18(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
-}
-
-unsafe extern "C" fn chrome_runtime_op_19(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if __args.length() < 1 {
-            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
-            let exc = v8::Exception::type_error(scope, msg);
-            scope.throw_exception(exc);
-            return;
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
-}
-
-unsafe extern "C" fn chrome_runtime_op_20(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "ChromeRuntime").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
-}
-
-unsafe extern "C" fn chrome_runtime_op_21(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
-}
-
-unsafe extern "C" fn chrome_runtime_op_22(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "ChromeRuntime").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
-}
-
-unsafe extern "C" fn chrome_runtime_op_23(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_runtime_op_15(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -5992,9 +5721,230 @@ unsafe extern "C" fn chrome_runtime_op_23(_info: *const v8::FunctionCallbackInfo
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Object::new(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn chrome_runtime_op_16(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn chrome_runtime_op_17(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "ChromeRuntime").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Object::new(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn chrome_runtime_op_18(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn chrome_runtime_op_19(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if __args.length() < 1 {
+            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn chrome_runtime_op_20(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "ChromeRuntime").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn chrome_runtime_op_21(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn chrome_runtime_op_22(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "ChromeRuntime").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn chrome_runtime_op_23(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "ChromeRuntime").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if __args.length() < 1 {
+            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for ChromeRuntime.
@@ -6853,20 +6803,17 @@ pub fn create_chrome_storage_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_storage_area_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_storage_area_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeStorageArea") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_storage_area_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_storage_area_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeStorageArea") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
@@ -6875,15 +6822,13 @@ unsafe extern "C" fn chrome_storage_area_op_2(_info: *const v8::FunctionCallback
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_storage_area_op_3(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_storage_area_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeStorageArea") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
@@ -6892,29 +6837,24 @@ unsafe extern "C" fn chrome_storage_area_op_3(_info: *const v8::FunctionCallback
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_storage_area_op_4(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_storage_area_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeStorageArea") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn chrome_storage_area_op_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_storage_area_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeStorageArea") { return; }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn chrome_storage_area_get_6(_info: *const v8::FunctionCallbackInfo) {
@@ -7583,10 +7523,9 @@ pub fn create_chrome_webrtc_logging_private_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_webstore_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn chrome_webstore_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -7624,9 +7563,8 @@ unsafe extern "C" fn chrome_webstore_op_1(_info: *const v8::FunctionCallbackInfo
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for ChromeWebstore.
@@ -7693,10 +7631,9 @@ pub fn create_chrome_windows_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn external_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn external_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -7734,15 +7671,13 @@ unsafe extern "C" fn external_op_1(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn external_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn external_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -7780,15 +7715,13 @@ unsafe extern "C" fn external_op_2(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn external_op_3(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn external_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -7826,15 +7759,13 @@ unsafe extern "C" fn external_op_3(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn external_op_4(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn external_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -7872,9 +7803,8 @@ unsafe extern "C" fn external_op_4(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for External.
@@ -8285,10 +8215,9 @@ pub fn create_webkit_storage_info_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn webkit_url_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn webkit_url_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -8333,15 +8262,13 @@ unsafe extern "C" fn webkit_url_op_1(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(crate::type_conv::v8_str(scope, ""));
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
-unsafe extern "C" fn webkit_url_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn webkit_url_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -8386,9 +8313,8 @@ unsafe extern "C" fn webkit_url_op_2(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 /// Create FunctionTemplate for webkitURL.

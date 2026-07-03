@@ -52,10 +52,9 @@ pub(crate) unsafe extern "C" fn crypto_get_1(_info: *const v8::FunctionCallbackI
     }));
 }
 
-unsafe extern "C" fn crypto_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn crypto_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -100,15 +99,13 @@ unsafe extern "C" fn crypto_op_2(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Object::new(scope).into());
 }
 
-unsafe extern "C" fn crypto_op_3(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn crypto_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -146,9 +143,8 @@ unsafe extern "C" fn crypto_op_3(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(crate::type_conv::v8_str(scope, ""));
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
 /// Create FunctionTemplate for Crypto.
@@ -422,10 +418,9 @@ pub fn create_crypto_key_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn subtle_crypto_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 3 {
@@ -434,15 +429,13 @@ unsafe extern "C" fn subtle_crypto_op_1(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 3 {
@@ -451,15 +444,13 @@ unsafe extern "C" fn subtle_crypto_op_2(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_3(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 3 {
@@ -468,15 +459,13 @@ unsafe extern "C" fn subtle_crypto_op_3(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_4(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 4 {
@@ -485,15 +474,13 @@ unsafe extern "C" fn subtle_crypto_op_4(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_5(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
@@ -502,15 +489,13 @@ unsafe extern "C" fn subtle_crypto_op_5(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_6(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_6(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 3 {
@@ -519,15 +504,13 @@ unsafe extern "C" fn subtle_crypto_op_6(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_7(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 5 {
@@ -536,15 +519,13 @@ unsafe extern "C" fn subtle_crypto_op_7(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_8(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_8(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
@@ -553,15 +534,13 @@ unsafe extern "C" fn subtle_crypto_op_8(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_9(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_9(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 5 {
@@ -570,15 +549,13 @@ unsafe extern "C" fn subtle_crypto_op_9(_info: *const v8::FunctionCallbackInfo) 
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_10(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_10(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
@@ -587,15 +564,13 @@ unsafe extern "C" fn subtle_crypto_op_10(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_11(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_11(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 4 {
@@ -604,15 +579,13 @@ unsafe extern "C" fn subtle_crypto_op_11(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_12(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_12(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 7 {
@@ -621,15 +594,13 @@ unsafe extern "C" fn subtle_crypto_op_12(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_13(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_13(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 5 {
@@ -638,15 +609,13 @@ unsafe extern "C" fn subtle_crypto_op_13(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_14(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_14(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
@@ -655,15 +624,13 @@ unsafe extern "C" fn subtle_crypto_op_14(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_15(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_15(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 6 {
@@ -672,15 +639,13 @@ unsafe extern "C" fn subtle_crypto_op_15(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_16(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_16(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 3 {
@@ -689,15 +654,13 @@ unsafe extern "C" fn subtle_crypto_op_16(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_17(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_17(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "SubtleCrypto") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
@@ -706,15 +669,13 @@ unsafe extern "C" fn subtle_crypto_op_17(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_18(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_18(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -759,15 +720,13 @@ unsafe extern "C" fn subtle_crypto_op_18(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Boolean::new(scope, false).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
-unsafe extern "C" fn subtle_crypto_op_19(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn subtle_crypto_op_19(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -812,9 +771,8 @@ unsafe extern "C" fn subtle_crypto_op_19(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Boolean::new(scope, false).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
 /// Create FunctionTemplate for SubtleCrypto.

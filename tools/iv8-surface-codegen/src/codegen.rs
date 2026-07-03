@@ -440,14 +440,16 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             let tm = type_mapper::map_idl_type(ret_name);
             let is_promise_ret = type_mapper::is_promise_public(ret_name);
             out.push_str(&format!(
-                "unsafe extern \"C\" fn {}_op_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
+                "pub(crate) unsafe extern \"C\" fn {}_op_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                 fn_name, idx
             ));
-            out.push_str(
-                "    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {\n",
-            );
-            out.push_str("        let info_ref = unsafe { &*_info };\n");
-            out.push_str("        v8::callback_scope!(unsafe scope, info_ref);\n");
+            // Note: catch_unwind is NOT used here because it swallows V8's
+            // throw_exception in the function call path (but not in the
+            // accessor property path). This is a V8+Rust interaction issue.
+            // Without catch_unwind, a Rust panic would crash V8, but all
+            // codegen callbacks are panic-safe (no unwrap/expect on None).
+            out.push_str("    let info_ref = unsafe { &*_info };\n");
+            out.push_str("    v8::callback_scope!(unsafe scope, info_ref);\n");
             if is_promise_ret {
                 out.push_str(&format!(
                     "        if !crate::promise_check::check_receiver_promise(scope, _info, \"{iface}\") {{ return; }}\n",
@@ -472,10 +474,9 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
                 out.push_str("        }\n");
             }
             out.push_str(
-                "        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);\n",
+                "    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);\n",
             );
-            out.push_str(&format!("        rv.set({});\n", tm.default_value));
-            out.push_str("    }));\n");
+            out.push_str(&format!("    rv.set({});\n", tm.default_value));
             out.push_str("}\n\n");
         }
     }
@@ -1093,6 +1094,113 @@ pub fn generate_install_all(
                 out.push_str(&format!("        }}\n"));
                 out.push_str(&format!("    }}\n"));
             }
+        }
+    }
+    out.push_str("}\n");
+
+    // Generate fix_operation_callbacks: re-install operations using
+    // get_function() so that V8 actually calls the callback.
+    //
+    // Root cause: ObjectTemplate::set(key, func_tmpl.into()) installs a
+    // FunctionTemplate as a property value. V8 creates a JS function from
+    // the template, but the callback may not be invoked when the function
+    // is called — the function becomes an empty [native code] shell.
+    //
+    // Fix: After templates are created and constructors registered on global,
+    // iterate each interface's prototype object and re-install each operation
+    // using func_tmpl.get_function(scope) to get a proper JS function whose
+    // callback is actually wired up.
+    out.push_str("\npub fn fix_operation_callbacks(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {\n");
+    {
+        let mut seen_iface = std::collections::BTreeSet::new();
+        for def in definitions {
+            if def.kind != "interface" { continue; }
+            let name = match &def.name { Some(n) => n, None => continue };
+            let fn_name = type_mapper::idl_name_to_rust(name);
+            let ea = process_interface_ea(def);
+            if ea.no_interface_object { continue; }
+            if !seen_iface.insert(name.clone()) { continue; }
+
+            // Collect operation names + idx for this interface
+            let mut ops: Vec<(String, usize, usize)> = Vec::new(); // (name, idx, min_args)
+            let mut idx = 0;
+            for m in &def.members {
+                if m.kind == "attribute" {
+                    let attr_name = m.name.as_deref().unwrap_or("");
+                    if should_skip_attribute(name, attr_name) {
+                        continue;
+                    }
+                    idx += 1;
+                } else if m.kind == "operation" {
+                    idx += 1;
+                    let op_name = if m.special.as_deref() == Some("stringifier") {
+                        "toString".to_string()
+                    } else {
+                        m.name.clone().unwrap_or_default()
+                    };
+                    if op_name.is_empty() { continue; }
+                    let is_static = m.special.as_deref() == Some("static");
+                    if is_static { continue; } // static ops handled separately
+                    let min_args = def.members.iter()
+                        .filter(|m2| m2.kind == "operation" && m2.name.as_deref() == m.name.as_deref())
+                        .map(|m2| m2.required_arg_count)
+                        .min()
+                        .unwrap_or(m.required_arg_count);
+                    ops.push((op_name, idx, min_args));
+                }
+            }
+            if ops.is_empty() { continue; }
+
+            // Skip interfaces whose prototypes have shim-installed JS operations.
+            // These have real logic that must not be overwritten with codegen stubs.
+            const SHIM_OPERATION_INTERFACES: &[&str] = &[
+                "Event", "CustomEvent", "MouseEvent", "KeyboardEvent", "PointerEvent",
+                "MessagePort", "BroadcastChannel", "Worker", "SharedWorker",
+                "Storage", "Navigator", "Node", "EventTarget",
+                "NodeList", "MutationObserver", "DOMTokenList",
+                "HTMLCanvasElement", "Document", "HTMLElement",
+                "HTMLFormElement", "HTMLInputElement", "HTMLTextAreaElement",
+                "HTMLSelectElement", "HTMLAnchorElement", "HTMLAreaElement",
+                "Range", "Location", "Window",
+                "DOMImplementation",
+            ];
+            if SHIM_OPERATION_INTERFACES.contains(&name.as_str()) {
+                // Still need to fix codegen operations on these interfaces,
+                // but we can't safely detect which are shim vs codegen.
+                // Skip for now — shim operations have their own receiver check TODO.
+                continue;
+            }
+
+            // Generate fix code for this interface
+            let module = domain_of.get(name).map(|s| s.as_str()).unwrap_or("web_apis");
+            let module_rust = module.replace('-', "_");
+            out.push_str(&format!("    // {} ({} ops)\n", name, ops.len()));
+            out.push_str("    {\n");
+            out.push_str(&format!("        let ctor_key = v8::String::new(scope, \"{}\").unwrap();\n", name));
+            out.push_str("        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {\n");
+            out.push_str("            if ctor_val.is_function() {\n");
+            out.push_str("                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };\n");
+            out.push_str("                let proto_key = v8::String::new(scope, \"prototype\").unwrap();\n");
+            out.push_str("                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {\n");
+            out.push_str("                    if let Some(proto_obj) = proto_val.to_object(scope) {\n");
+            for (op_name, op_idx, min_args) in &ops {
+                out.push_str(&format!("                        {{\n"));
+                out.push_str(&format!("                            let key = v8::String::new(scope, \"{}\").unwrap();\n", op_name));
+                if *min_args > 0 {
+                    out.push_str(&format!("                            let ft = v8::FunctionTemplate::builder_raw(super::{}::{}_op_{}).length({}).build(scope);\n", module_rust, fn_name, op_idx, min_args));
+                } else {
+                    out.push_str(&format!("                            let ft = v8::FunctionTemplate::builder_raw(super::{}::{}_op_{}).build(scope);\n", module_rust, fn_name, op_idx));
+                }
+                out.push_str(&format!("                            ft.set_class_name(v8::String::new(scope, \"{}\").unwrap());\n", op_name));
+                out.push_str("                            let fn_val = ft.get_function(scope).unwrap();\n");
+                out.push_str("                            let _ = proto_obj.set(scope, key.into(), fn_val.into());\n");
+                out.push_str("                        }\n");
+            }
+            out.push_str("                    }\n");
+            out.push_str("                }\n");
+            out.push_str("            }\n");
+            out.push_str("        }\n");
+            out.push_str("    }\n");
         }
     }
     out.push_str("}\n");

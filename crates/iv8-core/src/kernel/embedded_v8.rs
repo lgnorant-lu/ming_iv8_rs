@@ -507,6 +507,11 @@ impl EmbeddedV8Kernel {
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);
+            // TODO: fix_operation_callbacks disabled — causes idl_test setup failure.
+            // Root cause: ObjectTemplate::set(func_tmpl) creates empty [native code] shell.
+            // fix_operation_callbacks re-installs via get_function() but overwrites
+            // shim operations on some interfaces. Need per-interface approach.
+            // iv8_surface::generated::install_all::fix_operation_callbacks(scope, global);
 
             // Post-fix: convert [Global] data properties to accessor properties.
             // Shims install real values as data properties (history, customElements, etc.).

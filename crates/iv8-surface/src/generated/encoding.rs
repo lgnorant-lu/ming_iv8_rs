@@ -6,10 +6,9 @@ use super::construct_only;
 use v8::Local;
 use v8::FunctionTemplate;
 
-unsafe extern "C" fn text_decoder_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn text_decoder_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -47,9 +46,8 @@ unsafe extern "C" fn text_decoder_op_1(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(crate::type_conv::v8_str(scope, ""));
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
 pub(crate) unsafe extern "C" fn text_decoder_get_2(_info: *const v8::FunctionCallbackInfo) {
@@ -521,10 +519,9 @@ pub fn create_text_decoder_stream_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn text_encoder_op_1(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn text_encoder_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -562,15 +559,13 @@ unsafe extern "C" fn text_encoder_op_1(_info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(crate::type_conv::default_value_for_type(scope, "Uint8Array"));
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(crate::type_conv::default_value_for_type(scope, "Uint8Array"));
 }
 
-unsafe extern "C" fn text_encoder_op_2(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn text_encoder_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -615,9 +610,8 @@ unsafe extern "C" fn text_encoder_op_2(_info: *const v8::FunctionCallbackInfo) {
             scope.throw_exception(exc);
             return;
         }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
-    }));
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Object::new(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn text_encoder_get_3(_info: *const v8::FunctionCallbackInfo) {
