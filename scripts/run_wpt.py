@@ -72,6 +72,147 @@ WPT_SUITES = [
             "SVG", "html", "dom",
         ],
     },
+    {
+        "name": "css/cssom/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "cssom" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "cssom", "SVG", "uievents", "html", "dom", "mathml-core",
+        ],
+    },
+    {
+        "name": "FileAPI/idlharness",
+        "test_file": FIXTURES_DIR / "FileAPI" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "FileAPI", "dom", "html", "url",
+        ],
+    },
+    {
+        "name": "url/idlharness",
+        "test_file": FIXTURES_DIR / "url" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "url",
+        ],
+    },
+    {
+        "name": "console/idlharness",
+        "test_file": FIXTURES_DIR / "console" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "console",
+        ],
+    },
+    {
+        "name": "encoding/idlharness",
+        "test_file": FIXTURES_DIR / "encoding" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "encoding", "streams",
+        ],
+    },
+    {
+        "name": "WebCryptoAPI/idlharness",
+        "test_file": FIXTURES_DIR / "WebCryptoAPI" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webcrypto", "html", "dom",
+        ],
+    },
+    {
+        "name": "IndexedDB/idlharness",
+        "test_file": FIXTURES_DIR / "IndexedDB" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "IndexedDB", "html", "dom",
+        ],
+    },
+    {
+        "name": "navigation-timing/idlharness",
+        "test_file": FIXTURES_DIR / "navigation-timing" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "navigation-timing", "hr-time", "resource-timing", "performance-timeline",
+            "dom", "html",
+        ],
+    },
+    {
+        "name": "beacon/idlharness",
+        "test_file": FIXTURES_DIR / "beacon" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "beacon", "html",
+        ],
+    },
+    {
+        "name": "webvtt/idlharness",
+        "test_file": FIXTURES_DIR / "webvtt" / "api" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webvtt", "html", "dom",
+        ],
+    },
+    {
+        "name": "hr-time/idlharness",
+        "test_file": FIXTURES_DIR / "hr-time" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "hr-time", "html", "dom",
+        ],
+    },
+    {
+        "name": "performance-timeline/idlharness",
+        "test_file": FIXTURES_DIR / "performance-timeline" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "performance-timeline", "hr-time", "dom",
+        ],
+    },
+    {
+        "name": "screen-orientation/idlharness",
+        "test_file": FIXTURES_DIR / "screen-orientation" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "screen-orientation", "dom", "cssom-view", "html",
+        ],
+    },
+    {
+        "name": "requestidlecallback/idlharness",
+        "test_file": FIXTURES_DIR / "requestidlecallback" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "requestidlecallback", "html", "dom",
+        ],
+    },
 ]
 
 
@@ -273,6 +414,49 @@ if (typeof window !== 'undefined' && window !== globalThis) {{
 }}
 """
         ctx.eval(pre_shim, name="iv8-pre-shim.js")
+
+        # Suite-specific pre-shim: create test objects that require DOM features
+        # IV8 doesn't fully support (e.g. <style> element parsing, SVG elements)
+        suite_specific_shim = ""
+        if "css/cssom" in suite_name:
+            suite_specific_shim = """
+// Create CSSOM test objects using real constructors
+self.style_element = document.createElement('style');
+self.style_element.textContent = '@import url("data:text/css,"); @namespace x "y"; @page { @top-left {} } @media all {} #test { color: green; }';
+document.head.appendChild(self.style_element);
+self.sheet = self.style_element.sheet || new CSSStyleSheet();
+self.svg_element = document.createElement('svg');
+self.svg_element.id = 'svgElement';
+// Ensure CSSRule static constants
+if (typeof CSSRule !== 'undefined') {
+    CSSRule.STYLE_RULE = 1; CSSRule.IMPORT_RULE = 3; CSSRule.MEDIA_RULE = 4;
+    CSSRule.FONT_FACE_RULE = 5; CSSRule.PAGE_RULE = 6; CSSRule.NAMESPACE_RULE = 10;
+    CSSRule.MARGIN_RULE = 1000;
+}
+// Ensure sheet has cssRules
+if (!self.sheet.cssRules) self.sheet.cssRules = [];
+if (!self.sheet.media) self.sheet.media = { mediaText: 'all', length: 1, item: function(i) { return 'all'; }, toString: function() { return 'all'; } };
+// Ensure ProcessingInstruction for xmlss_pi
+self.xmlss_pi = document.createProcessingInstruction('xml-stylesheet', 'href="data:text/css,"');
+"""
+        elif "performance-timeline" in suite_name:
+            suite_specific_shim = """
+self.observer = new PerformanceObserver(function() {});
+"""
+        elif "requestidlecallback" in suite_name:
+            suite_specific_shim = """
+self.deadline = { didTimeout: false, timeRemaining: function() { return 50; } };
+"""
+        elif "navigation-timing" in suite_name:
+            suite_specific_shim = """
+self.xmlss_pi = document.createProcessingInstruction('xml-stylesheet', 'href="data:text/css,"');
+"""
+
+        if suite_specific_shim:
+            try:
+                ctx.eval(suite_specific_shim, name="iv8-suite-shim.js")
+            except Exception as e:
+                print(f"  Suite shim warning: {e}")
 
         # Load WPT harness (IIFE registers load listener via our shim)
         ctx.eval(resources["testharness.js"], name="testharness.js")
