@@ -603,11 +603,21 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                 fullscreenEnabled: false, fullscreenElement: null,
                 scrollingElement: null
             };
+            // readonly properties — no setter (setter must be undefined per WebIDL)
+            var _docReadonly = {
+                referrer: true, lastModified: true, readyState: true,
+                currentScript: true, defaultView: true, hidden: true,
+                visibilityState: true, URL: true, documentURI: true,
+                compatMode: true, characterSet: true, charset: true,
+                contentType: true, fullscreenEnabled: true, fullscreenElement: true,
+                scrollingElement: true
+            };
             Object.keys(_docProps).forEach(function(prop) {
                 if (prop in Document.prototype) return;
                 var dv = _docProps[prop];
                 var docProto = Document.prototype;
-                Object.defineProperty(docProto, prop, {
+                var isReadonly = _docReadonly[prop];
+                var desc = {
                     get: function() {
                         if (this === null || this === undefined) throw new TypeError('Illegal invocation');
                         if (this === docProto) return dv;
@@ -622,13 +632,16 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                         if (prop === 'URL' || prop === 'documentURI') return typeof location !== 'undefined' ? location.href : '';
                         return dv;
                     },
-                    set: function(v) {
-                        if (this === null || this === undefined) throw new TypeError('Illegal invocation');
-                        this['_' + prop] = v;
-                    },
                     enumerable: true,
                     configurable: true
-                });
+                };
+                if (!isReadonly) {
+                    desc.set = function(v) {
+                        if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+                        this['_' + prop] = v;
+                    };
+                }
+                Object.defineProperty(docProto, prop, desc);
             });
         }
     } catch(e) {}
@@ -643,10 +656,16 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                 scrollTop: 0, scrollLeft: 0,
                 scrollWidth: 0, scrollHeight: 0
             };
+            var _heReadonly = {
+                offsetTop: true, offsetLeft: true, offsetWidth: true, offsetHeight: true,
+                clientTop: true, clientLeft: true, clientWidth: true, clientHeight: true,
+                scrollWidth: true, scrollHeight: true
+            };
             Object.keys(_heProps).forEach(function(prop) {
                 var dv = _heProps[prop];
                 var proto = HTMLElement.prototype;
-                Object.defineProperty(proto, prop, {
+                var isReadonly = _heReadonly[prop];
+                var desc = {
                     get: function() {
                         if (this === null || this === undefined) throw new TypeError('Illegal invocation');
                         if (this === proto) return dv;
@@ -657,13 +676,16 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                         var s = this['_' + prop];
                         return s !== undefined ? s : dv;
                     },
-                    set: function(v) {
-                        if (this === null || this === undefined) throw new TypeError('Illegal invocation');
-                        this['_' + prop] = v;
-                    },
                     enumerable: true,
                     configurable: true
-                });
+                };
+                if (!isReadonly) {
+                    desc.set = function(v) {
+                        if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+                        this['_' + prop] = v;
+                    };
+                }
+                Object.defineProperty(proto, prop, desc);
             });
         }
     } catch(e) {}
