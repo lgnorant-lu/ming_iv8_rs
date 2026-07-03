@@ -821,7 +821,7 @@ impl EmbeddedV8Kernel {
                             var proto = ctor.prototype;
                             var names = Object.getOwnPropertyNames(proto);
                             for (var j = 0; j < names.length; j++) {
-                                var pname = names[j];
+                                let pname = names[j];
                                 if (pname === 'constructor') continue;
                                 try {
                                     var desc = Object.getOwnPropertyDescriptor(proto, pname);
@@ -830,12 +830,12 @@ impl EmbeddedV8Kernel {
                                     var fnStr = '';
                                     try { fnStr = desc.value.toString(); } catch(e) { continue; }
                                     if (fnStr.indexOf('[native code]') !== -1) continue;
-                                    var origFn = desc.value;
-                                    var origName = origFn.name || pname;
-                                    var origLen = origFn.length;
-                                    // Get the expected toStringTag for this interface
-                                    var expectedTag = shimOpInterfaces[i];
-                                    var wrappedFn = function() {
+                                    let origFn = desc.value;
+                                    let expectedTag = shimOpInterfaces[i];
+                                    let origName = origFn.name || pname;
+                                    let origLen = origFn.length;
+                                    // expectedTag already defined above
+                                    let wrappedFn = function() {
                                         // Check if this is the correct interface instance
                                         // by comparing Symbol.toStringTag
                                         var thisTag = '';
@@ -883,23 +883,28 @@ impl EmbeddedV8Kernel {
                         'NavigationTransition', 'ShadowRoot',
                     ];
                     for (var i = 0; i < receiverCheckInterfaces.length; i++) {
+                        let ifaceName = receiverCheckInterfaces[i];
                         try {
-                            var ifaceName = receiverCheckInterfaces[i];
                             var ctor = globalThis[ifaceName];
                             if (!ctor || !ctor.prototype) continue;
                             var proto = ctor.prototype;
                             var names = Object.getOwnPropertyNames(proto);
                             for (var j = 0; j < names.length; j++) {
-                                var pname = names[j];
+                                let pname = names[j];
                                 if (pname === 'constructor') continue;
                                 try {
                                     var desc = Object.getOwnPropertyDescriptor(proto, pname);
                                     if (!desc || !desc.get) continue;
-                                    if (desc.get.__iv8_wrapped) continue;
                                     var origGet = desc.get;
                                     var origSet = desc.set;
-                                    var thisIfaceName = ifaceName;
-                                    var wrappedGet = function() {
+                                    var alreadyWrapped = desc.get && desc.get.__iv8_wrapped;
+                                    if (alreadyWrapped && (!desc.set || desc.set.__iv8_set_wrapped)) continue;
+                                    let thisIfaceName = ifaceName;
+                                    var wrappedGet;
+                                    if (alreadyWrapped) {
+                                        wrappedGet = origGet;
+                                    } else {
+                                        wrappedGet = function() {
                                         var thisCtor = globalThis[thisIfaceName];
                                         if (thisCtor && thisCtor.prototype) {
                                             if (this === thisCtor.prototype) {
@@ -916,13 +921,72 @@ impl EmbeddedV8Kernel {
                                                 throw new TypeError('Illegal invocation');
                                             }
                                         }
+                                        // For event handlers, check hidden property first
+                                        if (pname.indexOf('on') === 0 && pname.length > 2) {
+                                            var hv = this['__iv8_' + pname];
+                                            if (hv !== undefined) return hv;
+                                        }
                                         return origGet.call(this);
                                     };
                                     wrappedGet.__iv8_wrapped = true;
                                     try { Object.defineProperty(wrappedGet, 'name', { value: 'get ' + pname }); } catch(e) {}
+                                    }
+                                    // Wrap setter with same receiver check
+                                    var wrappedSet = origSet;
+                                    if (typeof origSet === 'function') {
+                                        // For event handlers (on*), use simple property assignment
+                                        // instead of codegen setter (which has wrong receiver check)
+                                        if (pname.indexOf('on') === 0 && pname.length > 2) {
+                                            wrappedSet = function(v) {
+                                                var thisCtor2 = globalThis[thisIfaceName];
+                                                if (thisCtor2 && thisCtor2.prototype) {
+                                                    if (this === thisCtor2.prototype) {
+                                                        throw new TypeError('Illegal invocation');
+                                                    }
+                                                    var isValid2 = false;
+                                                    var cur2 = Object.getPrototypeOf(this);
+                                                    for (var k2 = 0; k2 < 30; k2++) {
+                                                        if (cur2 === thisCtor2.prototype) { isValid2 = true; break; }
+                                                        if (!cur2) break;
+                                                        cur2 = Object.getPrototypeOf(cur2);
+                                                    }
+                                                    if (!isValid2) {
+                                                        throw new TypeError('Illegal invocation');
+                                                    }
+                                                }
+                                                // Store event handler value in hidden property
+                                                // to avoid triggering setter recursion
+                                                Object.defineProperty(this, '__iv8_' + pname, { value: v, writable: true, enumerable: false, configurable: true });
+                                            };
+                                        } else {
+                                            wrappedSet = function(v) {
+                                                var thisCtor2 = globalThis[thisIfaceName];
+                                                if (thisCtor2 && thisCtor2.prototype) {
+                                                    if (this === thisCtor2.prototype) {
+                                                        throw new TypeError('Illegal invocation');
+                                                    }
+                                                    var isValid2 = false;
+                                                    var cur2 = Object.getPrototypeOf(this);
+                                                    for (var k2 = 0; k2 < 30; k2++) {
+                                                        if (cur2 === thisCtor2.prototype) { isValid2 = true; break; }
+                                                        if (!cur2) break;
+                                                        cur2 = Object.getPrototypeOf(cur2);
+                                                    }
+                                                    if (!isValid2) {
+                                                        throw new TypeError('Illegal invocation');
+                                                    }
+                                                }
+                                                // Use defineProperty to set own data property
+                                                // (avoids infinite recursion through this[pname] = v)
+                                                Object.defineProperty(this, pname, { value: v, writable: true, enumerable: true, configurable: true });
+                                            };
+                                        }
+                                        try { Object.defineProperty(wrappedSet, 'name', { value: 'set ' + pname }); } catch(e) {}
+                                        wrappedSet.__iv8_set_wrapped = true;
+                                    }
                                     Object.defineProperty(proto, pname, {
                                         get: wrappedGet,
-                                        set: origSet,
+                                        set: wrappedSet,
                                         enumerable: desc.enumerable,
                                         configurable: true
                                     });
