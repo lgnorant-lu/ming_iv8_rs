@@ -1047,6 +1047,49 @@ impl EmbeddedV8Kernel {
                         } catch(e) {}
                     }
                 })();
+                // Fix Crypto/SubtleCrypto: move instance methods to prototype
+                (function() {
+                    if (typeof crypto === 'undefined' || typeof Crypto === 'undefined') return;
+                    var cryptoProto = Crypto.prototype;
+                    if (!cryptoProto) return;
+                    var names = Object.getOwnPropertyNames(crypto);
+                    for (var i = 0; i < names.length; i++) {
+                        var prop = names[i];
+                        if (prop === 'subtle') {
+                            var subtleVal = crypto[prop];
+                            Object.defineProperty(cryptoProto, 'subtle', {
+                                get: function() { return subtleVal; },
+                                enumerable: true, configurable: true
+                            });
+                            delete crypto[prop];
+                        } else if (typeof crypto[prop] === 'function') {
+                            cryptoProto[prop] = crypto[prop];
+                            delete crypto[prop];
+                        }
+                    }
+                    Object.setPrototypeOf(crypto, cryptoProto);
+                    if (typeof SubtleCrypto !== 'undefined' && crypto.subtle) {
+                        var subtleProto = SubtleCrypto.prototype;
+                        if (subtleProto) {
+                            var subtleNames = Object.getOwnPropertyNames(crypto.subtle);
+                            for (var j = 0; j < subtleNames.length; j++) {
+                                var sprop = subtleNames[j];
+                                if (typeof crypto.subtle[sprop] === 'function') {
+                                    subtleProto[sprop] = crypto.subtle[sprop];
+                                    delete crypto.subtle[sprop];
+                                }
+                            }
+                            Object.setPrototypeOf(crypto.subtle, subtleProto);
+                        }
+                    }
+                    if (typeof Window !== 'undefined' && Window.prototype) {
+                        var _cryptoVal = crypto;
+                        Object.defineProperty(Window.prototype, 'crypto', {
+                            get: function() { return _cryptoVal; },
+                            enumerable: true, configurable: true
+                        });
+                    }
+                })();
             "#);
             let _ = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope));
         });
