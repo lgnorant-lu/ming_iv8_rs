@@ -34,14 +34,14 @@ pub const URL_SHIM_JS: &str = r#"
         }
     }
 
-    URLSearchParams.prototype.get = function(name) {
+    URLSearchParams.prototype.get = function get(name) {
         for (var i = 0; i < this._params.length; i++) {
             if (this._params[i][0] === name) return this._params[i][1];
         }
         return null;
     };
 
-    URLSearchParams.prototype.getAll = function(name) {
+    URLSearchParams.prototype.getAll = function getAll(name) {
         var result = [];
         for (var i = 0; i < this._params.length; i++) {
             if (this._params[i][0] === name) result.push(this._params[i][1]);
@@ -49,14 +49,14 @@ pub const URL_SHIM_JS: &str = r#"
         return result;
     };
 
-    URLSearchParams.prototype.has = function(name) {
+    URLSearchParams.prototype.has = function has(name) {
         for (var i = 0; i < this._params.length; i++) {
             if (this._params[i][0] === name) return true;
         }
         return false;
     };
 
-    URLSearchParams.prototype.set = function(name, value) {
+    URLSearchParams.prototype.set = function set(name, value) {
         var found = false;
         for (var i = this._params.length - 1; i >= 0; i--) {
             if (this._params[i][0] === name) {
@@ -67,7 +67,7 @@ pub const URL_SHIM_JS: &str = r#"
         if (!found) this._params.push([name, String(value)]);
     };
 
-    URLSearchParams.prototype.append = function(name, value) {
+    URLSearchParams.prototype.append = function append(name, value) {
         this._params.push([name, String(value)]);
     };
 
@@ -75,32 +75,41 @@ pub const URL_SHIM_JS: &str = r#"
         this._params = this._params.filter(function(p) { return p[0] !== name; });
     };
 
-    URLSearchParams.prototype.toString = function() {
+    URLSearchParams.prototype.toString = function toString() {
         return this._params.map(function(p) {
             return encodeURIComponent(p[0]) + '=' + encodeURIComponent(p[1]);
         }).join('&');
     };
 
-    URLSearchParams.prototype.forEach = function(callback, thisArg) {
+    URLSearchParams.prototype.sort = function sort() {
+        this._params.sort(function(a, b) { return a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0; });
+    };
+
+    Object.defineProperty(URLSearchParams.prototype, 'size', {
+        get: function get size() { return this._params.length; },
+        enumerable: true, configurable: true
+    });
+
+    URLSearchParams.prototype.forEach = function forEach(callback, thisArg) {
         for (var i = 0; i < this._params.length; i++) {
             callback.call(thisArg, this._params[i][1], this._params[i][0], this);
         }
     };
 
-    URLSearchParams.prototype.entries = function() {
+    URLSearchParams.prototype.entries = function entries() {
         return this._params[Symbol.iterator] ? this._params[Symbol.iterator]() : this._params;
     };
 
-    URLSearchParams.prototype.keys = function() {
+    URLSearchParams.prototype.keys = function keys() {
         return this._params.map(function(p) { return p[0]; });
     };
 
-    URLSearchParams.prototype.values = function() {
+    URLSearchParams.prototype.values = function values() {
         return this._params.map(function(p) { return p[1]; });
     };
 
-    Object.defineProperty(URLSearchParams.prototype, 'size', {
-        get: function() { return this._params.length; }
+    Object.defineProperty(URLSearchParams.prototype, Symbol.toStringTag, {
+        value: 'URLSearchParams', writable: true, configurable: true, enumerable: false
     });
 
     globalThis.URLSearchParams = URLSearchParams;
@@ -138,16 +147,35 @@ pub const URL_SHIM_JS: &str = r#"
         this.search = match[5] || '';
         this.hash = match[6] || '';
         this.host = this.hostname + (this.port ? ':' + this.port : '');
-        this.origin = this.protocol + '//' + this.host;
-        this.href = this.origin + this.pathname + this.search + this.hash;
-        this.searchParams = new URLSearchParams(this.search);
+        this._origin = this.protocol + '//' + this.host;
+        this.href = this._origin + this.pathname + this.search + this.hash;
+        this._searchParams = new URLSearchParams(this.search);
         this.username = '';
         this.password = '';
     }
 
-    URL.prototype.toString = function() { return this.href; };
-    URL.prototype.toJSON = function() { return this.href; };
+    Object.defineProperty(URL.prototype, 'origin', {
+        get: function() { return this._origin; },
+        enumerable: true, configurable: true
+    });
+    Object.defineProperty(URL.prototype, 'searchParams', {
+        get: function() { return this._searchParams; },
+        enumerable: true, configurable: true
+    });
+
+    URL.prototype.toString = function toString() { return this.href; };
+    URL.prototype.toJSON = function toJSON() { return this.href; };
+
+    Object.defineProperty(URL.prototype, Symbol.toStringTag, {
+        value: 'URL', writable: true, configurable: true, enumerable: false
+    });
+
+    // URL.length should be 1 (url is required, base is optional)
+    Object.defineProperty(URL, 'length', { value: 1, writable: false, enumerable: false, configurable: true });
+    // URLSearchParams.length should be 0 (init is optional)
+    Object.defineProperty(URLSearchParams, 'length', { value: 0, writable: false, enumerable: false, configurable: true });
 
     globalThis.URL = URL;
+    globalThis.webkitURL = URL;
 })();
 "#;
