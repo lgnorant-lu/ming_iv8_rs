@@ -759,27 +759,26 @@ impl EmbeddedV8Kernel {
                             }
                         }
                     } catch(e) {}
-                    // Wrap operations (methods) on prototypes with null/undefined receiver check.
-                    // Only wrap JS shim functions (not [native code] codegen functions).
-                    // codegen operations have receiver check (R3) but it may not work for
-                    // all cases — TODO: investigate catch_unwind + throw_exception interaction.
-                    // idlharness requires: calling operation with this=null must throw TypeError.
-                    // NOTE: Currently disabled — codegen operation receiver check (R3) has a
-                    // bug where throw_exception inside catch_unwind doesn't propagate.
-                    // JS shim functions that need null/undefined check should add it
-                    // individually. TODO: per-shim approach.
-                    /*
-                    var opCheckInterfaces = [
+                    // Wrap DOM template operations with null/undefined receiver check.
+                    // DOM template callbacks (dom/template.rs) are empty implementations
+                    // without receiver check. idlharness requires: calling operation
+                    // with this=null must throw TypeError.
+                    // codegen operations (via ObjectTemplate::set) DO have receiver check
+                    // (R3 prototype chain check) — their callbacks are correctly invoked.
+                    // Only wrap DOM template interfaces' methods.
+                    var domTemplateInterfaces = [
                         'HTMLElement', 'HTMLFormElement', 'HTMLInputElement',
-                        'HTMLTextAreaElement', 'HTMLCanvasElement', 'Navigator',
-                        'MessagePort', 'Worker', 'Storage', 'Node', 'Event',
-                        'EventTarget', 'NodeList', 'MutationObserver', 'DOMTokenList',
-                        'CustomEvent',
+                        'HTMLTextAreaElement', 'HTMLCanvasElement',
+                        'HTMLSelectElement', 'HTMLAnchorElement', 'HTMLAreaElement',
+                        'HTMLImageElement', 'HTMLVideoElement', 'HTMLAudioElement',
+                        'HTMLDivElement', 'HTMLSpanElement', 'HTMLButtonElement',
+                        'HTMLScriptElement', 'HTMLLinkElement', 'HTMLStyleElement',
+                        'HTMLMetaElement', 'HTMLOptionElement',
+                        'Range',
                     ];
-                    for (var i = 0; i < opCheckInterfaces.length; i++) {
+                    for (var i = 0; i < domTemplateInterfaces.length; i++) {
                         try {
-                            var ifaceName = opCheckInterfaces[i];
-                            var ctor = globalThis[ifaceName];
+                            var ctor = globalThis[domTemplateInterfaces[i]];
                             if (!ctor || !ctor.prototype) continue;
                             var proto = ctor.prototype;
                             var names = Object.getOwnPropertyNames(proto);
@@ -790,11 +789,6 @@ impl EmbeddedV8Kernel {
                                     var desc = Object.getOwnPropertyDescriptor(proto, pname);
                                     if (!desc || typeof desc.value !== 'function') continue;
                                     if (desc.value.__iv8_op_wrapped) continue;
-                                    // Skip codegen functions (they have [native code] in toString
-                                    // AND already have receiver check from R3)
-                                    var fnStr = '';
-                                    try { fnStr = desc.value.toString(); } catch(e) {}
-                                    if (fnStr.indexOf('[native code]') !== -1) continue;
                                     var origFn = desc.value;
                                     var wrappedFn = function() {
                                         if (this === null || this === undefined) {
@@ -815,7 +809,6 @@ impl EmbeddedV8Kernel {
                             }
                         } catch(e) {}
                     }
-                    */
                     // idlharness requires: calling getter on prototype object
                     // (or wrong-type receiver) must throw TypeError.
                     // codegen getters already have this check, but shim-installed
