@@ -507,11 +507,8 @@ impl EmbeddedV8Kernel {
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);
-            // TODO: fix_operation_callbacks disabled — causes idl_test setup failure.
-            // Root cause: ObjectTemplate::set(func_tmpl) creates empty [native code] shell.
-            // fix_operation_callbacks re-installs via get_function() but overwrites
-            // shim operations on some interfaces. Need per-interface approach.
-            // iv8_surface::generated::install_all::fix_operation_callbacks(scope, global);
+            // fix_operation_callbacks runs in install_browser_surface_init
+            // (before shim JS evals) to avoid overwriting shim operations.
 
             // Post-fix: convert [Global] data properties to accessor properties.
             // Shims install real values as data properties (history, customElements, etc.).
@@ -2100,6 +2097,10 @@ impl EmbeddedV8Kernel {
                     crate::telemetry::init_dom_constructors_installed();
                     crate::dom::template::chain_dom_prototypes(scope, global, &codegen_protos);
                     tracing::debug!("dom prototypes chained");
+
+                    // TODO: fix_operation_callbacks — needs per-interface approach
+                    // to avoid overwriting shim operations. Currently disabled.
+                    // iv8_surface::generated::install_all::fix_operation_callbacks(scope, global);
 
                     // Event system
                     install_behavior_via_bcr(

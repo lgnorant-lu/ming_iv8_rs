@@ -1151,25 +1151,24 @@ pub fn generate_install_all(
             }
             if ops.is_empty() { continue; }
 
-            // Skip interfaces whose prototypes have shim-installed JS operations.
-            // These have real logic that must not be overwritten with codegen stubs.
-            const SHIM_OPERATION_INTERFACES: &[&str] = &[
+            // fix_operation_callbacks runs AFTER install_dom_constructors
+            // (which replaces codegen prototypes with DOM prototypes) but
+            // BEFORE shim JS evals so shim functions can override codegen stubs.
+            // Only process interfaces that have codegen operations without
+            // shim overrides — skip interfaces with heavy shim operation coverage.
+            const SKIP_INTERFACES: &[&str] = &[
+                "Document", "DOMImplementation", "Node", "Element",
                 "Event", "CustomEvent", "MouseEvent", "KeyboardEvent", "PointerEvent",
                 "MessagePort", "BroadcastChannel", "Worker", "SharedWorker",
-                "Storage", "Navigator", "Node", "EventTarget",
+                "Storage", "Navigator", "EventTarget",
                 "NodeList", "MutationObserver", "DOMTokenList",
-                "HTMLCanvasElement", "Document", "HTMLElement",
+                "HTMLCanvasElement", "HTMLElement",
                 "HTMLFormElement", "HTMLInputElement", "HTMLTextAreaElement",
                 "HTMLSelectElement", "HTMLAnchorElement", "HTMLAreaElement",
                 "Range", "Location", "Window",
-                "DOMImplementation",
+                "ShadowRoot", "Text", "CharacterData",
             ];
-            if SHIM_OPERATION_INTERFACES.contains(&name.as_str()) {
-                // Still need to fix codegen operations on these interfaces,
-                // but we can't safely detect which are shim vs codegen.
-                // Skip for now — shim operations have their own receiver check TODO.
-                continue;
-            }
+            if SKIP_INTERFACES.contains(&name.as_str()) { continue; }
 
             // Generate fix code for this interface
             let module = domain_of.get(name).map(|s| s.as_str()).unwrap_or("web_apis");
