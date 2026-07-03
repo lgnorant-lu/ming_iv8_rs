@@ -460,6 +460,32 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
 
     // performance.getEntries / getEntriesByName / getEntriesByType stubs
     if (typeof performance !== 'undefined') {
+        // performance.timing — PerformanceTiming instance
+        if (typeof PerformanceTiming !== 'undefined') {
+            var _pt = Object.create(PerformanceTiming.prototype);
+            var _navStart = performance.timeOrigin || Date.now();
+            var _tProps = {
+                navigationStart: _navStart, unloadEventStart: 0, unloadEventEnd: 0,
+                redirectStart: 0, redirectEnd: 0, fetchStart: _navStart,
+                domainLookupStart: _navStart, domainLookupEnd: _navStart,
+                connectStart: _navStart, connectEnd: _navStart,
+                secureConnectionStart: _navStart, requestStart: _navStart,
+                responseStart: _navStart, responseEnd: _navStart,
+                domLoading: _navStart, domInteractive: _navStart,
+                domContentLoadedEventStart: _navStart, domContentLoadedEventEnd: _navStart,
+                domComplete: _navStart, loadEventStart: _navStart, loadEventEnd: _navStart,
+            };
+            Object.keys(_tProps).forEach(function(k) {
+                Object.defineProperty(_pt, k, { value: _tProps[k], writable: true, enumerable: true, configurable: true });
+            });
+            performance.timing = _pt;
+        }
+        // performance.navigation — PerformanceNavigation instance
+        if (typeof PerformanceNavigation !== 'undefined') {
+            var _pn = Object.create(PerformanceNavigation.prototype);
+            _pn.type = 0; _pn.redirectCount = 0;
+            performance.navigation = _pn;
+        }
         if (!performance.getEntries) {
             performance.getEntries = function getEntries() { return []; };
         }
@@ -468,9 +494,25 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         }
         if (!performance.getEntriesByType) {
             performance.getEntriesByType = function getEntriesByType(type) {
-                if (type === 'navigation') {
+                if (type === 'navigation' && typeof PerformanceNavigationTiming !== 'undefined') {
+                    var _navStart = performance.timeOrigin || Date.now();
                     var entry = Object.create(PerformanceNavigationTiming.prototype);
-                    Object.defineProperty(entry, Symbol.toStringTag, { value: 'PerformanceNavigationTiming', configurable: true });
+                    var _navProps = {
+                        name: '', entryType: 'navigation', startTime: 0, duration: 0,
+                        navigationStart: _navStart, unloadEventStart: 0, unloadEventEnd: 0,
+                        redirectStart: 0, redirectEnd: 0, fetchStart: 0,
+                        domainLookupStart: 0, domainLookupEnd: 0,
+                        connectStart: 0, connectEnd: 0, secureConnectionStart: 0,
+                        requestStart: 0, responseStart: 0, responseEnd: 0,
+                        domInteractive: 0, domContentLoadedEventStart: 0,
+                        domContentLoadedEventEnd: 0, domComplete: 0,
+                        loadEventStart: 0, loadEventEnd: 0,
+                        type: 'navigate', redirectCount: 0,
+                        criticalCHRestart: 0, navigationType: 'navigate',
+                    };
+                    Object.keys(_navProps).forEach(function(k) {
+                        Object.defineProperty(entry, k, { value: _navProps[k], writable: true, enumerable: true, configurable: true });
+                    });
                     return [entry];
                 }
                 return [];
