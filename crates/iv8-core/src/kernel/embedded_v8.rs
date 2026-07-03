@@ -766,10 +766,14 @@ impl EmbeddedV8Kernel {
                     // codegen operations (via ObjectTemplate::set) DO have receiver check
                     // (R3 prototype chain check) — their callbacks are correctly invoked.
                     // Only wrap DOM template interfaces' methods.
-                    // Shim JS operation receiver check — disabled for now
-                    // Rust null_this_check in dom/template.rs handles DOM template ops
-                    // Shim JS ops (Event/MessagePort/Storage) need per-shim approach
-                    /*
+                    // Shim JS operation receiver check.
+                    // Only wrap JS functions (toString does NOT contain [native code]).
+                    // [native code] functions (codegen + DOM template) already have
+                    // receiver check (R3 prototype chain check / null_this_check).
+                    // Shim JS functions (event_constructors.rs, message_channel.rs, etc.)
+                    // have no receiver check — wrap them with null/undefined check.
+                    // Note: V8 non-strict mode converts null→globalThis, so we check
+                    // globalThis as well.
                     var shimOpInterfaces = [
                         'Event', 'CustomEvent', 'MouseEvent',
                         'MessagePort', 'BroadcastChannel', 'Worker', 'SharedWorker',
@@ -789,20 +793,41 @@ impl EmbeddedV8Kernel {
                                     var desc = Object.getOwnPropertyDescriptor(proto, pname);
                                     if (!desc || typeof desc.value !== 'function') continue;
                                     if (desc.value.__iv8_op_wrapped) continue;
-                                    // Skip [native code] functions (codegen/DOM template)
                                     var fnStr = '';
                                     try { fnStr = desc.value.toString(); } catch(e) { continue; }
                                     if (fnStr.indexOf('[native code]') !== -1) continue;
                                     var origFn = desc.value;
+                                    var origName = origFn.name || pname;
+                                    var origLen = origFn.length;
+                                    // Get the expected toStringTag for this interface
+                                    var expectedTag = shimOpInterfaces[i];
                                     var wrappedFn = function() {
-                                        if (this === null || this === undefined) {
-                                            throw new TypeError('Illegal invocation');
+                                        // Check if this is the correct interface instance
+                                        // by comparing Symbol.toStringTag
+                                        var thisTag = '';
+                                        try { thisTag = this[Symbol.toStringTag]; } catch(e) {}
+                                        if (thisTag !== expectedTag && this !== globalThis[shimOpInterfaces[i]].prototype) {
+                                            // Also allow if this is an instance of the interface
+                                            // (check prototype chain for the constructor)
+                                            var isValid = false;
+                                            try {
+                                                var cur = Object.getPrototypeOf(this);
+                                                var expectedProto = globalThis[expectedTag].prototype;
+                                                for (var k = 0; k < 30; k++) {
+                                                    if (cur === expectedProto) { isValid = true; break; }
+                                                    if (!cur) break;
+                                                    cur = Object.getPrototypeOf(cur);
+                                                }
+                                            } catch(e) {}
+                                            if (!isValid) {
+                                                throw new TypeError('Illegal invocation');
+                                            }
                                         }
                                         return origFn.apply(this, arguments);
                                     };
                                     wrappedFn.__iv8_op_wrapped = true;
-                                    try { Object.defineProperty(wrappedFn, 'name', { value: origFn.name || pname }); } catch(e) {}
-                                    try { Object.defineProperty(wrappedFn, 'length', { value: origFn.length }); } catch(e) {}
+                                    try { Object.defineProperty(wrappedFn, 'name', { value: origName }); } catch(e) {}
+                                    try { Object.defineProperty(wrappedFn, 'length', { value: origLen }); } catch(e) {}
                                     Object.defineProperty(proto, pname, {
                                         value: wrappedFn,
                                         writable: desc.writable,
@@ -813,7 +838,6 @@ impl EmbeddedV8Kernel {
                             }
                         } catch(e) {}
                     }
-                    */
                     // idlharness requires: calling getter on prototype object
                     // (or wrong-type receiver) must throw TypeError.
                     // codegen getters already have this check, but shim-installed
