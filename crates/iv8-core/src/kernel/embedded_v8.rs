@@ -565,6 +565,46 @@ impl EmbeddedV8Kernel {
             let convert_js_str = crate::v8_utils::v8_string(scope, &convert_js);
             let _ = v8::Script::compile(scope, convert_js_str, None).and_then(|s| s.run(scope));
 
+            // JS op callback replacement — disabled for now
+            // let op_fix_js = crate::v8_utils::v8_string(scope, r#"
+            //     (function() {
+            //         var cbMap = globalThis.__iv8OpCallbacks;
+            //         if (!cbMap) return;
+            //         var replaced = [];
+            //         var keys = Object.getOwnPropertyNames(cbMap);
+            //         for (var i = 0; i < keys.length; i++) {
+            //             var key = keys[i];
+            //             var parts = key.split('.');
+            //             if (parts.length !== 2) continue;
+            //             var ifaceName = parts[0];
+            //             var opName = parts[1];
+            //             var realFn = cbMap[key];
+            //             if (typeof realFn !== 'function') continue;
+            //             try {
+            //                 var ctor = globalThis[ifaceName];
+            //                 if (!ctor || !ctor.prototype) continue;
+            //                 var proto = ctor.prototype;
+            //                 var desc = Object.getOwnPropertyDescriptor(proto, opName);
+            //                 if (!desc || typeof desc.value !== 'function') continue;
+            //                 var fnStr = '';
+            //                 try { fnStr = desc.value.toString(); } catch(e) { continue; }
+            //                 if (fnStr.indexOf('[native code]') === -1) continue;
+            //                 Object.defineProperty(proto, opName, {
+            //                     value: realFn,
+            //                     writable: desc.writable !== false,
+            //                     enumerable: desc.enumerable !== false,
+            //                     configurable: true
+            //                 });
+            //                 replaced.push(key);
+            //             } catch(e) {}
+            //         }
+            //         // Debug: store replaced operations on globalThis
+            //         // globalThis.__iv8ReplacedOps = replaced;
+            //         try { delete globalThis.__iv8OpCallbacks; } catch(e) {}
+            //     })();
+            // "#);
+            // let _ = v8::Script::compile(scope, op_fix_js, None).and_then(|s| s.run(scope));
+
             let fix_proto_js = crate::v8_utils::v8_string(scope, r#"
                 (function() {
                     var shimEvent = globalThis.Event;
@@ -2098,9 +2138,8 @@ impl EmbeddedV8Kernel {
                     crate::dom::template::chain_dom_prototypes(scope, global, &codegen_protos);
                     tracing::debug!("dom prototypes chained");
 
-                    // TODO: fix_operation_callbacks — needs per-interface approach
-                    // to avoid overwriting shim operations. Currently disabled.
-                    // iv8_surface::generated::install_all::fix_operation_callbacks(scope, global);
+                    // Install __iv8OpCallbacks (test: only install, no JS fix)
+                    iv8_surface::generated::install_all::install_op_callbacks(scope, global);
 
                     // Event system
                     install_behavior_via_bcr(

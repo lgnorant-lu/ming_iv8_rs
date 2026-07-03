@@ -1098,19 +1098,15 @@ pub fn generate_install_all(
     }
     out.push_str("}\n");
 
-    // Generate fix_operation_callbacks: re-install operations using
-    // get_function() so that V8 actually calls the callback.
-    //
-    // Root cause: ObjectTemplate::set(key, func_tmpl.into()) installs a
-    // FunctionTemplate as a property value. V8 creates a JS function from
-    // the template, but the callback may not be invoked when the function
-    // is called — the function becomes an empty [native code] shell.
-    //
-    // Fix: After templates are created and constructors registered on global,
-    // iterate each interface's prototype object and re-install each operation
-    // using func_tmpl.get_function(scope) to get a proper JS function whose
-    // callback is actually wired up.
-    out.push_str("\npub fn fix_operation_callbacks(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {\n");
+    // Generate install_op_callbacks: creates a JS object __iv8OpCallbacks
+    // on globalThis, mapping "InterfaceName.opName" to JS function (via get_function).
+    // JS post-fix in freeze_all_prototypes uses this to replace empty [native code]
+    // shells on prototypes with real callback functions, using toString() check
+    // to avoid overwriting shim JS functions.
+    // Skips DOM template interfaces (handled separately in dom/template.rs).
+    out.push_str("\npub fn install_op_callbacks(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {\n");
+    out.push_str("    let cb_key = v8::String::new(scope, \"__iv8OpCallbacks\").unwrap();\n");
+    out.push_str("    let cb_obj = v8::Object::new(scope);\n");
     {
         let mut seen_iface = std::collections::BTreeSet::new();
         for def in definitions {
@@ -1120,91 +1116,67 @@ pub fn generate_install_all(
             let ea = process_interface_ea(def);
             if ea.no_interface_object { continue; }
             if !seen_iface.insert(name.clone()) { continue; }
-
-            // Collect operation names + idx for this interface
-            let mut ops: Vec<(String, usize, usize)> = Vec::new(); // (name, idx, min_args)
+            const DOM_TEMPLATE_INTERFACES: &[&str] = &[
+                "EventTarget", "Node", "Element", "HTMLElement",
+                "HTMLDivElement", "HTMLSpanElement", "HTMLAnchorElement",
+                "HTMLInputElement", "HTMLButtonElement", "HTMLFormElement",
+                "HTMLCanvasElement", "HTMLScriptElement", "HTMLImageElement",
+                "HTMLVideoElement", "HTMLAudioElement", "HTMLSelectElement",
+                "HTMLTextAreaElement", "HTMLHeadElement", "HTMLBodyElement",
+                "HTMLHtmlElement", "HTMLParagraphElement", "HTMLHeadingElement",
+                "HTMLUListElement", "HTMLOListElement", "HTMLLIElement",
+                "HTMLTableElement", "HTMLStyleElement", "HTMLLinkElement",
+                "HTMLMetaElement", "HTMLUnknownElement",
+                "Document", "XMLDocument", "DOMImplementation",
+                "DocumentFragment", "DocumentType", "ShadowRoot",
+                "Text", "Comment", "CDATASection", "ProcessingInstruction",
+                "Attr", "NodeList", "HTMLCollection",
+                "Range", "Selection", "TreeWalker", "NodeIterator",
+            ];
+            if DOM_TEMPLATE_INTERFACES.contains(&name.as_str()) { continue; }
             let mut idx = 0;
             for m in &def.members {
                 if m.kind == "attribute" {
                     let attr_name = m.name.as_deref().unwrap_or("");
-                    if should_skip_attribute(name, attr_name) {
-                        continue;
-                    }
+                    if should_skip_attribute(name, attr_name) { continue; }
                     idx += 1;
                 } else if m.kind == "operation" {
                     idx += 1;
+                    let is_static = m.special.as_deref() == Some("static");
+                    if is_static { continue; }
                     let op_name = if m.special.as_deref() == Some("stringifier") {
                         "toString".to_string()
                     } else {
                         m.name.clone().unwrap_or_default()
                     };
                     if op_name.is_empty() { continue; }
-                    let is_static = m.special.as_deref() == Some("static");
-                    if is_static { continue; } // static ops handled separately
                     let min_args = def.members.iter()
                         .filter(|m2| m2.kind == "operation" && m2.name.as_deref() == m.name.as_deref())
                         .map(|m2| m2.required_arg_count)
                         .min()
                         .unwrap_or(m.required_arg_count);
-                    ops.push((op_name, idx, min_args));
+                    let module = domain_of.get(name).map(|s| s.as_str()).unwrap_or("web_apis");
+                    let module_rust = module.replace('-', "_");
+                    let full_key = format!("{}.{}", name, op_name);
+                    out.push_str("    {\n");
+                    out.push_str(&format!("        let k = v8::String::new(scope, \"{}\").unwrap();\n", full_key));
+                    if min_args > 0 {
+                        out.push_str(&format!("        let ft = v8::FunctionTemplate::builder_raw(super::{}::{}_op_{}).length({}).build(scope);\n", module_rust, fn_name, idx, min_args));
+                    } else {
+                        out.push_str(&format!("        let ft = v8::FunctionTemplate::builder_raw(super::{}::{}_op_{}).build(scope);\n", module_rust, fn_name, idx));
+                    }
+                    out.push_str(&format!("        ft.set_class_name(v8::String::new(scope, \"{}\").unwrap());\n", op_name));
+                    out.push_str("        let fn_val = ft.get_function(scope).unwrap();\n");
+                    out.push_str("        let _ = cb_obj.set(scope, k.into(), fn_val.into());\n");
+                    out.push_str("    }\n");
                 }
             }
-            if ops.is_empty() { continue; }
-
-            // fix_operation_callbacks runs AFTER install_dom_constructors
-            // (which replaces codegen prototypes with DOM prototypes) but
-            // BEFORE shim JS evals so shim functions can override codegen stubs.
-            // Only process interfaces that have codegen operations without
-            // shim overrides — skip interfaces with heavy shim operation coverage.
-            const SKIP_INTERFACES: &[&str] = &[
-                "Document", "DOMImplementation", "Node", "Element",
-                "Event", "CustomEvent", "MouseEvent", "KeyboardEvent", "PointerEvent",
-                "MessagePort", "BroadcastChannel", "Worker", "SharedWorker",
-                "Storage", "Navigator", "EventTarget",
-                "NodeList", "MutationObserver", "DOMTokenList",
-                "HTMLCanvasElement", "HTMLElement",
-                "HTMLFormElement", "HTMLInputElement", "HTMLTextAreaElement",
-                "HTMLSelectElement", "HTMLAnchorElement", "HTMLAreaElement",
-                "Range", "Location", "Window",
-                "ShadowRoot", "Text", "CharacterData",
-            ];
-            if SKIP_INTERFACES.contains(&name.as_str()) { continue; }
-
-            // Generate fix code for this interface
-            let module = domain_of.get(name).map(|s| s.as_str()).unwrap_or("web_apis");
-            let module_rust = module.replace('-', "_");
-            out.push_str(&format!("    // {} ({} ops)\n", name, ops.len()));
-            out.push_str("    {\n");
-            out.push_str(&format!("        let ctor_key = v8::String::new(scope, \"{}\").unwrap();\n", name));
-            out.push_str("        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {\n");
-            out.push_str("            if ctor_val.is_function() {\n");
-            out.push_str("                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };\n");
-            out.push_str("                let proto_key = v8::String::new(scope, \"prototype\").unwrap();\n");
-            out.push_str("                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {\n");
-            out.push_str("                    if let Some(proto_obj) = proto_val.to_object(scope) {\n");
-            for (op_name, op_idx, min_args) in &ops {
-                out.push_str(&format!("                        {{\n"));
-                out.push_str(&format!("                            let key = v8::String::new(scope, \"{}\").unwrap();\n", op_name));
-                if *min_args > 0 {
-                    out.push_str(&format!("                            let ft = v8::FunctionTemplate::builder_raw(super::{}::{}_op_{}).length({}).build(scope);\n", module_rust, fn_name, op_idx, min_args));
-                } else {
-                    out.push_str(&format!("                            let ft = v8::FunctionTemplate::builder_raw(super::{}::{}_op_{}).build(scope);\n", module_rust, fn_name, op_idx));
-                }
-                out.push_str(&format!("                            ft.set_class_name(v8::String::new(scope, \"{}\").unwrap());\n", op_name));
-                out.push_str("                            let fn_val = ft.get_function(scope).unwrap();\n");
-                out.push_str("                            let _ = proto_obj.set(scope, key.into(), fn_val.into());\n");
-                out.push_str("                        }\n");
-            }
-            out.push_str("                    }\n");
-            out.push_str("                }\n");
-            out.push_str("            }\n");
-            out.push_str("        }\n");
-            out.push_str("    }\n");
         }
     }
+    out.push_str("    let _ = global.set(scope, cb_key.into(), cb_obj.into());\n");
     out.push_str("}\n");
 
-    // Generate GLOBAL_ATTR_NAMES — list of all [Global] attribute names.
+        // Generate GLOBAL_ATTR_NAMES — list of all [Global] attribute names.
     // Used by freeze_all_prototypes JS post-fix to convert data properties
     // to accessor properties (preserving values) for idlharness compliance.
     out.push_str("\npub const GLOBAL_ATTR_NAMES: &[&str] = &[\n");

@@ -502,10 +502,23 @@ def main() -> None:
     # Write report
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(report, indent=2, ensure_ascii=False),
-        encoding="utf-8",
-    )
+    try:
+        report_str = json.dumps(report, indent=2, ensure_ascii=False)
+        output_path.write_text(report_str, encoding="utf-8")
+    except Exception as e:
+        print(f"WARNING: json.dumps failed ({e}), writing minimal report")
+        minimal_report = {
+            "schema_version": report.get("schema_version"),
+            "summary": report["summary"],
+            "suites": [{"suite": r["suite"], "variant": r["variant"],
+                         "run_status": r["run_status"], "total": r["total"],
+                         "pass": r["pass"], "fail": r["fail"],
+                         "tests": r["tests"][:10]} for r in results],
+        }
+        output_path.write_text(
+            json.dumps(minimal_report, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
 
     print("\n" + "=" * 60)
     print("WPT Official Test Report")
