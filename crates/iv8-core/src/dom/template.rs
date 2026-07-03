@@ -1667,6 +1667,28 @@ pub fn extract_node_id_from_internal(
 //   5. Set return value
 //
 // We use a helper macro that defines variables with explicit names.
+
+/// Check that `this` is a valid DOM node (has internal field).
+/// Per WebIDL, calling an operation with wrong receiver must throw TypeError.
+/// V8 non-strict mode converts null→globalThis, so we check internal fields
+/// rather than just null/undefined.
+unsafe fn null_this_check(info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*info };
+    v8::callback_scope!(unsafe scope, info_ref);
+    let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+    let this = args.this();
+    // Check if this has internal fields (is a DOM node created from template)
+    if let Some(obj) = this.to_object(scope) {
+        if obj.internal_field_count() > 0 {
+            // Has internal fields — likely a DOM node, allow call
+            return;
+        }
+    }
+    // No internal fields — wrong receiver, throw TypeError
+    let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+    let exc = v8::Exception::type_error(scope, msg);
+    scope.throw_exception(exc);
+}
 // The trick: use `paste!`-style renaming is not available, so we use
 // a different approach: define the callback body as a nested function
 // that takes explicit parameters.
@@ -3422,7 +3444,7 @@ unsafe extern "C" fn has_child_nodes_cb(info: *const v8::FunctionCallbackInfo) {
     });
 }
 
-unsafe extern "C" fn normalize_cb(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn normalize_cb(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 // ── Geometry ──────────────────────────────────────────────────────────────────
 
@@ -3492,7 +3514,7 @@ unsafe extern "C" fn get_client_rects_cb(info: *const v8::FunctionCallbackInfo) 
     });
 }
 
-unsafe extern "C" fn scroll_into_view_cb(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn scroll_into_view_cb(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 /// Read a layout value from environment config with fallback chain.
 /// Checks: primary_path → fallback_path → default_value.
@@ -3696,12 +3718,24 @@ unsafe extern "C" fn dispatch_event_cb(info: *const v8::FunctionCallbackInfo) {
 
 // ── HTMLElement methods ───────────────────────────────────────────────────────
 
-unsafe extern "C" fn focus_cb(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn blur_cb(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn click_cb(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn select_cb(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn submit_cb(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn reset_cb(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn focus_cb(info: *const v8::FunctionCallbackInfo) {
+    null_this_check(info);
+}
+unsafe extern "C" fn blur_cb(info: *const v8::FunctionCallbackInfo) {
+    null_this_check(info);
+}
+unsafe extern "C" fn click_cb(info: *const v8::FunctionCallbackInfo) {
+    null_this_check(info);
+}
+unsafe extern "C" fn select_cb(info: *const v8::FunctionCallbackInfo) {
+    null_this_check(info);
+}
+unsafe extern "C" fn submit_cb(info: *const v8::FunctionCallbackInfo) {
+    null_this_check(info);
+}
+unsafe extern "C" fn reset_cb(info: *const v8::FunctionCallbackInfo) {
+    null_this_check(info);
+}
 unsafe extern "C" fn check_validity_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, _args, rv, _state, _node_id| {
         rv.set(v8::Boolean::new(scope, true).into());
@@ -3955,7 +3989,7 @@ unsafe extern "C" fn css_style_length_getter(info: *const v8::FunctionCallbackIn
     });
 }
 
-unsafe extern "C" fn css_style_get_priority_cb(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn css_style_get_priority_cb(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 unsafe extern "C" fn dataset_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _state, _node_id| {
@@ -4375,7 +4409,7 @@ unsafe extern "C" fn to_data_url_cb(info: *const v8::FunctionCallbackInfo) {
     });
 }
 
-unsafe extern "C" fn to_blob_cb(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn to_blob_cb(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 // ── Image-specific ────────────────────────────────────────────────────────────
 
@@ -4492,8 +4526,8 @@ unsafe extern "C" fn media_play_cb(info: *const v8::FunctionCallbackInfo) {
     });
 }
 
-unsafe extern "C" fn media_pause_cb(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn media_load_cb(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn media_pause_cb(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn media_load_cb(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 unsafe extern "C" fn can_play_type_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, _args, rv, _state, _node_id| {

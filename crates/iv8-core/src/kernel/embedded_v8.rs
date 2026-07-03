@@ -766,19 +766,19 @@ impl EmbeddedV8Kernel {
                     // codegen operations (via ObjectTemplate::set) DO have receiver check
                     // (R3 prototype chain check) — their callbacks are correctly invoked.
                     // Only wrap DOM template interfaces' methods.
-                    var domTemplateInterfaces = [
-                        'HTMLElement', 'HTMLFormElement', 'HTMLInputElement',
-                        'HTMLTextAreaElement', 'HTMLCanvasElement',
-                        'HTMLSelectElement', 'HTMLAnchorElement', 'HTMLAreaElement',
-                        'HTMLImageElement', 'HTMLVideoElement', 'HTMLAudioElement',
-                        'HTMLDivElement', 'HTMLSpanElement', 'HTMLButtonElement',
-                        'HTMLScriptElement', 'HTMLLinkElement', 'HTMLStyleElement',
-                        'HTMLMetaElement', 'HTMLOptionElement',
-                        'Range',
+                    // Shim JS operation receiver check — disabled for now
+                    // Rust null_this_check in dom/template.rs handles DOM template ops
+                    // Shim JS ops (Event/MessagePort/Storage) need per-shim approach
+                    /*
+                    var shimOpInterfaces = [
+                        'Event', 'CustomEvent', 'MouseEvent',
+                        'MessagePort', 'BroadcastChannel', 'Worker', 'SharedWorker',
+                        'Storage', 'Navigator',
+                        'NodeList', 'MutationObserver', 'DOMTokenList',
                     ];
-                    for (var i = 0; i < domTemplateInterfaces.length; i++) {
+                    for (var i = 0; i < shimOpInterfaces.length; i++) {
                         try {
-                            var ctor = globalThis[domTemplateInterfaces[i]];
+                            var ctor = globalThis[shimOpInterfaces[i]];
                             if (!ctor || !ctor.prototype) continue;
                             var proto = ctor.prototype;
                             var names = Object.getOwnPropertyNames(proto);
@@ -789,6 +789,10 @@ impl EmbeddedV8Kernel {
                                     var desc = Object.getOwnPropertyDescriptor(proto, pname);
                                     if (!desc || typeof desc.value !== 'function') continue;
                                     if (desc.value.__iv8_op_wrapped) continue;
+                                    // Skip [native code] functions (codegen/DOM template)
+                                    var fnStr = '';
+                                    try { fnStr = desc.value.toString(); } catch(e) { continue; }
+                                    if (fnStr.indexOf('[native code]') !== -1) continue;
                                     var origFn = desc.value;
                                     var wrappedFn = function() {
                                         if (this === null || this === undefined) {
@@ -809,6 +813,7 @@ impl EmbeddedV8Kernel {
                             }
                         } catch(e) {}
                     }
+                    */
                     // idlharness requires: calling getter on prototype object
                     // (or wrong-type receiver) must throw TypeError.
                     // codegen getters already have this check, but shim-installed
