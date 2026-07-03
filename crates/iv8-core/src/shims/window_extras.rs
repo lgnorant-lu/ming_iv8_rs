@@ -461,13 +461,20 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     // performance.getEntries / getEntriesByName / getEntriesByType stubs
     if (typeof performance !== 'undefined') {
         if (!performance.getEntries) {
-            performance.getEntries = function() { return []; };
+            performance.getEntries = function getEntries() { return []; };
         }
         if (!performance.getEntriesByName) {
-            performance.getEntriesByName = function() { return []; };
+            performance.getEntriesByName = function getEntriesByName() { return []; };
         }
         if (!performance.getEntriesByType) {
-            performance.getEntriesByType = function() { return []; };
+            performance.getEntriesByType = function getEntriesByType(type) {
+                if (type === 'navigation') {
+                    var entry = Object.create(PerformanceNavigationTiming.prototype);
+                    Object.defineProperty(entry, Symbol.toStringTag, { value: 'PerformanceNavigationTiming', configurable: true });
+                    return [entry];
+                }
+                return [];
+            };
         }
         if (!performance.mark) {
             performance.mark = function(name) {};
