@@ -528,18 +528,17 @@ impl EmbeddedV8Kernel {
                     var windowCtor = globalThis.Window;
                     var windowProto = windowCtor && windowCtor.prototype;
                     for (var i = 0; i < attrs.length; i++) {{
-                        var name = attrs[i];
+                        (function(name) {{
                         try {{
                             var desc = Object.getOwnPropertyDescriptor(globalThis, name);
-                            if (!desc) continue;
-                            if (desc.get || desc.set) continue;
-                            if (!desc.configurable) continue;
+                            if (!desc) return;
+                            if (!desc.configurable) return;
                             if (desc.get || desc.set) {{
                                 // Accessor property (shim-installed getter/setter)
                                 // Wrap getter with receiver check
                                 if (desc.get && typeof desc.get === 'function') {{
-                                    var origGet = desc.get;
-                                    var wproto2 = windowProto;
+                                    let origGet = desc.get;
+                                    let wproto2 = windowProto;
                                     var wrappedGet = function() {{
                                         if (wproto2 && this !== globalThis && this !== wproto2) {{
                                             var cur = Object.getPrototypeOf(this);
@@ -551,7 +550,12 @@ impl EmbeddedV8Kernel {
                                             }}
                                             if (!found) throw new TypeError('Illegal invocation');
                                         }}
-                                        return origGet.call(this);
+                                        // Use globalThis directly for self/window to avoid
+                                        // getter recursion (self returns window, window returns window)
+                                        if (name === 'self' || name === 'window' || name === 'top' || name === 'parent' || name === 'frames') {{
+                                            return globalThis;
+                                        }}
+                                        return origGet.call(globalThis);
                                     }};
                                     try {{ Object.defineProperty(wrappedGet, 'name', {{ value: origGet.name || ('get ' + name) }}); }} catch(e) {{}}
                                     Object.defineProperty(globalThis, name, {{
@@ -561,7 +565,7 @@ impl EmbeddedV8Kernel {
                                         configurable: true
                                     }});
                                 }}
-                                continue;
+                                return;
                             }}
                             var value = desc.value;
                             var getter = (function(v, wproto) {{
@@ -588,6 +592,7 @@ impl EmbeddedV8Kernel {
                                 configurable: true
                             }});
                         }} catch(e) {{}}
+                        }})(attrs[i]);
                     }}
                 }})();
             "#, names = attr_names_js);
