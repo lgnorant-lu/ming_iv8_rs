@@ -534,6 +534,35 @@ impl EmbeddedV8Kernel {
                             if (!desc) continue;
                             if (desc.get || desc.set) continue;
                             if (!desc.configurable) continue;
+                            if (desc.get || desc.set) {{
+                                // Accessor property (shim-installed getter/setter)
+                                // Wrap getter with receiver check
+                                if (desc.get && typeof desc.get === 'function') {{
+                                    var origGet = desc.get;
+                                    var wproto2 = windowProto;
+                                    var wrappedGet = function() {{
+                                        if (wproto2 && this !== globalThis && this !== wproto2) {{
+                                            var cur = Object.getPrototypeOf(this);
+                                            var found = false;
+                                            for (var k = 0; k < 30; k++) {{
+                                                if (cur === wproto2) {{ found = true; break; }}
+                                                if (!cur) break;
+                                                cur = Object.getPrototypeOf(cur);
+                                            }}
+                                            if (!found) throw new TypeError('Illegal invocation');
+                                        }}
+                                        return origGet.call(this);
+                                    }};
+                                    try {{ Object.defineProperty(wrappedGet, 'name', {{ value: origGet.name || ('get ' + name) }}); }} catch(e) {{}}
+                                    Object.defineProperty(globalThis, name, {{
+                                        get: wrappedGet,
+                                        set: desc.set,
+                                        enumerable: desc.enumerable !== false,
+                                        configurable: true
+                                    }});
+                                }}
+                                continue;
+                            }}
                             var value = desc.value;
                             var getter = (function(v, wproto) {{
                                 return function() {{
