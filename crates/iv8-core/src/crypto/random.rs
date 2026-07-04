@@ -6,35 +6,64 @@
 //! Uses OS random (getrandom crate) by default.
 //! v0.2+ will support seeded PRNG for deterministic output.
 
-/// Install crypto.getRandomValues and crypto.randomUUID on the global `crypto` object.
+/// Install crypto.getRandomValues and crypto.randomUUID on Crypto.prototype.
+/// Methods installed on prototype (not instance) for correct prototype chain.
+/// Uses with_prototype_and_properties to create crypto with Crypto.prototype.
 pub fn install_crypto_random(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
-    // Get or create the crypto object
+    // Get Crypto.prototype from codegen constructor
+    let crypto_ctor_key = crate::v8_utils::v8_string(scope, "Crypto");
+    let crypto_proto = if let Some(ctor_val) = global.get(scope, crypto_ctor_key.into()) {
+        if ctor_val.is_function() {
+            let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+            let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+            if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                proto_val.to_object(scope)
+            } else { None }
+        } else { None }
+    } else { None };
+
+    // Get or create crypto object with Crypto.prototype
     let crypto_key = crate::v8_utils::v8_string(scope, "crypto");
     let crypto_obj = if let Some(existing) = global.get(scope, crypto_key.into()) {
         if existing.is_object() && !existing.is_null_or_undefined() {
             unsafe { v8::Local::<v8::Object>::cast_unchecked(existing) }
+        } else if let Some(ref proto) = crypto_proto {
+            let obj = v8::Object::with_prototype_and_properties(scope, (*proto).into(), &[], &[]);
+            global.set(scope, crypto_key.into(), obj.into());
+            obj
         } else {
             let obj = v8::Object::new(scope);
             global.set(scope, crypto_key.into(), obj.into());
             obj
         }
+    } else if let Some(ref proto) = crypto_proto {
+        let obj = v8::Object::with_prototype_and_properties(scope, (*proto).into(), &[], &[]);
+        global.set(scope, crypto_key.into(), obj.into());
+        obj
     } else {
         let obj = v8::Object::new(scope);
         global.set(scope, crypto_key.into(), obj.into());
         obj
     };
 
-    // Install getRandomValues
-    let grv_tmpl = v8::FunctionTemplate::builder_raw(get_random_values_callback).build(scope);
-    let grv_fn = crate::v8_utils::v8_fn(scope, &grv_tmpl);
-    let grv_key = crate::v8_utils::v8_string(scope, "getRandomValues");
-    crypto_obj.set(scope, grv_key.into(), grv_fn.into());
+    // Install getRandomValues and randomUUID on Crypto.prototype
+    if let Some(proto_obj) = crypto_proto {
+        let grv_tmpl = v8::FunctionTemplate::builder_raw(get_random_values_callback).build(scope);
+        let grv_fn = crate::v8_utils::v8_fn(scope, &grv_tmpl);
+        proto_obj.set(scope, crate::v8_utils::v8_string(scope, "getRandomValues").into(), grv_fn.into());
 
-    // Install randomUUID
-    let uuid_tmpl = v8::FunctionTemplate::builder_raw(random_uuid_callback).build(scope);
-    let uuid_fn = crate::v8_utils::v8_fn(scope, &uuid_tmpl);
-    let uuid_key = crate::v8_utils::v8_string(scope, "randomUUID");
-    crypto_obj.set(scope, uuid_key.into(), uuid_fn.into());
+        let uuid_tmpl = v8::FunctionTemplate::builder_raw(random_uuid_callback).build(scope);
+        let uuid_fn = crate::v8_utils::v8_fn(scope, &uuid_tmpl);
+        proto_obj.set(scope, crate::v8_utils::v8_string(scope, "randomUUID").into(), uuid_fn.into());
+    } else {
+        // Fallback: install on instance
+        let grv_tmpl = v8::FunctionTemplate::builder_raw(get_random_values_callback).build(scope);
+        let grv_fn = crate::v8_utils::v8_fn(scope, &grv_tmpl);
+        crypto_obj.set(scope, crate::v8_utils::v8_string(scope, "getRandomValues").into(), grv_fn.into());
+        let uuid_tmpl = v8::FunctionTemplate::builder_raw(random_uuid_callback).build(scope);
+        let uuid_fn = crate::v8_utils::v8_fn(scope, &uuid_tmpl);
+        crypto_obj.set(scope, crate::v8_utils::v8_string(scope, "randomUUID").into(), uuid_fn.into());
+    }
 }
 
 /// crypto.getRandomValues(typedArray) → fills array with random bytes, returns it.

@@ -272,10 +272,28 @@ pub fn install_subtle_crypto(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
     };
 
     // Create subtle object
-    let subtle_obj = v8::Object::new(scope);
+    // Get SubtleCrypto.prototype from codegen constructor
+    let subtle_ctor_key = crate::v8_utils::v8_string(scope, "SubtleCrypto");
+    let proto_obj = if let Some(ctor_val) = global.get(scope, subtle_ctor_key.into()) {
+        if ctor_val.is_function() {
+            let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+            let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+            if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                proto_val.to_object(scope)
+            } else { None }
+        } else { None }
+    } else { None };
 
-    // Install methods
-    install_method(scope, subtle_obj, "digest", subtle_digest);
+    // Create subtle object WITH SubtleCrypto.prototype as its prototype
+    let subtle_obj = if let Some(ref proto) = proto_obj {
+        v8::Object::with_prototype_and_properties(scope, (*proto).into(), &[], &[])
+    } else {
+        v8::Object::new(scope)
+    };
+
+    // Install methods on SubtleCrypto.prototype (or fallback to instance)
+    let target = proto_obj.unwrap_or(subtle_obj);
+    install_method(scope, target, "digest", subtle_digest);
     install_method(scope, subtle_obj, "importKey", subtle_import_key);
     install_method(scope, subtle_obj, "sign", subtle_sign);
     install_method(scope, subtle_obj, "verify", subtle_verify);
@@ -288,8 +306,21 @@ pub fn install_subtle_crypto(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
     install_method(scope, subtle_obj, "wrapKey", subtle_wrap_key);
     install_method(scope, subtle_obj, "unwrapKey", subtle_unwrap_key);
 
-    let subtle_key = crate::v8_utils::v8_string(scope, "subtle");
-    crypto_obj.set(scope, subtle_key.into(), subtle_obj.into());
+    // Install crypto.subtle on Crypto.prototype as data property
+    // (overwrites codegen's readonly accessor via create_data_property)
+    let crypto_ctor_key2 = crate::v8_utils::v8_string(scope, "Crypto");
+    if let Some(ctor_val) = global.get(scope, crypto_ctor_key2.into()) {
+        if ctor_val.is_function() {
+            let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+            let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+            if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                if let Some(crypto_proto) = proto_val.to_object(scope) {
+                    let subtle_key2 = crate::v8_utils::v8_string(scope, "subtle");
+                    let _ = crypto_proto.create_data_property(scope, subtle_key2.into(), subtle_obj.into());
+                }
+            }
+        }
+    }
 }
 
 fn install_method(
