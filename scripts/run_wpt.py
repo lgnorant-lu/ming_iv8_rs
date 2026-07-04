@@ -447,6 +447,13 @@ self.observer = new PerformanceObserver(function() {});
             suite_specific_shim = """
 self.deadline = { didTimeout: false, timeRemaining: function() { return 50; } };
 """
+        elif "FileAPI" in suite_name:
+            suite_specific_shim = """
+var fc = document.createElement('input');
+fc.type = 'file';
+fc.id = 'fileChooser';
+document.body.appendChild(fc);
+"""
         elif "navigation-timing" in suite_name:
             suite_specific_shim = """
 self.xmlss_pi = document.createProcessingInstruction('xml-stylesheet', 'href="data:text/css,"');

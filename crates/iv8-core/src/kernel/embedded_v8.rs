@@ -1082,7 +1082,71 @@ impl EmbeddedV8Kernel {
                             Object.setPrototypeOf(crypto.subtle, subtleProto);
                         }
                     }
-                    if (typeof Window !== 'undefined' && Window.prototype) {
+                })();
+                // Fix FileReader/FileReaderSync: prototype chain + remove FileReaderSync
+                (function() {
+                    if (typeof FileReader !== 'undefined' && typeof EventTarget !== 'undefined') {
+                        Object.setPrototypeOf(FileReader, EventTarget);
+                    }
+                    try { delete globalThis.FileReaderSync; } catch(e) {}
+                })();
+                // Fix ScreenOrientation: set prototype chain + move methods
+                (function() {
+                    if (typeof screen === 'undefined' || typeof ScreenOrientation === 'undefined') return;
+                    var so = screen.orientation;
+                    if (!so) return;
+                    var soProto = ScreenOrientation.prototype;
+                    if (!soProto) return;
+                    // Move own properties to prototype
+                    var soNames = Object.getOwnPropertyNames(so);
+                    for (var i = 0; i < soNames.length; i++) {
+                        var prop = soNames[i];
+                        if (typeof so[prop] === 'function' && !soProto[prop]) {
+                            soProto[prop] = so[prop];
+                            delete so[prop];
+                        }
+                    }
+                    Object.setPrototypeOf(so, soProto);
+                    if (typeof EventTarget !== 'undefined') {
+                        Object.setPrototypeOf(ScreenOrientation, EventTarget);
+                    }
+                    // screen.orientation accessor on Screen.prototype
+                    if (typeof Screen !== 'undefined' && Screen.prototype && Object.isExtensible(Screen.prototype)) {
+                        var _soVal = so;
+                        Object.defineProperty(Screen.prototype, 'orientation', {
+                            get: function() { return _soVal; },
+                            enumerable: true, configurable: true
+                        });
+                    }
+                })();
+                (function() {
+                    if (typeof performance === 'undefined' || typeof Performance === 'undefined') return;
+                    var perfProto = Performance.prototype;
+                    if (!perfProto) return;
+                    // Move own methods to prototype
+                    var perfNames = Object.getOwnPropertyNames(performance);
+                    for (var i = 0; i < perfNames.length; i++) {
+                        var prop = perfNames[i];
+                        if (typeof performance[prop] === 'function' && !perfProto[prop]) {
+                            perfProto[prop] = performance[prop];
+                        }
+                    }
+                    // Set prototype chain: performance -> Performance.prototype -> EventTarget.prototype
+                    Object.setPrototypeOf(performance, perfProto);
+                    // Performance.__proto__ = EventTarget
+                    if (typeof EventTarget !== 'undefined') {
+                        Object.setPrototypeOf(Performance, EventTarget);
+                    }
+                    // Window.performance accessor
+                    if (typeof Window !== 'undefined' && Window.prototype && Object.isExtensible(Window.prototype)) {
+                        var _perfVal = performance;
+                        Object.defineProperty(Window.prototype, 'performance', {
+                            get: function() { return _perfVal; },
+                            enumerable: true, configurable: true
+                        });
+                    }
+                    // Window.crypto accessor
+                    if (typeof Window !== 'undefined' && Window.prototype && Object.isExtensible(Window.prototype) && typeof crypto !== 'undefined') {
                         var _cryptoVal = crypto;
                         Object.defineProperty(Window.prototype, 'crypto', {
                             get: function() { return _cryptoVal; },
