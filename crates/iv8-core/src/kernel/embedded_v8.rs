@@ -780,11 +780,15 @@ impl EmbeddedV8Kernel {
                             ['Option', 'HTMLOptionElement'],
                         ];
                         for (var i = 0; i < namedCtors.length; i++) {
-                            var alias = namedCtors[i][0];
-                            var real = namedCtors[i][1];
-                            var realCtor = globalThis[real];
+                            let alias = namedCtors[i][0];
+                            let real = namedCtors[i][1];
+                            let realCtor = globalThis[real];
                             if (realCtor && realCtor.prototype) {
-                                var fn = function() {};
+                                var fn = function() {
+                                    if (!(this instanceof fn)) {
+                                        throw new TypeError("Failed to construct '" + alias + "': Please use the 'new' operator");
+                                    }
+                                };
                                 fn.prototype = realCtor.prototype;
                                 Object.defineProperty(fn, 'name', { value: alias });
                                 Object.defineProperty(globalThis, alias, {
