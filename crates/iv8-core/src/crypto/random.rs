@@ -6,6 +6,30 @@
 //! Uses OS random (getrandom crate) by default.
 //! v0.2+ will support seeded PRNG for deterministic output.
 
+/// Check if `this` has Crypto.prototype in its prototype chain.
+fn check_crypto_receiver(scope: &v8::PinScope<'_, '_>, this: v8::Local<v8::Value>) -> bool {
+    let crypto_key = crate::v8_utils::v8_string(scope, "Crypto");
+    let ctx = scope.get_current_context();
+    let global = ctx.global(scope);
+    let mut is_valid = false;
+    if let Some(crypto_ctor_val) = global.get(scope, crypto_key.into()) {
+        if crypto_ctor_val.is_function() {
+            let crypto_ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(crypto_ctor_val) };
+            let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+            if let Some(proto_val) = crypto_ctor.get(scope, proto_key.into()) {
+                let mut cur: v8::Local<v8::Value> = this;
+                for _ in 0..30 {
+                    if cur.strict_equals(proto_val) { is_valid = true; break; }
+                    if !cur.is_object() { break; }
+                    let obj = match cur.to_object(scope) { Some(o) => o, None => break };
+                    cur = match obj.get_prototype(scope) { Some(p) => p, None => break };
+                }
+            }
+        }
+    }
+    is_valid
+}
+
 /// Install crypto.getRandomValues and crypto.randomUUID on Crypto.prototype.
 /// Methods installed on prototype (not instance) for correct prototype chain.
 /// Uses with_prototype_and_properties to create crypto with Crypto.prototype.
@@ -79,6 +103,14 @@ unsafe extern "C" fn get_random_values_callback(info: *const v8::FunctionCallbac
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+
+        // Receiver check
+        if !check_crypto_receiver(scope, args.this().into()) {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
 
         if args.length() < 1 {
             let msg = crate::v8_utils::v8_string(scope, "getRandomValues requires 1 argument");
@@ -173,7 +205,16 @@ unsafe extern "C" fn random_uuid_callback(info: *const v8::FunctionCallbackInfo)
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+
+        // Receiver check
+        if !check_crypto_receiver(scope, args.this().into()) {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
 
         let uuid = generate_uuid_v4();
         if let Some(s) = v8::String::new(scope, &uuid) {

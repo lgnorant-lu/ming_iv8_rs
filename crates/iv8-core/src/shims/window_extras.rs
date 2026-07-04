@@ -33,7 +33,7 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         scrollTo: function scrollTo(x, y) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
         scrollBy: function scrollBy(dx, dy) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
         getComputedStyle: function getComputedStyle(el, pseudo) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return { getPropertyValue: function(prop) { return ''; }, getPropertyPriority: function(prop) { return ''; }, length: 0, item: function(i) { return ''; } }; },
-        matchMedia: function matchMedia(query) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return { matches: false, media: query, addListener: function() {}, removeListener: function() {}, addEventListener: function() {}, removeEventListener: function() {}, dispatchEvent: function() { return true; }, onchange: null }; }
+        matchMedia: function matchMedia(query) { 'use strict'; if (this === null || this === undefined) throw new TypeError('Illegal invocation'); if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return { matches: false, media: query, addListener: function() {}, removeListener: function() {}, addEventListener: function() {}, removeEventListener: function() {}, dispatchEvent: function() { return true; }, onchange: null }; }
     };
     Object.keys(_winOps).forEach(function(k) {
         if (typeof globalThis[k] === 'undefined') {
@@ -481,7 +481,7 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                     enumerable: true, configurable: true,
                 });
             });
-            performance.timing = _pt;
+            Object.defineProperty(performance, 'timing', { value: _pt, writable: true, enumerable: true, configurable: true });
         }
         // performance.navigation — PerformanceNavigation instance
         if (typeof PerformanceNavigation !== 'undefined') {
@@ -496,16 +496,16 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                 get: function() { return _pnRedirectCount; },
                 enumerable: true, configurable: true,
             });
-            performance.navigation = _pn;
+            Object.defineProperty(performance, 'navigation', { value: _pn, writable: true, enumerable: true, configurable: true });
         }
         if (!performance.getEntries) {
-            performance.getEntries = function getEntries() { return []; };
+            Object.defineProperty(performance, 'getEntries', { value: function getEntries() { return []; }, writable: true, enumerable: true, configurable: true });
         }
         if (!performance.getEntriesByName) {
-            performance.getEntriesByName = function getEntriesByName() { return []; };
+            Object.defineProperty(performance, 'getEntriesByName', { value: function getEntriesByName() { return []; }, writable: true, enumerable: true, configurable: true });
         }
         if (!performance.getEntriesByType) {
-            performance.getEntriesByType = function getEntriesByType(type) {
+            Object.defineProperty(performance, 'getEntriesByType', { value: function getEntriesByType(type) {
                 if (type === 'navigation' && typeof PerformanceNavigationTiming !== 'undefined') {
                     var _navStart = performance.timeOrigin || Date.now();
                     var entry = Object.create(PerformanceNavigationTiming.prototype);
@@ -528,22 +528,22 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                     return [entry];
                 }
                 return [];
-            };
+            }, writable: true, enumerable: true, configurable: true });
         }
         if (!performance.mark) {
-            performance.mark = function(name) {};
+            Object.defineProperty(performance, 'mark', { value: function mark(name) {}, writable: true, enumerable: true, configurable: true });
         }
         if (!performance.measure) {
-            performance.measure = function(name, startMark, endMark) {};
+            Object.defineProperty(performance, 'measure', { value: function measure(name, startMark, endMark) {}, writable: true, enumerable: true, configurable: true });
         }
         if (!performance.clearMarks) {
-            performance.clearMarks = function() {};
+            Object.defineProperty(performance, 'clearMarks', { value: function clearMarks() {}, writable: true, enumerable: true, configurable: true });
         }
         if (!performance.clearMeasures) {
-            performance.clearMeasures = function() {};
+            Object.defineProperty(performance, 'clearMeasures', { value: function clearMeasures() {}, writable: true, enumerable: true, configurable: true });
         }
         if (!performance.now) {
-            performance.now = function() { return Date.now() - (performance.timeOrigin || 0); };
+            Object.defineProperty(performance, 'now', { value: function now() { return Date.now() - (performance.timeOrigin || 0); }, writable: true, enumerable: true, configurable: true });
         }
     }
 

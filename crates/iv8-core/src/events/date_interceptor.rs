@@ -36,26 +36,67 @@ pub fn install_date_interceptor(scope: &v8::PinScope<'_, '_>, global: v8::Local<
         }
     }
 
-    // Install performance.now
+    // Install performance with Performance.prototype
     let perf_key = crate::v8_utils::v8_string(scope, "performance");
-    let perf_obj = if let Some(perf_val) = global.get(scope, perf_key.into()) {
-        if perf_val.is_object() {
-            unsafe { v8::Local::<v8::Object>::cast_unchecked(perf_val) }
+    // Get Performance.prototype from codegen
+    let perf_ctor_key = crate::v8_utils::v8_string(scope, "Performance");
+    let perf_proto = if let Some(ctor_val) = global.get(scope, perf_ctor_key.into()) {
+        if ctor_val.is_function() {
+            let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+            let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+            if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                proto_val.to_object(scope)
+            } else { None }
+        } else { None }
+    } else { None };
+
+    let perf_obj = if let Some(existing) = global.get(scope, perf_key.into()) {
+        if existing.is_object() && !existing.is_null_or_undefined() {
+            // Existing object — check if it has correct prototype
+            let obj = unsafe { v8::Local::<v8::Object>::cast_unchecked(existing) };
+            if let Some(ref proto) = perf_proto {
+                if let Some(cur_proto) = obj.get_prototype(scope) {
+                    if !cur_proto.strict_equals((*proto).into()) {
+                        // Wrong prototype — recreate with correct one
+                        let new_obj = v8::Object::with_prototype_and_properties(scope, (*proto).into(), &[], &[]);
+                        let _ = global.create_data_property(scope, perf_key.into(), new_obj.into());
+                        new_obj
+                    } else {
+                        obj
+                    }
+                } else {
+                    obj
+                }
+            } else {
+                obj
+            }
+        } else if let Some(ref proto) = perf_proto {
+            let obj = v8::Object::with_prototype_and_properties(scope, (*proto).into(), &[], &[]);
+            let _ = global.create_data_property(scope, perf_key.into(), obj.into());
+            obj
         } else {
             let obj = v8::Object::new(scope);
             global.set(scope, perf_key.into(), obj.into());
             obj
         }
+    } else if let Some(ref proto) = perf_proto {
+        let obj = v8::Object::with_prototype_and_properties(scope, (*proto).into(), &[], &[]);
+        let _ = global.create_data_property(scope, perf_key.into(), obj.into());
+        obj
     } else {
         let obj = v8::Object::new(scope);
         global.set(scope, perf_key.into(), obj.into());
         obj
     };
 
+    // Install performance.now on Performance.prototype
+    // Use create_data_property to bypass codegen's accessor on prototype
+    let now_target = perf_proto.unwrap_or(perf_obj);
+    let now_name = crate::v8_utils::v8_string(scope, "now");
     let perf_now_tmpl = v8::FunctionTemplate::builder_raw(performance_now_callback).build(scope);
+    perf_now_tmpl.set_class_name(now_name);
     let perf_now_fn = crate::v8_utils::v8_fn(scope, &perf_now_tmpl);
-    let now_method_key = crate::v8_utils::v8_string(scope, "now");
-    perf_obj.set(scope, now_method_key.into(), perf_now_fn.into());
+    let _ = now_target.create_data_property(scope, now_name.into(), perf_now_fn.into());
 
     // Install performance.memory — quantized, per-page-stable snapshot.
     // Real Chrome returns per-call-varying unbucketed heap bytes from V8
@@ -82,7 +123,8 @@ pub fn install_date_interceptor(scope: &v8::PinScope<'_, '_>, global: v8::Local<
             }
         }
     };
-    perf_obj.set(scope, origin_key.into(), v8::Number::new(scope, origin_val).into());
+    // Use create_data_property to bypass codegen's accessor on prototype
+    let _ = perf_obj.create_data_property(scope, origin_key.into(), v8::Number::new(scope, origin_val).into());
 
     // Install Date constructor shim (wraps original to use logical time for no-arg calls)
     // This is done via JS to preserve the original Date behavior for Date(timestamp) calls.
@@ -172,7 +214,36 @@ unsafe extern "C" fn performance_now_callback(info: *const v8::FunctionCallbackI
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+
+        // Receiver check: this must have Performance.prototype in chain
+        let this = args.this();
+        let perf_ctor_key = crate::v8_utils::v8_string(scope, "Performance");
+        let ctx = scope.get_current_context();
+        let global = ctx.global(scope);
+        let mut is_valid = false;
+        if let Some(ctor_val) = global.get(scope, perf_ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    let mut cur: v8::Local<v8::Value> = this.into();
+                    for _ in 0..30 {
+                        if cur.strict_equals(proto_val) { is_valid = true; break; }
+                        if !cur.is_object() { break; }
+                        let obj = match cur.to_object(scope) { Some(o) => o, None => break };
+                        cur = match obj.get_prototype(scope) { Some(p) => p, None => break };
+                    }
+                }
+            }
+        }
+        if !is_valid {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
@@ -259,5 +330,5 @@ fn install_performance_memory(scope: &v8::PinScope<'_, '_>, perf_obj: v8::Local<
     memory_obj.define_own_property(scope, k_used.into(), used.into(), ro);
 
     let k_memory = crate::v8_utils::v8_string(scope, "memory");
-    perf_obj.set(scope, k_memory.into(), memory_obj.into());
+    let _ = perf_obj.create_data_property(scope, k_memory.into(), memory_obj.into());
 }

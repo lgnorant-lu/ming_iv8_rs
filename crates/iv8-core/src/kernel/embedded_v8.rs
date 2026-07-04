@@ -804,22 +804,36 @@ impl EmbeddedV8Kernel {
                         'Storage', 'Navigator',
                         'NodeList', 'MutationObserver', 'DOMTokenList',
                     ];
-                    for (var i = 0; i < shimOpInterfaces.length; i++) {
+                    for (let i = 0; i < shimOpInterfaces.length; i++) {
                         try {
                             var ctor = globalThis[shimOpInterfaces[i]];
                             if (!ctor || !ctor.prototype) continue;
                             var proto = ctor.prototype;
                             var names = Object.getOwnPropertyNames(proto);
-                            for (var j = 0; j < names.length; j++) {
+                            for (let j = 0; j < names.length; j++) {
                                 let pname = names[j];
                                 if (pname === 'constructor') continue;
                                 try {
                                     var desc = Object.getOwnPropertyDescriptor(proto, pname);
                                     if (!desc || typeof desc.value !== 'function') continue;
+                                    // Skip already-wrapped functions
                                     if (desc.value.__iv8_op_wrapped) continue;
+                                    // For [native code] functions, check if they already throw
+                                    // by testing with null this (V8 converts to globalThis)
                                     var fnStr = '';
                                     try { fnStr = desc.value.toString(); } catch(e) { continue; }
-                                    if (fnStr.indexOf('[native code]') !== -1) continue;
+                                    var isNative = fnStr.indexOf('[native code]') !== -1;
+                                    // Test if the function throws on wrong receiver
+                                    var alreadyThrows = false;
+                                    if (isNative) {
+                                        try {
+                                            desc.value.call({});
+                                        } catch(e) {
+                                            alreadyThrows = true;
+                                        }
+                                    }
+                                    if (alreadyThrows) continue;
+                                    // Wrap both JS and native functions that don't throw
                                     let origFn = desc.value;
                                     let expectedTag = shimOpInterfaces[i];
                                     let origName = origFn.name || pname;
@@ -872,14 +886,14 @@ impl EmbeddedV8Kernel {
                         'HTMLElement', 'Element', 'Node', 'Window',
                         'NavigationTransition', 'ShadowRoot',
                     ];
-                    for (var i = 0; i < receiverCheckInterfaces.length; i++) {
+                    for (let i = 0; i < receiverCheckInterfaces.length; i++) {
                         let ifaceName = receiverCheckInterfaces[i];
                         try {
                             var ctor = globalThis[ifaceName];
                             if (!ctor || !ctor.prototype) continue;
                             var proto = ctor.prototype;
                             var names = Object.getOwnPropertyNames(proto);
-                            for (var j = 0; j < names.length; j++) {
+                            for (let j = 0; j < names.length; j++) {
                                 let pname = names[j];
                                 if (pname === 'constructor') continue;
                                 try {
@@ -1087,24 +1101,11 @@ impl EmbeddedV8Kernel {
                     }
                 })();
                 (function() {
-                    if (typeof performance === 'undefined' || typeof Performance === 'undefined') return;
-                    var perfProto = Performance.prototype;
-                    if (!perfProto) return;
-                    // Move own methods to prototype
-                    var perfNames = Object.getOwnPropertyNames(performance);
-                    for (var i = 0; i < perfNames.length; i++) {
-                        var prop = perfNames[i];
-                        if (typeof performance[prop] === 'function' && !perfProto[prop]) {
-                            perfProto[prop] = performance[prop];
-                        }
-                    }
-                    // Set prototype chain: performance -> Performance.prototype -> EventTarget.prototype
-                    Object.setPrototypeOf(performance, perfProto);
-                    // Performance.__proto__ = EventTarget
-                    if (typeof EventTarget !== 'undefined') {
+                    // Performance: Rust installs on prototype (date_interceptor.rs)
+                    // JS post-fix only sets constructor __proto__ + Window accessor
+                    if (typeof Performance !== 'undefined' && typeof EventTarget !== 'undefined') {
                         Object.setPrototypeOf(Performance, EventTarget);
                     }
-                    // Window.performance accessor
                     if (typeof Window !== 'undefined' && Window.prototype && Object.isExtensible(Window.prototype)) {
                         var _perfVal = performance;
                         Object.defineProperty(Window.prototype, 'performance', {
