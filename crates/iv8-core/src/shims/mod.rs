@@ -6,6 +6,7 @@ pub mod atob_btoa;
 pub mod audio_context;
 pub mod browser_profile;
 pub mod console;
+pub mod cssom;
 pub mod document_props;
 pub mod event_constructors;
 pub mod geometry;

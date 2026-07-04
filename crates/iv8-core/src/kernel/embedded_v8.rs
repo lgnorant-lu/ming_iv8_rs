@@ -1866,6 +1866,13 @@ impl EmbeddedV8Kernel {
         )
         .ok();
 
+        // 12b. Install CSSOM (CSS parser + CSSStyleSheet/CSSRule population)
+        self.eval(
+            crate::shims::cssom::CSSOM_SHIM_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
         // 13. Install MessageChannel
         self.eval(
             crate::shims::message_channel::MESSAGE_CHANNEL_JS,

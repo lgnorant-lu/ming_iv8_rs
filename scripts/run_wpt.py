@@ -420,23 +420,13 @@ if (typeof window !== 'undefined' && window !== globalThis) {{
         suite_specific_shim = ""
         if "css/cssom" in suite_name:
             suite_specific_shim = """
-// Create CSSOM test objects using real constructors
+// CSSOM test objects — CSSOM_SHIM_JS handles element.sheet parsing
 self.style_element = document.createElement('style');
 self.style_element.textContent = '@import url("data:text/css,"); @namespace x "y"; @page { @top-left {} } @media all {} #test { color: green; }';
 document.head.appendChild(self.style_element);
-self.sheet = self.style_element.sheet || new CSSStyleSheet();
+self.sheet = self.style_element.sheet;
 self.svg_element = document.createElement('svg');
 self.svg_element.id = 'svgElement';
-// Ensure CSSRule static constants
-if (typeof CSSRule !== 'undefined') {
-    CSSRule.STYLE_RULE = 1; CSSRule.IMPORT_RULE = 3; CSSRule.MEDIA_RULE = 4;
-    CSSRule.FONT_FACE_RULE = 5; CSSRule.PAGE_RULE = 6; CSSRule.NAMESPACE_RULE = 10;
-    CSSRule.MARGIN_RULE = 1000;
-}
-// Ensure sheet has cssRules
-if (!self.sheet.cssRules) self.sheet.cssRules = [];
-if (!self.sheet.media) self.sheet.media = { mediaText: 'all', length: 1, item: function(i) { return 'all'; }, toString: function() { return 'all'; } };
-// Ensure ProcessingInstruction for xmlss_pi
 self.xmlss_pi = document.createProcessingInstruction('xml-stylesheet', 'href="data:text/css,"');
 """
         elif "performance-timeline" in suite_name:
