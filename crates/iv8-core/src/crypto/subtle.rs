@@ -293,18 +293,18 @@ pub fn install_subtle_crypto(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
 
     // Install methods on SubtleCrypto.prototype (or fallback to instance)
     let target = proto_obj.unwrap_or(subtle_obj);
-    install_method(scope, target, "digest", subtle_digest);
-    install_method(scope, subtle_obj, "importKey", subtle_import_key);
-    install_method(scope, subtle_obj, "sign", subtle_sign);
-    install_method(scope, subtle_obj, "verify", subtle_verify);
-    install_method(scope, subtle_obj, "encrypt", subtle_encrypt);
-    install_method(scope, subtle_obj, "decrypt", subtle_decrypt);
-    install_method(scope, subtle_obj, "deriveBits", subtle_derive_bits);
-    install_method(scope, subtle_obj, "deriveKey", subtle_derive_key);
-    install_method(scope, subtle_obj, "generateKey", subtle_generate_key);
-    install_method(scope, subtle_obj, "exportKey", subtle_export_key);
-    install_method(scope, subtle_obj, "wrapKey", subtle_wrap_key);
-    install_method(scope, subtle_obj, "unwrapKey", subtle_unwrap_key);
+    install_method(scope, target, "digest", 2, subtle_digest);
+    install_method(scope, target, "importKey", 5, subtle_import_key);
+    install_method(scope, target, "sign", 3, subtle_sign);
+    install_method(scope, target, "verify", 4, subtle_verify);
+    install_method(scope, target, "encrypt", 3, subtle_encrypt);
+    install_method(scope, target, "decrypt", 3, subtle_decrypt);
+    install_method(scope, target, "deriveBits", 3, subtle_derive_bits);
+    install_method(scope, target, "deriveKey", 5, subtle_derive_key);
+    install_method(scope, target, "generateKey", 3, subtle_generate_key);
+    install_method(scope, target, "exportKey", 2, subtle_export_key);
+    install_method(scope, target, "wrapKey", 4, subtle_wrap_key);
+    install_method(scope, target, "unwrapKey", 7, subtle_unwrap_key);
 
     // Install crypto.subtle on Crypto.prototype as data property
     // (overwrites codegen's readonly accessor via create_data_property)
@@ -327,12 +327,15 @@ fn install_method(
     scope: &v8::PinScope<'_, '_>,
     obj: v8::Local<v8::Object>,
     name: &str,
+    length: i32,
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
-    let tmpl = v8::FunctionTemplate::builder_raw(callback).build(scope);
-    let func = crate::v8_utils::v8_fn(scope, &tmpl);
     let name_str = crate::v8_utils::v8_string(scope, name);
-    func.set_name(name_str);
+    let tmpl = v8::FunctionTemplate::builder_raw(callback)
+        .length(length)
+        .build(scope);
+    tmpl.set_class_name(name_str);
+    let func = crate::v8_utils::v8_fn(scope, &tmpl);
     obj.set(scope, name_str.into(), func.into());
 }
 

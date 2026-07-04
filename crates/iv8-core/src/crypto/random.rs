@@ -48,13 +48,19 @@ pub fn install_crypto_random(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
 
     // Install getRandomValues and randomUUID on Crypto.prototype
     if let Some(proto_obj) = crypto_proto {
-        let grv_tmpl = v8::FunctionTemplate::builder_raw(get_random_values_callback).build(scope);
+        let grv_name = crate::v8_utils::v8_string(scope, "getRandomValues");
+        let grv_tmpl = v8::FunctionTemplate::builder_raw(get_random_values_callback)
+            .length(1)
+            .build(scope);
+        grv_tmpl.set_class_name(grv_name);
         let grv_fn = crate::v8_utils::v8_fn(scope, &grv_tmpl);
-        proto_obj.set(scope, crate::v8_utils::v8_string(scope, "getRandomValues").into(), grv_fn.into());
+        proto_obj.set(scope, grv_name.into(), grv_fn.into());
 
+        let uuid_name = crate::v8_utils::v8_string(scope, "randomUUID");
         let uuid_tmpl = v8::FunctionTemplate::builder_raw(random_uuid_callback).build(scope);
+        uuid_tmpl.set_class_name(uuid_name);
         let uuid_fn = crate::v8_utils::v8_fn(scope, &uuid_tmpl);
-        proto_obj.set(scope, crate::v8_utils::v8_string(scope, "randomUUID").into(), uuid_fn.into());
+        proto_obj.set(scope, uuid_name.into(), uuid_fn.into());
     } else {
         // Fallback: install on instance
         let grv_tmpl = v8::FunctionTemplate::builder_raw(get_random_values_callback).build(scope);
