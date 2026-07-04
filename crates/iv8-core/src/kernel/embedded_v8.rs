@@ -660,7 +660,7 @@ impl EmbeddedV8Kernel {
                         ['MessageEvent','Event'], ['StorageEvent','Event'],
                         ['EventSource','EventTarget'], ['MessagePort','EventTarget'],
                         ['BroadcastChannel','EventTarget'], ['Worker','EventTarget'],
-                        ['SharedWorker','EventTarget'], ['Storage','Object'],
+                        ['SharedWorker','EventTarget'], ['Storage','EventTarget'],
                         ['RadioNodeList','NodeList'],
                         ['CustomEvent','Event'],
                         ['AbortSignal','EventTarget'],
@@ -668,9 +668,8 @@ impl EmbeddedV8Kernel {
                         ['DocumentType','Node'],
                         ['DocumentFragment','Node'],
                         ['Attr','Node'],
-                        ['Navigator','Object'],
+                        ['Navigator','EventTarget'],
                         ['EventTarget','Object'],
-                        ['Storage','Function'],
                         ['MediaQueryList','EventTarget'],
                         ['MediaQueryListEvent','Event'],
                         ['CharacterData','Node'],
@@ -755,21 +754,8 @@ impl EmbeddedV8Kernel {
                     } catch(e) {}
                     // WindowProperties: Window.prototype.__proto__ must be WindowProperties.prototype
                     // WindowProperties is not in webref IDL, so we create it manually.
-                    try {
-                        var winCtor = globalThis.Window;
-                        if (winCtor && winCtor.prototype) {
-                            var wpCtor = function WindowProperties() { throw new TypeError('Illegal constructor'); };
-                            Object.defineProperty(wpCtor.prototype, Symbol.toStringTag, {
-                                value: 'WindowProperties', writable: true, configurable: true, enumerable: false
-                            });
-                            Object.setPrototypeOf(wpCtor, Function.prototype);
-                            Object.setPrototypeOf(wpCtor.prototype, EventTarget.prototype || Object.prototype);
-                            Object.defineProperty(globalThis, 'WindowProperties', {
-                                value: wpCtor, writable: true, configurable: true, enumerable: false
-                            });
-                            Object.setPrototypeOf(winCtor.prototype, wpCtor.prototype);
-                        }
-                    } catch(e) {}
+                    // NOTE: creation moved to crate::shims::window_properties::WINDOW_PROPERTIES_SHIM_JS,
+                    // eval'd in install_browser_surface_init (step 12c).
                     // Named constructors: Image, Audio, Option
                     // Per HTML spec, these are named constructors with their
                     // own .name and .prototype pointing to the right interface.
@@ -1869,6 +1855,13 @@ impl EmbeddedV8Kernel {
         // 12b. Install CSSOM (CSS parser + CSSStyleSheet/CSSRule population)
         self.eval(
             crate::shims::cssom::CSSOM_SHIM_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
+        // 12c. Install WindowProperties interface (manual; not in webref IDL)
+        self.eval(
+            crate::shims::window_properties::WINDOW_PROPERTIES_SHIM_JS,
             crate::kernel::EvalOpts::default(),
         )
         .ok();

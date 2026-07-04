@@ -476,14 +476,26 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                 domComplete: _navStart, loadEventStart: _navStart, loadEventEnd: _navStart,
             };
             Object.keys(_tProps).forEach(function(k) {
-                Object.defineProperty(_pt, k, { value: _tProps[k], writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(PerformanceTiming.prototype, k, {
+                    get: (function(v) { return function() { return v; }; })(_tProps[k]),
+                    enumerable: true, configurable: true,
+                });
             });
             performance.timing = _pt;
         }
         // performance.navigation — PerformanceNavigation instance
         if (typeof PerformanceNavigation !== 'undefined') {
             var _pn = Object.create(PerformanceNavigation.prototype);
-            _pn.type = 0; _pn.redirectCount = 0;
+            var _pnType = 0;
+            var _pnRedirectCount = 0;
+            Object.defineProperty(PerformanceNavigation.prototype, 'type', {
+                get: function() { return _pnType; },
+                enumerable: true, configurable: true,
+            });
+            Object.defineProperty(PerformanceNavigation.prototype, 'redirectCount', {
+                get: function() { return _pnRedirectCount; },
+                enumerable: true, configurable: true,
+            });
             performance.navigation = _pn;
         }
         if (!performance.getEntries) {

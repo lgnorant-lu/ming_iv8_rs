@@ -20,4 +20,5 @@ pub mod structured_clone;
 pub mod url;
 pub mod user_agent_data;
 pub mod window_extras;
+pub mod window_properties;
 pub mod worker;

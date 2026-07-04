@@ -3590,13 +3590,13 @@ unsafe extern "C" fn scroll_top_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Number::new(scope, 0.0).into());
     });
 }
-unsafe extern "C" fn scroll_top_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn scroll_top_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 unsafe extern "C" fn scroll_left_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
         rv.set(v8::Number::new(scope, 0.0).into());
     });
 }
-unsafe extern "C" fn scroll_left_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn scroll_left_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 unsafe extern "C" fn offset_parent_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
         rv.set(v8::null(scope).into());
@@ -4047,7 +4047,7 @@ unsafe extern "C" fn tab_index_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Integer::new(scope, val).into());
     });
 }
-unsafe extern "C" fn tab_index_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn tab_index_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 // Generic attribute-backed accessor helper
 fn get_attr_str(state: &RuntimeState, node_id: NodeId, attr: &str) -> String {
@@ -4216,7 +4216,7 @@ unsafe extern "C" fn checked_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
-unsafe extern "C" fn checked_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn checked_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 unsafe extern "C" fn disabled_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -4230,7 +4230,7 @@ unsafe extern "C" fn disabled_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
-unsafe extern "C" fn disabled_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn disabled_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 unsafe extern "C" fn draggable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -4245,7 +4245,7 @@ unsafe extern "C" fn draggable_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
-unsafe extern "C" fn draggable_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn draggable_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 unsafe extern "C" fn content_editable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -4262,7 +4262,7 @@ unsafe extern "C" fn content_editable_getter(info: *const v8::FunctionCallbackIn
         }
     });
 }
-unsafe extern "C" fn content_editable_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn content_editable_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 unsafe extern "C" fn is_content_editable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -4293,7 +4293,7 @@ unsafe extern "C" fn canvas_width_getter(info: *const v8::FunctionCallbackInfo) 
         rv.set(v8::Number::new(scope, val).into());
     });
 }
-unsafe extern "C" fn canvas_width_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn canvas_width_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 unsafe extern "C" fn canvas_height_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -4308,7 +4308,7 @@ unsafe extern "C" fn canvas_height_getter(info: *const v8::FunctionCallbackInfo)
         rv.set(v8::Number::new(scope, val).into());
     });
 }
-unsafe extern "C" fn canvas_height_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn canvas_height_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 unsafe extern "C" fn get_context_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, rv, _state, node_id| {
@@ -4443,7 +4443,7 @@ unsafe extern "C" fn async_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
-unsafe extern "C" fn async_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn async_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 unsafe extern "C" fn defer_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -4457,7 +4457,7 @@ unsafe extern "C" fn defer_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
-unsafe extern "C" fn defer_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn defer_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 // ── Media-specific ────────────────────────────────────────────────────────────
 
@@ -4466,7 +4466,7 @@ unsafe extern "C" fn current_time_getter(info: *const v8::FunctionCallbackInfo) 
         rv.set(v8::Number::new(scope, 0.0).into());
     });
 }
-unsafe extern "C" fn current_time_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn current_time_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 unsafe extern "C" fn duration_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
         rv.set(v8::Number::new(scope, 0.0).into());
@@ -4482,13 +4482,13 @@ unsafe extern "C" fn muted_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, false).into());
     });
 }
-unsafe extern "C" fn muted_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn muted_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 unsafe extern "C" fn volume_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
         rv.set(v8::Number::new(scope, 1.0).into());
     });
 }
-unsafe extern "C" fn volume_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn volume_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 /// captureStream() stub — returns an empty MediaStream-like object.
 /// Used by fingerprint bitmask detection (bit 1).
@@ -4544,7 +4544,7 @@ unsafe extern "C" fn selected_index_getter(info: *const v8::FunctionCallbackInfo
         rv.set(v8::Integer::new(scope, -1).into());
     });
 }
-unsafe extern "C" fn selected_index_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn selected_index_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 unsafe extern "C" fn multiple_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
         rv.set(v8::Boolean::new(scope, false).into());
@@ -5144,7 +5144,7 @@ unsafe extern "C" fn request_headers_getter(info: *const v8::FunctionCallbackInf
         rv.set(v8::null(scope).into());
     }));
 }
-unsafe extern "C" fn multiple_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn multiple_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 #[cfg(test)]
 mod tests {
