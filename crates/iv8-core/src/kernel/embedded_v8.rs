@@ -929,6 +929,11 @@ impl EmbeddedV8Kernel {
                                         if (pname.indexOf('on') === 0 && pname.length > 2) {
                                             var hv = this['__iv8_' + pname];
                                             if (hv !== undefined) return hv;
+                                            // V8 does not invoke FunctionTemplate callbacks
+                                            // when called from within a JS accessor getter.
+                                            // Return null instead of calling origGet.call(this)
+                                            // which would throw "Illegal invocation".
+                                            return null;
                                         }
                                         return origGet.call(this);
                                     };
