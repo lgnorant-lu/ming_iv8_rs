@@ -480,6 +480,30 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             out.push_str("}\n\n");
         }
     }
+
+    let ea = process_interface_ea(def);
+    if let Some(ref alias) = ea.named_constructor {
+        let alias_ident = alias.to_lowercase().replace('-', "_");
+        out.push_str(&format!(
+            "pub(crate) unsafe extern \"C\" fn named_ctor_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
+            alias_ident
+        ));
+        out.push_str("    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {\n");
+        out.push_str("        let info_ref = unsafe { &*_info };\n");
+        out.push_str("        v8::callback_scope!(unsafe scope, info_ref);\n");
+        out.push_str("        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);\n");
+        out.push_str("        if !args.is_construct_call() {\n");
+        out.push_str(&format!(
+            "            let msg = v8::String::new(scope, \"Failed to construct '{}': Please use the 'new' operator\").unwrap();\n",
+            alias
+        ));
+        out.push_str("            let exc = v8::Exception::type_error(scope, msg);\n");
+        out.push_str("            scope.throw_exception(exc);\n");
+        out.push_str("        }\n");
+        out.push_str("    }));\n");
+        out.push_str("}\n\n");
+    }
+
     out
 }
 
@@ -534,7 +558,12 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
             ctor_cb
         ));
     }
-    out.push_str("    tmpl.read_only_prototype();\n");
+    let is_cb_interface = def.kind == "callback_interface";
+    if !is_cb_interface {
+        out.push_str("    tmpl.read_only_prototype();\n");
+    } else {
+        out.push_str("    tmpl.remove_prototype();\n");
+    }
     out.push_str(&format!(
         "    tmpl.set_class_name(v8::String::new(scope, \"{}\").unwrap());\n",
         name
@@ -575,22 +604,29 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
         if m.kind == "const" {
             if let (Some(cname), Some(cval)) = (&m.name, &m.const_value) {
                 let v8_val = format_const_v8_value(cval);
-                let mut block = String::new();
-                block.push_str(&format!("    // const: {}\n", cname));
-                block.push_str("    {\n");
-                block.push_str(&format!(
-                    "        let name = v8::String::new(scope, \"{}\").unwrap();\n",
-                    cname
-                ));
-                block.push_str(&format!("        let val = {};\n", v8_val));
-                block.push_str(&format!("        {}.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);\n", target_var));
-                block.push_str("    }\n");
-                member_blocks.push(block);
+                let ctor_attr = if is_cb_interface {
+                    "v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE"
+                } else {
+                    "v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE"
+                };
+                if !is_cb_interface {
+                    let mut block = String::new();
+                    block.push_str(&format!("    // const: {}\n", cname));
+                    block.push_str("    {\n");
+                    block.push_str(&format!(
+                        "        let name = v8::String::new(scope, \"{}\").unwrap();\n",
+                        cname
+                    ));
+                    block.push_str(&format!("        let val = {};\n", v8_val));
+                    block.push_str(&format!("        {}.set_with_attr(name.into(), val, {});\n", target_var, ctor_attr));
+                    block.push_str("    }\n");
+                    member_blocks.push(block);
+                }
 
                 let mut ctor_block = String::new();
                 ctor_block.push_str(&format!(
-                    "    {{ let name = v8::String::new(scope, \"{}\").unwrap(); let val = {}; ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }}\n",
-                    cname, v8_val
+                    "    {{ let name = v8::String::new(scope, \"{}\").unwrap(); let val = {}; ctor.define_own_property(scope, name.into(), val, {}); }}\n",
+                    cname, v8_val, ctor_attr
                 ));
                 const_blocks.push(ctor_block);
             }
@@ -700,6 +736,25 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
         }
     }
 
+    let cb_post = if is_cb_interface {
+        let mut s = String::new();
+        s.push_str("    {\n");
+        s.push_str("        let g_key = v8::String::new(scope, \"Function\").unwrap();\n");
+        s.push_str("        if let Some(g_val) = scope.get_current_context().global(scope).get(scope, g_key.into()) {\n");
+        s.push_str("            if let Some(fp) = g_val.to_object(scope) {\n");
+        s.push_str("                let pkey = v8::String::new(scope, \"prototype\").unwrap();\n");
+        s.push_str("                if let Some(fp_proto) = fp.get(scope, pkey.into()) {\n");
+        s.push_str("                    let cobj: v8::Local<v8::Object> = ctor.into();\n");
+        s.push_str("                    let _ = cobj.set_prototype(scope, fp_proto);\n");
+        s.push_str("                }\n");
+        s.push_str("            }\n");
+        s.push_str("        }\n");
+        s.push_str("    }\n");
+        s
+    } else {
+        String::new()
+    };
+
     if member_blocks.len() <= MEMBER_BATCH_SIZE {
         for block in &member_blocks {
             out.push_str(block);
@@ -723,7 +778,7 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
             }
             helper_fns.push_str("}\n\n");
         }
-        if !const_blocks.is_empty() || !static_blocks.is_empty() {
+        if !const_blocks.is_empty() || !static_blocks.is_empty() || is_cb_interface {
             out.push_str("    if let Some(ctor) = tmpl.get_function(scope) {\n");
             for block in &const_blocks {
                 out.push_str(block);
@@ -731,6 +786,7 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
             for block in &static_blocks {
                 out.push_str(block);
             }
+            out.push_str(&cb_post);
             out.push_str("    }\n");
         }
         out.push_str("\n    tmpl\n");
@@ -739,7 +795,7 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
         return out;
     }
 
-    if !const_blocks.is_empty() || !static_blocks.is_empty() {
+    if !const_blocks.is_empty() || !static_blocks.is_empty() || is_cb_interface {
         out.push_str("    if let Some(ctor) = tmpl.get_function(scope) {\n");
         for block in &const_blocks {
             out.push_str(block);
@@ -747,9 +803,77 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
         for block in &static_blocks {
             out.push_str(block);
         }
+        out.push_str(&cb_post);
         out.push_str("    }\n");
     }
     out.push_str("\n    tmpl\n");
+    out.push_str("}\n");
+    out
+}
+
+/// Generate install_named_constructors: creates Named Constructor aliases
+/// (Image, Audio, Option) that share the prototype of their target interface.
+/// Must be called AFTER DOM templates are installed (which overwrite codegen
+/// constructors on global), so it reads the final constructor from global.
+fn generate_named_constructors(
+    by_name: &BTreeMap<String, &Definition>,
+    domain_of: &BTreeMap<String, String>,
+) -> String {
+    let mut out = String::new();
+    let aliases: Vec<(String, String)> = by_name
+        .iter()
+        .filter_map(|(name, def)| {
+            let ea = process_interface_ea(def);
+            ea.named_constructor.as_ref().map(|a| (name.clone(), a.clone()))
+        })
+        .collect();
+
+    if aliases.is_empty() {
+        return out;
+    }
+
+    out.push_str("\n/// Install Named Constructor aliases (Image, Audio, Option).\n");
+    out.push_str("/// Reads target constructors from global AFTER DOM template install so\n");
+    out.push_str("/// the alias shares the correct (final) prototype object.\n");
+    out.push_str("pub fn install_named_constructors(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {\n");
+    for (name, alias) in &aliases {
+        let alias_ident = alias.to_lowercase().replace('-', "_");
+        let domain_mod = domain_of
+            .get(name.as_str())
+            .map(|d| d.as_str())
+            .unwrap_or("web_apis")
+            .replace('-', "_");
+        out.push_str(&format!("    // NamedConstructor: {} -> {}\n", alias, name));
+        out.push_str("    {\n");
+        out.push_str(&format!("        let target_key = v8::String::new(scope, \"{}\").unwrap();\n", name));
+        out.push_str("        if let Some(target_val) = global.get(scope, target_key.into()) {\n");
+        out.push_str("            if target_val.is_function() {\n");
+        out.push_str("                let target_ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(target_val) };\n");
+        out.push_str("                let proto_key = v8::String::new(scope, \"prototype\").unwrap();\n");
+        out.push_str("                if let Some(target_proto) = target_ctor.get(scope, proto_key.into()) {\n");
+        out.push_str("                    if target_proto.is_object() {\n");
+        out.push_str(&format!(
+            "                        let alias_tmpl = v8::FunctionTemplate::builder_raw(super::{dom}::named_ctor_{ai}).build(scope);\n",
+            dom = domain_mod, ai = alias_ident,
+        ));
+        out.push_str(&format!(
+            "                        alias_tmpl.set_class_name(v8::String::new(scope, \"{}\").unwrap());\n",
+            alias,
+        ));
+        out.push_str("                        if let Some(alias_fn) = alias_tmpl.get_function(scope) {\n");
+        out.push_str("                            let _ = alias_fn.set(scope, proto_key.into(), target_proto);\n");
+        out.push_str(&format!(
+            "                            let alias_name = v8::String::new(scope, \"{}\").unwrap();\n",
+            alias,
+        ));
+        out.push_str("                            global.define_own_property(scope, alias_name.into(), alias_fn.into(), v8::PropertyAttribute::DONT_ENUM);\n");
+        out.push_str("                        }\n");
+        out.push_str("                    }\n");
+        out.push_str("                }\n");
+        out.push_str("            }\n");
+        out.push_str("        }\n");
+        out.push_str("    }\n");
+    }
     out.push_str("}\n");
     out
 }
@@ -905,17 +1029,33 @@ pub fn generate_install_all(
                 .find(|(iface, _)| *iface == name.as_str())
                 .map(|(_, parent)| *parent)
         });
-        if effective_parent_reg.is_some() {
-            let parent = effective_parent_reg.unwrap();
-            out.push_str(&format!(
-                "            if let Some(pctor) = templates.get(\"{0}\").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {{\n",
-                parent,
-            ));
-            out.push_str(&format!(
-                "                let cobj: v8::Local<v8::Object> = ctor_{}.into();\n",
-                fn_name,
-            ));
-            out.push_str("                let _ = cobj.set_prototype(scope, pctor.into());\n");
+        let is_cb_reg = def.kind == "callback_interface";
+        if !is_cb_reg {
+            if effective_parent_reg.is_some() {
+                let parent = effective_parent_reg.unwrap();
+                out.push_str(&format!(
+                    "            if let Some(pctor) = templates.get(\"{0}\").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {{\n",
+                    parent,
+                ));
+                out.push_str(&format!(
+                    "                let cobj: v8::Local<v8::Object> = ctor_{}.into();\n",
+                    fn_name,
+                ));
+                out.push_str("                let _ = cobj.set_prototype(scope, pctor.into());\n");
+                out.push_str("            }\n");
+            }
+        } else {
+            out.push_str("            {\n");
+            out.push_str("                let g_key = v8::String::new(scope, \"Function\").unwrap();\n");
+            out.push_str("                if let Some(g_val) = scope.get_current_context().global(scope).get(scope, g_key.into()) {\n");
+            out.push_str("                    if let Some(fp) = g_val.to_object(scope) {\n");
+            out.push_str("                        let pkey = v8::String::new(scope, \"prototype\").unwrap();\n");
+            out.push_str("                        if let Some(fp_proto) = fp.get(scope, pkey.into()) {\n");
+            out.push_str(&format!("                            let cobj: v8::Local<v8::Object> = ctor_{}.into();\n", fn_name));
+            out.push_str("                            let _ = cobj.set_prototype(scope, fp_proto);\n");
+            out.push_str("                        }\n");
+            out.push_str("                    }\n");
+            out.push_str("                }\n");
             out.push_str("            }\n");
         }
 
@@ -930,42 +1070,28 @@ pub fn generate_install_all(
                 }
             })
             .collect();
+        let reg_ctor_attr = if is_cb_reg {
+            "v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE"
+        } else {
+            "v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE"
+        };
         for (cname, cval) in &const_members {
             let v8_val = format_const_v8_value(cval);
             out.push_str(&format!(
-                "            {{ let ck = v8::String::new(scope, \"{}\").unwrap(); let cv = {}; ctor_{}.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }}\n",
-                cname, v8_val, fn_name,
+                "            {{ let ck = v8::String::new(scope, \"{}\").unwrap(); let cv = {}; ctor_{}.define_own_property(scope, ck.into(), cv, {}); }}\n",
+                cname, v8_val, fn_name, reg_ctor_attr,
             ));
         }
 
         out.push_str("        }\n");
-
-        if let Some(ref alias) = ea.named_constructor {
-            let alias_ident = alias.to_lowercase().replace('-', "_");
-            out.push_str(&format!(
-                "        // NamedConstructor alias: {}\n",
-                alias
-            ));
-            out.push_str(&format!(
-                "        if let Some(ctor_{0}) = templates.get(\"{1}\").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {{\n",
-                fn_name, name,
-            ));
-            out.push_str(&format!(
-                "            let name_{0} = v8::String::new(scope, \"{1}\").unwrap();\n",
-                alias_ident, alias,
-            ));
-            out.push_str(&format!(
-                "            global.define_own_property(scope, name_{0}.into(), ctor_{1}.into(), v8::PropertyAttribute::DONT_ENUM);\n",
-                alias_ident, fn_name,
-            ));
-            out.push_str("        }\n");
-        }
 
         reg_count += 1;
     }
     out.push_str("    } // end last registration batch\n");
 
     out.push_str("}\n");
+
+    out.push_str(&generate_named_constructors(&by_name, &domain_of));
 
     // Phase 3 JS: For [Global] interfaces, move attributes from prototype to globalThis.
     // This is eval'd AFTER all installations (in freeze_all_prototypes) to avoid GC crash.
@@ -1268,6 +1394,7 @@ mod tests {
                 arguments: vec![],
                 const_value: None,
                 required_arg_count: 0,
+                special: None,
             }],
         };
         let fn_name = type_mapper::idl_name_to_rust("Foo");
@@ -1300,6 +1427,7 @@ mod tests {
                 arguments: vec![],
                 const_value: None,
                 required_arg_count: 0,
+                special: None,
             }],
         };
         let cb = generate_callbacks(&def, "bar");
@@ -1358,6 +1486,7 @@ mod tests {
             arguments: vec![],
             const_value: None,
             required_arg_count: 0,
+            special: None,
         });
         def
     }
@@ -1399,6 +1528,7 @@ mod tests {
             arguments: vec![],
             const_value: Some("1".into()),
             required_arg_count: 0,
+            special: None,
         });
         let fn_name = type_mapper::idl_name_to_rust("NodeFilter");
         let ea = process_interface_ea(&def);
@@ -1406,6 +1536,22 @@ mod tests {
         assert!(
             code.contains("builder_raw(illegal_constructor)"),
             "callback_interface must use illegal_constructor even with consts"
+        );
+        assert!(
+            !code.contains("read_only_prototype"),
+            "callback_interface must not call read_only_prototype (so prototype can be deleted)"
+        );
+        assert!(
+            code.contains("tmpl.remove_prototype()"),
+            "callback_interface must call remove_prototype() to drop the prototype own property"
+        );
+        assert!(
+            code.contains("Function"),
+            "callback_interface must set [[Prototype]] to Function.prototype"
+        );
+        assert!(
+            code.contains("READ_ONLY | v8::PropertyAttribute::DONT_DELETE"),
+            "callback_interface consts must be READ_ONLY | DONT_DELETE (not configurable)"
         );
     }
 

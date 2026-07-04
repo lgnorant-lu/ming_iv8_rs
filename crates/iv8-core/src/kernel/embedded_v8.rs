@@ -756,33 +756,6 @@ impl EmbeddedV8Kernel {
                     // WindowProperties is not in webref IDL, so we create it manually.
                     // NOTE: creation moved to crate::shims::window_properties::WINDOW_PROPERTIES_SHIM_JS,
                     // eval'd in install_browser_surface_init (step 12c).
-                    // Named constructors: Image, Audio, Option
-                    // Per HTML spec, these are named constructors with their
-                    // own .name and .prototype pointing to the right interface.
-                    try {
-                        var namedCtors = [
-                            ['Image', 'HTMLImageElement'],
-                            ['Audio', 'HTMLAudioElement'],
-                            ['Option', 'HTMLOptionElement'],
-                        ];
-                        for (var i = 0; i < namedCtors.length; i++) {
-                            let alias = namedCtors[i][0];
-                            let real = namedCtors[i][1];
-                            let realCtor = globalThis[real];
-                            if (realCtor && realCtor.prototype) {
-                                var fn = function() {
-                                    if (!(this instanceof fn)) {
-                                        throw new TypeError("Failed to construct '" + alias + "': Please use the 'new' operator");
-                                    }
-                                };
-                                fn.prototype = realCtor.prototype;
-                                Object.defineProperty(fn, 'name', { value: alias });
-                                Object.defineProperty(globalThis, alias, {
-                                    value: fn, writable: true, configurable: true, enumerable: false
-                                });
-                            }
-                        }
-                    } catch(e) {}
                     // Wrap DOM template operations with null/undefined receiver check.
                     // DOM template callbacks (dom/template.rs) are empty implementations
                     // without receiver check. idlharness requires: calling operation
@@ -1018,31 +991,6 @@ impl EmbeddedV8Kernel {
                     for (var i = 0; i < workerOnly.length; i++) {
                         try { delete globalThis[workerOnly[i]]; } catch(e) {}
                     }
-                    try {
-                        // NodeFilter is a callback interface.
-                        // Per WebIDL spec: interface object [[Prototype]] must be
-                        // Function.prototype, but must NOT have a "prototype" property.
-                        // We use Object.create(Function.prototype) so __proto__ is
-                        // correct and no "prototype" own property exists.
-                        var nf = Object.create(Function.prototype);
-                        var consts = {
-                            FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3,
-                            SHOW_ALL: 4294967295, SHOW_ELEMENT: 1, SHOW_ATTRIBUTE: 2,
-                            SHOW_TEXT: 4, SHOW_CDATA_SECTION: 8,
-                            SHOW_ENTITY_REFERENCE: 16, SHOW_ENTITY: 32,
-                            SHOW_PROCESSING_INSTRUCTION: 64,
-                            SHOW_COMMENT: 128, SHOW_DOCUMENT: 256, SHOW_DOCUMENT_TYPE: 512,
-                            SHOW_DOCUMENT_FRAGMENT: 1024, SHOW_NOTATION: 2048
-                        };
-                        for (var k in consts) {
-                            Object.defineProperty(nf, k, {
-                                value: consts[k], writable: false,
-                                enumerable: true, configurable: false
-                            });
-                        }
-                        nf.acceptNode = function(node) { return 3; };
-                        Object.defineProperty(globalThis, 'NodeFilter', {value: nf, writable: true, configurable: true, enumerable: false});
-                    } catch(e) {}
                     var names = Object.getOwnPropertyNames(globalThis);
                     for (var i = 0; i < names.length; i++) {
                         try {
@@ -2351,6 +2299,8 @@ impl EmbeddedV8Kernel {
                     crate::telemetry::init_dom_constructors_installed();
                     crate::dom::template::chain_dom_prototypes(scope, global, &codegen_protos);
                     tracing::debug!("dom prototypes chained");
+
+                    iv8_surface::generated::install_all::install_named_constructors(scope, global);
 
                     // Install __iv8OpCallbacks (test: only install, no JS fix)
                     iv8_surface::generated::install_all::install_op_callbacks(scope, global);

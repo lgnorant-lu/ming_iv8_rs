@@ -1540,7 +1540,7 @@ pub fn create_event_listener_template<'s>(
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
-    tmpl.read_only_prototype();
+    tmpl.remove_prototype();
     tmpl.set_class_name(v8::String::new(scope, "EventListener").unwrap());
 
     let proto = tmpl.prototype_template(scope);
@@ -1555,6 +1555,20 @@ pub fn create_event_listener_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(event_listener_op_1).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    if let Some(ctor) = tmpl.get_function(scope) {
+    {
+        let g_key = v8::String::new(scope, "Function").unwrap();
+        if let Some(g_val) = scope.get_current_context().global(scope).get(scope, g_key.into()) {
+            if let Some(fp) = g_val.to_object(scope) {
+                let pkey = v8::String::new(scope, "prototype").unwrap();
+                if let Some(fp_proto) = fp.get(scope, pkey.into()) {
+                    let cobj: v8::Local<v8::Object> = ctor.into();
+                    let _ = cobj.set_prototype(scope, fp_proto);
+                }
+            }
+        }
+    }
     }
 
     tmpl
