@@ -876,6 +876,12 @@ impl EmbeddedV8Kernel {
                                     var origSet = desc.set;
                                     var alreadyWrapped = desc.get && desc.get.__iv8_wrapped;
                                     if (alreadyWrapped && (!desc.set || desc.set.__iv8_set_wrapped)) continue;
+                                    // Skip [native code] getters: V8 does not invoke
+                                    // FunctionTemplate callbacks when called from within
+                                    // a JS accessor getter. Codegen getters (fix_accessor_properties)
+                                    // already have R3 receiver check. DOM template getters
+                                    // have null_this_check. Only shim JS getters need wrapping.
+                                    if (origGet.toString().indexOf('[native code]') !== -1) continue;
                                     let thisIfaceName = ifaceName;
                                     var wrappedGet;
                                     if (alreadyWrapped) {
@@ -915,7 +921,7 @@ impl EmbeddedV8Kernel {
                                     }
                                     // Wrap setter with same receiver check
                                     var wrappedSet = origSet;
-                                    if (typeof origSet === 'function') {
+                                    if (typeof origSet === 'function' && origSet.toString().indexOf('[native code]') === -1) {
                                         // For event handlers (on*), use simple property assignment
                                         // instead of codegen setter (which has wrong receiver check)
                                         if (pname.indexOf('on') === 0 && pname.length > 2) {

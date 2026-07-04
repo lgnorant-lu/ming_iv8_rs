@@ -280,14 +280,29 @@ pub const CSSOM_SHIM_JS: &str = r#"
     globalThis.__iv8CreateStyleSheet = createStyleSheetFromText;
 
     // Wire up HTMLStyleElement.prototype.sheet (override codegen stub)
+    // Also override textContent on HTMLStyleElement to bypass codegen stub
+    // (fix_accessor_properties replaces DOM template's text_content_getter
+    // with a codegen stub that returns empty object instead of actual text).
     if (typeof HTMLStyleElement !== 'undefined' && HTMLStyleElement.prototype) {
+        var __styleTextGetter = function() {
+            return this.__iv8TextContent !== undefined
+                ? this.__iv8TextContent : '';
+        };
+        var __styleTextSetter = function(v) {
+            Object.defineProperty(this, '__iv8TextContent', {
+                value: String(v), writable: true, enumerable: false, configurable: true
+            });
+        };
+        try {
+            Object.defineProperty(HTMLStyleElement.prototype, 'textContent', {
+                get: __styleTextGetter, set: __styleTextSetter,
+                enumerable: true, configurable: true
+            });
+        } catch(e) {}
         Object.defineProperty(HTMLStyleElement.prototype, 'sheet', {
             get: function() {
                 if (this.__iv8Sheet) return this.__iv8Sheet;
-                var text = '';
-                try { text = this.textContent || ''; } catch(e) {
-                    try { text = this.innerHTML || ''; } catch(e2) {}
-                }
+                var text = this.__iv8TextContent || '';
                 var sheet = createStyleSheetFromText(text, this);
                 try { Object.defineProperty(this, '__iv8Sheet', { value: sheet, writable: false, enumerable: false, configurable: false }); } catch(e3) {}
                 return sheet;
