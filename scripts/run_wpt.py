@@ -36,6 +36,7 @@ OUT_PATH = DATA_DIR / "wpt-report.json"
 # WPT test suites to run
 # Each suite maps to a WPT official test file and its variants
 WPT_SUITES = [
+    # === Multi-variant suites (manually configured) ===
     {
         "name": "html/dom/idlharness",
         "test_file": FIXTURES_DIR / "html" / "dom" / "idlharness.https.html",
@@ -61,25 +62,15 @@ WPT_SUITES = [
             "dom", "fullscreen", "html",
         ],
     },
+    # === Single-variant suites (auto-generated) ===
     {
-        "name": "css/cssom-view/idlharness",
-        "test_file": FIXTURES_DIR / "css" / "cssom-view" / "idlharness.html",
+        "name": "FileAPI/idlharness",
+        "test_file": FIXTURES_DIR / "FileAPI" / "idlharness.any.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "cssom-view", "css-pseudo", "cssom", "pointerevents", "uievents",
-            "SVG", "html", "dom",
-        ],
-    },
-    {
-        "name": "css/cssom/idlharness",
-        "test_file": FIXTURES_DIR / "css" / "cssom" / "idlharness.html",
-        "variants": [
-            {"name": "default", "query": ""},
-        ],
-        "idl_specs": [
-            "cssom", "SVG", "uievents", "html", "dom", "mathml-core",
+            "FileAPI", "dom", "html", "url",
         ],
     },
     {
@@ -93,46 +84,6 @@ WPT_SUITES = [
         ],
     },
     {
-        "name": "url/idlharness",
-        "test_file": FIXTURES_DIR / "url" / "idlharness.any.js",
-        "variants": [
-            {"name": "default", "query": ""},
-        ],
-        "idl_specs": [
-            "url",
-        ],
-    },
-    {
-        "name": "console/idlharness",
-        "test_file": FIXTURES_DIR / "console" / "idlharness.any.js",
-        "variants": [
-            {"name": "default", "query": ""},
-        ],
-        "idl_specs": [
-            "console",
-        ],
-    },
-    {
-        "name": "encoding/idlharness",
-        "test_file": FIXTURES_DIR / "encoding" / "idlharness.any.js",
-        "variants": [
-            {"name": "default", "query": ""},
-        ],
-        "idl_specs": [
-            "encoding", "streams",
-        ],
-    },
-    {
-        "name": "WebCryptoAPI/idlharness",
-        "test_file": FIXTURES_DIR / "WebCryptoAPI" / "idlharness.https.any.js",
-        "variants": [
-            {"name": "default", "query": ""},
-        ],
-        "idl_specs": [
-            "webcrypto", "html", "dom",
-        ],
-    },
-    {
         "name": "IndexedDB/idlharness",
         "test_file": FIXTURES_DIR / "IndexedDB" / "idlharness.any.js",
         "variants": [
@@ -143,14 +94,113 @@ WPT_SUITES = [
         ],
     },
     {
-        "name": "navigation-timing/idlharness",
-        "test_file": FIXTURES_DIR / "navigation-timing" / "idlharness.window.js",
+        "name": "WebCryptoAPI/idlharness",
+        "test_file": FIXTURES_DIR / "WebCryptoAPI" / "idlharness.tentative.https.any.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "navigation-timing", "hr-time", "resource-timing", "performance-timeline",
-            "dom", "html",
+            "webcrypto", "webcrypto-secure-curves", "webcrypto-modern-algos", "html", "dom",
+        ],
+    },
+    {
+        "name": "accelerometer/idlharness",
+        "test_file": FIXTURES_DIR / "accelerometer" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "accelerometer", "generic-sensor", "dom",
+        ],
+    },
+    {
+        "name": "ambient-light/idlharness",
+        "test_file": FIXTURES_DIR / "ambient-light" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "ambient-light", "generic-sensor", "dom",
+        ],
+    },
+    {
+        "name": "animation-worklet/idlharness",
+        "test_file": FIXTURES_DIR / "animation-worklet" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-animation-worklet", "web-animations", "html", "cssom", "dom",
+        ],
+    },
+    {
+        "name": "audio-output/idlharness",
+        "test_file": FIXTURES_DIR / "audio-output" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "audio-output", "mediacapture-streams", "html", "dom",
+        ],
+    },
+    {
+        "name": "audio-session/idlharness",
+        "test_file": FIXTURES_DIR / "audio-session" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "audio-session", "dom", "html",
+        ],
+    },
+    {
+        "name": "autoplay-policy-detection/idlharness",
+        "test_file": FIXTURES_DIR / "autoplay-policy-detection" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "autoplay-detection", "html",
+        ],
+    },
+    {
+        "name": "background-fetch/idlharness",
+        "test_file": FIXTURES_DIR / "background-fetch" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "background-fetch", "service-workers", "html", "dom",
+        ],
+    },
+    {
+        "name": "background-sync/idlharness",
+        "test_file": FIXTURES_DIR / "background-sync" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "background-sync", "service-workers", "html", "dom",
+        ],
+    },
+    {
+        "name": "badging/idlharness",
+        "test_file": FIXTURES_DIR / "badging" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "badging", "html", "dom",
+        ],
+    },
+    {
+        "name": "battery-status/idlharness",
+        "test_file": FIXTURES_DIR / "battery-status" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "battery-status", "dom", "html",
         ],
     },
     {
@@ -164,73 +214,133 @@ WPT_SUITES = [
         ],
     },
     {
-        "name": "webvtt/idlharness",
-        "test_file": FIXTURES_DIR / "webvtt" / "api" / "idlharness.window.js",
+        "name": "bluetooth/bidi/idl/idlharness",
+        "test_file": FIXTURES_DIR / "bluetooth" / "bidi" / "idl" / "idlharness.tentative.https.window.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "webvtt", "html", "dom",
+            "web-bluetooth", "dom", "html", "permissions",
         ],
     },
     {
-        "name": "hr-time/idlharness",
-        "test_file": FIXTURES_DIR / "hr-time" / "idlharness.any.js",
+        "name": "captured-mouse-events/idlharness",
+        "test_file": FIXTURES_DIR / "captured-mouse-events" / "idlharness.https.window.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "hr-time", "html", "dom",
+            "captured-mouse-events.tentative", "html", "dom",
         ],
     },
     {
-        "name": "performance-timeline/idlharness",
-        "test_file": FIXTURES_DIR / "performance-timeline" / "idlharness.any.js",
+        "name": "clipboard-apis/idlharness",
+        "test_file": FIXTURES_DIR / "clipboard-apis" / "idlharness.https.window.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "performance-timeline", "hr-time", "dom",
+            "clipboard-apis", "dom", "html", "permissions",
         ],
     },
     {
-        "name": "screen-orientation/idlharness",
-        "test_file": FIXTURES_DIR / "screen-orientation" / "idlharness.window.js",
+        "name": "compat/idlharness",
+        "test_file": FIXTURES_DIR / "compat" / "idlharness.window.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "screen-orientation", "dom", "cssom-view", "html",
+            "compat", "html", "dom",
         ],
     },
     {
-        "name": "requestidlecallback/idlharness",
-        "test_file": FIXTURES_DIR / "requestidlecallback" / "idlharness.window.js",
+        "name": "compression/idlharness",
+        "test_file": FIXTURES_DIR / "compression" / "idlharness.https.any.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "requestidlecallback", "html", "dom",
+            "compression", "streams",
         ],
     },
     {
-        "name": "css/geometry/idlharness",
-        "test_file": FIXTURES_DIR / "css" / "geometry" / "idlharness.any.js",
+        "name": "compute-pressure/idlharness",
+        "test_file": FIXTURES_DIR / "compute-pressure" / "idlharness.https.any.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "geometry", "dom", "html",
+            "compute-pressure", "dom", "html",
         ],
     },
     {
-        "name": "css/filter-effects/idlharness",
-        "test_file": FIXTURES_DIR / "css" / "filter-effects" / "idlharness.any.js",
+        "name": "console/idlharness",
+        "test_file": FIXTURES_DIR / "console" / "idlharness.any.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "filter-effects", "dom", "html",
+            "console",
+        ],
+    },
+    {
+        "name": "content-index/idlharness",
+        "test_file": FIXTURES_DIR / "content-index" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "content-index", "service-workers", "html", "dom",
+        ],
+    },
+    {
+        "name": "content-security-policy/embedded-enforcement/idlharness",
+        "test_file": FIXTURES_DIR / "content-security-policy" / "embedded-enforcement" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "csp-embedded-enforcement", "html", "dom",
+        ],
+    },
+    {
+        "name": "content-security-policy/securitypolicyviolation/idlharness",
+        "test_file": FIXTURES_DIR / "content-security-policy" / "securitypolicyviolation" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "CSP", "dom", "reporting",
+        ],
+    },
+    {
+        "name": "cookiestore/idlharness",
+        "test_file": FIXTURES_DIR / "cookiestore" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "cookiestore", "service-workers", "html", "dom",
+        ],
+    },
+    {
+        "name": "credential-management/idlharness",
+        "test_file": FIXTURES_DIR / "credential-management" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "credential-management", "html", "dom",
+        ],
+    },
+    {
+        "name": "css/css-anchor-position/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-anchor-position" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-anchor-position", "cssom",
         ],
     },
     {
@@ -240,17 +350,7 @@ WPT_SUITES = [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "css-animations", "cssom", "dom", "html",
-        ],
-    },
-    {
-        "name": "css/css-transitions/idlharness",
-        "test_file": FIXTURES_DIR / "css" / "css-transitions" / "idlharness.html",
-        "variants": [
-            {"name": "default", "query": ""},
-        ],
-        "idl_specs": [
-            "css-transitions", "cssom", "dom", "html",
+            "css-animations", "html", "dom", "cssom",
         ],
     },
     {
@@ -260,7 +360,27 @@ WPT_SUITES = [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "css-cascade", "cssom", "dom", "html",
+            "css-cascade", "css-cascade-6", "cssom",
+        ],
+    },
+    {
+        "name": "css/css-conditional/container-queries/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-conditional" / "container-queries" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-conditional-5", "css-conditional", "cssom", "dom",
+        ],
+    },
+    {
+        "name": "css/css-conditional/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-conditional" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-conditional", "cssom", "dom",
         ],
     },
     {
@@ -270,47 +390,287 @@ WPT_SUITES = [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "css-counter-styles", "cssom", "dom", "html",
+            "css-counter-styles", "cssom",
         ],
     },
     {
-        "name": "fullscreen/idlharness",
-        "test_file": FIXTURES_DIR / "fullscreen" / "idlharness.window.js",
+        "name": "css/css-font-loading/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-font-loading" / "idlharness.https.html",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "fullscreen", "dom", "html",
+            "css-font-loading", "dom", "html", "cssom",
         ],
     },
     {
-        "name": "geolocation/idlharness",
-        "test_file": FIXTURES_DIR / "geolocation" / "idlharness.https.window.js",
+        "name": "css/css-fonts/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-fonts" / "idlharness.html",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "geolocation", "dom", "html",
+            "css-fonts-5", "css-fonts", "cssom",
         ],
     },
     {
-        "name": "intersection-observer/idlharness",
-        "test_file": FIXTURES_DIR / "intersection-observer" / "idlharness.window.js",
+        "name": "css/css-highlight-api/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-highlight-api" / "idlharness.window.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "intersection-observer", "dom", "html",
+            "css-highlight-api", "cssom",
         ],
     },
     {
-        "name": "gamepad/idlharness",
-        "test_file": FIXTURES_DIR / "gamepad" / "idlharness.window.js",
+        "name": "css/css-images/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-images" / "idlharness.html",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "gamepad", "dom", "html",
+            "css-images-4", "cssom",
+        ],
+    },
+    {
+        "name": "css/css-masking/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-masking" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-masking", "SVG", "html", "dom",
+        ],
+    },
+    {
+        "name": "css/css-paint-api/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-paint-api" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-paint-api", "cssom", "html",
+        ],
+    },
+    {
+        "name": "css/css-parser-api/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-parser-api" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-parser-api", "cssom",
+        ],
+    },
+    {
+        "name": "css/css-properties-values-api/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-properties-values-api" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-properties-values-api", "cssom",
+        ],
+    },
+    {
+        "name": "css/css-pseudo/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-pseudo" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-pseudo", "cssom", "html", "dom",
+        ],
+    },
+    {
+        "name": "css/css-shadow/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-shadow" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-shadow", "dom",
+        ],
+    },
+    {
+        "name": "css/css-transitions/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-transitions" / "idlharness-2.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-transitions-2", "web-animations", "cssom", "html", "dom",
+        ],
+    },
+    {
+        "name": "css/css-transitions/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-transitions" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-transitions", "cssom", "html", "dom",
+        ],
+    },
+    {
+        "name": "css/css-typed-om/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-typed-om" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-typed-om", "cssom", "SVG", "geometry", "html", "dom", "mathml-core",
+        ],
+    },
+    {
+        "name": "css/css-view-transitions/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-view-transitions" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-view-transitions", "dom", "html", "cssom",
+        ],
+    },
+    {
+        "name": "css/cssom-view/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "cssom-view" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "cssom-view", "css-pseudo", "cssom", "pointerevents", "uievents", "SVG", "html", "dom",
+        ],
+    },
+    {
+        "name": "css/cssom/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "cssom" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "cssom", "SVG", "uievents", "html", "dom", "mathml-core",
+        ],
+    },
+    {
+        "name": "css/filter-effects/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "filter-effects" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "filter-effects", "SVG", "html", "dom",
+        ],
+    },
+    {
+        "name": "css/geometry/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "geometry" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "geometry",
+        ],
+    },
+    {
+        "name": "device-memory/idlharness",
+        "test_file": FIXTURES_DIR / "device-memory" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "device-memory", "html",
+        ],
+    },
+    {
+        "name": "device-posture/idlharness",
+        "test_file": FIXTURES_DIR / "device-posture" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "device-posture", "html", "dom", "webidl",
+        ],
+    },
+    {
+        "name": "dom/idlharness",
+        "test_file": FIXTURES_DIR / "dom" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "dom", "html",
+        ],
+    },
+    {
+        "name": "dom/observable/tentative/idlharness",
+        "test_file": FIXTURES_DIR / "dom" / "observable" / "tentative" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "observable.tentative", "dom",
+        ],
+    },
+    {
+        "name": "encoding/idlharness",
+        "test_file": FIXTURES_DIR / "encoding" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "encoding", "streams",
+        ],
+    },
+    {
+        "name": "encrypted-media/idlharness",
+        "test_file": FIXTURES_DIR / "encrypted-media" / "idlharness.https.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "encrypted-media", "html", "dom",
+        ],
+    },
+    {
+        "name": "entries-api/idlharness",
+        "test_file": FIXTURES_DIR / "entries-api" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "entries-api", "FileAPI", "html", "dom",
+        ],
+    },
+    {
+        "name": "event-timing/idlharness",
+        "test_file": FIXTURES_DIR / "event-timing" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "event-timing", "performance-timeline", "hr-time", "dom",
+        ],
+    },
+    {
+        "name": "event-timing/idlharness",
+        "test_file": FIXTURES_DIR / "event-timing" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "event-timing", "performance-timeline", "hr-time", "dom",
+        ],
+    },
+    {
+        "name": "eyedropper/idlharness",
+        "test_file": FIXTURES_DIR / "eyedropper" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "eyedropper-api",
         ],
     },
     {
@@ -324,23 +684,1293 @@ WPT_SUITES = [
         ],
     },
     {
-        "name": "clipboard-apis/idlharness",
-        "test_file": FIXTURES_DIR / "clipboard-apis" / "idlharness.https.window.js",
+        "name": "file-system-access/idlharness",
+        "test_file": FIXTURES_DIR / "file-system-access" / "idlharness.https.any.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "clipboard-apis", "dom", "html",
+            "file-system-access", "fs", "permissions", "html", "dom",
         ],
     },
     {
-        "name": "compat/idlharness",
-        "test_file": FIXTURES_DIR / "compat" / "idlharness.window.js",
+        "name": "fs/idlharness",
+        "test_file": FIXTURES_DIR / "fs" / "idlharness.https.any.js",
         "variants": [
             {"name": "default", "query": ""},
         ],
         "idl_specs": [
-            "compat", "dom", "html",
+            "fs", "storage", "streams",
+        ],
+    },
+    {
+        "name": "fullscreen/idlharness",
+        "test_file": FIXTURES_DIR / "fullscreen" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "fullscreen", "dom", "html",
+        ],
+    },
+    {
+        "name": "gamepad/idlharness",
+        "test_file": FIXTURES_DIR / "gamepad" / "idlharness-extensions.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "gamepad-extensions", "gamepad",
+        ],
+    },
+    {
+        "name": "gamepad/idlharness",
+        "test_file": FIXTURES_DIR / "gamepad" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "gamepad", "html", "dom",
+        ],
+    },
+    {
+        "name": "generic-sensor/idlharness",
+        "test_file": FIXTURES_DIR / "generic-sensor" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "generic-sensor", "dom", "html", "webidl",
+        ],
+    },
+    {
+        "name": "geolocation/idlharness",
+        "test_file": FIXTURES_DIR / "geolocation" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "geolocation", "hr-time", "html",
+        ],
+    },
+    {
+        "name": "gpc/idlharness",
+        "test_file": FIXTURES_DIR / "gpc" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "gpc", "html",
+        ],
+    },
+    {
+        "name": "gyroscope/idlharness",
+        "test_file": FIXTURES_DIR / "gyroscope" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "gyroscope", "generic-sensor", "dom",
+        ],
+    },
+    {
+        "name": "hr-time/idlharness",
+        "test_file": FIXTURES_DIR / "hr-time" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "hr-time", "html", "dom",
+        ],
+    },
+    {
+        "name": "html-media-capture/idlharness",
+        "test_file": FIXTURES_DIR / "html-media-capture" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "html-media-capture", "html", "dom",
+        ],
+    },
+    {
+        "name": "html/semantics/interestfor/idlharness",
+        "test_file": FIXTURES_DIR / "html" / "semantics" / "interestfor" / "idlharness.tentative.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "interest-invokers.tentative", "html", "dom", "SVG",
+        ],
+    },
+    {
+        "name": "html/semantics/permission-element/geolocation-element/idlharness",
+        "test_file": FIXTURES_DIR / "html" / "semantics" / "permission-element" / "geolocation-element" / "idlharness.tentative.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "geolocation-element.tentative", "html", "dom", "permissions", "geolocation",
+        ],
+    },
+    {
+        "name": "html/semantics/permission-element/usermedia/idlharness",
+        "test_file": FIXTURES_DIR / "html" / "semantics" / "permission-element" / "usermedia" / "idlharness.tentative.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "usermedia-element.tentative", "geolocation-element.tentative", "html", "dom", "permissions", "geolocation", "mediacapture-streams",
+        ],
+    },
+    {
+        "name": "idle-detection/idlharness",
+        "test_file": FIXTURES_DIR / "idle-detection" / "idlharness-worker.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "html", "dom",
+        ],
+    },
+    {
+        "name": "idle-detection/idlharness",
+        "test_file": FIXTURES_DIR / "idle-detection" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "idle-detection", "dom", "html",
+        ],
+    },
+    {
+        "name": "input-device-capabilities/idlharness",
+        "test_file": FIXTURES_DIR / "input-device-capabilities" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "input-device-capabilities", "uievents", "dom",
+        ],
+    },
+    {
+        "name": "input-events/idlharness",
+        "test_file": FIXTURES_DIR / "input-events" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "input-events", "uievents", "dom",
+        ],
+    },
+    {
+        "name": "installedapp/idlharness",
+        "test_file": FIXTURES_DIR / "installedapp" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "get-installed-related-apps", "html",
+        ],
+    },
+    {
+        "name": "intersection-observer/idlharness",
+        "test_file": FIXTURES_DIR / "intersection-observer" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "intersection-observer", "dom",
+        ],
+    },
+    {
+        "name": "is-input-pending/idlharness",
+        "test_file": FIXTURES_DIR / "is-input-pending" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "is-input-pending", "html", "dom",
+        ],
+    },
+    {
+        "name": "js-self-profiling/idlharness",
+        "test_file": FIXTURES_DIR / "js-self-profiling" / "idlharness.https.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "js-self-profiling", "hr-time", "dom",
+        ],
+    },
+    {
+        "name": "keyboard-lock/idlharness",
+        "test_file": FIXTURES_DIR / "keyboard-lock" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "keyboard-lock", "html", "dom",
+        ],
+    },
+    {
+        "name": "keyboard-map/idlharness",
+        "test_file": FIXTURES_DIR / "keyboard-map" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "keyboard-map", "keyboard-lock", "html", "dom",
+        ],
+    },
+    {
+        "name": "largest-contentful-paint/idlharness",
+        "test_file": FIXTURES_DIR / "largest-contentful-paint" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "largest-contentful-paint", "performance-timeline", "dom", "hr-time", "paint-timing",
+        ],
+    },
+    {
+        "name": "layout-instability/idlharness",
+        "test_file": FIXTURES_DIR / "layout-instability" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "layout-instability", "performance-timeline", "geometry", "dom", "hr-time",
+        ],
+    },
+    {
+        "name": "longtask-timing/idlharness",
+        "test_file": FIXTURES_DIR / "longtask-timing" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "longtasks", "performance-timeline", "hr-time",
+        ],
+    },
+    {
+        "name": "magnetometer/idlharness",
+        "test_file": FIXTURES_DIR / "magnetometer" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "magnetometer", "generic-sensor", "dom",
+        ],
+    },
+    {
+        "name": "measure-memory/idlharness",
+        "test_file": FIXTURES_DIR / "measure-memory" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "performance-measure-memory", "hr-time", "dom",
+        ],
+    },
+    {
+        "name": "media-capabilities/idlharness",
+        "test_file": FIXTURES_DIR / "media-capabilities" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "media-capabilities", "html", "cssom-view",
+        ],
+    },
+    {
+        "name": "media-playback-quality/idlharness",
+        "test_file": FIXTURES_DIR / "media-playback-quality" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "media-playback-quality", "html", "dom",
+        ],
+    },
+    {
+        "name": "media-source/idlharness",
+        "test_file": FIXTURES_DIR / "media-source" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "media-source", "dom", "html", "url",
+        ],
+    },
+    {
+        "name": "mediacapture-fromelement/idlharness",
+        "test_file": FIXTURES_DIR / "mediacapture-fromelement" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "mediacapture-fromelement", "mediacapture-streams", "html", "dom",
+        ],
+    },
+    {
+        "name": "mediacapture-image/idlharness",
+        "test_file": FIXTURES_DIR / "mediacapture-image" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "image-capture", "mediacapture-streams", "html", "dom",
+        ],
+    },
+    {
+        "name": "mediacapture-record/idlharness",
+        "test_file": FIXTURES_DIR / "mediacapture-record" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "mediastream-recording", "mediacapture-streams", "FileAPI", "html", "dom", "webidl",
+        ],
+    },
+    {
+        "name": "mediacapture-streams/idlharness",
+        "test_file": FIXTURES_DIR / "mediacapture-streams" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "mediacapture-streams", "webidl", "dom", "html", "permissions",
+        ],
+    },
+    {
+        "name": "mediasession/idlharness",
+        "test_file": FIXTURES_DIR / "mediasession" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "mediasession", "html",
+        ],
+    },
+    {
+        "name": "mst-content-hint/idlharness",
+        "test_file": FIXTURES_DIR / "mst-content-hint" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "mst-content-hint", "mediacapture-streams", "webrtc", "dom",
+        ],
+    },
+    {
+        "name": "navigation-timing/idlharness",
+        "test_file": FIXTURES_DIR / "navigation-timing" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "navigation-timing", "hr-time", "resource-timing", "performance-timeline", "dom", "html",
+        ],
+    },
+    {
+        "name": "netinfo/idlharness",
+        "test_file": FIXTURES_DIR / "netinfo" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "netinfo", "html", "dom",
+        ],
+    },
+    {
+        "name": "notifications/idlharness",
+        "test_file": FIXTURES_DIR / "notifications" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "notifications", "service-workers", "hr-time", "html", "dom",
+        ],
+    },
+    {
+        "name": "orientation-event/idlharness",
+        "test_file": FIXTURES_DIR / "orientation-event" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "orientation-event", "html", "dom",
+        ],
+    },
+    {
+        "name": "orientation-sensor/idlharness",
+        "test_file": FIXTURES_DIR / "orientation-sensor" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "orientation-sensor", "generic-sensor", "dom",
+        ],
+    },
+    {
+        "name": "page-lifecycle/idlharness",
+        "test_file": FIXTURES_DIR / "page-lifecycle" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "page-lifecycle", "service-workers", "html", "dom",
+        ],
+    },
+    {
+        "name": "paint-timing/idlharness",
+        "test_file": FIXTURES_DIR / "paint-timing" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "paint-timing", "performance-timeline", "hr-time",
+        ],
+    },
+    {
+        "name": "parakeet/idlharness",
+        "test_file": FIXTURES_DIR / "parakeet" / "idlharness.tentative.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "parakeet.tentative", "html",
+        ],
+    },
+    {
+        "name": "payment-request/idlharness",
+        "test_file": FIXTURES_DIR / "payment-request" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "payment-request", "dom", "html",
+        ],
+    },
+    {
+        "name": "performance-timeline/idlharness",
+        "test_file": FIXTURES_DIR / "performance-timeline" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "performance-timeline", "hr-time", "dom",
+        ],
+    },
+    {
+        "name": "periodic-background-sync/idlharness",
+        "test_file": FIXTURES_DIR / "periodic-background-sync" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "periodic-background-sync", "service-workers", "html", "dom",
+        ],
+    },
+    {
+        "name": "permissions-policy/idlharness",
+        "test_file": FIXTURES_DIR / "permissions-policy" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "permissions-policy", "reporting", "html", "dom",
+        ],
+    },
+    {
+        "name": "permissions-request/idlharness",
+        "test_file": FIXTURES_DIR / "permissions-request" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "permissions-request", "permissions", "html", "dom",
+        ],
+    },
+    {
+        "name": "permissions-revoke/idlharness",
+        "test_file": FIXTURES_DIR / "permissions-revoke" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "permissions-revoke", "permissions", "html", "dom",
+        ],
+    },
+    {
+        "name": "permissions/idlharness",
+        "test_file": FIXTURES_DIR / "permissions" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "permissions", "html", "dom",
+        ],
+    },
+    {
+        "name": "picture-in-picture/idlharness",
+        "test_file": FIXTURES_DIR / "picture-in-picture" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "picture-in-picture", "html", "dom",
+        ],
+    },
+    {
+        "name": "pointerevents/idlharness",
+        "test_file": FIXTURES_DIR / "pointerevents" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "pointerevents", "uievents", "html", "dom",
+        ],
+    },
+    {
+        "name": "pointerlock/idlharness",
+        "test_file": FIXTURES_DIR / "pointerlock" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "pointerlock", "pointerevents", "uievents", "html", "dom",
+        ],
+    },
+    {
+        "name": "presentation-api/controlling-ua/idlharness",
+        "test_file": FIXTURES_DIR / "presentation-api" / "controlling-ua" / "idlharness.https.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "html", "dom",
+        ],
+    },
+    {
+        "name": "private-click-measurement/idlharness",
+        "test_file": FIXTURES_DIR / "private-click-measurement" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "private-click-measurement", "html", "dom",
+        ],
+    },
+    {
+        "name": "proximity/idlharness",
+        "test_file": FIXTURES_DIR / "proximity" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "proximity", "generic-sensor", "dom",
+        ],
+    },
+    {
+        "name": "push-api/idlharness",
+        "test_file": FIXTURES_DIR / "push-api" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "push-api", "service-workers", "hr-time", "html", "dom", "permissions",
+        ],
+    },
+    {
+        "name": "remote-playback/idlharness",
+        "test_file": FIXTURES_DIR / "remote-playback" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "remote-playback", "html", "dom",
+        ],
+    },
+    {
+        "name": "reporting/idlharness",
+        "test_file": FIXTURES_DIR / "reporting" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "reporting",
+        ],
+    },
+    {
+        "name": "requestidlecallback/idlharness",
+        "test_file": FIXTURES_DIR / "requestidlecallback" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "requestidlecallback", "html", "dom",
+        ],
+    },
+    {
+        "name": "resize-observer/idlharness",
+        "test_file": FIXTURES_DIR / "resize-observer" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "resize-observer", "dom", "geometry",
+        ],
+    },
+    {
+        "name": "resource-timing/idlharness",
+        "test_file": FIXTURES_DIR / "resource-timing" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "resource-timing", "performance-timeline", "hr-time", "dom", "html",
+        ],
+    },
+    {
+        "name": "savedata/idlharness",
+        "test_file": FIXTURES_DIR / "savedata" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "savedata", "netinfo", "html", "dom",
+        ],
+    },
+    {
+        "name": "screen-capture/idlharness",
+        "test_file": FIXTURES_DIR / "screen-capture" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "screen-capture", "mediacapture-streams", "html", "dom",
+        ],
+    },
+    {
+        "name": "screen-orientation/idlharness",
+        "test_file": FIXTURES_DIR / "screen-orientation" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "screen-orientation", "dom", "cssom-view", "html",
+        ],
+    },
+    {
+        "name": "screen-wake-lock/idlharness",
+        "test_file": FIXTURES_DIR / "screen-wake-lock" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "screen-wake-lock", "dom", "html",
+        ],
+    },
+    {
+        "name": "scroll-animations/scroll-timelines/idlharness",
+        "test_file": FIXTURES_DIR / "scroll-animations" / "scroll-timelines" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "scroll-animations",
+        ],
+    },
+    {
+        "name": "scroll-to-text-fragment/idlharness",
+        "test_file": FIXTURES_DIR / "scroll-to-text-fragment" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "scroll-to-text-fragment", "dom", "html",
+        ],
+    },
+    {
+        "name": "selection/idlharness",
+        "test_file": FIXTURES_DIR / "selection" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "selection-api", "html", "dom",
+        ],
+    },
+    {
+        "name": "serial/idlharness",
+        "test_file": FIXTURES_DIR / "serial" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "serial", "html", "dom",
+        ],
+    },
+    {
+        "name": "server-timing/idlharness",
+        "test_file": FIXTURES_DIR / "server-timing" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "resource-timing", "server-timing", "performance-timeline", "hr-time", "dom",
+        ],
+    },
+    {
+        "name": "service-workers/idlharness",
+        "test_file": FIXTURES_DIR / "service-workers" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "service-workers", "dom", "html",
+        ],
+    },
+    {
+        "name": "shape-detection/idlharness",
+        "test_file": FIXTURES_DIR / "shape-detection" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "shape-detection-api", "text-detection-api", "dom", "geometry",
+        ],
+    },
+    {
+        "name": "speech-api/idlharness",
+        "test_file": FIXTURES_DIR / "speech-api" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "speech-api", "dom", "html",
+        ],
+    },
+    {
+        "name": "storage-access-api/idlharness",
+        "test_file": FIXTURES_DIR / "storage-access-api" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "storage-access", "dom",
+        ],
+    },
+    {
+        "name": "storage/buckets/idlharness",
+        "test_file": FIXTURES_DIR / "storage" / "buckets" / "idlharness-worker.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "storage-buckets", "html",
+        ],
+    },
+    {
+        "name": "storage/idlharness",
+        "test_file": FIXTURES_DIR / "storage" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "storage", "html",
+        ],
+    },
+    {
+        "name": "streams/idlharness",
+        "test_file": FIXTURES_DIR / "streams" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "streams", "dom",
+        ],
+    },
+    {
+        "name": "svg/idlharness",
+        "test_file": FIXTURES_DIR / "svg" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "SVG", "svg-animations", "cssom", "web-animations", "html", "dom",
+        ],
+    },
+    {
+        "name": "touch-events/idlharness",
+        "test_file": FIXTURES_DIR / "touch-events" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "touch-events", "uievents", "html", "dom",
+        ],
+    },
+    {
+        "name": "trusted-types/idlharness",
+        "test_file": FIXTURES_DIR / "trusted-types" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "trusted-types", "html", "dom",
+        ],
+    },
+    {
+        "name": "ua-client-hints/idlharness",
+        "test_file": FIXTURES_DIR / "ua-client-hints" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "ua-client-hints", "html", "dom",
+        ],
+    },
+    {
+        "name": "uievents/idlharness",
+        "test_file": FIXTURES_DIR / "uievents" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "uievents", "html", "dom",
+        ],
+    },
+    {
+        "name": "url/idlharness",
+        "test_file": FIXTURES_DIR / "url" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "url",
+        ],
+    },
+    {
+        "name": "user-timing/idlharness",
+        "test_file": FIXTURES_DIR / "user-timing" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "user-timing", "hr-time", "performance-timeline", "dom",
+        ],
+    },
+    {
+        "name": "vibration/idlharness",
+        "test_file": FIXTURES_DIR / "vibration" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "vibration", "html",
+        ],
+    },
+    {
+        "name": "video-rvfc/idlharness",
+        "test_file": FIXTURES_DIR / "video-rvfc" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "video-rvfc", "html", "dom",
+        ],
+    },
+    {
+        "name": "virtual-keyboard/idlharness",
+        "test_file": FIXTURES_DIR / "virtual-keyboard" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "virtual-keyboard.tentative", "html", "dom",
+        ],
+    },
+    {
+        "name": "wai-aria/idlharness",
+        "test_file": FIXTURES_DIR / "wai-aria" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "wai-aria", "dom",
+        ],
+    },
+    {
+        "name": "wasm/jsapi/idlharness",
+        "test_file": FIXTURES_DIR / "wasm" / "jsapi" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "wasm-js-api",
+        ],
+    },
+    {
+        "name": "wasm/webapi/idlharness",
+        "test_file": FIXTURES_DIR / "wasm" / "webapi" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "wasm-web-api", "wasm-js-api",
+        ],
+    },
+    {
+        "name": "web-animations/idlharness",
+        "test_file": FIXTURES_DIR / "web-animations" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "web-animations", "web-animations-2", "dom", "html", "scroll-animations",
+        ],
+    },
+    {
+        "name": "web-based-payment-handler/idlharness",
+        "test_file": FIXTURES_DIR / "web-based-payment-handler" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "web-based-payment-handler", "service-workers", "html", "dom",
+        ],
+    },
+    {
+        "name": "web-locks/idlharness",
+        "test_file": FIXTURES_DIR / "web-locks" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "web-locks", "html",
+        ],
+    },
+    {
+        "name": "web-nfc/idlharness",
+        "test_file": FIXTURES_DIR / "web-nfc" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "web-nfc", "html", "dom", "webidl",
+        ],
+    },
+    {
+        "name": "web-otp/idlharness",
+        "test_file": FIXTURES_DIR / "web-otp" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "web-otp", "credential-management",
+        ],
+    },
+    {
+        "name": "web-share/idlharness",
+        "test_file": FIXTURES_DIR / "web-share" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "web-share", "html",
+        ],
+    },
+    {
+        "name": "webaudio/idlharness",
+        "test_file": FIXTURES_DIR / "webaudio" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webaudio", "cssom", "uievents", "mediacapture-streams", "html", "dom",
+        ],
+    },
+    {
+        "name": "webauthn/idlharness",
+        "test_file": FIXTURES_DIR / "webauthn" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webauthn", "credential-management",
+        ],
+    },
+    {
+        "name": "webcodecs/idlharness",
+        "test_file": FIXTURES_DIR / "webcodecs" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webcodecs", "dom", "html", "webidl",
+        ],
+    },
+    {
+        "name": "webdriver/tests/classic/idlharness",
+        "test_file": FIXTURES_DIR / "webdriver" / "tests" / "classic" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webdriver", "html",
+        ],
+    },
+    {
+        "name": "webgl/idlharness",
+        "test_file": FIXTURES_DIR / "webgl" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webgl1", "webgl2", "dom",
+        ],
+    },
+    {
+        "name": "webhid/idlharness",
+        "test_file": FIXTURES_DIR / "webhid" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webhid", "html", "dom",
+        ],
+    },
+    {
+        "name": "webidl/idlharness",
+        "test_file": FIXTURES_DIR / "webidl" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webidl",
+        ],
+    },
+    {
+        "name": "webmcp/idlharness",
+        "test_file": FIXTURES_DIR / "webmcp" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webmcp", "html", "dom",
+        ],
+    },
+    {
+        "name": "webmidi/idlharness",
+        "test_file": FIXTURES_DIR / "webmidi" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webmidi", "html", "dom", "permissions",
+        ],
+    },
+    {
+        "name": "webnn/idlharness",
+        "test_file": FIXTURES_DIR / "webnn" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webnn", "html", "webidl", "webgpu",
+        ],
+    },
+    {
+        "name": "webrtc-encoded-transform/idlharness",
+        "test_file": FIXTURES_DIR / "webrtc-encoded-transform" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webrtc-encoded-transform", "webrtc", "streams", "html", "dom",
+        ],
+    },
+    {
+        "name": "webrtc-identity/idlharness",
+        "test_file": FIXTURES_DIR / "webrtc-identity" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webrtc-identity", "webrtc", "mediacapture-streams", "html", "dom", "webidl",
+        ],
+    },
+    {
+        "name": "webrtc/idlharness",
+        "test_file": FIXTURES_DIR / "webrtc" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webrtc", "webidl", "mediacapture-streams", "hr-time", "dom", "html", "websockets",
+        ],
+    },
+    {
+        "name": "websockets/idlharness",
+        "test_file": FIXTURES_DIR / "websockets" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "websockets", "html", "dom",
+        ],
+    },
+    {
+        "name": "webtransport/idlharness",
+        "test_file": FIXTURES_DIR / "webtransport" / "idlharness.https.sub.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webtransport", "webidl", "streams",
+        ],
+    },
+    {
+        "name": "webusb/idlharness",
+        "test_file": FIXTURES_DIR / "webusb" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webusb", "permissions", "html", "dom",
+        ],
+    },
+    {
+        "name": "webvtt/api/idlharness",
+        "test_file": FIXTURES_DIR / "webvtt" / "api" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webvtt", "html", "dom",
+        ],
+    },
+    {
+        "name": "webxr/anchors/idlharness",
+        "test_file": FIXTURES_DIR / "webxr" / "anchors" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "anchors", "webxr-hit-test", "webxr", "dom",
+        ],
+    },
+    {
+        "name": "webxr/ar-module/idlharness",
+        "test_file": FIXTURES_DIR / "webxr" / "ar-module" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webxr-ar-module", "webxr", "dom",
+        ],
+    },
+    {
+        "name": "webxr/depth-sensing/idlharness",
+        "test_file": FIXTURES_DIR / "webxr" / "depth-sensing" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webxr-depth-sensing", "webxr", "webxrlayers", "webgl1", "webgl2", "dom",
+        ],
+    },
+    {
+        "name": "webxr/dom-overlay/idlharness",
+        "test_file": FIXTURES_DIR / "webxr" / "dom-overlay" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webxr-dom-overlays", "webxr", "html", "dom", "SVG",
+        ],
+    },
+    {
+        "name": "webxr/gamepads-module/idlharness",
+        "test_file": FIXTURES_DIR / "webxr" / "gamepads-module" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webxr-gamepads-module", "webxr", "dom",
+        ],
+    },
+    {
+        "name": "webxr/hand-input/idlharness",
+        "test_file": FIXTURES_DIR / "webxr" / "hand-input" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webxr-hand-input", "webxr", "dom",
+        ],
+    },
+    {
+        "name": "webxr/hit-test/idlharness",
+        "test_file": FIXTURES_DIR / "webxr" / "hit-test" / "idlharness.https.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webxr-hit-test", "webxr", "geometry", "dom",
+        ],
+    },
+    {
+        "name": "webxr/idlharness",
+        "test_file": FIXTURES_DIR / "webxr" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webxr", "permissions", "webgl1", "geometry", "html", "dom",
+        ],
+    },
+    {
+        "name": "webxr/layers/idlharness",
+        "test_file": FIXTURES_DIR / "webxr" / "layers" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webxrlayers", "webxr", "webgl1", "webgl2", "dom",
+        ],
+    },
+    {
+        "name": "webxr/light-estimation/idlharness",
+        "test_file": FIXTURES_DIR / "webxr" / "light-estimation" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webxr-lighting-estimation", "webxr", "webxrlayers", "webgl1", "webgl2", "dom",
+        ],
+    },
+    {
+        "name": "webxr/plane-detection/idlharness",
+        "test_file": FIXTURES_DIR / "webxr" / "plane-detection" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "webxr-plane-detection", "webxr", "dom",
+        ],
+    },
+    {
+        "name": "xhr/idlharness",
+        "test_file": FIXTURES_DIR / "xhr" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "xhr", "dom", "html",
         ],
     },
 ]
