@@ -530,6 +530,11 @@ impl EmbeddedV8Kernel {
                     for (var i = 0; i < attrs.length; i++) {{
                         (function(name) {{
                         try {{
+                            // Skip length/name: these are function-intrinsic
+                            // data properties on the Window constructor, not
+                            // [Global] accessors. idlharness checks them as
+                            // data properties (no getter expected).
+                            if (name === 'length' || name === 'name') return;
                             var desc = Object.getOwnPropertyDescriptor(globalThis, name);
                             if (!desc) return;
                             if (!desc.configurable) return;
@@ -557,7 +562,7 @@ impl EmbeddedV8Kernel {
                                         }}
                                         return origGet.call(globalThis);
                                     }};
-                                    try {{ Object.defineProperty(wrappedGet, 'name', {{ value: origGet.name || ('get ' + name) }}); }} catch(e) {{}}
+                                    try {{ Object.defineProperty(wrappedGet, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
                                     Object.defineProperty(globalThis, name, {{
                                         get: wrappedGet,
                                         set: desc.set,
@@ -585,6 +590,7 @@ impl EmbeddedV8Kernel {
                                     return v;
                                 }};
                             }})(value, windowProto);
+                            try {{ Object.defineProperty(getter, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
                             Object.defineProperty(globalThis, name, {{
                                 get: getter,
                                 set: undefined,
