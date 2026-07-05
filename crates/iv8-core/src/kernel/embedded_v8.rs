@@ -1841,6 +1841,13 @@ impl EmbeddedV8Kernel {
         )
         .ok();
 
+        // 12a. Install CSSOM prototype setup (methods/getters on codegen prototypes)
+        self.eval(
+            crate::shims::cssom::CSSOM_PROTO_SETUP_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
         // 12b. Install CSSOM (CSS parser + CSSStyleSheet/CSSRule population)
         self.eval(
             crate::shims::cssom::CSSOM_SHIM_JS,

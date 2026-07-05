@@ -401,6 +401,14 @@ pub(crate) unsafe extern "C" fn event_get_1(_info: *const v8::FunctionCallbackIn
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Type").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -447,6 +455,14 @@ pub(crate) unsafe extern "C" fn event_get_2(_info: *const v8::FunctionCallbackIn
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Target").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -493,6 +509,14 @@ pub(crate) unsafe extern "C" fn event_get_3(_info: *const v8::FunctionCallbackIn
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SrcElement").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -539,6 +563,14 @@ pub(crate) unsafe extern "C" fn event_get_4(_info: *const v8::FunctionCallbackIn
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CurrentTarget").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -629,6 +661,14 @@ pub(crate) unsafe extern "C" fn event_get_6(_info: *const v8::FunctionCallbackIn
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8EventPhase").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -719,6 +759,14 @@ pub(crate) unsafe extern "C" fn event_get_8(_info: *const v8::FunctionCallbackIn
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CancelBubble").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -853,6 +901,14 @@ pub(crate) unsafe extern "C" fn event_get_10(_info: *const v8::FunctionCallbackI
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Bubbles").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -899,6 +955,14 @@ pub(crate) unsafe extern "C" fn event_get_11(_info: *const v8::FunctionCallbackI
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Cancelable").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -945,6 +1009,14 @@ pub(crate) unsafe extern "C" fn event_get_12(_info: *const v8::FunctionCallbackI
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ReturnValue").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -1079,6 +1151,14 @@ pub(crate) unsafe extern "C" fn event_get_14(_info: *const v8::FunctionCallbackI
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DefaultPrevented").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -1125,6 +1205,14 @@ pub(crate) unsafe extern "C" fn event_get_15(_info: *const v8::FunctionCallbackI
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Composed").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -1171,6 +1259,14 @@ pub(crate) unsafe extern "C" fn event_get_16(_info: *const v8::FunctionCallbackI
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8IsTrusted").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -1217,6 +1313,14 @@ pub(crate) unsafe extern "C" fn event_get_17(_info: *const v8::FunctionCallbackI
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8TimeStamp").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -1635,6 +1739,14 @@ pub(crate) unsafe extern "C" fn animation_event_get_1(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AnimationName").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -1681,6 +1793,14 @@ pub(crate) unsafe extern "C" fn animation_event_get_2(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ElapsedTime").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -1727,6 +1847,14 @@ pub(crate) unsafe extern "C" fn animation_event_get_3(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PseudoElement").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -1773,6 +1901,14 @@ pub(crate) unsafe extern "C" fn animation_event_get_4(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Animation").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -1869,6 +2005,14 @@ pub(crate) unsafe extern "C" fn animation_playback_event_get_1(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CurrentTime").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -1915,6 +2059,14 @@ pub(crate) unsafe extern "C" fn animation_playback_event_get_2(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8TimelineTime").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -1997,6 +2149,14 @@ pub(crate) unsafe extern "C" fn audio_processing_event_get_1(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PlaybackTime").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -2043,6 +2203,14 @@ pub(crate) unsafe extern "C" fn audio_processing_event_get_2(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InputBuffer").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -2089,6 +2257,14 @@ pub(crate) unsafe extern "C" fn audio_processing_event_get_3(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OutputBuffer").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -2178,6 +2354,14 @@ pub(crate) unsafe extern "C" fn autofill_event_get_1(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AutofillValues").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -2224,6 +2408,14 @@ pub(crate) unsafe extern "C" fn autofill_event_get_2(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Refill").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -2343,6 +2535,14 @@ pub(crate) unsafe extern "C" fn before_unload_event_get_1(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ReturnValue").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -2464,6 +2664,14 @@ pub(crate) unsafe extern "C" fn blob_event_get_1(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Data").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -2510,6 +2718,14 @@ pub(crate) unsafe extern "C" fn blob_event_get_2(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Timecode").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -2592,6 +2808,14 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_1(_info: *const 
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Device").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -2638,6 +2862,14 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_2(_info: *const 
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Uuids").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -2684,6 +2916,14 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_3(_info: *const 
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Name").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -2730,6 +2970,14 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_4(_info: *const 
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Appearance").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -2776,6 +3024,14 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_5(_info: *const 
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8TxPower").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -2822,6 +3078,14 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_6(_info: *const 
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Rssi").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -2868,6 +3132,14 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_7(_info: *const 
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ManufacturerData").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -2914,6 +3186,14 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_8(_info: *const 
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ServiceData").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -3038,6 +3318,14 @@ pub(crate) unsafe extern "C" fn buffered_change_event_get_1(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AddedRanges").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -3084,6 +3372,14 @@ pub(crate) unsafe extern "C" fn buffered_change_event_get_2(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8RemovedRanges").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -3166,6 +3462,14 @@ pub(crate) unsafe extern "C" fn capture_action_event_get_1(_info: *const v8::Fun
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Action").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -3241,6 +3545,14 @@ pub(crate) unsafe extern "C" fn captured_mouse_event_get_1(_info: *const v8::Fun
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SurfaceX").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -3287,6 +3599,14 @@ pub(crate) unsafe extern "C" fn captured_mouse_event_get_2(_info: *const v8::Fun
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SurfaceY").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -3369,6 +3689,14 @@ pub(crate) unsafe extern "C" fn character_bounds_update_event_get_1(_info: *cons
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8RangeStart").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -3415,6 +3743,14 @@ pub(crate) unsafe extern "C" fn character_bounds_update_event_get_2(_info: *cons
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8RangeEnd").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -3497,6 +3833,14 @@ pub(crate) unsafe extern "C" fn clipboard_change_event_get_1(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Types").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -3543,6 +3887,14 @@ pub(crate) unsafe extern "C" fn clipboard_change_event_get_2(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ChangeId").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::BigInt::new_from_i64(scope, 0).into());
     }));
 }
@@ -3625,6 +3977,14 @@ pub(crate) unsafe extern "C" fn clipboard_event_get_1(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ClipboardData").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -3700,6 +4060,14 @@ pub(crate) unsafe extern "C" fn close_event_get_1(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8WasClean").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -3746,6 +4114,14 @@ pub(crate) unsafe extern "C" fn close_event_get_2(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Code").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -3792,6 +4168,14 @@ pub(crate) unsafe extern "C" fn close_event_get_3(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Reason").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -3881,6 +4265,14 @@ pub(crate) unsafe extern "C" fn command_event_get_1(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Source").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -3927,6 +4319,14 @@ pub(crate) unsafe extern "C" fn command_event_get_2(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Command").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -4009,6 +4409,14 @@ pub(crate) unsafe extern "C" fn content_visibility_auto_state_change_event_get_1
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Skipped").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -4084,6 +4492,14 @@ pub(crate) unsafe extern "C" fn cookie_change_event_get_1(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Changed").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -4130,6 +4546,14 @@ pub(crate) unsafe extern "C" fn cookie_change_event_get_2(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Deleted").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -4212,6 +4636,14 @@ pub(crate) unsafe extern "C" fn custom_event_get_1(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Detail").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -4345,6 +4777,14 @@ pub(crate) unsafe extern "C" fn device_change_event_get_1(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Devices").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -4391,6 +4831,14 @@ pub(crate) unsafe extern "C" fn device_change_event_get_2(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8UserInsertedDevices").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -4473,6 +4921,14 @@ pub(crate) unsafe extern "C" fn device_motion_event_get_1(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Acceleration").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -4519,6 +4975,14 @@ pub(crate) unsafe extern "C" fn device_motion_event_get_2(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AccelerationIncludingGravity").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -4565,6 +5029,14 @@ pub(crate) unsafe extern "C" fn device_motion_event_get_3(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8RotationRate").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -4611,6 +5083,14 @@ pub(crate) unsafe extern "C" fn device_motion_event_get_4(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Interval").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -4725,6 +5205,14 @@ pub(crate) unsafe extern "C" fn device_orientation_event_get_1(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Alpha").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -4771,6 +5259,14 @@ pub(crate) unsafe extern "C" fn device_orientation_event_get_2(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Beta").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -4817,6 +5313,14 @@ pub(crate) unsafe extern "C" fn device_orientation_event_get_3(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Gamma").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -4863,6 +5367,14 @@ pub(crate) unsafe extern "C" fn device_orientation_event_get_4(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Absolute").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -4977,6 +5489,14 @@ pub(crate) unsafe extern "C" fn document_picture_in_picture_event_get_1(_info: *
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Window").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -5052,6 +5572,14 @@ pub(crate) unsafe extern "C" fn error_event_get_1(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Message").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -5098,6 +5626,14 @@ pub(crate) unsafe extern "C" fn error_event_get_2(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Filename").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -5144,6 +5680,14 @@ pub(crate) unsafe extern "C" fn error_event_get_3(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Lineno").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -5190,6 +5734,14 @@ pub(crate) unsafe extern "C" fn error_event_get_4(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Colno").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -5236,6 +5788,14 @@ pub(crate) unsafe extern "C" fn error_event_get_5(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Error").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -5419,6 +5979,14 @@ pub(crate) unsafe extern "C" fn font_face_set_load_event_get_1(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Fontfaces").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -5494,6 +6062,14 @@ pub(crate) unsafe extern "C" fn form_data_event_get_1(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FormData").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -5569,6 +6145,14 @@ pub(crate) unsafe extern "C" fn gpu_uncaptured_error_event_get_1(_info: *const v
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Error").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -5644,6 +6228,14 @@ pub(crate) unsafe extern "C" fn gamepad_event_get_1(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Gamepad").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -5719,6 +6311,14 @@ pub(crate) unsafe extern "C" fn hid_connection_event_get_1(_info: *const v8::Fun
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Device").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -5794,6 +6394,14 @@ pub(crate) unsafe extern "C" fn hid_input_report_event_get_1(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Device").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -5840,6 +6448,14 @@ pub(crate) unsafe extern "C" fn hid_input_report_event_get_2(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ReportId").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -5886,6 +6502,14 @@ pub(crate) unsafe extern "C" fn hid_input_report_event_get_3(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Data").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::default_value_for_type(scope, "DataView"));
     }));
 }
@@ -5975,6 +6599,14 @@ pub(crate) unsafe extern "C" fn hash_change_event_get_1(_info: *const v8::Functi
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OldURL").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -6021,6 +6653,14 @@ pub(crate) unsafe extern "C" fn hash_change_event_get_2(_info: *const v8::Functi
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8NewURL").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -6103,6 +6743,14 @@ pub(crate) unsafe extern "C" fn idb_version_change_event_get_1(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OldVersion").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -6149,6 +6797,14 @@ pub(crate) unsafe extern "C" fn idb_version_change_event_get_2(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8NewVersion").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -6231,6 +6887,14 @@ pub(crate) unsafe extern "C" fn key_frame_request_event_get_1(_info: *const v8::
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Rid").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -6306,6 +6970,14 @@ pub(crate) unsafe extern "C" fn midi_connection_event_get_1(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Port").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -6381,6 +7053,14 @@ pub(crate) unsafe extern "C" fn midi_message_event_get_1(_info: *const v8::Funct
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Data").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::default_value_for_type(scope, "Uint8Array"));
     }));
 }
@@ -6456,6 +7136,14 @@ pub(crate) unsafe extern "C" fn media_encrypted_event_get_1(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InitDataType").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -6502,6 +7190,14 @@ pub(crate) unsafe extern "C" fn media_encrypted_event_get_2(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InitData").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::ArrayBuffer::new(scope, 0).into());
     }));
 }
@@ -6584,6 +7280,14 @@ pub(crate) unsafe extern "C" fn media_key_message_event_get_1(_info: *const v8::
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MessageType").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -6630,6 +7334,14 @@ pub(crate) unsafe extern "C" fn media_key_message_event_get_2(_info: *const v8::
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Message").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::ArrayBuffer::new(scope, 0).into());
     }));
 }
@@ -6712,6 +7424,14 @@ pub(crate) unsafe extern "C" fn media_query_list_event_get_1(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Media").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -6758,6 +7478,14 @@ pub(crate) unsafe extern "C" fn media_query_list_event_get_2(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Matches").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -6840,6 +7568,14 @@ pub(crate) unsafe extern "C" fn media_stream_track_event_get_1(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Track").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -6915,6 +7651,14 @@ pub(crate) unsafe extern "C" fn message_event_get_1(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Data").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -6961,6 +7705,14 @@ pub(crate) unsafe extern "C" fn message_event_get_2(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Origin").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -7007,6 +7759,14 @@ pub(crate) unsafe extern "C" fn message_event_get_3(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8LastEventId").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -7053,6 +7813,14 @@ pub(crate) unsafe extern "C" fn message_event_get_4(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Source").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -7099,6 +7867,14 @@ pub(crate) unsafe extern "C" fn message_event_get_5(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Ports").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -7260,6 +8036,14 @@ pub(crate) unsafe extern "C" fn ndef_reading_event_get_1(_info: *const v8::Funct
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SerialNumber").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -7306,6 +8090,14 @@ pub(crate) unsafe extern "C" fn ndef_reading_event_get_2(_info: *const v8::Funct
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Message").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -7388,6 +8180,14 @@ pub(crate) unsafe extern "C" fn navigate_event_get_1(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8NavigationType").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -7434,6 +8234,14 @@ pub(crate) unsafe extern "C" fn navigate_event_get_2(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Destination").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -7480,6 +8288,14 @@ pub(crate) unsafe extern "C" fn navigate_event_get_3(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CanIntercept").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -7526,6 +8342,14 @@ pub(crate) unsafe extern "C" fn navigate_event_get_4(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8UserInitiated").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -7572,6 +8396,14 @@ pub(crate) unsafe extern "C" fn navigate_event_get_5(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8HashChange").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -7618,6 +8450,14 @@ pub(crate) unsafe extern "C" fn navigate_event_get_6(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Signal").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -7664,6 +8504,14 @@ pub(crate) unsafe extern "C" fn navigate_event_get_7(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FormData").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -7710,6 +8558,14 @@ pub(crate) unsafe extern "C" fn navigate_event_get_8(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DownloadRequest").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -7756,6 +8612,14 @@ pub(crate) unsafe extern "C" fn navigate_event_get_9(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Info").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -7802,6 +8666,14 @@ pub(crate) unsafe extern "C" fn navigate_event_get_10(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8HasUAVisualTransition").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -7848,6 +8720,14 @@ pub(crate) unsafe extern "C" fn navigate_event_get_11(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SourceElement").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -8104,6 +8984,14 @@ pub(crate) unsafe extern "C" fn navigation_current_entry_change_event_get_1(_inf
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8NavigationType").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -8150,6 +9038,14 @@ pub(crate) unsafe extern "C" fn navigation_current_entry_change_event_get_2(_inf
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8From").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -8232,6 +9128,14 @@ pub(crate) unsafe extern "C" fn offline_audio_completion_event_get_1(_info: *con
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8RenderedBuffer").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -8307,6 +9211,14 @@ pub(crate) unsafe extern "C" fn page_reveal_event_get_1(_info: *const v8::Functi
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ViewTransition").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -8382,6 +9294,14 @@ pub(crate) unsafe extern "C" fn page_swap_event_get_1(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Activation").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -8428,6 +9348,14 @@ pub(crate) unsafe extern "C" fn page_swap_event_get_2(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ViewTransition").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -8510,6 +9438,14 @@ pub(crate) unsafe extern "C" fn page_transition_event_get_1(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Persisted").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -8665,6 +9601,14 @@ pub(crate) unsafe extern "C" fn picture_in_picture_event_get_1(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PictureInPictureWindow").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -8740,6 +9684,14 @@ pub(crate) unsafe extern "C" fn pop_state_event_get_1(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8State").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -8786,6 +9738,14 @@ pub(crate) unsafe extern "C" fn pop_state_event_get_2(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8HasUAVisualTransition").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -8868,6 +9828,14 @@ pub(crate) unsafe extern "C" fn portal_activate_event_get_1(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Data").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -8994,6 +9962,14 @@ pub(crate) unsafe extern "C" fn presentation_connection_available_event_get_1(_i
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Connection").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -9069,6 +10045,14 @@ pub(crate) unsafe extern "C" fn presentation_connection_close_event_get_1(_info:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Reason").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -9115,6 +10099,14 @@ pub(crate) unsafe extern "C" fn presentation_connection_close_event_get_2(_info:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Message").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -9197,6 +10189,14 @@ pub(crate) unsafe extern "C" fn progress_event_get_1(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8LengthComputable").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -9243,6 +10243,14 @@ pub(crate) unsafe extern "C" fn progress_event_get_2(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Loaded").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -9289,6 +10297,14 @@ pub(crate) unsafe extern "C" fn progress_event_get_3(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Total").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -9378,6 +10394,14 @@ pub(crate) unsafe extern "C" fn promise_rejection_event_get_1(_info: *const v8::
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Promise").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -9424,6 +10448,14 @@ pub(crate) unsafe extern "C" fn promise_rejection_event_get_2(_info: *const v8::
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Reason").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -9506,6 +10538,14 @@ pub(crate) unsafe extern "C" fn rtcdtmf_tone_change_event_get_1(_info: *const v8
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Tone").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -9581,6 +10621,14 @@ pub(crate) unsafe extern "C" fn rtc_data_channel_event_get_1(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Channel").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -9656,6 +10704,14 @@ pub(crate) unsafe extern "C" fn rtc_error_event_get_1(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Error").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -9731,6 +10787,14 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_ice_error_event_get_1(_info:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Address").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -9777,6 +10841,14 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_ice_error_event_get_2(_info:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Port").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -9823,6 +10895,14 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_ice_error_event_get_3(_info:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Url").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -9869,6 +10949,14 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_ice_error_event_get_4(_info:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ErrorCode").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -9915,6 +11003,14 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_ice_error_event_get_5(_info:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ErrorText").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -10018,6 +11114,14 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_ice_event_get_1(_info: *cons
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Candidate").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -10064,6 +11168,14 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_ice_event_get_2(_info: *cons
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Url").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -10146,6 +11258,14 @@ pub(crate) unsafe extern "C" fn rtc_track_event_get_1(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Receiver").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -10192,6 +11312,14 @@ pub(crate) unsafe extern "C" fn rtc_track_event_get_2(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Track").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -10238,6 +11366,14 @@ pub(crate) unsafe extern "C" fn rtc_track_event_get_3(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Streams").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -10284,6 +11420,14 @@ pub(crate) unsafe extern "C" fn rtc_track_event_get_4(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Transceiver").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -10380,6 +11524,14 @@ pub(crate) unsafe extern "C" fn rtc_transform_event_get_1(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Transformer").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -10455,6 +11607,14 @@ pub(crate) unsafe extern "C" fn s_frame_transform_error_event_get_1(_info: *cons
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ErrorType").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -10501,6 +11661,14 @@ pub(crate) unsafe extern "C" fn s_frame_transform_error_event_get_2(_info: *cons
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8KeyID").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -10547,6 +11715,14 @@ pub(crate) unsafe extern "C" fn s_frame_transform_error_event_get_3(_info: *cons
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Frame").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -10636,6 +11812,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_1(_info: *co
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DocumentURI").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -10682,6 +11866,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_2(_info: *co
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Referrer").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -10728,6 +11920,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_3(_info: *co
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8BlockedURI").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -10774,6 +11974,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_4(_info: *co
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8EffectiveDirective").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -10820,6 +12028,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_5(_info: *co
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ViolatedDirective").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -10866,6 +12082,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_6(_info: *co
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OriginalPolicy").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -10912,6 +12136,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_7(_info: *co
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SourceFile").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -10958,6 +12190,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_8(_info: *co
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Sample").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -11004,6 +12244,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_9(_info: *co
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Disposition").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -11050,6 +12298,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_10(_info: *c
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8StatusCode").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -11096,6 +12352,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_11(_info: *c
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8LineNumber").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -11142,6 +12406,14 @@ pub(crate) unsafe extern "C" fn security_policy_violation_event_get_12(_info: *c
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ColumnNumber").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -11303,6 +12575,14 @@ pub(crate) unsafe extern "C" fn sensor_error_event_get_1(_info: *const v8::Funct
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Error").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -11378,6 +12658,14 @@ pub(crate) unsafe extern "C" fn snap_event_get_1(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SnapTargetBlock").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -11424,6 +12712,14 @@ pub(crate) unsafe extern "C" fn snap_event_get_2(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SnapTargetInline").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -11506,6 +12802,14 @@ pub(crate) unsafe extern "C" fn speech_recognition_error_event_get_1(_info: *con
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Error").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -11552,6 +12856,14 @@ pub(crate) unsafe extern "C" fn speech_recognition_error_event_get_2(_info: *con
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Message").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -11634,6 +12946,14 @@ pub(crate) unsafe extern "C" fn speech_recognition_event_get_1(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ResultIndex").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -11680,6 +13000,14 @@ pub(crate) unsafe extern "C" fn speech_recognition_event_get_2(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Results").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -11762,6 +13090,14 @@ pub(crate) unsafe extern "C" fn speech_synthesis_event_get_1(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Utterance").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -11808,6 +13144,14 @@ pub(crate) unsafe extern "C" fn speech_synthesis_event_get_2(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CharIndex").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -11854,6 +13198,14 @@ pub(crate) unsafe extern "C" fn speech_synthesis_event_get_3(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CharLength").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -11900,6 +13252,14 @@ pub(crate) unsafe extern "C" fn speech_synthesis_event_get_4(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ElapsedTime").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -11946,6 +13306,14 @@ pub(crate) unsafe extern "C" fn speech_synthesis_event_get_5(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Name").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -12049,6 +13417,14 @@ pub(crate) unsafe extern "C" fn storage_event_get_1(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Key").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -12095,6 +13471,14 @@ pub(crate) unsafe extern "C" fn storage_event_get_2(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OldValue").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -12141,6 +13525,14 @@ pub(crate) unsafe extern "C" fn storage_event_get_3(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8NewValue").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -12187,6 +13579,14 @@ pub(crate) unsafe extern "C" fn storage_event_get_4(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Url").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -12233,6 +13633,14 @@ pub(crate) unsafe extern "C" fn storage_event_get_5(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8StorageArea").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -12394,6 +13802,14 @@ pub(crate) unsafe extern "C" fn submit_event_get_1(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Submitter").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -12469,6 +13885,14 @@ pub(crate) unsafe extern "C" fn task_priority_change_event_get_1(_info: *const v
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PreviousPriority").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -12617,6 +14041,14 @@ pub(crate) unsafe extern "C" fn text_update_event_get_1(_info: *const v8::Functi
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8UpdateRangeStart").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -12663,6 +14095,14 @@ pub(crate) unsafe extern "C" fn text_update_event_get_2(_info: *const v8::Functi
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8UpdateRangeEnd").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -12709,6 +14149,14 @@ pub(crate) unsafe extern "C" fn text_update_event_get_3(_info: *const v8::Functi
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Text").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -12755,6 +14203,14 @@ pub(crate) unsafe extern "C" fn text_update_event_get_4(_info: *const v8::Functi
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SelectionStart").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -12801,6 +14257,14 @@ pub(crate) unsafe extern "C" fn text_update_event_get_5(_info: *const v8::Functi
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SelectionEnd").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -12904,6 +14368,14 @@ pub(crate) unsafe extern "C" fn time_event_get_1(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8View").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -12950,6 +14422,14 @@ pub(crate) unsafe extern "C" fn time_event_get_2(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Detail").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -13090,6 +14570,14 @@ pub(crate) unsafe extern "C" fn toggle_event_get_1(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OldState").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -13136,6 +14624,14 @@ pub(crate) unsafe extern "C" fn toggle_event_get_2(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8NewState").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -13182,6 +14678,14 @@ pub(crate) unsafe extern "C" fn toggle_event_get_3(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Source").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -13271,6 +14775,14 @@ pub(crate) unsafe extern "C" fn track_event_get_1(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Track").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -13346,6 +14858,14 @@ pub(crate) unsafe extern "C" fn transition_event_get_1(_info: *const v8::Functio
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PropertyName").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -13392,6 +14912,14 @@ pub(crate) unsafe extern "C" fn transition_event_get_2(_info: *const v8::Functio
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ElapsedTime").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -13438,6 +14966,14 @@ pub(crate) unsafe extern "C" fn transition_event_get_3(_info: *const v8::Functio
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PseudoElement").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -13484,6 +15020,14 @@ pub(crate) unsafe extern "C" fn transition_event_get_4(_info: *const v8::Functio
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Animation").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -13580,6 +15124,14 @@ pub(crate) unsafe extern "C" fn ui_event_get_1(_info: *const v8::FunctionCallbac
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8View").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -13626,6 +15178,14 @@ pub(crate) unsafe extern "C" fn ui_event_get_2(_info: *const v8::FunctionCallbac
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Detail").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -13672,6 +15232,14 @@ pub(crate) unsafe extern "C" fn ui_event_get_3(_info: *const v8::FunctionCallbac
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SourceCapabilities").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -13769,6 +15337,14 @@ pub(crate) unsafe extern "C" fn ui_event_get_5(_info: *const v8::FunctionCallbac
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Which").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -13872,6 +15448,14 @@ pub(crate) unsafe extern "C" fn usb_connection_event_get_1(_info: *const v8::Fun
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Device").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -13947,6 +15531,14 @@ pub(crate) unsafe extern "C" fn value_event_get_1(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Value").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -14022,6 +15614,14 @@ pub(crate) unsafe extern "C" fn web_gl_context_event_get_1(_info: *const v8::Fun
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8StatusMessage").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -14097,6 +15697,14 @@ pub(crate) unsafe extern "C" fn window_controls_overlay_geometry_change_event_ge
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8TitlebarAreaRect").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -14143,6 +15751,14 @@ pub(crate) unsafe extern "C" fn window_controls_overlay_geometry_change_event_ge
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Visible").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -14225,6 +15841,14 @@ pub(crate) unsafe extern "C" fn event_source_get_1(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Url").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -14271,6 +15895,14 @@ pub(crate) unsafe extern "C" fn event_source_get_2(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8WithCredentials").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -14317,6 +15949,14 @@ pub(crate) unsafe extern "C" fn event_source_get_3(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ReadyState").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -14363,6 +16003,14 @@ pub(crate) unsafe extern "C" fn event_source_get_4(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onopen").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -14453,6 +16101,14 @@ pub(crate) unsafe extern "C" fn event_source_get_5(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmessage").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -14543,6 +16199,14 @@ pub(crate) unsafe extern "C" fn event_source_get_6(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onerror").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -14777,6 +16441,14 @@ pub(crate) unsafe extern "C" fn background_fetch_event_get_1(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Registration").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -14932,6 +16604,14 @@ pub(crate) unsafe extern "C" fn content_index_event_get_1(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Id").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -15007,6 +16687,14 @@ pub(crate) unsafe extern "C" fn extendable_cookie_change_event_get_1(_info: *con
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Changed").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -15053,6 +16741,14 @@ pub(crate) unsafe extern "C" fn extendable_cookie_change_event_get_2(_info: *con
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Deleted").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -15135,6 +16831,14 @@ pub(crate) unsafe extern "C" fn extendable_message_event_get_1(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Data").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -15181,6 +16885,14 @@ pub(crate) unsafe extern "C" fn extendable_message_event_get_2(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Origin").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -15227,6 +16939,14 @@ pub(crate) unsafe extern "C" fn extendable_message_event_get_3(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8LastEventId").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -15273,6 +16993,14 @@ pub(crate) unsafe extern "C" fn extendable_message_event_get_4(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Source").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -15319,6 +17047,14 @@ pub(crate) unsafe extern "C" fn extendable_message_event_get_5(_info: *const v8:
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Ports").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -15422,6 +17158,14 @@ pub(crate) unsafe extern "C" fn fetch_event_get_1(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Request").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -15468,6 +17212,14 @@ pub(crate) unsafe extern "C" fn fetch_event_get_2(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PreloadResponse").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -15514,6 +17266,14 @@ pub(crate) unsafe extern "C" fn fetch_event_get_3(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ClientId").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -15560,6 +17320,14 @@ pub(crate) unsafe extern "C" fn fetch_event_get_4(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ResultingClientId").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -15606,6 +17374,14 @@ pub(crate) unsafe extern "C" fn fetch_event_get_5(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ReplacesClientId").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -15652,6 +17428,14 @@ pub(crate) unsafe extern "C" fn fetch_event_get_6(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Handled").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::undefined(scope).into());
     }));
 }
@@ -15864,6 +17648,14 @@ pub(crate) unsafe extern "C" fn notification_event_get_1(_info: *const v8::Funct
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Notification").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -15910,6 +17702,14 @@ pub(crate) unsafe extern "C" fn notification_event_get_2(_info: *const v8::Funct
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Action").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -15992,6 +17792,14 @@ pub(crate) unsafe extern "C" fn payment_request_event_get_1(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8TopOrigin").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -16038,6 +17846,14 @@ pub(crate) unsafe extern "C" fn payment_request_event_get_2(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PaymentRequestOrigin").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -16084,6 +17900,14 @@ pub(crate) unsafe extern "C" fn payment_request_event_get_3(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PaymentRequestId").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -16130,6 +17954,14 @@ pub(crate) unsafe extern "C" fn payment_request_event_get_4(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MethodData").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -16176,6 +18008,14 @@ pub(crate) unsafe extern "C" fn payment_request_event_get_5(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Total").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -16222,6 +18062,14 @@ pub(crate) unsafe extern "C" fn payment_request_event_get_6(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Modifiers").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -16268,6 +18116,14 @@ pub(crate) unsafe extern "C" fn payment_request_event_get_7(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PaymentOptions").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -16314,6 +18170,14 @@ pub(crate) unsafe extern "C" fn payment_request_event_get_8(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ShippingOptions").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Array::new(scope, 0).into());
     }));
 }
@@ -16586,6 +18450,14 @@ pub(crate) unsafe extern "C" fn periodic_sync_event_get_1(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Tag").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -16661,6 +18533,14 @@ pub(crate) unsafe extern "C" fn push_event_get_1(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Data").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -16707,6 +18587,14 @@ pub(crate) unsafe extern "C" fn push_event_get_2(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Notification").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -16789,6 +18677,14 @@ pub(crate) unsafe extern "C" fn push_subscription_change_event_get_1(_info: *con
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8NewSubscription").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -16835,6 +18731,14 @@ pub(crate) unsafe extern "C" fn push_subscription_change_event_get_2(_info: *con
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OldSubscription").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -16917,6 +18821,14 @@ pub(crate) unsafe extern "C" fn sync_event_get_1(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Tag").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -16963,6 +18875,14 @@ pub(crate) unsafe extern "C" fn sync_event_get_2(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8LastChance").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -17045,6 +18965,14 @@ pub(crate) unsafe extern "C" fn payment_method_change_event_get_1(_info: *const 
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MethodName").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -17091,6 +19019,14 @@ pub(crate) unsafe extern "C" fn payment_method_change_event_get_2(_info: *const 
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MethodDetails").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -17173,6 +19109,14 @@ pub(crate) unsafe extern "C" fn speech_synthesis_error_event_get_1(_info: *const
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Error").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -17248,6 +19192,14 @@ pub(crate) unsafe extern "C" fn composition_event_get_1(_info: *const v8::Functi
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Data").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -17381,6 +19333,14 @@ pub(crate) unsafe extern "C" fn focus_event_get_1(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8RelatedTarget").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -17456,6 +19416,14 @@ pub(crate) unsafe extern "C" fn input_event_get_1(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Data").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -17502,6 +19470,14 @@ pub(crate) unsafe extern "C" fn input_event_get_2(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8IsComposing").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -17548,6 +19524,14 @@ pub(crate) unsafe extern "C" fn input_event_get_3(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InputType").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -17594,6 +19578,14 @@ pub(crate) unsafe extern "C" fn input_event_get_4(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DataTransfer").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -17741,6 +19733,14 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_1(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Key").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -17787,6 +19787,14 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_2(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Code").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -17833,6 +19841,14 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_3(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Location").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -17879,6 +19895,14 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_4(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CtrlKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -17925,6 +19949,14 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_5(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ShiftKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -17971,6 +20003,14 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_6(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AltKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -18017,6 +20057,14 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_7(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MetaKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -18063,6 +20111,14 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_8(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Repeat").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -18109,6 +20165,14 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_9(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8IsComposing").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -18257,6 +20321,14 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_12(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CharCode").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -18303,6 +20375,14 @@ pub(crate) unsafe extern "C" fn keyboard_event_get_13(_info: *const v8::Function
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8KeyCode").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -18501,6 +20581,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_1(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ScreenX").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -18547,6 +20635,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_2(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ScreenY").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -18593,6 +20689,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_3(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ClientX").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -18639,6 +20743,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_4(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ClientY").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -18685,6 +20797,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_5(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8LayerX").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -18731,6 +20851,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_6(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8LayerY").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -18777,6 +20905,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_7(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CtrlKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -18823,6 +20959,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_8(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ShiftKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -18869,6 +21013,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_9(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AltKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -18915,6 +21067,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_10(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MetaKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -18961,6 +21121,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_11(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Button").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -19007,6 +21175,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_12(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Buttons").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -19053,6 +21229,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_13(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8RelatedTarget").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -19150,6 +21334,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_15(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PageX").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -19196,6 +21388,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_16(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PageY").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -19242,6 +21442,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_17(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8X").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -19288,6 +21496,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_18(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Y").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -19334,6 +21550,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_19(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OffsetX").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -19380,6 +21604,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_20(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OffsetY").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -19477,6 +21709,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_22(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MovementX").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -19523,6 +21763,14 @@ pub(crate) unsafe extern "C" fn mouse_event_get_23(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MovementY").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -19765,6 +22013,14 @@ pub(crate) unsafe extern "C" fn navigation_event_get_1(_info: *const v8::Functio
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Dir").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -19811,6 +22067,14 @@ pub(crate) unsafe extern "C" fn navigation_event_get_2(_info: *const v8::Functio
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8RelatedTarget").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -19893,6 +22157,14 @@ pub(crate) unsafe extern "C" fn text_event_get_1(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Data").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -20026,6 +22298,14 @@ pub(crate) unsafe extern "C" fn touch_event_get_1(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Touches").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -20072,6 +22352,14 @@ pub(crate) unsafe extern "C" fn touch_event_get_2(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8TargetTouches").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -20118,6 +22406,14 @@ pub(crate) unsafe extern "C" fn touch_event_get_3(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ChangedTouches").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -20164,6 +22460,14 @@ pub(crate) unsafe extern "C" fn touch_event_get_4(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AltKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -20210,6 +22514,14 @@ pub(crate) unsafe extern "C" fn touch_event_get_5(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MetaKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -20256,6 +22568,14 @@ pub(crate) unsafe extern "C" fn touch_event_get_6(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CtrlKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -20302,6 +22622,14 @@ pub(crate) unsafe extern "C" fn touch_event_get_7(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ShiftKey").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -20514,6 +22842,14 @@ pub(crate) unsafe extern "C" fn drag_event_get_1(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DataTransfer").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -20589,6 +22925,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_1(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PointerId").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -20635,6 +22979,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_2(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Width").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -20681,6 +23033,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_3(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Height").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -20727,6 +23087,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_4(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Pressure").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -20773,6 +23141,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_5(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8TangentialPressure").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -20819,6 +23195,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_6(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8TiltX").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -20865,6 +23249,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_7(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8TiltY").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -20911,6 +23303,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_8(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Twist").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -20957,6 +23357,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_9(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AltitudeAngle").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -21003,6 +23411,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_10(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AzimuthAngle").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -21049,6 +23465,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_11(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PointerType").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -21095,6 +23519,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_12(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8IsPrimary").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
@@ -21141,6 +23573,14 @@ pub(crate) unsafe extern "C" fn pointer_event_get_13(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PersistentDeviceId").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -21411,6 +23851,14 @@ pub(crate) unsafe extern "C" fn wheel_event_get_1(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DeltaX").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -21457,6 +23905,14 @@ pub(crate) unsafe extern "C" fn wheel_event_get_2(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DeltaY").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -21503,6 +23959,14 @@ pub(crate) unsafe extern "C" fn wheel_event_get_3(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DeltaZ").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
@@ -21549,6 +24013,14 @@ pub(crate) unsafe extern "C" fn wheel_event_get_4(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DeltaMode").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
@@ -21595,6 +24067,14 @@ pub(crate) unsafe extern "C" fn wheel_event_get_5(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Momentum").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }

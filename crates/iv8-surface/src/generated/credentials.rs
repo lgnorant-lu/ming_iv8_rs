@@ -48,6 +48,14 @@ pub(crate) unsafe extern "C" fn authenticator_response_get_1(_info: *const v8::F
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ClientDataJSON").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::ArrayBuffer::new(scope, 0).into());
     }));
 }
@@ -120,6 +128,14 @@ pub(crate) unsafe extern "C" fn credential_get_1(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Id").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -166,6 +182,14 @@ pub(crate) unsafe extern "C" fn credential_get_2(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Type").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
@@ -349,6 +373,14 @@ pub(crate) unsafe extern "C" fn authenticator_assertion_response_get_1(_info: *c
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AuthenticatorData").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::ArrayBuffer::new(scope, 0).into());
     }));
 }
@@ -395,6 +427,14 @@ pub(crate) unsafe extern "C" fn authenticator_assertion_response_get_2(_info: *c
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Signature").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::ArrayBuffer::new(scope, 0).into());
     }));
 }
@@ -441,6 +481,14 @@ pub(crate) unsafe extern "C" fn authenticator_assertion_response_get_3(_info: *c
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8UserHandle").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::ArrayBuffer::new(scope, 0).into());
     }));
 }
@@ -530,6 +578,14 @@ pub(crate) unsafe extern "C" fn authenticator_attestation_response_get_1(_info: 
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AttestationObject").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::ArrayBuffer::new(scope, 0).into());
     }));
 }
@@ -809,6 +865,14 @@ pub(crate) unsafe extern "C" fn public_key_credential_get_1(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8RawId").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::ArrayBuffer::new(scope, 0).into());
     }));
 }
@@ -855,6 +919,14 @@ pub(crate) unsafe extern "C" fn public_key_credential_get_2(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Response").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(v8::Object::new(scope).into());
     }));
 }
@@ -901,6 +973,14 @@ pub(crate) unsafe extern "C" fn public_key_credential_get_3(_info: *const v8::Fu
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AuthenticatorAttachment").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }

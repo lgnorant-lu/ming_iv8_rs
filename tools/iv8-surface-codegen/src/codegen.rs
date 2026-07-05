@@ -49,6 +49,26 @@ fn should_skip_attribute(interface_name: &str, attr_name: &str) -> bool {
         .any(|(iface, attr)| *iface == interface_name && *attr == attr_name)
 }
 
+/// Convert an IDL attribute name to PascalCase for hidden property names.
+/// e.g. "cssText" -> "CssText", "ownerNode" -> "OwnerNode", "page-orientation" -> "PageOrientation"
+fn to_camel_case(s: &str) -> String {
+    let mut result = String::new();
+    let mut capitalize_next = true;
+    for ch in s.chars() {
+        if ch == '-' || ch == '_' {
+            capitalize_next = true;
+            continue;
+        }
+        if capitalize_next {
+            result.push(ch.to_ascii_uppercase());
+            capitalize_next = false;
+        } else {
+            result.push(ch);
+        }
+    }
+    result
+}
+
 /// Interfaces that are constructable via JS alias constructors not
 /// represented as [Constructor] members in the IDL. These have
 /// [LegacyFactoryFunction] or [NamedConstructor] ext_attrs, or are
@@ -413,6 +433,13 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             out.push_str(
                 "        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);\n",
             );
+            // Check for __iv8 hidden property override (set by JS shims like CSSOM)
+            // If this.__iv8<PropName> exists, return it instead of the default value
+            let prop_name_camel = to_camel_case(attr_name);
+            out.push_str(&format!(
+                "        let __this = __args.this();\n        let __hidden_key = v8::String::new(scope, \"__iv8{}\").unwrap();\n        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {{\n            if !__hidden_val.is_undefined() {{\n                rv.set(__hidden_val);\n                return;\n            }}\n        }}\n",
+                prop_name_camel
+            ));
             out.push_str(&format!("        rv.set({});\n", tm.default_value));
             out.push_str("    }));\n");
             out.push_str("}\n\n");
