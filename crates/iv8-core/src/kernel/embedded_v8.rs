@@ -1007,6 +1007,37 @@ impl EmbeddedV8Kernel {
             "#);
             let _ = v8::Script::compile(scope, fix_proto_js, None).and_then(|s| s.run(scope));
 
+            // Fix readonly attribute setters: idlharness expects setter=undefined
+            // for readonly attributes. Some accessor wrappers install a JS setter.
+            let readonly_fix_js = crate::v8_utils::v8_string(scope, r#"
+                (function() {
+                    var readonlyAttrs = {
+                        'Event': ['type','target','currentTarget','srcElement','eventPhase',
+                                  'bubbles','cancelable','timeStamp','defaultPrevented','composed'],
+                        'MouseEvent': ['screenX','screenY','clientX','clientY','ctrlKey','shiftKey',
+                                       'altKey','metaKey','button','buttons','relatedTarget','region'],
+                        'CustomEvent': ['detail'],
+                    };
+                    for (var iface in readonlyAttrs) {
+                        var ctor = globalThis[iface];
+                        if (!ctor || !ctor.prototype) continue;
+                        var attrs = readonlyAttrs[iface];
+                        for (var i = 0; i < attrs.length; i++) {
+                            var desc = Object.getOwnPropertyDescriptor(ctor.prototype, attrs[i]);
+                            if (desc && desc.get && desc.set) {
+                                try {
+                                    Object.defineProperty(ctor.prototype, attrs[i], {
+                                        get: desc.get, set: undefined,
+                                        enumerable: desc.enumerable, configurable: true
+                                    });
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                })();
+            "#);
+            let _ = v8::Script::compile(scope, readonly_fix_js, None).and_then(|s| s.run(scope));
+
             let js = crate::v8_utils::v8_string(scope, r#"
                 (function() {
                     var workerOnly = ['WorkerGlobalScope','DedicatedWorkerGlobalScope',
