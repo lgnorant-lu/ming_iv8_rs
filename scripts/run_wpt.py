@@ -213,6 +213,136 @@ WPT_SUITES = [
             "requestidlecallback", "html", "dom",
         ],
     },
+    {
+        "name": "css/geometry/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "geometry" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "geometry", "dom", "html",
+        ],
+    },
+    {
+        "name": "css/filter-effects/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "filter-effects" / "idlharness.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "filter-effects", "dom", "html",
+        ],
+    },
+    {
+        "name": "css/css-animations/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-animations" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-animations", "cssom", "dom", "html",
+        ],
+    },
+    {
+        "name": "css/css-transitions/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-transitions" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-transitions", "cssom", "dom", "html",
+        ],
+    },
+    {
+        "name": "css/css-cascade/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-cascade" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-cascade", "cssom", "dom", "html",
+        ],
+    },
+    {
+        "name": "css/css-counter-styles/idlharness",
+        "test_file": FIXTURES_DIR / "css" / "css-counter-styles" / "idlharness.html",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "css-counter-styles", "cssom", "dom", "html",
+        ],
+    },
+    {
+        "name": "fullscreen/idlharness",
+        "test_file": FIXTURES_DIR / "fullscreen" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "fullscreen", "dom", "html",
+        ],
+    },
+    {
+        "name": "geolocation/idlharness",
+        "test_file": FIXTURES_DIR / "geolocation" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "geolocation", "dom", "html",
+        ],
+    },
+    {
+        "name": "intersection-observer/idlharness",
+        "test_file": FIXTURES_DIR / "intersection-observer" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "intersection-observer", "dom", "html",
+        ],
+    },
+    {
+        "name": "gamepad/idlharness",
+        "test_file": FIXTURES_DIR / "gamepad" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "gamepad", "dom", "html",
+        ],
+    },
+    {
+        "name": "fetch/api/idlharness",
+        "test_file": FIXTURES_DIR / "fetch" / "api" / "idlharness.https.any.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "fetch", "referrer-policy", "html", "dom",
+        ],
+    },
+    {
+        "name": "clipboard-apis/idlharness",
+        "test_file": FIXTURES_DIR / "clipboard-apis" / "idlharness.https.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "clipboard-apis", "dom", "html",
+        ],
+    },
+    {
+        "name": "compat/idlharness",
+        "test_file": FIXTURES_DIR / "compat" / "idlharness.window.js",
+        "variants": [
+            {"name": "default", "query": ""},
+        ],
+        "idl_specs": [
+            "compat", "dom", "html",
+        ],
+    },
 ]
 
 
