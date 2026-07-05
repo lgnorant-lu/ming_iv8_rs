@@ -338,7 +338,23 @@ pub(crate) unsafe extern "C" fn readable_byte_stream_controller_get_1(_info: *co
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "ReadableStreamBYOBRequest").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -1735,7 +1751,23 @@ pub(crate) unsafe extern "C" fn transform_stream_get_1(_info: *const v8::Functio
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "ReadableStream").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -1789,7 +1821,23 @@ pub(crate) unsafe extern "C" fn transform_stream_get_2(_info: *const v8::Functio
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "WritableStream").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -2270,7 +2318,23 @@ pub(crate) unsafe extern "C" fn writable_stream_default_controller_get_1(_info: 
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "AbortSignal").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 

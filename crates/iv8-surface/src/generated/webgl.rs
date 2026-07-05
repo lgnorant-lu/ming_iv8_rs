@@ -56,7 +56,23 @@ pub(crate) unsafe extern "C" fn web_gl2rendering_context_get_1(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "HTMLCanvasElement").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -110,7 +126,23 @@ pub(crate) unsafe extern "C" fn web_gl2rendering_context_get_2(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "GLsizei").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -164,7 +196,23 @@ pub(crate) unsafe extern "C" fn web_gl2rendering_context_get_3(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "GLsizei").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -218,7 +266,23 @@ pub(crate) unsafe extern "C" fn web_gl2rendering_context_get_4(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "GLenum").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -272,7 +336,23 @@ pub(crate) unsafe extern "C" fn web_gl2rendering_context_get_5(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "PredefinedColorSpace").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -370,7 +450,23 @@ pub(crate) unsafe extern "C" fn web_gl2rendering_context_get_6(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "PredefinedColorSpace").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -17689,7 +17785,23 @@ pub(crate) unsafe extern "C" fn web_gl_active_info_get_1(_info: *const v8::Funct
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "GLint").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -17743,7 +17855,23 @@ pub(crate) unsafe extern "C" fn web_gl_active_info_get_2(_info: *const v8::Funct
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "GLenum").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -18017,7 +18145,23 @@ pub(crate) unsafe extern "C" fn web_gl_rendering_context_get_1(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "HTMLCanvasElement").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -18071,7 +18215,23 @@ pub(crate) unsafe extern "C" fn web_gl_rendering_context_get_2(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "GLsizei").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -18125,7 +18285,23 @@ pub(crate) unsafe extern "C" fn web_gl_rendering_context_get_3(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "GLsizei").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -18179,7 +18355,23 @@ pub(crate) unsafe extern "C" fn web_gl_rendering_context_get_4(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "GLenum").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -18233,7 +18425,23 @@ pub(crate) unsafe extern "C" fn web_gl_rendering_context_get_5(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "PredefinedColorSpace").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -18331,7 +18539,23 @@ pub(crate) unsafe extern "C" fn web_gl_rendering_context_get_6(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "PredefinedColorSpace").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -28621,7 +28845,23 @@ pub(crate) unsafe extern "C" fn web_gl_shader_precision_format_get_1(_info: *con
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "GLint").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -28675,7 +28915,23 @@ pub(crate) unsafe extern "C" fn web_gl_shader_precision_format_get_2(_info: *con
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "GLint").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 
@@ -28729,7 +28985,23 @@ pub(crate) unsafe extern "C" fn web_gl_shader_precision_format_get_3(_info: *con
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        {
+            let __ctor_name = v8::String::new(scope, "GLint").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
     }));
 }
 

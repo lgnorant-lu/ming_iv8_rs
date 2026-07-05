@@ -43,6 +43,37 @@ const EXCLUDED_ATTRIBUTES: &[(&str, &str)] = &[
     ("Node", "ownerDocument"),
 ];
 
+/// Check if an IDL type name is an interface type (not a primitive or built-in).
+/// Used to determine whether to create an object with the correct prototype.
+fn is_interface_type(type_name: &str) -> bool {
+    // Strip nullable suffix
+    let name = type_name.trim_end_matches('?');
+    // Strip union types — take first member
+    let name = if name.starts_with('(') {
+        name.trim_start_matches('(').trim_end_matches(')').split(" or ").next().unwrap_or("")
+    } else {
+        name
+    };
+    let name = name.trim();
+    // Primitives and built-in types are NOT interface types
+    !matches!(
+        name,
+        "boolean" | "byte" | "octet" | "short" | "unsigned short" |
+        "long" | "unsigned long" | "long long" | "unsigned long long" |
+        "float" | "double" | "unrestricted float" | "unrestricted double" |
+        "DOMString" | "ByteString" | "USVString" | "CSSOMString" |
+        "any" | "object" | "undefined" | "void" | "bigint" |
+        "Function" | "ArrayBuffer" | "DataView" |
+        "Int8Array" | "Int16Array" | "Int32Array" | "Uint8Array" |
+        "Uint8ClampedArray" | "Uint16Array" | "Uint32Array" |
+        "Float32Array" | "Float64Array" | "BigInt64Array" | "BigUint64Array"
+    ) && !name.starts_with("sequence<")
+      && !name.starts_with("FrozenArray<")
+      && !name.starts_with("record<")
+      && !name.starts_with("Promise<")
+      && !name.is_empty()
+}
+
 fn should_skip_attribute(interface_name: &str, attr_name: &str) -> bool {
     EXCLUDED_ATTRIBUTES
         .iter()
@@ -440,7 +471,16 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
                 "        let __this = __args.this();\n        let __hidden_key = v8::String::new(scope, \"__iv8{}\").unwrap();\n        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {{\n            if !__hidden_val.is_undefined() {{\n                rv.set(__hidden_val);\n                return;\n            }}\n        }}\n",
                 prop_name_camel
             ));
-            out.push_str(&format!("        rv.set({});\n", tm.default_value));
+            // For interface-typed attributes, create an object with the correct prototype
+            // instead of a bare Object::new() with Object.prototype
+            if is_interface_type(type_name) {
+                out.push_str(&format!(
+                    "        {{\n            let __ctor_name = v8::String::new(scope, \"{}\").unwrap();\n            let __ctx = scope.get_current_context();\n            let __global = __ctx.global(scope);\n            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {{\n                if __ctor.is_object() {{\n                    let __proto_key = v8::String::new(scope, \"prototype\").unwrap();\n                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {{\n                        let __obj = v8::Object::new(scope);\n                        __obj.set_prototype(scope, __proto);\n                        rv.set(__obj.into());\n                        return;\n                    }}\n                }}\n            }}\n            rv.set(v8::Object::new(scope).into());\n        }}\n",
+                    type_name
+                ));
+            } else {
+                out.push_str(&format!("        rv.set({});\n", tm.default_value));
+            }
             out.push_str("    }));\n");
             out.push_str("}\n\n");
 
