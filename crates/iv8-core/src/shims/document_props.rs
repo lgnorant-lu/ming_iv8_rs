@@ -287,11 +287,73 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // the shim is the single source of truth.
     Object.defineProperty(document, 'scrollingElement', { get: function() { return document.body || null; }, configurable: true });
     Object.defineProperty(document, 'currentScript', { get: function() { return null; }, configurable: true });
+    // Override document.createRange to return object with correct prototype
+    // codegen callback returns Object::new() with Object.prototype, not Range.prototype
+    if (typeof Range !== 'undefined') {
+        document.createRange = function createRange() {
+            return Object.create(Range.prototype);
+        };
+    }
+    // Override document.createEvent to return objects with correct prototypes
+    if (typeof Event !== 'undefined') {
+        var origCreateEvent = document.createEvent;
+        document.createEvent = function createEvent(type) {
+            var ctorMap = { Event: Event, CustomEvent: CustomEvent, MouseEvent: MouseEvent, UIEvent: UIEvent, KeyboardEvent: KeyboardEvent, AnimationEvent: AnimationEvent, TransitionEvent: TransitionEvent, MessageEvent: MessageEvent, DragEvent: DragEvent, BeforeUnloadEvent: BeforeUnloadEvent, HashChangeEvent: HashChangeEvent, PageTransitionEvent: PageTransitionEvent, PopStateEvent: PopStateEvent, StorageEvent: StorageEvent, SubmitEvent: SubmitEvent, ToggleEvent: ToggleEvent, CloseWatcher: CloseWatcher, PromiseRejectionEvent: PromiseRejectionEvent, ErrorEvent: ErrorEvent, FormDataEvent: FormDataEvent, DragEvent: DragEvent };
+            var Ctor = ctorMap[type];
+            if (Ctor) {
+                try { return new Ctor(type); } catch(e) {}
+            }
+            return new Event(type);
+        };
+    }
     if (!document.implementation) {
         var implProto = (typeof DOMImplementation !== 'undefined') ? DOMImplementation.prototype : Object.prototype;
         var impl = Object.create(implProto);
         Object.defineProperty(impl, 'createHTMLDocument', { value: function(t) { return document; }, writable: true, configurable: true, enumerable: true });
         Object.defineProperty(impl, 'hasFeature', { value: function() { return true; }, writable: true, configurable: true, enumerable: true });
+        // createDocument: return an XMLDocument-like object with Document prototype
+        // codegen callback returns Object::new() without proper prototype
+        Object.defineProperty(impl, 'createDocument', { value: function createDocument(ns, name, doctype) {
+            var docProto = (typeof XMLDocument !== 'undefined') ? XMLDocument.prototype : (typeof Document !== 'undefined' ? Document.prototype : Object.prototype);
+            var doc = Object.create(docProto);
+            Object.defineProperty(doc, Symbol.toStringTag, { value: 'XMLDocument', writable: true, configurable: true, enumerable: false });
+            // Override createElementNS to return Element with correct prototype
+            // codegen callback returns Object::new() without Element.prototype
+            // Use document.createElement internally to get a real Element instance
+            doc.createElementNS = function createElementNS(ns, qname) {
+                return document.createElement(qname || 'div');
+            };
+            doc.createElement = function createElement(tag) {
+                return document.createElement(tag || 'div');
+            };
+            doc.createProcessingInstruction = function createProcessingInstruction(target, data) {
+                var piProto = (typeof ProcessingInstruction !== 'undefined') ? ProcessingInstruction.prototype : Object.prototype;
+                return Object.create(piProto);
+            };
+            doc.createAttribute = function createAttribute(name) {
+                var attrProto = (typeof Attr !== 'undefined') ? Attr.prototype : Object.prototype;
+                return Object.create(attrProto);
+            };
+            doc.createCDATASection = function createCDATASection(data) {
+                var textProto = (typeof Text !== 'undefined') ? Text.prototype : Object.prototype;
+                return Object.create(textProto);
+            };
+            doc.createTextNode = function createTextNode(data) {
+                var textProto = (typeof Text !== 'undefined') ? Text.prototype : Object.prototype;
+                return Object.create(textProto);
+            };
+            doc.createComment = function createComment(data) {
+                var commentProto = (typeof Comment !== 'undefined') ? Comment.prototype : Object.prototype;
+                return Object.create(commentProto);
+            };
+            return doc;
+        }, writable: true, configurable: true, enumerable: true });
+        // createDocumentType: return a DocumentType-like object
+        Object.defineProperty(impl, 'createDocumentType', { value: function createDocumentType(qname, publicId, systemId) {
+            var dtProto = (typeof DocumentType !== 'undefined') ? DocumentType.prototype : Object.prototype;
+            var dt = Object.create(dtProto);
+            return dt;
+        }, writable: true, configurable: true, enumerable: true });
         document.implementation = impl;
     }
     Object.defineProperty(document, 'defaultView', { get: function() { return window; }, configurable: true });
