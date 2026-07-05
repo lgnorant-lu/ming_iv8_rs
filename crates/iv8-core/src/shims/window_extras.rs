@@ -498,14 +498,10 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             });
             Object.defineProperty(performance, 'navigation', { value: _pn, writable: true, enumerable: true, configurable: true });
         }
-        if (!performance.getEntries) {
-            Object.defineProperty(performance, 'getEntries', { value: function getEntries() { return []; }, writable: true, enumerable: true, configurable: true });
-        }
-        if (!performance.getEntriesByName) {
-            Object.defineProperty(performance, 'getEntriesByName', { value: function getEntriesByName() { return []; }, writable: true, enumerable: true, configurable: true });
-        }
-        if (!performance.getEntriesByType) {
-            Object.defineProperty(performance, 'getEntriesByType', { value: function getEntriesByType(type) {
+        // Always override getEntries/getEntriesByType: codegen stubs return
+        // undefined, but idlharness needs proper return values.
+        {
+            var _getEntriesByType = function getEntriesByType(type) {
                 if (type === 'navigation' && typeof PerformanceNavigationTiming !== 'undefined') {
                     var _navStart = performance.timeOrigin || Date.now();
                     var entry = Object.create(PerformanceNavigationTiming.prototype);
@@ -528,7 +524,12 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                     return [entry];
                 }
                 return [];
+            };
+            Object.defineProperty(performance, 'getEntriesByType', { value: _getEntriesByType, writable: true, enumerable: true, configurable: true });
+            Object.defineProperty(performance, 'getEntries', { value: function getEntries() {
+                return _getEntriesByType('navigation');
             }, writable: true, enumerable: true, configurable: true });
+            Object.defineProperty(performance, 'getEntriesByName', { value: function getEntriesByName() { return []; }, writable: true, enumerable: true, configurable: true });
         }
         if (!performance.mark) {
             Object.defineProperty(performance, 'mark', { value: function mark(name) {}, writable: true, enumerable: true, configurable: true });
