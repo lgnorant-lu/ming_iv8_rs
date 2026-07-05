@@ -683,6 +683,21 @@ impl EmbeddedV8Kernel {
                         ['Screen','Object'],
                         ['VisualViewport','EventTarget'],
                         ['Location','Object'],
+                        ['IDBRequest','EventTarget'], ['IDBDatabase','EventTarget'],
+                        ['IDBTransaction','EventTarget'], ['IDBVersionChangeEvent','Event'],
+                        ['IDBOpenDBRequest','IDBRequest'],
+                        ['Performance','EventTarget'],
+                        ['ScreenOrientation','EventTarget'],
+                        ['PerformanceEntry','Object'],
+                        ['PerformanceResourceTiming','PerformanceEntry'],
+                        ['PerformanceNavigationTiming','PerformanceResourceTiming'],
+                        ['PerformanceObserver','EventTarget'],
+                        ['XMLHttpRequestEventTarget','EventTarget'],
+                        ['XMLHttpRequest','XMLHttpRequestEventTarget'],
+                        ['XMLHttpRequestUpload','XMLHttpRequestEventTarget'],
+                        ['WebSocket','EventTarget'],
+                        ['Animation','EventTarget'],
+                        ['FileReader','EventTarget'],
                     ];
                     for (var i = 0; i < fixes.length; i++) {
                         var child = fixes[i][0], parent = fixes[i][1];
