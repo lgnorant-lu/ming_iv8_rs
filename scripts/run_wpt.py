@@ -99,7 +99,7 @@ WPT_SUITES = [
         ],
     },
     {
-        "name": "FileAPI/idlharness",
+        "name": "FileAPI/idlharness.html",
         "test_file": FIXTURES_DIR / "FileAPI" / "idlharness.html",
         "variants": [
             {"name": "default", "query": ""},
@@ -519,7 +519,7 @@ WPT_SUITES = [
         ],
     },
     {
-        "name": "css/css-transitions/idlharness",
+        "name": "css/css-transitions/idlharness-2",
         "test_file": FIXTURES_DIR / "css" / "css-transitions" / "idlharness-2.html",
         "variants": [
             {"name": "default", "query": ""},
@@ -619,16 +619,6 @@ WPT_SUITES = [
         ],
     },
     {
-        "name": "dom/idlharness",
-        "test_file": FIXTURES_DIR / "dom" / "idlharness.any.js",
-        "variants": [
-            {"name": "default", "query": ""},
-        ],
-        "idl_specs": [
-            "dom", "html",
-        ],
-    },
-    {
         "name": "dom/observable/tentative/idlharness",
         "test_file": FIXTURES_DIR / "dom" / "observable" / "tentative" / "idlharness.html",
         "variants": [
@@ -649,27 +639,7 @@ WPT_SUITES = [
         ],
     },
     {
-        "name": "encrypted-media/idlharness",
-        "test_file": FIXTURES_DIR / "encrypted-media" / "idlharness.https.html",
-        "variants": [
-            {"name": "default", "query": ""},
-        ],
-        "idl_specs": [
-            "encrypted-media", "html", "dom",
-        ],
-    },
-    {
-        "name": "entries-api/idlharness",
-        "test_file": FIXTURES_DIR / "entries-api" / "idlharness.window.js",
-        "variants": [
-            {"name": "default", "query": ""},
-        ],
-        "idl_specs": [
-            "entries-api", "FileAPI", "html", "dom",
-        ],
-    },
-    {
-        "name": "event-timing/idlharness",
+        "name": "event-timing/idlharness.any",
         "test_file": FIXTURES_DIR / "event-timing" / "idlharness.any.js",
         "variants": [
             {"name": "default", "query": ""},
@@ -739,7 +709,7 @@ WPT_SUITES = [
         ],
     },
     {
-        "name": "gamepad/idlharness",
+        "name": "gamepad/idlharness-extensions",
         "test_file": FIXTURES_DIR / "gamepad" / "idlharness-extensions.https.window.js",
         "variants": [
             {"name": "default", "query": ""},
@@ -849,7 +819,7 @@ WPT_SUITES = [
         ],
     },
     {
-        "name": "idle-detection/idlharness",
+        "name": "idle-detection/idlharness-worker",
         "test_file": FIXTURES_DIR / "idle-detection" / "idlharness-worker.https.window.js",
         "variants": [
             {"name": "default", "query": ""},
@@ -1998,6 +1968,30 @@ WPT_SUITES = [
             "xhr", "dom", "html",
         ],
     },
+    {
+        "name": "element-timing/idlharness",
+        "test_file": FIXTURES_DIR / "element-timing" / "idlharness.window.js",
+        "variants": [{"name": "default", "query": ""}],
+        "idl_specs": ["element-timing", "performance-timeline", "dom"],
+    },
+    {
+        "name": "deprecation-reporting/idlharness",
+        "test_file": FIXTURES_DIR / "deprecation-reporting" / "idlharness.any.js",
+        "variants": [{"name": "default", "query": ""}],
+        "idl_specs": ["deprecation-reporting", "reporting"],
+    },
+    {
+        "name": "intervention-reporting/idlharness",
+        "test_file": FIXTURES_DIR / "intervention-reporting" / "idlharness.any.js",
+        "variants": [{"name": "default", "query": ""}],
+        "idl_specs": ["intervention-reporting", "reporting"],
+    },
+    {
+        "name": "webrtc-stats/idlharness",
+        "test_file": FIXTURES_DIR / "webrtc-stats" / "idlharness.window.js",
+        "variants": [{"name": "default", "query": ""}],
+        "idl_specs": ["webrtc-stats", "webrtc", "dom", "html"],
+    },
 ]
 
 
@@ -2453,6 +2447,8 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="WPT official test runner")
     parser.add_argument("--suite", "-s", help="Filter suite (e.g. html/dom)")
+    parser.add_argument("--baseline", "-b", action="store_true",
+                        help="Only run Chrome baseline 10 files (9640 tests)")
     parser.add_argument("--update", action="store_true",
                         help="Update status files to match current results")
     parser.add_argument("--output", "-o", default=str(OUT_PATH))
@@ -2470,6 +2466,14 @@ def main() -> None:
             suites = WPT_SUITES
             if args.suite:
                 suites = [s for s in suites if args.suite in s["name"]]
+            elif args.baseline:
+                # Only Chrome baseline 10 files
+                baseline_names = {
+                    "html/dom/idlharness", "html/dom/idlharness.worker",
+                    "dom/idlharness", "dom/idlharness.worker",
+                    "css/cssom-view/idlharness",
+                }
+                suites = [s for s in suites if s["name"] in baseline_names]
 
             all_results = []
             for suite in suites:
