@@ -52,6 +52,18 @@ WPT_SUITES = [
         ],
     },
     {
+        "name": "html/dom/idlharness.worker",
+        "test_file": FIXTURES_DIR / "html" / "dom" / "idlharness.any.js",
+        "is_worker": True,
+        "variants": [
+            {"name": "worker", "query": ""},
+        ],
+        "idl_specs": [
+            "html", "wai-aria", "dom", "cssom", "touch-events", "pointerevents",
+            "uievents", "performance-timeline",
+        ],
+    },
+    {
         "name": "dom/idlharness",
         "test_file": FIXTURES_DIR / "dom" / "idlharness.window.js",
         "variants": [
@@ -60,6 +72,19 @@ WPT_SUITES = [
         ],
         "idl_specs": [
             "dom", "fullscreen", "html",
+        ],
+    },
+    {
+        "name": "dom/idlharness.worker",
+        "test_file": FIXTURES_DIR / "dom" / "idlharness.any.js",
+        "is_worker": True,
+        "variants": [
+            {"name": "worker", "query": ""},
+            {"name": "serviceworker", "query": ""},
+            {"name": "sharedworker", "query": ""},
+        ],
+        "idl_specs": [
+            "dom", "html",
         ],
     },
     # === Single-variant suites (auto-generated) ===
@@ -2099,6 +2124,7 @@ def run_suite(suite: dict, variant: dict, resources: dict) -> dict:
     variant_name = variant["name"]
     variant_query = variant["query"]
     test_file = suite["test_file"]
+    is_worker = suite.get("is_worker", False)
 
     if not test_file.exists():
         return {
@@ -2117,6 +2143,8 @@ def run_suite(suite: dict, variant: dict, resources: dict) -> dict:
         test_code = extract_script_from_html(test_file)
     else:
         test_code = test_file.read_text(encoding="utf-8")
+        # Strip META comments from .any.js / .window.js files
+        test_code = re.sub(r'^//\s*META:.*$', '', test_code, flags=re.MULTILINE)
 
     # Neutralize setup() calls that create DOM elements (video, iframe, etc.)
     # These crash in IV8 because createElement('video') returns a div-like
@@ -2142,11 +2170,32 @@ def run_suite(suite: dict, variant: dict, resources: dict) -> dict:
         # testharness.js IIFE registers load event listener at load time
         # via window.addEventListener('load', callback). We must intercept
         # this before testharness.js executes.
+        is_window = "false" if is_worker else "true"
+        is_worker_js = "true" if is_worker else "false"
+        worker_shim = ""
+        if is_worker:
+            # Only define the GlobalScope matching this variant
+            # idlharness.exposed_in() checks 'XxxGlobalScope' in self && self instanceof XxxGlobalScope
+            # We patch the instanceof check to true, so only the 'in' check matters
+            worker_type = variant_name  # worker/serviceworker/sharedworker
+            if worker_type == "serviceworker":
+                scope_name = "ServiceWorkerGlobalScope"
+            elif worker_type == "sharedworker":
+                scope_name = "SharedWorkerGlobalScope"
+            else:
+                scope_name = "DedicatedWorkerGlobalScope"
+            worker_shim = f"""
+// Worker context ({worker_type}): define {scope_name} for idlharness instanceof check
+if (typeof {scope_name} === 'undefined') {{
+    globalThis.{scope_name} = function {scope_name}() {{}};
+}}
+"""
         pre_shim = f"""
 globalThis.GLOBAL = globalThis;
-globalThis.GLOBAL.isWindow = function() {{ return true; }};
-globalThis.GLOBAL.isWorker = function() {{ return false; }};
+globalThis.GLOBAL.isWindow = function() {{ return {is_window}; }};
+globalThis.GLOBAL.isWorker = function() {{ return {is_worker_js}; }};
 globalThis.GLOBAL.isShadowRealm = function() {{ return false; }};
+{worker_shim}
 Object.defineProperty(globalThis, 'location', {{
     value: {{ search: {json.dumps(variant_query)}, href: 'about:blank' }},
     writable: true, configurable: true, enumerable: true
@@ -2224,7 +2273,34 @@ self.xmlss_pi = document.createProcessingInstruction('xml-stylesheet', 'href="da
             ctx.eval(subset_path.read_text(encoding="utf-8"),
                      name="subset-tests-by-key.js")
         ctx.eval(resources["webidl2.js"], name="webidl2.js")
-        ctx.eval(resources["idlharness.js"], name="idlharness.js")
+        idlharness_code = resources["idlharness.js"]
+        if is_worker:
+            worker_type = variant_name  # "worker", "serviceworker", "sharedworker"
+            # Patch idlharness to think we're in the specified Worker context
+            idlharness_code = idlharness_code.replace(
+                "'Window' in self",
+                "false",
+            )
+            # Map variant name to GlobalScope type
+            if worker_type == "serviceworker":
+                idlharness_code = idlharness_code.replace(
+                    "self instanceof ServiceWorkerGlobalScope",
+                    "typeof ServiceWorkerGlobalScope !== 'undefined' && true",
+                )
+                worker_scope_name = "ServiceWorkerGlobalScope"
+            elif worker_type == "sharedworker":
+                idlharness_code = idlharness_code.replace(
+                    "self instanceof SharedWorkerGlobalScope",
+                    "typeof SharedWorkerGlobalScope !== 'undefined' && true",
+                )
+                worker_scope_name = "SharedWorkerGlobalScope"
+            else:
+                idlharness_code = idlharness_code.replace(
+                    "self instanceof DedicatedWorkerGlobalScope",
+                    "typeof DedicatedWorkerGlobalScope !== 'undefined' && true",
+                )
+                worker_scope_name = "DedicatedWorkerGlobalScope"
+        ctx.eval(idlharness_code, name="idlharness.js")
 
         # Post-shim: add result callback + completion callback
         post_shim = """
