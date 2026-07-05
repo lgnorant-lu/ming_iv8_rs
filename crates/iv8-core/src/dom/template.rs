@@ -1081,7 +1081,9 @@ pub fn install_dom_constructors(
         ("Request", &templates.request),
         ("Text", &templates.text_node),
         ("Comment", &templates.comment_node),
-        ("Document", &templates.document_node),
+        // Document: keep codegen constructor (construct_only) which allows
+        // `new Document()` per WebIDL spec. DOM template's illegal_dom_constructor
+        // would block construction, causing idlharness to skip Document tests.
     ];
 
     // Install all constructors first, then fix up __proto__ chains.

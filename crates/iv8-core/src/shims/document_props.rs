@@ -288,7 +288,11 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     Object.defineProperty(document, 'scrollingElement', { get: function() { return document.body || null; }, configurable: true });
     Object.defineProperty(document, 'currentScript', { get: function() { return null; }, configurable: true });
     if (!document.implementation) {
-        document.implementation = { createHTMLDocument: function(t) { return document; }, hasFeature: function() { return true; } };
+        var implProto = (typeof DOMImplementation !== 'undefined') ? DOMImplementation.prototype : Object.prototype;
+        var impl = Object.create(implProto);
+        Object.defineProperty(impl, 'createHTMLDocument', { value: function(t) { return document; }, writable: true, configurable: true, enumerable: true });
+        Object.defineProperty(impl, 'hasFeature', { value: function() { return true; }, writable: true, configurable: true, enumerable: true });
+        document.implementation = impl;
     }
     Object.defineProperty(document, 'defaultView', { get: function() { return window; }, configurable: true });
     Object.defineProperty(document, 'ownerDocument', { get: function() { return null; }, configurable: true });
