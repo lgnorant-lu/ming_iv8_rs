@@ -2140,17 +2140,10 @@ def run_suite(suite: dict, variant: dict, resources: dict) -> dict:
         # Strip META comments from .any.js / .window.js files
         test_code = re.sub(r'^//\s*META:.*$', '', test_code, flags=re.MULTILINE)
 
-    # Neutralize setup() calls that create DOM elements (video, iframe, etc.)
-    # These crash in IV8 because createElement('video') returns a div-like
-    # element without media capabilities. Replace setup(function() {...})
-    # with a no-op, preserving the idl_test() call intact.
-    # Pattern: setup(function() { ... });
-    test_code = re.sub(
-        r'setup\s*\(\s*function\s*\(\s*\)\s*\{[^}]*(?:\{[^}]*\}[^}]*)*\}\s*\)',
-        'setup(function() {})',
-        test_code,
-        count=1,
-    )
+    # Test code is used as-is. Previous versions neutralized setup() calls
+    # that create DOM elements (video, iframe, etc.) because createElement
+    # returned incomplete elements. This is no longer needed — the DOM
+    # template hierarchy now supports these element types correctly.
 
     # Create IV8 context
     ctx = iv8.JSContext()
