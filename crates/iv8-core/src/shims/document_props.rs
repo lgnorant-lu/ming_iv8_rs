@@ -876,6 +876,12 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             thead: 'HTMLTableSectionElement', tbody: 'HTMLTableSectionElement',
             tfoot: 'HTMLTableSectionElement', col: 'HTMLTableColElement',
             colgroup: 'HTMLTableColElement', caption: 'HTMLTableCaptionElement',
+            frameset: 'HTMLFrameSetElement', frame: 'HTMLFrameElement',
+            marquee: 'HTMLMarqueeElement', param: 'HTMLParamElement',
+            font: 'HTMLFontElement', dir: 'HTMLDirectoryElement',
+            listing: 'HTMLPreElement', xmp: 'HTMLPreElement',
+            menu: 'HTMLMenuElement', noscript: 'HTMLElement',
+            nobr: 'HTMLElement', center: 'HTMLElement',
         };
         var _origCreate = document.createElement;
         if (_origCreate && !_origCreate.__iv8ElemPatched) {
