@@ -121,6 +121,34 @@ fn dom_instance_get_attribute_works() {
     assert_eq!(result, RustValue::String("foo".into()));
 }
 
+// Codegen accessor properties (baseURI, ownerDocument) must be visible
+// in the DOM prototype chain after chain_dom_prototypes + reapply.
+#[test]
+fn codegen_attrs_visible_on_dom_prototype() {
+    let mut kernel = common::make_kernel_with_doc("<div>hello</div>");
+    let result = kernel.eval_to_rust_value(r#"
+        (function() {
+            var el = document.createElement('div');
+            var results = [];
+            results.push('baseURI' in el ? 'PASS' : 'FAIL:baseURI not in div');
+            results.push('ownerDocument' in el ? 'PASS' : 'FAIL:ownerDocument not in div');
+            results.push('appendChild' in el ? 'PASS' : 'FAIL:appendChild not in div');
+            results.push('addEventListener' in el ? 'PASS' : 'FAIL:addEventListener not in div');
+            return results.join(';');
+        })()
+    "#);
+    match &result {
+        RustValue::String(s) => {
+            for part in s.split(';') {
+                if part.starts_with("FAIL") {
+                    panic!("{}", part);
+                }
+            }
+        }
+        other => panic!("Expected string, got {:?}", other),
+    }
+}
+
 // DOM prototype access must throw — but only for codegen-generated attributes.
 // Dom-native attributes (tagName, parentNode, etc.) use run_accessor which
 // doesn't have receiver check yet. This is a known limitation.

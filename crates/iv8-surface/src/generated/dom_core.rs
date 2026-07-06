@@ -14761,6 +14761,60 @@ pub(crate) unsafe extern "C" fn node_get_3(_info: *const v8::FunctionCallbackInf
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8BaseURI").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+pub(crate) unsafe extern "C" fn node_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Node").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
         let __hidden_key = v8::String::new(scope, "__iv8IsConnected").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
@@ -14772,7 +14826,77 @@ pub(crate) unsafe extern "C" fn node_get_3(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_op_4(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Node").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OwnerDocument").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
+        {
+            let __ctor_name = v8::String::new(scope, "Document").unwrap();
+            let __ctx = scope.get_current_context();
+            let __global = __ctx.global(scope);
+            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
+                if __ctor.is_object() {
+                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+            rv.set(v8::Object::new(scope).into());
+        }
+    }));
+}
+
+pub(crate) unsafe extern "C" fn node_op_6(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -14816,7 +14940,7 @@ pub(crate) unsafe extern "C" fn node_op_4(_info: *const v8::FunctionCallbackInfo
     rv.set(v8::Object::new(scope).into());
 }
 
-pub(crate) unsafe extern "C" fn node_get_5(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -14886,7 +15010,7 @@ pub(crate) unsafe extern "C" fn node_get_5(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_get_6(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -14956,7 +15080,7 @@ pub(crate) unsafe extern "C" fn node_get_6(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_op_7(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_op_9(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -15000,7 +15124,7 @@ pub(crate) unsafe extern "C" fn node_op_7(_info: *const v8::FunctionCallbackInfo
     rv.set(v8::Boolean::new(scope, false).into());
 }
 
-pub(crate) unsafe extern "C" fn node_get_8(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -15070,7 +15194,7 @@ pub(crate) unsafe extern "C" fn node_get_8(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_get_9(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -15140,7 +15264,7 @@ pub(crate) unsafe extern "C" fn node_get_9(_info: *const v8::FunctionCallbackInf
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_get_10(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_get_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -15210,7 +15334,7 @@ pub(crate) unsafe extern "C" fn node_get_10(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_get_11(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_get_13(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -15280,7 +15404,7 @@ pub(crate) unsafe extern "C" fn node_get_11(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_get_12(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_get_14(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -15350,7 +15474,7 @@ pub(crate) unsafe extern "C" fn node_get_12(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_get_13(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_get_15(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -15404,7 +15528,7 @@ pub(crate) unsafe extern "C" fn node_get_13(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_set_13(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_set_15(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -15448,7 +15572,7 @@ pub(crate) unsafe extern "C" fn node_set_13(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_get_14(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_get_16(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -15502,7 +15626,7 @@ pub(crate) unsafe extern "C" fn node_get_14(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_set_14(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_set_16(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -15546,7 +15670,7 @@ pub(crate) unsafe extern "C" fn node_set_14(_info: *const v8::FunctionCallbackIn
     }));
 }
 
-pub(crate) unsafe extern "C" fn node_op_15(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_op_17(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -15590,7 +15714,7 @@ pub(crate) unsafe extern "C" fn node_op_15(_info: *const v8::FunctionCallbackInf
     rv.set(v8::undefined(scope).into());
 }
 
-pub(crate) unsafe extern "C" fn node_op_16(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn node_op_18(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -15632,108 +15756,6 @@ pub(crate) unsafe extern "C" fn node_op_16(_info: *const v8::FunctionCallbackInf
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     rv.set(v8::Object::new(scope).into());
-}
-
-pub(crate) unsafe extern "C" fn node_op_17(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Node").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if __args.length() < 1 {
-            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
-            let exc = v8::Exception::type_error(scope, msg);
-            scope.throw_exception(exc);
-            return;
-        }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Boolean::new(scope, false).into());
-}
-
-pub(crate) unsafe extern "C" fn node_op_18(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Node").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if __args.length() < 1 {
-            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
-            let exc = v8::Exception::type_error(scope, msg);
-            scope.throw_exception(exc);
-            return;
-        }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Boolean::new(scope, false).into());
 }
 
 pub(crate) unsafe extern "C" fn node_op_19(_info: *const v8::FunctionCallbackInfo) {
@@ -15784,7 +15806,7 @@ pub(crate) unsafe extern "C" fn node_op_19(_info: *const v8::FunctionCallbackInf
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Integer::new(scope, 0).into());
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
 pub(crate) unsafe extern "C" fn node_op_20(_info: *const v8::FunctionCallbackInfo) {
@@ -15886,7 +15908,7 @@ pub(crate) unsafe extern "C" fn node_op_21(_info: *const v8::FunctionCallbackInf
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(crate::type_conv::v8_str(scope, ""));
+    rv.set(v8::Integer::new(scope, 0).into());
 }
 
 pub(crate) unsafe extern "C" fn node_op_22(_info: *const v8::FunctionCallbackInfo) {
@@ -15937,7 +15959,7 @@ pub(crate) unsafe extern "C" fn node_op_22(_info: *const v8::FunctionCallbackInf
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(crate::type_conv::v8_str(scope, ""));
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
 pub(crate) unsafe extern "C" fn node_op_23(_info: *const v8::FunctionCallbackInfo) {
@@ -15988,7 +16010,7 @@ pub(crate) unsafe extern "C" fn node_op_23(_info: *const v8::FunctionCallbackInf
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Boolean::new(scope, false).into());
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
 pub(crate) unsafe extern "C" fn node_op_24(_info: *const v8::FunctionCallbackInfo) {
@@ -16032,14 +16054,14 @@ pub(crate) unsafe extern "C" fn node_op_24(_info: *const v8::FunctionCallbackInf
             }
         }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if __args.length() < 2 {
-            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
+        if __args.length() < 1 {
+            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
             scope.throw_exception(exc);
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
 pub(crate) unsafe extern "C" fn node_op_25(_info: *const v8::FunctionCallbackInfo) {
@@ -16090,7 +16112,7 @@ pub(crate) unsafe extern "C" fn node_op_25(_info: *const v8::FunctionCallbackInf
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
 pub(crate) unsafe extern "C" fn node_op_26(_info: *const v8::FunctionCallbackInfo) {
@@ -16145,6 +16167,108 @@ pub(crate) unsafe extern "C" fn node_op_26(_info: *const v8::FunctionCallbackInf
 }
 
 pub(crate) unsafe extern "C" fn node_op_27(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Node").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if __args.length() < 1 {
+            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Object::new(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn node_op_28(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Node").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if __args.length() < 2 {
+            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Object::new(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn node_op_29(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -16332,128 +16456,142 @@ fn install_node_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s,
         getter.set_class_name(v8::String::new(scope, "get nodeName").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: baseURI
+    {
+        let name = v8::String::new(scope, "baseURI").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(node_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseURI").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
     // attribute: isConnected
     {
         let name = v8::String::new(scope, "isConnected").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(node_get_3).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(node_get_4).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get isConnected").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: ownerDocument
+    {
+        let name = v8::String::new(scope, "ownerDocument").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(node_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ownerDocument").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getRootNode()
     {
         let name = v8::String::new(scope, "getRootNode").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_4).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_6).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: parentNode
     {
         let name = v8::String::new(scope, "parentNode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(node_get_5).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(node_get_7).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get parentNode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: parentElement
     {
         let name = v8::String::new(scope, "parentElement").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(node_get_6).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(node_get_8).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get parentElement").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_node_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: hasChildNodes()
     {
         let name = v8::String::new(scope, "hasChildNodes").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_7).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_9).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: childNodes
     {
         let name = v8::String::new(scope, "childNodes").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(node_get_8).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(node_get_10).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get childNodes").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_node_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: firstChild
     {
         let name = v8::String::new(scope, "firstChild").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(node_get_9).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(node_get_11).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get firstChild").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: lastChild
     {
         let name = v8::String::new(scope, "lastChild").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(node_get_10).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(node_get_12).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get lastChild").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: previousSibling
     {
         let name = v8::String::new(scope, "previousSibling").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(node_get_11).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(node_get_13).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get previousSibling").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: nextSibling
     {
         let name = v8::String::new(scope, "nextSibling").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(node_get_12).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(node_get_14).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get nextSibling").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: nodeValue
     {
         let name = v8::String::new(scope, "nodeValue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(node_get_13).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(node_get_15).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get nodeValue").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(node_set_13).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(node_set_15).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set nodeValue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: textContent
     {
         let name = v8::String::new(scope, "textContent").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(node_get_14).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(node_get_16).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get textContent").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(node_set_14).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(node_set_16).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set textContent").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: normalize()
     {
         let name = v8::String::new(scope, "normalize").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_15).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_17).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: cloneNode()
     {
         let name = v8::String::new(scope, "cloneNode").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_16).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: isEqualNode()
-    {
-        let name = v8::String::new(scope, "isEqualNode").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_17).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: isSameNode()
-    {
-        let name = v8::String::new(scope, "isSameNode").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_18).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_18).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
 }
 
 fn install_node_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
+    // method: isEqualNode()
+    {
+        let name = v8::String::new(scope, "isEqualNode").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_19).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isSameNode()
+    {
+        let name = v8::String::new(scope, "isSameNode").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_20).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
     // const: DOCUMENT_POSITION_DISCONNECTED
     {
         let name = v8::String::new(scope, "DOCUMENT_POSITION_DISCONNECTED").unwrap();
@@ -16493,27 +16631,13 @@ fn install_node_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s,
     // method: compareDocumentPosition()
     {
         let name = v8::String::new(scope, "compareDocumentPosition").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_19).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_21).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: contains()
     {
         let name = v8::String::new(scope, "contains").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_20).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: lookupPrefix()
-    {
-        let name = v8::String::new(scope, "lookupPrefix").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_21).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: lookupNamespaceURI()
-    {
-        let name = v8::String::new(scope, "lookupNamespaceURI").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_22).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
@@ -16521,38 +16645,52 @@ fn install_node_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s,
 }
 
 fn install_node_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
+    // method: lookupPrefix()
+    {
+        let name = v8::String::new(scope, "lookupPrefix").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_23).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: lookupNamespaceURI()
+    {
+        let name = v8::String::new(scope, "lookupNamespaceURI").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_24).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
     // method: isDefaultNamespace()
     {
         let name = v8::String::new(scope, "isDefaultNamespace").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_23).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_25).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: insertBefore()
     {
         let name = v8::String::new(scope, "insertBefore").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_24).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_26).length(2).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: appendChild()
     {
         let name = v8::String::new(scope, "appendChild").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_25).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_27).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: replaceChild()
     {
         let name = v8::String::new(scope, "replaceChild").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_26).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_28).length(2).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: removeChild()
     {
         let name = v8::String::new(scope, "removeChild").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_27).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(node_op_29).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -50822,9 +50960,9 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "nodeValue").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(node_get_13).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(node_get_15).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get nodeValue").unwrap());
-                        let s = v8::FunctionTemplate::builder_raw(node_set_13).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(node_set_15).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set nodeValue").unwrap());
                         let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
@@ -50846,9 +50984,9 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "textContent").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(node_get_14).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(node_get_16).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get textContent").unwrap());
-                        let s = v8::FunctionTemplate::builder_raw(node_set_14).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(node_set_16).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set textContent").unwrap());
                         let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
