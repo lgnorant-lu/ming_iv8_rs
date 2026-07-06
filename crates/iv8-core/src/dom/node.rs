@@ -48,6 +48,10 @@ pub enum NodeData {
 
     /// A comment node (nodeType = 8).
     Comment(String),
+
+    /// A document fragment (nodeType = 11).
+    /// Acts as a lightweight container for grouping nodes.
+    DocumentFragment,
 }
 
 impl NodeData {
@@ -105,6 +109,7 @@ impl NodeData {
             NodeData::Element { .. } => 1,
             NodeData::Text(_) => 3,
             NodeData::Comment(_) => 8,
+            NodeData::DocumentFragment => 11,
         }
     }
 
@@ -116,6 +121,7 @@ impl NodeData {
             NodeData::Element { tag_name, .. } => tag_name,
             NodeData::Text(_) => "#text",
             NodeData::Comment(_) => "#comment",
+            NodeData::DocumentFragment => "#document-fragment",
         }
     }
 

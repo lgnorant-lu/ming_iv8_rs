@@ -96,6 +96,11 @@ fn serialize_node(doc: &Document, node_id: NodeId, output: &mut String) {
             output.push_str(text);
             output.push_str("-->");
         }
+        NodeData::DocumentFragment => {
+            for child in node_ref.children() {
+                serialize_node(doc, child.id(), output);
+            }
+        }
     }
 }
 

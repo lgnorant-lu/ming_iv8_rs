@@ -2183,6 +2183,85 @@ def run_suite(suite: dict, variant: dict, resources: dict) -> dict:
 if (typeof {scope_name} === 'undefined') {{
     globalThis.{scope_name} = function {scope_name}() {{}};
 }}
+// Remove Window-only interfaces from globalThis.
+// idlharness checks `name in self` for non-exposed interfaces — if the
+// interface object exists on globalThis but is not [Exposed] in workers,
+// the test "should not exist" fails. We delete known Window-only
+// interfaces so worker tests pass.
+(function() {{
+    var windowOnly = [
+        'Document', 'XMLDocument', 'DOMImplementation', 'DocumentType',
+        'DocumentFragment', 'ShadowRoot', 'Element', 'NamedNodeMap',
+        'Attr', 'CharacterData', 'Text', 'CDATASection',
+        'ProcessingInstruction', 'Comment', 'AbstractRange', 'StaticRange',
+        'Range', 'NodeIterator', 'TreeWalker', 'NodeFilter', 'DOMTokenList',
+        'XPathResult', 'XPathExpression', 'XPathNSResolver', 'XPathEvaluator',
+        'XSLTProcessor', 'NodeList', 'HTMLCollection', 'MutationObserver',
+        'MutationRecord', 'EventListener', 'Node',
+        'HTMLElement', 'HTMLUnknownElement', 'HTMLHtmlElement',
+        'HTMLHeadElement', 'HTMLTitleElement', 'HTMLBaseElement',
+        'HTMLLinkElement', 'HTMLMetaElement', 'HTMLStyleElement',
+        'HTMLBodyElement', 'HTMLHeadingElement', 'HTMLParagraphElement',
+        'HTMLHRElement', 'HTMLPreElement', 'HTMLQuoteElement',
+        'HTMLOListElement', 'HTMLUListElement', 'HTMLMenuElement',
+        'HTMLLIElement', 'HTMLDListElement', 'HTMLDivElement',
+        'HTMLAnchorElement', 'HTMLDataElement', 'HTMLTimeElement',
+        'HTMLSpanElement', 'HTMLBRElement', 'HTMLModElement',
+        'HTMLPictureElement', 'HTMLSourceElement', 'HTMLImageElement',
+        'HTMLIFrameElement', 'HTMLEmbedElement', 'HTMLObjectElement',
+        'HTMLVideoElement', 'HTMLAudioElement', 'HTMLTrackElement',
+        'HTMLMediaElement', 'MediaError', 'AudioTrackList', 'AudioTrack',
+        'VideoTrackList', 'VideoTrack', 'TextTrackList', 'TextTrack',
+        'TextTrackCueList', 'TextTrackCue', 'TimeRanges', 'TrackEvent',
+        'HTMLMapElement', 'HTMLAreaElement', 'HTMLTableElement',
+        'HTMLTableCaptionElement', 'HTMLTableColElement',
+        'HTMLTableSectionElement', 'HTMLTableRowElement',
+        'HTMLTableCellElement', 'HTMLFormElement', 'HTMLLabelElement',
+        'HTMLInputElement', 'HTMLButtonElement', 'HTMLSelectElement',
+        'HTMLDataListElement', 'HTMLOptGroupElement', 'HTMLOptionElement',
+        'HTMLTextAreaElement', 'HTMLOutputElement', 'HTMLProgressElement',
+        'HTMLMeterElement', 'HTMLFieldSetElement', 'HTMLLegendElement',
+        'HTMLSelectedContentElement', 'ValidityState', 'SubmitEvent',
+        'FormDataEvent', 'HTMLDetailsElement', 'HTMLDialogElement',
+        'HTMLScriptElement', 'HTMLTemplateElement', 'HTMLSlotElement',
+        'HTMLCanvasElement', 'CanvasRenderingContext2D',
+        'CustomElementRegistry', 'ElementInternals', 'CustomStateSet',
+        'VisibilityStateEntry', 'UserActivation', 'ToggleEvent',
+        'CommandEvent', 'CloseWatcher', 'DataTransfer',
+        'DataTransferItemList', 'DataTransferItem', 'DragEvent',
+        'BarProp', 'History', 'Navigation', 'NavigationHistoryEntry',
+        'NavigationTransition', 'NavigationActivation', 'NavigateEvent',
+        'NavigationPrecommitController', 'NavigationDestination',
+        'NavigationCurrentEntryChangeEvent', 'PopStateEvent',
+        'HashChangeEvent', 'PageSwapEvent', 'PageRevealEvent',
+        'PageTransitionEvent', 'BeforeUnloadEvent',
+        'NotRestoredReasonDetails', 'NotRestoredReasons',
+        'DOMParser', 'XMLSerializer', 'Sanitizer',
+        'PluginArray', 'MimeTypeArray', 'Plugin', 'MimeType',
+        'Storage', 'StorageEvent', 'HTMLMarqueeElement',
+        'HTMLFrameSetElement', 'HTMLFrameElement', 'HTMLDirectoryElement',
+        'HTMLFontElement', 'HTMLParamElement', 'External',
+        'HTMLAllCollection', 'HTMLFormControlsCollection',
+        'RadioNodeList', 'HTMLOptionsCollection', 'DOMStringMap',
+        'Window', 'Location', 'Navigator', 'SharedWorker', 'Worklet',
+    ];
+    for (var i = 0; i < windowOnly.length; i++) {{
+        try {{ delete globalThis[windowOnly[i]]; }} catch(e) {{}}
+    }}
+    // Also remove document, window, etc.
+    try {{ delete globalThis.document; }} catch(e) {{}}
+    try {{ delete globalThis.window; }} catch(e) {{}}
+    try {{ delete globalThis.top; }} catch(e) {{}}
+    try {{ delete globalThis.parent; }} catch(e) {{}}
+    try {{ delete globalThis.frames; }} catch(e) {{}}
+    try {{ delete globalThis.locationbar; }} catch(e) {{}}
+    try {{ delete globalThis.menubar; }} catch(e) {{}}
+    try {{ delete globalThis.personalbar; }} catch(e) {{}}
+    try {{ delete globalThis.scrollbars; }} catch(e) {{}}
+    try {{ delete globalThis.statusbar; }} catch(e) {{}}
+    try {{ delete globalThis.toolbar; }} catch(e) {{}}
+    // Keep self — testharness.js needs it. self === globalThis in workers.
+}})();
 """
         pre_shim = f"""
 globalThis.GLOBAL = globalThis;

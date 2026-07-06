@@ -201,16 +201,29 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     }
     if (!document.createTextNode) {
         document.createTextNode = function(data) {
+            if (typeof Text !== 'undefined' && Text.prototype) {
+                return Object.create(Text.prototype);
+            }
             return { nodeType: 3, textContent: data, data: data, nodeName: '#text' };
         };
     }
     if (!document.createComment) {
         document.createComment = function(data) {
+            if (typeof Comment !== 'undefined' && Comment.prototype) {
+                return Object.create(Comment.prototype);
+            }
             return { nodeType: 8, textContent: data, data: data, nodeName: '#comment' };
         };
     }
     if (!document.createDocumentFragment) {
         document.createDocumentFragment = function() {
+            // Use codegen DocumentFragment constructor's prototype if available.
+            // This ensures the fragment has the correct prototype chain:
+            // fragment → DocumentFragment.prototype → Node.prototype → EventTarget.prototype
+            if (typeof DocumentFragment !== 'undefined' && DocumentFragment.prototype) {
+                var frag = Object.create(DocumentFragment.prototype);
+                return frag;
+            }
             return { nodeType: 11, nodeName: '#document-fragment', childNodes: [], appendChild: function(n) { this.childNodes.push(n); return n; }, children: [] };
         };
     }

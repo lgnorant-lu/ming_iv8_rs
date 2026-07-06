@@ -84,10 +84,14 @@ pub struct DomTemplates {
     pub html_meta_element: v8::Global<v8::FunctionTemplate>,
     /// HTMLUnknownElement — inherits HTMLElement, fallback for unknown tag names.
     pub html_unknown_element: v8::Global<v8::FunctionTemplate>,
-    /// Text node — inherits Node.
+    /// Text node — inherits CharacterData.
     pub text_node: v8::Global<v8::FunctionTemplate>,
-    /// Comment node — inherits Node.
+    /// Comment node — inherits CharacterData.
     pub comment_node: v8::Global<v8::FunctionTemplate>,
+    /// CharacterData — inherits Node, parent of Text/Comment.
+    pub character_data: v8::Global<v8::FunctionTemplate>,
+    /// DocumentFragment — inherits Node.
+    pub document_fragment: v8::Global<v8::FunctionTemplate>,
     /// Document node — inherits Node.
     pub document_node: v8::Global<v8::FunctionTemplate>,
     /// NodeList — live or static node collection.
@@ -799,15 +803,48 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         set_to_string_tag(scope, proto, "HTMLUnknownElement");
     }
 
-    // ── 7. Text node (inherits Node) ────────────────────────────────────────
+    // ── 7. CharacterData (inherits Node) — parent of Text and Comment ──────
+    let character_data = make_template(scope, "CharacterData", illegal_dom_constructor);
+    character_data.inherit(node);
+    {
+        let proto = character_data.prototype_template(scope);
+        install_proto_accessor(scope, proto, "data", data_getter, Some(data_setter));
+        install_proto_accessor(scope, proto, "length", char_data_length_getter, None);
+        install_proto_method_with_length(scope, proto, "substringData", substring_data_cb, 2);
+        install_proto_method_with_length(scope, proto, "appendData", append_data_cb, 1);
+        install_proto_method_with_length(scope, proto, "insertData", insert_data_cb, 2);
+        install_proto_method_with_length(scope, proto, "deleteData", delete_data_cb, 2);
+        install_proto_method_with_length(scope, proto, "replaceData", replace_data_cb, 3);
+        set_to_string_tag(scope, proto, "CharacterData");
+    }
+
+    // ── 8. Text node (inherits CharacterData) ───────────────────────────────
     let text_node = make_template(scope, "Text", illegal_dom_constructor);
-    text_node.inherit(node);
+    text_node.inherit(character_data);
+    {
+        let proto = text_node.prototype_template(scope);
+        install_proto_method_with_length(scope, proto, "splitText", split_text_cb, 1);
+        install_proto_accessor(scope, proto, "wholeText", whole_text_getter, None);
+        set_to_string_tag(scope, proto, "Text");
+    }
 
-    // ── 8. Comment node (inherits Node) ─────────────────────────────────────
+    // ── 9. Comment node (inherits CharacterData) ────────────────────────────
     let comment_node = make_template(scope, "Comment", illegal_dom_constructor);
-    comment_node.inherit(node);
+    comment_node.inherit(character_data);
+    {
+        let proto = comment_node.prototype_template(scope);
+        set_to_string_tag(scope, proto, "Comment");
+    }
 
-    // ── 9. Document node (inherits Node) ────────────────────────────────────
+    // ── 10. DocumentFragment (inherits Node) ────────────────────────────────
+    let document_fragment = make_template(scope, "DocumentFragment", illegal_dom_constructor);
+    document_fragment.inherit(node);
+    {
+        let proto = document_fragment.prototype_template(scope);
+        set_to_string_tag(scope, proto, "DocumentFragment");
+    }
+
+    // ── 11. Document node (inherits Node) ───────────────────────────────────
     let document_node = make_template(scope, "Document", illegal_dom_constructor);
     document_node.inherit(node);
 
@@ -1025,6 +1062,8 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         html_unknown_element: v8::Global::new(scope, html_unknown_element),
         text_node: v8::Global::new(scope, text_node),
         comment_node: v8::Global::new(scope, comment_node),
+        character_data: v8::Global::new(scope, character_data),
+        document_fragment: v8::Global::new(scope, document_fragment),
         document_node: v8::Global::new(scope, document_node),
         node_list: v8::Global::new(scope, node_list),
         dom_token_list: v8::Global::new(scope, dom_token_list),
@@ -1081,6 +1120,8 @@ pub fn install_dom_constructors(
         ("Request", &templates.request),
         ("Text", &templates.text_node),
         ("Comment", &templates.comment_node),
+        ("CharacterData", &templates.character_data),
+        ("DocumentFragment", &templates.document_fragment),
         // Document: keep codegen constructor (construct_only) which allows
         // `new Document()` per WebIDL spec. DOM template's illegal_dom_constructor
         // would block construction, causing idlharness to skip Document tests.
@@ -1140,6 +1181,8 @@ pub fn install_dom_constructors(
         ("HTMLUnknownElement", "HTMLElement"),
         ("Text", "CharacterData"),
         ("Comment", "CharacterData"),
+        ("CharacterData", "Node"),
+        ("DocumentFragment", "Node"),
         ("Document", "Node"),
         ("NodeList", ""),
         ("DOMTokenList", ""),
@@ -1617,6 +1660,7 @@ pub fn create_node_object<'s>(
         NodeData::Comment(_) => v8::Local::new(scope, &templates.comment_node),
         NodeData::Document => v8::Local::new(scope, &templates.document_node),
         NodeData::DocumentType { .. } => v8::Local::new(scope, &templates.node),
+        NodeData::DocumentFragment => v8::Local::new(scope, &templates.document_fragment),
     };
 
     // Instantiate from the instance_template directly. This bypasses the
@@ -1875,6 +1919,279 @@ unsafe extern "C" fn inner_text_getter(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn inner_text_setter(info: *const v8::FunctionCallbackInfo) {
     text_content_setter(info)
+}
+
+// ── CharacterData accessors/methods ────────────────────────────────────────────
+
+unsafe extern "C" fn data_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let doc = state.document.borrow();
+        if let Some(ref doc) = *doc {
+            if let Some(node_ref) = doc.get(node_id) {
+                let data = match node_ref.value() {
+                    NodeData::Text(s) => s.as_str(),
+                    NodeData::Comment(s) => s.as_str(),
+                    _ => "",
+                };
+                if let Some(s) = v8::String::new(scope, data) {
+                    rv.set(s.into());
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn data_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let val = args.get(0).to_rust_string_lossy(scope);
+                let mut doc = state.document.borrow_mut();
+                if let Some(ref mut doc) = *doc {
+                    if let Some(mut node_ref) = doc.tree.get_mut(nid) {
+                        match node_ref.value() {
+                            NodeData::Text(ref mut s) => *s = val,
+                            NodeData::Comment(ref mut s) => *s = val,
+                            _ => {}
+                        }
+                    }
+                    state.node_cache.borrow_mut().remove(&nid);
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn char_data_length_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let doc = state.document.borrow();
+        if let Some(ref doc) = *doc {
+            if let Some(node_ref) = doc.get(node_id) {
+                let len = match node_ref.value() {
+                    NodeData::Text(s) => s.chars().count(),
+                    NodeData::Comment(s) => s.chars().count(),
+                    _ => 0,
+                };
+                rv.set(v8::Integer::new_from_unsigned(scope, len as u32).into());
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn substring_data_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let offset = args.get(0).int32_value(scope).unwrap_or(0) as usize;
+            let count = args.get(1).int32_value(scope).unwrap_or(0) as usize;
+            let doc = state.document.borrow();
+            if let Some(ref doc) = *doc {
+                if let Some(node_ref) = doc.get(nid) {
+                    let data = match node_ref.value() {
+                        NodeData::Text(s) => s.as_str(),
+                        NodeData::Comment(s) => s.as_str(),
+                        _ => "",
+                    };
+                    let chars: Vec<char> = data.chars().collect();
+                    let end = (offset + count).min(chars.len());
+                    let result: String = if offset < chars.len() {
+                        chars[offset..end].iter().collect()
+                    } else {
+                        String::new()
+                    };
+                    if let Some(s) = v8::String::new(scope, &result) {
+                        rv.set(s.into());
+                    }
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn append_data_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let val = args.get(0).to_rust_string_lossy(scope);
+                let mut doc = state.document.borrow_mut();
+                if let Some(ref mut doc) = *doc {
+                    if let Some(mut node_ref) = doc.tree.get_mut(nid) {
+                        match node_ref.value() {
+                            NodeData::Text(ref mut s) => s.push_str(&val),
+                            NodeData::Comment(ref mut s) => s.push_str(&val),
+                            _ => {}
+                        }
+                    }
+                    state.node_cache.borrow_mut().remove(&nid);
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn insert_data_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 2 {
+                let offset = args.get(0).int32_value(scope).unwrap_or(0) as usize;
+                let val = args.get(1).to_rust_string_lossy(scope);
+                let mut doc = state.document.borrow_mut();
+                if let Some(ref mut doc) = *doc {
+                    if let Some(mut node_ref) = doc.tree.get_mut(nid) {
+                        match node_ref.value() {
+                            NodeData::Text(ref mut s) => {
+                                let mut chars: Vec<char> = s.chars().collect();
+                                let pos = offset.min(chars.len());
+                                chars.splice(pos..pos, val.chars());
+                                *s = chars.into_iter().collect();
+                            }
+                            NodeData::Comment(ref mut s) => {
+                                let mut chars: Vec<char> = s.chars().collect();
+                                let pos = offset.min(chars.len());
+                                chars.splice(pos..pos, val.chars());
+                                *s = chars.into_iter().collect();
+                            }
+                            _ => {}
+                        }
+                    }
+                    state.node_cache.borrow_mut().remove(&nid);
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn delete_data_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 2 {
+                let offset = args.get(0).int32_value(scope).unwrap_or(0) as usize;
+                let count = args.get(1).int32_value(scope).unwrap_or(0) as usize;
+                let mut doc = state.document.borrow_mut();
+                if let Some(ref mut doc) = *doc {
+                    if let Some(mut node_ref) = doc.tree.get_mut(nid) {
+                        match node_ref.value() {
+                            NodeData::Text(ref mut s) => {
+                                let mut chars: Vec<char> = s.chars().collect();
+                                let end = (offset + count).min(chars.len());
+                                if offset < chars.len() {
+                                    chars.drain(offset..end);
+                                }
+                                *s = chars.into_iter().collect();
+                            }
+                            NodeData::Comment(ref mut s) => {
+                                let mut chars: Vec<char> = s.chars().collect();
+                                let end = (offset + count).min(chars.len());
+                                if offset < chars.len() {
+                                    chars.drain(offset..end);
+                                }
+                                *s = chars.into_iter().collect();
+                            }
+                            _ => {}
+                        }
+                    }
+                    state.node_cache.borrow_mut().remove(&nid);
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn replace_data_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 3 {
+                let offset = args.get(0).int32_value(scope).unwrap_or(0) as usize;
+                let count = args.get(1).int32_value(scope).unwrap_or(0) as usize;
+                let val = args.get(2).to_rust_string_lossy(scope);
+                let mut doc = state.document.borrow_mut();
+                if let Some(ref mut doc) = *doc {
+                    if let Some(mut node_ref) = doc.tree.get_mut(nid) {
+                        match node_ref.value() {
+                            NodeData::Text(ref mut s) => {
+                                let mut chars: Vec<char> = s.chars().collect();
+                                let end = (offset + count).min(chars.len());
+                                if offset < chars.len() {
+                                    chars.drain(offset..end);
+                                }
+                                let pos = offset.min(chars.len());
+                                chars.splice(pos..pos, val.chars());
+                                *s = chars.into_iter().collect();
+                            }
+                            NodeData::Comment(ref mut s) => {
+                                let mut chars: Vec<char> = s.chars().collect();
+                                let end = (offset + count).min(chars.len());
+                                if offset < chars.len() {
+                                    chars.drain(offset..end);
+                                }
+                                let pos = offset.min(chars.len());
+                                chars.splice(pos..pos, val.chars());
+                                *s = chars.into_iter().collect();
+                            }
+                            _ => {}
+                        }
+                    }
+                    state.node_cache.borrow_mut().remove(&nid);
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn split_text_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let offset = args.get(0).int32_value(scope).unwrap_or(0) as usize;
+            let (text_before, text_after) = {
+                let doc = state.document.borrow();
+                let doc = doc.as_ref();
+                if let Some(doc) = doc {
+                    if let Some(node_ref) = doc.get(nid) {
+                        match node_ref.value() {
+                            NodeData::Text(s) => {
+                                let chars: Vec<char> = s.chars().collect();
+                                let pos = offset.min(chars.len());
+                                let before: String = chars[..pos].iter().collect();
+                                let after: String = chars[pos..].iter().collect();
+                                (before, after)
+                            }
+                            _ => return,
+                        }
+                    } else { return; }
+                } else { return; }
+            };
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut doc) = *doc {
+                if let Some(mut node_ref) = doc.tree.get_mut(nid) {
+                    if let NodeData::Text(ref mut s) = node_ref.value() {
+                        *s = text_before;
+                    }
+                }
+                let new_id = doc.append_child(nid, NodeData::text(&text_after));
+                state.node_cache.borrow_mut().remove(&nid);
+                drop(doc);
+                if let Some(obj) = create_node_object(scope, state, new_id) {
+                    rv.set(obj);
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn whole_text_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let doc = state.document.borrow();
+        if let Some(ref doc) = *doc {
+            if let Some(node_ref) = doc.get(node_id) {
+                let text = match node_ref.value() {
+                    NodeData::Text(s) => s.clone(),
+                    _ => String::new(),
+                };
+                if let Some(s) = v8::String::new(scope, &text) {
+                    rv.set(s.into());
+                }
+            }
+        }
+    });
 }
 
 // ── Navigation accessors ──────────────────────────────────────────────────────
