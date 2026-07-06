@@ -125,7 +125,11 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
             __canvas_cmd__.apply(null, args);
         }
 
-        var ctx = {
+        // Use CanvasRenderingContext2D.prototype as __proto__ if available
+        // so idlharness assert_inherits checks pass.
+        var proto = (typeof CanvasRenderingContext2D !== 'undefined' && CanvasRenderingContext2D.prototype)
+            ? CanvasRenderingContext2D.prototype : Object.prototype;
+        var ctx = Object.create(proto);
             get fillStyle() { return state.fillStyle; },
             set fillStyle(v) { state.fillStyle = v; },
             get strokeStyle() { return state.strokeStyle; },
