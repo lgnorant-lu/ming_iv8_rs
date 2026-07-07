@@ -531,10 +531,11 @@ impl EmbeddedV8Kernel {
                         (function(name) {{
                         try {{
                             // Skip length/name: these are function-intrinsic
-                            // data properties on the Window constructor, not
-                            // [Global] accessors. idlharness checks them as
-                            // data properties (no getter expected).
-                            if (name === 'length' || name === 'name') return;
+                            // name/length: Function-intrinsic data properties
+                            // on the global object. idlharness [Global]
+                            // checks require them to be accessor properties
+                            // (descriptor.get === function). Since they are
+                            // configurable on V8's global, we can convert them.
                             var desc = Object.getOwnPropertyDescriptor(globalThis, name);
                             if (!desc) return;
                             if (!desc.configurable) return;
@@ -591,9 +592,34 @@ impl EmbeddedV8Kernel {
                                 }};
                             }})(value, windowProto);
                             try {{ Object.defineProperty(getter, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
+                            // Create setter for writable attributes.
+                            // idlharness checks typeof desc.set === "function"
+                            // for non-readonly / PutForwards / Replaceable attrs.
+                            var setter = (function(nm, wproto) {{
+                                return function(v) {{
+                                    // Receiver check
+                                    if (wproto && this !== globalThis && this !== wproto) {{
+                                        var cur = Object.getPrototypeOf(this);
+                                        var found = false;
+                                        for (var k = 0; k < 30; k++) {{
+                                            if (cur === wproto) {{ found = true; break; }}
+                                            if (!cur) break;
+                                            cur = Object.getPrototypeOf(cur);
+                                        }}
+                                        if (!found) throw new TypeError('Illegal invocation');
+                                    }}
+                                    // Store value as data property (Replaceable semantics)
+                                    Object.defineProperty(globalThis, nm, {{
+                                        value: v, writable: true,
+                                        enumerable: true, configurable: true
+                                    }});
+                                }};
+                            }})(name, windowProto);
+                            try {{ Object.defineProperty(setter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
+                            try {{ Object.defineProperty(setter, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
                             Object.defineProperty(globalThis, name, {{
                                 get: getter,
-                                set: undefined,
+                                set: setter,
                                 enumerable: desc.enumerable !== false,
                                 configurable: true
                             }});
