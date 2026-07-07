@@ -264,15 +264,51 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         window.WebSocket.prototype.CLOSED = 3;
     }
 
-    // indexedDB stub
+    // indexedDB stub - fires onsuccess with a fake database so detection
+    // scripts checking open() success do not fail.
     if (!window.indexedDB) {
+        var _idbMakeDB = function(name) {
+            return {
+                name: name,
+                version: 1,
+                objectStoreNames: [],
+                transaction: function() { return {}; },
+                createObjectStore: function() { return {}; },
+                deleteObjectStore: function() {},
+                close: function() {}
+            };
+        };
+        var _idbFire = function(req, result) {
+            req.result = result;
+            req.readyState = "done";
+            var evt = { result: result, target: { result: result } };
+            if (req.onsuccess) req.onsuccess(evt);
+        };
         window.indexedDB = {
             open: function(name, version) {
-                var req = { result: null, error: null, onsuccess: null, onerror: null, onupgradeneeded: null };
-                setTimeout(function() { if (req.onerror) req.onerror({}); }, 0);
+                var req = {
+                    result: null,
+                    error: null,
+                    readyState: "pending",
+                    onsuccess: null,
+                    onerror: null,
+                    onupgradeneeded: null
+                };
+                setTimeout(function() { _idbFire(req, _idbMakeDB(name)); }, 0);
                 return req;
             },
-            deleteDatabase: function() { return {}; },
+            deleteDatabase: function(name) {
+                var req = {
+                    result: null,
+                    error: null,
+                    readyState: "pending",
+                    onsuccess: null,
+                    onerror: null,
+                    onupgradeneeded: null
+                };
+                setTimeout(function() { _idbFire(req, undefined); }, 0);
+                return req;
+            },
             databases: function() { return Promise.resolve([]); },
         };
     }

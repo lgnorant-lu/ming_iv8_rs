@@ -139,6 +139,13 @@ const CATALOG: &[EventSpec] = &[
         safety: Safety::Diagnostic,
         fields: &["callback", "panic_msg"],
     },
+    EventSpec {
+        name: "worker_import_script_not_found",
+        category: "iv8.worker",
+        level: "WARN",
+        safety: Safety::Diagnostic,
+        fields: &["url"],
+    },
 ];
 
 // ─── Init phase events ──────────────────────────────────────────────
@@ -230,6 +237,16 @@ pub fn worker_script_error(error: &str) {
         target: "iv8.worker",
         error = error,
         "worker script error"
+    );
+}
+
+/// Worker importScripts URL not found in ResourceBundle or network handler.
+/// Safety: Diagnostic (URL may reveal internal state)
+pub fn worker_import_script_not_found(url: &str) {
+    tracing::warn!(
+        target: "iv8.worker",
+        url = url,
+        "worker importScripts URL not found in ResourceBundle"
     );
 }
 

@@ -94,7 +94,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         self.ratio = _createAudioParam((options && options.ratio !== undefined) ? options.ratio : (_comp.ratio !== undefined ? _comp.ratio : 12));
         self.attack = _createAudioParam((options && options.attack !== undefined) ? options.attack : (_comp.attack !== undefined ? _comp.attack : 0.003));
         self.release = _createAudioParam((options && options.release !== undefined) ? options.release : (_comp.release !== undefined ? _comp.release : 0.25));
-        self.reduction = 0;
+        self.reduction = (_comp.reduction !== undefined) ? _comp.reduction : 0;
     }
     function _createDynamicsCompressorNode(ctx, options) {
         var node = Object.create(DynamicsCompressorNode.prototype);
@@ -167,7 +167,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initAudioBuffer(this, options);
     }
     function _initAudioBuffer(self, options) {
-        self.sampleRate = (options && options.sampleRate) || 48000;
+        self.sampleRate = (options && options.sampleRate) || _defaultSampleRate;
         self.length = (options && options.length) || 0;
         self.duration = self.length / self.sampleRate;
         self.numberOfChannels = (options && options.numberOfChannels) || 1;
@@ -180,6 +180,38 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     }
     AudioBuffer.prototype.getChannelData = function(channel) {
         var data = new Float32Array(this.length);
+        // Profile-driven fingerprint injection: captured channel data
+        var fpData = _audioPrefs.channelData;
+        if (fpData) {
+            var src = null;
+            if (typeof fpData === 'string') {
+                // Try JSON array first
+                try {
+                    var parsed = JSON.parse(fpData);
+                    if (Array.isArray(parsed)) { src = parsed; }
+                } catch (e) {
+                    // Not JSON, try base64
+                    if (typeof atob === 'function') {
+                        try {
+                            var bin = atob(fpData);
+                            var view = new DataView(new ArrayBuffer(bin.length));
+                            for (var j = 0; j < bin.length; j++) { view.setUint8(j, bin.charCodeAt(j)); }
+                            src = [];
+                            for (var k = 0; k + 3 < bin.length; k += 4) {
+                                src.push(view.getFloat32(k, true));
+                            }
+                        } catch (e2) { src = null; }
+                    }
+                }
+            } else if (Array.isArray(fpData)) {
+                src = fpData;
+            }
+            if (src) {
+                var n = Math.min(src.length, data.length);
+                for (var i = 0; i < n; i++) { data[i] = src[i]; }
+                return data;
+            }
+        }
         // Check for profile-driven fingerprint seed
         var fpSeed = _audioPrefs.channelDataSeed;
         if (typeof fpSeed === 'number' && fpSeed !== 0) {
@@ -208,7 +240,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initBaseAudioContext(this, sampleRate);
     }
     function _initBaseAudioContext(self, sampleRate) {
-        self._sampleRate = sampleRate || 48000;
+        self._sampleRate = sampleRate || _defaultSampleRate;
         self._currentTime = 0;
         self._destination = _createAudioDestinationNode(self);
         self._listener = {};
@@ -329,8 +361,9 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
 
     // AudioContext
     var _audioPrefs = (typeof globalThis.__iv8AudioPrefs === 'object' && globalThis.__iv8AudioPrefs) ? globalThis.__iv8AudioPrefs : {};
+    var _defaultSampleRate = (_audioPrefs.sampleRate !== undefined) ? _audioPrefs.sampleRate : 48000;
     function AudioContext(options) {
-        _initBaseAudioContext(this, options && options.sampleRate);
+        _initBaseAudioContext(this, (options && options.sampleRate) || _defaultSampleRate);
         this._baseLatency = _audioPrefs.baseLatency != null ? _audioPrefs.baseLatency : 0.05;
         this._outputLatency = _audioPrefs.outputLatency != null ? _audioPrefs.outputLatency : 0;
     }
@@ -375,8 +408,9 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
             var opts = numberOfChannels;
             numberOfChannels = opts.numberOfChannels || 1;
             length = opts.length || 44100;
-            sampleRate = opts.sampleRate || 48000;
+            sampleRate = opts.sampleRate || _defaultSampleRate;
         }
+        sampleRate = sampleRate || _defaultSampleRate;
         _initBaseAudioContext(this, sampleRate);
         this.length = length;
         this.numberOfChannels = numberOfChannels;

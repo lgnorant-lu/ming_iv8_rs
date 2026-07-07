@@ -439,6 +439,43 @@ unsafe extern "C" fn worker_close_cb(info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+/// Resolve a potentially relative script URL against the worker's base URL.
+/// Returns the resolved absolute URL string.
+fn resolve_worker_url(base_url: &str, script_url: &str) -> String {
+    if script_url.starts_with("http://")
+        || script_url.starts_with("https://")
+        || script_url.starts_with("blob:")
+        || script_url.starts_with("data:")
+    {
+        return script_url.to_string();
+    }
+
+    if let Some(idx) = base_url.find("://") {
+        let rest = &base_url[idx + 3..];
+        let (host_part, path_part) = if let Some(slash) = rest.find('/') {
+            (&rest[..slash], &rest[slash..])
+        } else {
+            (rest, "")
+        };
+
+        let origin = &base_url[..idx + 3 + host_part.len()];
+
+        if script_url.starts_with('/') {
+            return format!("{}{}", origin, script_url);
+        }
+
+        let dir = if let Some(last_slash) = path_part.rfind('/') {
+            &path_part[..=last_slash]
+        } else {
+            "/"
+        };
+
+        return format!("{}{}{}", origin, dir, script_url);
+    }
+
+    script_url.to_string()
+}
+
 unsafe extern "C" fn worker_import_script_cb(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -451,7 +488,67 @@ unsafe extern "C" fn worker_import_script_cb(info: *const v8::FunctionCallbackIn
             rv.set(empty().into());
             return;
         }
-        rv.set(empty().into());
+
+        let raw_url = args.get(0).to_rust_string_lossy(scope);
+        let isolate: &v8::Isolate = &*scope;
+        let state = crate::state::RuntimeState::get(isolate);
+
+        let resolved_url = if raw_url.starts_with("http://")
+            || raw_url.starts_with("https://")
+            || raw_url.starts_with("blob:")
+            || raw_url.starts_with("data:")
+        {
+            raw_url.clone()
+        } else {
+            let profile_url = {
+                let global = scope.get_current_context().global(scope);
+                let profile_key = crate::v8_utils::v8_string(scope, "__iv8WorkerProfile");
+                global
+                    .get(scope, profile_key.into())
+                    .and_then(|v| {
+                        let obj: v8::Local<v8::Object> = v.try_into().ok()?;
+                        let url_key = crate::v8_utils::v8_string(scope, "workerUrl");
+                        obj.get(scope, url_key.into())
+                            .map(|v2| v2.to_rust_string_lossy(scope))
+                    })
+                    .unwrap_or_default()
+            };
+            resolve_worker_url(&profile_url, &raw_url)
+        };
+
+        let resource_ref = {
+            let bundle = state.resource_bundle.borrow();
+            bundle.get(&resolved_url).cloned()
+        };
+
+        let resource = if resource_ref.is_none() {
+            let handler_result = {
+                let handler = state.network_handler.borrow();
+                if let Some(ref h) = *handler {
+                    h(&resolved_url, "GET")
+                } else {
+                    None
+                }
+            };
+            handler_result
+                .map(|(status, body)| crate::network::bundle::Resource::new(body, status, None))
+        } else {
+            resource_ref
+        };
+
+        match resource {
+            Some(res) => {
+                let body = res.body_text();
+                match v8::String::new(scope, &body) {
+                    Some(s) => rv.set(s.into()),
+                    None => rv.set(empty().into()),
+                }
+            }
+            None => {
+                crate::telemetry::worker_import_script_not_found(&resolved_url);
+                rv.set(empty().into());
+            }
+        }
     }));
 }
 
