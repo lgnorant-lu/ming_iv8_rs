@@ -100,6 +100,18 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         return [];
     };
 
+    Event.prototype.initEvent = function initEvent(eventType, bubbles, cancelable) {
+        this.type = eventType;
+        this._bubbles = bubbles !== undefined ? !!bubbles : false;
+        this._cancelable = cancelable !== undefined ? !!cancelable : false;
+    };
+
+    if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+        Object.defineProperty(Event.prototype, Symbol.toStringTag, {
+            value: 'Event', writable: false, enumerable: false, configurable: true
+        });
+    }
+
     Event.NONE = 0;
     Event.CAPTURING_PHASE = 1;
     Event.AT_TARGET = 2;

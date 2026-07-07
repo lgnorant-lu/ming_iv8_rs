@@ -876,7 +876,7 @@ impl EmbeddedV8Kernel {
                     // getters (document_props.rs, event_constructors.rs) don't.
                     // This wraps ALL accessor getters on key prototypes.
                     var receiverCheckInterfaces = [
-                        'Document', 'Event', 'CustomEvent', 'MouseEvent',
+                        'Document', 'CustomEvent', 'MouseEvent',
                         'HTMLElement', 'Element', 'Node', 'Window',
                         'NavigationTransition', 'ShadowRoot',
                     ];
