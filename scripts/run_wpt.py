@@ -2312,6 +2312,12 @@ self.observer = new PerformanceObserver(function() {});
             suite_specific_shim = """
 self.deadline = { didTimeout: false, timeRemaining: function() { return 50; } };
 """
+        elif suite_name == "dom/idlharness":
+            suite_specific_shim = """
+var _idlTestEl = document.createElement('div');
+_idlTestEl.setAttribute('id', 'idl-test-element');
+document.body.appendChild(_idlTestEl);
+"""
         elif "FileAPI" in suite_name:
             suite_specific_shim = """
 var fc = document.createElement('input');
