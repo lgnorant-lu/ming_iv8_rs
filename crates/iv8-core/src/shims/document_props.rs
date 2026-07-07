@@ -882,6 +882,17 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             listing: 'HTMLPreElement', xmp: 'HTMLPreElement',
             menu: 'HTMLMenuElement', noscript: 'HTMLElement',
             nobr: 'HTMLElement', center: 'HTMLElement',
+            div: 'HTMLDivElement', p: 'HTMLParagraphElement',
+            a: 'HTMLAnchorElement', span: 'HTMLSpanElement',
+            h1: 'HTMLHeadingElement', h2: 'HTMLHeadingElement',
+            h3: 'HTMLHeadingElement', h4: 'HTMLHeadingElement',
+            h5: 'HTMLHeadingElement', h6: 'HTMLHeadingElement',
+            input: 'HTMLInputElement', button: 'HTMLButtonElement',
+            form: 'HTMLFormElement',
+            code: 'HTMLElement', small: 'HTMLElement',
+            strong: 'HTMLElement', em: 'HTMLElement',
+            b: 'HTMLElement', i: 'HTMLElement', u: 'HTMLElement',
+            s: 'HTMLElement', sub: 'HTMLElement', sup: 'HTMLElement',
         };
         var _origCreate = document.createElement;
         if (_origCreate && !_origCreate.__iv8ElemPatched) {
@@ -893,6 +904,15 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                         && globalThis[cls].prototype
                         && el.__proto__ !== globalThis[cls].prototype) {
                         try { el.__proto__ = globalThis[cls].prototype; } catch(e) {}
+                    }
+                    // Set Symbol.toStringTag on the instance for correct class string
+                    if (cls && typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+                        try {
+                            Object.defineProperty(el, Symbol.toStringTag, {
+                                value: cls, writable: false,
+                                enumerable: false, configurable: true
+                            });
+                        } catch(e) {}
                     }
                 }
                 return el;
