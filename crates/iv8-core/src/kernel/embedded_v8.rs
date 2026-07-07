@@ -346,6 +346,7 @@ impl EmbeddedV8Kernel {
         let time_mode = config.time_mode;
         let js_api_name = config.js_api_name;
         let environment = Arc::new(EnvironmentMap::build(config.environment_overrides.as_ref()));
+        let worker_mode = config.worker_mode;
 
         Self::init_kernel(
             environment,
@@ -358,6 +359,7 @@ impl EmbeddedV8Kernel {
             crypto_seed,
             time_freeze,
             user_overrides,
+            worker_mode,
         )
     }
 
@@ -372,6 +374,7 @@ impl EmbeddedV8Kernel {
         crypto_seed: Option<u64>,
         time_freeze: Option<f64>,
         user_overrides: crate::user_overrides::UserOverrides,
+        worker_mode: bool,
     ) -> Result<Self, IV8Error> {
         let mut isolate = v8::Isolate::new(
             v8::CreateParams::default().heap_limits(512 * 1024 * 1024, 4 * 1024 * 1024 * 1024),
@@ -447,8 +450,6 @@ impl EmbeddedV8Kernel {
         kernel.install_browser_surface_init();
 
         // Phase 2: install native environment objects (navigator, screen)
-        // AFTER install_all so codegen parent templates (EventTarget) are
-        // available for FunctionTemplate inheritance.
         kernel.install_native_environment();
 
         // Install anti-detection shims + JS shims (skip native behaviors
@@ -1631,6 +1632,38 @@ try {
     }
 
     /// Install the Worker constructor on the global object.
+    /// Set the global object's __proto__ to DedicatedWorkerGlobalScope.prototype.
+    /// Called when worker_mode=true, after install_browser_surface_init
+    /// (which instantiates codegen templates including DedicatedWorkerGlobalScope)
+    /// and before freeze_all_prototypes.
+    pub fn set_worker_global_prototype(&mut self) {
+        unsafe {
+            self.isolate.enter();
+        }
+        {
+            v8::scope!(handle_scope, &mut self.isolate);
+            let context = v8::Local::new(handle_scope, &self.context);
+            v8::scope_with_context!(scope, handle_scope, context);
+
+            let global = context.global(scope);
+
+            let dwgs_key = crate::v8_utils::v8_string(scope, "DedicatedWorkerGlobalScope");
+            if let Some(dwgs_val) = global.get(scope, dwgs_key.into()) {
+                if let Ok(dwgs_obj) = <v8::Local<v8::Object>>::try_from(dwgs_val) {
+                    let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+                    if let Some(proto_val) = dwgs_obj.get(scope, proto_key.into()) {
+                        if let Ok(proto_obj) = <v8::Local<v8::Object>>::try_from(proto_val) {
+                            let _ = global.set_prototype(scope, proto_obj.into());
+                        }
+                    }
+                }
+            }
+        }
+        unsafe {
+            self.isolate.exit();
+        }
+    }
+
     /// Creates a FunctionTemplate with worker_constructor_cb, installs
     /// postMessage and terminate on the prototype, and registers on global
     /// as "Worker" with DONT_ENUM.

@@ -130,6 +130,7 @@ impl JSContext {
         random_seed = None,
         crypto_seed = None,
         time_freeze = None,
+        worker_mode = false,
     ))]
     fn new(
         environment: Option<&Bound<'_, PyDict>>,
@@ -140,6 +141,7 @@ impl JSContext {
         random_seed: Option<u64>,
         crypto_seed: Option<u64>,
         time_freeze: Option<f64>,
+        worker_mode: bool,
     ) -> PyResult<Self> {
         // Parse config dict
         let mut timezone: Option<String> = None;
@@ -198,6 +200,7 @@ impl JSContext {
             user_overrides: Default::default(),
             browser_profile: None,
             local_storage: None,
+            worker_mode,
         };
 
         let kernel = EmbeddedV8Kernel::new(kernel_config).map_err(error::iv8_error_to_pyerr)?;
@@ -225,10 +228,21 @@ impl JSContext {
         Ok(())
     }
 
+    /// Set globalThis.__proto__ to DedicatedWorkerGlobalScope.prototype.
+    /// Called after Worker interfaces are installed via JS eval.
+    /// Uses V8 API to bypass JS immutable prototype restriction.
+    fn set_worker_prototype(&self, py: Python<'_>) -> PyResult<()> {
+        self.assert_thread()?;
+        py.allow_threads(|| {
+            let mut kernel = self.inner.kernel.lock();
+            kernel.set_worker_global_prototype();
+        });
+        Ok(())
+    }
+
     /// Evaluate JavaScript source code and return the result as a Python object.
     #[pyo3(signature = (source, /, name=None, line=-1, col=-1, to_py=false, devtools=true))]
-    fn eval(
-        &self,
+    fn eval(        &self,
         py: Python<'_>,
         source: &str,
         name: Option<&str>,

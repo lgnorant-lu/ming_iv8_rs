@@ -33,6 +33,10 @@ pub struct KernelConfig {
     /// Optional shared localStorage backend for cross-kernel persistence.
     /// Multiple kernels sharing the same `LocalStorageStore` see the same data.
     pub local_storage: Option<crate::dom::local_storage::LocalStorageStore>,
+    /// If true, the global object's __proto__ is set to
+    /// DedicatedWorkerGlobalScope.prototype after codegen installation.
+    /// This enables correct prototype chain for Worker context testing.
+    pub worker_mode: bool,
 }
 
 impl Default for KernelConfig {
@@ -48,6 +52,7 @@ impl Default for KernelConfig {
             user_overrides: crate::user_overrides::UserOverrides::new(),
             browser_profile: None,
             local_storage: None,
+            worker_mode: false,
         }
     }
 }

@@ -2146,7 +2146,9 @@ def run_suite(suite: dict, variant: dict, resources: dict) -> dict:
     # template hierarchy now supports these element types correctly.
 
     # Create IV8 context
-    ctx = iv8.JSContext()
+    # Worker mode: set globalThis.__proto__ to DedicatedWorkerGlobalScope.prototype
+    # via V8 API (bypasses JS immutable prototype restriction)
+    ctx = iv8.JSContext(worker_mode=is_worker)
 
     try:
         # Register IDL files as resources
@@ -2454,6 +2456,33 @@ if (typeof window !== 'undefined' && window !== globalThis) {{
 }}
 """
         ctx.eval(pre_shim, name="iv8-pre-shim.js")
+
+        # Worker mode: after pre-shim installs Worker interfaces,
+        # set globalThis.__proto__ to DedicatedWorkerGlobalScope.prototype
+        # via V8 API (bypasses JS immutable prototype restriction).
+        # Then delete own properties that shadow WorkerGlobalScope.prototype
+        # so assert_inherits checks pass.
+        if is_worker:
+            ctx.set_worker_prototype()
+            # Delete own properties that shadow WorkerGlobalScope.prototype
+            # Only delete if they also exist on the prototype (so the property
+            # resolves via prototype chain, not as own property).
+            # testharness.js dependencies (setTimeout, etc) are NOT on
+            # WorkerGlobalScope.prototype, so they won't be deleted.
+            ctx.eval("""
+                (function() {
+                    var wgsProto = (typeof WorkerGlobalScope !== 'undefined' && WorkerGlobalScope.prototype) ? WorkerGlobalScope.prototype : null;
+                    if (!wgsProto) return;
+                    var wgsNames = Object.getOwnPropertyNames(wgsProto);
+                    for (var i = 0; i < wgsNames.length; i++) {
+                        var name = wgsNames[i];
+                        if (name === 'constructor') continue;
+                        if (globalThis.hasOwnProperty(name)) {
+                            try { delete globalThis[name]; } catch(e) {}
+                        }
+                    }
+                })();
+            """, name="iv8-worker-prop-cleanup.js")
 
         # Suite-specific pre-shim: create test objects that require DOM features
         # IV8 doesn't fully support (e.g. <style> element parsing, SVG elements)
