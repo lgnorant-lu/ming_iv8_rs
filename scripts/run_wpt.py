@@ -2188,17 +2188,17 @@ if (typeof globalThis.WorkerGlobalScope === 'undefined') {{
     }});
     // self
     Object.defineProperty(WorkerGlobalScope.prototype, 'self', {{
-        get: function() {{ return globalThis; }},
+        get: function() {{ if (this === WorkerGlobalScope.prototype) throw new TypeError('Illegal invocation'); return globalThis; }},
         enumerable: true, configurable: true
     }});
     // location
     Object.defineProperty(WorkerGlobalScope.prototype, 'location', {{
-        get: function() {{ return globalThis.__workerLocation || null; }},
+        get: function() {{ if (this === WorkerGlobalScope.prototype) throw new TypeError('Illegal invocation'); return globalThis.__workerLocation || null; }},
         enumerable: true, configurable: true
     }});
     // navigator
     Object.defineProperty(WorkerGlobalScope.prototype, 'navigator', {{
-        get: function() {{ return globalThis.__workerNavigator || null; }},
+        get: function() {{ if (this === WorkerGlobalScope.prototype) throw new TypeError('Illegal invocation'); return globalThis.__workerNavigator || null; }},
         enumerable: true, configurable: true
     }});
     // importScripts
@@ -2221,7 +2221,8 @@ if (typeof globalThis.WorkerGlobalScope === 'undefined') {{
         }});
     }}
     Object.defineProperty(WorkerGlobalScope, 'length', {{ value: 0, writable: false, enumerable: false, configurable: true }});
-    globalThis.WorkerGlobalScope = WorkerGlobalScope;
+    try {{ Object.defineProperty(globalThis, 'WorkerGlobalScope', {{ value: WorkerGlobalScope, writable: true, configurable: true, enumerable: false }}); }} catch(e) {{}}
+    try {{ Object.defineProperty(WorkerGlobalScope, 'prototype', {{ writable: false, enumerable: false, configurable: false }}); }} catch(e) {{}}
 }}
 
 // WorkerNavigator
@@ -2234,24 +2235,26 @@ if (typeof globalThis.WorkerNavigator === 'undefined') {{
         value: WorkerNavigator, writable: true, enumerable: false, configurable: true
     }});
     // NavigatorID mixin
-    Object.defineProperty(WorkerNavigator.prototype, 'appVersion', {{ get: function() {{ return '5.0'; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerNavigator.prototype, 'appName', {{ get: function() {{ return 'Netscape'; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerNavigator.prototype, 'platform', {{ get: function() {{ return 'Win32'; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerNavigator.prototype, 'product', {{ get: function() {{ return 'Gecko'; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerNavigator.prototype, 'userAgent', {{ get: function() {{ return navigator.userAgent; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'appCodeName', {{ get: function() {{ if (this === WorkerNavigator.prototype) throw new TypeError('Illegal invocation'); return 'Mozilla'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'appName', {{ get: function() {{ if (this === WorkerNavigator.prototype) throw new TypeError('Illegal invocation'); return 'Netscape'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'appVersion', {{ get: function() {{ if (this === WorkerNavigator.prototype) throw new TypeError('Illegal invocation'); return '5.0'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'platform', {{ get: function() {{ if (this === WorkerNavigator.prototype) throw new TypeError('Illegal invocation'); return 'Win32'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'product', {{ get: function() {{ if (this === WorkerNavigator.prototype) throw new TypeError('Illegal invocation'); return 'Gecko'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'userAgent', {{ get: function() {{ if (this === WorkerNavigator.prototype) throw new TypeError('Illegal invocation'); return navigator.userAgent; }}, enumerable: true, configurable: true }});
     // NavigatorLanguage mixin
-    Object.defineProperty(WorkerNavigator.prototype, 'language', {{ get: function() {{ return 'en-US'; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerNavigator.prototype, 'languages', {{ get: function() {{ return ['en-US','en']; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'language', {{ get: function() {{ if (this === WorkerNavigator.prototype) throw new TypeError('Illegal invocation'); return 'en-US'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'languages', {{ get: function() {{ if (this === WorkerNavigator.prototype) throw new TypeError('Illegal invocation'); return ['en-US','en']; }}, enumerable: true, configurable: true }});
     // NavigatorOnLine mixin
-    Object.defineProperty(WorkerNavigator.prototype, 'onLine', {{ get: function() {{ return true; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'onLine', {{ get: function() {{ if (this === WorkerNavigator.prototype) throw new TypeError('Illegal invocation'); return true; }}, enumerable: true, configurable: true }});
     // NavigatorConcurrentHardware mixin
-    Object.defineProperty(WorkerNavigator.prototype, 'hardwareConcurrency', {{ get: function() {{ return 8; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'hardwareConcurrency', {{ get: function() {{ if (this === WorkerNavigator.prototype) throw new TypeError('Illegal invocation'); return 8; }}, enumerable: true, configurable: true }});
     if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {{
         Object.defineProperty(WorkerNavigator.prototype, Symbol.toStringTag, {{
             value: 'WorkerNavigator', writable: false, configurable: true, enumerable: false
         }});
     }}
-    globalThis.WorkerNavigator = WorkerNavigator;
+    try {{ Object.defineProperty(globalThis, 'WorkerNavigator', {{ value: WorkerNavigator, writable: true, configurable: true, enumerable: false }}); }} catch(e) {{}}
+    try {{ Object.defineProperty(WorkerNavigator, 'prototype', {{ writable: false, enumerable: false, configurable: false }}); }} catch(e) {{}}
     globalThis.__workerNavigator = Object.create(WorkerNavigator.prototype);
 }}
 
@@ -2263,22 +2266,23 @@ if (typeof globalThis.WorkerLocation === 'undefined') {{
     Object.defineProperty(WorkerLocation.prototype, 'constructor', {{
         value: WorkerLocation, writable: true, enumerable: false, configurable: true
     }});
-    Object.defineProperty(WorkerLocation.prototype, 'href', {{ get: function() {{ return _wlHref; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerLocation.prototype, 'origin', {{ get: function() {{ return _wlHref.split('/').slice(0,3).join('/'); }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerLocation.prototype, 'protocol', {{ get: function() {{ return _wlHref.split(':')[0] + ':'; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerLocation.prototype, 'host', {{ get: function() {{ return _wlHref.split('/')[2] || ''; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerLocation.prototype, 'hostname', {{ get: function() {{ return (_wlHref.split('/')[2] || '').split(':')[0]; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerLocation.prototype, 'port', {{ get: function() {{ var h = _wlHref.split('/')[2] || ''; var p = h.split(':')[1]; return p || ''; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerLocation.prototype, 'pathname', {{ get: function() {{ return '/' + (_wlHref.split('/').slice(3).join('/') || '').split('?')[0].split('#')[0]; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerLocation.prototype, 'search', {{ get: function() {{ var q = _wlHref.split('?')[1]; return q ? '?' + q.split('#')[0] : ''; }}, enumerable: true, configurable: true }});
-    Object.defineProperty(WorkerLocation.prototype, 'hash', {{ get: function() {{ var h = _wlHref.split('#')[1]; return h ? '#' + h : ''; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'href', {{ get: function() {{ if (this === WorkerLocation.prototype) throw new TypeError('Illegal invocation'); return _wlHref; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'origin', {{ get: function() {{ if (this === WorkerLocation.prototype) throw new TypeError('Illegal invocation'); return _wlHref.split('/').slice(0,3).join('/'); }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'protocol', {{ get: function() {{ if (this === WorkerLocation.prototype) throw new TypeError('Illegal invocation'); return _wlHref.split(':')[0] + ':'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'host', {{ get: function() {{ if (this === WorkerLocation.prototype) throw new TypeError('Illegal invocation'); return _wlHref.split('/')[2] || ''; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'hostname', {{ get: function() {{ if (this === WorkerLocation.prototype) throw new TypeError('Illegal invocation'); return (_wlHref.split('/')[2] || '').split(':')[0]; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'port', {{ get: function() {{ if (this === WorkerLocation.prototype) throw new TypeError('Illegal invocation'); var h = _wlHref.split('/')[2] || ''; var p = h.split(':')[1]; return p || ''; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'pathname', {{ get: function() {{ if (this === WorkerLocation.prototype) throw new TypeError('Illegal invocation'); return '/' + (_wlHref.split('/').slice(3).join('/') || '').split('?')[0].split('#')[0]; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'search', {{ get: function() {{ if (this === WorkerLocation.prototype) throw new TypeError('Illegal invocation'); var q = _wlHref.split('?')[1]; return q ? '?' + q.split('#')[0] : ''; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'hash', {{ get: function() {{ if (this === WorkerLocation.prototype) throw new TypeError('Illegal invocation'); var h = _wlHref.split('#')[1]; return h ? '#' + h : ''; }}, enumerable: true, configurable: true }});
     WorkerLocation.prototype.toString = function() {{ return _wlHref; }};
     if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {{
         Object.defineProperty(WorkerLocation.prototype, Symbol.toStringTag, {{
             value: 'WorkerLocation', writable: false, configurable: true, enumerable: false
         }});
     }}
-    globalThis.WorkerLocation = WorkerLocation;
+    try {{ Object.defineProperty(globalThis, 'WorkerLocation', {{ value: WorkerLocation, writable: true, configurable: true, enumerable: false }}); }} catch(e) {{}}
+    try {{ Object.defineProperty(WorkerLocation, 'prototype', {{ writable: false, enumerable: false, configurable: false }}); }} catch(e) {{}}
     globalThis.__workerLocation = Object.create(WorkerLocation.prototype);
 }}
 
@@ -2316,7 +2320,14 @@ if (typeof globalThis.DedicatedWorkerGlobalScope === 'undefined') {{
             value: 'DedicatedWorkerGlobalScope', writable: false, configurable: true, enumerable: false
         }});
     }}
-    globalThis.DedicatedWorkerGlobalScope = DedicatedWorkerGlobalScope;
+    try {{ Object.defineProperty(globalThis, 'DedicatedWorkerGlobalScope', {{ value: DedicatedWorkerGlobalScope, writable: true, configurable: true, enumerable: false }}); }} catch(e) {{}}
+    try {{ Object.defineProperty(DedicatedWorkerGlobalScope, 'prototype', {{ writable: false, enumerable: false, configurable: false }}); }} catch(e) {{}}
+    // Immutable prototype: [[SetPrototypeOf]] must throw
+    Object.defineProperty(DedicatedWorkerGlobalScope.prototype, '__proto__', {{
+        configurable: false,
+        get: function() {{ return Object.getPrototypeOf(DedicatedWorkerGlobalScope.prototype); }},
+        set: function() {{ throw new TypeError('Cannot set prototype of an immutable prototype object'); }}
+    }});
     // Set __proto__ of globalThis to DedicatedWorkerGlobalScope.prototype
     // so `self instanceof DedicatedWorkerGlobalScope` works
     try {{ Object.setPrototypeOf(globalThis, DedicatedWorkerGlobalScope.prototype); }} catch(e) {{}}

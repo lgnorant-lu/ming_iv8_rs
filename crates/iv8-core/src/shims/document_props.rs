@@ -313,10 +313,13 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         document.createEvent = function createEvent(type) {
             var ctorMap = { Event: Event, CustomEvent: CustomEvent, MouseEvent: MouseEvent, UIEvent: UIEvent, KeyboardEvent: KeyboardEvent, AnimationEvent: AnimationEvent, TransitionEvent: TransitionEvent, MessageEvent: MessageEvent, DragEvent: DragEvent, BeforeUnloadEvent: BeforeUnloadEvent, HashChangeEvent: HashChangeEvent, PageTransitionEvent: PageTransitionEvent, PopStateEvent: PopStateEvent, StorageEvent: StorageEvent, SubmitEvent: SubmitEvent, ToggleEvent: ToggleEvent, CloseWatcher: CloseWatcher, PromiseRejectionEvent: PromiseRejectionEvent, ErrorEvent: ErrorEvent, FormDataEvent: FormDataEvent, DragEvent: DragEvent };
             var Ctor = ctorMap[type];
+            var ev;
             if (Ctor) {
-                try { return new Ctor(type); } catch(e) {}
+                try { ev = new Ctor(type); } catch(e) {}
             }
-            return new Event(type);
+            if (!ev) { ev = new Event(type); }
+            try { Object.defineProperty(ev, 'isTrusted', { value: false, writable: false, enumerable: true, configurable: true }); } catch(e) { ev.isTrusted = false; }
+            return ev;
         };
     }
     if (!document.implementation) {
@@ -970,16 +973,27 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         try { Object.defineProperty(globalThis.close, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
     }
 
-    // window.external — legacy IE API, returns empty/minimal
-    if (typeof globalThis.external === 'undefined') {
-        var ext = {};
-        ext.AddSearchProvider = function() {};
-        ext.IsSearchProviderInstalled = function() { return 0; };
+    // window.external — legacy IE API. Must be instanceof External.
+    // Real Chrome has window.external as an External instance.
+    if (typeof External === 'undefined') {
+        function External() {}
         if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-            Object.defineProperty(ext, Symbol.toStringTag, { value: 'External', writable: false, configurable: true, enumerable: false });
+            Object.defineProperty(External.prototype, Symbol.toStringTag, {
+                value: 'External', writable: false, configurable: true, enumerable: false
+            });
         }
-        Object.defineProperty(globalThis, 'external', { value: ext, writable: true, configurable: true, enumerable: true });
+        globalThis.External = External;
     }
+    try {
+        var _extProto = (typeof External !== 'undefined' && External.prototype)
+            ? External.prototype : Object.prototype;
+        var _extInstance = Object.create(_extProto);
+        _extInstance.AddSearchProvider = function() {};
+        _extInstance.IsSearchProviderInstalled = function() { return 0; };
+        Object.defineProperty(globalThis, 'external', {
+            value: _extInstance, writable: true, configurable: true, enumerable: true
+        });
+    } catch(e) {}
 
     // Stringifier for HTMLAnchorElement/HTMLAreaElement — toString returns href
     if (typeof HTMLAnchorElement !== 'undefined' && HTMLAnchorElement.prototype && !HTMLAnchorElement.prototype.toString) {
@@ -990,10 +1004,13 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     }
 
     // Location interface properties
+    // [LegacyUnforgeable] attributes are own properties of the location
+    // instance, not Location.prototype. idlharness uses
+    // assert_own_property(window.location, name) for these.
     try {
         var _locObj = (typeof location !== 'undefined') ? location : null;
         var _locProto = (typeof Location !== 'undefined' && Location.prototype) ? Location.prototype : null;
-        var _locTarget = _locProto || _locObj;
+        var _locTarget = _locObj;  // Use instance, not prototype
         if (_locTarget) {
             var _locProps = {
                 origin: function() {
@@ -1047,6 +1064,13 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
+    // Location stringifier — Location.prototype.toString returns href
+    try {
+        if (typeof Location !== 'undefined' && Location.prototype && !Location.prototype.toString) {
+            Location.prototype.toString = function toString() { return this.href || ''; };
+        }
+    } catch(e) {}
+
     // postMessage argument count validation
     try {
         var _origPostMessage = globalThis.postMessage;
@@ -1075,6 +1099,155 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             }
         });
     }
+
+    // INHERITS_other fix: delete own properties that shadow prototype.
+    // idlharness assert_inherits requires properties on the prototype chain,
+    // not own properties on the instance. After codegen installs prototypes
+    // (capture_codegen_prototypes), remove shadowing own props so lookups
+    // resolve via the prototype chain.
+
+    // History — set __proto__ to History.prototype
+    try {
+        if (typeof History !== 'undefined' && History.prototype && globalThis.history) {
+            try { Object.setPrototypeOf(globalThis.history, History.prototype); } catch(e) {}
+        }
+    } catch(e) {}
+
+    // Storage — set __proto__ to Storage.prototype
+    try {
+        if (typeof Storage !== 'undefined' && Storage.prototype) {
+            ['localStorage', 'sessionStorage'].forEach(function(name) {
+                var obj = globalThis[name];
+                if (obj && typeof obj === 'object') {
+                    try { Object.setPrototypeOf(obj, Storage.prototype); } catch(e) {}
+                }
+            });
+        }
+    } catch(e) {}
+
+    // DOMImplementation — set __proto__ to DOMImplementation.prototype
+    // so codegen properties are in the prototype chain (not on instance).
+    // Don't delete own properties — that breaks the methods.
+    try {
+        if (typeof DOMImplementation !== 'undefined' && DOMImplementation.prototype && document.implementation) {
+            try { Object.setPrototypeOf(document.implementation, DOMImplementation.prototype); } catch(e) {}
+        }
+    } catch(e) {}
+
+    // External — set __proto__ to External.prototype
+    try {
+        if (typeof External !== 'undefined' && External.prototype && globalThis.external) {
+            try { Object.setPrototypeOf(globalThis.external, External.prototype); } catch(e) {}
+        }
+    } catch(e) {}
+
+    // MediaQueryList — set __proto__ on returned objects
+    try {
+        if (typeof MediaQueryList !== 'undefined' && MediaQueryList.prototype) {
+            var origMM = globalThis.matchMedia;
+            if (origMM && !origMM.__iv8MqlInheritsPatched) {
+                var _mqlInheritsWrapper = function matchMedia(query) {
+                    var mql = origMM.call(this, query);
+                    if (mql && typeof MediaQueryList !== 'undefined' && MediaQueryList.prototype) {
+                        try { Object.setPrototypeOf(mql, MediaQueryList.prototype); } catch(e) {}
+                    }
+                    return mql;
+                };
+                Object.defineProperty(_mqlInheritsWrapper, '__iv8MqlInheritsPatched', {
+                    value: true, writable: true, configurable: true, enumerable: false,
+                });
+                globalThis.matchMedia = _mqlInheritsWrapper;
+            }
+        }
+    } catch(e) {}
+
+    // BarProp — window.locationbar/menubar/etc must be BarProp instances.
+    // idlharness checks `window.locationbar instanceof BarProp`.
+    // If codegen did not create a BarProp constructor, create one here.
+    if (typeof BarProp === 'undefined') {
+        function BarProp() {}
+        if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+            Object.defineProperty(BarProp.prototype, Symbol.toStringTag, {
+                value: 'BarProp', writable: false, configurable: true, enumerable: false
+            });
+        }
+        globalThis.BarProp = BarProp;
+    }
+    try {
+        var _barProto = (typeof BarProp !== 'undefined' && BarProp.prototype)
+            ? BarProp.prototype : Object.prototype;
+        var _barPropInstance = Object.create(_barProto);
+        Object.defineProperty(_barPropInstance, 'visible', {
+            get: function() { return true; },
+            enumerable: true, configurable: true
+        });
+        // Set all bar props to use this instance. Reinstall unconditionally
+        // so existing plain objects become proper BarProp instances.
+        ['locationbar', 'menubar', 'personalbar', 'scrollbars', 'statusbar', 'toolbar'].forEach(function(name) {
+            var existing = globalThis[name];
+            if (existing instanceof BarProp) return;
+            try {
+                Object.defineProperty(globalThis, name, {
+                    value: _barPropInstance, writable: true,
+                    configurable: true, enumerable: true
+                });
+            } catch(e) {}
+        });
+    } catch(e) {}
+
+    // document.all — [[IsHTMLDDA]] exotic object. typeof must return
+    // "undefined". This internal slot cannot be set from JS.
+    // Making document.all actually undefined breaks DOM queries that
+    // use document.all internally. Leave as-is for now (7 FAIL accepted).
+    // try {
+    //     Object.defineProperty(document, 'all', {
+    //         value: undefined,
+    //         writable: false,
+    //         enumerable: false,
+    //         configurable: true
+    //     });
+    // } catch(e) {}
+
+    // Document.location — [LegacyUnforgeable] own property on every Document
+    // instance. idlharness checks assert_own_property on iframe.contentDocument,
+    // new Document(), and documentWithHandler instances.
+    try {
+        if (typeof Document !== 'undefined' && Document.prototype) {
+            if (!Object.getOwnPropertyDescriptor(Document.prototype, 'location')) {
+                Object.defineProperty(Document.prototype, 'location', {
+                    get: function() { return globalThis.location; },
+                    enumerable: true,
+                    configurable: true,
+                });
+            }
+            // Wrap DOMImplementation.createDocument so XMLDocuments get location
+            if (typeof document !== 'undefined' && document.implementation
+                && document.implementation.createDocument
+                && !document.implementation.createDocument.__iv8LocPatched) {
+                var _origImplCreateDoc = document.implementation.createDocument;
+                var _implWrapper = function createDocument(ns, name, doctype) {
+                    var doc = _origImplCreateDoc.call(this, ns, name, doctype);
+                    if (doc) {
+                        try {
+                            if (!Object.getOwnPropertyDescriptor(doc, 'location')) {
+                                Object.defineProperty(doc, 'location', {
+                                    value: globalThis.location,
+                                    writable: false,
+                                    enumerable: true,
+                                    configurable: false,
+                                });
+                            }
+                        } catch(e) {}
+                    }
+                    return doc;
+                };
+                Object.defineProperty(_implWrapper, '__iv8LocPatched', {
+                    value: true, writable: true, configurable: true, enumerable: false,
+                });
+                document.implementation.createDocument = _implWrapper;
+            }
+        }
+    } catch(e) {}
 
 })();
 "#;

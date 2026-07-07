@@ -815,13 +815,18 @@ pub const NAMED_NODE_MAP_JS: &str = r#"
                             var attr = Object.create(
                                 (typeof Attr !== 'undefined' && Attr.prototype) ? Attr.prototype : Object.prototype
                             );
-                            Object.defineProperty(attr, 'name', { value: name, writable: false, enumerable: true, configurable: true });
-                            Object.defineProperty(attr, 'value', { value: value, writable: true, enumerable: true, configurable: true });
-                            Object.defineProperty(attr, 'localName', { value: name, writable: false, enumerable: true, configurable: true });
-                            Object.defineProperty(attr, 'namespaceURI', { value: null, writable: false, enumerable: true, configurable: true });
-                            Object.defineProperty(attr, 'prefix', { value: null, writable: false, enumerable: true, configurable: true });
-                            Object.defineProperty(attr, 'ownerElement', { value: this, writable: false, enumerable: true, configurable: true });
-                            Object.defineProperty(attr, 'specified', { value: true, writable: false, enumerable: true, configurable: true });
+                            // Store data in hidden properties read by codegen
+                            // Attr.prototype accessors (__iv8Name, __iv8Value, etc).
+                            // Do NOT define name/value/localName/etc as own properties
+                            // — idlharness assert_inherits checks they are inherited
+                            // from the prototype, not own.
+                            Object.defineProperty(attr, '__iv8Name', { value: name, writable: true, enumerable: false, configurable: true });
+                            Object.defineProperty(attr, '__iv8Value', { value: value, writable: true, enumerable: false, configurable: true });
+                            Object.defineProperty(attr, '__iv8LocalName', { value: name, writable: true, enumerable: false, configurable: true });
+                            Object.defineProperty(attr, '__iv8NamespaceURI', { value: null, writable: true, enumerable: false, configurable: true });
+                            Object.defineProperty(attr, '__iv8Prefix', { value: null, writable: true, enumerable: false, configurable: true });
+                            Object.defineProperty(attr, '__iv8OwnerElement', { value: this, writable: true, enumerable: false, configurable: true });
+                            Object.defineProperty(attr, '__iv8Specified', { value: true, writable: true, enumerable: false, configurable: true });
                             if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
                                 try { Object.defineProperty(attr, Symbol.toStringTag, {
                                     value: 'Attr', writable: false, configurable: true, enumerable: false

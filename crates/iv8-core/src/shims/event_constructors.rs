@@ -74,6 +74,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         this._cancelBubble = false;
         this._stopPropagation = false;
         this._stopImmediatePropagation = false;
+        this.isTrusted = false;
     }
 
     _defAccessor(Event.prototype, 'type', '');
@@ -143,10 +144,22 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         Event.call(this, type, options);
         options = options || {};
         this._detail = options.detail !== undefined ? options.detail : null;
+        this.isTrusted = false;
     }
     CustomEvent.prototype = Object.create(Event.prototype);
     Object.defineProperty(CustomEvent.prototype, 'constructor', {value: CustomEvent, writable: true, enumerable: false, configurable: true});
     _defReadOnly(CustomEvent.prototype, 'detail', null);
+
+    CustomEvent.prototype.initCustomEvent = function initCustomEvent(type, bubbles, cancelable, detail) {
+        if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present.');
+        this._type = type;
+        this._bubbles = bubbles !== undefined ? !!bubbles : false;
+        this._cancelable = cancelable !== undefined ? !!cancelable : false;
+        this._detail = detail;
+    };
+    try { Object.defineProperty(CustomEvent.prototype.initCustomEvent, 'name', { value: 'initCustomEvent' }); } catch(e) {}
+    try { Object.defineProperty(CustomEvent.prototype.initCustomEvent, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+
     Object.defineProperty(CustomEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
     Object.defineProperty(CustomEvent, 'length', {value: 1, writable: false, enumerable: false, configurable: true});
 
