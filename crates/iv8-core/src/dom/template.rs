@@ -1247,6 +1247,13 @@ pub fn capture_codegen_prototypes(
         "HTMLMetaElement", "HTMLUnknownElement",
         "NodeList", "DOMTokenList", "CSSStyleDeclaration",
         "Headers", "Response", "Request", "Text", "Comment", "Document",
+        "DocumentFragment", "CharacterData", "XMLDocument",
+        "DocumentType", "Attr", "NodeIterator", "TreeWalker",
+        "XPathResult", "XPathExpression", "XPathEvaluator",
+        "Range", "MutationObserver", "MutationRecord",
+        "NamedNodeMap", "DOMImplementation", "ShadowRoot",
+        "HTMLCollection", "HTMLOptionsCollection",
+        "HTMLAllCollection",
     ];
     let mut map = HashMap::new();
     for name in names {
