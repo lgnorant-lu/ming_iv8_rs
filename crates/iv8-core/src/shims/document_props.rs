@@ -988,19 +988,49 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         var _extProto = (typeof External !== 'undefined' && External.prototype)
             ? External.prototype : Object.prototype;
         var _extInstance = Object.create(_extProto);
-        _extInstance.AddSearchProvider = function() {};
-        _extInstance.IsSearchProviderInstalled = function() { return 0; };
         Object.defineProperty(globalThis, 'external', {
             value: _extInstance, writable: true, configurable: true, enumerable: true
         });
     } catch(e) {}
+    // External prototype operations — AddSearchProvider / IsSearchProviderInstalled
+    // must be own properties of External.prototype (not the instance) for idlharness.
+    try {
+        if (typeof External !== 'undefined' && External.prototype) {
+            if (!External.prototype.AddSearchProvider) {
+                External.prototype.AddSearchProvider = function AddSearchProvider() {};
+                try { Object.defineProperty(External.prototype.AddSearchProvider, 'name', { value: 'AddSearchProvider' }); } catch(e) {}
+                try { Object.defineProperty(External.prototype.AddSearchProvider, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+            }
+            if (!External.prototype.IsSearchProviderInstalled) {
+                External.prototype.IsSearchProviderInstalled = function IsSearchProviderInstalled() { return 0; };
+                try { Object.defineProperty(External.prototype.IsSearchProviderInstalled, 'name', { value: 'IsSearchProviderInstalled' }); } catch(e) {}
+                try { Object.defineProperty(External.prototype.IsSearchProviderInstalled, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+            }
+        }
+    } catch(e) {}
+    // Delete AddSearchProvider / IsSearchProviderInstalled from the external
+    // instance if they are own properties, so they resolve via the prototype.
+    try {
+        if (globalThis.external && globalThis.external.hasOwnProperty('AddSearchProvider')) {
+            try { delete globalThis.external.AddSearchProvider; } catch(e) {}
+        }
+        if (globalThis.external && globalThis.external.hasOwnProperty('IsSearchProviderInstalled')) {
+            try { delete globalThis.external.IsSearchProviderInstalled; } catch(e) {}
+        }
+    } catch(e) {}
 
     // Stringifier for HTMLAnchorElement/HTMLAreaElement — toString returns href
-    if (typeof HTMLAnchorElement !== 'undefined' && HTMLAnchorElement.prototype && !HTMLAnchorElement.prototype.toString) {
-        HTMLAnchorElement.prototype.toString = function toString() { return this.href || ''; };
+    if (typeof HTMLAnchorElement !== 'undefined' && HTMLAnchorElement.prototype) {
+        Object.defineProperty(HTMLAnchorElement.prototype, 'toString', {
+            value: function toString() { return this.href || ''; },
+            writable: true, enumerable: false, configurable: true
+        });
     }
-    if (typeof HTMLAreaElement !== 'undefined' && HTMLAreaElement.prototype && !HTMLAreaElement.prototype.toString) {
-        HTMLAreaElement.prototype.toString = function toString() { return this.href || ''; };
+    if (typeof HTMLAreaElement !== 'undefined' && HTMLAreaElement.prototype) {
+        Object.defineProperty(HTMLAreaElement.prototype, 'toString', {
+            value: function toString() { return this.href || ''; },
+            writable: true, enumerable: false, configurable: true
+        });
     }
 
     // Location interface properties
@@ -1066,8 +1096,11 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
 
     // Location stringifier — Location.prototype.toString returns href
     try {
-        if (typeof Location !== 'undefined' && Location.prototype && !Location.prototype.toString) {
-            Location.prototype.toString = function toString() { return this.href || ''; };
+        if (typeof Location !== 'undefined' && Location.prototype) {
+            Object.defineProperty(Location.prototype, 'toString', {
+                value: function toString() { return this.href || ''; },
+                writable: true, enumerable: false, configurable: true
+            });
         }
     } catch(e) {}
 
@@ -1106,14 +1139,15 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // (capture_codegen_prototypes), remove shadowing own props so lookups
     // resolve via the prototype chain.
 
-    // History — set __proto__ to History.prototype
+    // History — set __proto__ to History.prototype.
+    // Don't delete own properties — codegen prototype stubs may not work.
     try {
         if (typeof History !== 'undefined' && History.prototype && globalThis.history) {
             try { Object.setPrototypeOf(globalThis.history, History.prototype); } catch(e) {}
         }
     } catch(e) {}
 
-    // Storage — set __proto__ to Storage.prototype
+    // Storage — set __proto__ to Storage.prototype.
     try {
         if (typeof Storage !== 'undefined' && Storage.prototype) {
             ['localStorage', 'sessionStorage'].forEach(function(name) {
@@ -1126,11 +1160,34 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     } catch(e) {}
 
     // DOMImplementation — set __proto__ to DOMImplementation.prototype
-    // so codegen properties are in the prototype chain (not on instance).
-    // Don't delete own properties — that breaks the methods.
+    // so codegen properties are in the prototype chain.
+    // Don't delete own properties — codegen prototype methods are stubs
+    // that don't actually work; the real implementations are own props.
     try {
         if (typeof DOMImplementation !== 'undefined' && DOMImplementation.prototype && document.implementation) {
             try { Object.setPrototypeOf(document.implementation, DOMImplementation.prototype); } catch(e) {}
+        }
+    } catch(e) {}
+
+    // HTMLCollection — define item/namedItem on HTMLCollection.prototype
+    // if missing, so assert_inherits passes for document.body.children etc.
+    try {
+        if (typeof HTMLCollection !== 'undefined' && HTMLCollection.prototype) {
+            if (!HTMLCollection.prototype.item) {
+                HTMLCollection.prototype.item = function item(index) {
+                    if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present.');
+                    return this[index] || null;
+                };
+            }
+            if (!HTMLCollection.prototype.namedItem) {
+                HTMLCollection.prototype.namedItem = function namedItem(name) {
+                    if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present.');
+                    for (var i = 0; i < this.length; i++) {
+                        if (this[i].id === name || this[i].name === name) return this[i];
+                    }
+                    return null;
+                };
+            }
         }
     } catch(e) {}
 
@@ -1141,7 +1198,8 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
-    // MediaQueryList — set __proto__ on returned objects
+    // MediaQueryList — wrap matchMedia so returned objects get the correct
+    // prototype chain. Don't delete own properties — codegen stubs may not work.
     try {
         if (typeof MediaQueryList !== 'undefined' && MediaQueryList.prototype) {
             var origMM = globalThis.matchMedia;
@@ -1246,6 +1304,62 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                 });
                 document.implementation.createDocument = _implWrapper;
             }
+        }
+    } catch(e) {}
+
+    // XPathResult — set __proto__ on document.evaluate() result
+    try {
+        var _origEvaluate = document.evaluate;
+        if (_origEvaluate && typeof XPathResult !== 'undefined' && XPathResult.prototype) {
+            document.evaluate = function evaluate(expr, context) {
+                var result = _origEvaluate.apply(this, arguments);
+                if (result && typeof result === 'object') {
+                    try { Object.setPrototypeOf(result, XPathResult.prototype); } catch(e) {}
+                }
+                return result;
+            };
+        }
+    } catch(e) {}
+
+    // TreeWalker — set __proto__ on document.createTreeWalker() result
+    try {
+        var _origCTW = document.createTreeWalker;
+        if (_origCTW && typeof TreeWalker !== 'undefined' && TreeWalker.prototype) {
+            document.createTreeWalker = function createTreeWalker() {
+                var result = _origCTW.apply(this, arguments);
+                if (result && typeof result === 'object') {
+                    try { Object.setPrototypeOf(result, TreeWalker.prototype); } catch(e) {}
+                }
+                return result;
+            };
+        }
+    } catch(e) {}
+
+    // NodeIterator — set __proto__ on document.createNodeIterator() result
+    try {
+        var _origCNI = document.createNodeIterator;
+        if (_origCNI && typeof NodeIterator !== 'undefined' && NodeIterator.prototype) {
+            document.createNodeIterator = function createNodeIterator() {
+                var result = _origCNI.apply(this, arguments);
+                if (result && typeof result === 'object') {
+                    try { Object.setPrototypeOf(result, NodeIterator.prototype); } catch(e) {}
+                }
+                return result;
+            };
+        }
+    } catch(e) {}
+
+    // XPathExpression — set __proto__ on document.createExpression() result
+    try {
+        var _origCE = document.createExpression;
+        if (_origCE && typeof XPathExpression !== 'undefined' && XPathExpression.prototype) {
+            document.createExpression = function createExpression() {
+                var result = _origCE.apply(this, arguments);
+                if (result && typeof result === 'object') {
+                    try { Object.setPrototypeOf(result, XPathExpression.prototype); } catch(e) {}
+                }
+                return result;
+            };
         }
     } catch(e) {}
 

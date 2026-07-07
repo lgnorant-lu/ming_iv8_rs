@@ -74,7 +74,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         this._cancelBubble = false;
         this._stopPropagation = false;
         this._stopImmediatePropagation = false;
-        this.isTrusted = false;
+        Object.defineProperty(this, 'isTrusted', { value: false, writable: false, enumerable: true, configurable: true });
     }
 
     _defAccessor(Event.prototype, 'type', '');
@@ -144,7 +144,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         Event.call(this, type, options);
         options = options || {};
         this._detail = options.detail !== undefined ? options.detail : null;
-        this.isTrusted = false;
+        Object.defineProperty(this, 'isTrusted', { value: false, writable: false, enumerable: true, configurable: true });
     }
     CustomEvent.prototype = Object.create(Event.prototype);
     Object.defineProperty(CustomEvent.prototype, 'constructor', {value: CustomEvent, writable: true, enumerable: false, configurable: true});
