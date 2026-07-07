@@ -327,6 +327,10 @@ pub const CSSOM_PROTO_SETUP_JS: &str = r#"
         MediaList.prototype.toString = function() { return this.__iv8MediaText || ''; };
     }
 
+    // NamedNodeMap is installed separately via NAMED_NODE_MAP_JS to avoid
+    // being skipped when CSSOM_PROTO_SETUP_JS IIFE throws on frozen prototypes.
+    // See NAMED_NODE_MAP_JS below.
+
     // ---- CSS namespace ----
     // CSS namespace is installed separately via CSS_NAMESPACE_JS to avoid
     // being skipped when CSSOM_PROTO_SETUP_JS IIFE throws on frozen prototypes.
@@ -726,7 +730,126 @@ pub const CSSOM_SHIM_JS: &str = r#"
 })();
 "#;
 
-/// CSS namespace object (CSS.supports, CSS.escape, CSS.cssFloat).
+/// NamedNodeMap implementation (element.attributes).
+/// Installed separately to avoid being skipped when
+/// CSSOM_PROTO_SETUP_JS IIFE throws on frozen prototypes.
+pub const NAMED_NODE_MAP_JS: &str = r#"
+(function() {
+    'use strict';
+
+    if (typeof Element === 'undefined' || !Element.prototype) return;
+
+    var nnmProto = (typeof NamedNodeMap !== 'undefined' && NamedNodeMap.prototype)
+        ? NamedNodeMap.prototype : null;
+    if (!nnmProto) {
+        function NamedNodeMap() {}
+        nnmProto = NamedNodeMap.prototype;
+        if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+            Object.defineProperty(nnmProto, Symbol.toStringTag, {
+                value: 'NamedNodeMap', writable: false, configurable: true, enumerable: false
+            });
+        }
+        globalThis.NamedNodeMap = NamedNodeMap;
+    }
+
+    if (!nnmProto.item) {
+        nnmProto.item = function item(index) {
+            if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present.');
+            var attrs = this.__iv8Attrs;
+            if (!attrs || index < 0 || index >= attrs.length) return null;
+            return attrs[index];
+        };
+        try { Object.defineProperty(nnmProto.item, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+    }
+    if (!nnmProto.getNamedItem) {
+        nnmProto.getNamedItem = function getNamedItem(qualifiedName) {
+            if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present.');
+            var attrs = this.__iv8Attrs;
+            if (!attrs) return null;
+            for (var i = 0; i < attrs.length; i++) {
+                if (attrs[i].name === qualifiedName) return attrs[i];
+            }
+            return null;
+        };
+        try { Object.defineProperty(nnmProto.getNamedItem, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+    }
+    if (!nnmProto.setNamedItem) {
+        nnmProto.setNamedItem = function setNamedItem(attr) {
+            if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present.');
+            var attrs = this.__iv8Attrs;
+            if (!attrs) return null;
+            for (var i = 0; i < attrs.length; i++) {
+                if (attrs[i].name === attr.name) { var old = attrs[i]; attrs[i] = attr; return old; }
+            }
+            attrs.push(attr);
+            return null;
+        };
+    }
+    if (!nnmProto.removeNamedItem) {
+        nnmProto.removeNamedItem = function removeNamedItem(qualifiedName) {
+            if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present.');
+            var attrs = this.__iv8Attrs;
+            if (!attrs) return null;
+            for (var i = 0; i < attrs.length; i++) {
+                if (attrs[i].name === qualifiedName) return attrs.splice(i, 1)[0];
+            }
+            return null;
+        };
+    }
+    Object.defineProperty(nnmProto, 'length', {
+        get: function() { return this.__iv8Attrs ? this.__iv8Attrs.length : 0; },
+        enumerable: true, configurable: true
+    });
+
+    try {
+        var attrDesc = Object.getOwnPropertyDescriptor(Element.prototype, 'attributes');
+        if (attrDesc && attrDesc.get && attrDesc.configurable) {
+            Object.defineProperty(Element.prototype, 'attributes', {
+                get: function() {
+                    var attrs = [];
+                    if (this.getAttributeNames) {
+                        var names = this.getAttributeNames();
+                        for (var i = 0; i < names.length; i++) {
+                            var name = names[i];
+                            var value = this.getAttribute(name);
+                            var attr = Object.create(
+                                (typeof Attr !== 'undefined' && Attr.prototype) ? Attr.prototype : Object.prototype
+                            );
+                            Object.defineProperty(attr, 'name', { value: name, writable: false, enumerable: true, configurable: true });
+                            Object.defineProperty(attr, 'value', { value: value, writable: true, enumerable: true, configurable: true });
+                            Object.defineProperty(attr, 'localName', { value: name, writable: false, enumerable: true, configurable: true });
+                            Object.defineProperty(attr, 'namespaceURI', { value: null, writable: false, enumerable: true, configurable: true });
+                            Object.defineProperty(attr, 'prefix', { value: null, writable: false, enumerable: true, configurable: true });
+                            Object.defineProperty(attr, 'ownerElement', { value: this, writable: false, enumerable: true, configurable: true });
+                            Object.defineProperty(attr, 'specified', { value: true, writable: false, enumerable: true, configurable: true });
+                            if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+                                try { Object.defineProperty(attr, Symbol.toStringTag, {
+                                    value: 'Attr', writable: false, configurable: true, enumerable: false
+                                }); } catch(e) {}
+                            }
+                            attrs.push(attr);
+                        }
+                    }
+                    var nnm = Object.create(nnmProto);
+                    Object.defineProperty(nnm, '__iv8Attrs', { value: attrs, writable: true, enumerable: false, configurable: true });
+                    // Define index properties for array-like access
+                    for (var ai = 0; ai < attrs.length; ai++) {
+                        (function(idx, attrObj) {
+                            Object.defineProperty(nnm, idx, {
+                                value: attrObj, writable: true, enumerable: true, configurable: true
+                            });
+                        })(ai, attrs[ai]);
+                    }
+                    return nnm;
+                },
+                set: undefined,
+                enumerable: true,
+                configurable: true
+            });
+        }
+    } catch(e) {}
+})();
+"#;
 /// Installed as a separate eval to avoid being skipped when
 /// CSSOM_PROTO_SETUP_JS IIFE throws on V8 frozen prototypes.
 /// V8 FunctionTemplate prototypes are non-extensible by default,

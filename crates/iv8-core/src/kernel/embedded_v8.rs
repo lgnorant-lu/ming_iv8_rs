@@ -833,7 +833,7 @@ impl EmbeddedV8Kernel {
                             for (let j = 0; j < names.length; j++) {
                                 let pname = names[j];
                                 if (pname === 'constructor') continue;
-                                try {
+try {
                                     var desc = Object.getOwnPropertyDescriptor(proto, pname);
                                     if (!desc || typeof desc.value !== 'function') continue;
                                     // Skip already-wrapped functions
@@ -916,6 +916,7 @@ impl EmbeddedV8Kernel {
                             for (let j = 0; j < names.length; j++) {
                                 let pname = names[j];
                                 if (pname === 'constructor') continue;
+                                if (pname === 'attributes') continue;
                                 try {
                                     var desc = Object.getOwnPropertyDescriptor(proto, pname);
                                     if (!desc || !desc.get) continue;
@@ -2028,6 +2029,14 @@ impl EmbeddedV8Kernel {
         // reaching the CSS namespace section.
         self.eval(
             crate::shims::cssom::CSS_NAMESPACE_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
+        // 12b3. Install NamedNodeMap (element.attributes)
+        // Separate for same reason as CSS namespace.
+        self.eval(
+            crate::shims::cssom::NAMED_NODE_MAP_JS,
             crate::kernel::EvalOpts::default(),
         )
         .ok();
