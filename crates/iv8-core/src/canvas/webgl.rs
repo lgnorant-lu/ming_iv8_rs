@@ -391,6 +391,28 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
             "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 (0x00002882) Direct3D11 vs_5_0 ps_5_0, D3D11)",
         );
 
+        const FORBIDDEN_RENDERER_SUBSTRINGS: &[&str] = &["SwiftShader", "llvmpipe"];
+        for forbidden in FORBIDDEN_RENDERER_SUBSTRINGS {
+            if unmasked_renderer.contains(forbidden) {
+                tracing::warn!(
+                    target: "iv8.canvas",
+                    renderer = unmasked_renderer,
+                    forbidden = forbidden,
+                    "webgl.UNMASKED_RENDERER_WEBGL contains a cloud VM/headless signal; \
+                     anti-fingerprint scripts may detect this as headless"
+                );
+            }
+            if renderer.contains(forbidden) {
+                tracing::warn!(
+                    target: "iv8.canvas",
+                    renderer = renderer,
+                    forbidden = forbidden,
+                    "webgl.RENDERER contains a cloud VM/headless signal; \
+                     anti-fingerprint scripts may detect this as headless"
+                );
+            }
+        }
+
         match pname {
             GL_VENDOR => {
                 if let Some(s) = v8::String::new(scope, vendor) {

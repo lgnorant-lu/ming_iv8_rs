@@ -1227,7 +1227,87 @@ unsafe extern "C" fn stub_promise_resolve_empty_array(info: *const v8::FunctionC
     }));
 }
 
-// navigator.geolocation → object with stub methods
+// Build the Geolocation error object: {code:1, message:"...", PERMISSION_DENIED:1}
+fn build_geo_permission_denied<'s>(
+    scope: &'s v8::PinScope<'s, '_>,
+) -> v8::Local<'s, v8::Object> {
+    let obj = v8::Object::new(scope);
+    let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+    obj.set(scope, s("code").into(), v8::Integer::new(scope, 1).into());
+    obj.set(
+        scope,
+        s("message").into(),
+        crate::v8_utils::v8_string(scope, "User denied Geolocation").into(),
+    );
+    obj.set(
+        scope,
+        s("PERMISSION_DENIED").into(),
+        v8::Integer::new(scope, 1).into(),
+    );
+    obj
+}
+
+// Call setTimeout(errorCb, 0, errorObj) on the global object.
+// If errorCb is missing or not a function, does nothing (no hang).
+fn schedule_geo_error(
+    scope: &v8::PinScope<'_, '_>,
+    error_cb: Option<v8::Local<v8::Function>>,
+) {
+    let Some(cb) = error_cb else {
+        return;
+    };
+    let global = scope.get_current_context().global(scope);
+    let set_timeout_key = crate::v8_utils::v8_string(scope, "setTimeout");
+    if let Some(set_timeout_val) = global.get(scope, set_timeout_key.into()) {
+        if set_timeout_val.is_function() {
+            let set_timeout: v8::Local<v8::Function> =
+                unsafe { v8::Local::cast_unchecked(set_timeout_val) };
+            let err_obj = build_geo_permission_denied(scope);
+            let delay = v8::Integer::new(scope, 0);
+            set_timeout.call(
+                scope,
+                global.into(),
+                &[cb.into(), delay.into(), err_obj.into()],
+            );
+        }
+    }
+}
+
+// navigator.geolocation.getCurrentPosition(success, error, options)
+// → calls error callback with PERMISSION_DENIED (code=1) via setTimeout
+unsafe extern "C" fn geo_get_current_position(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let error_cb = if args.length() >= 2 && args.get(1).is_function() {
+            Some(unsafe { v8::Local::<v8::Function>::cast_unchecked(args.get(1)) })
+        } else {
+            None
+        };
+        schedule_geo_error(&scope, error_cb);
+    }));
+}
+
+// navigator.geolocation.watchPosition(success, error, options)
+// → same as getCurrentPosition but returns a fake watch ID
+unsafe extern "C" fn geo_watch_position(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let error_cb = if args.length() >= 2 && args.get(1).is_function() {
+            Some(unsafe { v8::Local::<v8::Function>::cast_unchecked(args.get(1)) })
+        } else {
+            None
+        };
+        schedule_geo_error(&scope, error_cb);
+        rv.set(v8::Integer::new(scope, 1).into());
+    }));
+}
+
+// navigator.geolocation → object with methods
 unsafe extern "C" fn nav_geolocation(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -1238,8 +1318,9 @@ unsafe extern "C" fn nav_geolocation(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let obj = v8::Object::new(scope);
         let s = |k: &str| crate::v8_utils::v8_string(scope, k);
-        let build_stub = |name: &str| {
-            let tmpl = v8::FunctionTemplate::builder_raw(stub_noop).build(scope);
+        let build_fn = |name: &str,
+                        cb: unsafe extern "C" fn(*const v8::FunctionCallbackInfo)| {
+            let tmpl = v8::FunctionTemplate::builder_raw(cb).build(scope);
             let name_str = crate::v8_utils::v8_string(scope, name);
             tmpl.set_class_name(name_str);
             tmpl.remove_prototype();
@@ -1248,17 +1329,17 @@ unsafe extern "C" fn nav_geolocation(info: *const v8::FunctionCallbackInfo) {
         obj.set(
             scope,
             s("getCurrentPosition").into(),
-            build_stub("getCurrentPosition").into(),
+            build_fn("getCurrentPosition", geo_get_current_position).into(),
         );
         obj.set(
             scope,
             s("watchPosition").into(),
-            build_stub("watchPosition").into(),
+            build_fn("watchPosition", geo_watch_position).into(),
         );
         obj.set(
             scope,
             s("clearWatch").into(),
-            build_stub("clearWatch").into(),
+            build_fn("clearWatch", stub_noop).into(),
         );
         rv.set(obj.into());
     }));

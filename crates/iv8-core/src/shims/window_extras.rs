@@ -225,20 +225,43 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         });
     }
 
-    // WebSocket stub
+    // WebSocket stub with state-machine lifecycle
     if (!window.WebSocket) {
         window.WebSocket = function WebSocket(url, protocols) {
             this.url = url;
             this.readyState = 0;
-            this.CONNECTING = 0; this.OPEN = 1; this.CLOSING = 2; this.CLOSED = 3;
             this.onopen = null; this.onclose = null; this.onmessage = null; this.onerror = null;
-            this.send = function() {};
-            this.close = function() { this.readyState = 3; };
             this.addEventListener = function() {};
             this.removeEventListener = function() {};
+            var self = this;
+            this.send = function(data) {
+                if (self.readyState !== 1) {
+                    throw new DOMException("WebSocket is not in OPEN state", "InvalidStateError");
+                }
+            };
+            this.close = function() {
+                if (self.readyState === 3) return;
+                self.readyState = 2;
+                self.readyState = 3;
+                if (typeof self.onclose === "function") {
+                    self.onclose({ code: 1005, reason: "", wasClean: true });
+                }
+            };
+            setTimeout(function() {
+                if (self.readyState === 0) {
+                    self.readyState = 1;
+                    if (typeof self.onopen === "function") {
+                        self.onopen({});
+                    }
+                }
+            }, 0);
         };
         window.WebSocket.CONNECTING = 0; window.WebSocket.OPEN = 1;
         window.WebSocket.CLOSING = 2; window.WebSocket.CLOSED = 3;
+        window.WebSocket.prototype.CONNECTING = 0;
+        window.WebSocket.prototype.OPEN = 1;
+        window.WebSocket.prototype.CLOSING = 2;
+        window.WebSocket.prototype.CLOSED = 3;
     }
 
     // indexedDB stub
