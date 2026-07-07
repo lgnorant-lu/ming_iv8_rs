@@ -1064,6 +1064,147 @@ impl EmbeddedV8Kernel {
             "#);
             let _ = v8::Script::compile(scope, readonly_fix_js, None).and_then(|s| s.run(scope));
 
+            // Fix operation .name and .length on key prototypes.
+            // codegen sets .name via set_class_name but V8 may not persist it
+            // on the function object. .length may be wrong for overloaded ops.
+            let name_length_js = crate::v8_utils::v8_string(scope, r#"
+                (function() {
+                    var fixes = {
+                        'Window': { 'postMessage': { name: 'postMessage', length: 1 } },
+                        'HTMLCanvasElement': {
+                            'getContext': { name: 'getContext', length: 1 },
+                            'toDataURL': { name: 'toDataURL', length: 0 }
+                        },
+                        'CanvasRenderingContext2D': {
+                            'setTransform': { name: 'setTransform', length: 0 }
+                        },
+                        'OffscreenCanvasRenderingContext2D': {
+                            'setTransform': { name: 'setTransform', length: 0 },
+                            'createLinearGradient': { name: 'createLinearGradient', length: 4 },
+                            'createRadialGradient': { name: 'createRadialGradient', length: 6 },
+                            'createConicGradient': { name: 'createConicGradient', length: 1 },
+                            'drawImage': { name: 'drawImage', length: 3 },
+                            'fillText': { name: 'fillText', length: 3 },
+                            'strokeText': { name: 'strokeText', length: 3 },
+                            'putImageData': { name: 'putImageData', length: 3 },
+                        },
+                    };
+                    for (var ifaceName in fixes) {
+                        try {
+                            var ctor = globalThis[ifaceName];
+                            if (!ctor || !ctor.prototype) continue;
+                            var proto = ctor.prototype;
+                            var ifaceFixes = fixes[ifaceName];
+                            for (var opName in ifaceFixes) {
+                                try {
+                                    var fn = proto[opName];
+                                    if (!fn || typeof fn !== 'function') continue;
+                                    var fix = ifaceFixes[opName];
+                                    if (fn.name !== fix.name) {
+                                        try { Object.defineProperty(fn, 'name', {
+                                            value: fix.name, writable: false,
+                                            enumerable: false, configurable: true
+                                        }); } catch(e) {}
+                                    }
+                                    if (fn.length !== fix.length) {
+                                        try { Object.defineProperty(fn, 'length', {
+                                            value: fix.length, writable: false,
+                                            enumerable: false, configurable: true
+                                        }); } catch(e) {}
+                                    }
+                                } catch(e) {}
+                            }
+                        } catch(e) {}
+                    }
+                    // Also fix [Global] operations on globalThis (not on prototype)
+                    try {
+                        var pm = globalThis.postMessage;
+                        if (pm && typeof pm === 'function') {
+                            if (pm.name !== 'postMessage') {
+                                try { Object.defineProperty(pm, 'name', {
+                                    value: 'postMessage', writable: false,
+                                    enumerable: false, configurable: true
+                                }); } catch(e) {}
+                            }
+                            if (pm.length !== 1) {
+                                try { Object.defineProperty(pm, 'length', {
+                                    value: 1, writable: false,
+                                    enumerable: false, configurable: true
+                                }); } catch(e) {}
+                            }
+                        }
+                    } catch(e) {}
+
+                    // Fix Event.prototype.initEvent length (should be 1, not 3)
+                    try {
+                        if (typeof Event !== 'undefined' && Event.prototype) {
+                            var ie = Event.prototype.initEvent;
+                            if (ie && typeof ie === 'function' && ie.length !== 1) {
+                                try { Object.defineProperty(ie, 'length', {
+                                    value: 1, writable: false,
+                                    enumerable: false, configurable: true
+                                }); } catch(e) {}
+                            }
+                        }
+                    } catch(e) {}
+
+                    // Fix CanvasRenderingContext2D createImageData length
+                    try {
+                        if (typeof CanvasRenderingContext2D !== 'undefined' && CanvasRenderingContext2D.prototype) {
+                            var cid = CanvasRenderingContext2D.prototype.createImageData;
+                            if (cid && typeof cid === 'function' && cid.length !== 1) {
+                                try { Object.defineProperty(cid, 'length', {
+                                    value: 1, writable: false,
+                                    enumerable: false, configurable: true
+                                }); } catch(e) {}
+                            }
+                        }
+                    } catch(e) {}
+
+                    // Fix OffscreenCanvasRenderingContext2D createImageData + createConicGradient
+                    try {
+                        if (typeof OffscreenCanvasRenderingContext2D !== 'undefined' && OffscreenCanvasRenderingContext2D.prototype) {
+                            var oproto = OffscreenCanvasRenderingContext2D.prototype;
+                            var ocid = oproto.createImageData;
+                            if (ocid && typeof ocid === 'function' && ocid.length !== 1) {
+                                try { Object.defineProperty(ocid, 'length', {
+                                    value: 1, writable: false,
+                                    enumerable: false, configurable: true
+                                }); } catch(e) {}
+                            }
+                            var occg = oproto.createConicGradient;
+                            if (occg && typeof occg === 'function' && occg.length !== 3) {
+                                try { Object.defineProperty(occg, 'length', {
+                                    value: 3, writable: false,
+                                    enumerable: false, configurable: true
+                                }); } catch(e) {}
+                            }
+                        }
+                    } catch(e) {}
+
+                    // Fix Navigator registerProtocolHandler/unregisterProtocolHandler length
+                    try {
+                        if (typeof Navigator !== 'undefined' && Navigator.prototype) {
+                            var rph = Navigator.prototype.registerProtocolHandler;
+                            if (rph && typeof rph === 'function' && rph.length !== 2) {
+                                try { Object.defineProperty(rph, 'length', {
+                                    value: 2, writable: false,
+                                    enumerable: false, configurable: true
+                                }); } catch(e) {}
+                            }
+                            var uph = Navigator.prototype.unregisterProtocolHandler;
+                            if (uph && typeof uph === 'function' && uph.length !== 2) {
+                                try { Object.defineProperty(uph, 'length', {
+                                    value: 2, writable: false,
+                                    enumerable: false, configurable: true
+                                }); } catch(e) {}
+                            }
+                        }
+                    } catch(e) {}
+                })();
+            "#);
+            let _ = v8::Script::compile(scope, name_length_js, None).and_then(|s| s.run(scope));
+
             let js = crate::v8_utils::v8_string(scope, r#"
                 (function() {
                     var workerOnly = ['WorkerGlobalScope','DedicatedWorkerGlobalScope',

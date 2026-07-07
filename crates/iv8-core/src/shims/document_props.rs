@@ -469,15 +469,53 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
-    // window.Image constructor (standard DOM API)
-    if (typeof Image === 'undefined') {
-        window.Image = function Image(width, height) {
-            var img = document.createElement('img');
-            if (width !== undefined) img.width = width;
-            if (height !== undefined) img.height = height;
-            return img;
-        };
-    }
+    // window.Image / window.Audio named constructors
+    // codegen installs native named constructors, but they return elements
+    // without Symbol.toStringTag. Wrap them to set toStringTag.
+    try {
+        var _origImage = globalThis.Image;
+        if (_origImage && typeof _origImage === 'function') {
+            var _wrappedImage = function Image(width, height) {
+                var img = document.createElement('img');
+                if (width !== undefined) img.width = width;
+                if (height !== undefined) img.height = height;
+                if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+                    try { Object.defineProperty(img, Symbol.toStringTag, {
+                        value: 'HTMLImageElement', writable: false,
+                        enumerable: false, configurable: true
+                    }); } catch(e) {}
+                }
+                return img;
+            };
+            try { Object.defineProperty(_wrappedImage, 'name', { value: 'Image' }); } catch(e) {}
+            try { Object.defineProperty(_wrappedImage, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+            Object.defineProperty(globalThis, 'Image', {
+                value: _wrappedImage, writable: true, configurable: true, enumerable: false
+            });
+        }
+    } catch(e) {}
+
+    try {
+        var _origAudio = globalThis.Audio;
+        if (_origAudio && typeof _origAudio === 'function') {
+            var _wrappedAudio = function Audio(url) {
+                var aud = document.createElement('audio');
+                if (url !== undefined) aud.src = url;
+                if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+                    try { Object.defineProperty(aud, Symbol.toStringTag, {
+                        value: 'HTMLAudioElement', writable: false,
+                        enumerable: false, configurable: true
+                    }); } catch(e) {}
+                }
+                return aud;
+            };
+            try { Object.defineProperty(_wrappedAudio, 'name', { value: 'Audio' }); } catch(e) {}
+            try { Object.defineProperty(_wrappedAudio, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+            Object.defineProperty(globalThis, 'Audio', {
+                value: _wrappedAudio, writable: true, configurable: true, enumerable: false
+            });
+        }
+    } catch(e) {}
 
     // requestIdleCallback / cancelIdleCallback
     if (typeof requestIdleCallback === 'undefined') {
