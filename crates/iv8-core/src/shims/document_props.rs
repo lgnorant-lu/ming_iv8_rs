@@ -962,6 +962,118 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
+    // window.close — no-op in non-browser context
+    if (typeof globalThis.close === 'undefined') {
+        globalThis.close = function close() {};
+        try { Object.defineProperty(globalThis.close, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+    }
+
+    // window.external — legacy IE API, returns empty/minimal
+    if (typeof globalThis.external === 'undefined') {
+        var ext = {};
+        ext.AddSearchProvider = function() {};
+        ext.IsSearchProviderInstalled = function() { return 0; };
+        if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+            Object.defineProperty(ext, Symbol.toStringTag, { value: 'External', writable: false, configurable: true, enumerable: false });
+        }
+        Object.defineProperty(globalThis, 'external', { value: ext, writable: true, configurable: true, enumerable: true });
+    }
+
+    // Stringifier for HTMLAnchorElement/HTMLAreaElement — toString returns href
+    if (typeof HTMLAnchorElement !== 'undefined' && HTMLAnchorElement.prototype && !HTMLAnchorElement.prototype.toString) {
+        HTMLAnchorElement.prototype.toString = function toString() { return this.href || ''; };
+    }
+    if (typeof HTMLAreaElement !== 'undefined' && HTMLAreaElement.prototype && !HTMLAreaElement.prototype.toString) {
+        HTMLAreaElement.prototype.toString = function toString() { return this.href || ''; };
+    }
+
+    // Location interface properties
+    try {
+        var _locObj = (typeof location !== 'undefined') ? location : null;
+        var _locProto = (typeof Location !== 'undefined' && Location.prototype) ? Location.prototype : null;
+        var _locTarget = _locProto || _locObj;
+        if (_locTarget) {
+            var _locProps = {
+                origin: function() {
+                    var h = this.href || '';
+                    return h.split('/').slice(0,3).join('/');
+                },
+                protocol: function() {
+                    var h = this.href || '';
+                    return h.split(':')[0] + ':';
+                },
+                host: function() {
+                    var h = this.href || '';
+                    return h.split('/')[2] || '';
+                },
+                hostname: function() {
+                    var h = this.href || '';
+                    return (h.split('/')[2] || '').split(':')[0];
+                },
+                port: function() {
+                    var h = this.href || '';
+                    var p = (h.split('/')[2] || '').split(':')[1];
+                    return p || '';
+                },
+                pathname: function() {
+                    var h = this.href || '';
+                    var p = h.split('?')[0].split('#')[0];
+                    return p.split('/').slice(3).join('/') ? '/' + p.split('/').slice(3).join('/') : '/';
+                },
+                search: function() {
+                    var h = this.href || '';
+                    var q = h.split('?')[1];
+                    return q ? '?' + q.split('#')[0] : '';
+                },
+                hash: function() {
+                    var h = this.href || '';
+                    var f = h.split('#')[1];
+                    return f ? '#' + f : '';
+                }
+            };
+            for (var _lp in _locProps) {
+                if (!Object.getOwnPropertyDescriptor(_locTarget, _lp)) {
+                    (function(prop, fn) {
+                        Object.defineProperty(_locTarget, prop, {
+                            get: function() { return fn.call(this); },
+                            set: prop === 'hash' || prop === 'pathname' || prop === 'search' ? function(v) {} : undefined,
+                            enumerable: true, configurable: true
+                        });
+                    })(_lp, _locProps[_lp]);
+                }
+            }
+        }
+    } catch(e) {}
+
+    // postMessage argument count validation
+    try {
+        var _origPostMessage = globalThis.postMessage;
+        if (_origPostMessage && typeof _origPostMessage === 'function') {
+            var _wrappedPostMessage = function postMessage(message, targetOrigin, transfer) {
+                if (arguments.length < 2) throw new TypeError('2 argument(s) required, but only ' + arguments.length + ' present.');
+            };
+            try { Object.defineProperty(_wrappedPostMessage, 'length', { value: 2, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+            Object.defineProperty(globalThis, 'postMessage', { value: _wrappedPostMessage, writable: true, configurable: true, enumerable: true });
+        }
+    } catch(e) {}
+
+    // Window scroll operations (no-op in headless context)
+    ['scroll', 'scrollTo', 'scrollBy'].forEach(function(name) {
+        if (typeof globalThis[name] === 'undefined') {
+            globalThis[name] = new Function('return function ' + name + '() {}')();
+            try { Object.defineProperty(globalThis[name], 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+        }
+    });
+    // Also add to Window.prototype if it exists
+    if (typeof Window !== 'undefined' && Window.prototype) {
+        ['scroll', 'scrollTo', 'scrollBy'].forEach(function(name) {
+            if (!Window.prototype[name]) {
+                Window.prototype[name] = new Function('return function ' + name + '() {}')();
+                try { Object.defineProperty(Window.prototype[name], 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+            }
+        });
+    }
+
 })();
 "#;
 

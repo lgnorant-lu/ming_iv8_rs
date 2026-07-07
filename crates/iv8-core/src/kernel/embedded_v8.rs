@@ -631,6 +631,76 @@ impl EmbeddedV8Kernel {
             let convert_js_str = crate::v8_utils::v8_string(scope, &convert_js);
             let _ = v8::Script::compile(scope, convert_js_str, None).and_then(|s| s.run(scope));
 
+            let extra_accessor_js = crate::v8_utils::v8_string(scope, r#"
+    (function() {
+        var extras = ['name', 'status', 'closed'];
+        var windowCtor = globalThis.Window;
+        var windowProto = windowCtor && windowCtor.prototype;
+        for (var i = 0; i < extras.length; i++) {
+            (function(name) {
+                try {
+                    var desc = Object.getOwnPropertyDescriptor(globalThis, name);
+                    if (!desc) {
+                        // Property doesn't exist on globalThis — install it
+                        var getter = function() { return null; };
+                        try { Object.defineProperty(getter, 'name', { value: 'get ' + name }); } catch(e) {}
+                        try { Object.defineProperty(getter, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                        var setter = (name === 'status') ? function(v) {
+                            Object.defineProperty(globalThis, name, { value: v, writable: true, enumerable: true, configurable: true });
+                        } : undefined;
+                        if (setter) {
+                            try { Object.defineProperty(setter, 'name', { value: 'set ' + name }); } catch(e) {}
+                            try { Object.defineProperty(setter, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                        }
+                        Object.defineProperty(globalThis, name, {
+                            get: getter, set: setter,
+                            enumerable: true, configurable: true
+                        });
+                        return;
+                    }
+                    if (desc.get || desc.set) return; // Already accessor
+                    if (!desc.configurable) return;
+                    var value = desc.value;
+                    var getter = (function(v) {
+                        return function() {
+                            if (windowProto && this !== globalThis && this !== windowProto) {
+                                var cur = Object.getPrototypeOf(this);
+                                var found = false;
+                                for (var k = 0; k < 30; k++) {
+                                    if (cur === windowProto) { found = true; break; }
+                                    if (!cur) break;
+                                    cur = Object.getPrototypeOf(cur);
+                                }
+                                if (!found) throw new TypeError('Illegal invocation');
+                            }
+                            return v;
+                        };
+                    })(value);
+                    try { Object.defineProperty(getter, 'name', { value: 'get ' + name }); } catch(e) {}
+                    try { Object.defineProperty(getter, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                    var setter = (name === 'status') ? (function(nm, wproto) {
+                        return function(v) {
+                            if (wproto && this !== globalThis && this !== wproto) {
+                                throw new TypeError('Illegal invocation');
+                            }
+                            Object.defineProperty(globalThis, nm, { value: v, writable: true, enumerable: true, configurable: true });
+                        };
+                    })(name, windowProto) : undefined;
+                    if (setter) {
+                        try { Object.defineProperty(setter, 'name', { value: 'set ' + name }); } catch(e) {}
+                        try { Object.defineProperty(setter, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                    }
+                    Object.defineProperty(globalThis, name, {
+                        get: getter, set: setter,
+                        enumerable: desc.enumerable !== false, configurable: true
+                    });
+                } catch(e) {}
+            })(extras[i]);
+        }
+    })();
+"#);
+            let _ = v8::Script::compile(scope, extra_accessor_js, None).and_then(|s| s.run(scope));
+
             // JS op callback replacement — disabled for now
             // let op_fix_js = crate::v8_utils::v8_string(scope, r#"
             //     (function() {
