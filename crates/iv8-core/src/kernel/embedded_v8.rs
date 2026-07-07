@@ -1272,6 +1272,38 @@ try {
                             }
                         }
                     } catch(e) {}
+
+                    // Wrap HTMLMediaElement.canPlayType for arg count validation
+                    try {
+                        if (typeof HTMLMediaElement !== 'undefined' && HTMLMediaElement.prototype) {
+                            var origCPT = HTMLMediaElement.prototype.canPlayType;
+                            if (origCPT && typeof origCPT === 'function') {
+                                var wCPT = function canPlayType(type) {
+                                    if (arguments.length < 1) throw new TypeError("1 argument(s) required, but only 0 present.");
+                                    return origCPT.call(this, type);
+                                };
+                                try { Object.defineProperty(wCPT, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                                try { Object.defineProperty(wCPT, 'name', { value: 'canPlayType', writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                                Object.defineProperty(HTMLMediaElement.prototype, 'canPlayType', { value: wCPT, writable: true, configurable: true, enumerable: true });
+                            }
+                        }
+                    } catch(e) {}
+
+                    // Wrap HTMLCanvasElement.getContext for arg count validation
+                    try {
+                        if (typeof HTMLCanvasElement !== 'undefined' && HTMLCanvasElement.prototype) {
+                            var origGC = HTMLCanvasElement.prototype.getContext;
+                            if (origGC && typeof origGC === 'function') {
+                                var wGC = function getContext(contextId, options) {
+                                    if (arguments.length < 1) throw new TypeError("1 argument(s) required, but only 0 present.");
+                                    return origGC.call(this, contextId, options);
+                                };
+                                try { Object.defineProperty(wGC, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                                try { Object.defineProperty(wGC, 'name', { value: 'getContext', writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                                Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', { value: wGC, writable: true, configurable: true, enumerable: true });
+                            }
+                        }
+                    } catch(e) {}
                 })();
             "#);
             let _ = v8::Script::compile(scope, name_length_js, None).and_then(|s| s.run(scope));

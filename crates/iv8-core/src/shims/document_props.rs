@@ -476,6 +476,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         var _origImage = globalThis.Image;
         if (_origImage && typeof _origImage === 'function') {
             var _wrappedImage = function Image(width, height) {
+                if (!(this instanceof Image)) throw new TypeError("Failed to construct 'Image': Please use the 'new' operator, this DOM object constructor cannot be called as a function.");
                 var img = document.createElement('img');
                 if (width !== undefined) img.width = width;
                 if (height !== undefined) img.height = height;
@@ -499,6 +500,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         var _origAudio = globalThis.Audio;
         if (_origAudio && typeof _origAudio === 'function') {
             var _wrappedAudio = function Audio(url) {
+                if (!(this instanceof Audio)) throw new TypeError("Failed to construct 'Audio': Please use the 'new' operator, this DOM object constructor cannot be called as a function.");
                 var aud = document.createElement('audio');
                 if (url !== undefined) aud.src = url;
                 if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
