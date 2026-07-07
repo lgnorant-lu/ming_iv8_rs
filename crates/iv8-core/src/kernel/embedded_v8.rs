@@ -1855,6 +1855,16 @@ impl EmbeddedV8Kernel {
         )
         .ok();
 
+        // 12b2. Install CSS namespace (CSS.supports, CSS.escape, CSS.cssFloat)
+        // Separate from CSSOM_PROTO_SETUP_JS because V8 FunctionTemplate
+        // prototypes are non-extensible, causing the IIFE to throw before
+        // reaching the CSS namespace section.
+        self.eval(
+            crate::shims::cssom::CSS_NAMESPACE_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
         // 12c. Install WindowProperties interface (manual; not in webref IDL)
         self.eval(
             crate::shims::window_properties::WINDOW_PROPERTIES_SHIM_JS,

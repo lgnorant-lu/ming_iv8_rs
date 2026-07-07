@@ -328,21 +328,10 @@ pub const CSSOM_PROTO_SETUP_JS: &str = r#"
     }
 
     // ---- CSS namespace ----
-    // WebIDL namespace CSS { CSSOMString escape(CSSOMString); }
-    if (typeof globalThis.CSS === 'undefined') {
-        var cssNs = {};
-        Object.defineProperty(cssNs, 'escape', {
-            value: function escape(ident) {
-                if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present');
-                return String(ident).replace(/[^a-zA-Z0-9_-]/g, function(ch) {
-                    return '\\' + ch;
-                });
-            },
-            writable: true, configurable: true, enumerable: true
-        });
-        Object.defineProperty(cssNs, Symbol.toStringTag, { value: 'CSS', writable: false, configurable: true, enumerable: false });
-        Object.defineProperty(globalThis, 'CSS', { value: cssNs, writable: true, configurable: true, enumerable: false });
-    }
+    // CSS namespace is installed separately via CSS_NAMESPACE_JS to avoid
+    // being skipped when CSSOM_PROTO_SETUP_JS IIFE throws on frozen prototypes.
+    // See CSS_NAMESPACE_JS below.
+
 
     // ---- Document.prototype.styleSheets / adoptedStyleSheets ----
     // These are on Document.prototype, not on the instance
@@ -733,6 +722,96 @@ pub const CSSOM_SHIM_JS: &str = r#"
         };
         Object.defineProperty(gcs, 'name', { value: 'getComputedStyle', writable: false, enumerable: false, configurable: true });
         globalThis.getComputedStyle = gcs;
+    }
+})();
+"#;
+
+/// CSS namespace object (CSS.supports, CSS.escape, CSS.cssFloat).
+/// Installed as a separate eval to avoid being skipped when
+/// CSSOM_PROTO_SETUP_JS IIFE throws on V8 frozen prototypes.
+/// V8 FunctionTemplate prototypes are non-extensible by default,
+/// so Object.defineProperty on them for new properties throws.
+/// This constant only touches globalThis (which is extensible).
+pub const CSS_NAMESPACE_JS: &str = r#"
+(function() {
+    'use strict';
+
+    function cssSupports(prop, value) {
+        if (arguments.length === 0) return false;
+        if (arguments.length === 1) {
+            var str = String(prop);
+            if (str.indexOf(':') !== -1) {
+                var parts = str.split(':');
+                return cssSupports(parts[0].trim(), parts[1].trim());
+            }
+            var knownProps = [
+                'display','position','color','background','margin','padding',
+                'border','width','height','top','left','right','bottom',
+                'font','text-align','overflow','z-index','opacity','visibility',
+                'flex','grid','transform','transition','animation',
+                'cursor','pointer-events','box-sizing','box-shadow',
+                'border-radius','outline','content','white-space',
+                'text-decoration','vertical-align','line-height'
+            ];
+            return knownProps.indexOf(str.trim()) !== -1;
+        }
+        return true;
+    }
+
+    function cssEscape(ident) {
+        if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present');
+        var str = String(ident);
+        var result = '';
+        for (var i = 0; i < str.length; i++) {
+            var ch = str.charCodeAt(i);
+            if ((ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122) ||
+                (ch >= 48 && ch <= 57) || ch === 45 || ch === 95) {
+                result += str[i];
+            } else if (ch === 0) {
+                result += '\uFFFD';
+            } else {
+                result += '\\' + str[i];
+            }
+        }
+        return result;
+    }
+
+    if (typeof globalThis.CSS === 'undefined') {
+        var cssNs = {};
+        Object.defineProperty(cssNs, 'escape', {
+            value: cssEscape, writable: true, configurable: true, enumerable: true
+        });
+        Object.defineProperty(cssNs, 'supports', {
+            value: cssSupports, writable: true, configurable: true, enumerable: true
+        });
+        Object.defineProperty(cssNs, 'cssFloat', {
+            value: 'cssFloat', writable: true, configurable: true, enumerable: true
+        });
+        if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+            Object.defineProperty(cssNs, Symbol.toStringTag, {
+                value: 'CSS', writable: false, configurable: true, enumerable: false
+            });
+        }
+        Object.defineProperty(globalThis, 'CSS', {
+            value: cssNs, writable: true, configurable: true, enumerable: false
+        });
+    } else {
+        var existing = globalThis.CSS;
+        if (typeof existing.supports !== 'function') {
+            Object.defineProperty(existing, 'supports', {
+                value: cssSupports, writable: true, configurable: true, enumerable: true
+            });
+        }
+        if (typeof existing.escape !== 'function') {
+            Object.defineProperty(existing, 'escape', {
+                value: cssEscape, writable: true, configurable: true, enumerable: true
+            });
+        }
+        if (typeof existing.cssFloat === 'undefined') {
+            Object.defineProperty(existing, 'cssFloat', {
+                value: 'cssFloat', writable: true, configurable: true, enumerable: true
+            });
+        }
     }
 })();
 "#;
