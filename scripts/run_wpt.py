@@ -2172,8 +2172,158 @@ def run_suite(suite: dict, variant: dict, resources: dict) -> dict:
             else:
                 scope_name = "DedicatedWorkerGlobalScope"
             worker_shim = f"""
-// Worker context ({worker_type}): define {scope_name} for idlharness instanceof check
-if (typeof {scope_name} === 'undefined') {{
+// Worker context ({worker_type}): install Worker interfaces on globalThis.
+// codegen only installs [Exposed=Window] interfaces. Worker-specific
+// interfaces (WorkerGlobalScope, WorkerNavigator, WorkerLocation,
+// DedicatedWorkerGlobalScope) need to be installed for idlharness.
+
+// WorkerGlobalScope : EventTarget
+if (typeof globalThis.WorkerGlobalScope === 'undefined') {{
+    function WorkerGlobalScope() {{}}
+    WorkerGlobalScope.prototype = Object.create(
+        (typeof EventTarget !== 'undefined' && EventTarget.prototype) ? EventTarget.prototype : Object.prototype
+    );
+    Object.defineProperty(WorkerGlobalScope.prototype, 'constructor', {{
+        value: WorkerGlobalScope, writable: true, enumerable: false, configurable: true
+    }});
+    // self
+    Object.defineProperty(WorkerGlobalScope.prototype, 'self', {{
+        get: function() {{ return globalThis; }},
+        enumerable: true, configurable: true
+    }});
+    // location
+    Object.defineProperty(WorkerGlobalScope.prototype, 'location', {{
+        get: function() {{ return globalThis.__workerLocation || null; }},
+        enumerable: true, configurable: true
+    }});
+    // navigator
+    Object.defineProperty(WorkerGlobalScope.prototype, 'navigator', {{
+        get: function() {{ return globalThis.__workerNavigator || null; }},
+        enumerable: true, configurable: true
+    }});
+    // importScripts
+    WorkerGlobalScope.prototype.importScripts = function importScripts() {{
+        if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present.');
+    }};
+    try {{ Object.defineProperty(WorkerGlobalScope.prototype.importScripts, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
+    // Event handlers
+    var _wgsHandlers = ['onerror','onlanguagechange','onoffline','ononline','onrejectionhandled','onunhandledrejection'];
+    _wgsHandlers.forEach(function(hn) {{
+        Object.defineProperty(WorkerGlobalScope.prototype, hn, {{
+            get: function() {{ return this['__iv8' + hn] || null; }},
+            set: function(v) {{ this['__iv8' + hn] = v; }},
+            enumerable: true, configurable: true
+        }});
+    }});
+    if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {{
+        Object.defineProperty(WorkerGlobalScope.prototype, Symbol.toStringTag, {{
+            value: 'WorkerGlobalScope', writable: false, configurable: true, enumerable: false
+        }});
+    }}
+    Object.defineProperty(WorkerGlobalScope, 'length', {{ value: 0, writable: false, enumerable: false, configurable: true }});
+    globalThis.WorkerGlobalScope = WorkerGlobalScope;
+}}
+
+// WorkerNavigator
+if (typeof globalThis.WorkerNavigator === 'undefined') {{
+    function WorkerNavigator() {{}}
+    WorkerNavigator.prototype = Object.create(
+        (typeof Navigator !== 'undefined' && Navigator.prototype) ? Navigator.prototype : Object.prototype
+    );
+    Object.defineProperty(WorkerNavigator.prototype, 'constructor', {{
+        value: WorkerNavigator, writable: true, enumerable: false, configurable: true
+    }});
+    // NavigatorID mixin
+    Object.defineProperty(WorkerNavigator.prototype, 'appVersion', {{ get: function() {{ return '5.0'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'appName', {{ get: function() {{ return 'Netscape'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'platform', {{ get: function() {{ return 'Win32'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'product', {{ get: function() {{ return 'Gecko'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'userAgent', {{ get: function() {{ return navigator.userAgent; }}, enumerable: true, configurable: true }});
+    // NavigatorLanguage mixin
+    Object.defineProperty(WorkerNavigator.prototype, 'language', {{ get: function() {{ return 'en-US'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerNavigator.prototype, 'languages', {{ get: function() {{ return ['en-US','en']; }}, enumerable: true, configurable: true }});
+    // NavigatorOnLine mixin
+    Object.defineProperty(WorkerNavigator.prototype, 'onLine', {{ get: function() {{ return true; }}, enumerable: true, configurable: true }});
+    // NavigatorConcurrentHardware mixin
+    Object.defineProperty(WorkerNavigator.prototype, 'hardwareConcurrency', {{ get: function() {{ return 8; }}, enumerable: true, configurable: true }});
+    if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {{
+        Object.defineProperty(WorkerNavigator.prototype, Symbol.toStringTag, {{
+            value: 'WorkerNavigator', writable: false, configurable: true, enumerable: false
+        }});
+    }}
+    globalThis.WorkerNavigator = WorkerNavigator;
+    globalThis.__workerNavigator = Object.create(WorkerNavigator.prototype);
+}}
+
+// WorkerLocation
+if (typeof globalThis.WorkerLocation === 'undefined') {{
+    function WorkerLocation() {{}}
+    var _wlHref = (typeof location !== 'undefined' && location.href) ? location.href : 'https://example.com/';
+    WorkerLocation.prototype = Object.create(Object.prototype);
+    Object.defineProperty(WorkerLocation.prototype, 'constructor', {{
+        value: WorkerLocation, writable: true, enumerable: false, configurable: true
+    }});
+    Object.defineProperty(WorkerLocation.prototype, 'href', {{ get: function() {{ return _wlHref; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'origin', {{ get: function() {{ return _wlHref.split('/').slice(0,3).join('/'); }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'protocol', {{ get: function() {{ return _wlHref.split(':')[0] + ':'; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'host', {{ get: function() {{ return _wlHref.split('/')[2] || ''; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'hostname', {{ get: function() {{ return (_wlHref.split('/')[2] || '').split(':')[0]; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'port', {{ get: function() {{ var h = _wlHref.split('/')[2] || ''; var p = h.split(':')[1]; return p || ''; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'pathname', {{ get: function() {{ return '/' + (_wlHref.split('/').slice(3).join('/') || '').split('?')[0].split('#')[0]; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'search', {{ get: function() {{ var q = _wlHref.split('?')[1]; return q ? '?' + q.split('#')[0] : ''; }}, enumerable: true, configurable: true }});
+    Object.defineProperty(WorkerLocation.prototype, 'hash', {{ get: function() {{ var h = _wlHref.split('#')[1]; return h ? '#' + h : ''; }}, enumerable: true, configurable: true }});
+    WorkerLocation.prototype.toString = function() {{ return _wlHref; }};
+    if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {{
+        Object.defineProperty(WorkerLocation.prototype, Symbol.toStringTag, {{
+            value: 'WorkerLocation', writable: false, configurable: true, enumerable: false
+        }});
+    }}
+    globalThis.WorkerLocation = WorkerLocation;
+    globalThis.__workerLocation = Object.create(WorkerLocation.prototype);
+}}
+
+// DedicatedWorkerGlobalScope : WorkerGlobalScope
+if (typeof globalThis.DedicatedWorkerGlobalScope === 'undefined') {{
+    function DedicatedWorkerGlobalScope() {{}}
+    DedicatedWorkerGlobalScope.prototype = Object.create(
+        (typeof WorkerGlobalScope !== 'undefined' && WorkerGlobalScope.prototype) ? WorkerGlobalScope.prototype : Object.prototype
+    );
+    Object.defineProperty(DedicatedWorkerGlobalScope.prototype, 'constructor', {{
+        value: DedicatedWorkerGlobalScope, writable: true, enumerable: false, configurable: true
+    }});
+    // name
+    Object.defineProperty(DedicatedWorkerGlobalScope.prototype, 'name', {{ get: function() {{ return ''; }}, enumerable: true, configurable: true }});
+    // postMessage
+    DedicatedWorkerGlobalScope.prototype.postMessage = function postMessage() {{
+        if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present.');
+    }};
+    try {{ Object.defineProperty(DedicatedWorkerGlobalScope.prototype.postMessage, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
+    DedicatedWorkerGlobalScope.prototype.postMessage.name = 'postMessage';
+    // close
+    DedicatedWorkerGlobalScope.prototype.close = function close() {{}};
+    try {{ Object.defineProperty(DedicatedWorkerGlobalScope.prototype.close, 'length', {{ value: 0, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
+    // Event handlers
+    var _dwgsHandlers = ['onmessage','onmessageerror'];
+    _dwgsHandlers.forEach(function(hn) {{
+        Object.defineProperty(DedicatedWorkerGlobalScope.prototype, hn, {{
+            get: function() {{ return this['__iv8' + hn] || null; }},
+            set: function(v) {{ this['__iv8' + hn] = v; }},
+            enumerable: true, configurable: true
+        }});
+    }});
+    if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {{
+        Object.defineProperty(DedicatedWorkerGlobalScope.prototype, Symbol.toStringTag, {{
+            value: 'DedicatedWorkerGlobalScope', writable: false, configurable: true, enumerable: false
+        }});
+    }}
+    globalThis.DedicatedWorkerGlobalScope = DedicatedWorkerGlobalScope;
+    // Set __proto__ of globalThis to DedicatedWorkerGlobalScope.prototype
+    // so `self instanceof DedicatedWorkerGlobalScope` works
+    try {{ Object.setPrototypeOf(globalThis, DedicatedWorkerGlobalScope.prototype); }} catch(e) {{}}
+}}
+
+// {scope_name} for idlharness instanceof check
+if (typeof globalThis.{scope_name} === 'undefined') {{
     globalThis.{scope_name} = function {scope_name}() {{}};
 }}
 // Remove Window-only interfaces from globalThis.
