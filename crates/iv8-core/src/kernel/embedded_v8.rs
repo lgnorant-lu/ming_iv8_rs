@@ -988,6 +988,7 @@ try {
                                 let pname = names[j];
                                 if (pname === 'constructor') continue;
                                 if (pname === 'attributes') continue;
+                                if (pname.startsWith('on')) continue;
                                 try {
                                     var desc = Object.getOwnPropertyDescriptor(proto, pname);
                                     if (!desc || !desc.get) continue;

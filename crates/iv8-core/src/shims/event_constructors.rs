@@ -163,6 +163,12 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
     Object.defineProperty(CustomEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
     Object.defineProperty(CustomEvent, 'length', {value: 1, writable: false, enumerable: false, configurable: true});
 
+    if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+        Object.defineProperty(CustomEvent.prototype, Symbol.toStringTag, {
+            value: 'CustomEvent', writable: false, configurable: true, enumerable: false
+        });
+    }
+
     globalThis.CustomEvent = CustomEvent;
 
     function MouseEvent(type, options) {

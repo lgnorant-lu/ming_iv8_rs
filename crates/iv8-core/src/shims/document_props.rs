@@ -1363,6 +1363,69 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
+    // TextTrack.cues — return empty TextTrackCueList-like object
+    try {
+        if (typeof HTMLMediaElement !== 'undefined' && HTMLMediaElement.prototype) {
+            var origAddTT = HTMLMediaElement.prototype.addTextTrack;
+            if (origAddTT && typeof origAddTT === 'function' && !origAddTT.__iv8TTpatched) {
+                var wrappedAddTT = function addTextTrack(kind, label, language) {
+                    var track = origAddTT.call(this, kind, label, language);
+                    if (track && !track.cues) {
+                        var cueList = {};
+                        cueList.length = 0;
+                        cueList.getCueById = function() { return null; };
+                        if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+                            Object.defineProperty(cueList, Symbol.toStringTag, {
+                                value: 'TextTrackCueList', writable: false, configurable: true, enumerable: false
+                            });
+                        }
+                        Object.defineProperty(track, 'cues', {
+                            value: cueList, writable: true, configurable: true, enumerable: true
+                        });
+                    }
+                    return track;
+                };
+                try { Object.defineProperty(wrappedAddTT, 'name', { value: 'addTextTrack' }); } catch(e) {}
+                try { Object.defineProperty(wrappedAddTT, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                Object.defineProperty(wrappedAddTT, '__iv8TTpatched', { value: true, writable: true, configurable: true, enumerable: false });
+                Object.defineProperty(HTMLMediaElement.prototype, 'addTextTrack', { value: wrappedAddTT, writable: true, configurable: true, enumerable: true });
+            }
+        }
+    } catch(e) {}
+
+    // DOMStringMap — set Symbol.toStringTag on dataset
+    try {
+        if (typeof HTMLElement !== 'undefined' && HTMLElement.prototype) {
+            var datasetDesc = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'dataset');
+            if (datasetDesc && datasetDesc.get && !datasetDesc.__iv8DatasetPatched) {
+                var origDatasetGet = datasetDesc.get;
+                var wrappedDatasetGet = function dataset() {
+                    var ds = origDatasetGet.call(this);
+                    if (ds && typeof Symbol !== 'undefined' && Symbol.toStringTag && !ds[Symbol.toStringTag]) {
+                        try { Object.defineProperty(ds, Symbol.toStringTag, {
+                            value: 'DOMStringMap', writable: false, configurable: true, enumerable: false
+                        }); } catch(e) {}
+                    }
+                    return ds;
+                };
+                try { Object.defineProperty(wrappedDatasetGet, 'name', { value: 'get dataset' }); } catch(e) {}
+                Object.defineProperty(HTMLElement.prototype, 'dataset', {
+                    get: wrappedDatasetGet, set: undefined, enumerable: true, configurable: true
+                });
+            }
+        }
+    } catch(e) {}
+
+    if (typeof EventTarget !== 'undefined' && EventTarget.prototype && typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+        try {
+            if (!EventTarget.prototype[Symbol.toStringTag]) {
+                Object.defineProperty(EventTarget.prototype, Symbol.toStringTag, {
+                    value: 'EventTarget', writable: false, configurable: true, enumerable: false
+                });
+            }
+        } catch(e) {}
+    }
+
 })();
 "#;
 
