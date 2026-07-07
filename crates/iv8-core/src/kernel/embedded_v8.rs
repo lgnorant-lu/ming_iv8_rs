@@ -15,38 +15,94 @@ use std::sync::Arc;
 
 /// document.write workaround shim (REQ-DOM-008).
 /// Replaces document.write with insertAdjacentHTML-based implementation.
+///
+/// Uses a persistent insertion-point tracker so that multiple document.write
+/// calls append sequentially rather than all inserting at the same anchor.
+/// Primary path: body.insertAdjacentHTML('beforeend'), creating body if needed.
+/// If a currentScript anchor exists, the first write inserts after it and
+/// subsequent writes append after the previously written content.
 pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
 (function() {
     if (typeof document === 'undefined') return;
-    var origWrite = document.write;
-    document.write = function() {
-        var html = Array.prototype.join.call(arguments, '');
-        // Try to insert after currentScript, fallback to body
-        var anchor = document.currentScript;
-        if (anchor && anchor.parentNode) {
-            try {
-                anchor.insertAdjacentHTML('afterend', html);
-                return;
-            } catch(e) {}
+
+    // Persistent insertion point: tracks where the next write should go.
+    // - null  => no write has happened yet; use currentScript or body
+    // - node  => insert after this node (a sentinel comment we insert)
+    var __iv8_write_anchor = null;
+
+    function ensureBody() {
+        if (document.body) return document.body;
+        if (!document.documentElement) {
+            // No documentElement either — create the full chain
+            var html = document.createElement('html');
+            document.appendChild(html);
         }
-        if (document.body) {
-            try {
-                document.body.insertAdjacentHTML('beforeend', html);
-                return;
-            } catch(e) {}
+        var body = document.createElement('body');
+        document.documentElement.appendChild(body);
+        return body;
+    }
+
+    function doWrite(html) {
+        // Case 1: We have a currentScript with a parent — insert after it
+        // and track the position via a sentinel comment so subsequent
+        // writes append after the previously written content.
+        if (__iv8_write_anchor === null) {
+            var script = document.currentScript;
+            if (script && script.parentNode) {
+                try {
+                    // Insert a sentinel comment after the script to act as
+                    // our tracking anchor. Content goes before the sentinel
+                    // so it appears in document order.
+                    var sentinel = document.createComment('iv8-write');
+                    script.parentNode.insertBefore(sentinel, script.nextSibling);
+                    sentinel.insertAdjacentHTML('beforebegin', html);
+                    __iv8_write_anchor = sentinel;
+                    return;
+                } catch(e) {
+                    __iv8_write_anchor = null;
+                }
+            }
         }
-        // Last resort: append to document element
+
+        // Case 2: Subsequent write — append before the existing sentinel
+        if (__iv8_write_anchor && __iv8_write_anchor.parentNode) {
+            try {
+                __iv8_write_anchor.insertAdjacentHTML('beforebegin', html);
+                return;
+            } catch(e) {
+                // Sentinel was detached, fall through to body path
+                __iv8_write_anchor = null;
+            }
+        }
+
+        // Case 3: Body path (primary fallback / post-load)
+        var body = ensureBody();
+        try {
+            body.insertAdjacentHTML('beforeend', html);
+            return;
+        } catch(e) {}
+
+        // Case 4: Last resort — append to documentElement
         if (document.documentElement) {
             try {
                 document.documentElement.insertAdjacentHTML('beforeend', html);
             } catch(e) {}
         }
+    }
+
+    document.write = function() {
+        var html = Array.prototype.join.call(arguments, '');
+        doWrite(html);
     };
     document.writeln = function() {
         var args = Array.prototype.slice.call(arguments);
         document.write(args.join(' ') + '\n');
     };
-    document.open = function() { return document; };
+    document.open = function() {
+        // Reset the insertion point on explicit open()
+        __iv8_write_anchor = null;
+        return document;
+    };
     document.close = function() {};
 })();
 "#;

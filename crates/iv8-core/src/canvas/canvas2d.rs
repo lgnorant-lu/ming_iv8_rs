@@ -273,23 +273,10 @@ impl Canvas2D {
                     pixmap.fill_rect(rect, &paint, Transform::identity(), None);
                 }
             }
-            DrawCmd::FillText { text, x, y, color, font_size } => {
-                // Simple bitmap text: draw a colored rectangle as text placeholder
-                // Real text rendering would need cosmic-text
-                let char_w = font_size * 0.6;
-                let text_w = text.len() as f32 * char_w;
-                let text_h = *font_size;
-                if let Some(_rect) = Rect::from_xywh(*x, *y - text_h * 0.8, text_w, text_h) {
-                    let mut paint = Paint::default();
-                    paint.set_color_rgba8(color[0], color[1], color[2], color[3]);
-                    // Draw individual character blocks for more realistic fingerprint
-                    for (i, _ch) in text.chars().enumerate() {
-                        let cx = *x + i as f32 * char_w;
-                        if let Some(cr) = Rect::from_xywh(cx, *y - text_h * 0.8, char_w * 0.85, text_h * 0.9) {
-                            pixmap.fill_rect(cr, &paint, Transform::identity(), None);
-                        }
-                    }
-                }
+            DrawCmd::FillText { text: _, x: _, y: _, color: _, font_size: _ } => {
+                // No-op: drawing recognizable rectangles is a fingerprint
+                // detection signal. A blank canvas (except for explicit
+                // fillRect/strokeRect) is cleaner and less distinguishable.
             }
             DrawCmd::Arc { x, y, r, start, end, color, fill } => {
                 let mut pb = PathBuilder::new();

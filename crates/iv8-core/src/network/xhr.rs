@@ -1,7 +1,13 @@
-//! XMLHttpRequest stub: synchronous XHR that reads from ResourceBundle.
+//! XMLHttpRequest: supports sync/async requests via ResourceBundle or
+//! Python network_handler callback.
 //!
-//! In v0.1 (offline mode), XHR only supports synchronous requests against
-//! pre-registered resources. Async XHR is stubbed (fires onload after eventLoop advance).
+//! - ResourceBundle hit: immediate response (fast path).
+//! - network_handler callback: used when URL not in bundle.
+//! - Neither: status=0, statusText='', readyState=4, fire onerror.
+//! - Async mode: defers response via setTimeout(0) so onreadystatechange
+//!   fires in correct order: 1 (OPENED) → 2 (HEADERS_RECEIVED) → 3 (LOADING) → 4 (DONE).
+//! - Sync mode: resolves immediately.
+//! - timeout: if set and exceeded, fires ontimeout.
 //!
 //! Installed as a JS class via eval shim that delegates to native __xhr_send__.
 
@@ -53,6 +59,9 @@ pub const XHR_SHIM_JS: &str = r#"
         this._async = true;
         this._headers = {};
         this._responseHeaders = null;
+        this._aborted = false;
+        this._timedOut = false;
+        this._timeoutTimer = undefined;
         // XMLHttpRequestUpload stub (real browser has EventTarget subclass)
         this.upload = {
             addEventListener: function() {},
@@ -78,6 +87,15 @@ pub const XHR_SHIM_JS: &str = r#"
         this._method = method || 'GET';
         this._url = url || '';
         this._async = async !== false; // default true
+        this._aborted = false;
+        this._timedOut = false;
+        this._timeoutTimer = undefined;
+        this.status = 0;
+        this.statusText = '';
+        this.responseText = '';
+        this.response = '';
+        this.responseURL = '';
+        this._responseHeaders = null;
         this.readyState = 1; // OPENED
         if (this.onreadystatechange) this.onreadystatechange();
     };
@@ -101,6 +119,7 @@ pub const XHR_SHIM_JS: &str = r#"
 
     XMLHttpRequest.prototype.send = function(body) {
         var self = this;
+        self._body = body || '';
 
         // Record in netLog (use 'in' check — __iv8__ is undetectable/falsy)
         if ('__iv8__' in globalThis && globalThis.__iv8__.netLog) {
@@ -116,11 +135,61 @@ pub const XHR_SHIM_JS: &str = r#"
             });
         }
 
+        function fireReadyState(rs) {
+            self.readyState = rs;
+            if (self.onreadystatechange) self.onreadystatechange();
+        }
+
+        function fireProgress(loaded, total) {
+            var event = {
+                type: 'progress',
+                loaded: loaded,
+                total: total || 0,
+                lengthComputable: !!total,
+            };
+            if (self.onprogress) self.onprogress(event);
+        }
+
+        function done(success, errorEvent) {
+            if (self._aborted) return;
+            fireReadyState(4); // DONE
+            if (success) {
+                if (self.onload) self.onload();
+            } else {
+                if (self.onerror) self.onerror(errorEvent || new Error('NetworkError'));
+            }
+            if (self.onloadend) self.onloadend();
+            // Clear timeout timer if we set one
+            if (self._timeoutTimer !== undefined) {
+                clearTimeout(self._timeoutTimer);
+                self._timeoutTimer = undefined;
+            }
+        }
+
         function doSend() {
+            if (self._aborted) return;
+
+            if (self.onloadstart) self.onloadstart();
+
+            // Set up timeout for async requests
+            if (self._async && self.timeout > 0) {
+                self._timeoutTimer = setTimeout(function() {
+                    if (self.readyState >= 4) return; // already done
+                    self._timedOut = true;
+                    self.status = 0;
+                    self.statusText = '';
+                    fireReadyState(4);
+                    if (self.ontimeout) self.ontimeout(new Error('Timeout'));
+                    if (self.onloadend) self.onloadend();
+                }, self.timeout);
+            }
+
             var result = globalThis.__xhr_send__(self._method, self._url);
+            if (self._timedOut) return; // timeout fired before we got result
+
             if (result) {
                 self.status = result.status;
-                self.statusText = result.status === 200 ? 'OK' : '';
+                self.statusText = result.status === 200 ? 'OK' : (result.statusText || '');
                 self._responseHeaders = result.headers || {};
                 self.responseURL = self._url;
 
@@ -139,20 +208,22 @@ pub const XHR_SHIM_JS: &str = r#"
                     }
                 } catch(e) {}
 
-                self.readyState = 2; // HEADERS_RECEIVED
-                if (self.onreadystatechange) self.onreadystatechange();
+                fireReadyState(2); // HEADERS_RECEIVED
+
                 self.responseText = result.responseText;
                 self.response = result.responseText;
-                self.readyState = 3; // LOADING
-                if (self.onreadystatechange) self.onreadystatechange();
-                self.readyState = 4; // DONE
-                if (self.onreadystatechange) self.onreadystatechange();
-                if (self.onload) self.onload();
+
+                fireProgress(result.responseText.length, 0);
+                fireReadyState(3); // LOADING
+
+                done(true);
             } else {
+                // Neither ResourceBundle nor network_handler produced content
                 self.status = 0;
-                self.readyState = 4;
-                if (self.onreadystatechange) self.onreadystatechange();
-                if (self.onerror) self.onerror(new Error('NetworkError'));
+                self.statusText = '';
+                self.responseText = '';
+                self.response = '';
+                done(false, new Error('NetworkError'));
             }
         }
 
@@ -166,7 +237,14 @@ pub const XHR_SHIM_JS: &str = r#"
     };
 
     XMLHttpRequest.prototype.abort = function() {
+        this._aborted = true;
         this.readyState = 0;
+        if (this._timeoutTimer !== undefined) {
+            clearTimeout(this._timeoutTimer);
+            this._timeoutTimer = undefined;
+        }
+        if (this.onabort) this.onabort();
+        if (this.onloadend) this.onloadend();
     };
 
     XMLHttpRequest.prototype.overrideMimeType = function(mime) {
@@ -239,6 +317,13 @@ unsafe extern "C" fn xhr_send_callback(info: *const v8::FunctionCallbackInfo) {
                 let body_str = String::from_utf8_lossy(&res.body);
                 let text_val = crate::v8_utils::v8_string(scope, &body_str);
                 obj.set(scope, text_key.into(), text_val.into());
+
+                // statusText: "OK" for 200, empty otherwise (network_handler
+                // does not provide status text, so we derive it)
+                let status_text = if res.status == 200 { "OK" } else { "" };
+                let status_text_key = crate::v8_utils::v8_string(scope, "statusText");
+                let status_text_val = crate::v8_utils::v8_string(scope, status_text);
+                obj.set(scope, status_text_key.into(), status_text_val.into());
 
                 // Headers as object
                 let headers_obj = v8::Object::new(scope);

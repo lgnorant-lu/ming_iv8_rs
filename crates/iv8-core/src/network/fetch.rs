@@ -1,10 +1,12 @@
 //! fetch() JS binding: looks up ResourceBundle, returns Promise<Response>.
 //!
-//! In v0.1 (strict_compat, default offline):
-//! - If URL is in ResourceBundle → resolve with Response object
-//! - If URL is NOT in ResourceBundle → reject with TypeError("NetworkError")
+//! Resolution order:
+//! 1. If URL is in ResourceBundle → resolve with Response(status=resource.status)
+//! 2. If URL is NOT in ResourceBundle, try Python network_handler → resolve with Response
+//! 3. If neither works → resolve with Response(status=404, statusText="Not Found")
 //!
-//! The Response object has: status, ok, headers, text(), json(), arrayBuffer()
+//! The Response object has: status, ok, statusText, headers, url,
+//! text(), json(), arrayBuffer(), blob()
 //!
 //! v0.2 (L-04 fix): fetch() requests are also recorded to `__iv8__.netLog.entries`
 //! (was previously XHR-only). Same entry format: { method, url, headers, body }.
@@ -236,13 +238,16 @@ unsafe extern "C" fn fetch_callback(info: *const v8::FunctionCallbackInfo) {
                         resolver.resolve(scope, response.into());
                     }
                     None => {
-                        // Network error (offline mode)
-                        let msg = crate::v8_utils::v8_string(
-                            scope,
-                            &format!("TypeError: Failed to fetch '{}': NetworkError when attempting to fetch resource.", url_str),
+                        // Neither ResourceBundle nor network handler resolved the URL.
+                        // Return a 404 Response (do not reject — matches browser fetch
+                        // which resolves with an error Response, not a rejected promise).
+                        let not_found = crate::network::Resource::new(
+                            Vec::new(),
+                            404,
+                            None,
                         );
-                        let err = v8::Exception::type_error(scope, msg);
-                        resolver.reject(scope, err);
+                        let response = build_response_object(scope, &not_found);
+                        resolver.resolve(scope, response.into());
                     }
                 }
             }
@@ -302,10 +307,15 @@ fn build_response_object<'s>(
     );
 
     let st_key = crate::v8_utils::v8_string(scope, "__statusText__");
+    let status_text = match resource.status {
+        200 => "OK",
+        404 => "Not Found",
+        _ => "",
+    };
     obj.set(
         scope,
         st_key.into(),
-        crate::v8_utils::v8_string(scope, if resource.status == 200 { "OK" } else { "" }).into(),
+        crate::v8_utils::v8_string(scope, status_text).into(),
     );
 
     let url_key = crate::v8_utils::v8_string(scope, "__url__");

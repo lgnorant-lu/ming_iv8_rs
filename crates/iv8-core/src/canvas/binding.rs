@@ -263,13 +263,25 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
             isPointInPath: function() { return false; },
             isPointInStroke: function() { return false; },
 
-            // measureText: font-aware width estimation
+            // measureText: profile-driven, per-character width estimation
             measureText: function(text) {
                 var font = state.font || '10px sans-serif';
                 var sizeMatch = font.match(/(\d+(?:\.\d+)?)(px|pt|em)/);
                 var fontSize = sizeMatch ? parseFloat(sizeMatch[1]) : 10;
                 if (sizeMatch && sizeMatch[2] === 'pt') fontSize *= 1.333;
-                // Check if the font family is in the profile's font list
+                var str = String(text == null ? '' : text);
+
+                // Profile override: if globalThis.__iv8CanvasPrefs.textMetrics
+                // is a function, delegate entirely to it.
+                var canvasPrefs = (typeof globalThis.__iv8CanvasPrefs === 'object' && globalThis.__iv8CanvasPrefs) ? globalThis.__iv8CanvasPrefs : null;
+                if (canvasPrefs && typeof canvasPrefs.textMetrics === 'function') {
+                    try {
+                        var tm = canvasPrefs.textMetrics(str, font, fontSize);
+                        if (tm && typeof tm === 'object') { return tm; }
+                    } catch(e) {}
+                }
+
+                // Determine font class for per-character widths.
                 var fontPrefs = (typeof globalThis.__iv8FontPrefs === 'object' && globalThis.__iv8FontPrefs) ? globalThis.__iv8FontPrefs : {};
                 var families = fontPrefs.families || [];
                 var fontMatch = font.match(/["']?([^"']+)["']?\s*$/);
@@ -277,14 +289,74 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
                 var isKnown = families.some(function(f) { return f.toLowerCase() === fontName; });
                 var isMonospace = /monospace|courier|mono/i.test(font) || (isKnown && /consolas|menlo|monaco|lucida/i.test(fontName));
                 var isSerif = /serif/i.test(font) && !/sans-serif/i.test(font) || (isKnown && /times|georgia|garamond/i.test(fontName));
-                var charWidth = isMonospace ? fontSize * 0.6 : isSerif ? fontSize * 0.55 : fontSize * 0.5;
-                var width = (text || '').length * charWidth;
+
+                // Per-character width factors (relative to fontSize) for
+                // ASCII printable range 0x20-0x7E. Index = charCode - 0x20.
+                // Monospace: uniform 0.6. Serif/sans-serif: variable by glyph.
+                var WIDTHS_MONO = [
+                    0.25,0.33,0.45,0.92,0.92,1.10,1.00,0.20,0.33,0.33,
+                    0.45,0.92,0.25,0.33,0.25,0.45,0.60,0.60,0.60,0.60,
+                    0.60,0.60,0.60,0.60,0.60,0.60,0.25,0.25,0.92,0.92,
+                    0.92,0.50,0.92,0.67,0.67,0.72,0.72,0.67,0.61,0.78,
+                    0.72,0.28,0.50,0.67,0.56,0.83,0.72,0.78,0.67,0.78,
+                    0.72,0.67,0.61,0.72,0.67,0.94,0.67,0.67,0.61,0.28,
+                    0.28,0.28,0.47,0.56,0.50,0.56,0.50,0.28,0.56,0.56,
+                    0.25,0.28,0.50,0.28,0.78,0.56,0.56,0.56,0.56,0.33,
+                    0.33,0.28,0.56,0.50,0.72,0.50,0.50,0.50,0.33,0.25,
+                    0.33,0.92
+                ];
+                var WIDTHS_SERIF = [
+                    0.25,0.33,0.41,0.50,0.50,0.83,0.78,0.18,0.33,0.33,
+                    0.50,0.56,0.25,0.33,0.25,0.28,0.50,0.50,0.50,0.50,
+                    0.50,0.50,0.50,0.50,0.50,0.50,0.25,0.25,0.56,0.56,
+                    0.56,0.44,0.56,0.67,0.67,0.72,0.72,0.67,0.61,0.78,
+                    0.72,0.22,0.50,0.67,0.56,0.83,0.72,0.78,0.67,0.78,
+                    0.72,0.67,0.61,0.72,0.67,0.94,0.67,0.67,0.61,0.28,
+                    0.28,0.28,0.47,0.56,0.50,0.56,0.50,0.28,0.56,0.56,
+                    0.25,0.28,0.50,0.28,0.78,0.56,0.56,0.56,0.56,0.33,
+                    0.33,0.28,0.56,0.50,0.72,0.50,0.50,0.50,0.33,0.25,
+                    0.33,0.92
+                ];
+                var WIDTHS_SANS = [
+                    0.28,0.36,0.46,0.92,0.92,1.00,0.88,0.27,0.36,0.36,
+                    0.50,0.92,0.27,0.36,0.27,0.46,0.60,0.60,0.60,0.60,
+                    0.60,0.60,0.60,0.60,0.60,0.60,0.27,0.27,0.92,0.92,
+                    0.92,0.50,0.92,0.67,0.67,0.72,0.72,0.67,0.61,0.78,
+                    0.72,0.28,0.50,0.67,0.56,0.83,0.72,0.78,0.67,0.78,
+                    0.72,0.67,0.61,0.72,0.67,0.94,0.67,0.67,0.61,0.28,
+                    0.28,0.28,0.47,0.56,0.50,0.56,0.50,0.28,0.56,0.56,
+                    0.25,0.28,0.50,0.28,0.78,0.56,0.56,0.56,0.56,0.33,
+                    0.33,0.28,0.56,0.50,0.72,0.50,0.50,0.50,0.33,0.25,
+                    0.33,0.92
+                ];
+                var table = isMonospace ? WIDTHS_MONO : isSerif ? WIDTHS_SERIF : WIDTHS_SANS;
+                var fallbackFactor = isMonospace ? 0.6 : isSerif ? 0.55 : 0.5;
+
+                var width = 0;
+                var maxLeft = 0, maxRight = 0;
+                for (var i = 0; i < str.length; i++) {
+                    var code = str.charCodeAt(i);
+                    var factor;
+                    if (code >= 0x20 && code <= 0x7E) {
+                        factor = table[code - 0x20];
+                    } else if (code === 0x09) {
+                        factor = 1.80; // tab
+                    } else {
+                        factor = fallbackFactor; // non-ASCII fallback
+                    }
+                    width += factor * fontSize;
+                    if (i === 0) maxLeft = factor * fontSize * 0.5;
+                    maxRight = width;
+                }
+
+                var ascent = fontSize * 0.8;
+                var descent = fontSize * 0.2;
                 return {
                     width: width,
-                    actualBoundingBoxAscent: fontSize * 0.8,
-                    actualBoundingBoxDescent: fontSize * 0.2,
-                    actualBoundingBoxLeft: 0,
-                    actualBoundingBoxRight: width,
+                    actualBoundingBoxLeft: maxLeft,
+                    actualBoundingBoxRight: maxRight,
+                    actualBoundingBoxAscent: ascent,
+                    actualBoundingBoxDescent: descent,
                     fontBoundingBoxAscent: fontSize,
                     fontBoundingBoxDescent: fontSize * 0.25,
                 };

@@ -1001,6 +1001,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "text", response_text_cb);
         install_proto_method(scope, proto, "json", response_json_cb);
         install_proto_method(scope, proto, "arrayBuffer", response_array_buffer_cb);
+        install_proto_method(scope, proto, "blob", response_blob_cb);
         install_proto_method(scope, proto, "clone", response_clone_cb);
         install_proto_accessor(scope, proto, "status", response_status_getter, None);
         install_proto_accessor(scope, proto, "ok", response_ok_getter, None);
@@ -5238,6 +5239,80 @@ unsafe extern "C" fn response_array_buffer_cb(info: *const v8::FunctionCallbackI
         } else {
             resolver.resolve(scope, v8::ArrayBuffer::new(scope, 0).into());
         }
+    }));
+}
+
+unsafe extern "C" fn response_blob_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let resolver = crate::v8_utils::v8_resolver(scope);
+        rv.set(resolver.get_promise(scope).into());
+
+        let consumed_key = crate::v8_utils::v8_string(scope, "__consumed__");
+        if this
+            .get(scope, consumed_key.into())
+            .map(|v| v.is_true())
+            .unwrap_or(false)
+        {
+            let err = crate::v8_utils::v8_string(scope, "TypeError: Already read");
+            resolver.reject(scope, err.into());
+            return;
+        }
+        this.define_own_property(
+            scope,
+            consumed_key.into(),
+            v8::Boolean::new(scope, true).into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+
+        // Construct a Blob via the global Blob constructor (codegen-installed).
+        // Blob constructor: new Blob([arrayBuffer], { type: contentType })
+        let global = scope.get_current_context().global(scope);
+        let blob_key = crate::v8_utils::v8_string(scope, "Blob");
+        let ab_key = crate::v8_utils::v8_string(scope, "__arrayBuffer__");
+
+        if let Some(blob_ctor_val) = global.get(scope, blob_key.into()) {
+            if blob_ctor_val.is_function() {
+                let blob_ctor: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(blob_ctor_val) };
+
+                // Build [arrayBuffer] argument array
+                let ab_val = this
+                    .get(scope, ab_key.into())
+                    .unwrap_or_else(|| v8::ArrayBuffer::new(scope, 0).into());
+                let arr = v8::Array::new(scope, 1);
+                arr.set_index(scope, 0, ab_val);
+
+                // Build options object { type: contentType }
+                let opts = v8::Object::new(scope);
+                let headers_key = crate::v8_utils::v8_string(scope, "__headers__");
+                if let Some(headers_val) = this.get(scope, headers_key.into()) {
+                    if headers_val.is_object() {
+                        let headers_obj: v8::Local<v8::Object> =
+                            unsafe { v8::Local::cast_unchecked(headers_val) };
+                        let ct_key = crate::v8_utils::v8_string(scope, "content-type");
+                        if let Some(ct_val) = headers_obj.get(scope, ct_key.into()) {
+                            if !ct_val.is_undefined() && !ct_val.is_null() {
+                                let type_key = crate::v8_utils::v8_string(scope, "type");
+                                opts.set(scope, type_key.into(), ct_val);
+                            }
+                        }
+                    }
+                }
+
+                if let Some(blob_instance) = blob_ctor.new_instance(scope, &[arr.into(), opts.into()]) {
+                    resolver.resolve(scope, blob_instance.into());
+                    return;
+                }
+            }
+        }
+
+        // Fallback: resolve with a plain object (no Blob constructor available)
+        resolver.resolve(scope, v8::Object::new(scope).into());
     }));
 }
 
