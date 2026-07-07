@@ -9,17 +9,17 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         Object.defineProperty(proto, name, {
             get: function() {
                 if (this === null || this === undefined) throw new TypeError('Illegal invocation');
-                if (this !== proto) {
-                    var cur = Object.getPrototypeOf(this);
-                    var found = false;
-                    while (cur) { if (cur === proto) { found = true; break; } cur = Object.getPrototypeOf(cur); }
-                    if (!found) throw new TypeError('Illegal invocation');
-                }
+                if (this === proto) throw new TypeError('Illegal invocation');
+                var cur = Object.getPrototypeOf(this);
+                var found = false;
+                while (cur) { if (cur === proto) { found = true; break; } cur = Object.getPrototypeOf(cur); }
+                if (!found) throw new TypeError('Illegal invocation');
                 var v = this[slot];
                 return v !== undefined ? v : defaultVal;
             },
             set: function(v) {
                 if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+                if (this === proto) throw new TypeError('Illegal invocation');
                 this[slot] = v;
             },
             enumerable: true,
@@ -31,11 +31,11 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         Object.defineProperty(proto, name, {
             get: function() {
                 if (this === null || this === undefined) throw new TypeError('Illegal invocation');
-                if (Object.getPrototypeOf(this) !== proto && this !== proto) {
-                    var cur = Object.getPrototypeOf(this);
-                    while (cur) { if (cur === proto) break; cur = Object.getPrototypeOf(cur); }
-                    if (!cur) throw new TypeError('Illegal invocation');
-                }
+                if (this === proto) throw new TypeError('Illegal invocation');
+                var cur = Object.getPrototypeOf(this);
+                var found = false;
+                while (cur) { if (cur === proto) { found = true; break; } cur = Object.getPrototypeOf(cur); }
+                if (!found) throw new TypeError('Illegal invocation');
                 var v = this[slot];
                 return v !== undefined ? v : defaultVal;
             },
@@ -101,6 +101,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
     };
 
     Event.prototype.initEvent = function initEvent(eventType, bubbles, cancelable) {
+        if (arguments.length < 1) throw new TypeError("1 argument(s) required, but only 0 present.");
         this.type = eventType;
         this._bubbles = bubbles !== undefined ? !!bubbles : false;
         this._cancelable = cancelable !== undefined ? !!cancelable : false;
