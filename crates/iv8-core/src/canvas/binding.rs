@@ -295,8 +295,23 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
 
         // Set __proto__ to CanvasRenderingContext2D.prototype if available
         // so idlharness assert_inherits checks pass.
+        // Then delete own properties that also exist on the prototype,
+        // so assert_inherits finds them in the prototype chain (not on instance).
         if (proto) {
-            try { Object.setPrototypeOf(ctx, proto); } catch(e) {}
+            try {
+                Object.setPrototypeOf(ctx, proto);
+                // Delete own properties that shadow prototype methods/attributes.
+                // idlharness assert_inherits requires properties to NOT be own
+                // properties but to exist in the prototype chain.
+                var protoNames = Object.getOwnPropertyNames(proto);
+                for (var pi = 0; pi < protoNames.length; pi++) {
+                    var pn = protoNames[pi];
+                    if (pn === 'constructor') continue;
+                    if (ctx.hasOwnProperty(pn)) {
+                        try { delete ctx[pn]; } catch(e) {}
+                    }
+                }
+            } catch(e) {}
         }
 
         return ctx;
