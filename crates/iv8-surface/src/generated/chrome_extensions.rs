@@ -622,6 +622,10 @@ pub(crate) unsafe extern "C" fn chrome_csi_set_1(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8StartE").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -720,6 +724,10 @@ pub(crate) unsafe extern "C" fn chrome_csi_set_2(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnReadable").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -818,6 +826,10 @@ pub(crate) unsafe extern "C" fn chrome_csi_set_3(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnWindowCreated").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -916,6 +928,10 @@ pub(crate) unsafe extern "C" fn chrome_csi_set_4(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnTabsOnUpdated").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -1058,6 +1074,10 @@ pub(crate) unsafe extern "C" fn chrome_csi_set_6(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8WindowId").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -1156,6 +1176,10 @@ pub(crate) unsafe extern "C" fn chrome_csi_set_7(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8TabId").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -1254,6 +1278,10 @@ pub(crate) unsafe extern "C" fn chrome_csi_set_8(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OpenerTabId").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2480,6 +2508,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_1(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8RequestTime").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2578,6 +2610,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_2(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8StartLoadTime").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2676,6 +2712,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_3(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CommitLoadTime").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2774,6 +2814,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_4(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FinishDocumentLoadTime").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2872,6 +2916,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_5(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FinishLoadTime").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2970,6 +3018,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_6(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FirstPaintTime").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3068,6 +3120,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_7(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FirstPaintAfterLoadTime").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3166,6 +3222,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_8(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8NavigationType").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3264,6 +3324,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_9(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8WasFetchedViaSpdy").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3362,6 +3426,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_10(_info: *const v8::Funct
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8WasNpnNegotiated").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3460,6 +3528,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_11(_info: *const v8::Funct
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8NpnNegotiatedProtocol").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3558,6 +3630,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_12(_info: *const v8::Funct
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8WasAlternateProtocolAvailable").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3656,6 +3732,10 @@ pub(crate) unsafe extern "C" fn chrome_load_times_set_13(_info: *const v8::Funct
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ConnectionInfo").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4260,6 +4340,10 @@ pub(crate) unsafe extern "C" fn chrome_port_set_1(_info: *const v8::FunctionCall
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Name").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4374,6 +4458,10 @@ pub(crate) unsafe extern "C" fn chrome_port_set_2(_info: *const v8::FunctionCall
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnMessage").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4488,6 +4576,10 @@ pub(crate) unsafe extern "C" fn chrome_port_set_3(_info: *const v8::FunctionCall
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnDisconnect").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4947,6 +5039,10 @@ pub(crate) unsafe extern "C" fn chrome_runtime_set_1(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnMessage").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5061,6 +5157,10 @@ pub(crate) unsafe extern "C" fn chrome_runtime_set_2(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnConnect").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5175,6 +5275,10 @@ pub(crate) unsafe extern "C" fn chrome_runtime_set_3(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnInstalled").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5289,6 +5393,10 @@ pub(crate) unsafe extern "C" fn chrome_runtime_set_4(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnStartup").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5403,6 +5511,10 @@ pub(crate) unsafe extern "C" fn chrome_runtime_set_5(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnSuspend").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5517,6 +5629,10 @@ pub(crate) unsafe extern "C" fn chrome_runtime_set_6(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnSuspendCanceled").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5631,6 +5747,10 @@ pub(crate) unsafe extern "C" fn chrome_runtime_set_7(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnUpdateAvailable").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5745,6 +5865,10 @@ pub(crate) unsafe extern "C" fn chrome_runtime_set_8(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnRestartRequired").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5859,6 +5983,10 @@ pub(crate) unsafe extern "C" fn chrome_runtime_set_9(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnBrowserUpdateAvailable").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5957,6 +6085,10 @@ pub(crate) unsafe extern "C" fn chrome_runtime_set_10(_info: *const v8::Function
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Id").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -6939,6 +7071,10 @@ pub(crate) unsafe extern "C" fn chrome_storage_set_1(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Sync").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -7053,6 +7189,10 @@ pub(crate) unsafe extern "C" fn chrome_storage_set_2(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Local").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -7167,6 +7307,10 @@ pub(crate) unsafe extern "C" fn chrome_storage_set_3(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Managed").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -7281,6 +7425,10 @@ pub(crate) unsafe extern "C" fn chrome_storage_set_4(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Session").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -7504,6 +7652,10 @@ pub(crate) unsafe extern "C" fn chrome_storage_area_set_6(_info: *const v8::Func
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8OnChanged").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 

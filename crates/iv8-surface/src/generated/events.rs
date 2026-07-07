@@ -860,6 +860,10 @@ pub(crate) unsafe extern "C" fn event_set_8(_info: *const v8::FunctionCallbackIn
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CancelBubble").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -1110,6 +1114,10 @@ pub(crate) unsafe extern "C" fn event_set_12(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ReturnValue").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2748,6 +2756,10 @@ pub(crate) unsafe extern "C" fn before_unload_event_set_1(_info: *const v8::Func
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ReturnValue").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17211,23 +17223,7 @@ pub(crate) unsafe extern "C" fn event_source_get_4(_info: *const v8::FunctionCal
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -17272,6 +17268,10 @@ pub(crate) unsafe extern "C" fn event_source_set_4(_info: *const v8::FunctionCal
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onopen").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17325,23 +17325,7 @@ pub(crate) unsafe extern "C" fn event_source_get_5(_info: *const v8::FunctionCal
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -17386,6 +17370,10 @@ pub(crate) unsafe extern "C" fn event_source_set_5(_info: *const v8::FunctionCal
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmessage").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17439,23 +17427,7 @@ pub(crate) unsafe extern "C" fn event_source_get_6(_info: *const v8::FunctionCal
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -17500,6 +17472,10 @@ pub(crate) unsafe extern "C" fn event_source_set_6(_info: *const v8::FunctionCal
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onerror").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 

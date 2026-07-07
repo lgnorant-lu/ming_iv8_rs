@@ -2307,23 +2307,7 @@ pub(crate) unsafe extern "C" fn bluetooth_get_2(_info: *const v8::FunctionCallba
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -2368,6 +2352,10 @@ pub(crate) unsafe extern "C" fn bluetooth_set_2(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onavailabilitychanged").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2515,23 +2503,7 @@ pub(crate) unsafe extern "C" fn bluetooth_get_7(_info: *const v8::FunctionCallba
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -2576,6 +2548,10 @@ pub(crate) unsafe extern "C" fn bluetooth_set_7(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onadvertisementreceived").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2629,23 +2605,7 @@ pub(crate) unsafe extern "C" fn bluetooth_get_8(_info: *const v8::FunctionCallba
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -2690,6 +2650,10 @@ pub(crate) unsafe extern "C" fn bluetooth_set_8(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Ongattserverdisconnected").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2743,23 +2707,7 @@ pub(crate) unsafe extern "C" fn bluetooth_get_9(_info: *const v8::FunctionCallba
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -2804,6 +2752,10 @@ pub(crate) unsafe extern "C" fn bluetooth_set_9(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncharacteristicvaluechanged").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2857,23 +2809,7 @@ pub(crate) unsafe extern "C" fn bluetooth_get_10(_info: *const v8::FunctionCallb
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -2918,6 +2854,10 @@ pub(crate) unsafe extern "C" fn bluetooth_set_10(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onserviceadded").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2971,23 +2911,7 @@ pub(crate) unsafe extern "C" fn bluetooth_get_11(_info: *const v8::FunctionCallb
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3032,6 +2956,10 @@ pub(crate) unsafe extern "C" fn bluetooth_set_11(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onservicechanged").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3085,23 +3013,7 @@ pub(crate) unsafe extern "C" fn bluetooth_get_12(_info: *const v8::FunctionCallb
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3146,6 +3058,10 @@ pub(crate) unsafe extern "C" fn bluetooth_set_12(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onserviceremoved").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3576,23 +3492,7 @@ pub(crate) unsafe extern "C" fn bluetooth_device_get_7(_info: *const v8::Functio
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3637,6 +3537,10 @@ pub(crate) unsafe extern "C" fn bluetooth_device_set_7(_info: *const v8::Functio
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onadvertisementreceived").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3690,23 +3594,7 @@ pub(crate) unsafe extern "C" fn bluetooth_device_get_8(_info: *const v8::Functio
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3751,6 +3639,10 @@ pub(crate) unsafe extern "C" fn bluetooth_device_set_8(_info: *const v8::Functio
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Ongattserverdisconnected").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3804,23 +3696,7 @@ pub(crate) unsafe extern "C" fn bluetooth_device_get_9(_info: *const v8::Functio
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3865,6 +3741,10 @@ pub(crate) unsafe extern "C" fn bluetooth_device_set_9(_info: *const v8::Functio
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncharacteristicvaluechanged").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3918,23 +3798,7 @@ pub(crate) unsafe extern "C" fn bluetooth_device_get_10(_info: *const v8::Functi
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3979,6 +3843,10 @@ pub(crate) unsafe extern "C" fn bluetooth_device_set_10(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onserviceadded").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4032,23 +3900,7 @@ pub(crate) unsafe extern "C" fn bluetooth_device_get_11(_info: *const v8::Functi
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -4093,6 +3945,10 @@ pub(crate) unsafe extern "C" fn bluetooth_device_set_11(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onservicechanged").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4146,23 +4002,7 @@ pub(crate) unsafe extern "C" fn bluetooth_device_get_12(_info: *const v8::Functi
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -4207,6 +4047,10 @@ pub(crate) unsafe extern "C" fn bluetooth_device_set_12(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onserviceremoved").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4743,23 +4587,7 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_characteristic_get_13(_inf
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -4804,6 +4632,10 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_characteristic_set_13(_inf
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncharacteristicvaluechanged").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5221,23 +5053,7 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_get_8(_info: *cons
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -5282,6 +5098,10 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_set_8(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncharacteristicvaluechanged").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5335,23 +5155,7 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_get_9(_info: *cons
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -5396,6 +5200,10 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_set_9(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onserviceadded").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5449,23 +5257,7 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_get_10(_info: *con
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -5510,6 +5302,10 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_set_10(_info: *con
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onservicechanged").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5563,23 +5359,7 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_get_11(_info: *con
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -5624,6 +5404,10 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_set_11(_info: *con
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onserviceremoved").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5838,6 +5622,10 @@ pub(crate) unsafe extern "C" fn bluetooth_le_scan_permission_result_set_1(_info:
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Scans").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5967,6 +5755,10 @@ pub(crate) unsafe extern "C" fn bluetooth_permission_result_set_1(_info: *const 
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Devices").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 

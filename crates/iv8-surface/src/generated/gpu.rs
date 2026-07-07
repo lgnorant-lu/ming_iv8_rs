@@ -974,6 +974,10 @@ pub(crate) unsafe extern "C" fn gpu_bind_group_set_1(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -1100,6 +1104,10 @@ pub(crate) unsafe extern "C" fn gpu_bind_group_layout_set_1(_info: *const v8::Fu
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -1583,6 +1591,10 @@ pub(crate) unsafe extern "C" fn gpu_buffer_set_8(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2065,6 +2077,10 @@ pub(crate) unsafe extern "C" fn gpu_command_buffer_set_1(_info: *const v8::Funct
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2687,6 +2703,10 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_set_11(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3737,6 +3757,10 @@ pub(crate) unsafe extern "C" fn gpu_compute_pass_encoder_set_5(_info: *const v8:
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4174,6 +4198,10 @@ pub(crate) unsafe extern "C" fn gpu_compute_pipeline_set_1(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4595,6 +4623,10 @@ pub(crate) unsafe extern "C" fn gpu_external_texture_set_1(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4721,6 +4753,10 @@ pub(crate) unsafe extern "C" fn gpu_pipeline_layout_set_1(_info: *const v8::Func
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5031,6 +5067,10 @@ pub(crate) unsafe extern "C" fn gpu_query_set_set_4(_info: *const v8::FunctionCa
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5390,6 +5430,10 @@ pub(crate) unsafe extern "C" fn gpu_queue_set_6(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5551,6 +5595,10 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_set_1(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5721,6 +5769,10 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_set_2(_info: *const v8
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -6946,6 +6998,10 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_set_9(_info: *const v8::
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -7830,6 +7886,10 @@ pub(crate) unsafe extern "C" fn gpu_render_pipeline_set_1(_info: *const v8::Func
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -8014,6 +8074,10 @@ pub(crate) unsafe extern "C" fn gpu_sampler_set_1(_info: *const v8::FunctionCall
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -8148,6 +8212,10 @@ pub(crate) unsafe extern "C" fn gpu_shader_module_set_2(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11250,6 +11318,10 @@ pub(crate) unsafe extern "C" fn gpu_texture_set_12(_info: *const v8::FunctionCal
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11462,6 +11534,10 @@ pub(crate) unsafe extern "C" fn gpu_texture_view_set_1(_info: *const v8::Functio
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12758,23 +12834,7 @@ pub(crate) unsafe extern "C" fn gpu_device_get_24(_info: *const v8::FunctionCall
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -12819,6 +12879,10 @@ pub(crate) unsafe extern "C" fn gpu_device_set_24(_info: *const v8::FunctionCall
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onuncapturederror").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12917,6 +12981,10 @@ pub(crate) unsafe extern "C" fn gpu_device_set_25(_info: *const v8::FunctionCall
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 

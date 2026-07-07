@@ -932,6 +932,10 @@ pub(crate) unsafe extern "C" fn css_rule_set_1(_info: *const v8::FunctionCallbac
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CssText").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -1513,6 +1517,10 @@ pub(crate) unsafe extern "C" fn css_style_declaration_set_1(_info: *const v8::Fu
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CssText").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2301,6 +2309,10 @@ pub(crate) unsafe extern "C" fn css_transform_component_set_2(_info: *const v8::
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Is2D").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2485,6 +2497,10 @@ pub(crate) unsafe extern "C" fn css_variable_reference_value_set_1(_info: *const
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Variable").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -2688,6 +2704,10 @@ pub(crate) unsafe extern "C" fn media_list_set_1(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MediaText").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -3452,23 +3472,7 @@ pub(crate) unsafe extern "C" fn screen_get_9(_info: *const v8::FunctionCallbackI
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3513,6 +3517,10 @@ pub(crate) unsafe extern "C" fn screen_set_9(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onchange").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4013,6 +4021,10 @@ pub(crate) unsafe extern "C" fn style_sheet_set_6(_info: *const v8::FunctionCall
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Media").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -4111,6 +4123,10 @@ pub(crate) unsafe extern "C" fn style_sheet_set_7(_info: *const v8::FunctionCall
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Disabled").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5877,6 +5893,10 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_set_1(_info: *const v8::F
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Name").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -5975,6 +5995,10 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_set_2(_info: *const v8::F
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8System").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -6073,6 +6097,10 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_set_3(_info: *const v8::F
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Symbols").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -6171,6 +6199,10 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_set_4(_info: *const v8::F
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AdditiveSymbols").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -6269,6 +6301,10 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_set_5(_info: *const v8::F
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Negative").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -6367,6 +6403,10 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_set_6(_info: *const v8::F
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Prefix").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -6465,6 +6505,10 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_set_7(_info: *const v8::F
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Suffix").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -6563,6 +6607,10 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_set_8(_info: *const v8::F
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Range").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -6661,6 +6709,10 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_set_9(_info: *const v8::F
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Pad").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -6759,6 +6811,10 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_set_10(_info: *const v8::
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SpeakAs").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -6857,6 +6913,10 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_set_11(_info: *const v8::
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Fallback").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -7261,6 +7321,10 @@ pub(crate) unsafe extern "C" fn css_font_face_rule_set_1(_info: *const v8::Funct
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Style").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -7390,6 +7454,10 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_set_1(_info: *const
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontFamily").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -8340,6 +8408,10 @@ pub(crate) unsafe extern "C" fn css_function_declarations_set_1(_info: *const v8
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Style").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -8754,6 +8826,10 @@ pub(crate) unsafe extern "C" fn css_import_rule_set_2(_info: *const v8::Function
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Media").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -9089,6 +9165,10 @@ pub(crate) unsafe extern "C" fn css_keyframe_rule_set_1(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8KeyText").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -9203,6 +9283,10 @@ pub(crate) unsafe extern "C" fn css_keyframe_rule_set_2(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Style").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -9341,6 +9425,10 @@ pub(crate) unsafe extern "C" fn css_keyframes_rule_set_1(_info: *const v8::Funct
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Name").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -9993,6 +10081,10 @@ pub(crate) unsafe extern "C" fn css_margin_rule_set_2(_info: *const v8::Function
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Style").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -10289,6 +10381,10 @@ pub(crate) unsafe extern "C" fn css_nested_declarations_set_1(_info: *const v8::
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Style").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -10488,6 +10584,10 @@ pub(crate) unsafe extern "C" fn css_position_try_rule_set_2(_info: *const v8::Fu
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Style").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11034,6 +11134,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_1(_info: *const v8
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Src").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11132,6 +11236,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_2(_info: *const v8
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontFamily").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11230,6 +11338,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_3(_info: *const v8
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontFamily").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11328,6 +11440,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_4(_info: *const v8
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontStyle").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11426,6 +11542,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_5(_info: *const v8
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontStyle").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11524,6 +11644,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_6(_info: *const v8
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontWeight").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11622,6 +11746,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_7(_info: *const v8
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontWeight").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11720,6 +11848,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_8(_info: *const v8
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontStretch").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11818,6 +11950,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_9(_info: *const v8
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontStretch").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -11916,6 +12052,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_10(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontWidth").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12014,6 +12154,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_11(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontWidth").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12112,6 +12256,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_12(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12210,6 +12358,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_13(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12308,6 +12460,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_14(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SizeAdjust").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12406,6 +12562,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_15(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SizeAdjust").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12504,6 +12664,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_16(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8UnicodeRange").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12602,6 +12766,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_17(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8UnicodeRange").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12700,6 +12868,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_18(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontFeatureSettings").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12798,6 +12970,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_19(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontFeatureSettings").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12896,6 +13072,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_20(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontVariationSettings").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -12994,6 +13174,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_21(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontVariationSettings").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -13092,6 +13276,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_22(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontNamedInstance").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -13190,6 +13378,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_23(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontNamedInstance").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -13288,6 +13480,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_24(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontDisplay").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -13386,6 +13582,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_25(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontDisplay").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -13484,6 +13684,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_26(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontLanguageOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -13582,6 +13786,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_27(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FontLanguageOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -13680,6 +13888,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_28(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AscentOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -13778,6 +13990,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_29(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AscentOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -13876,6 +14092,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_30(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DescentOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -13974,6 +14194,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_31(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DescentOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -14072,6 +14296,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_32(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8LineGapOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -14170,6 +14398,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_33(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8LineGapOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -14268,6 +14500,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_34(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SuperscriptPositionOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -14366,6 +14602,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_35(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SuperscriptPositionOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -14464,6 +14704,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_36(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SubscriptPositionOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -14562,6 +14806,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_37(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SubscriptPositionOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -14660,6 +14908,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_38(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SuperscriptSizeOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -14758,6 +15010,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_39(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SuperscriptSizeOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -14856,6 +15112,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_40(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SubscriptSizeOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -14954,6 +15214,10 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_set_41(_info: *const v
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SubscriptSizeOverride").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -15464,6 +15728,10 @@ pub(crate) unsafe extern "C" fn css_function_descriptors_set_1(_info: *const v8:
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Result").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -15593,6 +15861,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_1(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Margin").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -15691,6 +15963,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_2(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginTop").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -15789,6 +16065,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_3(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginRight").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -15887,6 +16167,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_4(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginBottom").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -15985,6 +16269,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_5(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginLeft").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -16083,6 +16371,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_6(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginTop").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -16181,6 +16473,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_7(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginRight").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -16279,6 +16575,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_8(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginBottom").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -16377,6 +16677,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_9(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginLeft").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -16475,6 +16779,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_10(_info: *const v8::Fu
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Size").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -16573,6 +16881,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_11(_info: *const v8::Fu
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PageOrientation").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -16671,6 +16983,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_12(_info: *const v8::Fu
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PageOrientation").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -16769,6 +17085,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_13(_info: *const v8::Fu
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Marks").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -16867,6 +17187,10 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_set_14(_info: *const v8::Fu
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Bleed").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17122,6 +17446,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_1(_info: *const
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Margin").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17220,6 +17548,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_2(_info: *const
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginTop").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17318,6 +17650,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_3(_info: *const
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginRight").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17416,6 +17752,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_4(_info: *const
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginBottom").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17514,6 +17854,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_5(_info: *const
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginLeft").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17612,6 +17956,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_6(_info: *const
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginBlock").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17710,6 +18058,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_7(_info: *const
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginBlockStart").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17808,6 +18160,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_8(_info: *const
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginBlockEnd").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -17906,6 +18262,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_9(_info: *const
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginInline").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18004,6 +18364,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_10(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginInlineStart").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18102,6 +18466,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_11(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginInlineEnd").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18200,6 +18568,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_12(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginTop").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18298,6 +18670,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_13(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginRight").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18396,6 +18772,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_14(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginBottom").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18494,6 +18874,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_15(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginLeft").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18592,6 +18976,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_16(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginBlock").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18690,6 +19078,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_17(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginBlockStart").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18788,6 +19180,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_18(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginBlockEnd").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18886,6 +19282,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_19(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginInline").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18984,6 +19384,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_20(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginInlineStart").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -19082,6 +19486,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_21(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MarginInlineEnd").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -19180,6 +19588,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_22(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Inset").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -19278,6 +19690,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_23(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetBlock").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -19376,6 +19792,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_24(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetBlockStart").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -19474,6 +19894,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_25(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetBlockEnd").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -19572,6 +19996,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_26(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetInline").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -19670,6 +20098,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_27(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetInlineStart").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -19768,6 +20200,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_28(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetInlineEnd").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -19866,6 +20302,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_29(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Top").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -19964,6 +20404,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_30(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Left").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -20062,6 +20506,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_31(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Right").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -20160,6 +20608,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_32(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Bottom").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -20258,6 +20710,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_33(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetBlock").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -20356,6 +20812,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_34(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetBlockStart").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -20454,6 +20914,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_35(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetBlockEnd").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -20552,6 +21016,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_36(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetInline").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -20650,6 +21118,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_37(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetInlineStart").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -20748,6 +21220,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_38(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InsetInlineEnd").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -20846,6 +21322,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_39(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Width").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -20944,6 +21424,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_40(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MinWidth").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -21042,6 +21526,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_41(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MaxWidth").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -21140,6 +21628,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_42(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Height").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -21238,6 +21730,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_43(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MinHeight").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -21336,6 +21832,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_44(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MaxHeight").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -21434,6 +21934,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_45(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8BlockSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -21532,6 +22036,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_46(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MinBlockSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -21630,6 +22138,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_47(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MaxBlockSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -21728,6 +22240,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_48(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InlineSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -21826,6 +22342,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_49(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MinInlineSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -21924,6 +22444,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_50(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MaxInlineSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -22022,6 +22546,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_51(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MinWidth").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -22120,6 +22648,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_52(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MaxWidth").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -22218,6 +22750,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_53(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MinHeight").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -22316,6 +22852,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_54(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MaxHeight").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -22414,6 +22954,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_55(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8BlockSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -22512,6 +23056,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_56(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MinBlockSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -22610,6 +23158,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_57(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MaxBlockSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -22708,6 +23260,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_58(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8InlineSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -22806,6 +23362,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_59(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MinInlineSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -22904,6 +23464,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_60(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8MaxInlineSize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -23002,6 +23566,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_61(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PlaceSelf").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -23100,6 +23668,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_62(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AlignSelf").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -23198,6 +23770,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_63(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8JustifySelf").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -23296,6 +23872,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_64(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PlaceSelf").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -23394,6 +23974,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_65(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8AlignSelf").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -23492,6 +24076,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_66(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8JustifySelf").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -23590,6 +24178,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_67(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PositionAnchor").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -23688,6 +24280,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_68(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PositionAnchor").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -23786,6 +24382,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_69(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PositionArea").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -23884,6 +24484,10 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_set_70(_info: *cons
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8PositionArea").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -24663,6 +25267,10 @@ pub(crate) unsafe extern "C" fn css_style_properties_set_1(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8CssFloat").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -24897,6 +25505,10 @@ pub(crate) unsafe extern "C" fn css_keyword_value_set_1(_info: *const v8::Functi
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Value").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -26152,6 +26764,10 @@ pub(crate) unsafe extern "C" fn css_matrix_component_set_1(_info: *const v8::Fun
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Matrix").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -26297,6 +26913,10 @@ pub(crate) unsafe extern "C" fn css_perspective_set_1(_info: *const v8::Function
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Length").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -26442,6 +27062,10 @@ pub(crate) unsafe extern "C" fn css_rotate_set_1(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8X").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -26556,6 +27180,10 @@ pub(crate) unsafe extern "C" fn css_rotate_set_2(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Y").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -26670,6 +27298,10 @@ pub(crate) unsafe extern "C" fn css_rotate_set_3(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Z").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -26784,6 +27416,10 @@ pub(crate) unsafe extern "C" fn css_rotate_set_4(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Angle").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -26956,6 +27592,10 @@ pub(crate) unsafe extern "C" fn css_scale_set_1(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8X").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -27070,6 +27710,10 @@ pub(crate) unsafe extern "C" fn css_scale_set_2(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Y").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -27184,6 +27828,10 @@ pub(crate) unsafe extern "C" fn css_scale_set_3(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Z").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -27347,6 +27995,10 @@ pub(crate) unsafe extern "C" fn css_skew_set_1(_info: *const v8::FunctionCallbac
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Ax").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -27461,6 +28113,10 @@ pub(crate) unsafe extern "C" fn css_skew_set_2(_info: *const v8::FunctionCallbac
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Ay").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -27615,6 +28271,10 @@ pub(crate) unsafe extern "C" fn css_skew_x_set_1(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Ax").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -27760,6 +28420,10 @@ pub(crate) unsafe extern "C" fn css_skew_y_set_1(_info: *const v8::FunctionCallb
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Ay").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -27905,6 +28569,10 @@ pub(crate) unsafe extern "C" fn css_translate_set_1(_info: *const v8::FunctionCa
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8X").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -28019,6 +28687,10 @@ pub(crate) unsafe extern "C" fn css_translate_set_2(_info: *const v8::FunctionCa
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Y").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -28133,6 +28805,10 @@ pub(crate) unsafe extern "C" fn css_translate_set_3(_info: *const v8::FunctionCa
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Z").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -28613,23 +29289,7 @@ pub(crate) unsafe extern "C" fn visual_viewport_get_8(_info: *const v8::Function
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -28674,6 +29334,10 @@ pub(crate) unsafe extern "C" fn visual_viewport_set_8(_info: *const v8::Function
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onresize").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -28727,23 +29391,7 @@ pub(crate) unsafe extern "C" fn visual_viewport_get_9(_info: *const v8::Function
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -28788,6 +29436,10 @@ pub(crate) unsafe extern "C" fn visual_viewport_set_9(_info: *const v8::Function
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onscroll").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -28841,23 +29493,7 @@ pub(crate) unsafe extern "C" fn visual_viewport_get_10(_info: *const v8::Functio
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventHandler").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -28902,6 +29538,10 @@ pub(crate) unsafe extern "C" fn visual_viewport_set_10(_info: *const v8::Functio
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onscrollend").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -30361,6 +31001,10 @@ pub(crate) unsafe extern "C" fn css_page_rule_set_1(_info: *const v8::FunctionCa
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SelectorText").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -30475,6 +31119,10 @@ pub(crate) unsafe extern "C" fn css_page_rule_set_2(_info: *const v8::FunctionCa
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Style").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -30779,6 +31427,10 @@ pub(crate) unsafe extern "C" fn css_style_rule_set_1(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8SelectorText").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -30893,6 +31545,10 @@ pub(crate) unsafe extern "C" fn css_style_rule_set_2(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Style").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -31207,6 +31863,10 @@ pub(crate) unsafe extern "C" fn css_color_set_1(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8ColorSpace").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -31321,6 +31981,10 @@ pub(crate) unsafe extern "C" fn css_color_set_2(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Channels").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -31435,6 +32099,10 @@ pub(crate) unsafe extern "C" fn css_color_set_3(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Alpha").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -31598,6 +32266,10 @@ pub(crate) unsafe extern "C" fn csshsl_set_1(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8H").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -31712,6 +32384,10 @@ pub(crate) unsafe extern "C" fn csshsl_set_2(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8S").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -31826,6 +32502,10 @@ pub(crate) unsafe extern "C" fn csshsl_set_3(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8L").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -31940,6 +32620,10 @@ pub(crate) unsafe extern "C" fn csshsl_set_4(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Alpha").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -32112,6 +32796,10 @@ pub(crate) unsafe extern "C" fn csshwb_set_1(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8H").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -32226,6 +32914,10 @@ pub(crate) unsafe extern "C" fn csshwb_set_2(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8W").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -32340,6 +33032,10 @@ pub(crate) unsafe extern "C" fn csshwb_set_3(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8B").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -32454,6 +33150,10 @@ pub(crate) unsafe extern "C" fn csshwb_set_4(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Alpha").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -32626,6 +33326,10 @@ pub(crate) unsafe extern "C" fn csslch_set_1(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8L").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -32740,6 +33444,10 @@ pub(crate) unsafe extern "C" fn csslch_set_2(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8C").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -32854,6 +33562,10 @@ pub(crate) unsafe extern "C" fn csslch_set_3(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8H").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -32968,6 +33680,10 @@ pub(crate) unsafe extern "C" fn csslch_set_4(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Alpha").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -33140,6 +33856,10 @@ pub(crate) unsafe extern "C" fn css_lab_set_1(_info: *const v8::FunctionCallback
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8L").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -33254,6 +33974,10 @@ pub(crate) unsafe extern "C" fn css_lab_set_2(_info: *const v8::FunctionCallback
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8A").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -33368,6 +34092,10 @@ pub(crate) unsafe extern "C" fn css_lab_set_3(_info: *const v8::FunctionCallback
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8B").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -33482,6 +34210,10 @@ pub(crate) unsafe extern "C" fn css_lab_set_4(_info: *const v8::FunctionCallback
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Alpha").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -33654,6 +34386,10 @@ pub(crate) unsafe extern "C" fn cssoklch_set_1(_info: *const v8::FunctionCallbac
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8L").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -33768,6 +34504,10 @@ pub(crate) unsafe extern "C" fn cssoklch_set_2(_info: *const v8::FunctionCallbac
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8C").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -33882,6 +34622,10 @@ pub(crate) unsafe extern "C" fn cssoklch_set_3(_info: *const v8::FunctionCallbac
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8H").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -33996,6 +34740,10 @@ pub(crate) unsafe extern "C" fn cssoklch_set_4(_info: *const v8::FunctionCallbac
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Alpha").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -34168,6 +34916,10 @@ pub(crate) unsafe extern "C" fn cssok_lab_set_1(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8L").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -34282,6 +35034,10 @@ pub(crate) unsafe extern "C" fn cssok_lab_set_2(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8A").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -34396,6 +35152,10 @@ pub(crate) unsafe extern "C" fn cssok_lab_set_3(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8B").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -34510,6 +35270,10 @@ pub(crate) unsafe extern "C" fn cssok_lab_set_4(_info: *const v8::FunctionCallba
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Alpha").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -34682,6 +35446,10 @@ pub(crate) unsafe extern "C" fn cssrgb_set_1(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8R").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -34796,6 +35564,10 @@ pub(crate) unsafe extern "C" fn cssrgb_set_2(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8G").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -34910,6 +35682,10 @@ pub(crate) unsafe extern "C" fn cssrgb_set_3(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8B").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -35024,6 +35800,10 @@ pub(crate) unsafe extern "C" fn cssrgb_set_4(_info: *const v8::FunctionCallbackI
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Alpha").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -35279,6 +36059,10 @@ pub(crate) unsafe extern "C" fn css_unit_value_set_1(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Value").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -35856,6 +36640,10 @@ pub(crate) unsafe extern "C" fn css_media_rule_set_1(_info: *const v8::FunctionC
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Media").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 

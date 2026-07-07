@@ -68,7 +68,8 @@ fn is_interface_type(type_name: &str) -> bool {
         "Function" | "ArrayBuffer" | "DataView" |
         "Int8Array" | "Int16Array" | "Int32Array" | "Uint8Array" |
         "Uint8ClampedArray" | "Uint16Array" | "Uint32Array" |
-        "Float32Array" | "Float64Array" | "BigInt64Array" | "BigUint64Array"
+        "Float32Array" | "Float64Array" | "BigInt64Array" | "BigUint64Array" |
+        "EventHandler" | "OnErrorEventHandler" | "OnBeforeUnloadEventHandler"
     ) && !name.starts_with("sequence<")
       && !name.starts_with("FrozenArray<")
       && !name.starts_with("record<")
@@ -498,6 +499,11 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
                 out.push_str("        let info_ref = unsafe { &*_info };\n");
                 out.push_str("        v8::callback_scope!(unsafe scope, info_ref);\n");
                 out.push_str(receiver_check);
+                // Store the value in __iv8<PropName> hidden property
+                out.push_str(&format!(
+                    "        let __this = __args.this();\n        let __hidden_key = v8::String::new(scope, \"__iv8{}\").unwrap();\n        let __val = __args.get(0);\n        __this.set(scope, __hidden_key.into(), __val);\n",
+                    prop_name_camel
+                ));
                 out.push_str("    }));\n");
                 out.push_str("}\n\n");
             }

@@ -125,6 +125,18 @@ pub fn map_idl_type(idl_type: &str) -> TypeMap {
             map_idl_type(inner.trim())
         }
 
+        // Nullable callback typedefs — return null (not an object)
+        // EventHandler = EventHandlerNonNull? (nullable callback)
+        // OnErrorEventHandler = OnErrorEventHandlerNonNull?
+        // OnBeforeUnloadEventHandler = OnBeforeUnloadEventHandlerNonNull?
+        "EventHandler"
+        | "OnErrorEventHandler"
+        | "OnBeforeUnloadEventHandler" => TypeMap {
+            rust_type: "v8::Local<'s, v8::Value>".into(),
+            default_value: "v8::null(scope).into()".into(),
+            needs_scope: true,
+        },
+
         // Interface references — return empty object skeleton
         _ => TypeMap {
             rust_type: "v8::Local<'s, v8::Object>".into(),

@@ -203,6 +203,10 @@ pub(crate) unsafe extern "C" fn url_set_3(_info: *const v8::FunctionCallbackInfo
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Href").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -355,6 +359,10 @@ pub(crate) unsafe extern "C" fn url_set_5(_info: *const v8::FunctionCallbackInfo
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Protocol").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -453,6 +461,10 @@ pub(crate) unsafe extern "C" fn url_set_6(_info: *const v8::FunctionCallbackInfo
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Username").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -551,6 +563,10 @@ pub(crate) unsafe extern "C" fn url_set_7(_info: *const v8::FunctionCallbackInfo
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Password").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -649,6 +665,10 @@ pub(crate) unsafe extern "C" fn url_set_8(_info: *const v8::FunctionCallbackInfo
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Host").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -747,6 +767,10 @@ pub(crate) unsafe extern "C" fn url_set_9(_info: *const v8::FunctionCallbackInfo
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Hostname").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -845,6 +869,10 @@ pub(crate) unsafe extern "C" fn url_set_10(_info: *const v8::FunctionCallbackInf
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Port").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -943,6 +971,10 @@ pub(crate) unsafe extern "C" fn url_set_11(_info: *const v8::FunctionCallbackInf
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Pathname").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -1041,6 +1073,10 @@ pub(crate) unsafe extern "C" fn url_set_12(_info: *const v8::FunctionCallbackInf
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Search").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -1209,6 +1245,10 @@ pub(crate) unsafe extern "C" fn url_set_14(_info: *const v8::FunctionCallbackInf
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Hash").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 

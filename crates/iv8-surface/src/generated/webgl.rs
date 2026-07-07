@@ -397,6 +397,10 @@ pub(crate) unsafe extern "C" fn web_gl2rendering_context_set_5(_info: *const v8:
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DrawingBufferColorSpace").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -511,6 +515,10 @@ pub(crate) unsafe extern "C" fn web_gl2rendering_context_set_6(_info: *const v8:
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8UnpackColorSpace").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18064,6 +18072,10 @@ pub(crate) unsafe extern "C" fn web_gl_object_set_1(_info: *const v8::FunctionCa
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Label").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18486,6 +18498,10 @@ pub(crate) unsafe extern "C" fn web_gl_rendering_context_set_5(_info: *const v8:
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8DrawingBufferColorSpace").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
@@ -18600,6 +18616,10 @@ pub(crate) unsafe extern "C" fn web_gl_rendering_context_set_6(_info: *const v8:
                 }
             }
         }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8UnpackColorSpace").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
