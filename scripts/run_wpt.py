@@ -2205,7 +2205,7 @@ if (typeof globalThis.WorkerGlobalScope === 'undefined') {{
     WorkerGlobalScope.prototype.importScripts = function importScripts() {{
         if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present.');
     }};
-    try {{ Object.defineProperty(WorkerGlobalScope.prototype.importScripts, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
+    try {{ Object.defineProperty(WorkerGlobalScope.prototype.importScripts, 'length', {{ value: 0, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
     // Event handlers
     var _wgsHandlers = ['onerror','onlanguagechange','onoffline','ononline','onrejectionhandled','onunhandledrejection'];
     _wgsHandlers.forEach(function(hn) {{

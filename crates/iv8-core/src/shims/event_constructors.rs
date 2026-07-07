@@ -6,39 +6,48 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
 (function() {
     function _defAccessor(proto, name, defaultVal) {
         var slot = '_' + name;
+        var getter = function() {
+            if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+            if (this === proto) throw new TypeError('Illegal invocation');
+            var cur = Object.getPrototypeOf(this);
+            var found = false;
+            while (cur) { if (cur === proto) { found = true; break; } cur = Object.getPrototypeOf(cur); }
+            if (!found) throw new TypeError('Illegal invocation');
+            var v = this[slot];
+            return v !== undefined ? v : defaultVal;
+        };
+        var setter = function(v) {
+            if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+            if (this === proto) throw new TypeError('Illegal invocation');
+            this[slot] = v;
+        };
+        try { Object.defineProperty(getter, 'name', { value: 'get ' + name, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+        try { Object.defineProperty(getter, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+        try { Object.defineProperty(setter, 'name', { value: 'set ' + name, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+        try { Object.defineProperty(setter, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
         Object.defineProperty(proto, name, {
-            get: function() {
-                if (this === null || this === undefined) throw new TypeError('Illegal invocation');
-                if (this === proto) throw new TypeError('Illegal invocation');
-                var cur = Object.getPrototypeOf(this);
-                var found = false;
-                while (cur) { if (cur === proto) { found = true; break; } cur = Object.getPrototypeOf(cur); }
-                if (!found) throw new TypeError('Illegal invocation');
-                var v = this[slot];
-                return v !== undefined ? v : defaultVal;
-            },
-            set: function(v) {
-                if (this === null || this === undefined) throw new TypeError('Illegal invocation');
-                if (this === proto) throw new TypeError('Illegal invocation');
-                this[slot] = v;
-            },
+            get: getter,
+            set: setter,
             enumerable: true,
             configurable: true
         });
     }
     function _defReadOnly(proto, name, defaultVal) {
         var slot = '_' + name;
+        var getter = function() {
+            if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+            if (this === proto) throw new TypeError('Illegal invocation');
+            var cur = Object.getPrototypeOf(this);
+            var found = false;
+            while (cur) { if (cur === proto) { found = true; break; } cur = Object.getPrototypeOf(cur); }
+            if (!found) throw new TypeError('Illegal invocation');
+            var v = this[slot];
+            return v !== undefined ? v : defaultVal;
+        };
+        try { Object.defineProperty(getter, 'name', { value: 'get ' + name, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+        try { Object.defineProperty(getter, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
         Object.defineProperty(proto, name, {
-            get: function() {
-                if (this === null || this === undefined) throw new TypeError('Illegal invocation');
-                if (this === proto) throw new TypeError('Illegal invocation');
-                var cur = Object.getPrototypeOf(this);
-                var found = false;
-                while (cur) { if (cur === proto) { found = true; break; } cur = Object.getPrototypeOf(cur); }
-                if (!found) throw new TypeError('Illegal invocation');
-                var v = this[slot];
-                return v !== undefined ? v : defaultVal;
-            },
+            get: getter,
             set: undefined,
             enumerable: true,
             configurable: true
