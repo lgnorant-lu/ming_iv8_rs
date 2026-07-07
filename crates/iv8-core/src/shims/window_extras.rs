@@ -197,9 +197,43 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                     clip: function() {}, save: function() {}, restore: function() {},
                     scale: function() {}, rotate: function() {}, translate: function() {},
                     transform: function() {}, setTransform: function() {}, resetTransform: function() {},
-                    createLinearGradient: function() { return {addColorStop: function(){}}; },
-                    createRadialGradient: function() { return {addColorStop: function(){}}; },
-                    createPattern: function() { return null; },
+                    createLinearGradient: function(x0, y0, x1, y1) {
+                        var stops = [];
+                        var grad = {
+                            _stops: stops,
+                            _coords: {x0: x0, y0: y0, x1: x1, y1: y1},
+                            addColorStop: function(offset, color) {
+                                if (typeof offset !== 'number' || isNaN(offset) || offset < 0 || offset > 1)
+                                    throw new TypeError('The provided value is not of type \'number\'.');
+                                if (typeof color !== 'string')
+                                    throw new TypeError('The provided value is not of type \'string\'.');
+                                stops.push({offset: offset, color: color});
+                            }
+                        };
+                        Object.defineProperty(grad, Symbol.toStringTag, {value: 'CanvasGradient', configurable: true, enumerable: false, writable: false});
+                        return grad;
+                    },
+                    createRadialGradient: function(x0, y0, r0, x1, y1, r1) {
+                        var stops = [];
+                        var grad = {
+                            _stops: stops,
+                            _coords: {x0: x0, y0: y0, r0: r0, x1: x1, y1: y1, r1: r1},
+                            addColorStop: function(offset, color) {
+                                if (typeof offset !== 'number' || isNaN(offset) || offset < 0 || offset > 1)
+                                    throw new TypeError('The provided value is not of type \'number\'.');
+                                if (typeof color !== 'string')
+                                    throw new TypeError('The provided value is not of type \'string\'.');
+                                stops.push({offset: offset, color: color});
+                            }
+                        };
+                        Object.defineProperty(grad, Symbol.toStringTag, {value: 'CanvasGradient', configurable: true, enumerable: false, writable: false});
+                        return grad;
+                    },
+                    createPattern: function(image, repetition) {
+                        var pat = {_image: image, _repetition: repetition || 'repeat'};
+                        Object.defineProperty(pat, Symbol.toStringTag, {value: 'CanvasPattern', configurable: true, enumerable: false, writable: false});
+                        return pat;
+                    },
                     drawImage: function() {},
                     createImageData: function(w, h) {
                         return {width: w, height: h, data: new Uint8ClampedArray(w*h*4)};

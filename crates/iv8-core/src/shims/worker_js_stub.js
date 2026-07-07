@@ -6883,69 +6883,114 @@
   var _g_Sensor_activated = function() {
     if (!(this instanceof Sensor) && (this === null || this === undefined || Object.getPrototypeOf(this) !== Sensor.prototype))
       throw new TypeError('Illegal invocation');
-    return false;
+    var v = this.__iv8Activated;
+    return v !== undefined ? v : false;
   };
   Object.defineProperty(_g_Sensor_activated, 'name', {value: 'get activated'});
   Object.defineProperty(Sensor.prototype, 'activated', {get: _g_Sensor_activated, set: undefined, enumerable: true, configurable: true});
   var _g_Sensor_hasReading = function() {
     if (!(this instanceof Sensor) && (this === null || this === undefined || Object.getPrototypeOf(this) !== Sensor.prototype))
       throw new TypeError('Illegal invocation');
-    return false;
+    var v = this.__iv8HasReading;
+    return v !== undefined ? v : false;
   };
   Object.defineProperty(_g_Sensor_hasReading, 'name', {value: 'get hasReading'});
   Object.defineProperty(Sensor.prototype, 'hasReading', {get: _g_Sensor_hasReading, set: undefined, enumerable: true, configurable: true});
   var _g_Sensor_timestamp = function() {
     if (!(this instanceof Sensor) && (this === null || this === undefined || Object.getPrototypeOf(this) !== Sensor.prototype))
       throw new TypeError('Illegal invocation');
-    return null;
+    var v = this.__iv8Timestamp;
+    return v !== undefined ? v : null;
   };
   Object.defineProperty(_g_Sensor_timestamp, 'name', {value: 'get timestamp'});
   Object.defineProperty(Sensor.prototype, 'timestamp', {get: _g_Sensor_timestamp, set: undefined, enumerable: true, configurable: true});
   var _op_Sensor_start = function() {
     if (!(this instanceof Sensor) && (this === null || this === undefined || Object.getPrototypeOf(this) !== Sensor.prototype))
       throw new TypeError('Illegal invocation');
+    var self = this;
+    self.__iv8Activated = true;
+    var ts = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+    self.__iv8Timestamp = ts;
+    self.__iv8HasReading = true;
+    var reading = {timestamp: ts};
+    var proto = Object.getPrototypeOf(self);
+    var ctorName = (proto && proto.constructor && proto.constructor.name) || '';
+    if (ctorName === 'Accelerometer' || ctorName === 'LinearAccelerationSensor' || ctorName === 'GravitySensor' || ctorName === 'Gyroscope' || ctorName === 'Magnetometer' || ctorName === 'UncalibratedMagnetometer') {
+      reading.x = self.__iv8X !== undefined ? self.__iv8X : 0;
+      reading.y = self.__iv8Y !== undefined ? self.__iv8Y : 0;
+      reading.z = self.__iv8Z !== undefined ? self.__iv8Z : (ctorName === 'Accelerometer' ? 9.8 : 0);
+      self.__iv8X = reading.x; self.__iv8Y = reading.y; self.__iv8Z = reading.z;
+    } else if (ctorName === 'AmbientLightSensor') {
+      reading.illuminance = self.__iv8Illuminance !== undefined ? self.__iv8Illuminance : 0;
+      self.__iv8Illuminance = reading.illuminance;
+    } else if (ctorName === 'AbsoluteOrientationSensor' || ctorName === 'RelativeOrientationSensor' || ctorName === 'OrientationSensor') {
+      reading.quaternion = self.__iv8Quaternion !== undefined ? self.__iv8Quaternion : [0, 0, 0, 1];
+      self.__iv8Quaternion = reading.quaternion;
+    }
+    self.__iv8LastReading = reading;
+    if (typeof setTimeout === 'function') {
+      var wrapper = function() {
+        var cb = self.__iv8Onreading;
+        if (typeof cb === 'function') { cb.call(self, self.__iv8LastReading); }
+      };
+      var tid = setTimeout(wrapper, 0);
+      self.__iv8SensorTimerId = tid;
+    }
   };
   Object.defineProperty(_op_Sensor_start, 'name', {value: 'start'});
   Object.defineProperty(Sensor.prototype, 'start', {value: _op_Sensor_start, writable: true, enumerable: true, configurable: true});
   var _op_Sensor_stop = function() {
     if (!(this instanceof Sensor) && (this === null || this === undefined || Object.getPrototypeOf(this) !== Sensor.prototype))
       throw new TypeError('Illegal invocation');
+    var self = this;
+    if (self.__iv8SensorTimerId !== undefined && typeof clearTimeout === 'function') {
+      clearTimeout(self.__iv8SensorTimerId);
+      self.__iv8SensorTimerId = undefined;
+    }
+    self.__iv8Activated = false;
+    self.__iv8HasReading = false;
   };
   Object.defineProperty(_op_Sensor_stop, 'name', {value: 'stop'});
   Object.defineProperty(Sensor.prototype, 'stop', {value: _op_Sensor_stop, writable: true, enumerable: true, configurable: true});
   var _g_Sensor_onreading = function() {
     if (!(this instanceof Sensor) && (this === null || this === undefined || Object.getPrototypeOf(this) !== Sensor.prototype))
       throw new TypeError('Illegal invocation');
-    return null;
+    var v = this.__iv8Onreading;
+    return v !== undefined ? v : null;
   };
   Object.defineProperty(_g_Sensor_onreading, 'name', {value: 'get onreading'});
   var _s_Sensor_onreading = function(v) {
     if (!(this instanceof Sensor) && (this === null || this === undefined || Object.getPrototypeOf(this) !== Sensor.prototype))
       throw new TypeError('Illegal invocation');
+    this.__iv8Onreading = v;
   };
   Object.defineProperty(_s_Sensor_onreading, 'name', {value: 'set onreading'});
   Object.defineProperty(Sensor.prototype, 'onreading', {get: _g_Sensor_onreading, set: _s_Sensor_onreading, enumerable: true, configurable: true});
   var _g_Sensor_onactivate = function() {
     if (!(this instanceof Sensor) && (this === null || this === undefined || Object.getPrototypeOf(this) !== Sensor.prototype))
       throw new TypeError('Illegal invocation');
-    return null;
+    var v = this.__iv8Onactivate;
+    return v !== undefined ? v : null;
   };
   Object.defineProperty(_g_Sensor_onactivate, 'name', {value: 'get onactivate'});
   var _s_Sensor_onactivate = function(v) {
     if (!(this instanceof Sensor) && (this === null || this === undefined || Object.getPrototypeOf(this) !== Sensor.prototype))
       throw new TypeError('Illegal invocation');
+    this.__iv8Onactivate = v;
   };
   Object.defineProperty(_s_Sensor_onactivate, 'name', {value: 'set onactivate'});
   Object.defineProperty(Sensor.prototype, 'onactivate', {get: _g_Sensor_onactivate, set: _s_Sensor_onactivate, enumerable: true, configurable: true});
   var _g_Sensor_onerror = function() {
     if (!(this instanceof Sensor) && (this === null || this === undefined || Object.getPrototypeOf(this) !== Sensor.prototype))
       throw new TypeError('Illegal invocation');
-    return null;
+    var v = this.__iv8Onerror;
+    return v !== undefined ? v : null;
   };
   Object.defineProperty(_g_Sensor_onerror, 'name', {value: 'get onerror'});
   var _s_Sensor_onerror = function(v) {
     if (!(this instanceof Sensor) && (this === null || this === undefined || Object.getPrototypeOf(this) !== Sensor.prototype))
       throw new TypeError('Illegal invocation');
+    this.__iv8Onerror = v;
   };
   Object.defineProperty(_s_Sensor_onerror, 'name', {value: 'set onerror'});
   Object.defineProperty(Sensor.prototype, 'onerror', {get: _g_Sensor_onerror, set: _s_Sensor_onerror, enumerable: true, configurable: true});
@@ -8349,6 +8394,20 @@
     if (!(this instanceof OffscreenCanvasRenderingContext2D) && (this === null || this === undefined || Object.getPrototypeOf(this) !== OffscreenCanvasRenderingContext2D.prototype))
       throw new TypeError('Illegal invocation');
     if (arguments.length < 4) throw new TypeError("4 argument(s) required, but only " + arguments.length + " present.");
+    var stops = [];
+    var grad = {
+      _stops: stops,
+      _coords: {x0: a0, y0: a1, x1: a2, y1: a3},
+      addColorStop: function(offset, color) {
+        if (typeof offset !== 'number' || isNaN(offset) || offset < 0 || offset > 1)
+          throw new TypeError('The provided value is not of type \'number\'.');
+        if (typeof color !== 'string')
+          throw new TypeError('The provided value is not of type \'string\'.');
+        stops.push({offset: offset, color: color});
+      }
+    };
+    Object.defineProperty(grad, Symbol.toStringTag, {value: 'CanvasGradient', configurable: true, enumerable: false, writable: false});
+    return grad;
   };
   Object.defineProperty(_op_OffscreenCanvasRenderingContext2D_createLinearGradient, 'name', {value: 'createLinearGradient'});
   Object.defineProperty(OffscreenCanvasRenderingContext2D.prototype, 'createLinearGradient', {value: _op_OffscreenCanvasRenderingContext2D_createLinearGradient, writable: true, enumerable: true, configurable: true});
@@ -8356,6 +8415,20 @@
     if (!(this instanceof OffscreenCanvasRenderingContext2D) && (this === null || this === undefined || Object.getPrototypeOf(this) !== OffscreenCanvasRenderingContext2D.prototype))
       throw new TypeError('Illegal invocation');
     if (arguments.length < 6) throw new TypeError("6 argument(s) required, but only " + arguments.length + " present.");
+    var stops = [];
+    var grad = {
+      _stops: stops,
+      _coords: {x0: a0, y0: a1, r0: a2, x1: a3, y1: a4, r1: a5},
+      addColorStop: function(offset, color) {
+        if (typeof offset !== 'number' || isNaN(offset) || offset < 0 || offset > 1)
+          throw new TypeError('The provided value is not of type \'number\'.');
+        if (typeof color !== 'string')
+          throw new TypeError('The provided value is not of type \'string\'.');
+        stops.push({offset: offset, color: color});
+      }
+    };
+    Object.defineProperty(grad, Symbol.toStringTag, {value: 'CanvasGradient', configurable: true, enumerable: false, writable: false});
+    return grad;
   };
   Object.defineProperty(_op_OffscreenCanvasRenderingContext2D_createRadialGradient, 'name', {value: 'createRadialGradient'});
   Object.defineProperty(OffscreenCanvasRenderingContext2D.prototype, 'createRadialGradient', {value: _op_OffscreenCanvasRenderingContext2D_createRadialGradient, writable: true, enumerable: true, configurable: true});
@@ -8363,6 +8436,20 @@
     if (!(this instanceof OffscreenCanvasRenderingContext2D) && (this === null || this === undefined || Object.getPrototypeOf(this) !== OffscreenCanvasRenderingContext2D.prototype))
       throw new TypeError('Illegal invocation');
     if (arguments.length < 3) throw new TypeError("3 argument(s) required, but only " + arguments.length + " present.");
+    var stops = [];
+    var grad = {
+      _stops: stops,
+      _coords: {startAngle: a0, x: a1, y: a2},
+      addColorStop: function(offset, color) {
+        if (typeof offset !== 'number' || isNaN(offset) || offset < 0 || offset > 1)
+          throw new TypeError('The provided value is not of type \'number\'.');
+        if (typeof color !== 'string')
+          throw new TypeError('The provided value is not of type \'string\'.');
+        stops.push({offset: offset, color: color});
+      }
+    };
+    Object.defineProperty(grad, Symbol.toStringTag, {value: 'CanvasGradient', configurable: true, enumerable: false, writable: false});
+    return grad;
   };
   Object.defineProperty(_op_OffscreenCanvasRenderingContext2D_createConicGradient, 'name', {value: 'createConicGradient'});
   Object.defineProperty(OffscreenCanvasRenderingContext2D.prototype, 'createConicGradient', {value: _op_OffscreenCanvasRenderingContext2D_createConicGradient, writable: true, enumerable: true, configurable: true});
@@ -8370,6 +8457,9 @@
     if (!(this instanceof OffscreenCanvasRenderingContext2D) && (this === null || this === undefined || Object.getPrototypeOf(this) !== OffscreenCanvasRenderingContext2D.prototype))
       throw new TypeError('Illegal invocation');
     if (arguments.length < 2) throw new TypeError("2 argument(s) required, but only " + arguments.length + " present.");
+    var pat = {_image: a0, _repetition: a1 || 'repeat'};
+    Object.defineProperty(pat, Symbol.toStringTag, {value: 'CanvasPattern', configurable: true, enumerable: false, writable: false});
+    return pat;
   };
   Object.defineProperty(_op_OffscreenCanvasRenderingContext2D_createPattern, 'name', {value: 'createPattern'});
   Object.defineProperty(OffscreenCanvasRenderingContext2D.prototype, 'createPattern', {value: _op_OffscreenCanvasRenderingContext2D_createPattern, writable: true, enumerable: true, configurable: true});

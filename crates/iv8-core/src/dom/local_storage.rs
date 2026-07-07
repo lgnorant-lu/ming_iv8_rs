@@ -9,6 +9,7 @@
 //! Track A of v0.8.72.
 
 use std::collections::HashMap;
+use std::path::Path;
 use std::sync::{Arc, Mutex};
 
 #[derive(Clone, Debug)]
@@ -51,6 +52,26 @@ impl LocalStorageStore {
     pub fn to_json_object(&self) -> String {
         let map = self.data.lock().unwrap();
         serde_json::to_string(&*map).unwrap_or_else(|_| "{}".to_string())
+    }
+
+    pub fn save_to_file(&self, path: &Path) -> Result<(), std::io::Error> {
+        let map = self.data.lock().unwrap();
+        let json = serde_json::to_string(&*map).unwrap_or_else(|_| "{}".to_string());
+        if let Some(parent) = path.parent() {
+            if !parent.as_os_str().is_empty() {
+                std::fs::create_dir_all(parent)?;
+            }
+        }
+        std::fs::write(path, json)
+    }
+
+    pub fn load_from_file(&self, path: &Path) -> Result<(), std::io::Error> {
+        let content = std::fs::read_to_string(path)?;
+        let map: HashMap<String, String> =
+            serde_json::from_str(&content).unwrap_or_else(|_| HashMap::new());
+        let mut data = self.data.lock().unwrap();
+        *data = map;
+        Ok(())
     }
 }
 

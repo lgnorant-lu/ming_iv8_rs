@@ -146,12 +146,16 @@ impl JSContext {
         // Parse config dict
         let mut timezone: Option<String> = None;
         let mut locale: Option<String> = None;
+        let mut storage_path: Option<std::path::PathBuf> = None;
         if let Some(cfg) = config {
             if let Ok(Some(tz_val)) = cfg.get_item("timezone") {
                 timezone = tz_val.extract::<String>().ok();
             }
             if let Ok(Some(lc_val)) = cfg.get_item("locale") {
                 locale = lc_val.extract::<String>().ok();
+            }
+            if let Ok(Some(sp_val)) = cfg.get_item("storage_path") {
+                storage_path = sp_val.extract::<String>().ok().map(std::path::PathBuf::from);
             }
         }
 
@@ -200,6 +204,7 @@ impl JSContext {
             user_overrides: Default::default(),
             browser_profile: None,
             local_storage: None,
+            storage_path,
             worker_mode,
         };
 
@@ -1597,6 +1602,53 @@ impl JSContext {
             .map_err(error::iv8_error_to_pyerr)?;
         let rust_value = kernel.global_to_rust_value(&global);
         rust_value_to_py(py, &rust_value)
+    }
+
+    /// Persist localStorage data to a JSON file.
+    ///
+    /// Flushes the current localStorage state from the JS engine to the
+    /// shared backend, then writes it to the specified file path as JSON.
+    ///
+    /// Args:
+    ///     path: File path to write localStorage data to.
+    ///
+    /// Example:
+    ///     ctx.eval("localStorage.setItem('key', 'value')")
+    ///     ctx.persist_storage("/tmp/iv8_storage.json")
+    fn persist_storage(&self, path: &str) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        let file_path = std::path::PathBuf::from(path);
+        kernel
+            .persist_storage_to_file(&file_path)
+            .map_err(|e| pyo3::exceptions::PyIOError::new_err(e.to_string()))
+    }
+
+    /// Load localStorage data from a JSON file.
+    ///
+    /// Reads the JSON file and populates the shared localStorage backend,
+    /// then re-injects the data into the JS engine so `localStorage.getItem()`
+    /// reflects the persisted values. Call this before executing JS that
+    /// depends on prior localStorage state.
+    ///
+    /// If the file does not exist, this is a no-op (not an error).
+    ///
+    /// Args:
+    ///     path: File path to read localStorage data from.
+    ///
+    /// Example:
+    ///     ctx.load_storage("/tmp/iv8_storage.json")
+    ///     ctx.eval("localStorage.getItem('key')")  // returns persisted value
+    fn load_storage(&self, path: &str) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        let file_path = std::path::PathBuf::from(path);
+        if !file_path.exists() {
+            return Ok(());
+        }
+        kernel
+            .load_storage_from_file(&file_path)
+            .map_err(|e| pyo3::exceptions::PyIOError::new_err(e.to_string()))
     }
 
     /// Get all console messages captured since context creation.

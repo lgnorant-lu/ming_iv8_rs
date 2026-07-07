@@ -33,6 +33,10 @@ pub struct KernelConfig {
     /// Optional shared localStorage backend for cross-kernel persistence.
     /// Multiple kernels sharing the same `LocalStorageStore` see the same data.
     pub local_storage: Option<crate::dom::local_storage::LocalStorageStore>,
+    /// Optional file path for localStorage persistence.
+    /// When set, localStorage data is loaded from this file on kernel creation
+    /// and can be saved back via `persist_storage()` on the Python side.
+    pub storage_path: Option<std::path::PathBuf>,
     /// If true, the global object's __proto__ is set to
     /// DedicatedWorkerGlobalScope.prototype after codegen installation.
     /// This enables correct prototype chain for Worker context testing.
@@ -52,6 +56,7 @@ impl Default for KernelConfig {
             user_overrides: crate::user_overrides::UserOverrides::new(),
             browser_profile: None,
             local_storage: None,
+            storage_path: None,
             worker_mode: false,
         }
     }

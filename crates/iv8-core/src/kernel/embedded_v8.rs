@@ -397,7 +397,22 @@ impl EmbeddedV8Kernel {
         let user_overrides = config.user_overrides;
         let browser_profile: Option<&'static crate::shims::browser_profile::BrowserProfile> =
             config.browser_profile.map(|bp| &*Box::leak(bp));
-        let local_storage_backend = config.local_storage;
+        let storage_path = config.storage_path;
+        let mut local_storage_backend = config.local_storage;
+        if let Some(ref path) = storage_path {
+            if path.exists() {
+                match local_storage_backend {
+                    Some(ref store) => {
+                        let _ = store.load_from_file(path);
+                    }
+                    None => {
+                        let store = crate::dom::local_storage::LocalStorageStore::new();
+                        let _ = store.load_from_file(path);
+                        local_storage_backend = Some(store);
+                    }
+                }
+            }
+        }
         let strict_compat = config.strict_compat;
         let time_mode = config.time_mode;
         let js_api_name = config.js_api_name;
@@ -2694,6 +2709,90 @@ impl EmbeddedV8Kernel {
                 }
             }
         }
+    }
+
+    pub fn persist_storage_to_file(
+        &mut self,
+        path: &std::path::Path,
+    ) -> Result<(), IV8Error> {
+        let state = RuntimeState::get(&self.isolate);
+        let backend = state.local_storage.borrow().clone();
+        if let Some(backend) = backend {
+            let result =
+                self.eval_to_rust_value("window.__iv8DumpLocalStorage()");
+            if let crate::convert::RustValue::String(json) = result {
+                if let Ok(map) = serde_json::from_str::<
+                    std::collections::HashMap<String, String>,
+                >(&json)
+                {
+                    backend.replace_all(map);
+                }
+            }
+            backend
+                .save_to_file(path)
+                .map_err(|e| IV8Error::Internal(format!("persist_storage: {}", e)))
+        } else {
+            let store = crate::dom::local_storage::LocalStorageStore::new();
+            let result =
+                self.eval_to_rust_value("window.__iv8DumpLocalStorage()");
+            if let crate::convert::RustValue::String(json) = result {
+                if let Ok(map) = serde_json::from_str::<
+                    std::collections::HashMap<String, String>,
+                >(&json)
+                {
+                    store.replace_all(map);
+                }
+            }
+            store
+                .save_to_file(path)
+                .map_err(|e| IV8Error::Internal(format!("persist_storage: {}", e)))
+        }
+    }
+
+    pub fn load_storage_from_file(
+        &mut self,
+        path: &std::path::Path,
+    ) -> Result<(), IV8Error> {
+        let state = RuntimeState::get(&self.isolate);
+        let backend = {
+            let borrow = state.local_storage.borrow();
+            borrow.clone()
+        };
+        let store = match backend {
+            Some(existing) => {
+                existing.load_from_file(path).map_err(|e| {
+                    IV8Error::Internal(format!("load_storage: {}", e))
+                })?;
+                existing
+            }
+            None => {
+                let new_store = crate::dom::local_storage::LocalStorageStore::new();
+                new_store.load_from_file(path).map_err(|e| {
+                    IV8Error::Internal(format!("load_storage: {}", e))
+                })?;
+                *state.local_storage.borrow_mut() = Some(new_store.clone());
+                new_store
+            }
+        };
+        let seed_json = store.to_json_object();
+        if !seed_json.is_empty() && seed_json != "{}" {
+            let seed_js = format!("window.__iv8LocalSeed = {};", seed_json);
+            self.eval(&seed_js, crate::kernel::EvalOpts::default())
+                .ok();
+            self.eval(
+                r#"(function() {
+                    if (typeof localStorage !== 'undefined' && window.__iv8LocalSeed) {
+                        var data = window.__iv8LocalSeed;
+                        localStorage._data = data;
+                        localStorage.length = Object.keys(data).length;
+                        try { delete window.__iv8LocalSeed; } catch(e) {}
+                    }
+                })();"#,
+                crate::kernel::EvalOpts::default(),
+            )
+            .ok();
+        }
+        Ok(())
     }
 
     /// Install BrowserSurface — default init path since v0.8.26.
