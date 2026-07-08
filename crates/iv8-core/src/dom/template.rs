@@ -1355,65 +1355,79 @@ pub fn chain_dom_prototypes(
 
         let mut proto_copied = 0u32;
         let mut proto_skipped = 0u32;
+        let mut proto_define_failed = 0u32;
+
+        // AD-1a fix (root cause 2): use get_own_property_descriptor instead of
+        // has() to check if dom_proto already has the property as own.
+        // has() traverses the prototype chain, so dom parent's simplified stubs
+        // block codegen full version. get_own_property_descriptor only checks own.
+        // Note: root cause 1 (recursive chain traversal) deferred — requires
+        // deeper V8 scope safety analysis before enabling.
         let prop_names = codegen_proto.get_own_property_names(scope, Default::default());
         if let Some(names) = prop_names {
             let len = names.length();
             for i in 0..len {
                 let Some(prop_name_val) = names.get_index(scope, i) else { continue };
-                if dom_proto.has(scope, prop_name_val).unwrap_or(false) { proto_skipped += 1; continue; }
                 let prop_name = if prop_name_val.is_name() {
                     unsafe { v8::Local::<v8::Name>::cast_unchecked(prop_name_val) }
                 } else { continue };
+                // AD-1a fix: check own property only, not prototype chain
+                let dom_existing = dom_proto.get_own_property_descriptor(scope, prop_name);
+                if dom_existing.is_some_and(|d| d.is_object() && !d.is_undefined()) {
+                    proto_skipped += 1; continue;
+                }
+
                 let Some(descriptor) = codegen_proto.get_own_property_descriptor(scope, prop_name) else { continue };
-                if descriptor.is_object() && !descriptor.is_null_or_undefined() {
-                    let desc_obj = unsafe { v8::Local::<v8::Object>::cast_unchecked(descriptor) };
-                    let getter = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "get").into());
-                    let setter = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "set").into());
-                    let value = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "value").into());
-                    let writable_val = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "writable").into());
-                    let configurable_val = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "configurable").into());
-                    let src_writable = writable_val
-                        .map(|v| v.is_boolean() && v.is_true())
-                        .unwrap_or_else(|| {
-                            let val = value.unwrap_or(v8::undefined(scope).into());
-                            !(val.is_number() || val.is_string() || val.is_boolean())
-                        });
-                    let src_configurable = configurable_val.map(|v| v.is_boolean() && v.is_true()).unwrap_or(true);
-                    let pd = if let (Some(g), Some(s)) = (getter, setter) {
-                        if g.is_undefined() && s.is_undefined() {
+                    if descriptor.is_object() && !descriptor.is_null_or_undefined() {
+                        let desc_obj = unsafe { v8::Local::<v8::Object>::cast_unchecked(descriptor) };
+                        let getter = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "get").into());
+                        let setter = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "set").into());
+                        let value = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "value").into());
+                        let writable_val = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "writable").into());
+                        let configurable_val = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "configurable").into());
+                        let src_writable = writable_val
+                            .map(|v| v.is_boolean() && v.is_true())
+                            .unwrap_or_else(|| {
+                                let val = value.unwrap_or(v8::undefined(scope).into());
+                                !(val.is_number() || val.is_string() || val.is_boolean())
+                            });
+                        let src_configurable = configurable_val.map(|v| v.is_boolean() && v.is_true()).unwrap_or(true);
+                        let pd = if let (Some(g), Some(s)) = (getter, setter) {
+                            if g.is_undefined() && s.is_undefined() {
+                                let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), src_writable);
+                                p.set_configurable(src_configurable);
+                                p.set_enumerable(true);
+                                p
+                            } else {
+                                let mut p = v8::PropertyDescriptor::new_from_get_set(g, s);
+                                p.set_configurable(src_configurable);
+                                p.set_enumerable(true);
+                                p
+                            }
+                        } else if let Some(g) = getter {
+                            if g.is_undefined() {
+                                let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), src_writable);
+                                p.set_configurable(src_configurable);
+                                p.set_enumerable(true);
+                                p
+                            } else {
+                                let mut p = v8::PropertyDescriptor::new_from_get_set(g, v8::undefined(scope).into());
+                                p.set_configurable(src_configurable);
+                                p.set_enumerable(true);
+                                p
+                            }
+                        } else {
                             let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), src_writable);
                             p.set_configurable(src_configurable);
                             p.set_enumerable(true);
                             p
-                        } else {
-                            let mut p = v8::PropertyDescriptor::new_from_get_set(g, s);
-                            p.set_configurable(src_configurable);
-                            p.set_enumerable(true);
-                            p
-                        }
-                    } else if let Some(g) = getter {
-                        if g.is_undefined() {
-                            let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), src_writable);
-                            p.set_configurable(src_configurable);
-                            p.set_enumerable(true);
-                            p
-                        } else {
-                            let mut p = v8::PropertyDescriptor::new_from_get_set(g, v8::undefined(scope).into());
-                            p.set_configurable(src_configurable);
-                            p.set_enumerable(true);
-                            p
-                        }
-                    } else {
-                        let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), src_writable);
-                        p.set_configurable(src_configurable);
-                        p.set_enumerable(true);
-                        p
-                    };
-                    let _ = dom_proto.define_property(scope, prop_name, &pd);
-                    proto_copied += 1;
+                        };
+                        // AD-1a fix: check define_property return value (R3 suggestion)
+                        let ok = dom_proto.define_property(scope, prop_name, &pd);
+                        if ok.unwrap_or(false) { proto_copied += 1; } else { proto_define_failed += 1; }
+                    }
                 }
             }
-        }
 
         let ctor_names = codegen_ctor.get_own_property_names(scope, Default::default());
         let mut ctor_copied = 0u32;
@@ -1464,11 +1478,6 @@ pub fn chain_dom_prototypes(
             var names = Object.getOwnPropertyNames(globalThis);
             for (var i = 0; i < names.length; i++) {
                 var name = names[i];
-                if (!name.startsWith('HTML') && !name.startsWith('SVG')
-                    && name !== 'Window' && name !== 'Navigator'
-                    && name !== 'Document' && name !== 'EventTarget') {
-                    continue;
-                }
                 var ctor = globalThis[name];
                 if (typeof ctor !== 'function') continue;
 
