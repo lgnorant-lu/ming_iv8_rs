@@ -122,10 +122,55 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         return node;
     }
     AnalyserNode.prototype = Object.create(AudioNode.prototype);
-    AnalyserNode.prototype.getFloatFrequencyData = function(arr) {};
-    AnalyserNode.prototype.getByteFrequencyData = function(arr) {};
-    AnalyserNode.prototype.getFloatTimeDomainData = function(arr) {};
-    AnalyserNode.prototype.getByteTimeDomainData = function(arr) {};
+    AnalyserNode.prototype.getFloatFrequencyData = function(arr) {
+        var n = arr.length;
+        var prefs = _audioPrefs.analyserData;
+        if (prefs && prefs.floatFrequency) {
+            var src = prefs.floatFrequency;
+            if (typeof src === 'string') {
+                try { src = JSON.parse(src); } catch (e) { src = null; }
+            }
+            if (Array.isArray(src)) {
+                for (var i = 0; i < n; i++) { arr[i] = src[i] !== undefined ? src[i] : -Infinity; }
+                return;
+            }
+        }
+        for (var i = 0; i < n; i++) { arr[i] = -Infinity; }
+    };
+    AnalyserNode.prototype.getByteFrequencyData = function(arr) {
+        var n = arr.length;
+        var prefs = _audioPrefs.analyserData;
+        if (prefs && prefs.byteFrequency) {
+            var src = prefs.byteFrequency;
+            if (typeof src === 'string') {
+                try { src = JSON.parse(src); } catch (e) { src = null; }
+            }
+            if (Array.isArray(src)) {
+                for (var i = 0; i < n; i++) { arr[i] = src[i] !== undefined ? (src[i] & 0xFF) : 0; }
+                return;
+            }
+        }
+        for (var i = 0; i < n; i++) { arr[i] = 0; }
+    };
+    AnalyserNode.prototype.getFloatTimeDomainData = function(arr) {
+        var n = arr.length;
+        var prefs = _audioPrefs.analyserData;
+        if (prefs && prefs.floatTimeDomain) {
+            var src = prefs.floatTimeDomain;
+            if (typeof src === 'string') {
+                try { src = JSON.parse(src); } catch (e) { src = null; }
+            }
+            if (Array.isArray(src)) {
+                for (var i = 0; i < n; i++) { arr[i] = src[i] !== undefined ? src[i] : 0; }
+                return;
+            }
+        }
+        for (var i = 0; i < n; i++) { arr[i] = 0; }
+    };
+    AnalyserNode.prototype.getByteTimeDomainData = function(arr) {
+        var n = arr.length;
+        for (var i = 0; i < n; i++) { arr[i] = 128; }
+    };
 
     // GainNode
     function GainNode(ctx, options) {

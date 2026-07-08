@@ -297,13 +297,20 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     if (!document.fonts) {
         var _fontPrefs = (typeof globalThis.__iv8FontPrefs === 'object' && globalThis.__iv8FontPrefs) ? globalThis.__iv8FontPrefs : {};
         var _fontFamilies = _fontPrefs.families || [];
+        var _fontFaceObjects = _fontFamilies.map(function(f) {
+            return {
+                family: f, status: 'loaded', weight: 'normal', style: 'normal',
+                stretch: 'normal', display: 'auto', unicodeRange: 'U+0-10FFFF',
+                featureSettings: 'normal', variationSettings: 'normal',
+            };
+        });
         var _fontSet = {
             ready: null, // set after object creation (see below)
             status: 'loaded',
             onloading: null,
             onloadingdone: null,
             onloadingerror: null,
-            size: _fontFamilies.length,
+            get size() { return _fontFaceObjects.length; },
             check: function(font, text) {
                 // Return true if the font is in the profile's family list
                 if (!font) return true;
@@ -314,18 +321,25 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                     family.indexOf('fantasy') !== -1) return true;
                 return _fontFamilies.some(function(f) { return f.toLowerCase() === family; });
             },
-            load: function(font, text) { return Promise.resolve([]); },
+            load: function(font, text) { return Promise.resolve(_fontFaceObjects.slice()); },
             forEach: function(cb) {
-                _fontFamilies.forEach(function(f, i) {
-                    cb({ family: f, status: 'loaded', weight: 'normal', style: 'normal', display: 'auto' }, i, _fontSet);
+                _fontFaceObjects.forEach(function(ff, i) {
+                    cb(ff, i, _fontSet);
                 });
             },
-            values: function() { return _fontFamilies.map(function(f) { return { family: f, status: 'loaded' }; }).values(); },
-            entries: function() { return _fontFamilies.map(function(f, i) { return [i, { family: f, status: 'loaded' }]; }).entries(); },
-            keys: function() { return _fontFamilies.keys(); },
-            add: function(fontFace) {},
-            delete: function(fontFace) {},
-            clear: function() {},
+            values: function() { return _fontFaceObjects.slice().values(); },
+            entries: function() { return _fontFaceObjects.map(function(ff, i) { return [i, ff]; }).entries(); },
+            keys: function() { return _fontFaceObjects.keys(); },
+            add: function(fontFace) {
+                if (fontFace && typeof fontFace === 'object') {
+                    _fontFaceObjects.push(fontFace);
+                }
+            },
+            delete: function(fontFace) {
+                var idx = _fontFaceObjects.indexOf(fontFace);
+                if (idx !== -1) _fontFaceObjects.splice(idx, 1);
+            },
+            clear: function() { _fontFaceObjects.length = 0; },
         };
         // Per FontFaceSet spec: ready resolves to the FontFaceSet itself.
         _fontSet.ready = Promise.resolve(_fontSet);
@@ -333,6 +347,64 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     }
     if (!document.timeline) {
         document.timeline = { currentTime: performance.now() };
+    }
+
+    // FontFace constructor — new FontFace(family, source)
+    // Returns a FontFace object with family, status='unloaded', load()→Promise.
+    // If a codegen FontFace constructor already exists, enhance its prototype
+    // with the load() method and status property if missing.
+    if (typeof FontFace === 'undefined') {
+        function FontFace(family, source, descriptors) {
+            if (!(this instanceof FontFace)) {
+                throw new TypeError("Failed to construct 'FontFace': Please use the 'new' operator, this DOM object constructor cannot be called as a function.");
+            }
+            this.family = String(family || '');
+            this._source = String(source || '');
+            this._descriptors = descriptors || {};
+            this.status = 'unloaded';
+            this.display = this._descriptors.display || 'auto';
+            this.weight = this._descriptors.weight || 'normal';
+            this.style = this._descriptors.style || 'normal';
+            this.stretch = this._descriptors.stretch || 'normal';
+            this.unicodeRange = this._descriptors.unicodeRange || 'U+0-10FFFF';
+            this.featureSettings = this._descriptors.featureSettings || 'normal';
+            this.variationSettings = this._descriptors.variationSettings || 'normal';
+            this.ascentOverride = this._descriptors.ascentOverride || 'normal';
+            this.descentOverride = this._descriptors.descentOverride || 'normal';
+            this.lineGapOverride = this._descriptors.lineGapOverride || 'normal';
+        }
+        FontFace.prototype.load = function() {
+            var self = this;
+            return new Promise(function(resolve, reject) {
+                self.status = 'loading';
+                setTimeout(function() {
+                    self.status = 'loaded';
+                    resolve(self);
+                }, 0);
+            });
+        };
+        if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+            Object.defineProperty(FontFace.prototype, Symbol.toStringTag, {
+                value: 'FontFace', writable: false, configurable: true, enumerable: false,
+            });
+        }
+        try { Object.defineProperty(FontFace, 'length', { value: 2, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+        globalThis.FontFace = FontFace;
+    } else {
+        // Codegen FontFace exists — ensure load() and status are present.
+        if (typeof FontFace.prototype.load !== 'function') {
+            FontFace.prototype.load = function() {
+                var self = this;
+                return new Promise(function(resolve, reject) {
+                    if (self.status === undefined) self.status = 'unloaded';
+                    self.status = 'loading';
+                    setTimeout(function() {
+                        self.status = 'loaded';
+                        resolve(self);
+                    }, 0);
+                });
+            };
+        }
     }
     // Properties below are in EXCLUDED_ATTRIBUTES — codegen no longer
     // installs them, so guards are dead code. Always install to ensure

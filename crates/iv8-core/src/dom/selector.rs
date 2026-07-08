@@ -945,6 +945,40 @@ mod tests {
     }
 
     #[test]
+    fn selector_nth_of_type() {
+        let doc = parse_html("<div><p>1</p><span>2</span><p>3</p><p>4</p></div>", None);
+        let results = doc.query_selector_all("p:nth-of-type(2)").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_nth_of_type_odd() {
+        let doc = parse_html(
+            "<div><p>1</p><span>s</span><p>2</p><span>s</span><p>3</p></div>",
+            None,
+        );
+        let results = doc.query_selector_all("p:nth-of-type(odd)").unwrap();
+        assert_eq!(results.len(), 2);
+    }
+
+    #[test]
+    fn selector_only_of_type() {
+        let doc = parse_html(
+            "<div><p>only</p><span>1</span><span>2</span></div>",
+            None,
+        );
+        let results = doc.query_selector_all("p:only-of-type").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_only_of_type_none_when_multiple() {
+        let doc = parse_html("<div><p>1</p><p>2</p></div>", None);
+        let results = doc.query_selector_all("p:only-of-type").unwrap();
+        assert_eq!(results.len(), 0);
+    }
+
+    #[test]
     fn selector_pseudo_class_with_combinator() {
         let doc = parse_html(
             "<form><input type=\"checkbox\" checked></form>",

@@ -1,4 +1,4 @@
-//! getBoundingClientRect + offsetWidth/offsetHeight stubs.
+//! getBoundingClientRect + offsetWidth/offsetHeight + client/scroll/offset stubs.
 //!
 //! Default values are zero. Fixtures can configure per-element rectangles via
 //! `__iv8SetElementRect(element, {x, y, width, height})`.
@@ -262,12 +262,19 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
         return mql;
     };
 
-    // --- Basic layout engine: offsetWidth / offsetHeight / getBoundingClientRect ---
+    // --- Basic layout engine: offset*/client*/scroll* / getBoundingClientRect ---
     // JS-level overrides on Element.prototype. Priority:
     // 1. globalThis.__iv8ElementRects (selector to rect Map/object)
     // 2. this.__iv8Rect__ (fixture hook via __iv8SetElementRect)
     // 3. this.style.width/height (heuristic pixel parsing)
     // 4. getComputedStyle fallback (auto returns 0)
+    //
+    // offsetTop/offsetLeft read from the same rect (x/y).
+    // offsetParent returns document.body (no real positioning).
+    // clientWidth/Height alias offsetWidth/Height (no scrollbar modeling).
+    // clientTop/clientLeft return 0 (no border modeling).
+    // scrollWidth/Height alias offsetWidth/Height.
+    // scrollTop/scrollLeft return 0 (getter), accept any value (no-op setter).
 
     function _iv8ParsePx(val) {
         if (typeof val !== 'string') return 0;
@@ -341,6 +348,71 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
             get: function offsetHeight() {
                 return _iv8GetOffsetHeight(this);
             },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'offsetTop', {
+            get: function offsetTop() {
+                var r = _iv8LookupElementRect(this);
+                return (r && r.y !== undefined) ? Number(r.y) || 0 : 0;
+            },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'offsetLeft', {
+            get: function offsetLeft() {
+                var r = _iv8LookupElementRect(this);
+                return (r && r.x !== undefined) ? Number(r.x) || 0 : 0;
+            },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'offsetParent', {
+            get: function offsetParent() {
+                if (typeof document !== 'undefined' && document.body) {
+                    return document.body;
+                }
+                return null;
+            },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'clientWidth', {
+            get: function clientWidth() {
+                return _iv8GetOffsetWidth(this);
+            },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'clientHeight', {
+            get: function clientHeight() {
+                return _iv8GetOffsetHeight(this);
+            },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'clientTop', {
+            get: function clientTop() { return 0; },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'clientLeft', {
+            get: function clientLeft() { return 0; },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'scrollWidth', {
+            get: function scrollWidth() {
+                return _iv8GetOffsetWidth(this);
+            },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'scrollHeight', {
+            get: function scrollHeight() {
+                return _iv8GetOffsetHeight(this);
+            },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'scrollTop', {
+            get: function scrollTop() { return 0; },
+            set: function scrollTop(v) { /* no-op */ },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'scrollLeft', {
+            get: function scrollLeft() { return 0; },
+            set: function scrollLeft(v) { /* no-op */ },
             configurable: true, enumerable: true,
         });
         Object.defineProperty(Element.prototype, 'getBoundingClientRect', {

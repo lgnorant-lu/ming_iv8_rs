@@ -64,10 +64,30 @@ pub const WEBGL_SHIM_JS: &str = r#"
         attachShader: function() {},
         linkProgram: function(program) { if (program) { program.LINK_STATUS = true; } },
         useProgram: function() {},
-        getShaderParameter: function() { return true; },
-        getProgramParameter: function() { return true; },
-        getAttribLocation: function() { return 0; },
-        getUniformLocation: function() { return {}; },
+        getShaderParameter: function(shader, pname) {
+            if (pname === 35713) {
+                return shader ? shader.COMPILE_STATUS === true : false;
+            }
+            return false;
+        },
+        getProgramParameter: function(program, pname) {
+            if (pname === 35714) {
+                return program ? program.LINK_STATUS === true : false;
+            }
+            if (pname === 35721) {
+                return 0;
+            }
+            if (pname === 35718) {
+                return 0;
+            }
+            return false;
+        },
+        getShaderInfoLog: function(shader) { return ''; },
+        getProgramInfoLog: function(program) { return ''; },
+        getAttribLocation: function(program, name) { return 0; },
+        getUniformLocation: function(program, name) {
+            return { _isWebGLUniformLocation: true, _program: program, _name: name };
+        },
         enableVertexAttribArray: function() {},
         vertexAttribPointer: function() {},
         bindBuffer: function() {},
@@ -243,9 +263,7 @@ pub const WEBGL_SHIM_JS: &str = r#"
         getBufferParameter: function() { return null; },
         getContextAttributes: function() { return {alpha:true,antialias:true,depth:true,failIfMajorPerformanceCaveat:false,powerPreference:'default',premultipliedAlpha:true,preserveDrawingBuffer:false,stencil:false,desynchronized:false}; },
         getFramebufferAttachmentParameter: function() { return null; },
-        getProgramInfoLog: function() { return ''; },
         getRenderbufferParameter: function() { return null; },
-        getShaderInfoLog: function() { return ''; },
         getShaderPrecisionFormat: function(shaderType, precisionType) {
             // Desktop Chrome (all GPUs via ANGLE): all float precisions
             // promoted to IEEE 32-bit, all int precisions to 32-bit int.
