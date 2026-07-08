@@ -6,6 +6,31 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.86] - 2026-07-09
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Mode: Lightweight Increment.
+
+### Added
+- 行为层高信号 API L4→L5 (D-129): clipboard.readText 返回 "" (非 undefined), PaymentRequest.abort resolve (非 reject), Notification.requestPermission callback 参数支持, wakeLock sentinel onrelease 事件 + released 状态转换, WebSocket binaryType/protocol/extensions/bufferedAmount 默认值.
+- Observer bounded behavior (D-129): observe/unobserve/disconnect 从 no-op 升级为有状态 bounded behavior (5 Observer 统一 patch).
+- AD-1a chain_dom_prototypes 算法修复 (D-130): has()→get_own_property_descriptor() 只检查 own property; define_property 返回值检查.
+- AD-1b inheritance JS fix 过滤器扩展 (D-130): 移除 startsWith 限制, 遍历所有 globalThis function 构造器.
+- AD-3 TODO schema enforcement (D-131): TODO 条目增加 Level (L0-L8) + D1-D6 + Route + Evidence 标注.
+- P1-DESC Document accessor migration (D-131): referrer/hidden/visibilityState/readyState/domain 从 instance data property→accessor.
+- 4 轮架构审计交叉验证 (R1/R2/R3): 6 个 P0 主张逐项验证, 2 个已过时, 1 个确认, 3 个修正.
+- window.chrome + chrome.loadTimes env map 可配置化.
+- Camellia sigma 常量修正 + RegistryEntry schema_version + VMAnalysisReport null-handling + ir.rs typo fix.
+
+### Changed
+- Architecture debt reclassification: AD-1 P0→P1 (算法修复优先), AD-3 P1→P0 (schema enforcement), P0-DOC→P1-DESC (runtime 可用, L3 问题).
+- browser_profile.rs 注释 Chrome 131→147 (文档债务修正).
+
+### Quality Gates
+- Rust: 359/359 lib PASS (无回归).
+- WPT idlharness: 9246/9640 (95.91%, Chrome 151 基线 9483/9640).
+- Pre-existing: test_canvas_2d_fill_style FAIL (非本轮回归).
+
 ## [v0.8.84] - 2026-06-27
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.
