@@ -1680,14 +1680,16 @@ if (typeof navigator !== 'undefined' && navigator.serviceWorker) {
     }
 }
 
-// WorkletGlobalScope stubs
-if (typeof AudioWorklet === 'undefined' && typeof AudioContext !== 'undefined') {
-    Object.defineProperty(AudioContext.prototype, 'audioWorklet', {
-        get: function() {
-            return { addModule: function() { return Promise.resolve(); } };
-        },
-        enumerable: true, configurable: true
-    });
+// WorkletGlobalScope stubs — always install audioWorklet getter
+if (typeof AudioContext !== 'undefined' && AudioContext.prototype) {
+    try {
+        Object.defineProperty(AudioContext.prototype, 'audioWorklet', {
+            get: function() {
+                return { addModule: function() { return Promise.resolve(); } };
+            },
+            enumerable: true, configurable: true
+        });
+    } catch(e) {}
 }
 })();
 "#;
