@@ -635,7 +635,7 @@ impl EmbeddedV8Kernel {
                                         }}
                                         return origGet.call(globalThis);
                                     }};
-                                    try {{ Object.defineProperty(wrappedGet, 'name', {{ value: 'get ' + name, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
+                                    try {{ Object.defineProperty(wrappedGet, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
                                     Object.defineProperty(globalThis, name, {{
                                         get: wrappedGet,
                                         set: desc.set,
@@ -663,7 +663,7 @@ impl EmbeddedV8Kernel {
                                     return v;
                                 }};
                             }})(value, windowProto);
-                            try {{ Object.defineProperty(getter, 'name', {{ value: 'get ' + name, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
+                            try {{ Object.defineProperty(getter, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
                             // Create setter for writable attributes.
                             // idlharness checks typeof desc.set === "function"
                             // for non-readonly / PutForwards / Replaceable attrs.
@@ -687,7 +687,7 @@ impl EmbeddedV8Kernel {
                                     }});
                                 }};
                             }})(name, windowProto);
-                            try {{ Object.defineProperty(setter, 'name', {{ value: 'set ' + name, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
+                            try {{ Object.defineProperty(setter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
                             try {{ Object.defineProperty(setter, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
                             Object.defineProperty(globalThis, name, {{
                                 get: getter,
@@ -715,13 +715,13 @@ impl EmbeddedV8Kernel {
                     if (!desc) {
                         // Property doesn't exist on globalThis — install it
                         var getter = function() { return null; };
-                        try { Object.defineProperty(getter, 'name', { value: 'get ' + name, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                        try { Object.defineProperty(getter, 'name', { value: 'get ' + name }); } catch(e) {}
                         try { Object.defineProperty(getter, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
                         var setter = (name === 'status') ? function(v) {
                             Object.defineProperty(globalThis, name, { value: v, writable: true, enumerable: true, configurable: true });
                         } : undefined;
                         if (setter) {
-                            try { Object.defineProperty(setter, 'name', { value: 'set ' + name, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                            try { Object.defineProperty(setter, 'name', { value: 'set ' + name }); } catch(e) {}
                             try { Object.defineProperty(setter, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
                         }
                         Object.defineProperty(globalThis, name, {
@@ -748,7 +748,7 @@ impl EmbeddedV8Kernel {
                             return v;
                         };
                     })(value);
-                    try { Object.defineProperty(getter, 'name', { value: 'get ' + name, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                    try { Object.defineProperty(getter, 'name', { value: 'get ' + name }); } catch(e) {}
                     try { Object.defineProperty(getter, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
                     var setter = (name === 'status') ? (function(nm, wproto) {
                         return function(v) {
@@ -759,7 +759,7 @@ impl EmbeddedV8Kernel {
                         };
                     })(name, windowProto) : undefined;
                     if (setter) {
-                        try { Object.defineProperty(setter, 'name', { value: 'set ' + name, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                        try { Object.defineProperty(setter, 'name', { value: 'set ' + name }); } catch(e) {}
                         try { Object.defineProperty(setter, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
                     }
                     Object.defineProperty(globalThis, name, {
@@ -1026,8 +1026,8 @@ try {
                                         return origFn.apply(this, arguments);
                                     };
                                     wrappedFn.__iv8_op_wrapped = true;
-                                    try { Object.defineProperty(wrappedFn, 'name', { value: origName || pname, writable: false, enumerable: false, configurable: true }); } catch(e) {}
-                                    try { Object.defineProperty(wrappedFn, 'length', { value: origLen, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                                    try { Object.defineProperty(wrappedFn, 'name', { value: origName }); } catch(e) {}
+                                    try { Object.defineProperty(wrappedFn, 'length', { value: origLen }); } catch(e) {}
                                     Object.defineProperty(proto, pname, {
                                         value: wrappedFn,
                                         writable: desc.writable,
@@ -1108,7 +1108,7 @@ try {
                                         return origGet.call(this);
                                     };
                                     wrappedGet.__iv8_wrapped = true;
-                                    try { Object.defineProperty(wrappedGet, 'name', { value: 'get ' + pname, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                                    try { Object.defineProperty(wrappedGet, 'name', { value: 'get ' + pname }); } catch(e) {}
                                     }
                                     // Wrap setter with same receiver check
                                     var wrappedSet = origSet;
@@ -1160,7 +1160,7 @@ try {
                                                 Object.defineProperty(this, pname, { value: v, writable: true, enumerable: true, configurable: true });
                                             };
                                         }
-                                        try { Object.defineProperty(wrappedSet, 'name', { value: 'set ' + pname, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+                                        try { Object.defineProperty(wrappedSet, 'name', { value: 'set ' + pname }); } catch(e) {}
                                         wrappedSet.__iv8_set_wrapped = true;
                                     }
                                     Object.defineProperty(proto, pname, {
