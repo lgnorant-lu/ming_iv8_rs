@@ -1372,7 +1372,12 @@ pub fn chain_dom_prototypes(
                     let value = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "value").into());
                     let writable_val = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "writable").into());
                     let configurable_val = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "configurable").into());
-                    let src_writable = writable_val.map(|v| v.is_boolean() && v.is_true()).unwrap_or(true);
+                    let src_writable = writable_val
+                        .map(|v| v.is_boolean() && v.is_true())
+                        .unwrap_or_else(|| {
+                            let val = value.unwrap_or(v8::undefined(scope).into());
+                            !(val.is_number() || val.is_string() || val.is_boolean())
+                        });
                     let src_configurable = configurable_val.map(|v| v.is_boolean() && v.is_true()).unwrap_or(true);
                     let pd = if let (Some(g), Some(s)) = (getter, setter) {
                         if g.is_undefined() && s.is_undefined() {

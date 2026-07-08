@@ -1540,6 +1540,31 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
+    // NodeFilter constants — callback interface with SHOW_* and FILTER_*
+    // constants. Codegen generates these on the constructor template, but
+    // as a safety net ensure they exist on the global NodeFilter object.
+    if (typeof NodeFilter !== 'undefined' && NodeFilter) {
+        var nfConsts = {
+            SHOW_ALL: 0xFFFFFFFF,
+            SHOW_ELEMENT: 1,
+            SHOW_ATTRIBUTE: 2,
+            SHOW_TEXT: 4,
+            SHOW_CDATA_SECTION: 8,
+            SHOW_PROCESSING_INSTRUCTION: 64,
+            SHOW_COMMENT: 128,
+            SHOW_DOCUMENT: 256,
+            SHOW_DOCUMENT_TYPE: 512,
+            SHOW_DOCUMENT_FRAGMENT: 1024,
+            SHOW_NOTATION: 2048,
+            FILTER_ACCEPT: 1,
+            FILTER_REJECT: 2,
+            FILTER_SKIP: 3
+        };
+        for (var k in nfConsts) {
+            try { Object.defineProperty(NodeFilter, k, { value: nfConsts[k], writable: false, enumerable: true, configurable: false }); } catch(e) {}
+        }
+    }
+
     if (typeof EventTarget !== 'undefined' && EventTarget.prototype && typeof Symbol !== 'undefined' && Symbol.toStringTag) {
         try {
             if (!EventTarget.prototype[Symbol.toStringTag]) {

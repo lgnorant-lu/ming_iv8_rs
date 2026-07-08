@@ -152,6 +152,12 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             loadEventEnd: _navStart + 710,
         };
     }
+    // Configurable performance.timing.navigationStart via globalThis.__iv8PerfTiming
+    if (typeof performance !== 'undefined' && performance.timing) {
+        if (!performance.timing.navigationStart && globalThis.__iv8PerfTiming) {
+            performance.timing.navigationStart = globalThis.__iv8PerfTiming.navigationStart || 0;
+        }
+    }
     if (!window.screenX) { window.screenX = 0; }
     if (!window.screenY) { window.screenY = 0; }
     if (window.pageXOffset === undefined) { window.pageXOffset = 0; }
@@ -493,6 +499,15 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             addEventListener: function() {},
             removeEventListener: function() {},
             dispatchEvent: function() { return true; },
+        };
+    }
+
+    // Configurable speech voices via globalThis.__iv8SpeechVoices
+    if (typeof speechSynthesis !== 'undefined' && speechSynthesis.getVoices) {
+        var _origGetVoices = speechSynthesis.getVoices.bind(speechSynthesis);
+        speechSynthesis.getVoices = function getVoices() {
+            if (globalThis.__iv8SpeechVoices) return globalThis.__iv8SpeechVoices;
+            return _origGetVoices();
         };
     }
 

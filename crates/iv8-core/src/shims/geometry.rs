@@ -57,8 +57,8 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
     //
     // Priority order: __iv8ComputedStyleOverrides > element.style > defaults
     globalThis.getComputedStyle = function(element, pseudoElt) {
-        // Check for profile-driven overrides
-        var overrides = globalThis.__iv8ComputedStyleOverrides;
+        // Check for profile-driven overrides (support both naming variants)
+        var overrides = globalThis.__iv8ComputedStyleOverrides || globalThis.__iv8CSSPrefs;
         if (overrides && typeof overrides === 'object') {
             // Profile overrides are applied per-property below, with
             // priority: overrides > element.style > defaults.
