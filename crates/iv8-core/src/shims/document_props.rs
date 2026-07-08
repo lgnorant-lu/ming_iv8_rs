@@ -1550,6 +1550,36 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         } catch(e) {}
     }
 
+    // window.chrome — configurable via globalThis.__iv8ChromePrefs
+    if (typeof window !== 'undefined' && !window.chrome) {
+        window.chrome = globalThis.__iv8ChromePrefs || {
+            app: { isInstalled: false, InstallState: { DISABLED: 'disabled', INSTALLED: 'installed', NOT_INSTALLED: 'not_installed' }, RunningState: { CANNOT_RUN: 'cannot_run', READY_TO_RUN: 'ready_to_run', RUNNING: 'running' }, getDetails: function() { return null; }, getIsInstalled: function() { return 0; } },
+            runtime: { OnInstalledReason: { CHROME_UPDATE: 'chrome_update', INSTALL: 'install', SHARED_MODULE_UPDATE: 'shared_module_update', UPDATE: 'update' }, PlatformArch: { ARM: 'arm', ARM64: 'arm64', MIPS: 'mips', MIPS64: 'mips64', X86_32: 'x86-32', X86_64: 'x86-64' } }
+        };
+    }
+
+    // chrome.loadTimes — configurable via globalThis.__iv8LoadTimes
+    if (typeof window !== 'undefined' && !window.chrome?.loadTimes) {
+        if (!window.chrome) window.chrome = {};
+        window.chrome.loadTimes = function() {
+            return globalThis.__iv8LoadTimes || {
+                requestTime: Date.now() / 1000,
+                startLoadTime: Date.now() / 1000,
+                commitLoadTime: Date.now() / 1000,
+                finishDocumentLoadTime: Date.now() / 1000,
+                finishLoadTime: Date.now() / 1000,
+                firstPaintTime: Date.now() / 1000,
+                firstPaintAfterLoadTime: 0,
+                navigationType: "Other",
+                wasFetchedViaSpdy: true,
+                wasNpnNegotiated: true,
+                npnNegotiatedProtocol: "h2",
+                wasAlternateProtocolAvailable: false,
+                connectionInfo: "h2"
+            };
+        };
+    }
+
 })();
 "#;
 

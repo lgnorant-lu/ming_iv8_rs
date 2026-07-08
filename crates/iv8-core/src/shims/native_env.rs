@@ -1215,6 +1215,18 @@ unsafe extern "C" fn stub_promise_resolve_null(info: *const v8::FunctionCallback
     }));
 }
 
+// Stub that returns Promise.resolve("") — for APIs that resolve to empty string
+unsafe extern "C" fn stub_promise_resolve_empty_string(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let resolver = crate::v8_utils::v8_resolver(scope);
+        resolver.resolve(scope, crate::v8_utils::v8_string(scope, "").into());
+        rv.set(resolver.get_promise(scope).into());
+    }));
+}
+
 // Stub that returns Promise.resolve([]) — for APIs that resolve to empty array
 unsafe extern "C" fn stub_promise_resolve_empty_array(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1363,11 +1375,11 @@ unsafe extern "C" fn nav_clipboard(info: *const v8::FunctionCallbackInfo) {
             tmpl.remove_prototype();
             crate::v8_utils::v8_fn(scope, &tmpl)
         };
-        // readText → Promise<String> (returns empty string)
+        // readText → Promise<String> (returns empty string per spec)
         // writeText → Promise<void>
         // read → Promise<Array> (returns empty array)
         // write → Promise<void>
-        obj.set(scope, s("readText").into(), build_promise_stub("readText", stub_promise_resolve).into());
+        obj.set(scope, s("readText").into(), build_promise_stub("readText", stub_promise_resolve_empty_string).into());
         obj.set(scope, s("writeText").into(), build_promise_stub("writeText", stub_promise_resolve).into());
         obj.set(scope, s("read").into(), build_promise_stub("read", stub_promise_resolve_empty_array).into());
         obj.set(scope, s("write").into(), build_promise_stub("write", stub_promise_resolve).into());

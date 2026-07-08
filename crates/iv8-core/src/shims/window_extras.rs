@@ -271,6 +271,10 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             this.url = url;
             this.readyState = 0;
             this.onopen = null; this.onclose = null; this.onmessage = null; this.onerror = null;
+            this.binaryType = 'blob';
+            this.protocol = '';
+            this.extensions = '';
+            this.bufferedAmount = 0;
             this.addEventListener = function() {};
             this.removeEventListener = function() {};
             var self = this;
@@ -924,12 +928,17 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         Range.END_TO_END = 2; Range.END_TO_START = 3;
     }
 
-    // P1: Notification.requestPermission returns Promise
+    // P1: Notification.requestPermission returns Promise, supports callback
     // requestPermission is a static method on the constructor in real browsers,
     // but codegen puts it on the prototype. We override it as a static property.
+    // Spec: accepts optional callback(permission) and returns Promise<PermissionState>.
     if (typeof Notification !== 'undefined') {
-        Notification.requestPermission = function() {
-            return Promise.resolve(Notification.permission || 'default');
+        Notification.requestPermission = function(callback) {
+            var perm = Notification.permission || 'default';
+            if (typeof callback === 'function') {
+                setTimeout(function() { callback(perm); }, 0);
+            }
+            return Promise.resolve(perm);
         };
     }
 
@@ -951,14 +960,24 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         navigator.getInstalledRelatedApps = function() { return Promise.resolve([]); };
     }
 
-    // P1: navigator.wakeLock.request returns Promise
+    // P1: navigator.wakeLock.request returns Promise<WakeLockSentinel>
     // codegen navigator.wakeLock getter returns a new empty Object each access,
     // so we replace it with a data property holding a fixed WakeLock-like object.
+    // Sentinel includes onrelease event handler and released state transition.
     if (typeof navigator !== 'undefined' && navigator.wakeLock) {
         var _wlSentinel = function(type) {
             return Promise.resolve({
                 type: type || 'screen', released: false,
-                release: function() { this.released = true; return Promise.resolve(); },
+                onrelease: null,
+                release: function() {
+                    if (!this.released) {
+                        this.released = true;
+                        if (typeof this.onrelease === 'function') {
+                            this.onrelease({ type: 'release' });
+                        }
+                    }
+                    return Promise.resolve();
+                },
                 addEventListener: function() {}, removeEventListener: function() {},
                 dispatchEvent: function() { return true; }
             });
@@ -974,10 +993,12 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     }
 
     // P1: PaymentRequest show/canMakePayment return Promises
+    // abort() should resolve (not reject) per spec — only rejects InvalidStateError
+    // if already shown/closed. In headless context, abort resolves to undefined.
     if (typeof PaymentRequest !== 'undefined') {
         PaymentRequest.prototype.show = function() { return Promise.reject(new DOMException('AbortError')); };
         PaymentRequest.prototype.canMakePayment = function() { return Promise.resolve(false); };
-        PaymentRequest.prototype.abort = function() { return Promise.reject(new DOMException('InvalidStateError')); };
+        PaymentRequest.prototype.abort = function() { return Promise.resolve(); };
     }
 
     // P1: desktop-only APIs should be undefined
