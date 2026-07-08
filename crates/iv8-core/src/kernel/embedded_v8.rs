@@ -689,25 +689,12 @@ impl EmbeddedV8Kernel {
                             }})(name, windowProto);
                             try {{ Object.defineProperty(setter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
                             try {{ Object.defineProperty(setter, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
-                            // Try to define accessor on globalThis.
-                            // Only delete from Window.prototype if the accessor
-                            // was successfully defined on globalThis.
-                            var _defineOk = false;
-                            try {{
-                                Object.defineProperty(globalThis, name, {{
-                                    get: getter,
-                                    set: setter,
-                                    enumerable: desc.enumerable !== false,
-                                    configurable: true
-                                }});
-                                _defineOk = true;
-                            }} catch(e) {{}}
-                            // idlharness [Global] requires assert_false:
-                            // property must NOT be on Window.prototype.
-                            // Only delete if globalThis accessor was defined.
-                            if (_defineOk && windowProto) {{
-                                try {{ delete windowProto[name]; }} catch(e) {{}}
-                            }}
+                            Object.defineProperty(globalThis, name, {{
+                                get: getter,
+                                set: setter,
+                                enumerable: desc.enumerable !== false,
+                                configurable: true
+                            }});
                         }} catch(e) {{}}
                         }})(attrs[i]);
                     }}
@@ -775,17 +762,10 @@ impl EmbeddedV8Kernel {
                         try { Object.defineProperty(setter, 'name', { value: 'set ' + name }); } catch(e) {}
                         try { Object.defineProperty(setter, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
                     }
-                    var _defineOk2 = false;
-                    try {
-                        Object.defineProperty(globalThis, name, {
-                            get: getter, set: setter,
-                            enumerable: desc.enumerable !== false, configurable: true
-                        });
-                        _defineOk2 = true;
-                    } catch(e) {}
-                    if (_defineOk2 && windowProto) {
-                        try { delete windowProto[name]; } catch(e) {}
-                    }
+                    Object.defineProperty(globalThis, name, {
+                        get: getter, set: setter,
+                        enumerable: desc.enumerable !== false, configurable: true
+                    });
                 } catch(e) {}
             })(extras[i]);
         }
