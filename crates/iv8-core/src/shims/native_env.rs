@@ -1837,15 +1837,114 @@ unsafe extern "C" fn nav_gpu(info: *const v8::FunctionCallbackInfo) {
         let obj = v8::Object::new(scope);
         let s = |k: &str| crate::v8_utils::v8_string(scope, k);
         let request_adapter_fn = {
-            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_null).build(scope);
+            let tmpl = v8::FunctionTemplate::builder_raw(nav_gpu_request_adapter).build(scope);
             tmpl.set_class_name(s("requestAdapter"));
             tmpl.remove_prototype();
             crate::v8_utils::v8_fn(scope, &tmpl)
         };
         obj.set(scope, s("requestAdapter").into(), request_adapter_fn.into());
+        let getpreferred_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(nav_gpu_get_preferred_canvas_format).build(scope);
+            tmpl.set_class_name(s("getPreferredCanvasFormat"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("getPreferredCanvasFormat").into(), getpreferred_fn.into());
         let ts = v8::Symbol::get_to_string_tag(scope);
         obj.set(scope, ts.into(), s("GPU").into());
         rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_gpu_request_adapter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+
+        let adapter = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+
+        let adapter_info = v8::Object::new(scope);
+        adapter_info.set(scope, s("vendor").into(), s("nvidia").into());
+        adapter_info.set(scope, s("architecture").into(), s("rtx-4060").into());
+        adapter_info.set(scope, s("device").into(), s("RTX 4060").into());
+        adapter_info.set(
+            scope,
+            s("description").into(),
+            s("ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Direct3D11 vs_5_0 ps_5_0)").into(),
+        );
+        let info_ts = v8::Symbol::get_to_string_tag(scope);
+        adapter_info.set(scope, info_ts.into(), s("GPUAdapterInfo").into());
+        adapter.set(scope, s("info").into(), adapter_info.into());
+
+        let features = v8::Object::new(scope);
+        features.set(scope, s("size").into(), v8::Integer::new(scope, 0).into());
+        let feat_ts = v8::Symbol::get_to_string_tag(scope);
+        features.set(scope, feat_ts.into(), s("GPUSupportedFeatures").into());
+        adapter.set(scope, s("features").into(), features.into());
+
+        let limits = v8::Object::new(scope);
+        let limit_vals: &[(&str, f64)] = &[
+            ("maxTextureDimension1D", 8192.0),
+            ("maxTextureDimension2D", 8192.0),
+            ("maxTextureDimension3D", 2048.0),
+            ("maxTextureArrayLayers", 256.0),
+            ("maxBindGroups", 4.0),
+            ("maxDynamicUniformBuffersPerPipelineLayout", 8.0),
+            ("maxDynamicStorageBuffersPerPipelineLayout", 4.0),
+            ("maxSampledTexturesPerShaderStage", 16.0),
+            ("maxSamplersPerShaderStage", 16.0),
+            ("maxStorageBuffersPerShaderStage", 8.0),
+            ("maxStorageTexturesPerShaderStage", 4.0),
+            ("maxUniformBuffersPerShaderStage", 12.0),
+            ("maxUniformBufferBindingSize", 65536.0),
+            ("maxStorageBufferBindingSize", 134217728.0),
+            ("minUniformBufferOffsetAlignment", 256.0),
+            ("minStorageBufferOffsetAlignment", 256.0),
+            ("maxVertexBuffers", 8.0),
+            ("maxVertexAttributes", 16.0),
+            ("maxVertexBufferArrayStride", 2048.0),
+            ("maxInterStageShaderComponents", 60.0),
+            ("maxComputeWorkgroupStorageSize", 16384.0),
+            ("maxComputeInvocationsPerWorkgroup", 256.0),
+            ("maxComputeWorkgroupSizeX", 256.0),
+            ("maxComputeWorkgroupSizeY", 256.0),
+            ("maxComputeWorkgroupSizeZ", 64.0),
+            ("maxComputeWorkgroupsPerDimension", 65535.0),
+        ];
+        for (k, v) in limit_vals {
+            limits.set(scope, s(k).into(), v8::Number::new(scope, *v).into());
+        }
+        let lim_ts = v8::Symbol::get_to_string_tag(scope);
+        limits.set(scope, lim_ts.into(), s("GPUSupportedLimits").into());
+        adapter.set(scope, s("limits").into(), limits.into());
+
+        adapter.set(scope, s("isFallbackAdapter").into(), v8::Boolean::new(scope, false).into());
+
+        let request_device_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("requestDevice"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        adapter.set(scope, s("requestDevice").into(), request_device_fn.into());
+
+        let adapter_ts = v8::Symbol::get_to_string_tag(scope);
+        adapter.set(scope, adapter_ts.into(), s("GPUAdapter").into());
+
+        let resolver = crate::v8_utils::v8_resolver(scope);
+        resolver.resolve(scope, adapter.into());
+        rv.set(resolver.get_promise(scope).into());
+    }));
+}
+
+unsafe extern "C" fn nav_gpu_get_preferred_canvas_format(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::v8_utils::v8_string(scope, "bgra8unorm").into());
     }));
 }
 

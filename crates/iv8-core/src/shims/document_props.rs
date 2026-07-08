@@ -18,6 +18,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     }
 
     // document.cookie (v0.8.72 Track B: attribute parsing + filtering)
+    // F-30b: RFC 6265 expires/max-age expiry + domain matching
     var _cookies = window._iv8CookieStore || (window._iv8CookieStore = {});
 
     function _cookieValue(rec) {
@@ -26,14 +27,42 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         return '';
     }
 
+    function _cookieExpired(rec) {
+        if (typeof rec === 'string' || !rec || typeof rec !== 'object') return false;
+        // Check expires timestamp (epoch ms)
+        if (rec.expiresTs && typeof rec.expiresTs === 'number') {
+            if (Date.now() >= rec.expiresTs) return true;
+        }
+        return false;
+    }
+
+    function _domainMatches(cookieDomain, hostName) {
+        if (!cookieDomain) return true;
+        var d = cookieDomain.toLowerCase().replace(/^\./, '');
+        var h = (hostName || '').toLowerCase();
+        if (h === d) return true;
+        // Subdomain match: cookie domain ".example.com" matches "www.example.com"
+        return h.length > d.length && h.charAt(h.length - d.length - 1) === '.' && h.slice(-d.length) === d;
+    }
+
     function _cookieVisible(rec) {
         if (typeof rec === 'string') return true;    // legacy: no attributes
         if (!rec || typeof rec !== 'object') return true;
+        // httpOnly cookies are NOT visible to document.cookie (RFC 6265 §5.3)
+        if (rec.httpOnly) return false;
+        // Expired cookies are not visible
+        if (_cookieExpired(rec)) return false;
         // Path filtering (RFC 6265 prefix match)
         if (rec.path && rec.path !== '/') {
             var docPath = '/';
             try { docPath = document.location ? document.location.pathname : '/'; } catch(e) {}
             if (!_pathMatches(docPath, rec.path)) return false;
+        }
+        // Domain filtering
+        if (rec.domain) {
+            var host = '';
+            try { host = location.hostname || ''; } catch(e) {}
+            if (!_domainMatches(rec.domain, host)) return false;
         }
         // Secure filtering
         if (rec.secure) {
@@ -87,13 +116,21 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                     attrs.sameSite = attr.substring(9); hasAttrs = true;
                 }
                 else if (lower.indexOf('expires=') === 0) {
-                    attrs.expires = attr.substring(8); hasAttrs = true;
+                    var dateStr = attr.substring(8);
+                    attrs.expires = dateStr; hasAttrs = true;
+                    // Parse to epoch ms for expiry checking
+                    var parsed = Date.parse(dateStr);
+                    if (!isNaN(parsed)) {
+                        attrs.expiresTs = parsed;
+                    }
                 }
                 else if (lower.indexOf('max-age=') === 0) {
                     var ma = parseInt(attr.substring(8), 10);
                     if (!isNaN(ma)) {
                         if (ma <= 0) { delete _cookies[name]; return; }
                         attrs.maxAge = ma; hasAttrs = true;
+                        // Convert max-age to expires timestamp (seconds → ms)
+                        attrs.expiresTs = Date.now() + (ma * 1000);
                     }
                 }
             }
@@ -261,7 +298,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         var _fontPrefs = (typeof globalThis.__iv8FontPrefs === 'object' && globalThis.__iv8FontPrefs) ? globalThis.__iv8FontPrefs : {};
         var _fontFamilies = _fontPrefs.families || [];
         var _fontSet = {
-            ready: Promise.resolve(),
+            ready: null, // set after object creation (see below)
             status: 'loaded',
             onloading: null,
             onloadingdone: null,
@@ -290,6 +327,8 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             delete: function(fontFace) {},
             clear: function() {},
         };
+        // Per FontFaceSet spec: ready resolves to the FontFaceSet itself.
+        _fontSet.ready = Promise.resolve(_fontSet);
         document.fonts = _fontSet;
     }
     if (!document.timeline) {
@@ -1104,12 +1143,25 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
-    // postMessage argument count validation
+    // postMessage: argument count validation + structured clone of message
     try {
         var _origPostMessage = globalThis.postMessage;
         if (_origPostMessage && typeof _origPostMessage === 'function') {
             var _wrappedPostMessage = function postMessage(message, targetOrigin, transfer) {
                 if (arguments.length < 2) throw new TypeError('2 argument(s) required, but only ' + arguments.length + ' present.');
+                // Structured clone the message per HTML spec §2.9.5.
+                // structuredClone is provided by window_extras.rs polyfill.
+                // Fall back to JSON round-trip if unavailable or if it throws
+                // (e.g. functions, Symbols, circular refs).
+                var cloned;
+                try {
+                    cloned = (typeof structuredClone === 'function')
+                        ? structuredClone(message)
+                        : JSON.parse(JSON.stringify(message));
+                } catch(e) {
+                    cloned = JSON.parse(JSON.stringify(message));
+                }
+                // No actual dispatch (stub) — just accept the message.
             };
             try { Object.defineProperty(_wrappedPostMessage, 'length', { value: 2, writable: false, enumerable: false, configurable: true }); } catch(e) {}
             Object.defineProperty(globalThis, 'postMessage', { value: _wrappedPostMessage, writable: true, configurable: true, enumerable: true });
@@ -1444,13 +1496,34 @@ pub const COOKIE_REINSTALL_JS: &str = r#"
         if (rec && typeof rec === 'object' && rec.v !== undefined) return rec.v;
         return '';
     }
+    function _cookieExpired(rec) {
+        if (typeof rec === 'string' || !rec || typeof rec !== 'object') return false;
+        if (rec.expiresTs && typeof rec.expiresTs === 'number') {
+            if (Date.now() >= rec.expiresTs) return true;
+        }
+        return false;
+    }
+    function _domainMatches(cookieDomain, hostName) {
+        if (!cookieDomain) return true;
+        var d = cookieDomain.toLowerCase().replace(/^\./, '');
+        var h = (hostName || '').toLowerCase();
+        if (h === d) return true;
+        return h.length > d.length && h.charAt(h.length - d.length - 1) === '.' && h.slice(-d.length) === d;
+    }
     function _cookieVisible(rec) {
         if (typeof rec === 'string') return true;
         if (!rec || typeof rec !== 'object') return true;
+        if (rec.httpOnly) return false;
+        if (_cookieExpired(rec)) return false;
         if (rec.path && rec.path !== '/') {
             var docPath = '/';
             try { docPath = document.location ? document.location.pathname : '/'; } catch(e) {}
             if (docPath !== rec.path && docPath.indexOf(rec.path) !== 0) return false;
+        }
+        if (rec.domain) {
+            var host = '';
+            try { host = location.hostname || ''; } catch(e) {}
+            if (!_domainMatches(rec.domain, host)) return false;
         }
         if (rec.secure && window.__iv8IsSecureContext !== true) return false;
         return true;
@@ -1484,10 +1557,19 @@ pub const COOKIE_REINSTALL_JS: &str = r#"
                 else if (lower.indexOf('path=') === 0) { attrs.path = attr.substring(5); hasAttrs = true; }
                 else if (lower.indexOf('domain=') === 0) { attrs.domain = attr.substring(7); hasAttrs = true; }
                 else if (lower.indexOf('samesite=') === 0) { attrs.sameSite = attr.substring(9); hasAttrs = true; }
-                else if (lower.indexOf('expires=') === 0) { attrs.expires = attr.substring(8); hasAttrs = true; }
+                else if (lower.indexOf('expires=') === 0) {
+                    var dateStr = attr.substring(8);
+                    attrs.expires = dateStr; hasAttrs = true;
+                    var parsed = Date.parse(dateStr);
+                    if (!isNaN(parsed)) { attrs.expiresTs = parsed; }
+                }
                 else if (lower.indexOf('max-age=') === 0) {
                     var ma = parseInt(attr.substring(8), 10);
-                    if (!isNaN(ma)) { if (ma <= 0) { delete _cookies[name]; return; } attrs.maxAge = ma; hasAttrs = true; }
+                    if (!isNaN(ma)) {
+                        if (ma <= 0) { delete _cookies[name]; return; }
+                        attrs.maxAge = ma; hasAttrs = true;
+                        attrs.expiresTs = Date.now() + (ma * 1000);
+                    }
                 }
             }
             if (hasAttrs) { attrs.v = value; _cookies[name] = attrs; }
@@ -1497,5 +1579,43 @@ pub const COOKIE_REINSTALL_JS: &str = r#"
         configurable: true,
     });
     } catch(e) {}
+
+// SharedWorker stub
+if (typeof SharedWorker === 'undefined') {
+    function SharedWorker(url, options) {
+        this.port = { postMessage: function() {}, start: function() {}, close: function() {}, onmessage: null };
+        this.onerror = null;
+    }
+    SharedWorker.prototype = Object.create(EventTarget.prototype || Object.prototype);
+    try { Object.defineProperty(SharedWorker, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+    globalThis.SharedWorker = SharedWorker;
+}
+
+// ServiceWorkerContainer stub (navigator.serviceWorker already exists as stub)
+if (typeof navigator !== 'undefined' && navigator.serviceWorker) {
+    // Already has register stub, ensure ready returns a Promise
+    if (!navigator.serviceWorker.ready) {
+        Object.defineProperty(navigator.serviceWorker, 'ready', {
+            get: function() { return Promise.resolve({ active: null, installing: null, waiting: null }); },
+            enumerable: true, configurable: true
+        });
+    }
+    if (!navigator.serviceWorker.controller) {
+        Object.defineProperty(navigator.serviceWorker, 'controller', {
+            get: function() { return null; },
+            enumerable: true, configurable: true
+        });
+    }
+}
+
+// WorkletGlobalScope stubs
+if (typeof AudioWorklet === 'undefined' && typeof AudioContext !== 'undefined') {
+    Object.defineProperty(AudioContext.prototype, 'audioWorklet', {
+        get: function() {
+            return { addModule: function() { return Promise.resolve(); } };
+        },
+        enumerable: true, configurable: true
+    });
+}
 })();
 "#;

@@ -642,16 +642,23 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     }
 
     // CookieStore API stub (modern cookie access)
-    if (typeof CookieStore === 'undefined') {
-        globalThis.CookieStore = function CookieStore() {};
-        CookieStore.prototype.get = function(name) { return Promise.resolve(null); };
-        CookieStore.prototype.set = function(name, value) { return Promise.resolve(); };
-        CookieStore.prototype.delete = function(name) { return Promise.resolve(); };
-        CookieStore.prototype.getAll = function() { return Promise.resolve([]); };
+    // Codegen may already define CookieStore, but its methods return undefined
+    // instead of Promises. Always (re)install Promise-returning methods.
+    // Use try-catch because codegen prototype may be non-extensible.
+    try {
+        if (typeof CookieStore === 'undefined') {
+            globalThis.CookieStore = function CookieStore() {};
+        }
+        try {
+            CookieStore.prototype.get = function(name) { return Promise.resolve(null); };
+            CookieStore.prototype.set = function(name, value) { return Promise.resolve(); };
+            CookieStore.prototype.delete = function(name) { return Promise.resolve(); };
+            CookieStore.prototype.getAll = function() { return Promise.resolve([]); };
+        } catch(e) {}
         if (typeof window !== 'undefined' && !window.cookieStore) {
             window.cookieStore = new CookieStore();
         }
-    }
+    } catch(e) {}
 
     // CookieStore onchange event stub
     if (typeof window !== 'undefined' && window.cookieStore && !window.cookieStore.addEventListener) {

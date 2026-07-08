@@ -3,7 +3,11 @@
 //! Default values are zero. Fixtures can configure per-element rectangles via
 //! `__iv8SetElementRect(element, {x, y, width, height})`.
 //! The native Rust callback reads the stored rect from `this.__iv8Rect__`.
-//! No real layout engine.
+//! JS-level overrides on Element.prototype add heuristic layout:
+//! 1. `globalThis.__iv8ElementRects` (selector→rect Map/object)
+//! 2. `this.__iv8Rect__` (fixture hook via __iv8SetElementRect)
+//! 3. `this.style.width`/`this.style.height` (heuristic pixel parsing)
+//! 4. `getComputedStyle(el).width`/`.height` (computed style fallback)
 
 /// JS shim for geometry properties (fixture hooks + getComputedStyle).
 /// getBoundingClientRect itself is a Rust native callback on the prototype.
@@ -44,7 +48,21 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
     // getComputedStyle stub — returns a CSSStyleDeclaration-like object
     // with Chrome-default computed values for common properties.
     // Falls back to element.style values when available.
+    //
+    // Profile-driven overrides: if `globalThis.__iv8ComputedStyleOverrides`
+    // is an object, its property→value mappings take precedence over the
+    // hardcoded Chrome defaults. This allows profile environments to
+    // configure computed-style values (e.g. custom font families, colors,
+    // or UA-specific defaults) without modifying the shim.
+    //
+    // Priority order: __iv8ComputedStyleOverrides > element.style > defaults
     globalThis.getComputedStyle = function(element, pseudoElt) {
+        // Check for profile-driven overrides
+        var overrides = globalThis.__iv8ComputedStyleOverrides;
+        if (overrides && typeof overrides === 'object') {
+            // Profile overrides are applied per-property below, with
+            // priority: overrides > element.style > defaults.
+        }
         var defaults = {
             display: 'block',
             visibility: 'visible',
@@ -91,17 +109,35 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
         // Merge element.style overrides if available
         var styles = {};
         var keys = Object.keys(defaults);
+        // Include override keys not in defaults so they appear on the object
+        if (overrides && typeof overrides === 'object') {
+            var okeys = Object.keys(overrides);
+            for (var oi = 0; oi < okeys.length; oi++) {
+                if (keys.indexOf(okeys[oi]) === -1) keys.push(okeys[oi]);
+            }
+        }
         for (var i = 0; i < keys.length; i++) {
             var k = keys[i];
-            if (element && element.style && element.style[k] !== undefined && element.style[k] !== '') {
+            // Priority: overrides > element.style > defaults
+            if (overrides && overrides[k] !== undefined) {
+                styles[k] = overrides[k];
+            } else if (element && element.style && element.style[k] !== undefined && element.style[k] !== '') {
                 styles[k] = element.style[k];
             } else {
                 styles[k] = defaults[k];
             }
         }
         styles.getPropertyValue = function(prop) {
+            // Convert kebab-case to camelCase for lookup
+            var camel = prop.replace(/-([a-z])/g, function(_, c) { return c.toUpperCase(); });
+            if (overrides && overrides[camel] !== undefined) {
+                return overrides[camel];
+            }
+            if (overrides && overrides[prop] !== undefined) {
+                return overrides[prop];
+            }
             var kebab = prop.replace(/([A-Z])/g, '-$1').toLowerCase();
-            return this[prop] || this[kebab] || '';
+            return this[camel] || this[prop] || this[kebab] || '';
         };
         styles.length = keys.length;
         return styles;
@@ -225,5 +261,106 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
         mql.dispatchEvent = function(event) { return true; };
         return mql;
     };
+
+    // --- Basic layout engine: offsetWidth / offsetHeight / getBoundingClientRect ---
+    // JS-level overrides on Element.prototype. Priority:
+    // 1. globalThis.__iv8ElementRects (selector to rect Map/object)
+    // 2. this.__iv8Rect__ (fixture hook via __iv8SetElementRect)
+    // 3. this.style.width/height (heuristic pixel parsing)
+    // 4. getComputedStyle fallback (auto returns 0)
+
+    function _iv8ParsePx(val) {
+        if (typeof val !== 'string') return 0;
+        var m = val.match(/^(\d+(?:\.\d+)?)\s*px/);
+        return m ? parseFloat(m[1]) : 0;
+    }
+
+    function _iv8LookupElementRect(el) {
+        // 1. globalThis.__iv8ElementRects (selector to rect Map/object)
+        var rects = globalThis.__iv8ElementRects;
+        if (rects) {
+            var rect = null;
+            if (typeof rects.get === 'function') {
+                rect = rects.get(el);
+            } else if (el && el.tagName) {
+                rect = rects[el.tagName.toLowerCase()] || rects[el.tagName];
+            }
+            if (rect) return rect;
+        }
+        // 2. this.__iv8Rect__ (fixture hook via __iv8SetElementRect)
+        if (el && el.__iv8Rect__) {
+            return el.__iv8Rect__;
+        }
+        return null;
+    }
+
+    function _iv8GetOffsetWidth(el) {
+        var r = _iv8LookupElementRect(el);
+        if (r && r.width !== undefined) return Number(r.width) || 0;
+        // 3. Heuristic: parse style.width
+        if (el && el.style && el.style.width) {
+            var pw = _iv8ParsePx(el.style.width);
+            if (pw > 0) return pw;
+        }
+        // 4. getComputedStyle fallback
+        if (typeof globalThis.getComputedStyle === 'function') {
+            var cs = globalThis.getComputedStyle(el);
+            if (cs && cs.width && cs.width !== 'auto') {
+                var cw = parseInt(cs.width, 10);
+                if (!isNaN(cw)) return cw;
+            }
+        }
+        return 0;
+    }
+
+    function _iv8GetOffsetHeight(el) {
+        var r = _iv8LookupElementRect(el);
+        if (r && r.height !== undefined) return Number(r.height) || 0;
+        if (el && el.style && el.style.height) {
+            var ph = _iv8ParsePx(el.style.height);
+            if (ph > 0) return ph;
+        }
+        if (typeof globalThis.getComputedStyle === 'function') {
+            var cs = globalThis.getComputedStyle(el);
+            if (cs && cs.height && cs.height !== 'auto') {
+                var ch = parseInt(cs.height, 10);
+                if (!isNaN(ch)) return ch;
+            }
+        }
+        return 0;
+    }
+
+    if (typeof Element !== 'undefined' && Element.prototype) {
+        Object.defineProperty(Element.prototype, 'offsetWidth', {
+            get: function offsetWidth() {
+                return _iv8GetOffsetWidth(this);
+            },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'offsetHeight', {
+            get: function offsetHeight() {
+                return _iv8GetOffsetHeight(this);
+            },
+            configurable: true, enumerable: true,
+        });
+        Object.defineProperty(Element.prototype, 'getBoundingClientRect', {
+            value: function getBoundingClientRect() {
+                var r = _iv8LookupElementRect(this);
+                var x = (r && r.x !== undefined) ? Number(r.x) : 0;
+                var y = (r && r.y !== undefined) ? Number(r.y) : 0;
+                var w = _iv8GetOffsetWidth(this);
+                var h = _iv8GetOffsetHeight(this);
+                return {
+                    x: x, y: y, width: w, height: h,
+                    top: y, left: x, right: x + w, bottom: y + h,
+                    toJSON: function() {
+                        return { x: x, y: y, width: w, height: h,
+                                 top: y, left: x, right: x + w, bottom: y + h };
+                    },
+                };
+            },
+            writable: true, configurable: true, enumerable: true,
+        });
+    }
 })();
 "#;

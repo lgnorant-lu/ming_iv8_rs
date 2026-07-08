@@ -74,6 +74,8 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
         Object.defineProperty(HTMLCanvasElement.prototype.getContext, 'length', {value: 1});
 
         HTMLCanvasElement.prototype.toDataURL = function(type, quality) {
+            var _cached = globalThis.__iv8CanvasPrefs && globalThis.__iv8CanvasPrefs.toDataURL;
+            if (_cached) return _cached;
             var id = getOrCreateCanvasId(this);
             return __canvas_to_data_url__(id, type || 'image/png', quality || 0.92);
         };
@@ -94,6 +96,8 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
             return ctx;
         };
         el.toDataURL = function(type, quality) {
+            var _cached = globalThis.__iv8CanvasPrefs && globalThis.__iv8CanvasPrefs.toDataURL;
+            if (_cached) return _cached;
             return __canvas_to_data_url__(id, type || 'image/png', quality || 0.92);
         };
     };
@@ -449,6 +453,8 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
         };
 
         HTMLCanvasElement.prototype.toDataURL = function(type, quality) {
+            var _cached = globalThis.__iv8CanvasPrefs && globalThis.__iv8CanvasPrefs.toDataURL;
+            if (_cached) return _cached;
             var id = this.__canvasId__;
             if (!id) {
                 // Initialize canvas ID and register with Rust backend
@@ -456,7 +462,6 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
                 this.__canvasId__ = id;
                 __canvas_set_size__(id, this.width || 300, this.height || 150);
             }
-            return __canvas_to_data_url__(id, type || 'image/png', quality || 0.92);
             return __canvas_to_data_url__(id, type || 'image/png', quality || 0.92);
         };
 

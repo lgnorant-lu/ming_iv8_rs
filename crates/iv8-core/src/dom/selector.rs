@@ -5,7 +5,9 @@
 
 use std::fmt;
 
-use cssparser::ToCss;
+use cssparser::{
+    match_ignore_ascii_case, CowRcStr, ParseError, SourceLocation, ToCss,
+};
 use ego_tree::NodeRef;
 use precomputed_hash::PrecomputedHash;
 use selectors::attr::{AttrSelectorOperation, CaseSensitivity, NamespaceConstraint};
@@ -65,16 +67,54 @@ impl PrecomputedHash for CssString {
     }
 }
 
-/// Pseudo-class stub (we don't support dynamic pseudo-classes in v0.1).
+/// Non-tree-structural pseudo-classes supported by IV8.
+///
+/// Tree-structural pseudo-classes (`:first-child`, `:last-child`,
+/// `:only-child`, `:nth-child`, `:empty`, `:root`, `:first-of-type`, etc.)
+/// are handled internally by the `selectors` crate and do not appear here.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PseudoClass {
-    // Placeholder — no pseudo-classes supported yet
-    _Placeholder,
+    Hover,
+    Active,
+    Focus,
+    FocusVisible,
+    FocusWithin,
+    Visited,
+    Link,
+    Checked,
+    Disabled,
+    Enabled,
+    PlaceholderShown,
+    ReadOnly,
+    ReadWrite,
+    Required,
+    Optional,
+    Valid,
+    Invalid,
 }
 
 impl ToCss for PseudoClass {
-    fn to_css<W: fmt::Write>(&self, _dest: &mut W) -> fmt::Result {
-        Ok(())
+    fn to_css<W: fmt::Write>(&self, dest: &mut W) -> fmt::Result {
+        let s = match self {
+            PseudoClass::Hover => ":hover",
+            PseudoClass::Active => ":active",
+            PseudoClass::Focus => ":focus",
+            PseudoClass::FocusVisible => ":focus-visible",
+            PseudoClass::FocusWithin => ":focus-within",
+            PseudoClass::Visited => ":visited",
+            PseudoClass::Link => ":link",
+            PseudoClass::Checked => ":checked",
+            PseudoClass::Disabled => ":disabled",
+            PseudoClass::Enabled => ":enabled",
+            PseudoClass::PlaceholderShown => ":placeholder-shown",
+            PseudoClass::ReadOnly => ":read-only",
+            PseudoClass::ReadWrite => ":read-write",
+            PseudoClass::Required => ":required",
+            PseudoClass::Optional => ":optional",
+            PseudoClass::Valid => ":valid",
+            PseudoClass::Invalid => ":invalid",
+        };
+        dest.write_str(s)
     }
 }
 
@@ -82,11 +122,19 @@ impl parser::NonTSPseudoClass for PseudoClass {
     type Impl = Iv8SelectorImpl;
 
     fn is_active_or_hover(&self) -> bool {
-        false
+        matches!(*self, PseudoClass::Hover | PseudoClass::Active)
     }
 
     fn is_user_action_state(&self) -> bool {
-        false
+        matches!(
+            *self,
+            PseudoClass::Hover
+                | PseudoClass::Active
+                | PseudoClass::Focus
+                | PseudoClass::FocusVisible
+                | PseudoClass::FocusWithin
+                | PseudoClass::Visited
+        )
     }
 }
 
@@ -156,6 +204,55 @@ impl<'a> DomElement<'a> {
     /// Get the NodeId.
     pub fn id(&self) -> NodeId {
         self.node.id()
+    }
+
+    /// Check if the element is in a "checked" state.
+    ///
+    /// For `input[type=checkbox]` and `input[type=radio]`, the `checked`
+    /// attribute must be present (HTML boolean attribute).
+    /// For `option` elements, the `selected` attribute must be present.
+    fn is_checked(&self) -> bool {
+        let tag = match self.node.value().tag_name() {
+            Some(t) => t,
+            None => return false,
+        };
+        let tag = tag.to_ascii_lowercase();
+        match tag.as_str() {
+            "input" => {
+                let input_type = self
+                    .node
+                    .value()
+                    .get_attr("type")
+                    .map(|t| t.to_ascii_lowercase())
+                    .unwrap_or_else(|| "text".to_string());
+                matches!(input_type.as_str(), "checkbox" | "radio")
+                    && self.node.value().get_attr("checked").is_some()
+            }
+            "option" => self.node.value().get_attr("selected").is_some(),
+            _ => false,
+        }
+    }
+
+    /// Check if the element is in a "disabled" state.
+    ///
+    /// The `disabled` attribute is a boolean attribute for `button`,
+    /// `input`, `select`, `textarea`, `optgroup`, `option`, and `fieldset`.
+    fn is_disabled(&self) -> bool {
+        let tag = match self.node.value().tag_name() {
+            Some(t) => t.to_ascii_lowercase(),
+            None => return false,
+        };
+        let is_disableable = matches!(
+            tag.as_str(),
+            "button"
+                | "input"
+                | "select"
+                | "textarea"
+                | "optgroup"
+                | "option"
+                | "fieldset"
+        );
+        is_disableable && self.node.value().get_attr("disabled").is_some()
     }
 }
 
@@ -250,10 +347,28 @@ impl<'a> selectors::Element for DomElement<'a> {
 
     fn match_non_ts_pseudo_class(
         &self,
-        _pc: &PseudoClass,
+        pc: &PseudoClass,
         _context: &mut MatchingContext<Iv8SelectorImpl>,
     ) -> bool {
-        false
+        match *pc {
+            PseudoClass::Hover
+            | PseudoClass::Active
+            | PseudoClass::Focus
+            | PseudoClass::FocusVisible
+            | PseudoClass::FocusWithin
+            | PseudoClass::Visited => false,
+            PseudoClass::Link => self.is_link(),
+            PseudoClass::Checked => self.is_checked(),
+            PseudoClass::Disabled => self.is_disabled(),
+            PseudoClass::Enabled => !self.is_disabled(),
+            PseudoClass::PlaceholderShown
+            | PseudoClass::ReadOnly
+            | PseudoClass::ReadWrite
+            | PseudoClass::Required
+            | PseudoClass::Optional
+            | PseudoClass::Valid
+            | PseudoClass::Invalid => false,
+        }
     }
 
     fn match_pseudo_element(
@@ -343,6 +458,38 @@ impl<'i> From<SelectorParseErrorKind<'i>> for SelectorError<'i> {
 impl<'i> parser::Parser<'i> for Iv8Parser {
     type Impl = Iv8SelectorImpl;
     type Error = SelectorError<'i>;
+
+    fn parse_non_ts_pseudo_class(
+        &self,
+        location: SourceLocation,
+        name: CowRcStr<'i>,
+    ) -> Result<PseudoClass, ParseError<'i, SelectorError<'i>>> {
+        match_ignore_ascii_case! { &name,
+            "hover" => return Ok(PseudoClass::Hover),
+            "active" => return Ok(PseudoClass::Active),
+            "focus" => return Ok(PseudoClass::Focus),
+            "focus-visible" => return Ok(PseudoClass::FocusVisible),
+            "focus-within" => return Ok(PseudoClass::FocusWithin),
+            "visited" => return Ok(PseudoClass::Visited),
+            "link" => return Ok(PseudoClass::Link),
+            "checked" => return Ok(PseudoClass::Checked),
+            "disabled" => return Ok(PseudoClass::Disabled),
+            "enabled" => return Ok(PseudoClass::Enabled),
+            "placeholder-shown" => return Ok(PseudoClass::PlaceholderShown),
+            "read-only" => return Ok(PseudoClass::ReadOnly),
+            "read-write" => return Ok(PseudoClass::ReadWrite),
+            "required" => return Ok(PseudoClass::Required),
+            "optional" => return Ok(PseudoClass::Optional),
+            "valid" => return Ok(PseudoClass::Valid),
+            "invalid" => return Ok(PseudoClass::Invalid),
+            _ => {}
+        }
+        Err(
+            location.new_custom_error(SelectorParseErrorKind::UnsupportedPseudoClassOrElement(
+                name,
+            )),
+        )
+    }
 }
 
 /// A parsed CSS selector list.
@@ -593,5 +740,224 @@ mod tests {
         let doc = parse_html("<div>hello</div>", None);
         let result = doc.query_selector("span").unwrap();
         assert!(result.is_none());
+    }
+
+    #[test]
+    fn selector_hover_returns_nothing() {
+        let doc = parse_html("<div>hello</div>", None);
+        let results = doc.query_selector_all("div:hover").unwrap();
+        assert_eq!(results.len(), 0);
+    }
+
+    #[test]
+    fn selector_focus_returns_nothing() {
+        let doc = parse_html("<input><input>", None);
+        let results = doc.query_selector_all("input:focus").unwrap();
+        assert_eq!(results.len(), 0);
+    }
+
+    #[test]
+    fn selector_active_returns_nothing() {
+        let doc = parse_html("<a href=\"#\">link</a>", None);
+        let results = doc.query_selector_all("a:active").unwrap();
+        assert_eq!(results.len(), 0);
+    }
+
+    #[test]
+    fn selector_visited_returns_nothing() {
+        let doc = parse_html("<a href=\"#\">link</a>", None);
+        let results = doc.query_selector_all("a:visited").unwrap();
+        assert_eq!(results.len(), 0);
+    }
+
+    #[test]
+    fn selector_focus_visible_returns_nothing() {
+        let doc = parse_html("<button>btn</button>", None);
+        let results = doc.query_selector_all("button:focus-visible").unwrap();
+        assert_eq!(results.len(), 0);
+    }
+
+    #[test]
+    fn selector_focus_within_returns_nothing() {
+        let doc = parse_html("<div><input></div>", None);
+        let results = doc.query_selector_all("div:focus-within").unwrap();
+        assert_eq!(results.len(), 0);
+    }
+
+    #[test]
+    fn selector_link_matches_anchor_with_href() {
+        let doc = parse_html(
+            "<a href=\"https://example.com\">link</a><a>no href</a>",
+            None,
+        );
+        let results = doc.query_selector_all("a:link").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_link_matches_area_with_href() {
+        let doc = parse_html(
+            "<area href=\"https://example.com\"><area>",
+            None,
+        );
+        let results = doc.query_selector_all("area:link").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_checked_checkbox() {
+        let doc = parse_html(
+            "<input type=\"checkbox\" checked><input type=\"checkbox\">",
+            None,
+        );
+        let results = doc.query_selector_all("input:checked").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_checked_radio() {
+        let doc = parse_html(
+            "<input type=\"radio\" checked><input type=\"radio\">",
+            None,
+        );
+        let results = doc.query_selector_all("input:checked").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_checked_option() {
+        let doc = parse_html(
+            "<select><option>1</option><option selected>2</option></select>",
+            None,
+        );
+        let results = doc.query_selector_all("option:checked").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_checked_text_input_not_matched() {
+        let doc = parse_html("<input type=\"text\" checked>", None);
+        let results = doc.query_selector_all("input:checked").unwrap();
+        assert_eq!(results.len(), 0);
+    }
+
+    #[test]
+    fn selector_disabled_input() {
+        let doc = parse_html(
+            "<input disabled><input>",
+            None,
+        );
+        let results = doc.query_selector_all("input:disabled").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_disabled_button() {
+        let doc = parse_html(
+            "<button disabled>btn</button><button>btn2</button>",
+            None,
+        );
+        let results = doc.query_selector_all("button:disabled").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_disabled_select_textarea() {
+        let doc = parse_html(
+            "<select disabled></select><textarea disabled></textarea>",
+            None,
+        );
+        let results = doc.query_selector_all("select:disabled, textarea:disabled").unwrap();
+        assert_eq!(results.len(), 2);
+    }
+
+    #[test]
+    fn selector_enabled_input() {
+        let doc = parse_html(
+            "<input disabled><input>",
+            None,
+        );
+        let results = doc.query_selector_all("input:enabled").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_enabled_not_disableable_tag() {
+        let doc = parse_html("<div disabled></div>", None);
+        let results = doc.query_selector_all("div:enabled").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_disabled_not_disableable_tag() {
+        let doc = parse_html("<div disabled></div>", None);
+        let results = doc.query_selector_all("div:disabled").unwrap();
+        assert_eq!(results.len(), 0);
+    }
+
+    #[test]
+    fn selector_last_child() {
+        let doc = parse_html("<ul><li>1</li><li>2</li><li>3</li></ul>", None);
+        let results = doc.query_selector_all("li:last-child").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_only_child() {
+        let doc = parse_html("<div><p>only</p></div><div><p>1</p><p>2</p></div>", None);
+        let results = doc.query_selector_all("p:only-child").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_nth_child() {
+        let doc = parse_html("<ul><li>1</li><li>2</li><li>3</li></ul>", None);
+        let results = doc.query_selector_all("li:nth-child(2)").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_nth_child_odd() {
+        let doc = parse_html("<ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>", None);
+        let results = doc.query_selector_all("li:nth-child(odd)").unwrap();
+        assert_eq!(results.len(), 2);
+    }
+
+    #[test]
+    fn selector_root() {
+        let doc = parse_html("<html><body></body></html>", None);
+        let results = doc.query_selector_all("html:root").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_first_of_type() {
+        let doc = parse_html("<div><p>1</p><span>2</span><p>3</p></div>", None);
+        let results = doc.query_selector_all("p:first-of-type").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_last_of_type() {
+        let doc = parse_html("<div><p>1</p><span>2</span><p>3</p></div>", None);
+        let results = doc.query_selector_all("p:last-of-type").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_pseudo_class_with_combinator() {
+        let doc = parse_html(
+            "<form><input type=\"checkbox\" checked></form>",
+            None,
+        );
+        let results = doc.query_selector_all("form input:checked").unwrap();
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn selector_unknown_pseudo_class_returns_error() {
+        let doc = parse_html("<div></div>", None);
+        let result = doc.query_selector("div:nonexistent");
+        assert!(result.is_err());
     }
 }

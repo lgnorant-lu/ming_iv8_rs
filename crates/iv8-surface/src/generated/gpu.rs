@@ -11,7 +11,171 @@ pub(crate) unsafe extern "C" fn gpu_op_1(_info: *const v8::FunctionCallbackInfo)
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "GPU") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    let adapter = build_gpu_adapter(&scope);
+    if let Some(resolver) = v8::PromiseResolver::new(&scope) {
+        let _ = resolver.resolve(&scope, adapter.into());
+        rv.set(resolver.get_promise(&scope).into());
+    } else {
+        rv.set(v8::undefined(&scope).into());
+    }
+}
+
+fn build_gpu_adapter<'s>(scope: &v8::PinScope<'s, '_>) -> v8::Local<'s, v8::Object> {
+    let ctx = scope.get_current_context();
+    let global = ctx.global(scope);
+
+    let adapter = v8::Object::new(scope);
+
+    let proto = {
+        let iface_name = v8::String::new(scope, "GPUAdapter").unwrap();
+        let mut p: Option<v8::Local<v8::Value>> = None;
+        if let Some(ctor_val) = global.get(scope, iface_name.into()) {
+            if ctor_val.is_function() {
+                let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+                let pk = v8::String::new(scope, "prototype").unwrap();
+                if let Some(pv) = ctor.get(scope, pk.into()) {
+                    if pv.is_object() && !pv.is_null_or_undefined() {
+                        p = Some(pv);
+                    }
+                }
+            }
+        }
+        p
+    };
+    if let Some(pv) = proto {
+        let po = unsafe { v8::Local::<v8::Object>::cast_unchecked(pv) };
+        adapter.set_prototype(scope, po.into());
+    }
+
+    let s = |k: &str| v8::String::new(scope, k).unwrap();
+    let hide = |obj: v8::Local<v8::Object>, key: &str, val: v8::Local<v8::Value>| {
+        obj.set(scope, s(key).into(), val);
+    };
+
+    let features_obj = v8::Object::new(scope);
+    {
+        let fproto = {
+            let ctor_name = v8::String::new(scope, "GPUSupportedFeatures").unwrap();
+            global.get(scope, ctor_name.into()).and_then(|cv| {
+                if cv.is_function() {
+                    let c = unsafe { v8::Local::<v8::Function>::cast_unchecked(cv) };
+                    let pk = v8::String::new(scope, "prototype").unwrap();
+                    c.get(scope, pk.into())
+                } else {
+                    None
+                }
+            })
+        };
+        if let Some(fp) = fproto {
+            if fp.is_object() && !fp.is_null_or_undefined() {
+                let fpo = unsafe { v8::Local::<v8::Object>::cast_unchecked(fp) };
+                features_obj.set_prototype(scope, fpo.into());
+            }
+        }
+        let ts = v8::Symbol::get_to_string_tag(scope);
+        features_obj.set(scope, ts.into(), s("GPUSupportedFeatures").into());
+        let sz = v8::String::new(scope, "size").unwrap();
+        features_obj.set(scope, sz.into(), v8::Integer::new(scope, 0).into());
+    }
+    hide(adapter, "__iv8Features", features_obj.into());
+
+    let limits_obj = v8::Object::new(scope);
+    {
+        let lproto = {
+            let ctor_name = v8::String::new(scope, "GPUSupportedLimits").unwrap();
+            global.get(scope, ctor_name.into()).and_then(|cv| {
+                if cv.is_function() {
+                    let c = unsafe { v8::Local::<v8::Function>::cast_unchecked(cv) };
+                    let pk = v8::String::new(scope, "prototype").unwrap();
+                    c.get(scope, pk.into())
+                } else {
+                    None
+                }
+            })
+        };
+        if let Some(lp) = lproto {
+            if lp.is_object() && !lp.is_null_or_undefined() {
+                let lpo = unsafe { v8::Local::<v8::Object>::cast_unchecked(lp) };
+                limits_obj.set_prototype(scope, lpo.into());
+            }
+        }
+        let limit_vals: &[(&str, f64)] = &[
+            ("maxTextureDimension1D", 8192.0),
+            ("maxTextureDimension2D", 8192.0),
+            ("maxTextureDimension3D", 2048.0),
+            ("maxTextureArrayLayers", 256.0),
+            ("maxBindGroups", 4.0),
+            ("maxBindGroupsPlusVertexBuffers", 24.0),
+            ("maxBindingsPerBindGroup", 1000.0),
+            ("maxDynamicUniformBuffersPerPipelineLayout", 8.0),
+            ("maxDynamicStorageBuffersPerPipelineLayout", 4.0),
+            ("maxSampledTexturesPerShaderStage", 16.0),
+            ("maxSamplersPerShaderStage", 16.0),
+            ("maxStorageBuffersPerShaderStage", 8.0),
+            ("maxStorageTexturesPerShaderStage", 4.0),
+            ("maxUniformBuffersPerShaderStage", 12.0),
+            ("maxUniformBufferBindingSize", 65536.0),
+            ("maxStorageBufferBindingSize", 134217728.0),
+            ("minUniformBufferOffsetAlignment", 256.0),
+            ("minStorageBufferOffsetAlignment", 256.0),
+            ("maxVertexBuffers", 8.0),
+            ("maxVertexAttributes", 16.0),
+            ("maxVertexBufferArrayStride", 2048.0),
+            ("maxInterStageShaderVariables", 16.0),
+            ("maxInterStageShaderComponents", 60.0),
+            ("maxColorAttachments", 8.0),
+            ("maxColorAttachmentBytesPerSample", 32.0),
+            ("maxComputeWorkgroupStorageSize", 16384.0),
+            ("maxComputeInvocationsPerWorkgroup", 256.0),
+            ("maxComputeWorkgroupSizeX", 256.0),
+            ("maxComputeWorkgroupSizeY", 256.0),
+            ("maxComputeWorkgroupSizeZ", 64.0),
+            ("maxComputeWorkgroupsPerDimension", 65535.0),
+        ];
+        for (k, v) in limit_vals {
+            limits_obj.set(scope, s(k).into(), v8::Number::new(scope, *v).into());
+        }
+    }
+    hide(adapter, "__iv8Limits", limits_obj.into());
+
+    let info_obj = v8::Object::new(scope);
+    {
+        let iproto = {
+            let ctor_name = v8::String::new(scope, "GPUAdapterInfo").unwrap();
+            global.get(scope, ctor_name.into()).and_then(|cv| {
+                if cv.is_function() {
+                    let c = unsafe { v8::Local::<v8::Function>::cast_unchecked(cv) };
+                    let pk = v8::String::new(scope, "prototype").unwrap();
+                    c.get(scope, pk.into())
+                } else {
+                    None
+                }
+            })
+        };
+        if let Some(ip) = iproto {
+            if ip.is_object() && !ip.is_null_or_undefined() {
+                let ipo = unsafe { v8::Local::<v8::Object>::cast_unchecked(ip) };
+                info_obj.set_prototype(scope, ipo.into());
+            }
+        }
+        hide(info_obj, "__iv8Vendor", crate::type_conv::v8_str(scope, "nvidia"));
+        hide(info_obj, "__iv8Architecture", crate::type_conv::v8_str(scope, "rtx-4060"));
+        hide(info_obj, "__iv8Device", crate::type_conv::v8_str(scope, "RTX 4060"));
+        hide(
+            info_obj,
+            "__iv8Description",
+            crate::type_conv::v8_str(
+                scope,
+                "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Direct3D11 vs_5_0 ps_5_0)",
+            ),
+        );
+        hide(info_obj, "__iv8SubgroupMinSize", v8::Integer::new(scope, 4).into());
+        hide(info_obj, "__iv8SubgroupMaxSize", v8::Integer::new(scope, 128).into());
+        hide(info_obj, "__iv8IsFallbackAdapter", v8::Boolean::new(scope, false).into());
+    }
+    hide(adapter, "__iv8Info", info_obj.into());
+
+    adapter
 }
 
 pub(crate) unsafe extern "C" fn gpu_op_2(_info: *const v8::FunctionCallbackInfo) {
@@ -55,7 +219,7 @@ pub(crate) unsafe extern "C" fn gpu_op_2(_info: *const v8::FunctionCallbackInfo)
             }
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    rv.set(v8::String::new(scope, "bgra8unorm").unwrap().into());
 }
 
 pub(crate) unsafe extern "C" fn gpu_get_3(_info: *const v8::FunctionCallbackInfo) {
@@ -383,7 +547,13 @@ pub(crate) unsafe extern "C" fn gpu_adapter_op_4(_info: *const v8::FunctionCallb
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "GPUAdapter") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    let device = v8::Object::new(scope);
+    if let Some(resolver) = v8::PromiseResolver::new(scope) {
+        let _ = resolver.resolve(scope, device.into());
+        rv.set(resolver.get_promise(scope).into());
+    } else {
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for GPUAdapter.

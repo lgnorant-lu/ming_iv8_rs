@@ -164,23 +164,7 @@ pub(crate) unsafe extern "C" fn sensor_get_3(_info: *const v8::FunctionCallbackI
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "DOMHighResTimeStamp").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
@@ -224,6 +208,78 @@ pub(crate) unsafe extern "C" fn sensor_op_4(_info: *const v8::FunctionCallbackIn
                 }
             }
         }
+    // Set activated = true
+    let __activated_key = v8::String::new(scope, "__iv8Activated").unwrap();
+    __this.set(scope, __activated_key.into(), v8::Boolean::new(scope, true).into());
+    // Set hasReading = true
+    let __has_reading_key = v8::String::new(scope, "__iv8HasReading").unwrap();
+    __this.set(scope, __has_reading_key.into(), v8::Boolean::new(scope, true).into());
+    // Set timestamp = performance.now() (or Date.now() fallback)
+    let __timestamp_key = v8::String::new(scope, "__iv8Timestamp").unwrap();
+    let __ts_val = {
+        let __perf_key = v8::String::new(scope, "performance").unwrap();
+        let mut ts: f64 = 0.0;
+        if let Some(__perf_val) = __global.get(scope, __perf_key.into()) {
+            if __perf_val.is_object() {
+                let __perf_obj: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(__perf_val) };
+                let __now_key = v8::String::new(scope, "now").unwrap();
+                if let Some(__now_val) = __perf_obj.get(scope, __now_key.into()) {
+                    if __now_val.is_function() {
+                        let __now_fn: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(__now_val) };
+                        if let Some(__result) = __now_fn.call(scope, __perf_val, &[]) {
+                            if let Some(__n) = __result.number_value(scope) {
+                                ts = __n;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if ts == 0.0 {
+            let __date_key = v8::String::new(scope, "Date").unwrap();
+            if let Some(__date_val) = __global.get(scope, __date_key.into()) {
+                if __date_val.is_function() {
+                    let __date_fn: v8::Local<v8::Function> =
+                        unsafe { v8::Local::cast_unchecked(__date_val) };
+                    if let Some(__result) = __date_fn.call(scope, __global.into(), &[]) {
+                        if let Some(__n) = __result.number_value(scope) {
+                            ts = __n;
+                        }
+                    }
+                }
+            }
+        }
+        ts
+    };
+    __this.set(scope, __timestamp_key.into(), v8::Number::new(scope, __ts_val).into());
+
+    // Schedule setTimeout(onreading, 0) with fake reading data
+    let __onreading_key = v8::String::new(scope, "__iv8Onreading").unwrap();
+    if let Some(__onreading_val) = __this.get(scope, __onreading_key.into()) {
+        if __onreading_val.is_function() {
+            let __onreading_fn: v8::Local<v8::Function> =
+                unsafe { v8::Local::cast_unchecked(__onreading_val) };
+            let __set_timeout_key = v8::String::new(scope, "setTimeout").unwrap();
+            if let Some(__set_timeout_val) = __global.get(scope, __set_timeout_key.into()) {
+                if __set_timeout_val.is_function() {
+                    let __set_timeout_fn: v8::Local<v8::Function> =
+                        unsafe { v8::Local::cast_unchecked(__set_timeout_val) };
+                    let __delay = v8::Integer::new(scope, 0);
+                    if let Some(__timer_id) = __set_timeout_fn.call(
+                        scope,
+                        __global.into(),
+                        &[__onreading_fn.into(), __delay.into()],
+                    ) {
+                        let __timer_key = v8::String::new(scope, "__iv8ReadingTimer").unwrap();
+                        __this.set(scope, __timer_key.into(), __timer_id);
+                    }
+                }
+            }
+        }
+    }
+
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     rv.set(v8::undefined(scope).into());
 }
@@ -268,6 +324,28 @@ pub(crate) unsafe extern "C" fn sensor_op_5(_info: *const v8::FunctionCallbackIn
                 }
             }
         }
+    // Clear the reading timer via clearTimeout
+    let __timer_key = v8::String::new(scope, "__iv8ReadingTimer").unwrap();
+    if let Some(__timer_id) = __this.get(scope, __timer_key.into()) {
+        if !__timer_id.is_undefined() && !__timer_id.is_null() {
+            let __clear_key = v8::String::new(scope, "clearTimeout").unwrap();
+            if let Some(__clear_val) = __global.get(scope, __clear_key.into()) {
+                if __clear_val.is_function() {
+                    let __clear_fn: v8::Local<v8::Function> =
+                        unsafe { v8::Local::cast_unchecked(__clear_val) };
+                    __clear_fn.call(scope, __global.into(), &[__timer_id]);
+                }
+            }
+            __this.set(scope, __timer_key.into(), v8::undefined(scope).into());
+        }
+    }
+    // Set activated = false
+    let __activated_key = v8::String::new(scope, "__iv8Activated").unwrap();
+    __this.set(scope, __activated_key.into(), v8::Boolean::new(scope, false).into());
+    // Set hasReading = false
+    let __has_reading_key = v8::String::new(scope, "__iv8HasReading").unwrap();
+    __this.set(scope, __has_reading_key.into(), v8::Boolean::new(scope, false).into());
+
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     rv.set(v8::undefined(scope).into());
 }

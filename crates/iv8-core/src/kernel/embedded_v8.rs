@@ -2500,22 +2500,36 @@ impl EmbeddedV8Kernel {
 
     /// Inject audio preferences from the environment map into the JS context
     /// as `globalThis.__iv8AudioPrefs`. The AudioContext shim reads these
-    /// values for baseLatency/outputLatency and channelData fingerprint seed.
+    /// values for baseLatency/outputLatency, sampleRate, compressor settings,
+    /// and channelData fingerprint seed.
     fn inject_audio_prefs(&mut self) {
         let state = RuntimeState::get(&self.isolate);
         let env = &state.environment;
         let base_latency = env.get_f64("audio.baseLatency").unwrap_or(0.05);
         let output_latency = env.get_f64("audio.outputLatency").unwrap_or(0.0);
         let channel_data_seed = env.get_f64("audio.channelDataSeed").unwrap_or(0.0);
+        let sample_rate = env.get_f64("audio.sampleRate").unwrap_or(48000.0);
         let comp_threshold = env.get_f64("audio.compressor.threshold").unwrap_or(-24.0);
         let comp_knee = env.get_f64("audio.compressor.knee").unwrap_or(30.0);
         let comp_ratio = env.get_f64("audio.compressor.ratio").unwrap_or(12.0);
         let comp_attack = env.get_f64("audio.compressor.attack").unwrap_or(0.003);
         let comp_release = env.get_f64("audio.compressor.release").unwrap_or(0.25);
+        let comp_reduction = env.get_f64("audio.compressor.reduction").unwrap_or(0.0);
+
+        // channelData may be an array (of floats) or a string (JSON/base64).
+        // Pass it through as raw JSON so the JS shim can interpret it.
+        let channel_data_json = if let Some(cd) = env.get("audio.channelData") {
+            serde_json::to_string(cd).unwrap_or_else(|_| "null".into())
+        } else {
+            "null".to_string()
+        };
+
         let js = format!(
-            "globalThis.__iv8AudioPrefs = {{ baseLatency: {}, outputLatency: {}, channelDataSeed: {}, compressor: {{ threshold: {}, knee: {}, ratio: {}, attack: {}, release: {} }} }};",
+            "globalThis.__iv8AudioPrefs = {{ baseLatency: {}, outputLatency: {}, channelDataSeed: {}, sampleRate: {}, channelData: {}, compressor: {{ threshold: {}, knee: {}, ratio: {}, attack: {}, release: {}, reduction: {} }} }};",
             base_latency, output_latency, channel_data_seed as i64,
-            comp_threshold, comp_knee, comp_ratio, comp_attack, comp_release
+            sample_rate,
+            channel_data_json,
+            comp_threshold, comp_knee, comp_ratio, comp_attack, comp_release, comp_reduction
         );
         self.eval(&js, crate::kernel::EvalOpts::default()).ok();
     }

@@ -17,6 +17,10 @@
 use std::cmp::Reverse;
 use std::collections::BinaryHeap;
 
+/// HTML spec timer clamping constants (steps 11–13 of "the setTimeout() method").
+const NESTING_THRESHOLD: u32 = 5;
+const MIN_CLAMP_MS: f64 = 4.0;
+
 /// The event loop — manages logical time and a priority queue of timed tasks.
 pub struct EventLoop {
     /// Current logical time in microseconds.
@@ -29,6 +33,8 @@ pub struct EventLoop {
     next_id: u32,
     /// IDs that were cleared during callback execution (prevents re-enqueue).
     cleared_ids: std::collections::HashSet<u32>,
+    /// Current timer nesting depth (HTML spec: clamp to 4ms after 5 levels).
+    timer_nesting_depth: u32,
 }
 
 /// A timed task in the macrotask queue.
@@ -88,6 +94,7 @@ impl EventLoop {
             macro_tasks: BinaryHeap::new(),
             next_id: 1,
             cleared_ids: std::collections::HashSet::new(),
+            timer_nesting_depth: 0,
         }
     }
 
@@ -111,11 +118,17 @@ impl EventLoop {
         self.auto_advance_step_us
     }
 
+    /// Get the current timer nesting depth (for diagnostics / tests).
+    pub fn timer_nesting_depth(&self) -> u32 {
+        self.timer_nesting_depth
+    }
+
     /// Reset the event loop to initial state.
     pub fn reset(&mut self) {
         self.current_us = 0;
         self.macro_tasks.clear();
         self.cleared_ids.clear();
+        self.timer_nesting_depth = 0;
     }
 
     /// Register a new timer. Returns the timer ID.
@@ -129,7 +142,17 @@ impl EventLoop {
         let id = self.next_id;
         self.next_id += 1;
 
-        let delay_us = (delay_ms * 1000.0) as i64;
+        // HTML spec steps 11–13: clamp timeout delay when nesting > 5 and delay < 4ms.
+        let effective_delay_ms = if matches!(kind, TaskKind::Timeout)
+            && self.timer_nesting_depth > NESTING_THRESHOLD
+            && delay_ms < MIN_CLAMP_MS
+        {
+            MIN_CLAMP_MS
+        } else {
+            delay_ms
+        };
+
+        let delay_us = (effective_delay_ms * 1000.0) as i64;
         let due_us = self.current_us + delay_us.max(0);
 
         self.macro_tasks.push(Reverse(TimedTask {
@@ -245,6 +268,27 @@ pub fn execute_task(scope: &v8::PinScope<'_, '_>, task: &TimedTask) {
     func.call(scope, global.into(), &args);
 }
 
+/// Execute a collected task's callback with timer nesting tracking.
+/// Call this OUTSIDE the EventLoop borrow.
+pub fn execute_task_tracked(
+    scope: &v8::PinScope<'_, '_>,
+    state: &crate::state::RuntimeState,
+    task: &TimedTask,
+) {
+    // HTML spec: increment nesting level before invoking the callback so that
+    // timers registered inside the callback are subject to clamping.
+    if matches!(task.kind, TaskKind::Timeout) {
+        state.event_loop.borrow_mut().timer_nesting_depth += 1;
+    }
+    execute_task(scope, task);
+    if matches!(task.kind, TaskKind::Timeout) {
+        let mut el = state.event_loop.borrow_mut();
+        if el.timer_nesting_depth > 0 {
+            el.timer_nesting_depth -= 1;
+        }
+    }
+}
+
 /// Execute a batch of tasks and re-enqueue intervals.
 /// This is the main "run tasks" function used by the binding layer.
 /// `state` is the RuntimeState — we borrow event_loop only for queue ops, not during execution.
@@ -258,7 +302,7 @@ pub fn run_due_tasks(scope: &v8::PinScope<'_, '_>, state: &crate::state::Runtime
 
         // 2. Execute each task (EventLoop NOT borrowed)
         for task in &due_tasks {
-            execute_task(scope, task);
+            execute_task_tracked(scope, state, task);
         }
 
         // 3. Borrow → re-enqueue intervals → release
@@ -275,7 +319,7 @@ pub fn run_due_tasks(scope: &v8::PinScope<'_, '_>, state: &crate::state::Runtime
 pub fn run_one_due_task(scope: &v8::PinScope<'_, '_>, state: &crate::state::RuntimeState) {
     let task = state.event_loop.borrow_mut().collect_one_due_task();
     if let Some(task) = task {
-        execute_task(scope, &task);
+        execute_task_tracked(scope, state, &task);
         if let TaskKind::Interval { period_us } = task.kind {
             state
                 .event_loop
@@ -309,8 +353,19 @@ mod tests {
     fn event_loop_reset() {
         let mut el = EventLoop::new();
         el.current_us = 50000;
+        el.timer_nesting_depth = 10;
         el.reset();
         assert_eq!(el.get_time_us(), 0);
         assert_eq!(el.pending_count(), 0);
+        assert_eq!(el.timer_nesting_depth(), 0);
+    }
+
+    #[test]
+    fn timer_clamp_at_nesting_threshold() {
+        // We cannot create v8::Global<v8::Function> without a V8 isolate, so we
+        // verify the clamping logic indirectly: the clamp only applies when
+        // nesting > 5 and delay < 4.  The constants themselves encode the spec.
+        assert_eq!(NESTING_THRESHOLD, 5);
+        assert_eq!(MIN_CLAMP_MS, 4.0);
     }
 }

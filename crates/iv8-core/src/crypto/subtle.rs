@@ -367,6 +367,52 @@ fn extract_bytes(_scope: &v8::PinScope<'_, '_>, value: v8::Local<v8::Value>) -> 
     }
 }
 
+/// Build a DOMException-like error value with the given name and message.
+/// Tries the global DOMException constructor first, falls back to a plain
+/// object with `name` and `message` properties.
+fn build_dom_exception<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    message: &str,
+    name: &str,
+) -> v8::Local<'s, v8::Value> {
+    let global = scope.get_current_context().global(scope);
+    let dom_key = crate::v8_utils::v8_string(scope, "DOMException");
+    if let Some(dom_ctor_val) = global.get(scope, dom_key.into()) {
+        if dom_ctor_val.is_function() {
+            let ctor: v8::Local<v8::Function> =
+                unsafe { v8::Local::cast_unchecked(dom_ctor_val) };
+            let msg_arg = crate::v8_utils::v8_string(scope, message);
+            let name_arg = crate::v8_utils::v8_string(scope, name);
+            let undefined = v8::undefined(scope);
+            if let Some(result) =
+                ctor.call(scope, undefined.into(), &[msg_arg.into(), name_arg.into()])
+            {
+                return result;
+            }
+        }
+    }
+    // Fallback: plain object with name + message
+    let exception = v8::Object::new(scope);
+    let name_key = crate::v8_utils::v8_string(scope, "name");
+    let name_val = crate::v8_utils::v8_string(scope, name);
+    exception.set(scope, name_key.into(), name_val.into());
+    let msg_key = crate::v8_utils::v8_string(scope, "message");
+    let msg_val = crate::v8_utils::v8_string(scope, message);
+    exception.set(scope, msg_key.into(), msg_val.into());
+    exception.into()
+}
+
+/// Reject a promise resolver with a NotSupportedError DOMException for the
+/// given algorithm name. Returns immediately via the caller's `return`.
+macro_rules! reject_not_supported {
+    ($scope:expr, $resolver:expr, $algo:expr) => {{
+        let msg = format!("The algorithm '{}' is not supported", $algo);
+        let err = build_dom_exception($scope, &msg, "NotSupportedError");
+        $resolver.reject($scope, err);
+        return;
+    }};
+}
+
 /// Get algorithm name from a V8 value (string or {name: string}).
 fn get_algorithm_name(scope: &v8::PinScope<'_, '_>, value: v8::Local<v8::Value>) -> String {
     if value.is_string() {
@@ -935,13 +981,8 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
                     }
                     Err(_) => None,
                 },
-                _ => {
-                    // Fallback to raw key bytes for HMAC
-                    if let Ok(key_bytes) = b64_decode(&meta.key_bytes_b64) {
-                        hmac_sign(&hash_algo, &key_bytes, &data)
-                    } else {
-                        None
-                    }
+                "RSASSAPKCS1V15" | "ED25519" | "X25519" | "AESKW" | _ => {
+                    reject_not_supported!(scope, resolver, algo);
                 }
             };
             match result {
@@ -980,13 +1021,8 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
 
         let result = match algo_upper.as_str() {
             "HMAC" => hmac_sign(&hash_algo_from_arg, &key_bytes, &data),
-            _ => {
-                let msg = crate::v8_utils::v8_string(
-                    scope,
-                    &format!("sign: unsupported algorithm '{}'", algo),
-                );
-                resolver.reject(scope, v8::Exception::error(scope, msg));
-                return;
+            "RSASSAPKCS1V15" | "ED25519" | "X25519" | "AESKW" | _ => {
+                reject_not_supported!(scope, resolver, algo);
             }
         };
 
@@ -1065,12 +1101,8 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
                     Ok(ec_key) => crate::crypto::ec_impl::ecdsa_verify(&ec_key, &data, &signature),
                     Err(_) => false,
                 },
-                _ => {
-                    if let Ok(key_bytes) = b64_decode(&meta.key_bytes_b64) {
-                        hmac_verify(&hash_algo, &key_bytes, &data, &signature)
-                    } else {
-                        false
-                    }
+                "RSASSAPKCS1V15" | "ED25519" | "X25519" | "AESKW" | _ => {
+                    reject_not_supported!(scope, resolver, algo);
                 }
             };
             resolver.resolve(scope, v8::Boolean::new(scope, valid).into());
@@ -1092,7 +1124,9 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
         let valid = match key_bytes {
             Some(k) => match algo_upper.as_str() {
                 "HMAC" => hmac_verify(&hash_algo_from_arg, &k, &data, &signature),
-                _ => false,
+                "RSASSAPKCS1V15" | "ED25519" | "X25519" | "AESKW" | _ => {
+                    reject_not_supported!(scope, resolver, algo);
+                }
             },
             None => false,
         };

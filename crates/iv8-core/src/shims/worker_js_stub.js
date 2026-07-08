@@ -19955,6 +19955,38 @@
   var _op_GPU_requestAdapter = function(a0) {
     if (!(this instanceof GPU) && (this === null || this === undefined || Object.getPrototypeOf(this) !== GPU.prototype))
       throw new TypeError('Illegal invocation');
+    var _adapter = Object.create(GPUAdapter.prototype);
+    Object.defineProperty(_adapter, Symbol.toStringTag, {value: 'GPUAdapter', configurable: true});
+    var _info = Object.create(GPUAdapterInfo.prototype);
+    Object.defineProperty(_info, 'vendor', {value: 'nvidia', enumerable: true, configurable: true});
+    Object.defineProperty(_info, 'architecture', {value: 'rtx-4060', enumerable: true, configurable: true});
+    Object.defineProperty(_info, 'device', {value: 'RTX 4060', enumerable: true, configurable: true});
+    Object.defineProperty(_info, 'description', {value: 'ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Direct3D11 vs_5_0 ps_5_0)', enumerable: true, configurable: true});
+    Object.defineProperty(_info, 'subgroupMinSize', {value: 4, enumerable: true, configurable: true});
+    Object.defineProperty(_info, 'subgroupMaxSize', {value: 128, enumerable: true, configurable: true});
+    Object.defineProperty(_info, 'isFallbackAdapter', {value: false, enumerable: true, configurable: true});
+    Object.defineProperty(_adapter, 'info', {get: function() { return _info; }, enumerable: true, configurable: true});
+    var _features = Object.create(GPUSupportedFeatures.prototype);
+    Object.defineProperty(_features, 'size', {value: 0, enumerable: true, configurable: true});
+    Object.defineProperty(_adapter, 'features', {get: function() { return _features; }, enumerable: true, configurable: true});
+    var _limits = {
+      maxTextureDimension1D: 8192, maxTextureDimension2D: 8192, maxTextureDimension3D: 2048,
+      maxTextureArrayLayers: 256, maxBindGroups: 4,
+      maxDynamicUniformBuffersPerPipelineLayout: 8, maxDynamicStorageBuffersPerPipelineLayout: 4,
+      maxSampledTexturesPerShaderStage: 16, maxSamplersPerShaderStage: 16,
+      maxStorageBuffersPerShaderStage: 8, maxStorageTexturesPerShaderStage: 4,
+      maxUniformBuffersPerShaderStage: 12, maxUniformBufferBindingSize: 65536,
+      maxStorageBufferBindingSize: 134217728, minUniformBufferOffsetAlignment: 256,
+      minStorageBufferOffsetAlignment: 256, maxVertexBuffers: 8, maxVertexAttributes: 16,
+      maxVertexBufferArrayStride: 2048, maxInterStageShaderComponents: 60,
+      maxComputeWorkgroupStorageSize: 16384, maxComputeInvocationsPerWorkgroup: 256,
+      maxComputeWorkgroupSizeX: 256, maxComputeWorkgroupSizeY: 256, maxComputeWorkgroupSizeZ: 64,
+      maxComputeWorkgroupsPerDimension: 65535
+    };
+    Object.defineProperty(_adapter, 'limits', {get: function() { return _limits; }, enumerable: true, configurable: true});
+    Object.defineProperty(_adapter, 'isFallbackAdapter', {value: false, enumerable: true, configurable: true});
+    _adapter.requestDevice = function() { return Promise.resolve({}); };
+    return Promise.resolve(_adapter);
   };
   Object.defineProperty(_op_GPU_requestAdapter, 'name', {value: 'requestAdapter'});
   Object.defineProperty(_op_GPU_requestAdapter, 'length', {value: 0, writable: false, enumerable: false, configurable: true});
@@ -19962,6 +19994,7 @@
   var _op_GPU_getPreferredCanvasFormat = function() {
     if (!(this instanceof GPU) && (this === null || this === undefined || Object.getPrototypeOf(this) !== GPU.prototype))
       throw new TypeError('Illegal invocation');
+    return 'bgra8unorm';
   };
   Object.defineProperty(_op_GPU_getPreferredCanvasFormat, 'name', {value: 'getPreferredCanvasFormat'});
   Object.defineProperty(GPU.prototype, 'getPreferredCanvasFormat', {value: _op_GPU_getPreferredCanvasFormat, writable: true, enumerable: true, configurable: true});
@@ -19975,27 +20008,51 @@
   var _g_GPUAdapter_features = function() {
     if (!(this instanceof GPUAdapter) && (this === null || this === undefined || Object.getPrototypeOf(this) !== GPUAdapter.prototype))
       throw new TypeError('Illegal invocation');
-    return null;
+    var _f = Object.create(GPUSupportedFeatures.prototype);
+    Object.defineProperty(_f, 'size', {value: 0, enumerable: true, configurable: true});
+    return _f;
   };
   Object.defineProperty(_g_GPUAdapter_features, 'name', {value: 'get features'});
   Object.defineProperty(GPUAdapter.prototype, 'features', {get: _g_GPUAdapter_features, set: undefined, enumerable: true, configurable: true});
   var _g_GPUAdapter_limits = function() {
     if (!(this instanceof GPUAdapter) && (this === null || this === undefined || Object.getPrototypeOf(this) !== GPUAdapter.prototype))
       throw new TypeError('Illegal invocation');
-    return null;
+    return {
+      maxTextureDimension1D: 8192, maxTextureDimension2D: 8192, maxTextureDimension3D: 2048,
+      maxTextureArrayLayers: 256, maxBindGroups: 4,
+      maxDynamicUniformBuffersPerPipelineLayout: 8, maxDynamicStorageBuffersPerPipelineLayout: 4,
+      maxSampledTexturesPerShaderStage: 16, maxSamplersPerShaderStage: 16,
+      maxStorageBuffersPerShaderStage: 8, maxStorageTexturesPerShaderStage: 4,
+      maxUniformBuffersPerShaderStage: 12, maxUniformBufferBindingSize: 65536,
+      maxStorageBufferBindingSize: 134217728, minUniformBufferOffsetAlignment: 256,
+      minStorageBufferOffsetAlignment: 256, maxVertexBuffers: 8, maxVertexAttributes: 16,
+      maxVertexBufferArrayStride: 2048, maxInterStageShaderComponents: 60,
+      maxComputeWorkgroupStorageSize: 16384, maxComputeInvocationsPerWorkgroup: 256,
+      maxComputeWorkgroupSizeX: 256, maxComputeWorkgroupSizeY: 256, maxComputeWorkgroupSizeZ: 64,
+      maxComputeWorkgroupsPerDimension: 65535
+    };
   };
   Object.defineProperty(_g_GPUAdapter_limits, 'name', {value: 'get limits'});
   Object.defineProperty(GPUAdapter.prototype, 'limits', {get: _g_GPUAdapter_limits, set: undefined, enumerable: true, configurable: true});
   var _g_GPUAdapter_info = function() {
     if (!(this instanceof GPUAdapter) && (this === null || this === undefined || Object.getPrototypeOf(this) !== GPUAdapter.prototype))
       throw new TypeError('Illegal invocation');
-    return null;
+    var _i = Object.create(GPUAdapterInfo.prototype);
+    Object.defineProperty(_i, 'vendor', {value: 'nvidia', enumerable: true, configurable: true});
+    Object.defineProperty(_i, 'architecture', {value: 'rtx-4060', enumerable: true, configurable: true});
+    Object.defineProperty(_i, 'device', {value: 'RTX 4060', enumerable: true, configurable: true});
+    Object.defineProperty(_i, 'description', {value: 'ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Direct3D11 vs_5_0 ps_5_0)', enumerable: true, configurable: true});
+    Object.defineProperty(_i, 'subgroupMinSize', {value: 4, enumerable: true, configurable: true});
+    Object.defineProperty(_i, 'subgroupMaxSize', {value: 128, enumerable: true, configurable: true});
+    Object.defineProperty(_i, 'isFallbackAdapter', {value: false, enumerable: true, configurable: true});
+    return _i;
   };
   Object.defineProperty(_g_GPUAdapter_info, 'name', {value: 'get info'});
   Object.defineProperty(GPUAdapter.prototype, 'info', {get: _g_GPUAdapter_info, set: undefined, enumerable: true, configurable: true});
   var _op_GPUAdapter_requestDevice = function(a0) {
     if (!(this instanceof GPUAdapter) && (this === null || this === undefined || Object.getPrototypeOf(this) !== GPUAdapter.prototype))
       throw new TypeError('Illegal invocation');
+    return Promise.resolve({});
   };
   Object.defineProperty(_op_GPUAdapter_requestDevice, 'name', {value: 'requestDevice'});
   Object.defineProperty(_op_GPUAdapter_requestDevice, 'length', {value: 0, writable: false, enumerable: false, configurable: true});
