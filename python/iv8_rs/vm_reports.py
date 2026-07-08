@@ -109,7 +109,7 @@ class VMAnalysisReport:
     sample_id: str
     vm_family: str
     dispatch_variant: str
-    handler_table: HandlerTableSummary
+    handler_table: HandlerTableSummary | None
     bytecode: Any | None
     trace_summary: TraceSummary
     state_model: StateModel
@@ -119,15 +119,16 @@ class VMAnalysisReport:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> VMAnalysisReport:
+        ht = data.get("handler_table")
         return cls(
             schema_version=data["schema_version"],
             sample_id=data["sample_id"],
             vm_family=data["vm_family"],
             dispatch_variant=data["dispatch_variant"],
-            handler_table=HandlerTableSummary.from_dict(data["handler_table"]),
+            handler_table=HandlerTableSummary.from_dict(ht) if ht else None,
             bytecode=data.get("bytecode"),
-            trace_summary=TraceSummary.from_dict(data["trace_summary"]),
-            state_model=StateModel.from_dict(data["state_model"]),
+            trace_summary=TraceSummary.from_dict(data.get("trace_summary", {})),
+            state_model=StateModel.from_dict(data.get("state_model", {})),
             opcode_map={k: OpcodeHint.from_dict(v) for k, v in data.get("opcode_map", {}).items()},
             evidence=[ExperimentalEvidenceRecord.from_dict(e) for e in data.get("evidence", [])],
             diagnostics=[
@@ -141,7 +142,7 @@ class VMAnalysisReport:
             "sample_id": self.sample_id,
             "vm_family": self.vm_family,
             "dispatch_variant": self.dispatch_variant,
-            "handler_table": self.handler_table.to_dict(),
+            "handler_table": self.handler_table.to_dict() if self.handler_table else None,
             "bytecode": self.bytecode,
             "trace_summary": self.trace_summary.to_dict(),
             "state_model": self.state_model.to_dict(),

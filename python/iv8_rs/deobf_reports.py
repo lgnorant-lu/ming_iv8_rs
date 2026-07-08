@@ -40,6 +40,7 @@ class RegistryEntry:
     evidence_ceiling: str
     validation_required: bool
     quality_gate: str
+    schema_version: str = ""
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> RegistryEntry:
@@ -56,6 +57,7 @@ class RegistryEntry:
             evidence_ceiling=data["evidence_ceiling"],
             validation_required=data["validation_required"],
             quality_gate=data["quality_gate"],
+            schema_version=data.get("schema_version", ""),
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -72,6 +74,7 @@ class RegistryEntry:
             "evidence_ceiling": self.evidence_ceiling,
             "validation_required": self.validation_required,
             "quality_gate": self.quality_gate,
+            "schema_version": self.schema_version,
         }
 
 

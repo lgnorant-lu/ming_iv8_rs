@@ -1160,10 +1160,22 @@
     "description": "Camellia sigma1 high word"
   },
   "CAMELLIA_SIGMA2": {
-    "value": "0x3BCC908B",
-    "int": 1003262091,
+    "value": "0xB67AE858",
+    "int": 3061193560,
     "algorithm": "Camellia",
-    "description": "Camellia sigma1 low word"
+    "description": "Camellia sigma2 high word"
+  },
+  "CAMELLIA_SIGMA3": {
+    "value": "0xC6EF372F",
+    "int": 3335355439,
+    "algorithm": "Camellia",
+    "description": "Camellia sigma3 high word"
+  },
+  "CAMELLIA_SIGMA4": {
+    "value": "0x54FF53A5",
+    "int": 1424027301,
+    "algorithm": "Camellia",
+    "description": "Camellia sigma4 high word"
   },
   "SEED_KC_0": {
     "value": "0x9E3779B9",

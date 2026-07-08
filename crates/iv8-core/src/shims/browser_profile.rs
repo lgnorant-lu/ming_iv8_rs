@@ -6,7 +6,7 @@
 //!
 //! Cross-ref: docs/roadmap/v0.8/shared/profile-contract.md
 
-/// Compile-time default browser profile representing Chrome 131 on Windows x64, zh-CN locale.
+/// Compile-time default browser profile representing Chrome 147 on Windows x64, zh-CN locale.
 ///
 /// Individual fields are referenced by getter callbacks as fallback values.
 /// The `const` ensures zero runtime overhead — all values are baked into the binary.

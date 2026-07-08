@@ -62,7 +62,7 @@ fn extract_type_name(val: &serde_json::Value) -> Option<String> {
             }
             // Union type: take first type
             if let Some(serde_json::Value::Array(types)) =
-                map.get("idType").or_else(|| map.get("types"))
+                map.get("idlType").or_else(|| map.get("types"))
             {
                 if let Some(first) = types.first() {
                     return extract_type_name(first);
