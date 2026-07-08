@@ -383,19 +383,20 @@ mod tests {
     }
 
     #[test]
-    fn document_ready_state_still_own_property() {
+    fn document_ready_state_is_accessor_not_data() {
         let mut kernel = make_kernel_with_env();
-        kernel.install_environment();
-        // document.readyState has no native accessor, so
-        // env_inject must still inject it as own data property.
+        // P1-DESC: document.readyState is now an accessor property (not data),
+        // matching Chrome's WebIDL descriptor shape.
+        // Kernel::new() runs full init including install_undetect_shims
+        // which evals DOCUMENT_PROPS_JS that installs the accessor.
         let result = kernel.eval_to_rust_value(
-            "Object.prototype.hasOwnProperty\
-             .call(document, 'readyState')",
+            "var d = Object.getOwnPropertyDescriptor(document, 'readyState');\
+             d && typeof d.get === 'function' && d.set === undefined",
         );
         assert_eq!(
             result,
             RustValue::Bool(true),
-            "document.readyState must remain own property"
+            "document.readyState must be accessor with getter and no setter"
         );
     }
 }

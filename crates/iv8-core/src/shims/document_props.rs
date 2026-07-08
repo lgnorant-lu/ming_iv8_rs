@@ -147,41 +147,45 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     });
 
     // document.referrer
+    // P1-DESC: Install as accessor (not data property) on instance so
+    // getOwnPropertyDescriptor returns accessor descriptor, matching Chrome.
+    // Prototype accessor (line ~848) is the spec source; instance accessor
+    // delegates to the same value but with correct descriptor type.
     Object.defineProperty(document, 'referrer', {
-        value: '',
-        writable: true,
+        get: function() { return ''; },
+        set: undefined,
         enumerable: true,
         configurable: true,
     });
 
     // document.hidden
     Object.defineProperty(document, 'hidden', {
-        value: false,
-        writable: true,
+        get: function() { return false; },
+        set: undefined,
         enumerable: true,
         configurable: true,
     });
 
     // document.visibilityState
     Object.defineProperty(document, 'visibilityState', {
-        value: 'visible',
-        writable: true,
+        get: function() { return 'visible'; },
+        set: undefined,
         enumerable: true,
         configurable: true,
     });
 
     // document.readyState
     Object.defineProperty(document, 'readyState', {
-        value: 'complete',
-        writable: true,
+        get: function() { return 'complete'; },
+        set: undefined,
         enumerable: true,
         configurable: true,
     });
 
     // document.domain
     Object.defineProperty(document, 'domain', {
-        value: location.hostname || '',
-        writable: true,
+        get: function() { return location.hostname || ''; },
+        set: function(v) { /* WebIDL: domain is writable but no-op in sandboxed context */ },
         enumerable: true,
         configurable: true,
     });

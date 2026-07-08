@@ -552,23 +552,34 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     }
 
     // D1 fix: unconditionally patch Observer takeRecords to return []
+    // and observe/unobserve/disconnect to have bounded state (L4→L5).
     // (codegen defines these Observers, so the typeof === 'undefined' guards
     // above do not fire; codegen takeRecords returns undefined)
-    if (typeof IntersectionObserver !== 'undefined' && IntersectionObserver.prototype) {
-        IntersectionObserver.prototype.takeRecords = function takeRecords() { return []; };
-    }
-    if (typeof ResizeObserver !== 'undefined' && ResizeObserver.prototype) {
-        ResizeObserver.prototype.takeRecords = function takeRecords() { return []; };
-    }
-    if (typeof ReportingObserver !== 'undefined' && ReportingObserver.prototype) {
-        ReportingObserver.prototype.takeRecords = function takeRecords() { return []; };
-    }
-    if (typeof MutationObserver !== 'undefined' && MutationObserver.prototype) {
-        MutationObserver.prototype.takeRecords = function takeRecords() { return []; };
-    }
-    if (typeof PerformanceObserver !== 'undefined' && PerformanceObserver.prototype) {
-        PerformanceObserver.prototype.takeRecords = function takeRecords() { return []; };
-    }
+    // P0-BEH (v0.8.86): observe stores targets, disconnect clears, takeRecords
+    // returns [] after disconnect. No actual record generation (deferred L6).
+    var _patchObserver = function(Cls) {
+        if (typeof Cls === 'undefined' || !Cls.prototype) return;
+        var proto = Cls.prototype;
+        proto.takeRecords = function takeRecords() { return []; };
+        // Override observe to store targets (bounded behavior, not no-op)
+        var _origObserve = proto.observe;
+        proto.observe = function observe(target, options) {
+            if (!this._iv8Observed) this._iv8Observed = [];
+            if (target) this._iv8Observed.push(target);
+        };
+        proto.unobserve = function unobserve(target) {
+            if (!this._iv8Observed) return;
+            this._iv8Observed = this._iv8Observed.filter(function(t) { return t !== target; });
+        };
+        proto.disconnect = function disconnect() {
+            this._iv8Observed = [];
+        };
+    };
+    _patchObserver(IntersectionObserver);
+    _patchObserver(ResizeObserver);
+    _patchObserver(ReportingObserver);
+    _patchObserver(MutationObserver);
+    _patchObserver(PerformanceObserver);
 
     // performance.getEntries / getEntriesByName / getEntriesByType stubs
     if (typeof performance !== 'undefined') {
