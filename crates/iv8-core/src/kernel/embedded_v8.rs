@@ -750,6 +750,39 @@ impl EmbeddedV8Kernel {
             "#);
             let _ = v8::Script::compile(scope, iframe_fix, None).and_then(|s| s.run(scope));
 
+            // ROOT CAUSE: Element.prototype.shadowRoot returns {} by default but
+            // should return null. VMP checks this API and takes wrong branch.
+            let shadow_root_fix = crate::v8_utils::v8_string(scope, r#"
+                (function() {
+                    if (typeof Element === 'undefined' || typeof Element.prototype === 'undefined') {
+                        console.log('[shadowRoot] Element not available');
+                        return;
+                    }
+                    try {
+                        var oldDesc = Object.getOwnPropertyDescriptor(Element.prototype, 'shadowRoot');
+                        if (!oldDesc) { console.log('[shadowRoot] no desc'); return; }
+                        console.log('[shadowRoot] configurable=' + oldDesc.configurable + ' hasGetter=' + (typeof oldDesc.get));
+                        Object.defineProperty(Element.prototype, 'shadowRoot', {
+                            get: function() {
+                                if (!this || typeof this !== 'object') return null;
+                                return this.__iv8_shadowRoot || null;
+                            },
+                            enumerable: true, configurable: true
+                        });
+                        console.log('[shadowRoot] patched OK');
+                    } catch(e) { console.log('[shadowRoot] error: ' + e.message); }
+                    if (typeof Element.prototype.attachShadow === 'function') {
+                        Element.prototype.attachShadow = function(init) {
+                            var root = {};
+                            try { root = Object.create(ShadowRoot.prototype); } catch(ex) {}
+                            this.__iv8_shadowRoot = root;
+                            return root;
+                        };
+                    }
+                })();
+            "#);
+            let _ = v8::Script::compile(scope, shadow_root_fix, None).and_then(|s| s.run(scope));
+
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);
