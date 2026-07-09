@@ -146,6 +146,69 @@ const CATALOG: &[EventSpec] = &[
         safety: Safety::Diagnostic,
         fields: &["url"],
     },
+    EventSpec {
+        name: "v8_fatal_error",
+        category: "iv8.callback",
+        level: "ERROR",
+        safety: Safety::Diagnostic,
+        fields: &["file", "line", "message"],
+    },
+    EventSpec {
+        name: "v8_oom",
+        category: "iv8.callback",
+        level: "ERROR",
+        safety: Safety::Safe,
+        fields: &["location", "is_heap_oom"],
+    },
+    EventSpec {
+        name: "v8_uncaught_exception",
+        category: "iv8.eval",
+        level: "ERROR",
+        safety: Safety::Diagnostic,
+        fields: &["message"],
+    },
+    EventSpec {
+        name: "rust_panic",
+        category: "iv8.callback",
+        level: "ERROR",
+        safety: Safety::Diagnostic,
+        fields: &["msg"],
+    },
+    EventSpec {
+        name: "init_phase_start",
+        category: "iv8.init",
+        level: "INFO",
+        safety: Safety::Safe,
+        fields: &["phase"],
+    },
+    EventSpec {
+        name: "init_phase_complete",
+        category: "iv8.init",
+        level: "INFO",
+        safety: Safety::Safe,
+        fields: &["phase", "duration_ms"],
+    },
+    EventSpec {
+        name: "init_phase_failed",
+        category: "iv8.init",
+        level: "ERROR",
+        safety: Safety::Diagnostic,
+        fields: &["phase", "error"],
+    },
+    EventSpec {
+        name: "eval_complete",
+        category: "iv8.eval",
+        level: "DEBUG",
+        safety: Safety::Safe,
+        fields: &["success", "duration_ms"],
+    },
+    EventSpec {
+        name: "eval_error",
+        category: "iv8.eval",
+        level: "WARN",
+        safety: Safety::Diagnostic,
+        fields: &["message"],
+    },
 ];
 
 // ─── Init phase events ──────────────────────────────────────────────
@@ -263,6 +326,108 @@ pub fn callback_panic(callback: &str, panic_msg: &str) {
     );
 }
 
+// ─── V8 error events ────────────────────────────────────────────────
+
+/// V8 fatal error (CHECK failure or internal error).
+/// Safety: Diagnostic (may contain file/line/internal state)
+pub fn v8_fatal_error(file: &str, line: i32, message: &str) {
+    tracing::error!(
+        target: "iv8.callback",
+        file = file,
+        line = line,
+        message = message,
+        "V8 fatal error"
+    );
+}
+
+/// V8 out-of-memory error.
+/// Safety: Safe (location and heap flag only)
+pub fn v8_oom(location: &str, is_heap_oom: bool) {
+    tracing::error!(
+        target: "iv8.callback",
+        location = location,
+        is_heap_oom = is_heap_oom,
+        "V8 out of memory"
+    );
+}
+
+/// V8 uncaught exception during eval.
+/// Safety: Diagnostic (message may contain JS source)
+pub fn v8_uncaught_exception(message: &str) {
+    tracing::error!(
+        target: "iv8.eval",
+        message = message,
+        "V8 uncaught exception"
+    );
+}
+
+/// Rust panic caught at FFI boundary.
+/// Safety: Diagnostic (panic message may contain stack info)
+pub fn rust_panic(msg: &str) {
+    tracing::error!(
+        target: "iv8.callback",
+        msg = msg,
+        "Rust panic caught at FFI boundary"
+    );
+}
+
+// ─── Init phase events ─────────────────────────────────────────────
+
+/// Init phase started.
+/// Safety: Safe
+pub fn init_phase_start(phase: &str) {
+    tracing::info!(
+        target: "iv8.init",
+        phase = phase,
+        "init phase start"
+    );
+}
+
+/// Init phase completed.
+/// Safety: Safe
+pub fn init_phase_complete(phase: &str, duration_ms: u64) {
+    tracing::info!(
+        target: "iv8.init",
+        phase = phase,
+        duration_ms = duration_ms,
+        "init phase complete"
+    );
+}
+
+/// Init phase failed.
+/// Safety: Diagnostic (error may contain internal state)
+pub fn init_phase_failed(phase: &str, error: &str) {
+    tracing::error!(
+        target: "iv8.init",
+        phase = phase,
+        error = error,
+        "init phase failed"
+    );
+}
+
+// ─── Eval events ───────────────────────────────────────────────────
+
+/// Eval completed.
+/// Safety: Safe
+pub fn eval_complete(success: bool, duration_ms: u64) {
+    tracing::debug!(
+        target: "iv8.eval",
+        success = success,
+        duration_ms = duration_ms,
+        "eval complete"
+    );
+}
+
+/// Eval error (JS exception or compile error).
+/// Safety: Diagnostic (message may contain JS source)
+pub fn eval_error(message: &str) {
+    tracing::warn!(
+        target: "iv8.eval",
+        message = message,
+        "eval error"
+    );
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -275,7 +440,7 @@ mod tests {
     #[test]
     fn test_catalog_has_init_events() {
         let init_events: Vec<_> = catalog().iter().filter(|e| e.category == "iv8.init").collect();
-        assert!(init_events.len() >= 7, "expected at least 7 init events, got {}", init_events.len());
+        assert!(init_events.len() >= 10, "expected at least 10 init events, got {}", init_events.len());
     }
 
     #[test]

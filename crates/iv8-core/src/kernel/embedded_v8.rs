@@ -447,12 +447,52 @@ impl EmbeddedV8Kernel {
         user_overrides: crate::user_overrides::UserOverrides,
         worker_mode: bool,
     ) -> Result<Self, IV8Error> {
+        // Install panic hook once — ensures panics are logged via telemetry
+        // before PyO3's catch_unwind converts them to PanicException.
+        static PANIC_HOOK_INSTALLED: std::sync::Once = std::sync::Once::new();
+        PANIC_HOOK_INSTALLED.call_once(|| {
+            let default_hook = std::panic::take_hook();
+            std::panic::set_hook(Box::new(move |info| {
+                let msg = info.to_string();
+                crate::telemetry::rust_panic(&msg);
+                eprintln!("[iv8-panic] {}", msg);
+                default_hook(info);
+            }));
+        });
+
+        // Install V8 fatal error handler (process-wide, once).
+        static V8_FATAL_INSTALLED: std::sync::Once = std::sync::Once::new();
+        V8_FATAL_INSTALLED.call_once(|| {
+            fn fatal_handler(file: &str, line: i32, message: &str) {
+                crate::telemetry::v8_fatal_error(file, line, message);
+                eprintln!("[v8-fatal] {}:{} {}", file, line, message);
+            }
+            v8::V8::set_fatal_error_handler(fatal_handler);
+        });
+
         let mut isolate = v8::Isolate::new(
             v8::CreateParams::default().heap_limits(512 * 1024 * 1024, 4 * 1024 * 1024 * 1024),
         );
 
         // Set microtask policy to Explicit (we drive microtasks manually)
         isolate.set_microtasks_policy(v8::MicrotasksPolicy::Explicit);
+
+        // Capture stack traces for uncaught exceptions (like Deno does).
+        isolate.set_capture_stack_trace_for_uncaught_exceptions(true, 10);
+
+        // Set OOM error handler.
+        extern "C" fn oom_handler(location: *const std::ffi::c_char, details: &v8::OomDetails) {
+            let loc = if location.is_null() {
+                "<unknown>"
+            } else {
+                unsafe { std::ffi::CStr::from_ptr(location) }
+                    .to_str()
+                    .unwrap_or("<invalid>")
+            };
+            crate::telemetry::v8_oom(loc, details.is_heap_oom);
+            eprintln!("[v8-oom] {} heap={}", loc, details.is_heap_oom);
+        }
+        isolate.set_oom_error_handler(oom_handler);
 
         // Install RuntimeState (with environment reference for V8 callbacks)
         RuntimeState::install(
@@ -513,21 +553,36 @@ impl EmbeddedV8Kernel {
         // Phase 1 only: static value injection via env_inject.
         // Phase 2 (native_env) runs after install_browser_surface_init
         // so that codegen EventTarget template is available for inheritance.
+        let t0 = std::time::Instant::now();
+        crate::telemetry::init_phase_start("install_environment");
         kernel.install_environment();
+        crate::telemetry::init_phase_complete("install_environment", t0.elapsed().as_millis() as u64);
 
         // Install BrowserSurface (1284 IDL templates + 14 native behaviors).
         // Heap limits increased from default 1.4GB to 4GB to accommodate
         // 1284 FunctionTemplate creation without V8 GC IsOnCentralStack crash.
+        let t1 = std::time::Instant::now();
+        crate::telemetry::init_phase_start("install_browser_surface");
         kernel.install_browser_surface_init();
+        crate::telemetry::init_phase_complete("install_browser_surface", t1.elapsed().as_millis() as u64);
 
         // Phase 2: install native environment objects (navigator, screen)
+        let t2 = std::time::Instant::now();
+        crate::telemetry::init_phase_start("install_native_environment");
         kernel.install_native_environment();
+        crate::telemetry::init_phase_complete("install_native_environment", t2.elapsed().as_millis() as u64);
 
         // Install anti-detection shims + JS shims (skip native behaviors
         // — already installed by install_browser_surface_init above).
+        let t3 = std::time::Instant::now();
+        crate::telemetry::init_phase_start("install_undetect_shims");
         kernel.install_undetect_shims(true);
+        crate::telemetry::init_phase_complete("install_undetect_shims", t3.elapsed().as_millis() as u64);
 
+        let t4 = std::time::Instant::now();
+        crate::telemetry::init_phase_start("install_worker_constructor");
         kernel.install_worker_constructor();
+        crate::telemetry::init_phase_complete("install_worker_constructor", t4.elapsed().as_millis() as u64);
 
         // Note: XHR_SHIM_JS is eval'd twice (install_xhr in install_browser_surface_init
         // + step 8 in install_undetect_shims). The second eval overwrites the codegen

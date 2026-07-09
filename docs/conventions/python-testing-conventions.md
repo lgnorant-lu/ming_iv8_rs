@@ -70,6 +70,30 @@ Files that only test `tools/` modules (no `iv8_rs` dependency) are exempt.
 
 ## 4. Fixture Patterns
 
+### Stack Size Requirement (CRITICAL)
+
+V8 isolate + codegen mixin merge (9223 members) requires a large thread
+stack. `JSContext()` MUST be created on a thread with at least 128MB stack.
+
+**conftest.py fixtures handle this automatically.** But if you create
+`JSContext()` manually (e.g. in `_` prefix diagnostic scripts), you MUST:
+
+```python
+import threading
+threading.stack_size(128 * 1024 * 1024)  # 128MB
+
+# Option A: run on a sub-thread
+t = threading.Thread(target=your_function)
+t.start()
+t.join()
+
+# Option B: use the conftest.py fixture which handles this
+```
+
+Failure to set stack size results in silent hang or crash with no error
+message — V8 runs out of stack during template creation and the process
+hangs or aborts with no output.
+
 ### Standard Fixtures (in `conftest.py`)
 
 All tests that create a `JSContext` MUST use shared fixtures from conftest.py.
