@@ -62,6 +62,9 @@ p256 = { version = "0.13", features = ["ecdsa", "ecdh"] }
 p384 = { version = "0.13", features = ["ecdsa", "ecdh"] }
 elliptic-curve = "0.13"
 ecdsa = "0.16"
+# Ed25519 / X25519
+ed25519-dalek = { version = "2", features = ["rand_core"] }
+x25519-dalek = "2"
 hkdf = "0.12"
 pkcs8 = { version = "0.10", features = ["alloc"] }
 spki = "0.7"

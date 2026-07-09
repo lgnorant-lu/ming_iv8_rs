@@ -1004,7 +1004,26 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
                         return;
                     }
                 },
-                "ED25519" | "X25519" | "AESKW" | _ => {
+                "ED25519" => {
+                    // Ed25519 sign using CryptoKey metadata
+                    if let Ok(key_data) = b64_decode(&meta.key_bytes_b64) {
+                        if key_data.len() == 32 {
+                            match crate::crypto::ed_impl::import_ed25519_private_raw(&key_data) {
+                                Ok(sk) => Some(crate::crypto::ed_impl::ed25519_sign(&sk, &data)),
+                                Err(e) => {
+                                    let msg = crate::v8_utils::v8_string(scope, &format!("Ed25519 sign failed: {}", e));
+                                    resolver.reject(scope, v8::Exception::error(scope, msg));
+                                    return;
+                                }
+                            }
+                        } else {
+                            None
+                        }
+                    } else {
+                        None
+                    }
+                },
+                "X25519" | "AESKW" | _ => {
                     reject_not_supported!(scope, resolver, algo);
                 }
             };
@@ -1135,7 +1154,22 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
                     }
                     Err(_) => false,
                 },
-                "ED25519" | "X25519" | "AESKW" | _ => {
+                "ED25519" => {
+                    // Ed25519 verify using CryptoKey metadata
+                    if let Ok(key_data) = b64_decode(&meta.key_bytes_b64) {
+                        if key_data.len() == 32 {
+                            match crate::crypto::ed_impl::import_ed25519_public_raw(&key_data) {
+                                Ok(vk) => crate::crypto::ed_impl::ed25519_verify(&vk, &data, &signature),
+                                Err(_) => false,
+                            }
+                        } else {
+                            false
+                        }
+                    } else {
+                        false
+                    }
+                },
+                "X25519" | "AESKW" | _ => {
                     reject_not_supported!(scope, resolver, algo);
                 }
             };
@@ -1162,7 +1196,11 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
                     // Legacy path: not supported (CryptoKey path handles it above)
                     reject_not_supported!(scope, resolver, algo);
                 }
-                "ED25519" | "X25519" | "AESKW" | _ => {
+                "ED25519" => {
+                    // Legacy path: not supported (CryptoKey path handles it above)
+                    reject_not_supported!(scope, resolver, algo);
+                }
+                "X25519" | "AESKW" | _ => {
                     reject_not_supported!(scope, resolver, algo);
                 }
             },

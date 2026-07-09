@@ -35,6 +35,8 @@ p256 = { workspace = true }
 p384 = { workspace = true }
 elliptic-curve = { workspace = true }
 ecdsa = { workspace = true }
+ed25519-dalek = { workspace = true }
+x25519-dalek = { workspace = true }
 hkdf = { workspace = true }
 pkcs8 = { workspace = true }
 spki = { workspace = true }
