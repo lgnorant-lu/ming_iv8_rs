@@ -1078,6 +1078,9 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             Object.defineProperty(_wrapper, '__iv8ElemPatched', {
                 value: true, writable: true, configurable: true, enumerable: false,
             });
+            // P0-BT fix: toString must return native code to avoid CreepJS lie detection
+            _wrapper.toString = function() { return 'function createElement() { [native code] }'; };
+            _wrapper.toString.toString = function() { return 'function toString() { [native code] }'; };
             document.createElement = _wrapper;
         }
     } catch(e) {}

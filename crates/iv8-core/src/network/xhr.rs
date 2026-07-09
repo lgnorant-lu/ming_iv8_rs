@@ -259,6 +259,20 @@ pub const XHR_SHIM_JS: &str = r#"
         Object.setPrototypeOf(XMLHttpRequest.prototype, XMLHttpRequestEventTarget.prototype);
     }
 
+    // P0-BT fix: toString must return native code for all shim methods
+    var _nativeToStr = function(name) {
+        var fn = function() { return 'function ' + name + '() { [native code] }'; };
+        fn.toString = function() { return 'function toString() { [native code] }'; };
+        return fn;
+    };
+    var _xhrMethods = ['open','setRequestHeader','send','abort','getResponseHeader','getAllResponseHeaders','overrideMimeType'];
+    for (var _i = 0; _i < _xhrMethods.length; _i++) {
+        var _m = _xhrMethods[_i];
+        if (XMLHttpRequest.prototype[_m]) {
+            XMLHttpRequest.prototype[_m].toString = _nativeToStr(_m);
+        }
+    }
+
     globalThis.XMLHttpRequest = XMLHttpRequest;
 })();
 "#;
