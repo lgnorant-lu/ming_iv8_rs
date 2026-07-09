@@ -211,3 +211,177 @@ pub fn import_rsa_public_key_pkcs1(der: &[u8]) -> Result<RsaPublicKey, String> {
 pub fn import_rsa_private_key_pkcs1(der: &[u8]) -> Result<RsaPrivateKey, String> {
     RsaPrivateKey::from_pkcs1_der(der).map_err(|e| e.to_string())
 }
+
+// ─── RSA-PKCS1-v1.5 sign/verify ────────────────────────────────────
+
+/// RSA-PKCS1-v1.5 sign.
+pub fn rsa_pkcs1_sign(
+    private_key: &RsaPrivateKey,
+    data: &[u8],
+    hash: &str,
+) -> Result<Vec<u8>, String> {
+    use rsa::pkcs1v15::SigningKey;
+    use rsa::signature::{SignatureEncoding, Signer};
+
+    match hash.to_uppercase().replace("-", "").as_str() {
+        "SHA1" => {
+            let signing_key = SigningKey::<Sha1>::new(private_key.clone());
+            let sig = signing_key.sign(data);
+            Ok(sig.to_bytes().to_vec())
+        }
+        "SHA256" => {
+            let signing_key = SigningKey::<Sha256>::new(private_key.clone());
+            let sig = signing_key.sign(data);
+            Ok(sig.to_bytes().to_vec())
+        }
+        "SHA384" => {
+            let signing_key = SigningKey::<Sha384>::new(private_key.clone());
+            let sig = signing_key.sign(data);
+            Ok(sig.to_bytes().to_vec())
+        }
+        "SHA512" => {
+            let signing_key = SigningKey::<Sha512>::new(private_key.clone());
+            let sig = signing_key.sign(data);
+            Ok(sig.to_bytes().to_vec())
+        }
+        _ => Err(format!("RSA-PKCS1-v1.5: unsupported hash '{}'", hash)),
+    }
+}
+
+/// RSA-PKCS1-v1.5 verify.
+pub fn rsa_pkcs1_verify(
+    public_key: &RsaPublicKey,
+    data: &[u8],
+    signature: &[u8],
+    hash: &str,
+) -> bool {
+    use rsa::signature::Verifier;
+    use rsa::pkcs1v15::{Signature, VerifyingKey};
+
+    match hash.to_uppercase().replace("-", "").as_str() {
+        "SHA1" => {
+            let verifying_key = VerifyingKey::<Sha1>::new(public_key.clone());
+            if let Ok(sig) = Signature::try_from(signature) {
+                verifying_key.verify(data, &sig).is_ok()
+            } else {
+                false
+            }
+        }
+        "SHA256" => {
+            let verifying_key = VerifyingKey::<Sha256>::new(public_key.clone());
+            if let Ok(sig) = Signature::try_from(signature) {
+                verifying_key.verify(data, &sig).is_ok()
+            } else {
+                false
+            }
+        }
+        "SHA384" => {
+            let verifying_key = VerifyingKey::<Sha384>::new(public_key.clone());
+            if let Ok(sig) = Signature::try_from(signature) {
+                verifying_key.verify(data, &sig).is_ok()
+            } else {
+                false
+            }
+        }
+        "SHA512" => {
+            let verifying_key = VerifyingKey::<Sha512>::new(public_key.clone());
+            if let Ok(sig) = Signature::try_from(signature) {
+                verifying_key.verify(data, &sig).is_ok()
+            } else {
+                false
+            }
+        }
+        _ => false,
+    }
+}
+
+// ─── AES-KW (Key Wrap) ──────────────────────────────────────────────
+
+/// AES-KW wrap (RFC 3394).
+pub fn aes_kw_wrap(kek: &[u8], key_data: &[u8]) -> Result<Vec<u8>, String> {
+    if key_data.len() % 8 != 0 || key_data.is_empty() {
+        return Err("AES-KW: key data must be non-empty multiple of 8 bytes".to_string());
+    }
+    match kek.len() {
+        16 => wrap_impl::<aes::Aes128>(kek, key_data),
+        24 => wrap_impl::<aes::Aes192>(kek, key_data),
+        32 => wrap_impl::<aes::Aes256>(kek, key_data),
+        _ => Err("AES-KW: invalid KEK size (must be 16/24/32 bytes)".to_string()),
+    }
+}
+
+/// AES-KW unwrap (RFC 3394).
+pub fn aes_kw_unwrap(kek: &[u8], wrapped: &[u8]) -> Result<Vec<u8>, String> {
+    if wrapped.len() % 8 != 0 || wrapped.len() < 16 {
+        return Err("AES-KW: wrapped data must be at least 16 bytes and multiple of 8".to_string());
+    }
+    match kek.len() {
+        16 => unwrap_impl::<aes::Aes128>(kek, wrapped),
+        24 => unwrap_impl::<aes::Aes192>(kek, wrapped),
+        32 => unwrap_impl::<aes::Aes256>(kek, wrapped),
+        _ => Err("AES-KW: invalid KEK size (must be 16/24/32 bytes)".to_string()),
+    }
+}
+
+fn wrap_impl<C: aes::cipher::BlockCipher + aes::cipher::KeyInit + aes::cipher::BlockEncrypt>(kek: &[u8], data: &[u8]) -> Result<Vec<u8>, String> {
+    let cipher = C::new_from_slice(kek).map_err(|_| "AES-KW: cipher init failed")?;
+    let n = data.len() / 8;
+    let mut a = [0xA6u8; 8];
+    let mut r: Vec<[u8; 8]> = data.chunks(8).map(|c| c.try_into().unwrap()).collect();
+
+    for j in 0..6u64 {
+        for i in 0..n {
+            let mut block = [0u8; 16];
+            block[..8].copy_from_slice(&a);
+            block[8..].copy_from_slice(&r[i]);
+            let mut ga = aes::cipher::generic_array::GenericArray::from_mut_slice(&mut block);
+            cipher.encrypt_block(&mut ga);
+            a.copy_from_slice(&block[..8]);
+            a = u64::from_be_bytes(a)
+                .wrapping_add(n as u64 * j + i as u64 + 1)
+                .to_be_bytes();
+            r[i].copy_from_slice(&block[8..]);
+        }
+    }
+
+    let mut result = Vec::with_capacity(8 * (n + 1));
+    result.extend_from_slice(&a);
+    for chunk in &r {
+        result.extend_from_slice(chunk);
+    }
+    Ok(result)
+}
+
+fn unwrap_impl<C: aes::cipher::BlockCipher + aes::cipher::KeyInit + aes::cipher::BlockDecrypt>(kek: &[u8], data: &[u8]) -> Result<Vec<u8>, String> {
+    let cipher = C::new_from_slice(kek).map_err(|_| "AES-KW: cipher init failed")?;
+    let n = data.len() / 8 - 1;
+    let mut a: [u8; 8] = data[..8].try_into().map_err(|_| "AES-KW: bad data")?;
+    let mut r: Vec<[u8; 8]> = data[8..]
+        .chunks(8)
+        .map(|c| c.try_into().unwrap())
+        .collect();
+
+    for j in (0..6u64).rev() {
+        for i in (0..n).rev() {
+            let t = n as u64 * j + i as u64 + 1;
+            a = u64::from_be_bytes(a).wrapping_sub(t).to_be_bytes();
+            let mut block = [0u8; 16];
+            block[..8].copy_from_slice(&a);
+            block[8..].copy_from_slice(&r[i]);
+            let mut ga = aes::cipher::generic_array::GenericArray::from_mut_slice(&mut block);
+            cipher.decrypt_block(&mut ga);
+            a.copy_from_slice(&block[..8]);
+            r[i].copy_from_slice(&block[8..]);
+        }
+    }
+
+    if a != [0xA6u8; 8] {
+        return Err("AES-KW: integrity check failed".to_string());
+    }
+
+    let mut result = Vec::with_capacity(8 * n);
+    for chunk in &r {
+        result.extend_from_slice(chunk);
+    }
+    Ok(result)
+}

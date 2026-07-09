@@ -981,7 +981,30 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
                     }
                     Err(_) => None,
                 },
-                "RSASSAPKCS1V15" | "ED25519" | "X25519" | "AESKW" | _ => {
+                "RSASSAPKCS1V15" => match meta_to_rsa_private(&meta) {
+                    Ok(priv_key) => {
+                        match rsa_impl::rsa_pkcs1_sign(&priv_key, &data, &hash_algo) {
+                            Ok(sig) => Some(sig),
+                            Err(e) => {
+                                let msg = crate::v8_utils::v8_string(
+                                    scope,
+                                    &format!("RSA-PKCS1-v1.5 sign failed: {}", e),
+                                );
+                                resolver.reject(scope, v8::Exception::error(scope, msg));
+                                return;
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        let msg = crate::v8_utils::v8_string(
+                            scope,
+                            &format!("RSA-PKCS1-v1.5: key import failed: {}", e),
+                        );
+                        resolver.reject(scope, v8::Exception::error(scope, msg));
+                        return;
+                    }
+                },
+                "ED25519" | "X25519" | "AESKW" | _ => {
                     reject_not_supported!(scope, resolver, algo);
                 }
             };
@@ -1021,7 +1044,12 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
 
         let result = match algo_upper.as_str() {
             "HMAC" => hmac_sign(&hash_algo_from_arg, &key_bytes, &data),
-            "RSASSAPKCS1V15" | "ED25519" | "X25519" | "AESKW" | _ => {
+            "RSASSAPKCS1V15" => {
+                // Legacy path: PKCS1-v1.5 sign with raw key bytes
+                // For now, reject in legacy path (CryptoKey path handles it above)
+                reject_not_supported!(scope, resolver, algo);
+            }
+            "ED25519" | "X25519" | "AESKW" | _ => {
                 reject_not_supported!(scope, resolver, algo);
             }
         };
@@ -1101,7 +1129,13 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
                     Ok(ec_key) => crate::crypto::ec_impl::ecdsa_verify(&ec_key, &data, &signature),
                     Err(_) => false,
                 },
-                "RSASSAPKCS1V15" | "ED25519" | "X25519" | "AESKW" | _ => {
+                "RSASSAPKCS1V15" => match meta_to_rsa_public(&meta) {
+                    Ok(pub_key) => {
+                        rsa_impl::rsa_pkcs1_verify(&pub_key, &data, &signature, &hash_algo)
+                    }
+                    Err(_) => false,
+                },
+                "ED25519" | "X25519" | "AESKW" | _ => {
                     reject_not_supported!(scope, resolver, algo);
                 }
             };
@@ -1124,7 +1158,11 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
         let valid = match key_bytes {
             Some(k) => match algo_upper.as_str() {
                 "HMAC" => hmac_verify(&hash_algo_from_arg, &k, &data, &signature),
-                "RSASSAPKCS1V15" | "ED25519" | "X25519" | "AESKW" | _ => {
+                "RSASSAPKCS1V15" => {
+                    // Legacy path: not supported (CryptoKey path handles it above)
+                    reject_not_supported!(scope, resolver, algo);
+                }
+                "ED25519" | "X25519" | "AESKW" | _ => {
                     reject_not_supported!(scope, resolver, algo);
                 }
             },
