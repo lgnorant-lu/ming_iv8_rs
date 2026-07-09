@@ -6,21 +6,22 @@ output positions. Uses deterministic mode to eliminate random noise.
 """
 
 from __future__ import annotations
-from typing import Any, Dict, List, Optional, Tuple
+
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Any
 
 
 def diff_analysis(
     js_source: str,
     eval_expr: str,
-    base_env: Dict[str, Any],
-    test_variables: Dict[str, List[Any]],
-    random_seed: Optional[int] = 42,
-    time_freeze: Optional[float] = None,
+    base_env: dict[str, Any],
+    test_variables: dict[str, list[Any]],
+    random_seed: int | None = 42,
+    time_freeze: float | None = None,
     time_mode: str = "logical",
     max_workers: int = 4,
     progress_callback=None,
-) -> Dict[str, Dict[str, Any]]:
+) -> dict[str, dict[str, Any]]:
     """
     Analyze which environment variables affect the JS output.
 
@@ -63,7 +64,7 @@ def diff_analysis(
     """
     from iv8_rs._iv8 import JSContext as _RustCtx
 
-    def run_single(env: Dict[str, Any]) -> str:
+    def run_single(env: dict[str, Any]) -> str:
         """Execute JS with given environment and return result as string."""
         ctx = _RustCtx(
             environment=env,
@@ -84,7 +85,7 @@ def diff_analysis(
     base_result = run_single(base_env)
 
     # 2. Run each variable variation
-    report: Dict[str, Dict[str, Any]] = {}
+    report: dict[str, dict[str, Any]] = {}
     tasks = []
 
     for var_name, values in test_variables.items():
@@ -95,7 +96,7 @@ def diff_analysis(
             tasks.append((var_name, val, test_env))
 
     # Execute (parallel if multiple tasks)
-    results_map: Dict[Tuple[str, Any], str] = {}
+    results_map: dict[tuple[str, Any], str] = {}
 
     if max_workers > 1 and len(tasks) > 1:
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -132,7 +133,7 @@ def diff_analysis(
     return report
 
 
-def _find_diff_positions(base: str, variants: List[str]) -> List[int]:
+def _find_diff_positions(base: str, variants: list[str]) -> list[int]:
     """Find character positions where any variant differs from base."""
     positions = set()
     base_bytes = base.encode("utf-8", errors="replace")

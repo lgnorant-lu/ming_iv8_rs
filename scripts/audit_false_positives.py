@@ -5,8 +5,9 @@ This is the most important correctness test - if random data matches crypto,
 the whole engine is untrustworthy.
 """
 import random
+
+from iv8_rs.patterns import detect_all, detect_constants, detect_sequences
 from iv8_rs.trace import StructuredTrace, TraceEntry
-from iv8_rs.patterns import detect_constants, detect_sequences, detect_all
 
 random.seed(12345)  # deterministic
 

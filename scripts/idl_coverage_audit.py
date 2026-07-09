@@ -74,7 +74,7 @@ def load_bcd() -> tuple[set[str], dict[str, set[str]]]:
     Interface names have the 'api.' prefix stripped.
     Members are depth-2 (api.Interface.Member), depth-3+ sub-features excluded.
     """
-    with open(BCD_FULL, "r", encoding="utf-8") as f:
+    with open(BCD_FULL, encoding="utf-8") as f:
         data = json.load(f)
     entries = data["entries"]
 
@@ -104,7 +104,7 @@ def load_bcd() -> tuple[set[str], dict[str, set[str]]]:
 
 def load_bcd_interface_list() -> set[str]:
     """Load the interface-only bcd file for the total count."""
-    with open(BCD_IFACES, "r", encoding="utf-8") as f:
+    with open(BCD_IFACES, encoding="utf-8") as f:
         data = json.load(f)
     entries = data["entries"]
     return {

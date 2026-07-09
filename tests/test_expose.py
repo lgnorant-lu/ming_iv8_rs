@@ -1,6 +1,6 @@
 """Task 22: expose Python-side integration tests."""
-import pytest
 import iv8_rs
+import pytest
 
 
 def test_expose_basic_add():

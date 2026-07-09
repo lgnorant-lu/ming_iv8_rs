@@ -6,8 +6,6 @@ Integration tests for the convergence checker: profile overrides
 
 from __future__ import annotations
 
-import pytest
-
 from helpers.profile_verification_checker import (
     ConvergenceChecker,
     chrome147_win10_overrides,

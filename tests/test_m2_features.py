@@ -1,8 +1,7 @@
 """M2 feature tests: DOM, EventLoop, page.load, timers, DateInterceptor, add_resource."""
-import pytest
-import iv8_rs
 import math
 
+import iv8_rs
 
 # ─── page.load ───────────────────────────────────────────────────────────────
 

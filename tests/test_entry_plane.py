@@ -5,7 +5,7 @@ iv8_rs = pytest.importorskip("iv8_rs")
 
 
 def test_entry_plan_from_dict_minimal():
-    from iv8_rs.entry import EntryPlan, SelectedStrategy, Diagnostics
+    from iv8_rs.entry import Diagnostics, EntryPlan
     d = {
         "plan_id": "test-1",
         "persona": "analysis",
@@ -29,7 +29,7 @@ def test_entry_plan_from_dict_minimal():
 
 
 def test_entry_result_from_dict_minimal():
-    from iv8_rs.entry import EntryResult, SelectedStrategy, Diagnostics
+    from iv8_rs.entry import Diagnostics, EntryResult
     d = {
         "plan_id": "test-1",
         "final_state": "finalized",
@@ -64,7 +64,6 @@ def test_probe_result_from_dict():
 
 def test_entry_types_importable():
     from iv8_rs.entry import (
-        EntryPlan, EntryResult, SelectedStrategy, ExecutedStrategy,
-        ProbeResult, EventMeta, Diagnostics, TraceMeta,
+        EntryPlan,
     )
     assert EntryPlan is not None

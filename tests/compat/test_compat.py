@@ -6,9 +6,8 @@ import json
 import math
 import pathlib
 
-import pytest
-
 import iv8_rs
+import pytest
 
 FIXTURES_DIR = pathlib.Path(__file__).parent / "fixtures"
 

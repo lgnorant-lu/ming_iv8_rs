@@ -6,10 +6,11 @@ Covers both _find_diff_positions (pure function) and diff_analysis
 """
 
 from __future__ import annotations
-from typing import Any, Dict, List, Optional
-import pytest
-from iv8_rs.analysis import diff_analysis, _find_diff_positions
 
+from typing import Any
+
+import pytest
+from iv8_rs.analysis import _find_diff_positions, diff_analysis
 
 # ═══════════════════════════════════════════════════════════════════════
 # Mock JSContext — avoids importing the real Rust extension for tests
@@ -21,13 +22,13 @@ class FakeJSContext:
     The second eval call (the eval_expr) produces output that always
     reflects the full env dict, so any env change is visible as a diff.
     """
-    _all_instances: List[FakeJSContext] = []
+    _all_instances: list[FakeJSContext] = []
 
     def __init__(
         self,
-        environment: Optional[Dict[str, Any]] = None,
-        random_seed: Optional[int] = None,
-        time_freeze: Optional[float] = None,
+        environment: dict[str, Any] | None = None,
+        random_seed: int | None = None,
+        time_freeze: float | None = None,
         time_mode: str = "logical",
     ) -> None:
         self.env = environment or {}
@@ -38,7 +39,7 @@ class FakeJSContext:
         self.closed = False
         FakeJSContext._all_instances.append(self)
 
-    def eval(self, code: str) -> Optional[str]:
+    def eval(self, code: str) -> str | None:
         self._call_count += 1
         if self._call_count == 1:
             return None  # js_source eval — no return value
@@ -196,7 +197,7 @@ class TestDiffAnalysisExecution:
         assert report["a"]["affected"] is True
 
     def test_progress_callback_parallel(self) -> None:
-        calls: List[tuple] = []
+        calls: list[tuple] = []
 
         def cb(var_name: str, value: Any, result: str) -> None:
             calls.append((var_name, value, result))
@@ -213,7 +214,7 @@ class TestDiffAnalysisExecution:
         assert names == {"a", "b"}
 
     def test_progress_callback_serial(self) -> None:
-        calls: List[tuple] = []
+        calls: list[tuple] = []
 
         def cb(var_name: str, value: Any, result: str) -> None:
             calls.append((var_name, value))
@@ -292,7 +293,7 @@ class TestDiffAnalysisErrors:
         """Raises RuntimeError when env has a key whose value is '__fail__'."""
         def __init__(
             self,
-            environment: Optional[Dict[str, Any]] = None,
+            environment: dict[str, Any] | None = None,
             **kwargs: Any,
         ) -> None:
             self.env = environment or {}

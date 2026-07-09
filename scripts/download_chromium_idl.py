@@ -28,7 +28,6 @@ allow. This script is idempotent: if the checkout already exists, it reuses it.
 from __future__ import annotations
 
 import argparse
-import os
 import shutil
 import subprocess
 import sys
@@ -116,7 +115,7 @@ def find_idl_files(dest: Path) -> list[Path]:
 
 def parse_with_node(idl_root: Path, output: Path) -> None:
     """Run parse-chromium-idl.js recursively to produce IR JSON."""
-    print(f"[download_chromium_idl] Step 6: parsing IDL with Node.js...")
+    print("[download_chromium_idl] Step 6: parsing IDL with Node.js...")
     output.parent.mkdir(parents=True, exist_ok=True)
     node = shutil.which("node")
     if not node:

@@ -7,10 +7,7 @@ v0.1 behavior — verified for regression elsewhere.
 
 import datetime
 
-import pytest
-
 import iv8_rs
-
 
 # ---------- BigInt -> Python int ----------
 
@@ -59,19 +56,19 @@ def test_date_epoch():
     ctx = iv8_rs.JSContext(strict_compat=False)
     val = ctx.eval("new Date(0)")
     assert isinstance(val, datetime.datetime)
-    assert val == datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
+    assert val == datetime.datetime(1970, 1, 1, tzinfo=datetime.UTC)
 
 def test_date_specific_timestamp():
     ctx = iv8_rs.JSContext(strict_compat=False)
     # 2026-01-01 00:00:00 UTC = 1767225600000 ms
     val = ctx.eval("new Date(1767225600000)")
-    assert val == datetime.datetime(2026, 1, 1, tzinfo=datetime.timezone.utc)
+    assert val == datetime.datetime(2026, 1, 1, tzinfo=datetime.UTC)
 
 def test_date_milliseconds_precision():
     ctx = iv8_rs.JSContext(strict_compat=False)
     val = ctx.eval("new Date(1234567890123)")
     expected = datetime.datetime.fromtimestamp(
-        1234567890.123, tz=datetime.timezone.utc
+        1234567890.123, tz=datetime.UTC
     )
     assert val == expected
 
@@ -146,9 +143,9 @@ def test_array_of_dates():
     ctx = iv8_rs.JSContext(strict_compat=False)
     val = ctx.eval("[new Date(0), new Date(1000)]")
     assert len(val) == 2
-    assert val[0] == datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
+    assert val[0] == datetime.datetime(1970, 1, 1, tzinfo=datetime.UTC)
     assert val[1] == datetime.datetime(
-        1970, 1, 1, 0, 0, 1, tzinfo=datetime.timezone.utc
+        1970, 1, 1, 0, 0, 1, tzinfo=datetime.UTC
     )
 
 def test_map_with_object_values():

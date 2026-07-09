@@ -6,10 +6,10 @@ in the Rust types; these wrappers exist for Python ergonomics.
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any
 
-from iv8_rs.diagnostics import DiagnosticRecord, FallbackAttempt, EvidenceRecord
+from dataclasses import dataclass, field
+
+from iv8_rs.diagnostics import DiagnosticRecord, EvidenceRecord, FallbackAttempt
 
 
 @dataclass
@@ -32,7 +32,7 @@ class ExecutedStrategy:
     strategy_id: str
     phase_entered: str
     outcome: str
-    diagnostics: List[DiagnosticRecord] = field(default_factory=list)
+    diagnostics: list[DiagnosticRecord] = field(default_factory=list)
 
     @classmethod
     def from_dict(cls, d: dict) -> ExecutedStrategy:
@@ -71,8 +71,8 @@ class EventMeta:
     strategy_id: str
     phase: str
     confidence: float = 0.0
-    module_id: Optional[int] = None
-    chunk_id: Optional[str] = None
+    module_id: int | None = None
+    chunk_id: str | None = None
 
     @classmethod
     def from_dict(cls, d: dict) -> EventMeta:
@@ -88,17 +88,17 @@ class EventMeta:
 
 @dataclass
 class Diagnostics:
-    sample_signals: List[str]
-    selected_strategy_reason: Optional[str]
-    fallback_attempts: List[FallbackAttempt]
-    policy_constraints: List[str]
-    missing_capabilities: List[str]
-    diagnostic_records: List[DiagnosticRecord] = field(default_factory=list)
-    observed_evidence: List[EvidenceRecord] = field(default_factory=list)
-    activation_timing: Optional[str] = None
-    reload_reason: Optional[str] = None
-    collection_summary: Optional[str] = None
-    cleanup_summary: Optional[str] = None
+    sample_signals: list[str]
+    selected_strategy_reason: str | None
+    fallback_attempts: list[FallbackAttempt]
+    policy_constraints: list[str]
+    missing_capabilities: list[str]
+    diagnostic_records: list[DiagnosticRecord] = field(default_factory=list)
+    observed_evidence: list[EvidenceRecord] = field(default_factory=list)
+    activation_timing: str | None = None
+    reload_reason: str | None = None
+    collection_summary: str | None = None
+    cleanup_summary: str | None = None
 
     @classmethod
     def from_dict(cls, d: dict) -> Diagnostics:
@@ -128,9 +128,9 @@ class EntryPlan:
     selected_strategy: SelectedStrategy
     state: str
     diagnostics: Diagnostics
-    sample_signals: List[str] = field(default_factory=list)
-    expected_evidence: List[str] = field(default_factory=list)
-    fallback_chain: List[str] = field(default_factory=list)
+    sample_signals: list[str] = field(default_factory=list)
+    expected_evidence: list[str] = field(default_factory=list)
+    fallback_chain: list[str] = field(default_factory=list)
     risk_level: str = "low"
     requires_preload: bool = False
     requires_reload: bool = False
@@ -160,9 +160,9 @@ class TraceMeta:
     persona: str
     sample_kind: str
     selected_strategy_id: str
-    executed_strategy_ids: List[str]
-    trace_sources: List[str]
-    events: Dict[int, EventMeta] = field(default_factory=dict)
+    executed_strategy_ids: list[str]
+    trace_sources: list[str]
+    events: dict[int, EventMeta] = field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, d: dict) -> TraceMeta:
@@ -190,16 +190,16 @@ class EntryResult:
     plan_id: str
     final_state: str
     selected_strategy: SelectedStrategy
-    executed_strategies: List[ExecutedStrategy]
-    trace: List[str]
-    diagnostic_records: List[DiagnosticRecord]
-    observed_evidence: List[EvidenceRecord]
+    executed_strategies: list[ExecutedStrategy]
+    trace: list[str]
+    diagnostic_records: list[DiagnosticRecord]
+    observed_evidence: list[EvidenceRecord]
     diagnostics: Diagnostics
-    trace_meta: Optional[TraceMeta] = None
-    module_graph: Optional[dict] = None
-    hook_report: Optional[dict] = None
-    environment_report: Optional[dict] = None
-    cleanup_state: Optional[dict] = None
+    trace_meta: TraceMeta | None = None
+    module_graph: dict | None = None
+    hook_report: dict | None = None
+    environment_report: dict | None = None
+    cleanup_state: dict | None = None
 
     @classmethod
     def from_dict(cls, d: dict) -> EntryResult:

@@ -1,4 +1,4 @@
-"""
+r"""
 iv8 0.1.2 vs iv8-rs 对照探针。
 在两个引擎中执行相同的 JS，对比输出差异。
 用 .venv-probe 的 iv8 和 .venv 的 iv8_rs。
@@ -6,10 +6,10 @@ iv8 0.1.2 vs iv8-rs 对照探针。
 运行方式：
   .venv\Scripts\python.exe tests\probe_compare.py
 """
-import sys
 import json
-import subprocess
 import os
+import subprocess
+import sys
 
 # 探针 JS 代码列表：每个是 (名称, JS表达式)
 PROBES = [
@@ -211,7 +211,7 @@ def main():
     # Save results
     with open("tests/probe_results.json", "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
-    print(f"\n详细结果已保存到 tests/probe_results.json")
+    print("\n详细结果已保存到 tests/probe_results.json")
 
 
 if __name__ == "__main__":

@@ -5,9 +5,8 @@ console error classification, entry_expr failures, and edge cases.
 """
 
 from __future__ import annotations
-import warnings
-import pytest
 
+import warnings
 
 # ---------------------------------------------------------------------------
 # Helpers

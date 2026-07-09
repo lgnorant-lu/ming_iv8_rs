@@ -8,8 +8,8 @@ Task 54+55: Debugger 类 + M4 集成测试
 - snapshot: 环境快照
 - get_call_summary: 调用统计
 """
-import pytest
 import iv8_rs
+import pytest
 from iv8_rs import Debugger
 
 

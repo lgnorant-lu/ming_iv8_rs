@@ -31,12 +31,11 @@ Output:
 """
 from __future__ import annotations
 
-import json
-import re
-import sys
 import argparse
-from pathlib import Path
+import json
+import sys
 from collections import defaultdict
+from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = REPO_ROOT / "data"

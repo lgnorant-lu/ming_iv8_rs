@@ -39,7 +39,7 @@ Output: data/creepjs_lies_report.json
 
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -183,7 +183,7 @@ def main():
     if error:
         print(f"[FAIL] IV8 runtime unavailable: {error}")
         report = {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "status": "ERROR",
             "error": error,
             "totalLies": -1,
@@ -202,7 +202,7 @@ def main():
 
     print(f"  Total checks: {total_checks}")
     print(f"  Lies detected: {total_lies}")
-    print(f"  Baseline: 0")
+    print("  Baseline: 0")
     print(f"  Result: {status}")
 
     if lie_list:
@@ -215,7 +215,7 @@ def main():
                 print(f"      -> {detail}")
 
     report = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "status": status,
         "totalLies": total_lies,
         "baseline": 0,

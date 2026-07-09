@@ -4,9 +4,9 @@ Usage: python scripts/evaluate_surface_accuracy.py [--golden golden.json] [--act
 Exit code: 0 = all pass, 1 = any fail
 """
 
+import argparse
 import json
 import sys
-import argparse
 from pathlib import Path
 
 
@@ -64,7 +64,7 @@ def run(golden_path, actual_path):
         actual_val = actual_flat.get(key, "__MISSING__")
 
         if golden_val == "__MISSING__":
-            sections[section].append((key, "MISS", f"not in golden"))
+            sections[section].append((key, "MISS", "not in golden"))
             miss_count += 1
         elif actual_val == "__MISSING__":
             sections[section].append((key, "MISS", f"not in actual (golden={golden_val})"))

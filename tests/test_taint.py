@@ -1,7 +1,6 @@
 """Taint Tracking tests (M26)."""
-import pytest
+from iv8_rs.taint import TaintEngine
 from iv8_rs.trace import StructuredTrace, TraceEntry
-from iv8_rs.taint import TaintEngine, TaintReport
 
 
 def make_trace(entries_data):

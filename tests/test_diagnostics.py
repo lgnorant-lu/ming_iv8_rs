@@ -6,28 +6,26 @@ import pytest
 pytest.importorskip("iv8_rs")
 
 from iv8_rs.diagnostics import (
-    EVIDENCE_STRENGTHS,
+    DIAGNOSTIC_CATALOG,
     DIAGNOSTIC_SEVERITIES,
+    EVIDENCE_STRENGTHS,
     FALLBACK_OUTCOMES,
     TRACE_PREFIX_REGISTRY,
-    DIAGNOSTIC_CATALOG,
-    EvidenceRecord,
     DiagnosticRecord,
+    EvidenceGateResult,
+    EvidenceRecord,
     FallbackAttempt,
     TraceEvent,
-    EvidenceGateResult,
-    classify_trace_prefix,
-    build_trace_events,
-    build_trace_diagnostics,
-    build_evidence_diagnostics,
-    evaluate_evidence_gate,
-    evidence_satisfies,
-    confidence_from_evidence,
-    _payload_from_raw,
     _int_or_raw,
     _trace_payload_is_partial,
+    build_evidence_diagnostics,
+    build_trace_diagnostics,
+    build_trace_events,
+    classify_trace_prefix,
+    confidence_from_evidence,
+    evaluate_evidence_gate,
+    evidence_satisfies,
 )
-
 
 # ─── EvidenceRecord ──────────────────────────────────────────────────────────
 

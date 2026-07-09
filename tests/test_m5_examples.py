@@ -9,10 +9,10 @@ Task 56-58: M5 验收测试 — iv8 examples 兼容性
 
 注意：真实网络测试（zp_stoken 完整版）需要手动运行。
 """
-import pytest
-import iv8_rs
 import os
 
+import iv8_rs
+import pytest
 
 # ─── abogus 核心模式 ──────────────────────────────────────────────────────────
 

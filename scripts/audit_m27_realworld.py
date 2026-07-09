@@ -3,16 +3,21 @@ Adversarial usability audit of M27 crypto detection.
 Goes BEYOND the green harness: tests REALISTIC (not idealized) conditions
 to expose the gap between "harness PASS" and "actually usable in the field".
 """
-import sys
 import random
+import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent.parent / "python"))
 
-from iv8_rs.trace import StructuredTrace, TraceEntry
 from iv8_rs.patterns import (
-    detect_constants, detect_sequences, detect_all, detect_patterns,
-    _load_sequences_db, _load_builtin_patterns,
+    _load_builtin_patterns,
+    _load_sequences_db,
+    detect_constants,
+    detect_patterns,
+    detect_sequences,
 )
+from iv8_rs.trace import StructuredTrace, TraceEntry
+
 
 def mk(entries):
     return StructuredTrace([TraceEntry(type=t, pc=p, target=tg, value=str(v),
@@ -104,8 +109,8 @@ t = mk(disp)
 ms = detect_patterns(t)
 print(f"    feeding mapped opcodes -> {len(ms)} pattern matches "
       f"{[m.name for m in ms[:3]]}")
-print(f"    NOTE: detect_patterns compares numeric opcodes; behavior_pattern")
-print(f"    is string tokens. Without a per-VM opcode->semantic map, L3 cannot fire.")
+print("    NOTE: detect_patterns compares numeric opcodes; behavior_pattern")
+print("    is string tokens. Without a per-VM opcode->semantic map, L3 cannot fire.")
 
 # ------------------------------------------------------------
 # TEST 6: L3-only algorithms - can ANY of the 8 be detected at all?
@@ -116,8 +121,8 @@ for algo in l3:
     bp = patterns[algo].get("behavior_pattern", [])
     consts = patterns[algo].get("constants", [])
     print(f"    {algo:<12} behavior_pattern={len(bp)} tokens, constants={consts if consts else 'none'}")
-print(f"    -> These 8 have NO constants/sequences. detect_constants/sequences")
-print(f"       return nothing. Only detect_patterns could help, but see TEST 5.")
+print("    -> These 8 have NO constants/sequences. detect_constants/sequences")
+print("       return nothing. Only detect_patterns could help, but see TEST 5.")
 
 print("\n" + "=" * 72)
 print(" HONEST VERDICT")

@@ -186,7 +186,25 @@ unsafe extern "C" fn fetch_callback(info: *const v8::FunctionCallbackInfo) {
         }
 
         let url_arg = args.get(0);
-        let url_str = url_arg.to_rust_string_lossy(scope);
+
+        // Support Request object as first argument (like real Chrome)
+        // If the argument is an object with a .url property, extract the URL.
+        let url_str = if url_arg.is_object() && !url_arg.is_string() {
+            let obj = unsafe { v8::Local::<v8::Object>::cast_unchecked(url_arg) };
+            let url_key = crate::v8_utils::v8_string(scope, "url");
+            let url_val = obj.get(scope, url_key.into());
+            if let Some(v) = url_val {
+                if v.is_string() {
+                    v.to_rust_string_lossy(scope)
+                } else {
+                    url_arg.to_rust_string_lossy(scope)
+                }
+            } else {
+                url_arg.to_rust_string_lossy(scope)
+            }
+        } else {
+            url_arg.to_rust_string_lossy(scope)
+        };
 
         if url_str.starts_with("chrome-extension://") {
             let msg = crate::v8_utils::v8_string(scope, "TypeError: Failed to fetch");

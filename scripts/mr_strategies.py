@@ -11,8 +11,7 @@ D-101 (v0.8.83): Extended from 10 to 43 MR rules across 5 categories.
 
 from __future__ import annotations
 
-from hypothesis import strategies as st, assume
-
+from hypothesis import strategies as st
 
 # ---------------------------------------------------------------------------
 # Static lookup tables

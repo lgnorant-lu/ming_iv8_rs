@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from iv8_rs import (
     DIAGNOSTIC_CATALOG,
     DiagnosticRecord,

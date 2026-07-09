@@ -1,7 +1,12 @@
 """Contract tests — boundary families: WASM, framework, interpreter, IR, CFF, anti-debug (parametrized)."""
 
 import pytest
-from experimental_contract_helpers import load_fixture, assert_no_strong_evidence, assert_diagnostic, assert_fields
+from experimental_contract_helpers import (
+    assert_diagnostic,
+    assert_fields,
+    assert_no_strong_evidence,
+    load_fixture,
+)
 
 BOUNDARY_CONTRACTS = [
     ("wasm-boundary", ["schema_version", "parser_status", "signals"], "WASM_PARSER_DEFERRED"),

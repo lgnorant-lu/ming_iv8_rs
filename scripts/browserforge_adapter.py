@@ -24,7 +24,6 @@ from typing import Any
 
 from browserforge.fingerprints import Fingerprint, FingerprintGenerator, Screen
 
-
 SCHEMA_VERSION = "0.8.32"
 
 BROWSERFORGE_NAVIGATOR_FIELDS = 19

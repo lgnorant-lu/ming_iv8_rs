@@ -5,7 +5,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from .environment_dry_run_engine import Candidate, ComparisonReport
@@ -26,7 +26,7 @@ class ReportBuilder:
 
         report: dict[str, Any] = {
             "schema_version": "l2-stage2.v0.1",
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "input": input_info,
             "gaps": gaps.to_dict(),
             "candidates": {

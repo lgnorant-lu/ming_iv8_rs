@@ -1,6 +1,5 @@
 """精确检查项目文件中的 emoji 字符（排除中文、box-drawing、数学符号、ASCII）"""
 import os
-import re
 
 # 精确 emoji 范围（排除中文、box-drawing、数学符号、箭头等 ASCII 范围）
 EMOJI_RANGES = [
@@ -294,7 +293,7 @@ def has_emoji(line):
 EXTENSIONS = {'.md', '.rs', '.py', '.toml', '.yml', '.yaml', '.json', '.txt'}
 
 # 要跳过的目录
-SKIP_DIRS = {'.git', 'target', '.venv', '.venv-probe', '__pycache__', '.pytest_cache', 
+SKIP_DIRS = {'.git', 'target', '.venv', '.venv-probe', '__pycache__', '.pytest_cache',
              'node_modules', 'ghidra_proj', 'iv8-ref'}
 
 root = r'd:\dogepy\Tools\IV8'
@@ -302,17 +301,17 @@ found = []
 
 for dirpath, dirnames, filenames in os.walk(root):
     dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
-    
+
     for filename in filenames:
         ext = os.path.splitext(filename)[1].lower()
         if ext not in EXTENSIONS:
             continue
-        
+
         filepath = os.path.join(dirpath, filename)
         rel_path = os.path.relpath(filepath, root)
-        
+
         try:
-            with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(filepath, encoding='utf-8', errors='ignore') as f:
                 for lineno, line in enumerate(f, 1):
                     if has_emoji(line):
                         emojis = [f"U+{ord(c):04X}" for c in line if is_emoji(c)]

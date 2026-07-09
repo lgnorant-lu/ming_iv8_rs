@@ -23,8 +23,8 @@ import pytest
 
 iv8_rs = pytest.importorskip("iv8_rs", reason="Rust extension not built")
 
-from iv8_rs.trace import parse_trace
 from iv8_rs.patterns import detect_constants
+from iv8_rs.trace import parse_trace
 
 
 # ============================================================

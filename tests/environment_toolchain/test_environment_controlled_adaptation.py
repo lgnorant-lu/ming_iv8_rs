@@ -2,17 +2,11 @@
 #
 # Tests: S1 probe execution, S3 dry-run, S4 report, 5 guardrails.
 
-import json
-import os
-import tempfile
-from pathlib import Path
 
-import pytest
 
 from helpers.environment_dry_run_engine import Candidate, ComparisonReport, DryRunEngine
 from helpers.environment_probe_runner import GapList, ProbeResult, ProbeRunner
 from helpers.environment_report_builder import ReportBuilder
-
 
 # ── S1: Probe Runner ──────────────────────────────────────────────────
 

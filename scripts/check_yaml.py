@@ -1,4 +1,5 @@
-import pathlib, sys
+import pathlib
+import sys
 
 try:
     import yaml

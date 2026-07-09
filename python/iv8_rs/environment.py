@@ -9,7 +9,7 @@ inspect what changed rather than treating the result as an automatic fix.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from iv8_rs.environment_policy import (
     PatchPolicyOptions,
@@ -22,12 +22,12 @@ from iv8_rs.environment_policy import (
 class EnvironmentPatch:
     """Environment overrides produced from a probe report."""
 
-    values: Dict[str, Any]
+    values: dict[str, Any]
     policy: str = "runtime_safe"
     source: str = "probe_missing_defaults"
-    notes: Optional[List[str]] = None
+    notes: list[str] | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
@@ -35,37 +35,37 @@ class EnvironmentPatch:
 class EnvironmentPlaneReport:
     """Result of a probe -> patch -> rerun Environment Plane pass."""
 
-    before: Dict[str, Any]
+    before: dict[str, Any]
     patch: EnvironmentPatch
-    after: Dict[str, Any]
-    improved_targets: List[str]
-    unresolved_targets: List[str]
-    workflow: List[str]
+    after: dict[str, Any]
+    improved_targets: list[str]
+    unresolved_targets: list[str]
+    workflow: list[str]
     policy: str = "runtime_safe"
     schema_version: str = "environment-plane.v0.1"
-    patch_candidates: List[Dict[str, Any]] = field(default_factory=list)
-    applied_patches: List[Dict[str, Any]] = field(default_factory=list)
-    rejected_patches: List[Dict[str, Any]] = field(default_factory=list)
-    coverage: Dict[str, Any] = field(default_factory=dict)
-    evidence: List[Dict[str, Any]] = field(default_factory=list)
-    diagnostics: List[Dict[str, Any]] = field(default_factory=list)
+    patch_candidates: list[dict[str, Any]] = field(default_factory=list)
+    applied_patches: list[dict[str, Any]] = field(default_factory=list)
+    rejected_patches: list[dict[str, Any]] = field(default_factory=list)
+    coverage: dict[str, Any] = field(default_factory=dict)
+    evidence: list[dict[str, Any]] = field(default_factory=list)
+    diagnostics: list[dict[str, Any]] = field(default_factory=list)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         data = asdict(self)
         data["patch"] = self.patch.to_dict()
         return data
 
 
 def build_environment_patch(
-    probe_report: Dict[str, Any],
+    probe_report: dict[str, Any],
     *,
     policy: str = "runtime_safe",
-    defaults: Optional[Dict[str, Any]] = None,
+    defaults: dict[str, Any] | None = None,
 ) -> EnvironmentPatch:
     """Build deterministic environment overrides from probe missing targets."""
     default_map = defaults or {}
-    values: Dict[str, Any] = {}
-    notes: List[str] = []
+    values: dict[str, Any] = {}
+    notes: list[str] = []
 
     for target in sorted(set(probe_report.get("missing", []))):
         values[target] = default_map.get(target, _default_value_for_target(target))
@@ -82,13 +82,13 @@ def build_environment_patch(
 def run_environment_plane(
     js_source: str,
     *,
-    profile: Optional[str] = "default",
-    environment: Optional[Dict[str, Any]] = None,
-    random_seed: Optional[int] = 42,
-    time_freeze: Optional[float] = None,
+    profile: str | None = "default",
+    environment: dict[str, Any] | None = None,
+    random_seed: int | None = 42,
+    time_freeze: float | None = None,
     time_mode: str = "logical",
-    entry_expr: Optional[str] = None,
-    patch_defaults: Optional[Dict[str, Any]] = None,
+    entry_expr: str | None = None,
+    patch_defaults: dict[str, Any] | None = None,
     policy: str = "runtime_safe",
 ) -> EnvironmentPlaneReport:
     """Run probe -> patch -> rerun and return a structured report."""
@@ -179,17 +179,17 @@ def _default_value_for_target(target: str) -> Any:
 
 
 def _build_policy_checked_patch(
-    probe_report: Dict[str, Any],
+    probe_report: dict[str, Any],
     *,
     policy: str,
-    defaults: Optional[Dict[str, Any]],
-    environment: Optional[Dict[str, Any]],
+    defaults: dict[str, Any] | None,
+    environment: dict[str, Any] | None,
 ):
     default_map = defaults or {}
     candidates = []
     decisions = []
-    values: Dict[str, Any] = {}
-    notes: List[str] = []
+    values: dict[str, Any] = {}
+    notes: list[str] = []
     opts = PatchPolicyOptions(
         persona="analysis" if policy == "analysis_only" else "runtime",
         allow_analysis_only=policy == "analysis_only",
@@ -224,11 +224,11 @@ def _build_policy_checked_patch(
 
 
 def _build_coverage(
-    before: Dict[str, Any],
-    after: Dict[str, Any],
-    improved_targets: List[str],
-    unresolved_targets: List[str],
-) -> Dict[str, Any]:
+    before: dict[str, Any],
+    after: dict[str, Any],
+    improved_targets: list[str],
+    unresolved_targets: list[str],
+) -> dict[str, Any]:
     before_missing = len(before.get("missing", []))
     after_missing = len(after.get("missing", []))
     return {
@@ -250,13 +250,13 @@ def _build_coverage(
 
 
 def _build_environment_evidence(
-    applied_patches: List[Dict[str, Any]],
-    improved_targets: List[str],
-    before_missing: List[str],
-    candidates: List[Dict[str, Any]],
-    rejected_patches: List[Dict[str, Any]],
-    after_missing: List[str],
-) -> List[Dict[str, Any]]:
+    applied_patches: list[dict[str, Any]],
+    improved_targets: list[str],
+    before_missing: list[str],
+    candidates: list[dict[str, Any]],
+    rejected_patches: list[dict[str, Any]],
+    after_missing: list[str],
+) -> list[dict[str, Any]]:
     evidence = []
     for target in before_missing:
         evidence.append({
@@ -323,12 +323,12 @@ def _build_environment_evidence(
 
 def _build_environment_diagnostics(
     decisions,
-    improved_targets: List[str],
-    before_missing: List[str],
-    after_missing: List[str],
+    improved_targets: list[str],
+    before_missing: list[str],
+    after_missing: list[str],
     unsafe_attempted: bool = False,
     profile_write_attempted: bool = False,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     diagnostics = []
     for decision in decisions:
         severity = "info" if decision.decision == "applied" else "warn"

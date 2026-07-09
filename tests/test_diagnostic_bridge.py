@@ -1045,12 +1045,12 @@ def test_validate_runtime_brief_dom_owner_rejects_non_v085():
 
 def test_select_runtime_briefs_preserves_existing_owner_paths_v047():
     from tools.diagnostic_bridge import (
+        DOM_OWNER_PATH,
         NAVIGATOR_OWNER_PATH,
-        SCREEN_WINDOW_OWNER_PATH,
         NAVIGATOR_UADATA_OWNER_PATH,
+        SCREEN_WINDOW_OWNER_PATH,
         TIMING_OWNER_PATH,
         UNDETECT_OWNER_PATH,
-        DOM_OWNER_PATH,
         build_repair_brief,
         select_runtime_briefs,
     )

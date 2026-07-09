@@ -21,9 +21,9 @@ Output:
 """
 from __future__ import annotations
 
+import argparse
 import json
 import sys
-import argparse
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -35,7 +35,7 @@ DEFAULT_OUTPUT = DATA_DIR / "descriptor_diff.json"
 
 
 def load_surface(path: Path) -> dict:
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 

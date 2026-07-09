@@ -7,7 +7,9 @@ v0.5 (StructuredTrace, CFG, Taint Tracking, Crypto Detection, VM Diff, Module Is
 """
 
 from __future__ import annotations
-from typing import Any, Callable, Optional, Union, List, Dict, Tuple
+
+from collections.abc import Callable
+from typing import Any
 
 # --- Version ---
 
@@ -54,14 +56,14 @@ def instrument_source(
     mode: str = "auto",
     capture_stack_depth: int = 3,
     capture_env: bool = True,
-    env_targets: Optional[List[str]] = None,
+    env_targets: list[str] | None = None,
     limit: int = 100000,
-    handler_array: Optional[str] = None,
-    pc_var: Optional[str] = None,
-    stack_var: Optional[str] = None,
-    index_array: Optional[str] = None,
-    dispatch_pattern: Optional[str] = None,
-) -> Tuple[str, Dict[str, Any]]:
+    handler_array: str | None = None,
+    pc_var: str | None = None,
+    stack_var: str | None = None,
+    index_array: str | None = None,
+    dispatch_pattern: str | None = None,
+) -> tuple[str, dict[str, Any]]:
     """
     Detect JSVMP pattern and inject unified tracing code.
 
@@ -96,7 +98,7 @@ def instrument_source(
     ...
 
 
-def trace_diff(trace_a: List[str], trace_b: List[str]) -> Dict[str, Any]:
+def trace_diff(trace_a: list[str], trace_b: list[str]) -> dict[str, Any]:
     """
     Compare two trace logs and find the first divergence point.
 
@@ -137,14 +139,14 @@ class JSContext:
 
     def __init__(
         self,
-        environment: Optional[Dict[str, Any]] = None,
-        config: Optional[Dict[str, Any]] = None,
+        environment: dict[str, Any] | None = None,
+        config: dict[str, Any] | None = None,
         time_mode: str = "logical",
         js_api: str = "__iv8__",
         strict_compat: bool = True,
-        random_seed: Optional[int] = None,
-        crypto_seed: Optional[int] = None,
-        time_freeze: Optional[float] = None,
+        random_seed: int | None = None,
+        crypto_seed: int | None = None,
+        time_freeze: float | None = None,
     ) -> None:
         """
         Create a new JSContext.
@@ -172,7 +174,7 @@ class JSContext:
         self,
         source: str,
         /,
-        name: Optional[str] = None,
+        name: str | None = None,
         line: int = -1,
         col: int = -1,
         to_py: bool = False,
@@ -221,9 +223,9 @@ class JSContext:
     def add_resource(
         self,
         url: str,
-        body: Union[str, bytes],
+        body: str | bytes,
         status: int = 200,
-        headers: Optional[Dict[str, str]] = None,
+        headers: dict[str, str] | None = None,
     ) -> None:
         """
         Add a resource to the offline bundle.
@@ -234,7 +236,7 @@ class JSContext:
 
     def set_network_handler(
         self,
-        handler: Callable[[str, str], Optional[Tuple[int, Union[str, bytes]]]],
+        handler: Callable[[str, str], tuple[int, str | bytes] | None],
     ) -> None:
         """
         Set a Python network handler for fetch/XHR fallback.
@@ -250,7 +252,7 @@ class JSContext:
 
     # --- DOM & Page ---
 
-    def page_load(self, html: str, base_url: Optional[str] = None) -> None:
+    def page_load(self, html: str, base_url: str | None = None) -> None:
         """
         Load an HTML page: parse DOM, execute scripts, fire DOMContentLoaded.
 
@@ -262,8 +264,8 @@ class JSContext:
 
     def expose(
         self,
-        name_or_data: Union[str, Any],
-        callable_or_name: Optional[Any] = None,
+        name_or_data: str | Any,
+        callable_or_name: Any | None = None,
     ) -> None:
         """
         Expose a Python callable as a global JS function, or store data.
@@ -282,10 +284,10 @@ class JSContext:
     def with_devtools(
         self,
         port: int = 9229,
-        watch_apis: Optional[List[str]] = None,
+        watch_apis: list[str] | None = None,
         enable_console: bool = True,
         wait: bool = True,
-    ) -> "JSContext":
+    ) -> JSContext:
         """
         Start the V8 Inspector (CDP WebSocket server).
 
@@ -301,7 +303,7 @@ class JSContext:
         """
         ...
 
-    def get_devtools_url(self) -> Optional[str]:
+    def get_devtools_url(self) -> str | None:
         """Get the DevTools URL for the current inspector session."""
         ...
 
@@ -315,8 +317,8 @@ class JSContext:
         self,
         url: str,
         line: int,
-        column: Optional[int] = None,
-        condition: Optional[str] = None,
+        column: int | None = None,
+        condition: str | None = None,
     ) -> str:
         """
         Set a breakpoint by script URL.
@@ -360,7 +362,7 @@ class JSContext:
         """Step into (enter function calls)."""
         ...
 
-    def cdp_get_call_frames(self) -> Optional[List[Dict[str, Any]]]:
+    def cdp_get_call_frames(self) -> list[dict[str, Any]] | None:
         """
         Get call frames from the last breakpoint pause.
 
@@ -385,7 +387,7 @@ class JSContext:
         self,
         url: str,
         line: int,
-        column: Optional[int] = None,
+        column: int | None = None,
         expression: str = "'hit'",
     ) -> str:
         """
@@ -409,7 +411,7 @@ class JSContext:
         """Remove a trace point by id."""
         ...
 
-    def get_trace_log(self) -> List[Any]:
+    def get_trace_log(self) -> list[Any]:
         """Get all entries recorded by trace points since last clear."""
         ...
 
@@ -431,7 +433,7 @@ class JSContext:
 
     # --- VM-aware Helper (v0.3 M18) ---
 
-    def detect_chaosvm_vars(self, source: str) -> Optional[Dict[str, str]]:
+    def detect_chaosvm_vars(self, source: str) -> dict[str, str] | None:
         """
         Detect ChaosVM/JSVMP variable names from JS source code.
 
@@ -471,7 +473,7 @@ class JSContext:
         """
         ...
 
-    def get_vm_trace(self) -> List[str]:
+    def get_vm_trace(self) -> list[str]:
         """
         Get the VM trace log (after instrument_chaosvm + execution).
 
@@ -491,8 +493,8 @@ class JSContext:
     def detect_vm_dispatch(
         self,
         script_url: str,
-        patterns: Optional[List[str]] = None,
-    ) -> Optional[Dict[str, Any]]:
+        patterns: list[str] | None = None,
+    ) -> dict[str, Any] | None:
         """
         Detect a JSVMP dispatch loop in a loaded script.
 
@@ -510,8 +512,8 @@ class JSContext:
         self,
         url: str,
         line: int,
-        column: Optional[int] = None,
-        vars: Optional[List[str]] = None,
+        column: int | None = None,
+        vars: list[str] | None = None,
         limit: int = 50000,
     ) -> str:
         """
@@ -534,7 +536,7 @@ class JSContext:
 
     # --- M19: Deep Trace (unified instrument_source integration) ---
 
-    def get_unified_trace(self) -> List[str]:
+    def get_unified_trace(self) -> list[str]:
         """
         Get the unified trace log (from instrument_source injection).
 
@@ -554,7 +556,7 @@ class JSContext:
 
     def start_recording(
         self,
-        targets: Optional[List[str]] = None,
+        targets: list[str] | None = None,
         record_reads: bool = True,
         record_writes: bool = True,
         record_calls: bool = True,
@@ -573,7 +575,7 @@ class JSContext:
         """
         ...
 
-    def stop_recording(self) -> List[str]:
+    def stop_recording(self) -> list[str]:
         """
         Stop recording and return all captured entries.
 
@@ -593,7 +595,7 @@ class JSContext:
         """
         ...
 
-    def stop_profiler(self) -> Optional[Dict[str, Any]]:
+    def stop_profiler(self) -> dict[str, Any] | None:
         """
         Stop V8 CPU Profiler and return the profile data.
 
@@ -611,7 +613,7 @@ class JSContext:
         """
         ...
 
-    def stop_coverage(self) -> Optional[List[Dict[str, Any]]]:
+    def stop_coverage(self) -> list[dict[str, Any]] | None:
         """
         Stop coverage collection and return results.
 
@@ -622,7 +624,7 @@ class JSContext:
 
     # --- Console ---
 
-    def get_console_messages(self) -> List[Dict[str, str]]:
+    def get_console_messages(self) -> list[dict[str, str]]:
         """
         Get all console messages captured since context creation.
 
@@ -645,16 +647,16 @@ class JSContext:
         """Close the context and release V8 resources."""
         ...
 
-    def __enter__(self) -> "JSContext": ...
+    def __enter__(self) -> JSContext: ...
     def __exit__(
         self,
-        exc_type: Optional[type],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[Any],
+        exc_type: type | None,
+        exc_val: BaseException | None,
+        exc_tb: Any | None,
     ) -> bool: ...
 
     @classmethod
-    def get_defaults(cls) -> Dict[str, Any]:
+    def get_defaults(cls) -> dict[str, Any]:
         """Return the 393 default environment entries as a dict."""
         ...
 
@@ -691,11 +693,11 @@ class Debugger:
         """
         ...
 
-    def trace_apis(self, api_paths: List[str]) -> None:
+    def trace_apis(self, api_paths: list[str]) -> None:
         """Trace multiple APIs at once."""
         ...
 
-    def get_call_log(self) -> List[Dict[str, Any]]:
+    def get_call_log(self) -> list[dict[str, Any]]:
         """
         Get the call log.
 
@@ -707,11 +709,11 @@ class Debugger:
         """Clear the call log."""
         ...
 
-    def get_traced_apis(self) -> List[str]:
+    def get_traced_apis(self) -> list[str]:
         """Get the list of currently traced APIs."""
         ...
 
-    def eval_traced(self, source: str) -> Tuple[Any, List[Dict[str, Any]]]:
+    def eval_traced(self, source: str) -> tuple[Any, list[dict[str, Any]]]:
         """
         Evaluate JS and return both the result and the call log.
 
@@ -722,7 +724,7 @@ class Debugger:
         """
         ...
 
-    def snapshot(self) -> Dict[str, Any]:
+    def snapshot(self) -> dict[str, Any]:
         """
         Get a snapshot of the current environment.
 
@@ -748,7 +750,7 @@ class Debugger:
         """
         ...
 
-    def get_call_summary(self) -> Dict[str, int]:
+    def get_call_summary(self) -> dict[str, int]:
         """Get a summary of call counts per API."""
         ...
 

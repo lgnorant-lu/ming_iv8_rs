@@ -351,7 +351,7 @@ def _load_fp_rules():
     if _FP_RULES is not None:
         return _FP_RULES, _FP_GROUPS
     sys.path.insert(0, str(REPO_ROOT / "scripts"))
-    from fp_inconsistent_rules import parse_filterlist, categorize_rules
+    from fp_inconsistent_rules import categorize_rules, parse_filterlist
     all_rules = parse_filterlist()
     applicable, _ = categorize_rules(all_rules)
     groups = {}

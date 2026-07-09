@@ -9,8 +9,6 @@ NOT previously in the tracked test suite:
   - removeAttribute / insertAdjacentHTML / innerHTML setter
   - classList add/remove / nextElementSibling / closest / matches
 """
-import pytest
-import iv8_rs
 
 
 # ============================================================

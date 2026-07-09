@@ -17,20 +17,21 @@ Usage::
 """
 
 from __future__ import annotations
-import warnings
-from typing import Any, Dict, List, Optional
+
 import json
+import warnings
+from typing import Any
 
 
 def exec_vm_handler(
     ctx,
     handler_expr: str,
     stack_var: str = "g",
-    stack_input: Optional[List[Any]] = None,
-    pc_var: Optional[str] = None,
-    pc_value: Optional[int] = None,
-    mock_env: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
+    stack_input: list[Any] | None = None,
+    pc_var: str | None = None,
+    pc_value: int | None = None,
+    mock_env: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Execute a single VM handler in isolation and return stack changes.
 
     Sets up the VM stack with specified input, optionally sets the PC,

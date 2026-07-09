@@ -8,13 +8,13 @@ profiles, baselines, or samples.
 from __future__ import annotations
 
 import sys
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set
+from typing import Any
 
 import iv8_rs
-
 
 PATH_STATUSES = {"present", "missing", "external", "unknown"}
 AUTOMATION_STATUSES = {"ready", "manual_only", "blocked", "not_started"}
@@ -30,16 +30,16 @@ class CorpusManifestItem:
     runtime_family: str
     persona: str
     target_goal: str = ""
-    expected_evidence: List[str] = field(default_factory=list)
+    expected_evidence: list[str] = field(default_factory=list)
     automation_status: str = "not_started"
     validation_status: str = "not_validated"
     notes: str = ""
-    entry_expr: Optional[str] = None
-    profile: Optional[str] = None
-    environment: Optional[Dict[str, Any]] = None
-    tags: List[str] = field(default_factory=list)
-    fixtures: List[str] = field(default_factory=list)
-    policy_overrides: Dict[str, Any] = field(default_factory=dict)
+    entry_expr: str | None = None
+    profile: str | None = None
+    environment: dict[str, Any] | None = None
+    tags: list[str] = field(default_factory=list)
+    fixtures: list[str] = field(default_factory=list)
+    policy_overrides: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if self.path_status not in PATH_STATUSES:
@@ -54,7 +54,7 @@ class CorpusManifestItem:
             )
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "CorpusManifestItem":
+    def from_dict(cls, data: dict[str, Any]) -> CorpusManifestItem:
         return cls(
             sample_id=str(data["sample_id"]),
             source_path=str(data["source_path"]),
@@ -75,13 +75,13 @@ class CorpusManifestItem:
             policy_overrides=dict(data.get("policy_overrides", {})),
         )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
 @dataclass(slots=True)
 class CorpusRunOptions:
-    sample_filter: Optional[Set[str]] = None
+    sample_filter: set[str] | None = None
     include_external: bool = False
     include_missing: bool = False
     dry_run: bool = False
@@ -90,13 +90,13 @@ class CorpusRunOptions:
     runner_version: str = "0.7.0-dev"
 
 
-def load_manifest(path: str | Path) -> List[CorpusManifestItem]:
+def load_manifest(path: str | Path) -> list[CorpusManifestItem]:
     """Load the current Markdown manifest table into typed records."""
     manifest_path = Path(path)
     text = manifest_path.read_text(encoding="utf-8")
-    records: List[CorpusManifestItem] = []
+    records: list[CorpusManifestItem] = []
     in_table = False
-    headers: List[str] = []
+    headers: list[str] = []
 
     for raw_line in text.splitlines():
         line = raw_line.strip()
@@ -137,12 +137,12 @@ def load_manifest(path: str | Path) -> List[CorpusManifestItem]:
 
 
 def build_corpus_report(
-    items: Sequence[CorpusManifestItem | Dict[str, Any]],
+    items: Sequence[CorpusManifestItem | dict[str, Any]],
     *,
     manifest_path: str,
-    options: Optional[CorpusRunOptions] = None,
-    executor: Optional[Callable[[CorpusManifestItem], Dict[str, Any]]] = None,
-) -> Dict[str, Any]:
+    options: CorpusRunOptions | None = None,
+    executor: Callable[[CorpusManifestItem], dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     """Build a draft corpus report from manifest records.
 
     When `executor` is provided and a sample is eligible, the executor is
@@ -162,7 +162,7 @@ def build_corpus_report(
     return {
         "schema_version": "corpus-report.v0.1",
         "runner_version": opts.runner_version,
-        "created_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "manifest_path": manifest_path,
         "policy": {"level": opts.policy},
         "summary": summary,
@@ -172,7 +172,7 @@ def build_corpus_report(
     }
 
 
-def _classify_result(result_state: str, expected_evidence: List[str], observed_evidence: List[Dict[str, Any]]) -> str:
+def _classify_result(result_state: str, expected_evidence: list[str], observed_evidence: list[dict[str, Any]]) -> str:
     """Classify result per corpus-runner-contract.md section 12.
 
     PASS requires:
@@ -191,7 +191,7 @@ def _classify_result(result_state: str, expected_evidence: List[str], observed_e
 
 
 
-def default_executor(item: CorpusManifestItem) -> Dict[str, Any]:
+def default_executor(item: CorpusManifestItem) -> dict[str, Any]:
     """Default executor using Entry Plane via prepare_entry + run_with_entry."""
     source_path = Path(item.source_path)
     if not source_path.exists():
@@ -256,8 +256,8 @@ def default_executor(item: CorpusManifestItem) -> Dict[str, Any]:
 def run_corpus_manifest(
     manifest_path: str | Path,
     *,
-    options: Optional[CorpusRunOptions] = None,
-) -> Dict[str, Any]:
+    options: CorpusRunOptions | None = None,
+) -> dict[str, Any]:
     """Load a manifest and emit a report without mutating the manifest."""
     before = Path(manifest_path).read_text(encoding="utf-8")
     items = load_manifest(manifest_path)
@@ -272,8 +272,8 @@ def _build_sample_report(
     item: CorpusManifestItem,
     opts: CorpusRunOptions,
     *,
-    executor: Optional[Callable[[CorpusManifestItem], Dict[str, Any]]] = None,
-) -> Dict[str, Any]:
+    executor: Callable[[CorpusManifestItem], dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     if opts.sample_filter is not None and item.sample_id not in opts.sample_filter:
         eligibility, reason = "skipped", "not_selected"
     else:
@@ -358,11 +358,11 @@ def _build_sample_report(
                 selected_jps.append("function_ctor_source_point")
             if not selected_jps and "source_ast_transform_applied" in observed_kinds:
                 selected_jps.append("dispatch_expression")
-            
+
             runtime_validated = "source_ast_runtime_validated" in observed_kinds or "eval_source_captured" in observed_kinds or "function_constructor_source_captured" in observed_kinds
             source_ast_ev = [e.get("kind") for e in execution.get("observed_evidence", []) if isinstance(e, dict) and e.get("source") == "source_ast"]
             source_ast_diags = [d.get("code") for d in execution.get("diagnostics", []) if isinstance(d, dict) and d.get("stage", "").startswith("source_ast")]
-            
+
             sample["source_ast_report"] = {
                 "source_id": "input.js",
                 "selected_join_points": selected_jps,
@@ -378,7 +378,7 @@ def _decide_eligibility(
     item: CorpusManifestItem,
     opts: CorpusRunOptions,
     *,
-    executor: Optional[Callable[[CorpusManifestItem], Dict[str, Any]]] = None,
+    executor: Callable[[CorpusManifestItem], dict[str, Any]] | None = None,
 ) -> tuple[str, str]:
     if item.path_status == "missing":
         return "skipped", "dry_run" if opts.include_missing and opts.dry_run else "path_missing"
@@ -399,7 +399,7 @@ def _decide_eligibility(
     return "skipped", "executor_not_implemented"
 
 
-def _sample_diagnostics(item: CorpusManifestItem, eligibility: str, reason: str) -> List[Dict[str, Any]]:
+def _sample_diagnostics(item: CorpusManifestItem, eligibility: str, reason: str) -> list[dict[str, Any]]:
     if eligibility == "run":
         # Running samples get diagnostics from execution results, not eligibility
         return []
@@ -428,7 +428,7 @@ def _sample_diagnostics(item: CorpusManifestItem, eligibility: str, reason: str)
     }]
 
 
-def _build_summary(samples: Iterable[Dict[str, Any]], *, total: int) -> Dict[str, int]:
+def _build_summary(samples: Iterable[dict[str, Any]], *, total: int) -> dict[str, int]:
     sample_list = list(samples)
     return {
         "total": total,
@@ -443,10 +443,10 @@ def _build_summary(samples: Iterable[Dict[str, Any]], *, total: int) -> Dict[str
 
 
 def _runner_level_diagnostics(
-    items: List[CorpusManifestItem],
-    sample_reports: List[Dict[str, Any]],
-) -> List[Dict[str, Any]]:
-    diag: List[Dict[str, Any]] = []
+    items: list[CorpusManifestItem],
+    sample_reports: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    diag: list[dict[str, Any]] = []
     for report in sample_reports:
         for d in report.get("diagnostics", []):
             if d.get("stage") in {"corpus.execute"} and d.get("severity") == "error":
@@ -456,9 +456,9 @@ def _runner_level_diagnostics(
 
 def _build_sample_artifacts(
     sample_id: str,
-    execution: Optional[Dict[str, Any]] = None,
-) -> List[Dict[str, Any]]:
-    artifacts: List[Dict[str, Any]] = []
+    execution: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    artifacts: list[dict[str, Any]] = []
     if execution and execution.get("trace_meta"):
         artifacts.append({
             "kind": "trace_meta",
@@ -485,7 +485,7 @@ def _clean_markdown_cell(value: str) -> str:
     return value
 
 
-def _parse_list_cell(value: str) -> List[str]:
+def _parse_list_cell(value: str) -> list[str]:
     """Parse a Markdown cell containing a list-like value.
     
     Handles formats: `a, b, c` or `a` or empty.
@@ -507,7 +507,7 @@ EXIT_CODE_WRITE_FAILURE = 3
 EXIT_CODE_STRICT_WARN = 4
 
 
-def _resolve_exit_code(summary: Dict[str, int], *, strict: bool) -> int:
+def _resolve_exit_code(summary: dict[str, int], *, strict: bool) -> int:
     """Resolve exit code per corpus-runner-contract.md section 17.
 
     | Code | Meaning |
@@ -525,7 +525,7 @@ def _resolve_exit_code(summary: Dict[str, int], *, strict: bool) -> int:
     return EXIT_CODE_OK
 
 
-def main(argv: Optional[List[str]] = None) -> int:
+def main(argv: list[str] | None = None) -> int:
     """Run corpus CLI.
     
     Returns exit code 0-4 per corpus-runner-contract.md.
@@ -533,9 +533,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     if argv is None:
         argv = sys.argv[1:]
 
-    manifest_path: Optional[str] = None
-    output_path: Optional[str] = None
-    sample_filter: Optional[Set[str]] = None
+    manifest_path: str | None = None
+    output_path: str | None = None
+    sample_filter: set[str] | None = None
     include_external = False
     dry_run = False
     strict = False
@@ -599,7 +599,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             out = Path(output_path)
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
-        except (OSError, IOError) as exc:
+        except OSError as exc:
             print(f"error: report write failed: {exc}", file=sys.stderr)
             return EXIT_CODE_WRITE_FAILURE
 

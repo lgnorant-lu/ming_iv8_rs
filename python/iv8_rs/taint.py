@@ -26,8 +26,8 @@ Usage::
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import Dict, List, Set, Optional
+
+from dataclasses import dataclass
 
 from iv8_rs.trace import StructuredTrace
 
@@ -76,7 +76,7 @@ class TaintFlow:
     sink: TaintSink
     """Destination where the value arrived."""
 
-    intermediate_pcs: List[int]
+    intermediate_pcs: list[int]
     """PCs of D entries where the value appeared in stack (propagation path)."""
 
 
@@ -84,19 +84,19 @@ class TaintFlow:
 class TaintReport:
     """Result of taint analysis."""
 
-    sources: List[TaintSource]
+    sources: list[TaintSource]
     """All registered taint sources."""
 
-    sinks: List[TaintSink]
+    sinks: list[TaintSink]
     """All detected sinks (where tainted values were written)."""
 
-    flows: List[TaintFlow]
+    flows: list[TaintFlow]
     """Complete source-to-sink flows."""
 
-    unreached_sources: List[str]
+    unreached_sources: list[str]
     """Source labels that never reached any sink."""
 
-    stack_hits: Dict[str, int]
+    stack_hits: dict[str, int]
     """Per-source label: how many D entries contained the value in stack."""
 
 
@@ -123,11 +123,11 @@ class TaintEngine:
         print(report.flows)
     """
 
-    def __init__(self, trace: StructuredTrace, sources: Dict[str, str]):
+    def __init__(self, trace: StructuredTrace, sources: dict[str, str]):
         self.trace = trace
         self._sources = sources
         # Generate short labels from target names
-        self._labels: Dict[str, str] = {}
+        self._labels: dict[str, str] = {}
         for target in sources:
             parts = target.split(".")
             label = parts[-1][:6].upper() if parts else target[:6].upper()
@@ -160,7 +160,7 @@ class TaintEngine:
             TaintReport with sources, sinks, flows, and unreached sources.
         """
         # Build TaintSource objects
-        taint_sources: List[TaintSource] = []
+        taint_sources: list[TaintSource] = []
         for target, value in self._sources.items():
             # Try to find the value in R entries (to get a PC)
             pc = -1
@@ -177,9 +177,9 @@ class TaintEngine:
             ))
 
         # Track each source value through D entries (stack values)
-        stack_hits: Dict[str, int] = {s.label: 0 for s in taint_sources}
+        stack_hits: dict[str, int] = {s.label: 0 for s in taint_sources}
         # intermediate_pcs per source label
-        intermediates: Dict[str, List[int]] = {s.label: [] for s in taint_sources}
+        intermediates: dict[str, list[int]] = {s.label: [] for s in taint_sources}
 
         for entry in self.trace.dispatches:
             # D entry value field may contain: "depth,val1,val2,val3"
@@ -192,7 +192,7 @@ class TaintEngine:
                     intermediates[src.label].append(entry.pc)
 
         # Find sinks: W entries whose value matches a source value
-        sinks: List[TaintSink] = []
+        sinks: list[TaintSink] = []
         for entry in self.trace.writes:
             for src in taint_sources:
                 if self._value_matches(src.value, entry.value):
@@ -215,7 +215,7 @@ class TaintEngine:
                     ))
 
         # Build flows: source → intermediate → sink
-        flows: List[TaintFlow] = []
+        flows: list[TaintFlow] = []
         for sink in sinks:
             # Find the source that matches this sink's label
             src = next((s for s in taint_sources if s.label == sink.label), None)

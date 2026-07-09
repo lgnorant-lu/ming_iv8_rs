@@ -16,13 +16,13 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
+from iv8_rs.environment_toolchain_asset_models import ProbePack  # noqa: E402
+
 from tools.idl_probe.generate_probe_pack import (  # noqa: E402
     _CONSTRUCTOR_AVAILABLE,
     build_profile_values_from_env,
     generate_probe_pack,
 )
-
-from iv8_rs.environment_toolchain_asset_models import ProbePack  # noqa: E402
 
 
 def test_generated_pack_is_deterministic():

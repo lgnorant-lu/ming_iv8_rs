@@ -5,10 +5,11 @@ Covers: from_trace, find_loops, find_modules, get_complexity, to_dot, to_json.
 Strategy: construct known-structure traces, assert CFG properties.
 Includes positive, negative, boundary, and performance cases.
 """
-import pytest
 import time
-from iv8_rs.trace import StructuredTrace, TraceEntry, parse_trace
-from iv8_rs.cfg import CFG, CFGNode, CFGEdge, Loop, Module
+
+import pytest
+from iv8_rs.cfg import CFG
+from iv8_rs.trace import StructuredTrace, TraceEntry
 
 
 def make_dispatch_trace(pc_sequence):

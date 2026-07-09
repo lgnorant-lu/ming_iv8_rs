@@ -3,8 +3,7 @@ Cross-version VM handler diff tests (M28).
 
 Tests compare_vm_versions with synthetic JS sources containing handler arrays.
 """
-import pytest
-from iv8_rs.vm_diff import compare_vm_versions, DiffReport
+from iv8_rs.vm_diff import compare_vm_versions
 
 
 # Helper: minimal VM source with a handler array

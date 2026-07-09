@@ -3,9 +3,9 @@
 Usage: python scripts/sample_iv8_surface.py [--output actual.json]
 """
 
+import argparse
 import json
 import sys
-import argparse
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

@@ -24,16 +24,6 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from scripts.evaluate_env_consistency import (
     load_runtime_env,
-    check_a01_platform_matches_ua,
-    check_a02_vendor_matches_browser,
-    check_a03_webgl_vendor_renderer_consistency,
-    check_a04_screen_ge_window,
-    check_a05_pointer_consistency,
-    check_a06_hover_consistency,
-    check_a07_permissions_valid,
-    check_a08_audio_latency_valid,
-    check_a09_fonts_nonempty,
-    check_a10_color_gamut_valid,
 )
 
 _SCRIPTS_DIR = Path(__file__).resolve().parent

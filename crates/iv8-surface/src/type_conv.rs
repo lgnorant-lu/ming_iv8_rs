@@ -24,12 +24,16 @@ pub fn default_value_for_type<'s>(
         | "octet"
         | "unsigned long"
         | "unsigned short"
-        | "long long"
-        | "unsigned long long"
         | "float"
         | "double"
         | "unrestricted float"
         | "unrestricted double" => v8::Number::new(scope, 0.0).into(),
+        // WebIDL `long long` and `unsigned long long` are 64-bit integers.
+        // V8 Number (f64) can only represent integers up to 2^53 exactly.
+        // For correctness with large values, return BigInt(0) as default.
+        "long long" | "unsigned long long" => {
+            v8::BigInt::new_from_i64(scope, 0).into()
+        }
         "DOMString" | "USVString" | "ByteString" => v8::String::new(scope, "")
             .map(|s| s.into())
             .unwrap_or_else(|| v8::undefined(scope).into()),

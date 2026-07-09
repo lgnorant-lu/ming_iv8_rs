@@ -49,8 +49,8 @@ def test_run_environment_plane_returns_workflow_report():
 
 
 def test_run_environment_plane_policy_report_rejects_explicit_conflict(monkeypatch):
-    from iv8_rs import run_environment_plane
     import iv8_rs.probe
+    from iv8_rs import run_environment_plane
 
     def fake_probe_environment(*args, environment=None, **kwargs):
         return {

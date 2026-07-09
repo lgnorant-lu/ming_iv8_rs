@@ -14,10 +14,9 @@ Categories:
 Exit code 0 = ALL categories PASS. Non-zero = at least one FAIL.
 Run before claiming any detection work is "complete".
 """
-import sys
-import json
 import random
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
@@ -27,11 +26,16 @@ TEST_FILE = ROOT / "tests" / "test_crypto_detection.py"
 
 sys.path.insert(0, str(ROOT / "python"))
 
-from iv8_rs.trace import StructuredTrace, TraceEntry
 from iv8_rs.patterns import (
-    detect_constants, detect_sequences, detect_all, detect_patterns,
-    _load_builtin_patterns, _load_constants_db, _load_sequences_db,
+    _load_builtin_patterns,
+    _load_constants_db,
+    _load_sequences_db,
+    detect_all,
+    detect_constants,
+    detect_patterns,
+    detect_sequences,
 )
+from iv8_rs.trace import StructuredTrace, TraceEntry
 
 # ============================================================
 # THRESHOLDS - the single source of truth for "passing".

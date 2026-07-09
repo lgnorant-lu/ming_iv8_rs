@@ -1,7 +1,12 @@
 """Contract tests — deobfuscation families (parametrized)."""
 
 import pytest
-from experimental_contract_helpers import load_fixture, assert_no_strong_evidence, assert_diagnostic, assert_fields
+from experimental_contract_helpers import (
+    assert_diagnostic,
+    assert_fields,
+    assert_no_strong_evidence,
+    load_fixture,
+)
 
 DEOBF_CONTRACTS = [
     ("deobf-registry", ["schema_version", "entries", "selection_report"], "DEOBF_REGISTRY_POLICY_REJECTED"),

@@ -1,6 +1,7 @@
 from __future__ import annotations
-import pytest
-from iv8_rs import prepare_entry, run_with_entry, EntryPlan, EntryResult, evaluate_evidence_gate
+
+from iv8_rs import prepare_entry, run_with_entry
+
 
 def plan_and_run(source: str, persona: str = "analysis", entry_expr: str | None = None) -> tuple[dict, dict]:
     plan = prepare_entry(source, persona=persona)
@@ -45,7 +46,7 @@ def test_webpack4_runtime_captured():
     assert graph["runtime_flavor"] in ("webpack4", "webpack5", "unknown_webpack_like")
     assert graph["module_count"] == 2
     assert graph["entry_module_id"] == "0"
-    
+
     # Assert nodes
     nodes = {node["module_id"]: node for node in graph["nodes"]}
     assert "0" in nodes
@@ -90,7 +91,7 @@ def test_webpack5_runtime_captured():
     """
     plan, result = plan_and_run(source)
     assert plan["selected_strategy"]["strategy_kind"] == "webpack_bridge"
-    
+
     observed = result["observed_evidence"]
     kinds = [e["kind"] for e in observed]
     assert "require_captured" in kinds
@@ -125,7 +126,7 @@ def test_webpack_chunk_evidence():
     chunks = graph["chunks"]
     assert len(chunks) > 0
     assert chunks[0]["chunk_id"] == "vendors"
-    
+
     observed = result["observed_evidence"]
     kinds = [e["kind"] for e in observed]
     assert "chunk_event_observed" in kinds
@@ -144,7 +145,7 @@ def test_webpack_marker_only_guard():
     observed = result["observed_evidence"]
     kinds = [e["kind"] for e in observed]
     assert "module_table_captured" not in kinds
-    
+
     # WEBPACK_EVIDENCE_WEAK / WEBPACK_REQUIRE_CAPTURE_FAILED should be present
     records = result["diagnostic_records"]
     codes = [r["code"] for r in records]
@@ -194,10 +195,10 @@ def test_webpack_vm_hybrid_integration():
     """
     plan, result = plan_and_run(source)
     assert plan["sample_kind"] == "webpack_vm_hybrid"
-    
+
     graph = result["module_graph"]
     assert graph is not None
     assert graph["module_count"] == 1
-    
+
     # Trace contains the dispatch trace
     assert any("D," in t for t in result["trace"])

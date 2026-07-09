@@ -7,7 +7,6 @@ scalars (int / float). Round-trip via expose() also preserves the kind.
 
 import iv8_rs
 
-
 # ---------- strict_compat=True: bytes (back-compat) ----------
 
 def test_uint8_array_strict_compat_returns_bytes():

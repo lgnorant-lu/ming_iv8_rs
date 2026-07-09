@@ -1,7 +1,12 @@
 """Contract tests — VM analysis families (parametrized)."""
 
 import pytest
-from experimental_contract_helpers import load_fixture, assert_no_strong_evidence, assert_diagnostic, assert_fields
+from experimental_contract_helpers import (
+    assert_diagnostic,
+    assert_fields,
+    assert_no_strong_evidence,
+    load_fixture,
+)
 
 VM_CONTRACTS = [
     ("vm-analysis", ["schema_version", "vm_family", "dispatch_variant", "handler_table"], "VM_BYTECODE_CANDIDATE_UNVALIDATED"),

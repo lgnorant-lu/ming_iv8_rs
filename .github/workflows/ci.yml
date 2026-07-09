@@ -123,6 +123,9 @@ jobs:
           uv venv
           uv run maturin develop -m crates/iv8-py/Cargo.toml
 
+      - name: Ruff check
+        run: uv run ruff check python/ scripts/ tests/ || true
+
       - name: Run all Python tests
         run: uv run --with pytest pytest tests -q --tb=short
 

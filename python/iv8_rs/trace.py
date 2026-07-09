@@ -6,9 +6,11 @@ with filtering, slicing, statistics, and export capabilities.
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any, Iterator
+
 import json
+from collections.abc import Iterator
+from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass(slots=True)
@@ -47,7 +49,7 @@ class TraceEntry:
         return self.type == "W"
 
 
-def _parse_entry(raw: str) -> Optional[TraceEntry]:
+def _parse_entry(raw: str) -> TraceEntry | None:
     """Parse a single raw trace string into a TraceEntry.
 
     Handles two formats:
@@ -116,7 +118,7 @@ class StructuredTrace:
 
     __slots__ = ("entries",)
 
-    def __init__(self, entries: List[TraceEntry]):
+    def __init__(self, entries: list[TraceEntry]):
         self.entries = entries
 
     def __len__(self) -> int:
@@ -133,22 +135,22 @@ class StructuredTrace:
     # --- Type-filtered views ---
 
     @property
-    def dispatches(self) -> List[TraceEntry]:
+    def dispatches(self) -> list[TraceEntry]:
         """All D (dispatch) entries."""
         return [e for e in self.entries if e.type == "D"]
 
     @property
-    def reads(self) -> List[TraceEntry]:
+    def reads(self) -> list[TraceEntry]:
         """All R (read) entries."""
         return [e for e in self.entries if e.type == "R"]
 
     @property
-    def calls(self) -> List[TraceEntry]:
+    def calls(self) -> list[TraceEntry]:
         """All C (call) entries."""
         return [e for e in self.entries if e.type == "C"]
 
     @property
-    def writes(self) -> List[TraceEntry]:
+    def writes(self) -> list[TraceEntry]:
         """All W (write) entries."""
         return [e for e in self.entries if e.type == "W"]
 
@@ -156,10 +158,10 @@ class StructuredTrace:
 
     def filter(
         self,
-        type: Optional[str] = None,
-        target: Optional[str] = None,
-        pc_range: Optional[tuple] = None,
-    ) -> "StructuredTrace":
+        type: str | None = None,
+        target: str | None = None,
+        pc_range: tuple | None = None,
+    ) -> StructuredTrace:
         """Filter entries by type, target pattern, and/or PC range.
 
         Args:
@@ -180,7 +182,7 @@ class StructuredTrace:
             result = [e for e in result if lo <= e.pc <= hi]
         return StructuredTrace(result)
 
-    def between(self, pc_start: int, pc_end: int) -> "StructuredTrace":
+    def between(self, pc_start: int, pc_end: int) -> StructuredTrace:
         """Slice entries within a PC range (inclusive).
 
         Args:
@@ -194,7 +196,7 @@ class StructuredTrace:
 
     # --- Statistics ---
 
-    def summary(self) -> Dict[str, Any]:
+    def summary(self) -> dict[str, Any]:
         """Compute summary statistics.
 
         Returns:
@@ -259,7 +261,7 @@ class StructuredTrace:
 
     # --- Sequence extraction (for pattern matching) ---
 
-    def pc_sequence(self) -> List[int]:
+    def pc_sequence(self) -> list[int]:
         """Extract PC sequence from dispatch entries only.
 
         Returns:
@@ -268,7 +270,7 @@ class StructuredTrace:
         """
         return [e.pc for e in self.entries if e.type == "D"]
 
-    def value_sequence(self) -> List[str]:
+    def value_sequence(self) -> list[str]:
         """Extract value sequence from all entries.
 
         Returns:
@@ -285,27 +287,27 @@ class StructuredTrace:
         """
         return {e.pc for e in self.entries if e.type == "D" and e.pc >= 0}
 
-    def index_by_pc(self) -> Dict[int, List["TraceEntry"]]:
+    def index_by_pc(self) -> dict[int, list[TraceEntry]]:
         """Build index: PC -> list of entries at that PC.
 
         Returns:
             Dict mapping PC to all entries (D/R/C/W) at that PC.
             O(1) lookup after construction.
         """
-        idx: Dict[int, List[TraceEntry]] = {}
+        idx: dict[int, list[TraceEntry]] = {}
         for e in self.entries:
             if e.pc >= 0:
                 idx.setdefault(e.pc, []).append(e)
         return idx
 
-    def index_by_target(self) -> Dict[str, List["TraceEntry"]]:
+    def index_by_target(self) -> dict[str, list[TraceEntry]]:
         """Build index: target -> list of entries with that target.
 
         Returns:
             Dict mapping target string to all entries referencing it.
             O(1) lookup after construction.
         """
-        idx: Dict[str, List[TraceEntry]] = {}
+        idx: dict[str, list[TraceEntry]] = {}
         for e in self.entries:
             if e.target:
                 idx.setdefault(e.target, []).append(e)
@@ -322,7 +324,7 @@ class StructuredTrace:
         )
 
 
-def parse_trace(raw: List[str]) -> StructuredTrace:
+def parse_trace(raw: list[str]) -> StructuredTrace:
     """Parse raw unified trace strings into a StructuredTrace.
 
     Args:
@@ -402,7 +404,7 @@ class CompressedTrace:
 
     __slots__ = ("entries",)
 
-    def __init__(self, entries: List[CompressedEntry]):
+    def __init__(self, entries: list[CompressedEntry]):
         self.entries = entries
 
     def __len__(self) -> int:
@@ -459,7 +461,7 @@ def compress_trace(trace: StructuredTrace) -> CompressedTrace:
     if not trace.entries:
         return CompressedTrace([])
 
-    result: List[CompressedEntry] = []
+    result: list[CompressedEntry] = []
     prev = trace.entries[0]
     count = 1
 

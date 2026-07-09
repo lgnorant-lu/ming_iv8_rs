@@ -6,12 +6,9 @@ Usage:
 """
 
 import os
-import re
 import sys
 from pathlib import Path
 from subprocess import run as subprocess_run
-from typing import Dict, List, Tuple
-
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_FILE = PROJECT_ROOT / "docs" / "PYTHON_TEST_INVENTORY.md"
@@ -31,14 +28,14 @@ def collect_tests() -> str:
     return result.stdout
 
 
-def parse_collection(stdout: str) -> Dict[str, List[str]]:
+def parse_collection(stdout: str) -> dict[str, list[str]]:
     """Parse pytest --collect-only -q output into per-file test lists.
 
     Lines look like:
         tests/test_file.py::test_name
         tests/subdir/test_file.py::test_name
     """
-    by_file: Dict[str, List[str]] = {}
+    by_file: dict[str, list[str]] = {}
     for line in stdout.splitlines():
         line = line.strip()
         if not line or "::" not in line:
@@ -55,12 +52,12 @@ def normalize_path(path: str) -> str:
     return path.replace("\\", "/")
 
 
-def format_inventory(by_file: Dict[str, List[str]]) -> str:
+def format_inventory(by_file: dict[str, list[str]]) -> str:
     """Format the inventory as markdown."""
     from datetime import date
 
-    top_level: List[Tuple[str, int]] = []
-    subdirs: Dict[str, List[Tuple[str, int]]] = {}
+    top_level: list[tuple[str, int]] = []
+    subdirs: dict[str, list[tuple[str, int]]] = {}
     total = 0
 
     for filepath in sorted(by_file.keys()):
@@ -75,7 +72,7 @@ def format_inventory(by_file: Dict[str, List[str]]) -> str:
             file_name = parts[-1]
             subdirs.setdefault(dir_name, []).append((file_name, count))
 
-    lines: List[str] = []
+    lines: list[str] = []
     lines.append("# Python Test Inventory")
     lines.append("")
     lines.append(f"> Generated: {date.today()}")

@@ -1,6 +1,8 @@
 """Shared pytest fixtures for iv8-rs test suite."""
 from __future__ import annotations
-from typing import Iterator
+
+from collections.abc import Iterator
+
 import pytest
 
 iv8_rs = pytest.importorskip("iv8_rs")

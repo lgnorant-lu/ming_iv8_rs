@@ -22,6 +22,7 @@ Output:
 """
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import socket
@@ -31,7 +32,6 @@ import sys
 import tempfile
 import time
 import urllib.request
-import argparse
 from pathlib import Path
 from urllib.parse import urlparse
 

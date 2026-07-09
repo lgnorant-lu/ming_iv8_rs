@@ -16,9 +16,9 @@ Reference: Rimsa et al. (2020) "Practical Dynamic Reconstruction of CFG"
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import List, Dict, Set, Optional, Tuple
+
 from collections import defaultdict
+from dataclasses import dataclass
 
 from iv8_rs.trace import StructuredTrace
 
@@ -61,13 +61,13 @@ class Loop:
     header_pc: int
     """Loop header (back edge target)."""
 
-    body_pcs: Set[int]
+    body_pcs: set[int]
     """All PCs in the loop body."""
 
     iterations: int
     """Number of back edge traversals (= loop iterations)."""
 
-    back_edges: List[Tuple[int, int]]
+    back_edges: list[tuple[int, int]]
     """All back edges targeting this header: [(from_pc, to_pc), ...]."""
 
 
@@ -81,7 +81,7 @@ class Module:
     exit_pc: int
     """Last PC in the module."""
 
-    pcs: Set[int]
+    pcs: set[int]
     """All PCs belonging to this module."""
 
     edge_count: int
@@ -104,20 +104,20 @@ class CFG:
         print(cfg.to_dot())
     """
 
-    def __init__(self, nodes: Dict[int, CFGNode], edges: List[CFGEdge]):
+    def __init__(self, nodes: dict[int, CFGNode], edges: list[CFGEdge]):
         self.nodes = nodes
         self.edges = edges
         # Build adjacency for traversal
-        self._successors: Dict[int, List[int]] = defaultdict(list)
-        self._predecessors: Dict[int, List[int]] = defaultdict(list)
-        self._edge_map: Dict[Tuple[int, int], CFGEdge] = {}
+        self._successors: dict[int, list[int]] = defaultdict(list)
+        self._predecessors: dict[int, list[int]] = defaultdict(list)
+        self._edge_map: dict[tuple[int, int], CFGEdge] = {}
         for e in edges:
             self._successors[e.from_pc].append(e.to_pc)
             self._predecessors[e.to_pc].append(e.from_pc)
             self._edge_map[(e.from_pc, e.to_pc)] = e
 
     @classmethod
-    def from_trace(cls, trace: StructuredTrace) -> "CFG":
+    def from_trace(cls, trace: StructuredTrace) -> CFG:
         """Build CFG from dispatch entries in a trace.
 
         Only D (dispatch) entries are used. R/C/W entries are ignored.
@@ -134,8 +134,8 @@ class CFG:
             return cls({}, [])
 
         # Count node executions and find most common opcode per PC
-        pc_counts: Dict[int, int] = defaultdict(int)
-        pc_opcodes: Dict[int, Dict[int, int]] = defaultdict(lambda: defaultdict(int))
+        pc_counts: dict[int, int] = defaultdict(int)
+        pc_opcodes: dict[int, dict[int, int]] = defaultdict(lambda: defaultdict(int))
 
         for d in dispatches:
             pc_counts[d.pc] += 1
@@ -146,7 +146,7 @@ class CFG:
             pc_opcodes[d.pc][opc] += 1
 
         # Build nodes
-        nodes: Dict[int, CFGNode] = {}
+        nodes: dict[int, CFGNode] = {}
         for pc, count in pc_counts.items():
             # Most common opcode at this PC
             opc_counts = pc_opcodes[pc]
@@ -154,14 +154,14 @@ class CFG:
             nodes[pc] = CFGNode(pc=pc, opcode=best_opc, exec_count=count)
 
         # Build edges from consecutive dispatch pairs
-        edge_counts: Dict[Tuple[int, int], int] = defaultdict(int)
+        edge_counts: dict[tuple[int, int], int] = defaultdict(int)
         for i in range(len(dispatches) - 1):
             from_pc = dispatches[i].pc
             to_pc = dispatches[i + 1].pc
             if from_pc != to_pc or True:  # include self-loops
                 edge_counts[(from_pc, to_pc)] += 1
 
-        edges: List[CFGEdge] = []
+        edges: list[CFGEdge] = []
         for (from_pc, to_pc), count in edge_counts.items():
             edges.append(CFGEdge(
                 from_pc=from_pc,
@@ -172,7 +172,7 @@ class CFG:
 
         return cls(nodes, edges)
 
-    def find_loops(self) -> List[Loop]:
+    def find_loops(self) -> list[Loop]:
         """Detect loops via back edges (to_pc <= from_pc).
 
         For each back edge target (loop header), computes the natural loop body
@@ -183,19 +183,19 @@ class CFG:
             List of Loop objects, sorted by iteration count (descending).
         """
         # Group back edges by header
-        header_back_edges: Dict[int, List[Tuple[int, int]]] = defaultdict(list)
+        header_back_edges: dict[int, list[tuple[int, int]]] = defaultdict(list)
         for e in self.edges:
             if e.is_back_edge:
                 header_back_edges[e.to_pc].append((e.from_pc, e.to_pc))
 
-        loops: List[Loop] = []
+        loops: list[Loop] = []
         for header, back_edges in header_back_edges.items():
             # Natural loop body: header + all nodes that can reach back edge
             # sources without going through header (Benno 2024 classic).
             # PC-range constraint prevents unrelated nodes from entering body
             # when entry-block dominance is ambiguous (BUG-11).
-            body: Set[int] = {header}
-            stack: List[int] = []
+            body: set[int] = {header}
+            stack: list[int] = []
             total_iterations = 0
             max_body_pc = header  # upper bound for body nodes
 
@@ -226,7 +226,7 @@ class CFG:
         loops.sort(key=lambda l: l.iterations, reverse=True)
         return loops
 
-    def find_modules(self, gap_threshold: int = 100) -> List[Module]:
+    def find_modules(self, gap_threshold: int = 100) -> list[Module]:
         """Detect module boundaries via PC gaps.
 
         Consecutive PCs with a gap > threshold are considered separate modules.
@@ -242,8 +242,8 @@ class CFG:
             return []
 
         sorted_pcs = sorted(self.nodes.keys())
-        modules: List[Module] = []
-        current_pcs: List[int] = [sorted_pcs[0]]
+        modules: list[Module] = []
+        current_pcs: list[int] = [sorted_pcs[0]]
 
         for i in range(1, len(sorted_pcs)):
             if sorted_pcs[i] - sorted_pcs[i - 1] > gap_threshold:
@@ -287,7 +287,7 @@ class CFG:
         if not self.nodes:
             return 0
         # Count connected components via BFS
-        visited: Set[int] = set()
+        visited: set[int] = set()
         components = 0
         all_pcs = set(self.nodes.keys())
 
@@ -310,7 +310,7 @@ class CFG:
 
         return len(self.edges) - len(self.nodes) + 2 * components
 
-    def to_dot(self, path: Optional[str] = None) -> str:
+    def to_dot(self, path: str | None = None) -> str:
         """Export as Graphviz DOT format.
 
         Args:
@@ -396,7 +396,7 @@ class CFG:
             })
         return pd.DataFrame(rows)
 
-    def collapse_to_blocks(self) -> "CFG":
+    def collapse_to_blocks(self) -> CFG:
         """Collapse sequential PCs into basic blocks.
 
         A basic block is a maximal sequence of PCs where each has exactly
@@ -411,7 +411,7 @@ class CFG:
 
         # Find block boundaries: PCs with in_degree != 1 or out_degree != 1
         # or that are targets of non-sequential predecessor edges.
-        block_heads: Set[int] = set()
+        block_heads: set[int] = set()
         sorted_pcs = sorted(self.nodes.keys())
         pc_order = {pc: i for i, pc in enumerate(sorted_pcs)}  # position in sorted PC order
 
@@ -434,7 +434,7 @@ class CFG:
                     break
 
         # Build blocks: each block starts at a head and extends until next head
-        blocks: Dict[int, List[int]] = {}  # head_pc -> [pcs in block]
+        blocks: dict[int, list[int]] = {}  # head_pc -> [pcs in block]
         current_head = sorted_pcs[0]
         current_block = [current_head]
 
@@ -448,8 +448,8 @@ class CFG:
         blocks[current_head] = current_block
 
         # Build collapsed nodes
-        new_nodes: Dict[int, CFGNode] = {}
-        pc_to_block: Dict[int, int] = {}  # map each PC to its block head
+        new_nodes: dict[int, CFGNode] = {}
+        pc_to_block: dict[int, int] = {}  # map each PC to its block head
         for head, pcs in blocks.items():
             total_exec = sum(self.nodes[p].exec_count for p in pcs if p in self.nodes)
             opc = self.nodes[head].opcode if head in self.nodes else -1
@@ -458,7 +458,7 @@ class CFG:
                 pc_to_block[p] = head
 
         # Build collapsed edges
-        edge_counts: Dict[Tuple[int, int], int] = defaultdict(int)
+        edge_counts: dict[tuple[int, int], int] = defaultdict(int)
         for e in self.edges:
             from_block = pc_to_block.get(e.from_pc, e.from_pc)
             to_block = pc_to_block.get(e.to_pc, e.to_pc)

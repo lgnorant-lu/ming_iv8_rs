@@ -4,16 +4,17 @@ Task 62: 内存泄漏验证（100 轮长跑）
 验证 iv8-rs 在 100 轮 JSContext 创建/使用/销毁循环中内存稳定。
 目标：≤ +5MB 漂移（iv8 基准 +2MB）。
 """
-import pytest
 import gc
+
 import iv8_rs
 
 
 def get_memory_mb():
     """获取当前进程内存使用（MB）。"""
     try:
-        import psutil
         import os
+
+        import psutil
         process = psutil.Process(os.getpid())
         return process.memory_info().rss / 1024 / 1024
     except ImportError:

@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import os
 import tempfile
-from typing import List
 from unittest.mock import patch
 
 import pytest
@@ -20,7 +19,6 @@ from iv8_rs.trace import (
     parse_trace,
     parse_trace_stream,
 )
-
 
 # ─── TraceEntry ─────────────────────────────────────────────────────────────────
 

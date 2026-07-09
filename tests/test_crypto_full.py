@@ -12,8 +12,6 @@ Task 40: SubtleCrypto 完整测试套件
 - ECDH (P-256/P-384): deriveBits/deriveKey
 - wrapKey/unwrapKey
 """
-import pytest
-import iv8_rs
 
 
 # ─── 1. digest ────────────────────────────────────────────────────────────────

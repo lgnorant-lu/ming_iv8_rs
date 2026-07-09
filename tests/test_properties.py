@@ -6,12 +6,12 @@ edge cases that manual tests would miss.
 """
 from __future__ import annotations
 
-from hypothesis import given, strategies as st, assume, settings
-from iv8_rs.trace import parse_trace, compress_trace, TraceEntry
+from hypothesis import assume, given, settings
+from hypothesis import strategies as st
 from iv8_rs.cfg import CFG
-from iv8_rs.patterns import detect_constants, detect_all, detect_loops, detect_hotspots
+from iv8_rs.patterns import detect_all, detect_constants, detect_hotspots, detect_loops
 from iv8_rs.taint import TaintEngine
-
+from iv8_rs.trace import TraceEntry, compress_trace, parse_trace
 
 # ─── Strategy: generate a single trace line ──────────────────────────────────
 

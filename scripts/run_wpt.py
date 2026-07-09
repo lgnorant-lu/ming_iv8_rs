@@ -21,7 +21,6 @@ import sys
 import threading
 import urllib.request
 from pathlib import Path
-from collections import defaultdict
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 WPT_DIR = REPO_ROOT / "tools" / "wpt"

@@ -13,8 +13,8 @@ Usage::
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Set
+
+from dataclasses import dataclass
 from difflib import SequenceMatcher
 
 
@@ -48,13 +48,13 @@ class DiffReport:
     handler_count_b: int
     """Number of handlers in version B."""
 
-    new_handlers: List[int]
+    new_handlers: list[int]
     """Indices of handlers only in version B (added)."""
 
-    removed_handlers: List[int]
+    removed_handlers: list[int]
     """Indices of handlers only in version A (deleted)."""
 
-    modified_handlers: List[int]
+    modified_handlers: list[int]
     """Indices of handlers present in both but with different source."""
 
     unchanged_count: int
@@ -63,11 +63,11 @@ class DiffReport:
     similarity_score: float
     """Overall similarity (0.0-1.0): unchanged / max(count_a, count_b)."""
 
-    details: List[HandlerDiff]
+    details: list[HandlerDiff]
     """Per-handler diff details."""
 
 
-def _extract_handlers(source: str, handler_array: str) -> List[str]:
+def _extract_handlers(source: str, handler_array: str) -> list[str]:
     """Extract handler function sources by eval'ing the JS and calling toString.
 
     Uses iv8_rs JSContext to execute the source, then extracts handler sources
@@ -151,15 +151,15 @@ def compare_vm_versions(
     max_count = max(count_a, count_b)
 
     # Phase 1: position-by-position match
-    details: List[HandlerDiff] = []
-    new_handlers: List[int] = []
-    removed_handlers: List[int] = []
-    modified_handlers: List[int] = []
+    details: list[HandlerDiff] = []
+    new_handlers: list[int] = []
+    removed_handlers: list[int] = []
+    modified_handlers: list[int] = []
     unchanged_count = 0
     # Track which B indices are already matched
-    matched_b: Set[int] = set()
+    matched_b: set[int] = set()
     # Store per-position pair sim for Phase 2 swap detection
-    pair_sim: Dict[int, float] = {}
+    pair_sim: dict[int, float] = {}
 
     for i in range(max_count):
         src_a = handlers_a[i] if i < count_a else ""
@@ -196,7 +196,7 @@ def compare_vm_versions(
 
     # Phase 2: detect reorderings (swap) among modified positions
     # If A[i] ≈ B[j] and A[j] ≈ B[i] above threshold, it's a swap, not a modification
-    swap_pairs: Set[Tuple[int, int]] = set()
+    swap_pairs: set[Tuple[int, int]] = set()
     for i in modified_handlers[:]:
         if i >= count_a or i >= count_b:
             continue

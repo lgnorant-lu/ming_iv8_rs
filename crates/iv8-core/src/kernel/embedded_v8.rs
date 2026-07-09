@@ -783,6 +783,42 @@ impl EmbeddedV8Kernel {
             "#);
             let _ = v8::Script::compile(scope, shadow_root_fix, None).and_then(|s| s.run(scope));
 
+            // P1: Request constructor — codegen creates empty object, store url/method
+            let request_fix = crate::v8_utils::v8_string(scope, r#"
+                (function() {
+                    if (typeof Request === 'undefined') return;
+                    var origCtor = Request;
+                    function RequestShim(input, init) {
+                        var url = '';
+                        if (typeof input === 'string') {
+                            url = input;
+                        } else if (input && typeof input === 'object' && input.url) {
+                            url = input.url;
+                        }
+                        var method = (init && init.method) || 'GET';
+                        Object.defineProperty(this, 'url', { value: url, writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'method', { value: method, writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'headers', { value: (init && init.headers) || {}, writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'body', { value: (init && init.body) || null, writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'cache', { value: 'default', writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'credentials', { value: 'same-origin', writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'destination', { value: '', writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'integrity', { value: '', writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'keepalive', { value: false, writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'mode', { value: 'cors', writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'redirect', { value: 'follow', writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'referrer', { value: 'about:client', writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'referrerPolicy', { value: '', writable: true, configurable: true, enumerable: true });
+                        Object.defineProperty(this, 'signal', { value: null, writable: true, configurable: true, enumerable: true });
+                    }
+                    RequestShim.prototype = origCtor.prototype;
+                    try { Object.defineProperty(globalThis, 'Request', {
+                        value: RequestShim, writable: true, configurable: true, enumerable: true
+                    }); } catch(e) {}
+                })();
+            "#);
+            let _ = v8::Script::compile(scope, request_fix, None).and_then(|s| s.run(scope));
+
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);

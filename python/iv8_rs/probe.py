@@ -7,20 +7,21 @@ which ones returned undefined/error, and VM detection info.
 """
 
 from __future__ import annotations
+
 import warnings
-from typing import Any, Dict, List, Optional
 from collections import Counter
+from typing import Any
 
 
 def probe_environment(
     js_source: str,
-    profile: Optional[str] = "default",
-    environment: Optional[Dict[str, Any]] = None,
-    random_seed: Optional[int] = 42,
-    time_freeze: Optional[float] = None,
+    profile: str | None = "default",
+    environment: dict[str, Any] | None = None,
+    random_seed: int | None = 42,
+    time_freeze: float | None = None,
     time_mode: str = "logical",
-    entry_expr: Optional[str] = None,
-) -> Dict[str, Any]:
+    entry_expr: str | None = None,
+) -> dict[str, Any]:
     """Run JS with instrumentation and report all environment interactions.
 
     Automatically instruments the source (if VM pattern detected) or uses
@@ -116,11 +117,11 @@ def probe_environment(
     trace = parse_trace(raw_trace) if raw_trace else None
 
     # Build report
-    reads: Dict[str, str] = {}
+    reads: dict[str, str] = {}
     calls: Counter = Counter()
-    writes: Dict[str, str] = {}
-    missing: List[str] = []
-    issues: List[Dict[str, str]] = []
+    writes: dict[str, str] = {}
+    missing: list[str] = []
+    issues: list[dict[str, str]] = []
 
     if trace:
         for entry in trace.reads:

@@ -1,17 +1,19 @@
 """v0.8.50 S5: L2 diagnostic bridge projection test for RS补環境 vectors."""
 from __future__ import annotations
+
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from tools.diagnostic_bridge import (
-    project_tickets_from_knowledge_index,
     OWNER_ROUTING_TABLE,
-    route_ticket_to_owner,
-    build_repair_brief,
     build_evidence_bundle_manifest,
+    build_repair_brief,
     build_validation_plan,
     classify_repair_readiness,
+    project_tickets_from_knowledge_index,
+    route_ticket_to_owner,
 )
 
 

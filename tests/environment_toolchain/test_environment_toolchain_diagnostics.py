@@ -551,7 +551,7 @@ class TestPressurePlan:
 class TestNativeSubstrateReview:
     def test_pressure_mismatch_descriptor_prototype(self):
         from iv8_rs.environment_toolchain_diagnostics import _native_substrate_review_records
-        from iv8_rs.environment_toolchain_models import ProfileCoherenceGroup, FamilyPressure
+        from iv8_rs.environment_toolchain_models import FamilyPressure, ProfileCoherenceGroup
 
         groups = [
             ProfileCoherenceGroup(group_id="ua_platform", status="consistent",
@@ -571,7 +571,7 @@ class TestNativeSubstrateReview:
 
     def test_inconsistent_ua_platform(self):
         from iv8_rs.environment_toolchain_diagnostics import _native_substrate_review_records
-        from iv8_rs.environment_toolchain_models import ProfileCoherenceGroup, FamilyPressure
+        from iv8_rs.environment_toolchain_models import FamilyPressure, ProfileCoherenceGroup
 
         groups = [
             ProfileCoherenceGroup(group_id="ua_platform", status="inconsistent",
@@ -590,7 +590,7 @@ class TestNativeSubstrateReview:
 
     def test_inconsistent_network_info(self):
         from iv8_rs.environment_toolchain_diagnostics import _native_substrate_review_records
-        from iv8_rs.environment_toolchain_models import ProfileCoherenceGroup, FamilyPressure
+        from iv8_rs.environment_toolchain_models import FamilyPressure, ProfileCoherenceGroup
 
         groups = [
             ProfileCoherenceGroup(group_id="ua_platform", status="consistent",
@@ -609,7 +609,7 @@ class TestNativeSubstrateReview:
 
     def test_inconsistent_timezone_locale(self):
         from iv8_rs.environment_toolchain_diagnostics import _native_substrate_review_records
-        from iv8_rs.environment_toolchain_models import ProfileCoherenceGroup, FamilyPressure
+        from iv8_rs.environment_toolchain_models import FamilyPressure, ProfileCoherenceGroup
 
         groups = [
             ProfileCoherenceGroup(group_id="ua_platform", status="consistent",
@@ -628,7 +628,7 @@ class TestNativeSubstrateReview:
 
     def test_no_candidate_areas(self):
         from iv8_rs.environment_toolchain_diagnostics import _native_substrate_review_records
-        from iv8_rs.environment_toolchain_models import ProfileCoherenceGroup, FamilyPressure
+        from iv8_rs.environment_toolchain_models import FamilyPressure, ProfileCoherenceGroup
 
         groups = [
             ProfileCoherenceGroup(group_id="ua_platform", status="consistent",

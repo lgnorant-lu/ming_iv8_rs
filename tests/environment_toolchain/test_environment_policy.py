@@ -12,7 +12,11 @@ def test_runtime_safe_candidate_applied_by_default():
 
 
 def test_candidate_rejected_when_explicit_env_conflicts():
-    from iv8_rs.environment_policy import decide_patch_policy, PatchPolicyOptions, EnvironmentPatchCandidate
+    from iv8_rs.environment_policy import (
+        EnvironmentPatchCandidate,
+        PatchPolicyOptions,
+        decide_patch_policy,
+    )
     cand = EnvironmentPatchCandidate(
         patch_id="test", target="navigator.language",
         kind="value", policy="runtime_safe",
@@ -23,7 +27,7 @@ def test_candidate_rejected_when_explicit_env_conflicts():
 
 
 def test_analysis_only_rejected_without_opt_in():
-    from iv8_rs.environment_policy import decide_patch_policy, EnvironmentPatchCandidate
+    from iv8_rs.environment_policy import EnvironmentPatchCandidate, decide_patch_policy
     cand = EnvironmentPatchCandidate(
         patch_id="eval.capture", target="eval",
         kind="capture", policy="analysis_only",
@@ -33,7 +37,7 @@ def test_analysis_only_rejected_without_opt_in():
 
 
 def test_unsafe_hook_blocked_by_default():
-    from iv8_rs.environment_policy import decide_patch_policy, EnvironmentPatchCandidate
+    from iv8_rs.environment_policy import EnvironmentPatchCandidate, decide_patch_policy
     cand = EnvironmentPatchCandidate(
         patch_id="anti.debug", target="antiDebug",
         kind="hook", policy="unsafe_hook",

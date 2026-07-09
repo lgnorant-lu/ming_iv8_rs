@@ -6,11 +6,11 @@ stable contract layer without changing the Rust Entry Plane result schema.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any
 
-
-TRACE_PREFIX_REGISTRY: Dict[str, Dict[str, str]] = {
+TRACE_PREFIX_REGISTRY: dict[str, dict[str, str]] = {
     "D,": {"kind": "dispatch", "producer": "dispatch"},
     "R,": {"kind": "read", "producer": "runtime_hook"},
     "W,": {"kind": "write", "producer": "runtime_hook"},
@@ -27,7 +27,7 @@ EVIDENCE_STRENGTHS = {"strong", "weak", "marker_only", "diagnostic_only"}
 DIAGNOSTIC_SEVERITIES = {"info", "warn", "error"}
 FALLBACK_OUTCOMES = {"pass", "warn", "fail", "skip", "skipped"}
 
-DIAGNOSTIC_CATALOG: Dict[str, Dict[str, str]] = {
+DIAGNOSTIC_CATALOG: dict[str, dict[str, str]] = {
     "TRACE_EMPTY": {"severity": "warn", "stage": "trace.parse"},
     "TRACE_PREFIX_UNKNOWN": {"severity": "warn", "stage": "trace.parse"},
     "TRACE_PARSE_PARTIAL": {"severity": "warn", "stage": "trace.parse"},
@@ -54,16 +54,16 @@ class EvidenceRecord:
     source: str
     stage: str
     summary: str
-    producer: Optional[str] = None
-    sample_kind: Optional[str] = None
-    payload: Dict[str, Any] = field(default_factory=dict)
+    producer: str | None = None
+    sample_kind: str | None = None
+    payload: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if self.strength not in EVIDENCE_STRENGTHS:
             raise ValueError(f"invalid evidence strength: {self.strength}")
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "EvidenceRecord":
+    def from_dict(cls, data: dict[str, Any]) -> EvidenceRecord:
         return cls(
             kind=data["kind"],
             strength=data["strength"],
@@ -75,7 +75,7 @@ class EvidenceRecord:
             payload=dict(data.get("payload", {})),
         )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
@@ -89,8 +89,8 @@ class TraceEvent:
     stage: str
     strategy_id: str
     sample_kind: str
-    payload: Dict[str, Any] = field(default_factory=dict)
-    source: Dict[str, Any] = field(default_factory=dict)
+    payload: dict[str, Any] = field(default_factory=dict)
+    source: dict[str, Any] = field(default_factory=dict)
     confidence: str = "weak"
 
     @classmethod
@@ -101,7 +101,7 @@ class TraceEvent:
         stage: str = "trace.parse",
         strategy_id: str = "unknown",
         sample_kind: str = "unknown",
-    ) -> Optional["TraceEvent"]:
+    ) -> TraceEvent | None:
         meta = classify_trace_prefix(raw)
         if meta is None:
             return None
@@ -122,7 +122,7 @@ class TraceEvent:
         )
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "TraceEvent":
+    def from_dict(cls, data: dict[str, Any]) -> TraceEvent:
         return cls(
             version=data["version"],
             kind=data["kind"],
@@ -135,7 +135,7 @@ class TraceEvent:
             confidence=data.get("confidence", "weak"),
         )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
@@ -146,10 +146,10 @@ class EvidenceGateResult:
     status: str
     confidence: str
     satisfied: bool
-    evidence: List[EvidenceRecord] = field(default_factory=list)
-    diagnostics: List[DiagnosticRecord] = field(default_factory=list)
+    evidence: list[EvidenceRecord] = field(default_factory=list)
+    diagnostics: list[DiagnosticRecord] = field(default_factory=list)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         data = asdict(self)
         data["evidence"] = [item.to_dict() for item in self.evidence]
         data["diagnostics"] = [item.to_dict() for item in self.diagnostics]
@@ -164,17 +164,17 @@ class DiagnosticRecord:
     severity: str
     stage: str
     message: str
-    recovery_hint: Optional[str] = None
-    strategy_id: Optional[str] = None
-    sample_id: Optional[str] = None
-    details: Dict[str, Any] = field(default_factory=dict)
+    recovery_hint: str | None = None
+    strategy_id: str | None = None
+    sample_id: str | None = None
+    details: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if self.severity not in DIAGNOSTIC_SEVERITIES:
             raise ValueError(f"invalid diagnostic severity: {self.severity}")
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "DiagnosticRecord":
+    def from_dict(cls, data: dict[str, Any]) -> DiagnosticRecord:
         return cls(
             code=data["code"],
             severity=data["severity"],
@@ -186,7 +186,7 @@ class DiagnosticRecord:
             details=dict(data.get("details", {})),
         )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
@@ -197,16 +197,16 @@ class FallbackAttempt:
     strategy_id: str
     status: str
     reason: str
-    next_strategy: Optional[str] = None
-    diagnostics: List[DiagnosticRecord] = field(default_factory=list)
-    evidence: List[EvidenceRecord] = field(default_factory=list)
+    next_strategy: str | None = None
+    diagnostics: list[DiagnosticRecord] = field(default_factory=list)
+    evidence: list[EvidenceRecord] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if self.status not in FALLBACK_OUTCOMES:
             raise ValueError(f"invalid fallback outcome: {self.status}")
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "FallbackAttempt":
+    def from_dict(cls, data: dict[str, Any]) -> FallbackAttempt:
         return cls(
             strategy_id=data["strategy_id"],
             status=data["status"],
@@ -216,14 +216,14 @@ class FallbackAttempt:
             evidence=[EvidenceRecord.from_dict(item) for item in data.get("evidence", [])],
         )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         data = asdict(self)
         data["diagnostics"] = [item.to_dict() for item in self.diagnostics]
         data["evidence"] = [item.to_dict() for item in self.evidence]
         return data
 
 
-def classify_trace_prefix(raw: str) -> Optional[Dict[str, str]]:
+def classify_trace_prefix(raw: str) -> dict[str, str] | None:
     """Return registry metadata for a raw trace prefix, or None."""
     for prefix, meta in TRACE_PREFIX_REGISTRY.items():
         if raw.startswith(prefix):
@@ -237,9 +237,9 @@ def build_trace_events(
     stage: str = "trace.parse",
     strategy_id: str = "unknown",
     sample_kind: str = "unknown",
-) -> List[TraceEvent]:
+) -> list[TraceEvent]:
     """Convert known raw trace lines into normalized event envelopes."""
-    events: List[TraceEvent] = []
+    events: list[TraceEvent] = []
     for raw in raw_trace:
         event = TraceEvent.from_raw(
             raw,
@@ -252,7 +252,7 @@ def build_trace_events(
     return events
 
 
-def _payload_from_raw(prefix: str, raw: str) -> Dict[str, Any]:
+def _payload_from_raw(prefix: str, raw: str) -> dict[str, Any]:
     body = raw[len(prefix):]
     parts = body.split(",") if body else []
     if prefix == "D,":
@@ -332,9 +332,9 @@ def _trace_payload_is_partial(prefix: str, raw: str) -> bool:
     return len([part for part in parts if part != ""]) < required
 
 
-def build_trace_diagnostics(raw_trace: Iterable[str]) -> List[DiagnosticRecord]:
+def build_trace_diagnostics(raw_trace: Iterable[str]) -> list[DiagnosticRecord]:
     """Diagnose raw trace prefix compatibility without parsing every payload."""
-    diagnostics: List[DiagnosticRecord] = []
+    diagnostics: list[DiagnosticRecord] = []
     seen = False
     for idx, raw in enumerate(raw_trace):
         seen = True
@@ -380,14 +380,14 @@ def build_evidence_diagnostics(
     observed: Iterable[EvidenceRecord],
     *,
     policy_blocked: bool = False,
-) -> List[DiagnosticRecord]:
+) -> list[DiagnosticRecord]:
     """Diagnose missing, marker-only, and policy-blocked evidence gates."""
     observed_items = list(observed)
-    by_kind: Dict[str, List[EvidenceRecord]] = {}
+    by_kind: dict[str, list[EvidenceRecord]] = {}
     for item in observed_items:
         by_kind.setdefault(item.kind, []).append(item)
 
-    diagnostics: List[DiagnosticRecord] = []
+    diagnostics: list[DiagnosticRecord] = []
     if policy_blocked:
         diagnostics.append(DiagnosticRecord(
             code="POLICY_BLOCKED_ACTION",
@@ -454,7 +454,7 @@ def evaluate_evidence_gate(
 
 def evidence_satisfies(expected: Iterable[str], observed: Iterable[EvidenceRecord]) -> bool:
     """Return True when all expected evidence kinds have non-marker evidence."""
-    by_kind: Dict[str, List[EvidenceRecord]] = {}
+    by_kind: dict[str, list[EvidenceRecord]] = {}
     for item in observed:
         by_kind.setdefault(item.kind, []).append(item)
 

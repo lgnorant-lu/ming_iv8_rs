@@ -135,7 +135,7 @@ def main():
 
     OUTPUT_PATH.write_text(json.dumps(output, indent=2), encoding="utf-8")
 
-    print(f"=== Runtime Features (Chrome 148, Win) ===")
+    print("=== Runtime Features (Chrome 148, Win) ===")
     print(f"  Total features: {len(features)}")
     print(f"  Enabled: {enabled_count}")
     print(f"  Disabled: {disabled_count}")

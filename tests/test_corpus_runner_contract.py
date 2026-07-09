@@ -4,7 +4,6 @@ import copy
 import json
 
 import pytest
-
 from iv8_rs import (
     CorpusManifestItem,
     CorpusRunOptions,
@@ -156,7 +155,7 @@ def test_load_manifest_reads_current_markdown_table():
 def test_run_corpus_manifest_does_not_mutate_manifest(tmp_path):
     source = "docs/acceptance/v0.6-real-sample-manifest.md"
     manifest = tmp_path / "manifest.md"
-    original = open(source, "r", encoding="utf-8").read()
+    original = open(source, encoding="utf-8").read()
     manifest.write_text(original, encoding="utf-8")
 
     report = run_corpus_manifest(manifest)
@@ -749,8 +748,8 @@ def test_module_graph_embedded():
 
 def test_run_corpus_manifest_detects_mutation(tmp_path, monkeypatch):
     """If manifest content changes during run, RuntimeError is raised (line 267)."""
+
     import iv8_rs.corpus as _corpus_mod
-    from pathlib import Path as _Path
 
     m = tmp_path / "manifest.md"
     m.write_text(_VALID_MANIFEST, encoding="utf-8")

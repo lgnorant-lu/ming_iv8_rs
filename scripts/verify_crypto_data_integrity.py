@@ -18,11 +18,11 @@ GM/T 0002-2012 / GM/T 0004-2012 / Schneier Applied Cryptography.
 Output ends with "Total checks: N" + "Errors: N" for harness parsing.
 Exit code 0 = all pass, 1 = errors found.
 """
-import sys
+import hashlib
 import json
 import math
 import struct
-import hashlib
+import sys
 import zlib
 from collections import Counter
 from pathlib import Path

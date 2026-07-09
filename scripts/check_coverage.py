@@ -2,7 +2,6 @@
 Coverage analysis: which of the 51 patterns are actually detectable AND tested?
 """
 import json
-import re
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent

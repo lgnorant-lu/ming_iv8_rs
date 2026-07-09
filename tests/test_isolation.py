@@ -1,6 +1,6 @@
 """Module Isolation tests (M29)."""
-import pytest
 import iv8_rs
+import pytest
 from iv8_rs.isolation import exec_vm_handler
 
 

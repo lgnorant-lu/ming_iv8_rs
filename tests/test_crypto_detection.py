@@ -9,16 +9,18 @@ Methodology:
 - Verifies detection engine correctly identifies the algorithm
 - Multiple variants per algorithm (different constants, different positions)
 """
-import pytest
-import json
-from pathlib import Path
-from iv8_rs.trace import StructuredTrace, TraceEntry, parse_trace
 from iv8_rs.patterns import (
-    detect_constants, detect_sequences, detect_all, detect_patterns,
-    detect_loops, detect_hotspots,
-    _load_builtin_patterns, _load_constants_db, _load_sequences_db,
+    _load_builtin_patterns,
+    _load_constants_db,
+    _load_sequences_db,
+    detect_all,
+    detect_constants,
+    detect_hotspots,
+    detect_loops,
+    detect_patterns,
+    detect_sequences,
 )
-
+from iv8_rs.trace import StructuredTrace, TraceEntry
 
 # ============================================================
 # Helpers

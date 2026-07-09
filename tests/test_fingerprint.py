@@ -4,8 +4,8 @@ Task 59: CreepJS / FingerprintJS 核心检测验证套件
 模拟 CreepJS 和 FingerprintJS 的核心检测逻辑，验证 iv8-rs 的指纹健壮性。
 每个测试对应一个真实的反检测/指纹检测点。
 """
-import pytest
 import iv8_rs
+import pytest
 
 
 @pytest.fixture

@@ -12,12 +12,13 @@ by matching opcode sequences and value patterns against configurable libraries.
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import List, Dict, Optional, Any, Tuple, Set
-from pathlib import Path
-import json
 
-from iv8_rs.trace import StructuredTrace, TraceEntry
+import json
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+from iv8_rs.trace import StructuredTrace
 
 
 @dataclass
@@ -39,7 +40,7 @@ class PatternMatch:
     confidence: float
     """Match confidence (0.0 - 1.0)."""
 
-    matched_opcodes: List[int]
+    matched_opcodes: list[int]
     """The actual opcode sequence that matched."""
 
     window_index: int
@@ -77,30 +78,30 @@ class SequenceMatch:
     pc_end: int
     """Last PC where matched values appear."""
 
-    matched_values: List[int]
+    matched_values: list[int]
     """The actual values that matched."""
 
-    trace_indices: List[int]
+    trace_indices: list[int]
     """Indices in the trace entries list where matches were found."""
 
 
-def _load_builtin_patterns() -> Dict[str, Any]:
+def _load_builtin_patterns() -> dict[str, Any]:
     """Load the built-in crypto pattern library."""
     data_dir = Path(__file__).parent / "data"
     pattern_file = data_dir / "crypto_patterns.json"
     if pattern_file.exists():
-        with open(pattern_file, "r", encoding="utf-8") as f:
+        with open(pattern_file, encoding="utf-8") as f:
             return json.load(f)
     return {}
 
 
 def detect_patterns(
     trace: StructuredTrace,
-    patterns: Optional[Dict[str, Any]] = None,
-    opcode_map: Optional[Dict[int, str]] = None,
+    patterns: dict[str, Any] | None = None,
+    opcode_map: dict[int, str] | None = None,
     window_size: int = 20,
     min_confidence: float = 0.6,
-) -> List[PatternMatch]:
+) -> list[PatternMatch]:
     """Layer 3: Detect algorithmic structure patterns via opcode semantics.
 
     IMPORTANT — Layer 3 requires an ``opcode_map``:
@@ -156,8 +157,8 @@ def detect_patterns(
 
     # Translate this VM's numeric opcodes into semantic tokens via the map.
     # Unmapped opcodes become None (a token that matches nothing).
-    sem_tokens: List[Optional[str]] = []
-    pcs: List[int] = []
+    sem_tokens: list[str | None] = []
+    pcs: list[int] = []
     for d in dispatches:
         try:
             opc = int(d.target)
@@ -168,7 +169,7 @@ def detect_patterns(
         sem_tokens.append(opcode_map.get(opc))
         pcs.append(d.pc)
 
-    def token_similarity(window: List[Optional[str]], pat: List[str]) -> float:
+    def token_similarity(window: list[str | None], pat: list[str]) -> float:
         """Fraction of positions where the translated token equals the pattern token."""
         n = min(len(window), len(pat))
         if n == 0:
@@ -176,7 +177,7 @@ def detect_patterns(
         hits = sum(1 for i in range(n) if window[i] is not None and window[i] == pat[i])
         return hits / max(len(window), len(pat))
 
-    matches: List[PatternMatch] = []
+    matches: list[PatternMatch] = []
 
     for pattern_name, pattern_def in patterns.items():
         if pattern_name.startswith("_"):
@@ -217,7 +218,7 @@ def detect_patterns(
     return deduplicated
 
 
-def detect_loops(trace: StructuredTrace, min_iterations: int = 10) -> List[Dict[str, Any]]:
+def detect_loops(trace: StructuredTrace, min_iterations: int = 10) -> list[dict[str, Any]]:
     """Detect repeated opcode patterns (loops) in dispatch trace.
 
     Args:
@@ -232,7 +233,7 @@ def detect_loops(trace: StructuredTrace, min_iterations: int = 10) -> List[Dict[
         return []
 
     # Count how many times each PC is visited
-    pc_counts: Dict[int, int] = {}
+    pc_counts: dict[int, int] = {}
     for d in dispatches:
         pc_counts[d.pc] = pc_counts.get(d.pc, 0) + 1
 
@@ -251,7 +252,7 @@ def detect_loops(trace: StructuredTrace, min_iterations: int = 10) -> List[Dict[
     return loops
 
 
-def detect_hotspots(trace: StructuredTrace, top_n: int = 10) -> List[Dict[str, Any]]:
+def detect_hotspots(trace: StructuredTrace, top_n: int = 10) -> list[dict[str, Any]]:
     """Find the most frequently executed PCs (hotspots).
 
     Args:
@@ -266,8 +267,8 @@ def detect_hotspots(trace: StructuredTrace, top_n: int = 10) -> List[Dict[str, A
         return []
 
     total = len(dispatches)
-    pc_counts: Dict[int, int] = {}
-    pc_opcodes: Dict[int, str] = {}
+    pc_counts: dict[int, int] = {}
+    pc_opcodes: dict[int, str] = {}
     for d in dispatches:
         pc_counts[d.pc] = pc_counts.get(d.pc, 0) + 1
         pc_opcodes[d.pc] = d.target
@@ -286,10 +287,10 @@ def detect_hotspots(trace: StructuredTrace, top_n: int = 10) -> List[Dict[str, A
 
 # --- Constant-based detection (most reliable for custom VMs) ---
 
-_CONSTANTS_CACHE: Optional[Dict[int, Dict[str, str]]] = None
+_CONSTANTS_CACHE: dict[int, dict[str, str]] | None = None
 
 
-def _load_constants_db() -> Dict[int, Dict[str, str]]:
+def _load_constants_db() -> dict[int, dict[str, str]]:
     """Load the crypto constants database. Returns {int_value: {name, algorithm, description}}.
 
     When multiple constants share the same integer value (e.g. 0x9E3779B9 is used by
@@ -305,10 +306,10 @@ def _load_constants_db() -> Dict[int, Dict[str, str]]:
         _CONSTANTS_CACHE = {}
         return _CONSTANTS_CACHE
 
-    with open(const_file, "r", encoding="utf-8") as f:
+    with open(const_file, encoding="utf-8") as f:
         raw = json.load(f)
 
-    db: Dict[int, Dict[str, str]] = {}
+    db: dict[int, dict[str, str]] = {}
     for name, entry in raw.items():
         if name.startswith("_"):
             continue
@@ -366,9 +367,9 @@ class ConstantMatch:
 
 def detect_constants(
     trace: StructuredTrace,
-    constants_db: Optional[Dict[int, Dict[str, str]]] = None,
+    constants_db: dict[int, dict[str, str]] | None = None,
     min_value: int = 0x10000,
-) -> List[ConstantMatch]:
+) -> list[ConstantMatch]:
     """Detect known cryptographic constants in trace values.
 
     This is the MOST RELIABLE detection method for custom VMs because
@@ -406,11 +407,11 @@ def detect_constants(
     if not constants_db:
         return []
 
-    matches: List[ConstantMatch] = []
+    matches: list[ConstantMatch] = []
 
     for entry in trace.entries:
         # Try to extract integer values from the entry
-        values_to_check: List[int] = []
+        values_to_check: list[int] = []
 
         # Check the value field. For D entries with stack capture, the value
         # field may contain comma-separated values: "stack_depth,val1,val2,..."
@@ -476,10 +477,10 @@ def detect_constants(
 
 # --- Layer 2: Sequence Matching (highest confidence) ---
 
-_SEQUENCES_CACHE: Optional[Dict[str, Any]] = None
+_SEQUENCES_CACHE: dict[str, Any] | None = None
 
 
-def _load_sequences_db() -> Dict[str, Any]:
+def _load_sequences_db() -> dict[str, Any]:
     """Load the crypto sequences database for sliding window matching."""
     global _SEQUENCES_CACHE
     if _SEQUENCES_CACHE is not None:
@@ -491,7 +492,7 @@ def _load_sequences_db() -> Dict[str, Any]:
         _SEQUENCES_CACHE = {}
         return _SEQUENCES_CACHE
 
-    with open(seq_file, "r", encoding="utf-8") as f:
+    with open(seq_file, encoding="utf-8") as f:
         raw = json.load(f)
 
     db = {k: v for k, v in raw.items() if not k.startswith("_")}
@@ -499,16 +500,16 @@ def _load_sequences_db() -> Dict[str, Any]:
     return db
 
 
-def _extract_trace_values(trace: StructuredTrace) -> Tuple[List[int], List[int], List[int]]:
+def _extract_trace_values(trace: StructuredTrace) -> tuple[list[int], list[int], list[int]]:
     """Extract integer values from trace entries for sequence matching.
 
     Returns:
         (values, pcs, indices) - parallel lists of extracted int values,
         their PCs, and their indices in trace.entries.
     """
-    values: List[int] = []
-    pcs: List[int] = []
-    indices: List[int] = []
+    values: list[int] = []
+    pcs: list[int] = []
+    indices: list[int] = []
 
     for idx, entry in enumerate(trace.entries):
         val_str = entry.value.strip()
@@ -542,12 +543,12 @@ def _extract_trace_values(trace: StructuredTrace) -> Tuple[List[int], List[int],
 
 def detect_sequences(
     trace: StructuredTrace,
-    sequences_db: Optional[Dict[str, Any]] = None,
+    sequences_db: dict[str, Any] | None = None,
     min_match_length: int = 4,
     fuzzy: bool = False,
     fuzzy_tolerance: int = 0,
     max_gap: int = 0,
-) -> List[SequenceMatch]:
+) -> list[SequenceMatch]:
     """Layer 2: Detect known crypto table subsequences in trace values.
 
     Searches for consecutive values in the trace that match subsequences
@@ -587,7 +588,7 @@ def detect_sequences(
     if not trace_values:
         return []
 
-    matches: List[SequenceMatch] = []
+    matches: list[SequenceMatch] = []
 
     for seq_name, seq_def in sequences_db.items():
         known_seq = seq_def.get("values", [])
@@ -603,7 +604,7 @@ def detect_sequences(
         known_set = set(known_seq)
         if fuzzy and fuzzy_tolerance > 0:
             # Expand set with tolerance range
-            expanded_set: Set[int] = set()
+            expanded_set: set[int] = set()
             for kv in known_seq:
                 for delta in range(-fuzzy_tolerance, fuzzy_tolerance + 1):
                     expanded_set.add(kv + delta)
@@ -626,14 +627,14 @@ def detect_sequences(
 
             best_run_len = 0
             best_run_offset = 0
-            best_run_values: List[int] = []
-            best_run_trace_indices: List[int] = []
+            best_run_values: list[int] = []
+            best_run_trace_indices: list[int] = []
 
             for start_pos in start_positions:
                 # Try to extend the match from this position
                 run_len = 0
-                run_values: List[int] = []
-                run_trace_idx: List[int] = []
+                run_values: list[int] = []
+                run_trace_idx: list[int] = []
                 gaps_used = 0
                 ti = i
                 si = start_pos
@@ -708,22 +709,22 @@ class CryptoDetection:
     confidence: float
     """Overall confidence (0.0 - 1.0), boosted by cross-validation."""
 
-    layers_matched: List[str]
+    layers_matched: list[str]
     """Which layers contributed: ['constant', 'sequence', 'pattern']."""
 
-    constants_found: List[ConstantMatch]
+    constants_found: list[ConstantMatch]
     """Layer 1 matches for this algorithm."""
 
-    sequences_found: List[SequenceMatch]
+    sequences_found: list[SequenceMatch]
     """Layer 2 matches for this algorithm."""
 
-    patterns_found: List[PatternMatch]
+    patterns_found: list[PatternMatch]
     """Layer 3 matches for this algorithm."""
 
-    pc_range: Tuple[int, int]
+    pc_range: tuple[int, int]
     """Estimated PC range where this algorithm operates."""
 
-    ambiguity: List[str]
+    ambiguity: list[str]
     """Other algorithms that share constants with this one (if any)."""
 
     notes: str
@@ -735,8 +736,8 @@ def detect_all(
     min_confidence: float = 0.5,
     enable_fuzzy: bool = False,
     context_window: int = 50,
-    opcode_map: Optional[Dict[int, str]] = None,
-) -> List[CryptoDetection]:
+    opcode_map: dict[int, str] | None = None,
+) -> list[CryptoDetection]:
     """Layer 4: Cross-validated comprehensive crypto detection.
 
     Runs all three detection layers and combines results:
@@ -774,9 +775,9 @@ def detect_all(
     patterns = detect_patterns(trace, opcode_map=opcode_map, min_confidence=min_confidence)
 
     # Group by algorithm
-    algo_constants: Dict[str, List[ConstantMatch]] = {}
-    algo_sequences: Dict[str, List[SequenceMatch]] = {}
-    algo_patterns: Dict[str, List[PatternMatch]] = {}
+    algo_constants: dict[str, list[ConstantMatch]] = {}
+    algo_sequences: dict[str, list[SequenceMatch]] = {}
+    algo_patterns: dict[str, list[PatternMatch]] = {}
 
     for c in constants:
         # An algorithm field may contain multiple (e.g. "XTEA/TEA")
@@ -798,21 +799,21 @@ def detect_all(
     all_algos = set(algo_constants.keys()) | set(algo_sequences.keys()) | set(algo_patterns.keys())
 
     # Build shared-constant map for ambiguity detection
-    constant_to_algos: Dict[int, List[str]] = {}
+    constant_to_algos: dict[int, list[str]] = {}
     for c in constants:
         for algo in c.algorithm.split("/"):
             algo = algo.strip()
             if algo:
                 constant_to_algos.setdefault(c.value, []).append(algo)
 
-    results: List[CryptoDetection] = []
+    results: list[CryptoDetection] = []
 
     for algo in all_algos:
         consts = algo_constants.get(algo, [])
         seqs = algo_sequences.get(algo, [])
         pats = algo_patterns.get(algo, [])
 
-        layers: List[str] = []
+        layers: list[str] = []
         if consts:
             layers.append("constant")
         if seqs:
@@ -859,7 +860,7 @@ def detect_all(
         final_conf = min(1.0, base_conf + boost)
 
         # PC range
-        all_pcs: List[int] = []
+        all_pcs: list[int] = []
         for c in consts:
             all_pcs.append(c.pc)
         for s in seqs:
@@ -870,7 +871,7 @@ def detect_all(
         pc_range = (min(all_pcs), max(all_pcs)) if all_pcs else (-1, -1)
 
         # Ambiguity: which other algorithms share our constants?
-        ambiguity: List[str] = []
+        ambiguity: list[str] = []
         for c in consts:
             shared = constant_to_algos.get(c.value, [])
             for other in shared:
@@ -878,7 +879,7 @@ def detect_all(
                     ambiguity.append(other)
 
         # Notes
-        notes_parts: List[str] = []
+        notes_parts: list[str] = []
         if ambiguity:
             notes_parts.append(f"Shared constants with {ambiguity} - verify with structure")
         if len(consts) >= 3:

@@ -3,19 +3,53 @@
 import json
 import os
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
-from iv8_rs._iv8 import __version__, JSContext as _JSContextRust, Debugger, enable_logging
-from iv8_rs._iv8 import instrument_source, trace_diff, prepare_entry, run_with_entry
-from iv8_rs._iv8 import JSError, JSCompileError, JSTimeoutError, JSMemoryError, JSPanic
+from iv8_rs._iv8 import (
+    Debugger,
+    JSCompileError,
+    JSError,
+    JSMemoryError,
+    JSPanic,
+    JSTimeoutError,
+    __version__,
+    enable_logging,
+    instrument_source,
+    prepare_entry,
+    run_with_entry,
+    trace_diff,
+)
+from iv8_rs._iv8 import JSContext as _JSContextRust
 from iv8_rs.analysis import diff_analysis
-from iv8_rs.trace import parse_trace, StructuredTrace, parse_trace_stream, compress_trace, CompressedTrace
+from iv8_rs.cfg import CFG
+from iv8_rs.corpus import (
+    CorpusManifestItem,
+    CorpusRunOptions,
+    build_corpus_report,
+    default_executor,
+    load_manifest,
+    run_corpus_manifest,
+)
+from iv8_rs.corpus import (
+    main as corpus_main,
+)
+from iv8_rs.deobf_reports import (
+    DeobfRegistryReport,
+    RegistryEntry,
+    SelectionReport,
+    ValidationCheck,
+    ValidationReport,
+    registry_report_from_dict,
+    registry_report_to_dict,
+    validation_report_from_dict,
+    validation_report_to_dict,
+)
 from iv8_rs.diagnostics import (
     DIAGNOSTIC_CATALOG,
     TRACE_PREFIX_REGISTRY,
     DiagnosticRecord,
-    EvidenceRecord,
     EvidenceGateResult,
+    EvidenceRecord,
     FallbackAttempt,
     TraceEvent,
     build_evidence_diagnostics,
@@ -26,7 +60,7 @@ from iv8_rs.diagnostics import (
     evaluate_evidence_gate,
     evidence_satisfies,
 )
-from iv8_rs.probe import probe_environment
+from iv8_rs.entry import EntryPlan, EntryResult, SelectedStrategy
 from iv8_rs.environment import (
     EnvironmentPatch,
     EnvironmentPlaneReport,
@@ -41,25 +75,42 @@ from iv8_rs.environment_policy import (
     decide_patch_policy,
     runtime_safe_candidate,
 )
-from iv8_rs.corpus import (
-    CorpusManifestItem,
-    CorpusRunOptions,
-    build_corpus_report,
-    default_executor,
-    load_manifest,
-    main as corpus_main,
-    run_corpus_manifest,
+from iv8_rs.environment_pressure import (
+    ENVIRONMENT_PRESSURE_SCHEMA_VERSION,
+    EXECUTION_MODES,
+    FAILURE_KINDS,
+    INPUT_KINDS,
+    PRESSURE_KINDS,
+    PROMOTION_LEVELS,
+    EnvironmentPressureBatch,
+    EnvironmentPressureReport,
+    PressureManifestItem,
+    PressureSample,
+    PressureSignal,
+    PromotionDecision,
+    build_pressure_report,
+    classify_failure_kind,
+    classify_input_kind,
+    default_execution_mode,
+    environment_pressure_batch_to_toolchain_diagnostics,
+    pressure_batch_diagnostics,
+    pressure_from_failure,
+    pressure_report_from_dict,
+    pressure_report_to_dict,
+    promotion_for_pressure,
+    run_environment_pressure_manifest,
+    run_environment_pressure_samples,
 )
-from iv8_rs.cfg import CFG
-from iv8_rs.taint import TaintEngine, TaintReport
-from iv8_rs.patterns import (
-    detect_constants, detect_sequences, detect_patterns, detect_all,
-    detect_loops, detect_hotspots,
-    ConstantMatch, SequenceMatch, PatternMatch, CryptoDetection,
+from iv8_rs.environment_toolchain import (
+    CoverageDelta,
+    CoverageSnapshot,
+    EnvironmentToolchainReport,
+    ProfileSuggestion,
+    ToolchainPatchEntry,
+    toolchain_report_from_dict,
+    toolchain_report_to_dict,
 )
-from iv8_rs.vm_diff import compare_vm_versions, DiffReport, HandlerDiff
-from iv8_rs.isolation import exec_vm_handler
-from iv8_rs.entry import EntryPlan, EntryResult, SelectedStrategy
+from iv8_rs.environment_toolchain_runtime import run_environment_toolchain
 from iv8_rs.experimental_report import (
     EXPERIMENTAL_SCHEMA_VERSIONS,
     ExperimentalDiagnosticRecord,
@@ -69,82 +120,58 @@ from iv8_rs.experimental_report import (
     experimental_report_roundtrip,
     experimental_report_to_dict,
 )
-from iv8_rs.environment_toolchain import (
-    CoverageSnapshot,
-    CoverageDelta,
-    ToolchainPatchEntry,
-    ProfileSuggestion,
-    EnvironmentToolchainReport,
-    toolchain_report_from_dict,
-    toolchain_report_to_dict,
-)
-from iv8_rs.environment_pressure import (
-    ENVIRONMENT_PRESSURE_SCHEMA_VERSION,
-    EXECUTION_MODES,
-    FAILURE_KINDS,
-    INPUT_KINDS,
-    PRESSURE_KINDS,
-    PROMOTION_LEVELS,
-    EnvironmentPressureReport,
-    EnvironmentPressureBatch,
-    PressureManifestItem,
-    PressureSignal,
-    PressureSample,
-    PromotionDecision,
-    build_pressure_report,
-    classify_failure_kind,
-    classify_input_kind,
-    default_execution_mode,
-    pressure_from_failure,
-    pressure_batch_diagnostics,
-    environment_pressure_batch_to_toolchain_diagnostics,
-    pressure_report_from_dict,
-    pressure_report_to_dict,
-    promotion_for_pressure,
-    run_environment_pressure_samples,
-    run_environment_pressure_manifest,
-)
-from iv8_rs.environment_toolchain_runtime import run_environment_toolchain
-from iv8_rs.deobf_reports import (
-    RegistryEntry,
-    SelectionReport,
-    DeobfRegistryReport,
-    registry_report_from_dict,
-    registry_report_to_dict,
-    ValidationCheck,
-    ValidationReport,
-    validation_report_from_dict,
-    validation_report_to_dict,
-)
-from iv8_rs.string_array_reports import (
-    StringArrayCandidate,
-    RotationIIFE,
-    StringDecoder,
-    ReplacementSite,
-    StringArrayReport,
-    string_array_report_from_dict,
-    string_array_report_to_dict,
-)
-from iv8_rs.vm_reports import (
-    HandlerTableSummary,
-    TraceSummary,
-    StateModel,
-    OpcodeHint,
-    VMAnalysisReport,
-    vm_analysis_report_from_dict,
-    vm_analysis_report_to_dict,
-    HandlerEntry,
-    BytecodeCandidate,
-    VMHandlerTable,
-    vm_handler_table_from_dict,
-    vm_handler_table_to_dict,
-)
 from iv8_rs.ir_reports import (
-    IRNode,
     ConfidenceSummary,
+    IRNode,
     IRNodeReport,
     ir_node_report_from_dict,
     ir_node_report_to_dict,
+)
+from iv8_rs.isolation import exec_vm_handler
+from iv8_rs.patterns import (
+    ConstantMatch,
+    CryptoDetection,
+    PatternMatch,
+    SequenceMatch,
+    detect_all,
+    detect_constants,
+    detect_hotspots,
+    detect_loops,
+    detect_patterns,
+    detect_sequences,
+)
+from iv8_rs.probe import probe_environment
+from iv8_rs.string_array_reports import (
+    ReplacementSite,
+    RotationIIFE,
+    StringArrayCandidate,
+    StringArrayReport,
+    StringDecoder,
+    string_array_report_from_dict,
+    string_array_report_to_dict,
+)
+from iv8_rs.taint import TaintEngine, TaintReport
+from iv8_rs.trace import (
+    CompressedTrace,
+    StructuredTrace,
+    compress_trace,
+    parse_trace,
+    parse_trace_stream,
+)
+from iv8_rs.vm_diff import DiffReport, HandlerDiff, compare_vm_versions
+from iv8_rs.vm_reports import (
+    BytecodeCandidate,
+    HandlerEntry,
+    HandlerTableSummary,
+    OpcodeHint,
+    StateModel,
+    TraceSummary,
+    VMAnalysisReport,
+    VMHandlerTable,
+    vm_analysis_report_from_dict,
+    vm_analysis_report_to_dict,
+    vm_handler_table_from_dict,
+    vm_handler_table_to_dict,
 )
 
 # --- Profile System ---
@@ -152,7 +179,7 @@ from iv8_rs.ir_reports import (
 _PROFILES_DIR = Path(__file__).parent / "profiles"
 
 
-def load_profile(path: str) -> Dict[str, Any]:
+def load_profile(path: str) -> dict[str, Any]:
     """
     Load a browser fingerprint profile from a JSON file.
 
@@ -180,7 +207,7 @@ def load_profile(path: str) -> Dict[str, Any]:
         raise FileNotFoundError(f"Profile not found: {profile_path}")
 
     try:
-        with open(profile_path, "r", encoding="utf-8") as f:
+        with open(profile_path, encoding="utf-8") as f:
             data = json.load(f)
     except json.JSONDecodeError as e:
         raise ValueError(f"Invalid JSON in profile {profile_path}: {e}")
@@ -189,7 +216,7 @@ def load_profile(path: str) -> Dict[str, Any]:
     return {k: v for k, v in data.items() if not k.startswith("_meta.")}
 
 
-def _merge_profile_env(profile: Optional[str], environment: Optional[Dict]) -> Optional[Dict]:
+def _merge_profile_env(profile: str | None, environment: dict | None) -> dict | None:
     """Merge profile + environment into final environment dict."""
     if profile is None and environment is None:
         return None

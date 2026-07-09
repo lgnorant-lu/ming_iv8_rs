@@ -8,7 +8,6 @@ conversion.
 from __future__ import annotations
 
 import pytest
-
 from experimental_contract_helpers import load_fixture
 from iv8_rs.environment_toolchain import (
     ToolchainPatchEntry,
@@ -91,6 +90,7 @@ def test_runtime_coverage_snapshot_helpers():
 
 def test_runtime_iteration_stop_reason_paths():
     from types import SimpleNamespace
+
     from iv8_rs.environment_toolchain_runtime import _iteration_stop_reason
 
     before = SimpleNamespace(gaps=["a", "b"])
@@ -176,6 +176,7 @@ def test_runtime_target_family_classifier():
 
 def test_runtime_coverage_delta_and_observation_coverage():
     from types import SimpleNamespace
+
     from iv8_rs.environment_toolchain_runtime import (
         _coverage_delta,
         _coverage_from_observations,
@@ -408,6 +409,7 @@ def test_runtime_resolve_local_overlay_dict_paths(monkeypatch):
 
 def test_runtime_resolve_local_overlay_path_paths(tmp_path):
     import json
+
     from iv8_rs.environment_toolchain_runtime import _resolve_local_overlay
 
     valid_path = tmp_path / "overlay.json"
@@ -658,6 +660,7 @@ def test_runtime_resolve_local_overlay_none():
 
 def test_runtime_resolve_local_overlay_path_non_generic_keys(tmp_path):
     import json
+
     from iv8_rs.environment_toolchain_runtime import _resolve_local_overlay
 
     path = tmp_path / "bad_keys.json"
@@ -671,6 +674,7 @@ def test_runtime_resolve_local_overlay_path_non_generic_keys(tmp_path):
 
 def test_runtime_resolve_local_overlay_path_blocked_boundary(tmp_path, monkeypatch):
     import json
+
     import iv8_rs.environment_toolchain_runtime as runtime
 
     class BlockedDecision:
@@ -694,7 +698,7 @@ def test_runtime_resolve_local_overlay_path_blocked_boundary(tmp_path, monkeypat
 def test_runtime_run_probe_pack_empty_source(monkeypatch):
     import iv8_rs
     import iv8_rs.environment_toolchain_runtime as runtime
-    from iv8_rs.environment_toolchain_asset_models import ProbePack, ProbeDefinition
+    from iv8_rs.environment_toolchain_asset_models import ProbeDefinition, ProbePack
     from iv8_rs.environment_toolchain_models import AssetProvenance
 
     probe_pack = ProbePack(
@@ -730,7 +734,7 @@ def test_runtime_run_probe_pack_empty_source(monkeypatch):
 def test_runtime_run_probe_pack_with_probes(monkeypatch):
     import iv8_rs
     import iv8_rs.environment_toolchain_runtime as runtime
-    from iv8_rs.environment_toolchain_asset_models import ProbePack, ProbeDefinition
+    from iv8_rs.environment_toolchain_asset_models import ProbeDefinition, ProbePack
     from iv8_rs.environment_toolchain_models import AssetProvenance
 
     probe_a = ProbeDefinition(
@@ -774,7 +778,7 @@ def test_runtime_run_probe_pack_with_probes(monkeypatch):
 def test_runtime_run_probe_pack_entry_expr_failure(monkeypatch):
     import iv8_rs
     import iv8_rs.environment_toolchain_runtime as runtime
-    from iv8_rs.environment_toolchain_asset_models import ProbePack, ProbeDefinition
+    from iv8_rs.environment_toolchain_asset_models import ProbeDefinition, ProbePack
     from iv8_rs.environment_toolchain_models import AssetProvenance
 
     probe_pack = ProbePack(
@@ -832,7 +836,9 @@ def test_runtime_run_environment_toolchain_basic_report_only(monkeypatch):
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack, ToolchainCandidate
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun, ProbeObservation, EnvironmentGap,
+        AssetProvenance,
+        EnvironmentGap,
+        ProbeRun,
     )
 
     candidate = ToolchainCandidate(
@@ -876,7 +882,10 @@ def test_runtime_run_environment_toolchain_apply_runtime_safe(monkeypatch):
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack, ToolchainCandidate
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun, ProbeObservation, EnvironmentGap,
+        AssetProvenance,
+        EnvironmentGap,
+        ProbeObservation,
+        ProbeRun,
     )
 
     candidate = ToolchainCandidate(
@@ -941,7 +950,9 @@ def test_runtime_run_environment_toolchain_dry_run_planning(monkeypatch):
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun, EnvironmentGap,
+        AssetProvenance,
+        EnvironmentGap,
+        ProbeRun,
     )
 
     monkeypatch.setattr(
@@ -980,7 +991,8 @@ def test_runtime_run_environment_toolchain_additional_diagnostics(monkeypatch):
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun,
+        AssetProvenance,
+        ProbeRun,
     )
 
     monkeypatch.setattr(
@@ -1024,7 +1036,8 @@ def test_runtime_run_environment_toolchain_pressure_harness(monkeypatch):
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun,
+        AssetProvenance,
+        ProbeRun,
     )
 
     monkeypatch.setattr(
@@ -1104,7 +1117,10 @@ def test_runtime_iterative_environment_toolchain_completes(monkeypatch):
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack, ToolchainCandidate
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun, ProbeObservation, EnvironmentGap,
+        AssetProvenance,
+        EnvironmentGap,
+        ProbeObservation,
+        ProbeRun,
     )
 
     candidate = ToolchainCandidate(
@@ -1203,7 +1219,7 @@ def test_runtime_iterative_environment_toolchain_no_gaps(monkeypatch):
 def test_runtime_iterative_environment_toolchain_no_candidates(monkeypatch):
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack
-    from iv8_rs.environment_toolchain_models import AssetProvenance, ProbeRun, EnvironmentGap
+    from iv8_rs.environment_toolchain_models import AssetProvenance, EnvironmentGap, ProbeRun
 
     probe_run = ProbeRun(
         probe_pack="fp.m1", observations=[], gaps=[EnvironmentGap(
@@ -1237,7 +1253,9 @@ def test_runtime_iterative_environment_toolchain_budget_exhausted(monkeypatch):
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack, ToolchainCandidate
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun, EnvironmentGap,
+        AssetProvenance,
+        EnvironmentGap,
+        ProbeRun,
     )
 
     candidate = ToolchainCandidate(
@@ -1304,6 +1322,7 @@ def test_runtime_map_gaps_family_none_skip():
 
 def test_runtime_coverage_delta_probe_missing_in_after():
     from types import SimpleNamespace
+
     from iv8_rs.environment_toolchain_runtime import _coverage_delta
 
     before = SimpleNamespace(observations=[
@@ -1404,7 +1423,8 @@ def test_runtime_run_environment_toolchain_adapt_runtime_safe(monkeypatch):
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun,
+        AssetProvenance,
+        ProbeRun,
     )
 
     monkeypatch.setattr(
@@ -1433,7 +1453,8 @@ def test_runtime_run_environment_toolchain_pressure_harness_first_ok(monkeypatch
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun,
+        AssetProvenance,
+        ProbeRun,
     )
 
     monkeypatch.setattr(
@@ -1462,7 +1483,10 @@ def test_runtime_run_environment_toolchain_regressed_and_suggestions(monkeypatch
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack, ToolchainCandidate
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun, ProbeObservation, EnvironmentGap,
+        AssetProvenance,
+        EnvironmentGap,
+        ProbeObservation,
+        ProbeRun,
     )
 
     candidate = ToolchainCandidate(
@@ -1519,7 +1543,8 @@ def test_runtime_run_environment_toolchain_pressure_harness_dry_run(monkeypatch)
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun,
+        AssetProvenance,
+        ProbeRun,
     )
 
     monkeypatch.setattr(
@@ -1554,7 +1579,8 @@ def test_runtime_iterative_environment_toolchain_loop_breaks_no_gaps(monkeypatch
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun,
+        AssetProvenance,
+        ProbeRun,
     )
 
     probe_run = ProbeRun(
@@ -1586,7 +1612,10 @@ def test_runtime_iterative_environment_toolchain_regression(monkeypatch):
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack, ToolchainCandidate
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun, ProbeObservation, EnvironmentGap,
+        AssetProvenance,
+        EnvironmentGap,
+        ProbeObservation,
+        ProbeRun,
     )
 
     candidate = ToolchainCandidate(
@@ -1663,7 +1692,9 @@ def test_runtime_iterative_environment_toolchain_overlay(monkeypatch):
     import iv8_rs.environment_toolchain_runtime as runtime
     from iv8_rs.environment_toolchain_asset_models import CandidatePack
     from iv8_rs.environment_toolchain_models import (
-        AssetProvenance, ProbeRun, EnvironmentGap,
+        AssetProvenance,
+        EnvironmentGap,
+        ProbeRun,
     )
     from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
 
