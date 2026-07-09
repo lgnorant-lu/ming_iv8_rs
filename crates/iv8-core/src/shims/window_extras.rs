@@ -507,12 +507,39 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     }
 
     // Configurable speech voices via globalThis.__iv8SpeechVoices
+    // P0-BT-7 fix: inject default Windows Chrome voices if not set
     if (typeof speechSynthesis !== 'undefined' && speechSynthesis.getVoices) {
+        // Inject default voices matching Windows Chrome profile (zh-CN locale)
+        if (!globalThis.__iv8SpeechVoices) {
+            var _makeVoice = function(name, lang, voiceURI, isDefault) {
+                var v = {};
+                Object.defineProperties(v, {
+                    name: { value: name, enumerable: true, configurable: true },
+                    lang: { value: lang, enumerable: true, configurable: true },
+                    voiceURI: { value: voiceURI, enumerable: true, configurable: true },
+                    localService: { value: true, enumerable: true, configurable: true },
+                    default: { value: isDefault, enumerable: true, configurable: true },
+                });
+                if (typeof SpeechSynthesisVoice !== 'undefined' && SpeechSynthesisVoice.prototype) {
+                    Object.setPrototypeOf(v, SpeechSynthesisVoice.prototype);
+                }
+                return v;
+            };
+            globalThis.__iv8SpeechVoices = [
+                _makeVoice('Microsoft Huihui Desktop - Chinese (China)', 'zh-CN', 'Microsoft Huihui Desktop - Chinese (China)', true),
+                _makeVoice('Microsoft David Desktop - English (United States)', 'en-US', 'Microsoft David Desktop - English (United States)', false),
+                _makeVoice('Microsoft Zira Desktop - English (United States)', 'en-US', 'Microsoft Zira Desktop - English (United States)', false),
+            ];
+        }
         var _origGetVoices = speechSynthesis.getVoices.bind(speechSynthesis);
-        speechSynthesis.getVoices = function getVoices() {
+        var _patchedGetVoices = function getVoices() {
             if (globalThis.__iv8SpeechVoices) return globalThis.__iv8SpeechVoices;
             return _origGetVoices();
         };
+        // P0-BT fix: toString must return native code
+        _patchedGetVoices.toString = function() { return 'function getVoices() { [native code] }'; };
+        _patchedGetVoices.toString.toString = function() { return 'function toString() { [native code] }'; };
+        speechSynthesis.getVoices = _patchedGetVoices;
     }
 
     // navigator.speechSynthesis alias

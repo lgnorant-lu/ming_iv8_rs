@@ -694,6 +694,62 @@ impl EmbeddedV8Kernel {
             "#);
             let _ = v8::Script::compile(scope, plugins_fix, None).and_then(|s| s.run(scope));
 
+            // P0-BT-5 fix: iframe contentWindow.navigator missing.
+            // Root cause: contentWindow getter returns bare Object or null
+            // (looks for nonexistent "WindowProxy" global).
+            // Fix: wrap contentWindow to create a Window-like proxy with navigator.
+            let iframe_fix = crate::v8_utils::v8_string(scope, r#"
+                (function() {
+                    if (typeof HTMLIFrameElement === 'undefined') return;
+                    var proto = HTMLIFrameElement.prototype;
+                    var origGetter = Object.getOwnPropertyDescriptor(proto, 'contentWindow');
+                    if (!origGetter || !origGetter.get) return;
+                    var origGet = origGetter.get;
+                    Object.defineProperty(proto, 'contentWindow', {
+                        get: function contentWindow() {
+                            var cw = origGet.call(this);
+                            // If null/undefined, create a Window-like object
+                            if (!cw || typeof cw !== 'object') {
+                                cw = {};
+                            }
+                            // Install navigator if missing (shares top frame values)
+                            if (!cw.navigator) {
+                                try {
+                                    Object.defineProperty(cw, 'navigator', {
+                                        get: function() { return navigator; },
+                                        enumerable: true,
+                                        configurable: true,
+                                    });
+                                } catch(e) {}
+                            }
+                            // Install basic Window properties
+                            if (!cw.document) {
+                                try {
+                                    Object.defineProperty(cw, 'document', {
+                                        get: function() { return this._contentDocument || document; },
+                                        enumerable: true,
+                                        configurable: true,
+                                    });
+                                } catch(e) {}
+                            }
+                            if (!('parent' in cw)) {
+                                try {
+                                    Object.defineProperty(cw, 'parent', { value: window, enumerable: true, configurable: true });
+                                    Object.defineProperty(cw, 'top', { value: window, enumerable: true, configurable: true });
+                                    Object.defineProperty(cw, 'self', { value: cw, enumerable: true, configurable: true });
+                                    Object.defineProperty(cw, 'window', { value: cw, enumerable: true, configurable: true });
+                                } catch(e) {}
+                            }
+                            return cw;
+                        },
+                        set: undefined,
+                        enumerable: true,
+                        configurable: true,
+                    });
+                })();
+            "#);
+            let _ = v8::Script::compile(scope, iframe_fix, None).and_then(|s| s.run(scope));
+
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);
