@@ -631,6 +631,69 @@ impl EmbeddedV8Kernel {
             let move_js = crate::v8_utils::v8_string(scope, iv8_surface::generated::install_all::GLOBAL_MOVE_JS);
             let _ = v8::Script::compile(scope, move_js, None).and_then(|s| s.run(scope));
 
+            // P0 boundary fix: delete navigator.webdriver from Navigator.prototype.
+            // Real Chrome: Object.getOwnPropertyDescriptor(Navigator.prototype, 'webdriver') === undefined.
+            // IV8 installs it as a getter returning false, which is detectable.
+            let webdriver_fix = crate::v8_utils::v8_string(scope, r#"
+                (function() {
+                    try { delete Navigator.prototype.webdriver; } catch(e) {}
+                })();
+            "#);
+            let _ = v8::Script::compile(scope, webdriver_fix, None).and_then(|s| s.run(scope));
+
+            // P0 boundary fix: patch document.createElement toString to return native code.
+            // Current shim exposes JS source in toString().
+            let create_element_fix = crate::v8_utils::v8_string(scope, r#"
+                (function() {
+                    if (typeof document !== 'undefined' && document.createElement) {
+                        var orig = document.createElement;
+                        var origStr = orig.toString();
+                        if (origStr.indexOf('[native code]') < 0) {
+                            var patched = function createElement(tagName) { return orig.call(document, tagName); };
+                            patched.toString = function() { return 'function createElement() { [native code] }'; };
+                            patched.toString.toString = function() { return 'function toString() { [native code] }'; };
+                            try { Object.defineProperty(document, 'createElement', { value: patched, writable: true, configurable: true, enumerable: true }); } catch(e) {}
+                        }
+                    }
+                })();
+            "#);
+            let _ = v8::Script::compile(scope, create_element_fix, None).and_then(|s| s.run(scope));
+
+            // P0 boundary fix: navigator.plugins instanceof PluginArray must be true.
+            // Shim replaces plugins with plain object; wrap with Proxy that lies instanceof.
+            let plugins_fix = crate::v8_utils::v8_string(scope, r#"
+                (function() {
+                    if (typeof PluginArray === 'undefined' || typeof MimeTypeArray === 'undefined') return;
+                    if (typeof navigator === 'undefined' || !navigator.plugins) return;
+                    // If plugins is not instanceof PluginArray, wrap it
+                    if (!(navigator.plugins instanceof PluginArray)) {
+                        var realPlugins = navigator.plugins;
+                        var pa = Object.create(PluginArray.prototype);
+                        for (var i = 0; i < realPlugins.length; i++) {
+                            pa[i] = realPlugins[i];
+                        }
+                        pa.length = realPlugins.length;
+                        pa.item = function(i) { return realPlugins[i]; };
+                        pa.namedItem = function(n) { return realPlugins[n]; };
+                        pa[Symbol.toStringTag] = 'PluginArray';
+                        try { Object.defineProperty(navigator, 'plugins', { value: pa, writable: true, configurable: true, enumerable: true }); } catch(e) {}
+                    }
+                    if (!(navigator.mimeTypes instanceof MimeTypeArray)) {
+                        var realMT = navigator.mimeTypes;
+                        var ma = Object.create(MimeTypeArray.prototype);
+                        for (var i = 0; i < realMT.length; i++) {
+                            ma[i] = realMT[i];
+                        }
+                        ma.length = realMT.length;
+                        ma.item = function(i) { return realMT[i]; };
+                        ma.namedItem = function(n) { return realMT[n]; };
+                        ma[Symbol.toStringTag] = 'MimeTypeArray';
+                        try { Object.defineProperty(navigator, 'mimeTypes', { value: ma, writable: true, configurable: true, enumerable: true }); } catch(e) {}
+                    }
+                })();
+            "#);
+            let _ = v8::Script::compile(scope, plugins_fix, None).and_then(|s| s.run(scope));
+
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);
