@@ -536,28 +536,44 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     }
 
     // Inject PDF Plugin items if plugins/mimeTypes exist but are empty
+    // P0-BT-EXT fix: enabledPlugin must be bidirectional reference
+    // fpscanner: plugins[0] === plugins[0][0].enabledPlugin must be true
+    // Each plugin needs its own mimeType copies (not shared references)
     if (typeof navigator !== 'undefined' && navigator.plugins && navigator.plugins.length === 0) {
         try {
-            var _m1 = { type: 'application/pdf', suffixes: 'pdf', description: 'Portable Document Format', enabledPlugin: null };
-            Object.defineProperty(_m1, Symbol.toStringTag, { value: 'MimeType', configurable: true });
-            var _m2 = { type: 'text/pdf', suffixes: 'pdf', description: 'Portable Document Format', enabledPlugin: null };
-            Object.defineProperty(_m2, Symbol.toStringTag, { value: 'MimeType', configurable: true });
-            if (navigator.mimeTypes && navigator.mimeTypes.length === 0) {
-                navigator.mimeTypes[0] = _m1; navigator.mimeTypes[1] = _m2;
-                Object.defineProperty(navigator.mimeTypes, 'length', { value: 2, writable: true, configurable: true });
-            }
+            var _makeMime = function(type) {
+                var m = { type: type, suffixes: 'pdf', description: 'Portable Document Format' };
+                Object.defineProperty(m, Symbol.toStringTag, { value: 'MimeType', configurable: true });
+                return m;
+            };
+            var _allMimes = [];
             var _pls = [
-                { name: 'PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format', 0: _m1, 1: _m2, length: 2 },
-                { name: 'Chrome PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format', 0: _m1, 1: _m2, length: 2 },
-                { name: 'Chromium PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format', 0: _m1, 1: _m2, length: 2 },
-                { name: 'Microsoft Edge PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format', 0: _m1, 1: _m2, length: 2 },
-                { name: 'WebKit built-in PDF', filename: 'internal-pdf-viewer', description: 'Portable Document Format', 0: _m1, 1: _m2, length: 2 },
+                { name: 'PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format' },
+                { name: 'Chrome PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format' },
+                { name: 'Chromium PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format' },
+                { name: 'Microsoft Edge PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format' },
+                { name: 'WebKit built-in PDF', filename: 'internal-pdf-viewer', description: 'Portable Document Format' },
             ];
             for (var i = 0; i < _pls.length; i++) {
+                // Each plugin gets its own mimeType copies with bidirectional ref
+                var m1 = _makeMime('application/pdf');
+                var m2 = _makeMime('text/pdf');
+                m1.enabledPlugin = _pls[i];
+                m2.enabledPlugin = _pls[i];
+                _pls[i][0] = m1;
+                _pls[i][1] = m2;
+                _pls[i].length = 2;
                 navigator.plugins[i] = _pls[i];
                 Object.defineProperty(_pls[i], Symbol.toStringTag, { value: 'Plugin', configurable: true });
+                _allMimes.push(m1, m2);
             }
             Object.defineProperty(navigator.plugins, 'length', { value: 5, writable: true, configurable: true });
+            if (navigator.mimeTypes && navigator.mimeTypes.length === 0) {
+                // Use first plugin's mimes for the global mimeType array (real Chrome dedupes by type)
+                navigator.mimeTypes[0] = _allMimes[0];
+                navigator.mimeTypes[1] = _allMimes[1];
+                Object.defineProperty(navigator.mimeTypes, 'length', { value: 2, writable: true, configurable: true });
+            }
         } catch(e) {}
     }
 
