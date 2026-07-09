@@ -6,7 +6,38 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
-## [v0.8.86] - 2026-07-09
+## [v0.8.87] - 2026-07-10
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Mode: Lightweight Increment.
+
+### Added
+- V8 fatal/OOM error handlers + stack trace capture + panic hook (R10): set_fatal_error_handler + set_oom_error_handler + set_capture_stack_trace_for_uncaught_exceptions(true, 10) + set_hook panic logger; stack size 64MB to 128MB; telemetry 13 to 24 typed events; init phase telemetry (5 phases with duration_ms).
+- Real-world sample validation (R20): DataDome OK (DataDomeJsTag created), Akamai OK (no globals leaked), RS VMP Oracle Stage 5 (pushed to _$kV[_$bM] error).
+- Boundary test 7 P0 fixes (R30): navigator.webdriver delete, plugins/mimeTypes instanceof fix, createElement/XHR toString native, iframe navigator consistency, speechSynthesis voices array, shadowRoot null fix, Function.prototype.apply protection.
+- 15 external vector validation (R30): 14 PASS, 1 FAIL (pluginConsistency FIXED).
+- fetch(Request) support + Request constructor shim (R30).
+- crypto.subtle 11 to 15 algorithms (R40): RSA-PKCS1-v1.5 sign/verify, AES-KW wrap/unwrap (RFC 3394), Ed25519 sign/verify, X25519 deriveBits.
+- unsigned long long Number(0) to BigInt(0) (R50).
+- ruff check CI gate (R50): 829 auto-fixed, 473 remaining non-blocking.
+- WPT coverage gap deep analysis (R70): 34 data sources, 3-round cross-validation, 8 sub-layer coverage matrix, H05/H06/L4b TODO registration (13 items).
+
+### Changed
+- telemetry.rs: 13 to 24 typed log events with init phase duration tracking.
+- embedded_v8.rs: init_kernel installs V8 error handlers + panic hook + 128MB stack.
+- crypto/subtle.rs: dispatch for 15 algorithms.
+- crypto/ed_impl.rs: new file for Ed25519/X25519.
+
+### Quality Gates
+- Rust: 359/359 lib PASS (no regression).
+- WPT idlharness: 9248/9640 (95.91%, unchanged from v0.8.86).
+- No emoji violations.
+
+### Known Limitations
+- Ed25519/X25519: generateKey/importKey/exportKey dispatch pending (P2, v0.8.88).
+- AES-KW: wrapKey/unwrapKey dispatch pending (P2, v0.8.88).
+- RS VMP Oracle: Stage 5 blocked by codegen getter default value precision (enum type returns Object not string).
+- Phase 1 idlharness 392 FAIL fix deferred to v0.8.88 (codegen enum + AD-2 receiver + getter .name).
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.
 > Mode: Lightweight Increment.
