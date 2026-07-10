@@ -62,9 +62,10 @@ pub fn install_browser_surface(
     scope: &mut v8::PinScope<'_, '_>,
     global: v8::Local<v8::Object>,
     callbacks: &BehaviorCallbackRegistry,
+    worker_mode: bool,
 ) -> Result<BrowserSurfaceRegistry> {
     // Layer 1: Install all IDL-generated FunctionTemplates
-    generated::install_all::install_all(scope, global);
+    generated::install_all::install_all(scope, global, worker_mode);
 
     // Layer 2: Register deep stub callbacks via BehaviorCallbackRegistry
     //

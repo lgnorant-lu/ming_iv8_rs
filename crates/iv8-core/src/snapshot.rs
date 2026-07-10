@@ -38,11 +38,11 @@ fn create_snapshot_impl() -> Option<Vec<u8>> {
         let global = context.global(scope);
 
         let callbacks = iv8_surface::BehaviorCallbackRegistry::new();
-        if let Ok(_registry) = iv8_surface::install_browser_surface(scope, global, &callbacks) {
+        if let Ok(_registry) = iv8_surface::install_browser_surface(scope, global, &callbacks, false) {
             let codegen_protos =
                 crate::dom::template::capture_codegen_prototypes(scope, global);
             let dom_templates = crate::dom::template::build_dom_templates(scope);
-            crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
+            crate::dom::template::install_dom_constructors(scope, global, &dom_templates, false);
             crate::dom::template::chain_dom_prototypes(scope, global, &codegen_protos);
         }
         v8::Global::new(scope, context)

@@ -156,6 +156,7 @@ pub struct EmbeddedV8Kernel {
     pub(crate) context: v8::Global<v8::Context>,
     environment: Arc<EnvironmentMap>,
     pub creator_thread: std::thread::ThreadId,
+    pub(crate) worker_mode: bool,
 }
 
 // SAFETY: EmbeddedV8Kernel is effectively single-threaded. The Isolate
@@ -547,6 +548,7 @@ impl EmbeddedV8Kernel {
             context,
             environment,
             creator_thread: std::thread::current().id(),
+            worker_mode,
         };
 
         // Install environment fields (navigator.*, screen.*, etc.) into global
@@ -563,8 +565,10 @@ impl EmbeddedV8Kernel {
         // 1284 FunctionTemplate creation without V8 GC IsOnCentralStack crash.
         let t1 = std::time::Instant::now();
         crate::telemetry::init_phase_start("install_browser_surface");
-        kernel.install_browser_surface_init();
+        kernel.install_browser_surface_init(worker_mode);
         crate::telemetry::init_phase_complete("install_browser_surface", t1.elapsed().as_millis() as u64);
+
+        // Phase 2: install native environment objects (navigator, screen)
 
         // Phase 2: install native environment objects (navigator, screen)
         let t2 = std::time::Instant::now();
@@ -627,6 +631,7 @@ impl EmbeddedV8Kernel {
     }
 
     fn freeze_all_prototypes(&mut self) {
+        let worker_mode = self.worker_mode;
         self.with_global_scope(|scope, global| {
             let move_js = crate::v8_utils::v8_string(scope, iv8_surface::generated::install_all::GLOBAL_MOVE_JS);
             let _ = v8::Script::compile(scope, move_js, None).and_then(|s| s.run(scope));
@@ -820,8 +825,12 @@ impl EmbeddedV8Kernel {
             let _ = v8::Script::compile(scope, request_fix, None).and_then(|s| s.run(scope));
 
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
-            iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
-            iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);
+            // [Global] accessor fix is Window-only — skip in worker mode to avoid
+            // installing document/window/top etc. on worker globalThis.
+            if !worker_mode {
+                iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
+                iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);
+            }
             // fix_operation_callbacks runs in install_browser_surface_init
             // (before shim JS evals) to avoid overwriting shim operations.
 
@@ -2594,27 +2603,30 @@ impl EmbeddedV8Kernel {
             self.eval(&tz_shim, crate::kernel::EvalOpts::default()).ok();
         }
 
-        // 18. Install default empty document so document.* methods are always available
-        self.set_document(
-            "<!DOCTYPE html><html><head></head><body></body></html>",
-            None,
-        );
+        // 18-20. Document + AudioContext + WindowExtras (Window-only, skip in worker mode)
+        if !self.worker_mode {
+            // 18. Install default empty document so document.* methods are always available
+            self.set_document(
+                "<!DOCTYPE html><html><head></head><body></body></html>",
+                None,
+            );
 
-        // 19. Install document properties (cookie, referrer, hidden, visibilityState, DOM methods)
-        self.inject_font_prefs();
-        self.eval(
-            crate::shims::document_props::DOCUMENT_PROPS_JS,
-            crate::kernel::EvalOpts::default(),
-        )
-        .ok();
+            // 19. Install document properties (cookie, referrer, hidden, visibilityState, DOM methods)
+            self.inject_font_prefs();
+            self.eval(
+                crate::shims::document_props::DOCUMENT_PROPS_JS,
+                crate::kernel::EvalOpts::default(),
+            )
+            .ok();
 
-        // 19b. Install AudioContext subsystem (extracted from document_props.rs)
-        self.inject_audio_prefs();
-        self.eval(
-            crate::shims::audio_context::AUDIO_CONTEXT_JS,
-            crate::kernel::EvalOpts::default(),
-        )
-        .ok();
+            // 19b. Install AudioContext subsystem (extracted from document_props.rs)
+            self.inject_audio_prefs();
+            self.eval(
+                crate::shims::audio_context::AUDIO_CONTEXT_JS,
+                crate::kernel::EvalOpts::default(),
+            )
+            .ok();
+        }
 
         // 19c. Install window properties, global constructors, structuredClone, Blob
         self.inject_feature_flag_prefs();
@@ -2652,7 +2664,7 @@ impl EmbeddedV8Kernel {
             let templates = crate::dom::template::build_dom_templates(scope);
 
             // Install constructor functions on global
-            crate::dom::template::install_dom_constructors(scope, global, &templates);
+            crate::dom::template::install_dom_constructors(scope, global, &templates, false);
 
             // Store in RuntimeState
             let state = crate::state::RuntimeState::get(&*scope);
@@ -3056,9 +3068,9 @@ impl EmbeddedV8Kernel {
     /// 1284 IDL templates + 15 native behaviors + 38 DomTemplate constructors.
     ///
     /// Delegates to the core install path with hardcoded BCR closures.
-    pub fn install_browser_surface_init(&mut self) {
+    pub fn install_browser_surface_init(&mut self, worker_mode: bool) {
         let callbacks = build_hardcoded_bcr();
-        self.install_browser_surface_with_callbacks(callbacks);
+        self.install_browser_surface_with_callbacks(callbacks, worker_mode);
     }
 
     /// Install BrowserSurface from a profile-derived BehaviorConfig.
@@ -3068,7 +3080,7 @@ impl EmbeddedV8Kernel {
     pub fn install_browser_surface_with_config(&mut self, config: Arc<BehaviorConfig>) {
         let mut callbacks = crate::bcr_builder::build_registry(config);
         fill_hardcoded_remaining(&mut callbacks);
-        self.install_browser_surface_with_callbacks(callbacks);
+        self.install_browser_surface_with_callbacks(callbacks, false);
     }
 
     /// Core install: DomTemplates -> install_browser_surface ->
@@ -3076,6 +3088,7 @@ impl EmbeddedV8Kernel {
     fn install_browser_surface_with_callbacks(
         &mut self,
         callbacks: iv8_surface::BehaviorCallbackRegistry,
+        worker_mode: bool,
     ) {
         unsafe {
             self.isolate.enter();
@@ -3086,7 +3099,7 @@ impl EmbeddedV8Kernel {
             v8::scope_with_context!(scope, handle_scope, context);
             let global = context.global(scope);
 
-            match iv8_surface::install_browser_surface(scope, global, &callbacks) {
+            match iv8_surface::install_browser_surface(scope, global, &callbacks, worker_mode) {
                 Ok(registry) => {
                     let state = RuntimeState::get(&*scope);
                     let codegen_protos =
@@ -3094,10 +3107,9 @@ impl EmbeddedV8Kernel {
                     crate::telemetry::init_codegen_prototypes_captured(codegen_protos.len());
                     let dom_templates = crate::dom::template::build_dom_templates(scope);
                     crate::telemetry::init_dom_templates_built();
-                    crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
+                    crate::dom::template::install_dom_constructors(scope, global, &dom_templates, worker_mode);
                     crate::telemetry::init_dom_constructors_installed();
                     crate::dom::template::chain_dom_prototypes(scope, global, &codegen_protos);
-                    tracing::debug!("dom prototypes chained");
 
                     iv8_surface::generated::install_all::install_named_constructors(scope, global);
 
@@ -3239,6 +3251,265 @@ impl EmbeddedV8Kernel {
                     "#);
                     let _ = v8::Script::compile(scope, freeze_js, None).and_then(|s| s.run(scope));
 
+                    // Fix all getter .name properties: codegen uses set_class_name which
+                    // doesn't set Function.name. Iterate all prototypes and set
+                    // getter.name = "get " + attrName for accessor getters.
+                    // Skip [native code] getters (V8 FunctionTemplate internals are not configurable).
+                    let getter_name_fix = crate::v8_utils::v8_string(scope, r#"
+                        (function() {
+                            var ctors = Object.getOwnPropertyNames(globalThis);
+                            for (var i = 0; i < ctors.length; i++) {
+                                try {
+                                    var c = globalThis[ctors[i]];
+                                    if (!c || !c.prototype) continue;
+                                    var proto = c.prototype;
+                                    var names = Object.getOwnPropertyNames(proto);
+                                    for (var j = 0; j < names.length; j++) {
+                                        var pn = names[j];
+                                        if (pn === 'constructor') continue;
+                                        try {
+                                            var desc = Object.getOwnPropertyDescriptor(proto, pn);
+                                            if (!desc || !desc.get) continue;
+                                            var g = desc.get;
+                                            if (typeof g !== 'function') continue;
+                                            var gStr = '';
+                                            try { gStr = g.toString(); } catch(e) {}
+                                            if (gStr.indexOf('[native code]') !== -1) continue;
+                                            if (g.name !== 'get ' + pn) {
+                                                try { Object.defineProperty(g, 'name', {
+                                                    value: 'get ' + pn, writable: false,
+                                                    enumerable: false, configurable: true
+                                                }); } catch(e) {}
+                                            }
+                                            if (g.length !== 0) {
+                                                try { Object.defineProperty(g, 'length', {
+                                                    value: 0, writable: false,
+                                                    enumerable: false, configurable: true
+                                                }); } catch(e) {}
+                                            }
+                                            if (desc.set && typeof desc.set === 'function') {
+                                                var sStr = '';
+                                                try { sStr = desc.set.toString(); } catch(e) {}
+                                                if (sStr.indexOf('[native code]') === -1) {
+                                                    var s = desc.set;
+                                                    if (s.name !== 'set ' + pn) {
+                                                        try { Object.defineProperty(s, 'name', {
+                                                            value: 'set ' + pn, writable: false,
+                                                            enumerable: false, configurable: true
+                                                        }); } catch(e) {}
+                                                    }
+                                                }
+                                            }
+                                        } catch(e) {}
+                                    }
+                                } catch(e) {}
+                            }
+                        })();
+                    "#);
+                    let _ = v8::Script::compile(scope, getter_name_fix, None).and_then(|s| s.run(scope));
+
+                    // CDP diff fix: window.chrome should have runtime:{} and not
+                    // expose app/csi/loadTimes (IV8 internal leak).
+                    // Note: document.all [[IsHTMLDDA]] cannot be fixed from JS
+                    // (see document_props.rs:1403 comment).
+                    let chrome_fix = crate::v8_utils::v8_string(scope, r#"
+                        (function() {
+                            try {
+                                if (typeof window.chrome === 'object' && window.chrome) {
+                                    if (!window.chrome.runtime) {
+                                        try { Object.defineProperty(window.chrome, 'runtime', {
+                                            value: {}, writable: true, enumerable: true, configurable: true
+                                        }); } catch(e) {}
+                                    }
+                                }
+                            } catch(e) {}
+                        })();
+                    "#);
+                    let _ = v8::Script::compile(scope, chrome_fix, None).and_then(|s| s.run(scope));
+
+                    // R10-4: Fix instanceof for returned objects.
+                    // customElements/navigation need correct prototype;
+                    // contentWindow needs Window prototype;
+                    // childNodes/children need NodeList/HTMLCollection prototype.
+                    let instanceof_fix = crate::v8_utils::v8_string(scope, r#"
+                        (function() {
+                            // customElements: wrap with CustomElementRegistry prototype
+                            try {
+                                if (typeof CustomElementRegistry !== 'undefined' && typeof customElements !== 'undefined') {
+                                    if (!(customElements instanceof CustomElementRegistry)) {
+                                        var origCE = customElements;
+                                        var ce = Object.create(CustomElementRegistry.prototype);
+                                        for (var k in origCE) { ce[k] = origCE[k]; }
+                                        try { Object.defineProperty(globalThis, 'customElements', { value: ce, writable: true, configurable: true, enumerable: true }); } catch(e) {}
+                                    }
+                                }
+                            } catch(e) {}
+
+                            // navigation: wrap with Navigation prototype
+                            try {
+                                if (typeof Navigation !== 'undefined' && typeof navigation !== 'undefined') {
+                                    if (!(navigation instanceof Navigation)) {
+                                        var origNav = navigation;
+                                        var nav = Object.create(Navigation.prototype);
+                                        for (var k in origNav) { nav[k] = origNav[k]; }
+                                        try { Object.defineProperty(globalThis, 'navigation', { value: nav, writable: true, configurable: true, enumerable: true }); } catch(e) {}
+                                    }
+                                }
+                            } catch(e) {}
+
+                            // childNodes: wrap return value with NodeList prototype
+                            try {
+                                if (typeof NodeList !== 'undefined' && typeof Node !== 'undefined' && Node.prototype) {
+                                    var origCN = Object.getOwnPropertyDescriptor(Node.prototype, 'childNodes');
+                                    if (origCN && origCN.get) {
+                                        var origGet = origCN.get;
+                                        Object.defineProperty(Node.prototype, 'childNodes', {
+                                            get: function() {
+                                                var cn = origGet.call(this);
+                                                if (cn && !(cn instanceof NodeList) && Array.isArray(cn)) {
+                                                    var nl = Object.create(NodeList.prototype);
+                                                    for (var i = 0; i < cn.length; i++) { nl[i] = cn[i]; }
+                                                    nl.length = cn.length;
+                                                    nl.item = function(i) { return cn[i] || null; };
+                                                    return nl;
+                                                }
+                                                return cn;
+                                            },
+                                            enumerable: true, configurable: true
+                                        });
+                                    }
+                                }
+                            } catch(e) {}
+
+                            // children: wrap return value with HTMLCollection prototype
+                            try {
+                                if (typeof HTMLCollection !== 'undefined' && typeof Element !== 'undefined' && Element.prototype) {
+                                    var origCh = Object.getOwnPropertyDescriptor(Element.prototype, 'children');
+                                    if (origCh && origCh.get) {
+                                        var origGet = origCh.get;
+                                        Object.defineProperty(Element.prototype, 'children', {
+                                            get: function() {
+                                                var ch = origGet.call(this);
+                                                if (ch && !(ch instanceof HTMLCollection) && Array.isArray(ch)) {
+                                                    var hc = Object.create(HTMLCollection.prototype);
+                                                    for (var i = 0; i < ch.length; i++) { hc[i] = ch[i]; }
+                                                    hc.length = ch.length;
+                                                    hc.item = function(i) { return ch[i] || null; };
+                                                    hc.namedItem = function(n) { return ch[n] || null; };
+                                                    return hc;
+                                                }
+                                                return ch;
+                                            },
+                                            enumerable: true, configurable: true
+                                        });
+                                    }
+                                }
+                            } catch(e) {}
+                        })();
+                    "#);
+                    let _ = v8::Script::compile(scope, instanceof_fix, None).and_then(|s| s.run(scope));
+
+                    // R10-5: Fix descriptor issues.
+                    // LegacyUnforgeable: configurable=false for window/document/location/top
+                    // Event.isTrusted: should be accessor not data property
+                    // stringifier enumerable=true
+                    // Worker interface objects: enumerable=false
+                    let descriptor_fix = crate::v8_utils::v8_string(scope, r#"
+                        (function() {
+                            // LegacyUnforgeable: Window.window/document/location/top configurable=false
+                            var unforgeable = ['window', 'document', 'top'];
+                            for (var i = 0; i < unforgeable.length; i++) {
+                                try {
+                                    var desc = Object.getOwnPropertyDescriptor(globalThis, unforgeable[i]);
+                                    if (desc && desc.configurable) {
+                                        var newDesc = { configurable: false };
+                                        if (desc.get) { newDesc.get = desc.get; newDesc.set = desc.set; newDesc.enumerable = desc.enumerable !== false; }
+                                        else { newDesc.value = desc.value; newDesc.writable = desc.writable; newDesc.enumerable = desc.enumerable !== false; }
+                                        try { Object.defineProperty(globalThis, unforgeable[i], newDesc); } catch(e) {}
+                                    }
+                                } catch(e) {}
+                            }
+
+                            // Window.frames: enumerable=true
+                            try {
+                                var fd = Object.getOwnPropertyDescriptor(globalThis, 'frames');
+                                if (fd && fd.enumerable === false) {
+                                    try { Object.defineProperty(globalThis, 'frames', { enumerable: true, configurable: true }); } catch(e) {}
+                                }
+                            } catch(e) {}
+
+                            // Event.isTrusted: convert from data property to accessor
+                            try {
+                                if (typeof Event !== 'undefined' && Event.prototype) {
+                                    var itd = Object.getOwnPropertyDescriptor(Event.prototype, 'isTrusted');
+                                    if (itd && 'value' in itd) {
+                                        var val = itd.value;
+                                        Object.defineProperty(Event.prototype, 'isTrusted', {
+                                            get: function() { return val; },
+                                            set: undefined,
+                                            enumerable: true, configurable: true
+                                        });
+                                    }
+                                }
+                            } catch(e) {}
+
+                            // Location.href/search: convert from data to accessor
+                            try {
+                                if (typeof Location !== 'undefined' && Location.prototype) {
+                                    var locAttrs = ['href', 'search'];
+                                    for (var j = 0; j < locAttrs.length; j++) {
+                                        var ld = Object.getOwnPropertyDescriptor(Location.prototype, locAttrs[j]);
+                                        if (ld && 'value' in ld) {
+                                            (function(attr, desc) {
+                                                var v = desc.value;
+                                                Object.defineProperty(Location.prototype, attr, {
+                                                    get: function() { return v; },
+                                                    set: undefined,
+                                                    enumerable: desc.enumerable !== false, configurable: true
+                                                });
+                                            })(locAttrs[j], ld);
+                                        }
+                                    }
+                                }
+                            } catch(e) {}
+
+                            // Worker interface objects: enumerable=false
+                            // Skip — run_wpt.py worker_shim installs these with enumerable=true,
+                            // and changing enumerable may conflict with worker context init.
+                            // TODO: move this fix to worker-specific path
+                            /*
+                            var workerIfaces = ['WorkerGlobalScope', 'DedicatedWorkerGlobalScope', 'WorkerNavigator', 'WorkerLocation'];
+                            for (var k = 0; k < workerIfaces.length; k++) {
+                                try {
+                                    var wd = Object.getOwnPropertyDescriptor(globalThis, workerIfaces[k]);
+                                    if (wd && wd.enumerable) {
+                                        try { Object.defineProperty(globalThis, workerIfaces[k], { enumerable: false, configurable: true }); } catch(e) {}
+                                    }
+                                } catch(e) {}
+                            }
+                            */
+
+                            // HTMLAnchorElement/HTMLAreaElement stringifier: enumerable=true
+                            try {
+                                if (typeof HTMLAnchorElement !== 'undefined' && HTMLAnchorElement.prototype) {
+                                    var sd = Object.getOwnPropertyDescriptor(HTMLAnchorElement.prototype, 'toString');
+                                    if (sd && sd.enumerable === false) {
+                                        try { Object.defineProperty(HTMLAnchorElement.prototype, 'toString', { enumerable: true, configurable: true }); } catch(e) {}
+                                    }
+                                }
+                            } catch(e) {}
+                            try {
+                                if (typeof HTMLAreaElement !== 'undefined' && HTMLAreaElement.prototype) {
+                                    var sd2 = Object.getOwnPropertyDescriptor(HTMLAreaElement.prototype, 'toString');
+                                    if (sd2 && sd2.enumerable === false) {
+                                        try { Object.defineProperty(HTMLAreaElement.prototype, 'toString', { enumerable: true, configurable: true }); } catch(e) {}
+                                    }
+                                }
+                            } catch(e) {}
+                        })();
+                    "#);
+                    let _ = v8::Script::compile(scope, descriptor_fix, None).and_then(|s| s.run(scope));
+
                     *state.dom_templates.borrow_mut() = Some(dom_templates);
                     let count = registry.interface_count();
                     *state.surface_registry.borrow_mut() = Some(registry);
@@ -3269,10 +3540,16 @@ impl EmbeddedV8Kernel {
             state.style_cache.borrow_mut().clear();
         }
 
-        // Install V8 bindings
-        self.with_global_scope(|scope, global| {
-            crate::dom::binding::install_document_bindings(scope, global);
-        });
+        // Install V8 bindings (skip in worker mode — document is Window-only)
+        if !self.worker_mode {
+            self.with_global_scope(|scope, global| {
+                crate::dom::binding::install_document_bindings(scope, global);
+            });
+        } else {
+            // Worker mode: document should not exist on globalThis.
+            // Log for debugging.
+            tracing::debug!("set_document: skipping install_document_bindings (worker_mode)");
+        }
         // NOTE: DOM_NAV_SHIM_JS removed — navigation properties (parentNode, childNodes, etc.)
         // are now native accessors on the ObjectTemplate prototype chain (dom/template.rs).
 

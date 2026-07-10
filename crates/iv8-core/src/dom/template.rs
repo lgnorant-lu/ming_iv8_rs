@@ -1081,6 +1081,7 @@ pub fn install_dom_constructors(
     scope: &v8::PinScope<'_, '_>,
     global: v8::Local<v8::Object>,
     templates: &DomTemplates,
+    worker_mode: bool,
 ) {
     let pairs: &[(&str, &v8::Global<v8::FunctionTemplate>)] = &[
         ("EventTarget", &templates.event_target),
@@ -1132,6 +1133,9 @@ pub fn install_dom_constructors(
     let mut installed_ctors: std::collections::HashMap<String, v8::Local<v8::Function>> =
         std::collections::HashMap::new();
     for (name, tmpl_global) in pairs {
+        if worker_mode && iv8_surface::generated::install_all::is_window_only_interface(name) {
+            continue;
+        }
         let tmpl = v8::Local::new(scope, *tmpl_global);
         if let Some(func) = tmpl.get_function(scope) {
             let key = crate::v8_utils::v8_string(scope, name);
