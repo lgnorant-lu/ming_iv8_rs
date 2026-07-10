@@ -2530,7 +2530,20 @@ self.xmlss_pi = document.createProcessingInstruction('xml-stylesheet', 'href="da
                 print(f"  Suite shim warning: {e}")
 
         # Load WPT harness (IIFE registers load listener via our shim)
-        ctx.eval(resources["testharness.js"], name="testharness.js")
+        testharness_code = resources["testharness.js"]
+
+        # Worker mode: patch create_test_environment to use WorkerTestEnvironment.
+        # IV8's codegen Window FunctionTemplate makes 'document' exist on globalThis
+        # even when running as worker, which causes testharness to incorrectly
+        # choose WindowTestEnvironment. We bypass this by patching the check.
+        if is_worker:
+            testharness_code = testharness_code.replace(
+                "'document' in global_scope",
+                "false",
+            )
+
+        ctx.eval(testharness_code, name="testharness.js")
+
         ctx.eval(resources["testharnessreport.js"], name="testharnessreport.js")
         # Load subset-tests-by-key.js for variant filtering
         subset_path = RESOURCES_DIR / "subset-tests-by-key.js"
@@ -2774,15 +2787,12 @@ def main() -> None:
     total_pass = sum(r["pass"] for r in results)
     total_fail = sum(r["fail"] for r in results)
 
-    # Fetch Chrome baseline
-    print("\nFetching Chrome baseline from wpt.fyi...")
-    chrome_baseline = fetch_chrome_baseline()
-
+    # Build and save report BEFORE wpt.fyi fetch (which may crash)
     report = {
         "schema_version": "wpt-report.v0.1",
         "source": "WPT official test files (direct reuse)",
         "suites": results,
-        "chrome_baseline": chrome_baseline,
+        "chrome_baseline": None,
         "summary": {
             "total_tests": total_tests,
             "total_pass": total_pass,
@@ -2791,7 +2801,6 @@ def main() -> None:
         },
     }
 
-    # Write report
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     try:
@@ -2823,7 +2832,17 @@ def main() -> None:
         print(f"  {r['suite']} [{r['variant']}]: "
               f"{r['pass']}/{r['total']} PASS")
 
+    # Fetch Chrome baseline (may fail, non-critical)
+    print("\nFetching Chrome baseline from wpt.fyi...")
+    chrome_baseline = fetch_chrome_baseline()
     if chrome_baseline:
+        report["chrome_baseline"] = chrome_baseline
+        # Re-save with Chrome baseline
+        try:
+            output_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+        except Exception as e:
+            print(f"WARNING: failed to update report with Chrome baseline: {e}")
+
         print("\nChrome baseline (wpt.fyi):")
         for test, baseline in chrome_baseline.items():
             print(f"  {test}: {baseline['pass']}/{baseline['total']}")
