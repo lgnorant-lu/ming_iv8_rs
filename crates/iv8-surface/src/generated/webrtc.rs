@@ -2481,7 +2481,6 @@ pub(crate) unsafe extern "C" fn rtc_identity_provider_registrar_op_1(_info: *con
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2734,7 +2733,6 @@ pub(crate) unsafe extern "C" fn rtc_rtp_receiver_op_3(_info: *const v8::Function
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -3297,8 +3295,8 @@ pub fn create_rtc_rtp_receiver_template<'s>(
 pub(crate) unsafe extern "C" fn rtc_rtp_s_frame_encrypter_op_1(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCRtpSFrameEncrypter") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCRtpSFrameEncrypter") { return; }
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -3570,7 +3568,6 @@ pub(crate) unsafe extern "C" fn rtc_rtp_sender_op_3(_info: *const v8::FunctionCa
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -3584,8 +3581,8 @@ pub(crate) unsafe extern "C" fn rtc_rtp_sender_op_3(_info: *const v8::FunctionCa
 pub(crate) unsafe extern "C" fn rtc_rtp_sender_op_4(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCRtpSender") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCRtpSender") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -3655,8 +3652,8 @@ pub(crate) unsafe extern "C" fn rtc_rtp_sender_op_5(_info: *const v8::FunctionCa
 pub(crate) unsafe extern "C" fn rtc_rtp_sender_op_6(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCRtpSender") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCRtpSender") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4579,7 +4576,6 @@ pub(crate) unsafe extern "C" fn rtc_rtp_transceiver_op_7(_info: *const v8::Funct
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -5419,7 +5415,6 @@ pub(crate) unsafe extern "C" fn rtcdtmf_sender_op_1(_info: *const v8::FunctionCa
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7450,7 +7445,6 @@ pub(crate) unsafe extern "C" fn rtc_data_channel_op_19(_info: *const v8::Functio
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7513,7 +7507,6 @@ pub(crate) unsafe extern "C" fn rtc_data_channel_op_20(_info: *const v8::Functio
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7576,7 +7569,6 @@ pub(crate) unsafe extern "C" fn rtc_data_channel_op_21(_info: *const v8::Functio
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7639,7 +7631,6 @@ pub(crate) unsafe extern "C" fn rtc_data_channel_op_22(_info: *const v8::Functio
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -10283,8 +10274,8 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_get_6(_info: *const v8::Func
 pub(crate) unsafe extern "C" fn rtc_peer_connection_op_7(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -11988,8 +11979,8 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_set_27(_info: *const v8::Fun
 pub(crate) unsafe extern "C" fn rtc_peer_connection_op_28(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -12003,8 +11994,8 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_op_28(_info: *const v8::Func
 pub(crate) unsafe extern "C" fn rtc_peer_connection_op_29(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         if __args.length() < 3 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 3, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -12018,8 +12009,8 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_op_29(_info: *const v8::Func
 pub(crate) unsafe extern "C" fn rtc_peer_connection_op_30(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -12033,8 +12024,8 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_op_30(_info: *const v8::Func
 pub(crate) unsafe extern "C" fn rtc_peer_connection_op_31(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         if __args.length() < 3 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 3, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -12048,8 +12039,8 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_op_31(_info: *const v8::Func
 pub(crate) unsafe extern "C" fn rtc_peer_connection_op_32(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         if __args.length() < 3 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 3, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -12112,7 +12103,6 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_op_33(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -12332,8 +12322,8 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_get_37(_info: *const v8::Fun
 pub(crate) unsafe extern "C" fn rtc_peer_connection_op_38(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCPeerConnection") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -12564,7 +12554,6 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_op_42(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -12627,7 +12616,6 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_op_43(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -12690,7 +12678,6 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_op_44(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -12961,7 +12948,6 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_op_47(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -13516,8 +13502,8 @@ fn install_rtc_peer_connection_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto
 pub(crate) unsafe extern "C" fn rtc_rtp_s_frame_decrypter_op_1(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCRtpSFrameDecrypter") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCRtpSFrameDecrypter") { return; }
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -13531,8 +13517,8 @@ pub(crate) unsafe extern "C" fn rtc_rtp_s_frame_decrypter_op_1(_info: *const v8:
 pub(crate) unsafe extern "C" fn rtc_rtp_s_frame_decrypter_op_2(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCRtpSFrameDecrypter") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "RTCRtpSFrameDecrypter") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);

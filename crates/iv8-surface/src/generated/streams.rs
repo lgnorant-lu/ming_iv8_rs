@@ -592,7 +592,6 @@ pub(crate) unsafe extern "C" fn readable_byte_stream_controller_op_4(_info: *con
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -765,7 +764,6 @@ pub(crate) unsafe extern "C" fn readable_stream_op_1(_info: *const v8::FunctionC
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -958,7 +956,6 @@ pub(crate) unsafe extern "C" fn readable_stream_op_5(_info: *const v8::FunctionC
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -972,8 +969,8 @@ pub(crate) unsafe extern "C" fn readable_stream_op_5(_info: *const v8::FunctionC
 pub(crate) unsafe extern "C" fn readable_stream_op_6(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "ReadableStream") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "ReadableStream") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -1114,8 +1111,8 @@ pub fn create_readable_stream_template<'s>(
 pub(crate) unsafe extern "C" fn readable_stream_byob_reader_op_1(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "ReadableStreamBYOBReader") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "ReadableStreamBYOBReader") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -1421,7 +1418,6 @@ pub(crate) unsafe extern "C" fn readable_stream_byob_request_op_2(_info: *const 
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -1484,7 +1480,6 @@ pub(crate) unsafe extern "C" fn readable_stream_byob_request_op_3(_info: *const 
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);

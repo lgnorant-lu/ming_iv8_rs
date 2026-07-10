@@ -481,6 +481,14 @@ fn generate_callbacks(def: &Definition, fn_name: &str, enum_names: &std::collect
 
     let op_receiver_check = &prototype_chain_check;
 
+    // For operation callbacks we define __args once at the top (before both
+    // receiver check and arg count check) to avoid duplicate `let __args`
+    // binding when required_arg_count > 0. For attributes, __args is defined
+    // inside prototype_chain_check and that's fine because attributes never
+    // need the arg count check.
+    let prototype_chain_check_op_core = &prototype_chain_check
+        [prototype_chain_check.find('\n').map(|i| i + 1).unwrap_or(0)..];
+
     for m in &def.members {
         if m.kind == "attribute" {
             let attr_name = m.name.as_deref().unwrap_or("");
@@ -565,16 +573,22 @@ fn generate_callbacks(def: &Definition, fn_name: &str, enum_names: &std::collect
             // codegen callbacks are panic-safe (no unwrap/expect on None).
             out.push_str("    let info_ref = unsafe { &*_info };\n");
             out.push_str("    v8::callback_scope!(unsafe scope, info_ref);\n");
+            // Define __args once — shared by receiver check (non-promise) and arg count check.
+            // For promise ops with no required args, __args is not defined (unused variable warning).
+            if !is_promise_ret || m.required_arg_count > 0 {
+                out.push_str("        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);\n");
+            }
             if is_promise_ret {
                 out.push_str(&format!(
                     "        if !crate::promise_check::check_receiver_promise(scope, _info, \"{iface}\") {{ return; }}\n",
                     iface = iface_name,
                 ));
             } else {
-                out.push_str(op_receiver_check);
+                // Use receiver check without `let __args` (already defined above)
+                out.push_str(prototype_chain_check_op_core);
             }
             if m.required_arg_count > 0 {
-                out.push_str("        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);\n");
+                // __args is already defined above — no need for another let binding
                 out.push_str(&format!(
                     "        if __args.length() < {} {{\n",
                     m.required_arg_count

@@ -58,7 +58,6 @@ pub(crate) unsafe extern "C" fn url_op_1(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -121,7 +120,6 @@ pub(crate) unsafe extern "C" fn url_op_2(_info: *const v8::FunctionCallbackInfo)
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -1648,7 +1646,6 @@ pub(crate) unsafe extern "C" fn url_op_16(_info: *const v8::FunctionCallbackInfo
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -1711,7 +1708,6 @@ pub(crate) unsafe extern "C" fn url_op_17(_info: *const v8::FunctionCallbackInfo
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2013,7 +2009,6 @@ pub(crate) unsafe extern "C" fn url_search_params_op_2(_info: *const v8::Functio
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2076,7 +2071,6 @@ pub(crate) unsafe extern "C" fn url_search_params_op_3(_info: *const v8::Functio
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2139,7 +2133,6 @@ pub(crate) unsafe extern "C" fn url_search_params_op_4(_info: *const v8::Functio
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2202,7 +2195,6 @@ pub(crate) unsafe extern "C" fn url_search_params_op_5(_info: *const v8::Functio
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2265,7 +2257,6 @@ pub(crate) unsafe extern "C" fn url_search_params_op_6(_info: *const v8::Functio
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2328,7 +2319,6 @@ pub(crate) unsafe extern "C" fn url_search_params_op_7(_info: *const v8::Functio
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);

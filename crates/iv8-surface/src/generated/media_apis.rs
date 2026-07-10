@@ -9,8 +9,8 @@ use v8::FunctionTemplate;
 pub(crate) unsafe extern "C" fn media_capabilities_op_1(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaCapabilities") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaCapabilities") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -24,8 +24,8 @@ pub(crate) unsafe extern "C" fn media_capabilities_op_1(_info: *const v8::Functi
 pub(crate) unsafe extern "C" fn media_capabilities_op_2(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaCapabilities") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaCapabilities") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -756,7 +756,6 @@ pub(crate) unsafe extern "C" fn media_key_status_map_op_2(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -819,7 +818,6 @@ pub(crate) unsafe extern "C" fn media_key_status_map_op_3(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -1107,8 +1105,8 @@ pub(crate) unsafe extern "C" fn media_keys_op_2(_info: *const v8::FunctionCallba
 pub(crate) unsafe extern "C" fn media_keys_op_3(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaKeys") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaKeys") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2111,7 +2109,6 @@ pub(crate) unsafe extern "C" fn media_session_op_3(_info: *const v8::FunctionCal
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2181,8 +2178,8 @@ pub(crate) unsafe extern "C" fn media_session_op_4(_info: *const v8::FunctionCal
 pub(crate) unsafe extern "C" fn media_session_op_5(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaSession") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaSession") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2196,8 +2193,8 @@ pub(crate) unsafe extern "C" fn media_session_op_5(_info: *const v8::FunctionCal
 pub(crate) unsafe extern "C" fn media_session_op_6(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaSession") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaSession") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2211,8 +2208,8 @@ pub(crate) unsafe extern "C" fn media_session_op_6(_info: *const v8::FunctionCal
 pub(crate) unsafe extern "C" fn media_session_op_7(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaSession") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaSession") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2590,8 +2587,8 @@ pub fn create_media_stream_track_processor_template<'s>(
 pub(crate) unsafe extern "C" fn permissions_op_1(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "Permissions") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "Permissions") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2605,8 +2602,8 @@ pub(crate) unsafe extern "C" fn permissions_op_1(_info: *const v8::FunctionCallb
 pub(crate) unsafe extern "C" fn permissions_op_2(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "Permissions") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "Permissions") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2620,8 +2617,8 @@ pub(crate) unsafe extern "C" fn permissions_op_2(_info: *const v8::FunctionCallb
 pub(crate) unsafe extern "C" fn permissions_op_3(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "Permissions") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "Permissions") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2922,7 +2919,6 @@ pub(crate) unsafe extern "C" fn media_devices_op_5(_info: *const v8::FunctionCal
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -3770,8 +3766,8 @@ pub(crate) unsafe extern "C" fn media_key_session_set_6(_info: *const v8::Functi
 pub(crate) unsafe extern "C" fn media_key_session_op_7(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaKeySession") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaKeySession") { return; }
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -3785,8 +3781,8 @@ pub(crate) unsafe extern "C" fn media_key_session_op_7(_info: *const v8::Functio
 pub(crate) unsafe extern "C" fn media_key_session_op_8(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaKeySession") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaKeySession") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -3800,8 +3796,8 @@ pub(crate) unsafe extern "C" fn media_key_session_op_8(_info: *const v8::Functio
 pub(crate) unsafe extern "C" fn media_key_session_op_9(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaKeySession") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaKeySession") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4124,7 +4120,6 @@ pub(crate) unsafe extern "C" fn media_query_list_op_3(_info: *const v8::Function
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4187,7 +4182,6 @@ pub(crate) unsafe extern "C" fn media_query_list_op_4(_info: *const v8::Function
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -5883,7 +5877,6 @@ pub(crate) unsafe extern "C" fn media_recorder_op_18(_info: *const v8::FunctionC
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7000,7 +6993,6 @@ pub(crate) unsafe extern "C" fn media_source_op_10(_info: *const v8::FunctionCal
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7063,7 +7055,6 @@ pub(crate) unsafe extern "C" fn media_source_op_11(_info: *const v8::FunctionCal
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7182,7 +7173,6 @@ pub(crate) unsafe extern "C" fn media_source_op_13(_info: *const v8::FunctionCal
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7301,7 +7291,6 @@ pub(crate) unsafe extern "C" fn media_source_op_15(_info: *const v8::FunctionCal
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7745,7 +7734,6 @@ pub(crate) unsafe extern "C" fn media_stream_op_5(_info: *const v8::FunctionCall
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7808,7 +7796,6 @@ pub(crate) unsafe extern "C" fn media_stream_op_6(_info: *const v8::FunctionCall
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7871,7 +7858,6 @@ pub(crate) unsafe extern "C" fn media_stream_op_7(_info: *const v8::FunctionCall
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -9731,8 +9717,8 @@ pub(crate) unsafe extern "C" fn media_stream_track_op_18(_info: *const v8::Funct
 pub(crate) unsafe extern "C" fn media_stream_track_op_19(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaStreamTrack") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "MediaStreamTrack") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -10925,8 +10911,8 @@ pub fn create_media_stream_track_audio_source_node_template<'s>(
 pub(crate) unsafe extern "C" fn browser_capture_media_stream_track_op_1(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "BrowserCaptureMediaStreamTrack") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BrowserCaptureMediaStreamTrack") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -10996,8 +10982,8 @@ pub(crate) unsafe extern "C" fn browser_capture_media_stream_track_op_2(_info: *
 pub(crate) unsafe extern "C" fn browser_capture_media_stream_track_op_3(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "BrowserCaptureMediaStreamTrack") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BrowserCaptureMediaStreamTrack") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);

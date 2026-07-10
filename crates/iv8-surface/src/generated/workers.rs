@@ -3248,7 +3248,6 @@ pub(crate) unsafe extern "C" fn message_port_op_1(_info: *const v8::FunctionCall
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -3311,7 +3310,6 @@ pub(crate) unsafe extern "C" fn message_port_op_2(_info: *const v8::FunctionCall
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4073,7 +4071,6 @@ pub(crate) unsafe extern "C" fn service_worker_op_3(_info: *const v8::FunctionCa
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4136,7 +4133,6 @@ pub(crate) unsafe extern "C" fn service_worker_op_4(_info: *const v8::FunctionCa
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4618,8 +4614,8 @@ pub(crate) unsafe extern "C" fn service_worker_container_get_2(_info: *const v8:
 pub(crate) unsafe extern "C" fn service_worker_container_op_3(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "ServiceWorkerContainer") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "ServiceWorkerContainer") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -6104,8 +6100,8 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_13(_info: *const
 pub(crate) unsafe extern "C" fn service_worker_registration_op_14(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "ServiceWorkerRegistration") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "ServiceWorkerRegistration") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -6637,7 +6633,6 @@ pub(crate) unsafe extern "C" fn worker_op_2(_info: *const v8::FunctionCallbackIn
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -6700,7 +6695,6 @@ pub(crate) unsafe extern "C" fn worker_op_3(_info: *const v8::FunctionCallbackIn
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8609,7 +8603,6 @@ pub(crate) unsafe extern "C" fn worker_global_scope_op_15(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8672,7 +8665,6 @@ pub(crate) unsafe extern "C" fn worker_global_scope_op_16(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8735,7 +8727,6 @@ pub(crate) unsafe extern "C" fn worker_global_scope_op_17(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8798,7 +8789,6 @@ pub(crate) unsafe extern "C" fn worker_global_scope_op_18(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8917,7 +8907,6 @@ pub(crate) unsafe extern "C" fn worker_global_scope_op_20(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -9036,7 +9025,6 @@ pub(crate) unsafe extern "C" fn worker_global_scope_op_22(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -9050,8 +9038,8 @@ pub(crate) unsafe extern "C" fn worker_global_scope_op_22(_info: *const v8::Func
 pub(crate) unsafe extern "C" fn worker_global_scope_op_23(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "WorkerGlobalScope") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "WorkerGlobalScope") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -9114,7 +9102,6 @@ pub(crate) unsafe extern "C" fn worker_global_scope_op_24(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);

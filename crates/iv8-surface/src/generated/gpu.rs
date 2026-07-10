@@ -1564,8 +1564,8 @@ pub(crate) unsafe extern "C" fn gpu_buffer_get_3(_info: *const v8::FunctionCallb
 pub(crate) unsafe extern "C" fn gpu_buffer_op_4(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "GPUBuffer") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "GPUBuffer") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2081,7 +2081,6 @@ pub(crate) unsafe extern "C" fn gpu_canvas_context_op_2(_info: *const v8::Functi
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2520,7 +2519,6 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_1(_info: *const v8::Funct
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2639,7 +2637,6 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_3(_info: *const v8::Funct
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2702,7 +2699,6 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_4(_info: *const v8::Funct
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 4 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 4, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2765,7 +2761,6 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_5(_info: *const v8::Funct
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 3 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 3, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2828,7 +2823,6 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_6(_info: *const v8::Funct
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 3 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 3, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2891,7 +2885,6 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_7(_info: *const v8::Funct
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 3 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 3, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2954,7 +2947,6 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_8(_info: *const v8::Funct
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -3017,7 +3009,6 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_9(_info: *const v8::Funct
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 5 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 5, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -3262,7 +3253,6 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_12(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -3381,7 +3371,6 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_14(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4121,7 +4110,6 @@ pub(crate) unsafe extern "C" fn gpu_compute_pass_encoder_op_1(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4184,7 +4172,6 @@ pub(crate) unsafe extern "C" fn gpu_compute_pass_encoder_op_2(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4247,7 +4234,6 @@ pub(crate) unsafe extern "C" fn gpu_compute_pass_encoder_op_3(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4492,7 +4478,6 @@ pub(crate) unsafe extern "C" fn gpu_compute_pass_encoder_op_6(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4611,7 +4596,6 @@ pub(crate) unsafe extern "C" fn gpu_compute_pass_encoder_op_8(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4674,7 +4658,6 @@ pub(crate) unsafe extern "C" fn gpu_compute_pass_encoder_op_9(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4737,7 +4720,6 @@ pub(crate) unsafe extern "C" fn gpu_compute_pass_encoder_op_10(_info: *const v8:
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -5017,7 +4999,6 @@ pub(crate) unsafe extern "C" fn gpu_compute_pipeline_op_2(_info: *const v8::Func
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -6059,7 +6040,6 @@ pub(crate) unsafe extern "C" fn gpu_queue_op_1(_info: *const v8::FunctionCallbac
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -6130,7 +6110,6 @@ pub(crate) unsafe extern "C" fn gpu_queue_op_3(_info: *const v8::FunctionCallbac
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 3 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 3, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -6193,7 +6172,6 @@ pub(crate) unsafe extern "C" fn gpu_queue_op_4(_info: *const v8::FunctionCallbac
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 4 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 4, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -6256,7 +6234,6 @@ pub(crate) unsafe extern "C" fn gpu_queue_op_5(_info: *const v8::FunctionCallbac
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 3 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 3, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -6844,7 +6821,6 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_3(_info: *const v8:
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -6963,7 +6939,6 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_5(_info: *const v8:
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7026,7 +7001,6 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_6(_info: *const v8:
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7089,7 +7063,6 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_7(_info: *const v8:
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7152,7 +7125,6 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_8(_info: *const v8:
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7215,7 +7187,6 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_9(_info: *const v8:
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7278,7 +7249,6 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_10(_info: *const v8
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7341,7 +7311,6 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_11(_info: *const v8
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7404,7 +7373,6 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_12(_info: *const v8
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7467,7 +7435,6 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_13(_info: *const v8
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7530,7 +7497,6 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_14(_info: *const v8
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7721,7 +7687,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_1(_info: *const v8::F
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 6 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 6, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7784,7 +7749,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_2(_info: *const v8::F
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 4 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 4, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7847,7 +7811,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_3(_info: *const v8::F
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7910,7 +7873,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_4(_info: *const v8::F
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -7973,7 +7935,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_5(_info: *const v8::F
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8092,7 +8053,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_7(_info: *const v8::F
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8337,7 +8297,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_10(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8456,7 +8415,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_12(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8519,7 +8477,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_13(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8582,7 +8539,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_14(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8645,7 +8601,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_15(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8708,7 +8663,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_16(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8771,7 +8725,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_17(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8834,7 +8787,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_18(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8897,7 +8849,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_19(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -8960,7 +8911,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_20(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -9023,7 +8973,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pass_encoder_op_21(_info: *const v8::
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -9393,7 +9342,6 @@ pub(crate) unsafe extern "C" fn gpu_render_pipeline_op_2(_info: *const v8::Funct
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14172,7 +14120,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_6(_info: *const v8::FunctionCallba
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14235,7 +14182,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_7(_info: *const v8::FunctionCallba
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14354,7 +14300,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_9(_info: *const v8::FunctionCallba
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14417,7 +14362,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_10(_info: *const v8::FunctionCallb
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14480,7 +14424,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_11(_info: *const v8::FunctionCallb
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14543,7 +14486,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_12(_info: *const v8::FunctionCallb
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14606,7 +14548,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_13(_info: *const v8::FunctionCallb
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14669,7 +14610,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_14(_info: *const v8::FunctionCallb
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14732,7 +14672,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_15(_info: *const v8::FunctionCallb
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14746,8 +14685,8 @@ pub(crate) unsafe extern "C" fn gpu_device_op_15(_info: *const v8::FunctionCallb
 pub(crate) unsafe extern "C" fn gpu_device_op_16(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "GPUDevice") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "GPUDevice") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14761,8 +14700,8 @@ pub(crate) unsafe extern "C" fn gpu_device_op_16(_info: *const v8::FunctionCallb
 pub(crate) unsafe extern "C" fn gpu_device_op_17(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "GPUDevice") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "GPUDevice") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14881,7 +14820,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_19(_info: *const v8::FunctionCallb
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -14944,7 +14882,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_20(_info: *const v8::FunctionCallb
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -15073,7 +15010,6 @@ pub(crate) unsafe extern "C" fn gpu_device_op_22(_info: *const v8::FunctionCallb
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);

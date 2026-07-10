@@ -1916,8 +1916,8 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_descriptor_op_4(_info: *co
 pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_descriptor_op_5(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTDescriptor") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTDescriptor") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2197,8 +2197,8 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_server_op_4(_info: *const 
 pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_server_op_5(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTServer") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTServer") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2368,7 +2368,6 @@ pub(crate) unsafe extern "C" fn bluetooth_uuid_op_1(_info: *const v8::FunctionCa
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2431,7 +2430,6 @@ pub(crate) unsafe extern "C" fn bluetooth_uuid_op_2(_info: *const v8::FunctionCa
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2494,7 +2492,6 @@ pub(crate) unsafe extern "C" fn bluetooth_uuid_op_3(_info: *const v8::FunctionCa
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -2557,7 +2554,6 @@ pub(crate) unsafe extern "C" fn bluetooth_uuid_op_4(_info: *const v8::FunctionCa
             scope.throw_exception(__exc);
             return;
         }
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -5240,8 +5236,8 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_characteristic_get_4(_info
 pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_characteristic_op_5(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTCharacteristic") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTCharacteristic") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -5271,8 +5267,8 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_characteristic_op_7(_info:
 pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_characteristic_op_8(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTCharacteristic") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTCharacteristic") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -5286,8 +5282,8 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_characteristic_op_8(_info:
 pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_characteristic_op_9(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTCharacteristic") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTCharacteristic") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -5301,8 +5297,8 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_characteristic_op_9(_info:
 pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_characteristic_op_10(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTCharacteristic") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTCharacteristic") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -5812,8 +5808,8 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_get_3(_info: *cons
 pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_op_4(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTService") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTService") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -5835,8 +5831,8 @@ pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_op_5(_info: *const
 pub(crate) unsafe extern "C" fn bluetooth_remote_gatt_service_op_6(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTService") { return; }
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BluetoothRemoteGATTService") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
