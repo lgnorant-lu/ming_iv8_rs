@@ -191,8 +191,13 @@ pub fn generate_all(
     sorted: &[String],
 ) -> (Vec<GeneratedFile>, InstallInfo) {
     let mut by_name: BTreeMap<String, &Definition> = BTreeMap::new();
+    let mut enum_names: std::collections::HashSet<String> = std::collections::HashSet::new();
     for def in definitions {
         if let Some(name) = &def.name {
+            if def.kind == "enum" {
+                enum_names.insert(name.clone());
+                continue;
+            }
             if def.kind != "interface" && def.kind != "callback_interface" {
                 continue;
             }
@@ -212,7 +217,7 @@ pub fn generate_all(
 
     let mut files = Vec::new();
     for (domain, defs) in &domains {
-        let content = generate_domain_file(domain, defs, &by_name);
+        let content = generate_domain_file(domain, defs, &by_name, &enum_names);
         files.push(GeneratedFile {
             domain: domain.clone(),
             content,
@@ -240,6 +245,7 @@ fn generate_domain_file(
     domain: &str,
     defs: &[&Definition],
     _all: &BTreeMap<String, &Definition>,
+    enum_names: &std::collections::HashSet<String>,
 ) -> String {
     let mut out = String::new();
     out.push_str(&format!("//! Generated stubs: {}\n", domain));
@@ -262,7 +268,7 @@ fn generate_domain_file(
         let fn_name = type_mapper::idl_name_to_rust(name);
         let ea = process_interface_ea(def);
 
-        let callbacks = generate_callbacks(def, &fn_name);
+        let callbacks = generate_callbacks(def, &fn_name, enum_names);
         if !callbacks.is_empty() {
             out.push_str(&callbacks);
         }
@@ -322,7 +328,7 @@ fn generate_domain_file(
     out
 }
 
-fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
+fn generate_callbacks(def: &Definition, fn_name: &str, enum_names: &std::collections::HashSet<String>) -> String {
     let mut out = String::new();
     let mut idx = 0;
 
@@ -352,37 +358,49 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
          \x20       let __ctx = scope.get_current_context();\n\
          \x20       let __global = __ctx.global(scope);\n\
          \x20       let __iface_name = v8::String::new(scope, \"{iface}\").unwrap();\n\
-         \x20       if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {{\n\
-         \x20           if __ctor_val.is_function() {{\n\
-         \x20               let __ctor = unsafe {{ v8::Local::<v8::Function>::cast_unchecked(__ctor_val) }};\n\
-         \x20               let __proto_key = v8::String::new(scope, \"prototype\").unwrap();\n\
-         \x20               if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {{\n\
-         \x20                   if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {{\n\
-         \x20                       let __proto = unsafe {{ v8::Local::<v8::Object>::cast_unchecked(__proto_val) }};\n\
-         \x20                       if __this.strict_equals(__proto.into()) {{\n\
-         \x20                           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
-         \x20                           let __exc = v8::Exception::type_error(scope, __msg);\n\
-         \x20                           scope.throw_exception(__exc);\n\
-         \x20                           return;\n\
-         \x20                       }}\n\
-         \x20                       let mut __current: v8::Local<v8::Value> = __this.into();\n\
-         \x20                       let mut __found = false;\n\
-         \x20                       for _ in 0..20usize {{\n\
-         \x20                           let Some(__cur_obj) = __current.to_object(scope) else {{ break; }};\n\
-         \x20                           let Some(__parent) = __cur_obj.get_prototype(scope) else {{ break; }};\n\
-         \x20                           if __parent.is_null_or_undefined() || !__parent.is_object() {{ break; }}\n\
-         \x20                           if __parent.strict_equals(__proto.into()) {{ __found = true; break; }}\n\
-         \x20                           __current = __parent;\n\
-         \x20                       }}\n\
-         \x20                       if !__found {{\n\
-         \x20                           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
-         \x20                           let __exc = v8::Exception::type_error(scope, __msg);\n\
-         \x20                           scope.throw_exception(__exc);\n\
-         \x20                           return;\n\
-         \x20                       }}\n\
-         \x20                   }}\n\
-         \x20               }}\n\
+         \x20       let __ctor_val = __global.get(scope, __iface_name.into());\n\
+         \x20       let __ctor_val = match __ctor_val {{\n\
+         \x20           Some(v) if v.is_function() => v,\n\
+         \x20           _ => {{\n\
+         \x20               let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20               let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20               scope.throw_exception(__exc);\n\
+         \x20               return;\n\
          \x20           }}\n\
+         \x20       }};\n\
+         \x20       let __ctor = unsafe {{ v8::Local::<v8::Function>::cast_unchecked(__ctor_val) }};\n\
+         \x20       let __proto_key = v8::String::new(scope, \"prototype\").unwrap();\n\
+         \x20       let __proto_val = __ctor.get(scope, __proto_key.into());\n\
+         \x20       let __proto_val = match __proto_val {{\n\
+         \x20           Some(v) if v.is_object() && !v.is_null_or_undefined() => v,\n\
+         \x20           _ => {{\n\
+         \x20               let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20               let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20               scope.throw_exception(__exc);\n\
+         \x20               return;\n\
+         \x20           }}\n\
+         \x20       }};\n\
+         \x20       let __proto = unsafe {{ v8::Local::<v8::Object>::cast_unchecked(__proto_val) }};\n\
+         \x20       if __this.strict_equals(__proto.into()) {{\n\
+         \x20           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20           let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20           scope.throw_exception(__exc);\n\
+         \x20           return;\n\
+         \x20       }}\n\
+         \x20       let mut __current: v8::Local<v8::Value> = __this.into();\n\
+         \x20       let mut __found = false;\n\
+         \x20       for _ in 0..20usize {{\n\
+         \x20           let Some(__cur_obj) = __current.to_object(scope) else {{ break; }};\n\
+         \x20           let Some(__parent) = __cur_obj.get_prototype(scope) else {{ break; }};\n\
+         \x20           if __parent.is_null_or_undefined() || !__parent.is_object() {{ break; }}\n\
+         \x20           if __parent.strict_equals(__proto.into()) {{ __found = true; break; }}\n\
+         \x20           __current = __parent;\n\
+         \x20       }}\n\
+         \x20       if !__found {{\n\
+         \x20           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20           let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20           scope.throw_exception(__exc);\n\
+         \x20           return;\n\
          \x20       }}\n",
         iface = iface_name,
     );
@@ -398,45 +416,65 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
          \x20       let __ctx = scope.get_current_context();\n\
          \x20       let __global = __ctx.global(scope);\n\
          \x20       let __iface_name = v8::String::new(scope, \"{iface}\").unwrap();\n\
-         \x20       if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {{\n\
-         \x20           if __ctor_val.is_function() {{\n\
-         \x20               let __ctor = unsafe {{ v8::Local::<v8::Function>::cast_unchecked(__ctor_val) }};\n\
-         \x20               let __proto_key = v8::String::new(scope, \"prototype\").unwrap();\n\
-         \x20               if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {{\n\
-         \x20                   if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {{\n\
-         \x20                       let __proto = unsafe {{ v8::Local::<v8::Object>::cast_unchecked(__proto_val) }};\n\
-         \x20                       if __this.strict_equals(__proto.into()) {{\n\
-         \x20                           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
-         \x20                           let __exc = v8::Exception::type_error(scope, __msg);\n\
-         \x20                           if let Some(__resolver) = v8::PromiseResolver::new(scope) {{\n\
-         \x20                               let _ = __resolver.reject(scope, __exc.into());\n\
-         \x20                               let mut __rv = v8::ReturnValue::from_function_callback_info(info_ref);\n\
-         \x20                               __rv.set(__resolver.get_promise(scope).into());\n\
-         \x20                           }}\n\
-         \x20                           return;\n\
-         \x20                       }}\n\
-         \x20                       let mut __current: v8::Local<v8::Value> = __this.into();\n\
-         \x20                       let mut __found = false;\n\
-         \x20                       for _ in 0..20usize {{\n\
-         \x20                           let Some(__cur_obj) = __current.to_object(scope) else {{ break; }};\n\
-         \x20                           let Some(__parent) = __cur_obj.get_prototype(scope) else {{ break; }};\n\
-         \x20                           if __parent.is_null_or_undefined() || !__parent.is_object() {{ break; }}\n\
-         \x20                           if __parent.strict_equals(__proto.into()) {{ __found = true; break; }}\n\
-         \x20                           __current = __parent;\n\
-         \x20                       }}\n\
-         \x20                       if !__found {{\n\
-         \x20                           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
-         \x20                           let __exc = v8::Exception::type_error(scope, __msg);\n\
-         \x20                           if let Some(__resolver) = v8::PromiseResolver::new(scope) {{\n\
-         \x20                               let _ = __resolver.reject(scope, __exc.into());\n\
-         \x20                               let mut __rv = v8::ReturnValue::from_function_callback_info(info_ref);\n\
-         \x20                               __rv.set(__resolver.get_promise(scope).into());\n\
-         \x20                           }}\n\
-         \x20                           return;\n\
-         \x20                       }}\n\
-         \x20                   }}\n\
+         \x20       let __ctor_val = __global.get(scope, __iface_name.into());\n\
+         \x20       let __ctor_val = match __ctor_val {{\n\
+         \x20           Some(v) if v.is_function() => v,\n\
+         \x20           _ => {{\n\
+         \x20               let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20               let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20               if let Some(__resolver) = v8::PromiseResolver::new(scope) {{\n\
+         \x20                   let _ = __resolver.reject(scope, __exc.into());\n\
+         \x20                   let mut __rv = v8::ReturnValue::from_function_callback_info(info_ref);\n\
+         \x20                   __rv.set(__resolver.get_promise(scope).into());\n\
          \x20               }}\n\
+         \x20               return;\n\
          \x20           }}\n\
+         \x20       }};\n\
+         \x20       let __ctor = unsafe {{ v8::Local::<v8::Function>::cast_unchecked(__ctor_val) }};\n\
+         \x20       let __proto_key = v8::String::new(scope, \"prototype\").unwrap();\n\
+         \x20       let __proto_val = __ctor.get(scope, __proto_key.into());\n\
+         \x20       let __proto_val = match __proto_val {{\n\
+         \x20           Some(v) if v.is_object() && !v.is_null_or_undefined() => v,\n\
+         \x20           _ => {{\n\
+         \x20               let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20               let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20               if let Some(__resolver) = v8::PromiseResolver::new(scope) {{\n\
+         \x20                   let _ = __resolver.reject(scope, __exc.into());\n\
+         \x20                   let mut __rv = v8::ReturnValue::from_function_callback_info(info_ref);\n\
+         \x20                   __rv.set(__resolver.get_promise(scope).into());\n\
+         \x20               }}\n\
+         \x20               return;\n\
+         \x20           }}\n\
+         \x20       }};\n\
+         \x20       let __proto = unsafe {{ v8::Local::<v8::Object>::cast_unchecked(__proto_val) }};\n\
+         \x20       if __this.strict_equals(__proto.into()) {{\n\
+         \x20           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20           let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20           if let Some(__resolver) = v8::PromiseResolver::new(scope) {{\n\
+         \x20               let _ = __resolver.reject(scope, __exc.into());\n\
+         \x20               let mut __rv = v8::ReturnValue::from_function_callback_info(info_ref);\n\
+         \x20               __rv.set(__resolver.get_promise(scope).into());\n\
+         \x20           }}\n\
+         \x20           return;\n\
+         \x20       }}\n\
+         \x20       let mut __current: v8::Local<v8::Value> = __this.into();\n\
+         \x20       let mut __found = false;\n\
+         \x20       for _ in 0..20usize {{\n\
+         \x20           let Some(__cur_obj) = __current.to_object(scope) else {{ break; }};\n\
+         \x20           let Some(__parent) = __cur_obj.get_prototype(scope) else {{ break; }};\n\
+         \x20           if __parent.is_null_or_undefined() || !__parent.is_object() {{ break; }}\n\
+         \x20           if __parent.strict_equals(__proto.into()) {{ __found = true; break; }}\n\
+         \x20           __current = __parent;\n\
+         \x20       }}\n\
+         \x20       if !__found {{\n\
+         \x20           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20           let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20           if let Some(__resolver) = v8::PromiseResolver::new(scope) {{\n\
+         \x20               let _ = __resolver.reject(scope, __exc.into());\n\
+         \x20               let mut __rv = v8::ReturnValue::from_function_callback_info(info_ref);\n\
+         \x20               __rv.set(__resolver.get_promise(scope).into());\n\
+         \x20           }}\n\
+         \x20           return;\n\
          \x20       }}\n",
         iface = iface_name,
     );
@@ -474,9 +512,11 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
                 "        let __this = __args.this();\n        let __hidden_key = v8::String::new(scope, \"__iv8{}\").unwrap();\n        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {{\n            if !__hidden_val.is_undefined() {{\n                rv.set(__hidden_val);\n                return;\n            }}\n        }}\n",
                 prop_name_camel
             ));
-            // For interface-typed attributes, create an object with the correct prototype
-            // instead of a bare Object::new() with Object.prototype
-            if is_interface_type(type_name) {
+            // For enum-typed attributes, return empty string (WebIDL enums map to DOMString)
+            let bare_type = type_name.trim_end_matches('?').trim();
+            if enum_names.contains(bare_type) {
+                out.push_str("        rv.set(v8::String::new(scope, \"\").unwrap().into());\n");
+            } else if is_interface_type(type_name) {
                 out.push_str(&format!(
                     "        {{\n            let __ctor_name = v8::String::new(scope, \"{}\").unwrap();\n            let __ctx = scope.get_current_context();\n            let __global = __ctx.global(scope);\n            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {{\n                if __ctor.is_object() {{\n                    let __proto_key = v8::String::new(scope, \"prototype\").unwrap();\n                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {{\n                        let __obj = v8::Object::new(scope);\n                        __obj.set_prototype(scope, __proto);\n                        rv.set(__obj.into());\n                        return;\n                    }}\n                }}\n            }}\n            rv.set(v8::Object::new(scope).into());\n        }}\n",
                     type_name
@@ -975,7 +1015,7 @@ pub fn generate_install_all(
     out.push_str("//! v0.8.26: Global-handle HashMap + v8::scope! batch blocks.\n\n");
     out.push_str("use v8::Local;\nuse v8::Object;\nuse v8::Global;\nuse v8::FunctionTemplate;\n\n");
 
-    out.push_str("pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {\n");
+    out.push_str("pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>, worker_mode: bool) {\n");
     out.push_str("    let mut templates: std::collections::HashMap<&str, v8::Global<FunctionTemplate>> = std::collections::HashMap::new();\n\n");
 
     const BATCH_SIZE: usize = 5;
@@ -989,6 +1029,17 @@ pub fn generate_install_all(
             Some(d) => d,
             None => continue,
         };
+
+        // Worker mode architecture:
+        // - Phase 1 creates ALL templates (including Window-only) so inheritance
+        //   chains never break (WorkerGlobalScope -> EventTarget, etc.).
+        // - Phase 2 (registration) skips Window-only constructors on globalThis.
+        // - Window [Global] instance properties (document/window/top) come from
+        //   the Window FunctionTemplate instance template. Those must NOT be
+        //   applied to the worker global. We handle that by not installing
+        //   Window onto the worker global and by skipping document bindings
+        //   in kernel worker_mode (see EmbeddedV8Kernel.worker_mode).
+        // - Single source of truth: process_interface_ea / is_window_only_interface.
 
         if created % BATCH_SIZE == 0 {
             if created > 0 {
@@ -1058,6 +1109,23 @@ pub fn generate_install_all(
             None => continue,
         };
         let ea = process_interface_ea(def);
+
+        // Pre-compute const members (needed for both worker_skip and normal path)
+        let const_members: Vec<(&String, &String)> = def
+            .members
+            .iter()
+            .filter_map(|m| {
+                if m.kind == "const" {
+                    m.name.as_ref().and_then(|n| m.const_value.as_ref().map(|v| (n, v)))
+                } else {
+                    None
+                }
+            })
+            .collect();
+
+        // Worker mode: skip Window-only interfaces
+        let worker_skip = ea.exposed_window && !ea.exposed_worker;
+
         if ea.no_interface_object {
             out.push_str(&format!(
                 "    // {}: NoInterfaceObject — skip global registration\n",
@@ -1075,6 +1143,73 @@ pub fn generate_install_all(
         }
 
         let fn_name = type_mapper::idl_name_to_rust(name);
+
+        // Worker skip: for Window-only interfaces, wrap the entire
+        // registration in if !worker_mode { scope + if let }.
+        // Use a self-contained scope block to avoid batch boundary issues.
+        let worker_skip = ea.exposed_window && !ea.exposed_worker;
+        if worker_skip {
+            let fn_name_ws = type_mapper::idl_name_to_rust(name);
+            out.push_str(&format!(
+                "    if !worker_mode {{ // {} is Window-only\n",
+                name
+            ));
+            out.push_str("    {\n");
+            out.push_str("        v8::scope!(let scope, scope);\n");
+            out.push_str(&format!(
+                "        if let Some(ctor_{0}) = templates.get(\"{1}\").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {{\n",
+                fn_name_ws, name,
+            ));
+            out.push_str(&format!(
+                "            let name_{0} = v8::String::new(scope, \"{1}\").unwrap();\n",
+                fn_name_ws, name,
+            ));
+            out.push_str(&format!(
+                "            global.define_own_property(scope, name_{0}.into(), ctor_{0}.into(), v8::PropertyAttribute::DONT_ENUM);\n",
+                fn_name_ws,
+            ));
+            // Constructor __proto__ chain fix
+            const INHERITANCE_OVERRIDES_WS: &[(&str, &str)] = &[
+                ("Navigator", "EventTarget"),
+                ("WorkerNavigator", "EventTarget"),
+                ("Storage", "EventTarget"),
+                ("XMLHttpRequestEventTarget", "EventTarget"),
+                ("XMLHttpRequest", "XMLHttpRequestEventTarget"),
+                ("XMLHttpRequestUpload", "XMLHttpRequestEventTarget"),
+            ];
+            let effective_parent_ws = def.inheritance.as_ref().map(|s| s.as_str()).or_else(|| {
+                INHERITANCE_OVERRIDES_WS
+                    .iter()
+                    .find(|(iface, _)| *iface == name.as_str())
+                    .map(|(_, parent)| *parent)
+            });
+            if let Some(parent) = effective_parent_ws {
+                out.push_str(&format!(
+                    "            if let Some(pctor) = templates.get(\"{0}\").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {{\n",
+                    parent,
+                ));
+                out.push_str(&format!(
+                    "                let cobj: v8::Local<v8::Object> = ctor_{}.into();\n",
+                    fn_name_ws,
+                ));
+                out.push_str("                let _ = cobj.set_prototype(scope, pctor.into());\n");
+                out.push_str("            }\n");
+            }
+            // Const members
+            for (cname, cval) in &const_members {
+                let v8_val = format_const_v8_value(cval);
+                out.push_str(&format!(
+                    "            {{ let ck = v8::String::new(scope, \"{}\").unwrap(); let cv = {}; ctor_{}.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }}\n",
+                    cname, v8_val, fn_name_ws,
+                ));
+            }
+            out.push_str("        }\n");
+            out.push_str("    }\n");
+            out.push_str("    } // end worker_skip\n");
+            reg_count += 1;
+            continue;
+        }
+
         out.push_str(&format!(
             "        if let Some(ctor_{0}) = templates.get(\"{1}\").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {{\n",
             fn_name, name,
@@ -1134,17 +1269,6 @@ pub fn generate_install_all(
             out.push_str("            }\n");
         }
 
-        let const_members: Vec<(&String, &String)> = def
-            .members
-            .iter()
-            .filter_map(|m| {
-                if m.kind == "const" {
-                    m.name.as_ref().and_then(|n| m.const_value.as_ref().map(|v| (n, v)))
-                } else {
-                    None
-                }
-            })
-            .collect();
         let reg_ctor_attr = if is_cb_reg {
             "v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE"
         } else {
@@ -1401,6 +1525,36 @@ pub fn generate_install_all(
 
     // GLOBAL_MOVE_JS is now empty — replaced by fix_global_accessor_properties
     out.push_str("\npub const GLOBAL_MOVE_JS: &str = \"(function(){});\";\n");
+
+    // Generate is_window_only_interface — single source of truth for worker
+    // exposure filtering. Derived from IR [Exposed] attribute.
+    // Returns true for interfaces with [Exposed=Window] (without [Exposed=Worker]).
+    out.push_str("\n/// Returns true if the interface is Window-only ([Exposed=Window] without [Exposed=Worker]).\n");
+    out.push_str("/// Used by both install_all (codegen) and install_dom_constructors (hand-written)\n");
+    out.push_str("/// to skip Window-only interfaces in worker mode. Single source of truth from IR.\n");
+    out.push_str("pub fn is_window_only_interface(name: &str) -> bool {\n");
+    out.push_str("    static WINDOW_ONLY: std::sync::LazyLock<std::collections::HashSet<&'static str>> = std::sync::LazyLock::new(|| {\n");
+    out.push_str("        let mut s = std::collections::HashSet::new();\n");
+    {
+        let mut window_only_names: Vec<String> = Vec::new();
+        for def in definitions {
+            if def.kind != "interface" && def.kind != "callback_interface" { continue; }
+            let ea = process_interface_ea(def);
+            if ea.exposed_window && !ea.exposed_worker {
+                if let Some(name) = &def.name {
+                    window_only_names.push(name.clone());
+                }
+            }
+        }
+        window_only_names.sort();
+        for name in &window_only_names {
+            out.push_str(&format!("        s.insert(\"{}\");\n", name));
+        }
+    }
+    out.push_str("        s\n");
+    out.push_str("    });\n");
+    out.push_str("    WINDOW_ONLY.contains(name)\n");
+    out.push_str("}\n");
     out
 }
 

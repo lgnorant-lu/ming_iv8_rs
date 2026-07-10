@@ -15,37 +15,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_1(_info: *const v8::FunctionCallback
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -69,37 +81,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_2(_info: *const v8::FunctionCallback
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -123,37 +147,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_3(_info: *const v8::FunctionCallback
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -177,37 +213,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_4(_info: *const v8::FunctionCallback
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -247,37 +295,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_5(_info: *const v8::FunctionCallback
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -288,23 +348,7 @@ pub(crate) unsafe extern "C" fn gamepad_get_5(_info: *const v8::FunctionCallback
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "GamepadMappingType").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::String::new(scope, "").unwrap().into());
     }));
 }
 
@@ -317,37 +361,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_6(_info: *const v8::FunctionCallback
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -371,37 +427,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_7(_info: *const v8::FunctionCallback
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -425,37 +493,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_8(_info: *const v8::FunctionCallback
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -479,37 +559,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_9(_info: *const v8::FunctionCallback
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -549,37 +641,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_10(_info: *const v8::FunctionCallbac
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -590,23 +694,7 @@ pub(crate) unsafe extern "C" fn gamepad_get_10(_info: *const v8::FunctionCallbac
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "GamepadHand").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::String::new(scope, "").unwrap().into());
     }));
 }
 
@@ -619,37 +707,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_11(_info: *const v8::FunctionCallbac
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -673,37 +773,49 @@ pub(crate) unsafe extern "C" fn gamepad_get_12(_info: *const v8::FunctionCallbac
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "Gamepad").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -855,37 +967,49 @@ pub(crate) unsafe extern "C" fn gamepad_button_get_1(_info: *const v8::FunctionC
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadButton").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -909,37 +1033,49 @@ pub(crate) unsafe extern "C" fn gamepad_button_get_2(_info: *const v8::FunctionC
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadButton").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -963,37 +1099,49 @@ pub(crate) unsafe extern "C" fn gamepad_button_get_3(_info: *const v8::FunctionC
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadButton").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -1057,37 +1205,49 @@ pub(crate) unsafe extern "C" fn gamepad_haptic_actuator_get_1(_info: *const v8::
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadHapticActuator").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -1196,37 +1356,49 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_1(_info: *const v8::FunctionCal
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadPose").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -1250,37 +1422,49 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_2(_info: *const v8::FunctionCal
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadPose").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -1304,37 +1488,49 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_3(_info: *const v8::FunctionCal
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadPose").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -1358,37 +1554,49 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_4(_info: *const v8::FunctionCal
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadPose").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -1412,37 +1620,49 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_5(_info: *const v8::FunctionCal
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadPose").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -1466,37 +1686,49 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_6(_info: *const v8::FunctionCal
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadPose").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -1520,37 +1752,49 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_7(_info: *const v8::FunctionCal
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadPose").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
@@ -1574,37 +1818,49 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_8(_info: *const v8::FunctionCal
         let __ctx = scope.get_current_context();
         let __global = __ctx.global(scope);
         let __iface_name = v8::String::new(scope, "GamepadPose").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
             }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();

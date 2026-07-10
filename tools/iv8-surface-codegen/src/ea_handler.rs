@@ -80,6 +80,11 @@ pub fn process_interface_ea(def: &Definition) -> EaResult {
     // Check for [Exposed=Worker] or [Exposed=(Window,Worker)]
     for attr in &def.ext_attrs {
         if attr.starts_with("Exposed") {
+            // [Exposed=*] means exposed in all contexts
+            if attr.contains("=*") {
+                result.exposed_window = true;
+                result.exposed_worker = true;
+            }
             if attr.contains("Worker") {
                 result.exposed_worker = true;
             }

@@ -29,6 +29,7 @@ use cbc::{Decryptor as CbcDecryptor, Encryptor as CbcEncryptor};
 
 use crate::crypto::ec_impl::{EcCurve, EcKeyMaterial};
 use crate::crypto::rsa_impl;
+use crate::crypto::ed_impl;
 
 // ─── Key metadata ─────────────────────────────────────────────────────────────
 
@@ -583,7 +584,7 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
 
         match algo_upper.as_str() {
             // Symmetric algorithms: raw format only
-            "HMAC" | "AESGCM" | "AESCBC" | "AESCTR" | "PBKDF2" | "HKDF" => {
+            "HMAC" | "AESGCM" | "AESCBC" | "AESCTR" | "AESKW" | "PBKDF2" | "HKDF" => {
                 let meta = KeyMeta {
                     key_type: "secret".to_string(),
                     algo: algo.clone(),
@@ -768,8 +769,107 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
                 resolver.resolve(scope, key_obj.into());
             }
 
+            // Ed25519 importKey
+            "ED25519" => {
+                let (key_type, key_bytes) = match format.as_str() {
+                    "raw" => {
+                        if key_data.len() != 32 {
+                            let msg = crate::v8_utils::v8_string(scope, "Ed25519 raw key must be 32 bytes");
+                            resolver.reject(scope, v8::Exception::error(scope, msg));
+                            return;
+                        }
+                        ("public".to_string(), key_data.clone())
+                    }
+                    "spki" => {
+                        match ed_impl::import_ed25519_public_raw(&extract_spki_key(&key_data).unwrap_or_default()) {
+                            Ok(k) => ("public".to_string(), ed_impl::export_ed25519_public_raw(&k)),
+                            Err(e) => {
+                                let msg = crate::v8_utils::v8_string(scope, &format!("Ed25519 importKey spki: {}", e));
+                                resolver.reject(scope, v8::Exception::error(scope, msg));
+                                return;
+                            }
+                        }
+                    }
+                    "pkcs8" => {
+                        match ed_impl::import_ed25519_private_raw(&extract_pkcs8_key(&key_data).unwrap_or_default()) {
+                            Ok(k) => ("private".to_string(), ed_impl::export_ed25519_private_raw(&k)),
+                            Err(e) => {
+                                let msg = crate::v8_utils::v8_string(scope, &format!("Ed25519 importKey pkcs8: {}", e));
+                                resolver.reject(scope, v8::Exception::error(scope, msg));
+                                return;
+                            }
+                        }
+                    }
+                    _ => {
+                        let msg = crate::v8_utils::v8_string(scope, &format!("Ed25519 importKey: unsupported format '{}'", format));
+                        resolver.reject(scope, v8::Exception::error(scope, msg));
+                        return;
+                    }
+                };
+                let meta = KeyMeta {
+                    key_type,
+                    algo: algo.clone(),
+                    hash: None,
+                    curve: None,
+                    modulus_length: None,
+                    key_bytes_b64: b64_encode(&key_bytes),
+                    extractable,
+                    usages,
+                };
+                let key_obj = make_crypto_key(scope, &meta);
+                resolver.resolve(scope, key_obj.into());
+            }
+
+            // X25519 importKey
+            "X25519" => {
+                let (key_type, key_bytes) = match format.as_str() {
+                    "raw" => {
+                        if key_data.len() != 32 {
+                            let msg = crate::v8_utils::v8_string(scope, "X25519 raw key must be 32 bytes");
+                            resolver.reject(scope, v8::Exception::error(scope, msg));
+                            return;
+                        }
+                        ("public".to_string(), key_data.clone())
+                    }
+                    "spki" => {
+                        let raw = extract_spki_key(&key_data).unwrap_or_default();
+                        if raw.len() != 32 {
+                            let msg = crate::v8_utils::v8_string(scope, "X25519 spki: extracted key not 32 bytes");
+                            resolver.reject(scope, v8::Exception::error(scope, msg));
+                            return;
+                        }
+                        ("public".to_string(), raw)
+                    }
+                    "pkcs8" => {
+                        let raw = extract_pkcs8_key(&key_data).unwrap_or_default();
+                        if raw.len() != 32 {
+                            let msg = crate::v8_utils::v8_string(scope, "X25519 pkcs8: extracted key not 32 bytes");
+                            resolver.reject(scope, v8::Exception::error(scope, msg));
+                            return;
+                        }
+                        ("private".to_string(), raw)
+                    }
+                    _ => {
+                        let msg = crate::v8_utils::v8_string(scope, &format!("X25519 importKey: unsupported format '{}'", format));
+                        resolver.reject(scope, v8::Exception::error(scope, msg));
+                        return;
+                    }
+                };
+                let meta = KeyMeta {
+                    key_type,
+                    algo: algo.clone(),
+                    hash: None,
+                    curve: None,
+                    modulus_length: None,
+                    key_bytes_b64: b64_encode(&key_bytes),
+                    extractable,
+                    usages,
+                };
+                let key_obj = make_crypto_key(scope, &meta);
+                resolver.resolve(scope, key_obj.into());
+            }
+
             _ => {
-                // Fallback: treat as raw symmetric key
                 let meta = KeyMeta {
                     key_type: "secret".to_string(),
                     algo: algo.clone(),
@@ -1023,7 +1123,7 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
                         None
                     }
                 },
-                "X25519" | "AESKW" | _ => {
+                "X25519" | _ => {
                     reject_not_supported!(scope, resolver, algo);
                 }
             };
@@ -1068,7 +1168,7 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
                 // For now, reject in legacy path (CryptoKey path handles it above)
                 reject_not_supported!(scope, resolver, algo);
             }
-            "ED25519" | "X25519" | "AESKW" | _ => {
+            "ED25519" | "X25519" | _ => {
                 reject_not_supported!(scope, resolver, algo);
             }
         };
@@ -1169,7 +1269,7 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
                         false
                     }
                 },
-                "X25519" | "AESKW" | _ => {
+                "X25519" | _ => {
                     reject_not_supported!(scope, resolver, algo);
                 }
             };
@@ -1200,7 +1300,7 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
                     // Legacy path: not supported (CryptoKey path handles it above)
                     reject_not_supported!(scope, resolver, algo);
                 }
-                "X25519" | "AESKW" | _ => {
+                "X25519" | _ => {
                     reject_not_supported!(scope, resolver, algo);
                 }
             },
@@ -2200,8 +2300,76 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
                 }
             }
 
+            // Ed25519 key pair generation
+            "ED25519" => {
+                let (verifying_key, signing_key) = ed_impl::ed25519_generate_key();
+                let pub_bytes = ed_impl::export_ed25519_public_raw(&verifying_key);
+                let priv_bytes = ed_impl::export_ed25519_private_raw(&signing_key);
+                let pub_meta = KeyMeta {
+                    key_type: "public".to_string(),
+                    algo: algo.clone(),
+                    hash: None,
+                    curve: None,
+                    modulus_length: None,
+                    key_bytes_b64: b64_encode(&pub_bytes),
+                    extractable,
+                    usages: usages.iter().filter(|u| matches!(u.as_str(), "verify")).cloned().collect(),
+                };
+                let priv_meta = KeyMeta {
+                    key_type: "private".to_string(),
+                    algo: algo.clone(),
+                    hash: None,
+                    curve: None,
+                    modulus_length: None,
+                    key_bytes_b64: b64_encode(&priv_bytes),
+                    extractable,
+                    usages: usages.iter().filter(|u| matches!(u.as_str(), "sign")).cloned().collect(),
+                };
+                let pub_obj = make_crypto_key(scope, &pub_meta);
+                let priv_obj = make_crypto_key(scope, &priv_meta);
+                let pair_obj = v8::Object::new(scope);
+                let pub_key_str = crate::v8_utils::v8_string(scope, "publicKey");
+                let priv_key_str = crate::v8_utils::v8_string(scope, "privateKey");
+                pair_obj.set(scope, pub_key_str.into(), pub_obj.into());
+                pair_obj.set(scope, priv_key_str.into(), priv_obj.into());
+                resolver.resolve(scope, pair_obj.into());
+            }
+
+            // X25519 key pair generation
+            "X25519" => {
+                let (pub_key, priv_bytes) = ed_impl::x25519_generate_key();
+                let pub_bytes = pub_key.to_bytes();
+                let pub_meta = KeyMeta {
+                    key_type: "public".to_string(),
+                    algo: algo.clone(),
+                    hash: None,
+                    curve: None,
+                    modulus_length: None,
+                    key_bytes_b64: b64_encode(&pub_bytes),
+                    extractable,
+                    usages: usages.iter().filter(|u| matches!(u.as_str(), "deriveKey" | "deriveBits")).cloned().collect(),
+                };
+                let priv_meta = KeyMeta {
+                    key_type: "private".to_string(),
+                    algo: algo.clone(),
+                    hash: None,
+                    curve: None,
+                    modulus_length: None,
+                    key_bytes_b64: b64_encode(&priv_bytes),
+                    extractable,
+                    usages: usages.iter().filter(|u| matches!(u.as_str(), "deriveKey" | "deriveBits")).cloned().collect(),
+                };
+                let pub_obj = make_crypto_key(scope, &pub_meta);
+                let priv_obj = make_crypto_key(scope, &priv_meta);
+                let pair_obj = v8::Object::new(scope);
+                let pub_key_str = crate::v8_utils::v8_string(scope, "publicKey");
+                let priv_key_str = crate::v8_utils::v8_string(scope, "privateKey");
+                pair_obj.set(scope, pub_key_str.into(), pub_obj.into());
+                pair_obj.set(scope, priv_key_str.into(), priv_obj.into());
+                resolver.resolve(scope, pair_obj.into());
+            }
+
             _ => {
-                // Fallback: generate random symmetric key
                 let key_length = 256usize;
                 let mut key_data = vec![0u8; key_length / 8];
                 crate::crypto::random::fill_random_bytes(&mut key_data);
@@ -2273,7 +2441,7 @@ unsafe extern "C" fn subtle_export_key(info: *const v8::FunctionCallbackInfo) {
                                 }
                             }
                         }
-                        _ => {
+            _ => {
                             // Symmetric: return raw key bytes
                             match b64_decode(&meta.key_bytes_b64) {
                                 Ok(bytes) => resolve_with_array_buffer(scope, resolver, &bytes),
@@ -2685,6 +2853,9 @@ unsafe extern "C" fn subtle_wrap_key(info: *const v8::FunctionCallbackInfo) {
                 let iv = iv.unwrap_or_else(|| vec![0u8; 16]);
                 aes_cbc_encrypt(&wrap_key_bytes, &iv, &key_bytes)
             }
+            "AESKW" => {
+                rsa_impl::aes_kw_wrap(&wrap_key_bytes, &key_bytes)
+            }
             _ => Err(format!(
                 "wrapKey: unsupported wrap algorithm '{}'",
                 wrap_algo
@@ -2761,6 +2932,9 @@ unsafe extern "C" fn subtle_unwrap_key(info: *const v8::FunctionCallbackInfo) {
                 let iv = iv.unwrap_or_else(|| vec![0u8; 16]);
                 aes_cbc_decrypt(&unwrap_key_bytes, &iv, &wrapped_key_bytes)
             }
+            "AESKW" => {
+                rsa_impl::aes_kw_unwrap(&unwrap_key_bytes, &wrapped_key_bytes)
+            }
             _ => Err(format!(
                 "unwrapKey: unsupported algorithm '{}'",
                 unwrap_algo
@@ -2804,4 +2978,22 @@ unsafe extern "C" fn subtle_unwrap_key(info: *const v8::FunctionCallbackInfo) {
             }
         }
     }));
+}
+
+fn extract_spki_key(der: &[u8]) -> Option<Vec<u8>> {
+    for i in 0..der.len().saturating_sub(34) {
+        if der[i] == 0x03 && der[i + 1] == 0x21 && der[i + 2] == 0x00 {
+            return Some(der[i + 3..i + 35].to_vec());
+        }
+    }
+    None
+}
+
+fn extract_pkcs8_key(der: &[u8]) -> Option<Vec<u8>> {
+    for i in 0..der.len().saturating_sub(33) {
+        if der[i] == 0x04 && der[i + 1] == 0x20 {
+            return Some(der[i + 2..i + 34].to_vec());
+        }
+    }
+    None
 }

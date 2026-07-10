@@ -11,24 +11,34 @@ pub fn check_receiver(
     let global = ctx.global(scope);
     let iface_str = match v8::String::new(scope, iface_name) {
         Some(s) => s,
-        None => return true,
+        None => {
+            throw_illegal_invocation(scope);
+            return false;
+        }
     };
     let Some(ctor_val) = global.get(scope, iface_str.into()) else {
-        return true;
+        throw_illegal_invocation(scope);
+        return false;
     };
     if !ctor_val.is_function() {
-        return true;
+        throw_illegal_invocation(scope);
+        return false;
     }
     let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
     let proto_key = match v8::String::new(scope, "prototype") {
         Some(s) => s,
-        None => return true,
+        None => {
+            throw_illegal_invocation(scope);
+            return false;
+        }
     };
     let Some(proto_val) = ctor.get(scope, proto_key.into()) else {
-        return true;
+        throw_illegal_invocation(scope);
+        return false;
     };
     if !proto_val.is_object() || proto_val.is_null_or_undefined() {
-        return true;
+        throw_illegal_invocation(scope);
+        return false;
     }
     let proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(proto_val) };
     if this.strict_equals(proto.into()) {
@@ -67,34 +77,54 @@ pub fn check_receiver_promise(
     let this = args.this();
     let ctx = scope.get_current_context();
     let global = ctx.global(scope);
-    let iface_str = v8::String::new(scope, iface_name).unwrap();
-    if let Some(ctor_val) = global.get(scope, iface_str.into()) {
-        if ctor_val.is_function() {
-            let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
-            let proto_key = v8::String::new(scope, "prototype").unwrap();
-            if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
-                if proto_val.is_object() && !proto_val.is_null_or_undefined() {
-                    let proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(proto_val) };
-                    if this.strict_equals(proto.into()) {
-                        reject_promise(scope, info_ref);
-                        return false;
-                    }
-                    let mut current: v8::Local<v8::Value> = this.into();
-                    let mut found = false;
-                    for _ in 0..20usize {
-                        let Some(cur_obj) = current.to_object(scope) else { break; };
-                        let Some(parent) = cur_obj.get_prototype(scope) else { break; };
-                        if parent.is_null_or_undefined() || !parent.is_object() { break; }
-                        if parent.strict_equals(proto.into()) { found = true; break; }
-                        current = parent;
-                    }
-                    if !found {
-                        reject_promise(scope, info_ref);
-                        return false;
-                    }
-                }
-            }
+    let iface_str = match v8::String::new(scope, iface_name) {
+        Some(s) => s,
+        None => {
+            reject_promise(scope, info_ref);
+            return false;
         }
+    };
+    let Some(ctor_val) = global.get(scope, iface_str.into()) else {
+        reject_promise(scope, info_ref);
+        return false;
+    };
+    if !ctor_val.is_function() {
+        reject_promise(scope, info_ref);
+        return false;
+    }
+    let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+    let proto_key = match v8::String::new(scope, "prototype") {
+        Some(s) => s,
+        None => {
+            reject_promise(scope, info_ref);
+            return false;
+        }
+    };
+    let Some(proto_val) = ctor.get(scope, proto_key.into()) else {
+        reject_promise(scope, info_ref);
+        return false;
+    };
+    if !proto_val.is_object() || proto_val.is_null_or_undefined() {
+        reject_promise(scope, info_ref);
+        return false;
+    }
+    let proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(proto_val) };
+    if this.strict_equals(proto.into()) {
+        reject_promise(scope, info_ref);
+        return false;
+    }
+    let mut current: v8::Local<v8::Value> = this.into();
+    let mut found = false;
+    for _ in 0..20usize {
+        let Some(cur_obj) = current.to_object(scope) else { break; };
+        let Some(parent) = cur_obj.get_prototype(scope) else { break; };
+        if parent.is_null_or_undefined() || !parent.is_object() { break; }
+        if parent.strict_equals(proto.into()) { found = true; break; }
+        current = parent;
+    }
+    if !found {
+        reject_promise(scope, info_ref);
+        return false;
     }
     true
 }
