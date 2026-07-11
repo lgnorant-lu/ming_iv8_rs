@@ -6,6 +6,47 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.88] - 2026-07-12
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Mode: Lightweight Increment.
+
+### Added
+- codegen [Global] interface attribute/operation split: attributes on instance_template, operations on prototype_template (P1, +12 WPT)
+- WorkerGlobalScope is_global override: IR parser drops [Global=Worker], hardcoded override in ea_handler.rs (P3, +20 WPT)
+- Worker mode freeze_all_prototypes fix: workerOnly delete gated behind !worker_mode (P3)
+- canPlayType arg count validation in JS wrapper (+1 WPT)
+- K-008 readonly accessor workaround pattern: dataset → DOMStringMap direct creation, children → HTMLCollection direct creation (+6 WPT)
+- Telemetry catalog: 14 new events (29 total), 3 new categories (iv8.inspector, iv8.shim, iv8.canvas), COVERAGE_MATRIX const with validation tests
+- 44 new Rust integration tests: test_telemetry_catalog (13), test_codegen_global_interface (7), test_k008_accessor_workaround (11), test_worker_init (7), test_executor (6)
+- 126 new Rust inline unit tests across 12 source files
+- Testing conventions: 3 new sections (Telemetry Testing, Codegen Output Testing, V8 Limitation Workaround Testing), 4 new coverage dimensions
+- Logging conventions: updated with all 29 catalog events + coverage matrix table
+
+### Changed
+- All 69 direct tracing:: calls consolidated through telemetry catalog (0 violations)
+- fix_global_accessor_properties now runs in worker_mode (was skipped)
+- freeze_all_prototypes workerOnly delete gated behind !worker_mode
+- childNodes JS wrapper removed (K-008: V8 accessor getter cannot be called via .call())
+- global_accessor_fix native code getter handling improved (self/window/top/parent/frames return globalThis)
+- canvas_fingerprint_warning safety level: Sensitive → Diagnostic (renderer is GPU info, not user data)
+
+### Quality Gates
+- WPT idlharness: 9359/9640 (97.09%), from 9320 (+39)
+- Rust lib tests: 485/485 PASS (from 359, +126)
+- Rust integration tests: 44 new tests, all PASS
+- Line coverage: 47.4% (from 43.7%, +3.7%)
+- 0% coverage files: 1 (from 10)
+- Logging violations: 0 (from 69)
+- Bug fix: X25519 public key generation (PublicKey::from treated private bytes as point, fixed to x25519(private, BASEPOINT))
+
+### Known Limitations
+- K-008: V8 FunctionTemplate getter cannot be called via JS .call() — global_accessor_fix JS wrapper still needed
+- K-009: Test coverage 47.4% < 80% target — remaining gaps are V8-dependent, deferred to v0.8.89+
+- K-010: RUST_MIN_STACK not in core config — still requires env var
+- K-011: 128MB stack size performance analysis pending
+- K-012: Python API ergonomics audit needed
+
 ## [v0.8.87] - 2026-07-10
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.

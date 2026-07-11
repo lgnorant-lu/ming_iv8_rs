@@ -3,7 +3,7 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.87 (V8 error handlers + boundary fixes + crypto 15 algorithms + WPT coverage gap analysis + H05/H06/L4b TODO registration) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.88 (codegen [Global] split + K-008 accessor fix + logging catalog consolidation + test coverage expansion) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
