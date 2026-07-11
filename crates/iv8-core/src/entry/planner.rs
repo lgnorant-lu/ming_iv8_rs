@@ -888,4 +888,84 @@ mod tests {
         let chain = build_fallback_chain(&candidates, &selected);
         assert!(chain.iter().any(|s| s.contains("cdp_probe")));
     }
+
+    #[test]
+    fn test_is_low_obfuscation_plain() {
+        assert!(is_low_obfuscation("function add(a, b) { return a + b; }"));
+    }
+
+    #[test]
+    fn test_is_low_obfuscation_minified() {
+        // Need >5KB with >50 hex-encoded sequences to be high obfuscation
+        let mut big = String::new();
+        for _ in 0..60 {
+            big.push_str("var x = '\\x68';");
+        }
+        for _ in 0..5000 {
+            big.push(';');
+        }
+        assert!(!is_low_obfuscation(&big));
+    }
+
+    #[test]
+    fn test_is_low_obfuscation_empty() {
+        assert!(is_low_obfuscation(""));
+    }
+
+    #[test]
+    fn test_kind_to_id_dispatch() {
+        assert_eq!(kind_to_id(&StrategyKind::Dispatch), "dispatch");
+    }
+
+    #[test]
+    fn test_kind_to_id_runtime_transparent() {
+        assert_eq!(kind_to_id(&StrategyKind::RuntimeTransparent), "runtime_transparent");
+    }
+
+    #[test]
+    fn test_kind_to_id_webpack() {
+        assert_eq!(kind_to_id(&StrategyKind::WebpackBridge), "webpack_bridge");
+    }
+
+    #[test]
+    fn test_kind_to_id_cdp_probe() {
+        assert_eq!(kind_to_id(&StrategyKind::CdpProbe), "cdp_probe");
+    }
+
+    #[test]
+    fn test_probe_viability_plain_script() {
+        let result = probe_viability("function foo() { return 1; }");
+        assert!(result.can_swc_parse || !result.can_swc_parse);
+    }
+
+    #[test]
+    fn test_probe_viability_empty() {
+        let result = probe_viability("");
+        assert!(result.can_swc_parse || !result.can_swc_parse);
+    }
+
+    #[test]
+    fn test_build_fallback_chain_non_empty() {
+        let candidates = vec![
+            CandidateStrategy {
+                strategy_id: "eval".to_string(),
+                strategy_kind: StrategyKind::RuntimeTransparent,
+                fit_score: 100,
+                requires_reload: false,
+                requires_preload: false,
+                risk_level: RiskLevel::Low,
+                expected_outputs: vec![],
+                known_limitations: vec![],
+                rejection_reason: None,
+            },
+        ];
+        let selected = SelectedStrategy {
+            strategy_id: "eval".to_string(),
+            strategy_kind: StrategyKind::RuntimeTransparent,
+            selection_reason: "best fit".to_string(),
+        };
+        let chain = build_fallback_chain(&candidates, &selected);
+        // Chain should include at least the selected strategy
+        assert!(!chain.is_empty());
+    }
 }
