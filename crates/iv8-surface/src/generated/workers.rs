@@ -12177,39 +12177,40 @@ pub fn create_service_worker_global_scope_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    let inst = tmpl.instance_template(scope);
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ServiceWorkerGlobalScope").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    install_service_worker_global_scope_members_1(scope, tmpl);
-    install_service_worker_global_scope_members_2(scope, tmpl);
-    install_service_worker_global_scope_members_3(scope, tmpl);
+    install_service_worker_global_scope_members_1(scope, inst, proto);
+    install_service_worker_global_scope_members_2(scope, inst, proto);
+    install_service_worker_global_scope_members_3(scope, inst, proto);
 
     tmpl
 }
 
-fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::FunctionTemplate>) {
+fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, inst: v8::Local<'s, v8::ObjectTemplate>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: clients
     {
         let name = v8::String::new(scope, "clients").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_get_1).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get clients").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: registration
     {
         let name = v8::String::new(scope, "registration").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_get_2).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get registration").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: serviceWorker
     {
         let name = v8::String::new(scope, "serviceWorker").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_get_3).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get serviceWorker").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: skipWaiting()
     {
@@ -12225,7 +12226,7 @@ fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get oninstall").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_5).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oninstall").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onactivate
     {
@@ -12234,7 +12235,7 @@ fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onactivate").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_6).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onactivate").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onfetch
     {
@@ -12243,7 +12244,7 @@ fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onfetch").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_7).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onfetch").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmessage
     {
@@ -12252,7 +12253,7 @@ fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_8).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmessageerror
     {
@@ -12261,7 +12262,7 @@ fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onmessageerror").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_9).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onmessageerror").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbackgroundfetchsuccess
     {
@@ -12270,11 +12271,11 @@ fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onbackgroundfetchsuccess").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_10).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onbackgroundfetchsuccess").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
 
-fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::FunctionTemplate>) {
+fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_>, inst: v8::Local<'s, v8::ObjectTemplate>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onbackgroundfetchfail
     {
         let name = v8::String::new(scope, "onbackgroundfetchfail").unwrap();
@@ -12282,7 +12283,7 @@ fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onbackgroundfetchfail").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_11).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onbackgroundfetchfail").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbackgroundfetchabort
     {
@@ -12291,7 +12292,7 @@ fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onbackgroundfetchabort").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_12).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onbackgroundfetchabort").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbackgroundfetchclick
     {
@@ -12300,7 +12301,7 @@ fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onbackgroundfetchclick").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_13).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onbackgroundfetchclick").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsync
     {
@@ -12309,7 +12310,7 @@ fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onsync").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_14).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onsync").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncontentdelete
     {
@@ -12318,14 +12319,14 @@ fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get oncontentdelete").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_15).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncontentdelete").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: cookieStore
     {
         let name = v8::String::new(scope, "cookieStore").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_get_16).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get cookieStore").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: oncookiechange
     {
@@ -12334,7 +12335,7 @@ fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get oncookiechange").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_17).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncookiechange").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onnotificationclick
     {
@@ -12343,7 +12344,7 @@ fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onnotificationclick").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_18).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onnotificationclick").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onnotificationclose
     {
@@ -12352,7 +12353,7 @@ fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onnotificationclose").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_19).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onnotificationclose").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onperiodicsync
     {
@@ -12361,11 +12362,11 @@ fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onperiodicsync").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_20).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onperiodicsync").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
 
-fn install_service_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::FunctionTemplate>) {
+fn install_service_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_>, inst: v8::Local<'s, v8::ObjectTemplate>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onpush
     {
         let name = v8::String::new(scope, "onpush").unwrap();
@@ -12373,7 +12374,7 @@ fn install_service_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onpush").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_21).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onpush").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpushsubscriptionchange
     {
@@ -12382,7 +12383,7 @@ fn install_service_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onpushsubscriptionchange").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_22).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onpushsubscriptionchange").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncanmakepayment
     {
@@ -12391,7 +12392,7 @@ fn install_service_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get oncanmakepayment").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_23).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncanmakepayment").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpaymentrequest
     {
@@ -12400,7 +12401,7 @@ fn install_service_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_
         getter.set_class_name(v8::String::new(scope, "get onpaymentrequest").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_24).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onpaymentrequest").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
 

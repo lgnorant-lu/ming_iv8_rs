@@ -15058,6 +15058,7 @@ pub fn create_rtc_identity_provider_global_scope_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    let inst = tmpl.instance_template(scope);
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCIdentityProviderGlobalScope").unwrap();
@@ -15068,7 +15069,7 @@ pub fn create_rtc_identity_provider_global_scope_template<'s>(
         let name = v8::String::new(scope, "rtcIdentityProvider").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(rtc_identity_provider_global_scope_get_1).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get rtcIdentityProvider").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl

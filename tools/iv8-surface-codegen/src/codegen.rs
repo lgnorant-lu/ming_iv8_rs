@@ -718,9 +718,15 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
     // Prototype setup
     let _has_members = !def.members.is_empty();
     out.push_str("\n    let proto = tmpl.prototype_template(scope);\n");
-    
-    // For [Global] interfaces, attributes go on the instance (tmpl) not prototype
-    let target_var = "proto";
+    if ea.is_global {
+        out.push_str("    let inst = tmpl.instance_template(scope);\n");
+    }
+
+    // For [Global] interfaces, attributes go on the instance template
+    // (so they appear on globalThis directly, not on Window.prototype).
+    // Operations go on the prototype template (so idlharness finds them
+    // on Window.prototype).
+    let target_var = if ea.is_global { "inst" } else { "proto" };
 
     // Symbol.toStringTag
     out.push_str("    {\n");
@@ -868,7 +874,7 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
                 sblock.push_str("    }\n");
                 static_blocks.push(sblock);
             } else {
-                block.push_str(&format!("        {}.set(name.into(), func_tmpl.into());\n", target_var));
+                block.push_str(&format!("        proto.set(name.into(), func_tmpl.into());\n"));
                 block.push_str("    }\n");
                 member_blocks.push(block);
             }
@@ -900,22 +906,32 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
         }
     } else {
         let mut helper_fns = String::new();
-        let (helper_param_type, helper_param_name) = if ea.is_global {
-            ("FunctionTemplate", "tmpl")
-        } else {
-            ("ObjectTemplate", "proto")
-        };
-        for (batch_i, chunk) in member_blocks.chunks(MEMBER_BATCH_SIZE).enumerate() {
-            let helper_name = format!("install_{}_members_{}", fn_name, batch_i + 1);
-            out.push_str(&format!("    {}(scope, {});\n", helper_name, helper_param_name));
-            helper_fns.push_str(&format!(
-                "fn {}<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::{}>) {{\n",
-                helper_name, helper_param_type
-            ));
-            for block in chunk {
-                helper_fns.push_str(block);
+        if ea.is_global {
+            for (batch_i, chunk) in member_blocks.chunks(MEMBER_BATCH_SIZE).enumerate() {
+                let helper_name = format!("install_{}_members_{}", fn_name, batch_i + 1);
+                out.push_str(&format!("    {}(scope, inst, proto);\n", helper_name));
+                helper_fns.push_str(&format!(
+                    "fn {}<'s>(scope: &v8::PinScope<'s, '_>, inst: v8::Local<'s, v8::ObjectTemplate>, proto: v8::Local<'s, v8::ObjectTemplate>) {{\n",
+                    helper_name
+                ));
+                for block in chunk {
+                    helper_fns.push_str(block);
+                }
+                helper_fns.push_str("}\n\n");
             }
-            helper_fns.push_str("}\n\n");
+        } else {
+            for (batch_i, chunk) in member_blocks.chunks(MEMBER_BATCH_SIZE).enumerate() {
+                let helper_name = format!("install_{}_members_{}", fn_name, batch_i + 1);
+                out.push_str(&format!("    {}(scope, proto);\n", helper_name));
+                helper_fns.push_str(&format!(
+                    "fn {}<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {{\n",
+                    helper_name
+                ));
+                for block in chunk {
+                    helper_fns.push_str(block);
+                }
+                helper_fns.push_str("}\n\n");
+            }
         }
         if !const_blocks.is_empty() || !static_blocks.is_empty() || is_cb_interface {
             out.push_str("    if let Some(ctor) = tmpl.get_function(scope) {\n");
@@ -1316,8 +1332,10 @@ pub fn generate_install_all(
 
     out.push_str(&generate_named_constructors(&by_name, &domain_of));
 
-    // Phase 3 JS: For [Global] interfaces, move attributes from prototype to globalThis.
-    // This is eval'd AFTER all installations (in freeze_all_prototypes) to avoid GC crash.
+    // Phase 3 JS: For [Global] interfaces, copy attributes from prototype to
+    // globalThis WITHOUT deleting from prototype. idlharness checks properties
+    // on BOTH the prototype and the instance. Deleting from prototype causes
+    // "interface prototype object missing non-static operation" failures.
     let mut global_move_js = String::from("(function(){");
     for name in sorted {
         let def = match by_name.get(name.as_str()) {
@@ -1333,7 +1351,7 @@ pub fn generate_install_all(
         if attrs.is_empty() { continue; }
         let attrs_js: Vec<String> = attrs.iter().map(|a| format!("'{}'", a)).collect();
         global_move_js.push_str(&format!(
-            "try{{var p={}.prototype;var names=[{}];for(var i=0;i<names.length;i++){{try{{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d){{Object.defineProperty(globalThis,names[i],d);delete p[names[i]];}}}}catch(e){{}}}}}}catch(e){{}}",
+            "try{{var p={}.prototype;var names=[{}];for(var i=0;i<names.length;i++){{try{{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d&&!Object.getOwnPropertyDescriptor(globalThis,names[i])){{Object.defineProperty(globalThis,names[i],d);}}}}catch(e){{}}}}}}catch(e){{}}",
             name, attrs_js.join(","),
         ));
     }

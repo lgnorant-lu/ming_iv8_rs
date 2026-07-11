@@ -2739,7 +2739,7 @@ def main() -> None:
     args = parser.parse_args()
 
     # Set stack size for V8 template creation
-    threading.stack_size(64 * 1024 * 1024)
+    threading.stack_size(128 * 1024 * 1024)
 
     result_holder = {}
 

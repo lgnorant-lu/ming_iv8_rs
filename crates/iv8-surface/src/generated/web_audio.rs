@@ -11089,6 +11089,7 @@ pub fn create_audio_worklet_global_scope_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    let inst = tmpl.instance_template(scope);
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioWorkletGlobalScope").unwrap();
@@ -11106,35 +11107,35 @@ pub fn create_audio_worklet_global_scope_template<'s>(
         let name = v8::String::new(scope, "currentFrame").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_2).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get currentFrame").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: currentTime
     {
         let name = v8::String::new(scope, "currentTime").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_3).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get currentTime").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sampleRate
     {
         let name = v8::String::new(scope, "sampleRate").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_4).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get sampleRate").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: renderQuantumSize
     {
         let name = v8::String::new(scope, "renderQuantumSize").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_5).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get renderQuantumSize").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: port
     {
         let name = v8::String::new(scope, "port").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_6).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get port").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
