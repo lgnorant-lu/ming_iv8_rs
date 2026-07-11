@@ -1537,6 +1537,30 @@ pub fn generate_install_all(
     }
     out.push_str("];\n");
 
+    // Generate GLOBAL_ATTR_METADATA — (name, is_readonly, has_replaceable) for each [Global] attribute.
+    // Used by freeze_all_prototypes to install correct accessors with proper setter logic.
+    out.push_str("\npub const GLOBAL_ATTR_METADATA: &[(&str, bool, bool)] = &[\n");
+    {
+        let mut seen = std::collections::BTreeSet::new();
+        for def in definitions {
+            if def.kind != "interface" { continue; }
+            let ea = process_interface_ea(def);
+            if !ea.is_global { continue; }
+            for m in &def.members {
+                if m.kind == "attribute" {
+                    let name = m.name.as_deref().unwrap_or("");
+                    if name.is_empty() || seen.contains(name) { continue; }
+                    seen.insert(name.to_string());
+                    out.push_str(&format!(
+                        "    (\"{}\", {}, {}),\n",
+                        name, m.readonly, m.has_replaceable
+                    ));
+                }
+            }
+        }
+    }
+    out.push_str("];\n");
+
     // GLOBAL_MOVE_JS is now empty — replaced by fix_global_accessor_properties
     out.push_str("\npub const GLOBAL_MOVE_JS: &str = \"(function(){});\";\n");
 
