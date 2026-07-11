@@ -4,6 +4,7 @@
 //! `EmbeddedV8Kernel`. v0.3+ can add `CdpKernel` etc.
 
 pub mod embedded_v8;
+pub mod post_hoc_fixes;
 
 /// Options for a single eval call.
 #[derive(Debug, Clone, Default)]

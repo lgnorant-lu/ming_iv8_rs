@@ -641,189 +641,34 @@ impl EmbeddedV8Kernel {
             // P0 boundary fix: delete navigator.webdriver from Navigator.prototype.
             // Real Chrome: Object.getOwnPropertyDescriptor(Navigator.prototype, 'webdriver') === undefined.
             // IV8 installs it as a getter returning false, which is detectable.
-            let webdriver_fix = crate::v8_utils::v8_string(scope, r#"
-                (function() {
-                    try { delete Navigator.prototype.webdriver; } catch(e) {}
-                })();
-            "#);
+            let webdriver_fix = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::WEBDRIVER_FIX_JS);
             let _ = v8::Script::compile(scope, webdriver_fix, None).and_then(|s| s.run(scope));
 
             // P0 boundary fix: patch document.createElement toString to return native code.
-            // Current shim exposes JS source in toString().
-            let create_element_fix = crate::v8_utils::v8_string(scope, r#"
-                (function() {
-                    if (typeof document !== 'undefined' && document.createElement) {
-                        var orig = document.createElement;
-                        var origStr = orig.toString();
-                        if (origStr.indexOf('[native code]') < 0) {
-                            var patched = function createElement(tagName) { return orig.call(document, tagName); };
-                            patched.toString = function() { return 'function createElement() { [native code] }'; };
-                            patched.toString.toString = function() { return 'function toString() { [native code] }'; };
-                            try { Object.defineProperty(document, 'createElement', { value: patched, writable: true, configurable: true, enumerable: true }); } catch(e) {}
-                        }
-                    }
-                })();
-            "#);
+            let create_element_fix = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::CREATE_ELEMENT_FIX_JS);
             let _ = v8::Script::compile(scope, create_element_fix, None).and_then(|s| s.run(scope));
 
             // P0 boundary fix: navigator.plugins instanceof PluginArray must be true.
-            // Shim replaces plugins with plain object; wrap with Proxy that lies instanceof.
-            let plugins_fix = crate::v8_utils::v8_string(scope, r#"
-                (function() {
-                    if (typeof PluginArray === 'undefined' || typeof MimeTypeArray === 'undefined') return;
-                    if (typeof navigator === 'undefined' || !navigator.plugins) return;
-                    // If plugins is not instanceof PluginArray, wrap it
-                    if (!(navigator.plugins instanceof PluginArray)) {
-                        var realPlugins = navigator.plugins;
-                        var pa = Object.create(PluginArray.prototype);
-                        for (var i = 0; i < realPlugins.length; i++) {
-                            pa[i] = realPlugins[i];
-                        }
-                        pa.length = realPlugins.length;
-                        pa.item = function(i) { return realPlugins[i]; };
-                        pa.namedItem = function(n) { return realPlugins[n]; };
-                        pa[Symbol.toStringTag] = 'PluginArray';
-                        try { Object.defineProperty(navigator, 'plugins', { value: pa, writable: true, configurable: true, enumerable: true }); } catch(e) {}
-                    }
-                    if (!(navigator.mimeTypes instanceof MimeTypeArray)) {
-                        var realMT = navigator.mimeTypes;
-                        var ma = Object.create(MimeTypeArray.prototype);
-                        for (var i = 0; i < realMT.length; i++) {
-                            ma[i] = realMT[i];
-                        }
-                        ma.length = realMT.length;
-                        ma.item = function(i) { return realMT[i]; };
-                        ma.namedItem = function(n) { return realMT[n]; };
-                        ma[Symbol.toStringTag] = 'MimeTypeArray';
-                        try { Object.defineProperty(navigator, 'mimeTypes', { value: ma, writable: true, configurable: true, enumerable: true }); } catch(e) {}
-                    }
-                })();
-            "#);
+            let plugins_fix = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::PLUGINS_FIX_JS);
             let _ = v8::Script::compile(scope, plugins_fix, None).and_then(|s| s.run(scope));
 
             // P0-BT-5 fix: iframe contentWindow.navigator missing.
-            // Root cause: contentWindow getter returns bare Object or null
-            // (looks for nonexistent "WindowProxy" global).
-            // Fix: wrap contentWindow to create a Window-like proxy with navigator.
-            let iframe_fix = crate::v8_utils::v8_string(scope, r#"
-                (function() {
-                    if (typeof HTMLIFrameElement === 'undefined') return;
-                    var proto = HTMLIFrameElement.prototype;
-                    var origGetter = Object.getOwnPropertyDescriptor(proto, 'contentWindow');
-                    if (!origGetter || !origGetter.get) return;
-                    var origGet = origGetter.get;
-                    Object.defineProperty(proto, 'contentWindow', {
-                        get: function contentWindow() {
-                            var cw = origGet.call(this);
-                            // If null/undefined, create a Window-like object
-                            if (!cw || typeof cw !== 'object') {
-                                cw = {};
-                            }
-                            // Install navigator if missing (shares top frame values)
-                            if (!cw.navigator) {
-                                try {
-                                    Object.defineProperty(cw, 'navigator', {
-                                        get: function() { return navigator; },
-                                        enumerable: true,
-                                        configurable: true,
-                                    });
-                                } catch(e) {}
-                            }
-                            // Install basic Window properties
-                            if (!cw.document) {
-                                try {
-                                    Object.defineProperty(cw, 'document', {
-                                        get: function() { return this._contentDocument || document; },
-                                        enumerable: true,
-                                        configurable: true,
-                                    });
-                                } catch(e) {}
-                            }
-                            if (!('parent' in cw)) {
-                                try {
-                                    Object.defineProperty(cw, 'parent', { value: window, enumerable: true, configurable: true });
-                                    Object.defineProperty(cw, 'top', { value: window, enumerable: true, configurable: true });
-                                    Object.defineProperty(cw, 'self', { value: cw, enumerable: true, configurable: true });
-                                    Object.defineProperty(cw, 'window', { value: cw, enumerable: true, configurable: true });
-                                } catch(e) {}
-                            }
-                            return cw;
-                        },
-                        set: undefined,
-                        enumerable: true,
-                        configurable: true,
-                    });
-                })();
-            "#);
+            let iframe_fix = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::IFRAME_FIX_JS);
             let _ = v8::Script::compile(scope, iframe_fix, None).and_then(|s| s.run(scope));
 
             // ROOT CAUSE: Element.prototype.shadowRoot returns {} by default but
             // should return null. VMP checks this API and takes wrong branch.
-            let shadow_root_fix = crate::v8_utils::v8_string(scope, r#"
-                (function() {
-                    if (typeof Element === 'undefined' || typeof Element.prototype === 'undefined') {
-                        console.log('[shadowRoot] Element not available');
-                        return;
-                    }
-                    try {
-                        var oldDesc = Object.getOwnPropertyDescriptor(Element.prototype, 'shadowRoot');
-                        if (!oldDesc) { console.log('[shadowRoot] no desc'); return; }
-                        console.log('[shadowRoot] configurable=' + oldDesc.configurable + ' hasGetter=' + (typeof oldDesc.get));
-                        Object.defineProperty(Element.prototype, 'shadowRoot', {
-                            get: function() {
-                                if (!this || typeof this !== 'object') return null;
-                                return this.__iv8_shadowRoot || null;
-                            },
-                            enumerable: true, configurable: true
-                        });
-                        console.log('[shadowRoot] patched OK');
-                    } catch(e) { console.log('[shadowRoot] error: ' + e.message); }
-                    if (typeof Element.prototype.attachShadow === 'function') {
-                        Element.prototype.attachShadow = function(init) {
-                            var root = {};
-                            try { root = Object.create(ShadowRoot.prototype); } catch(ex) {}
-                            this.__iv8_shadowRoot = root;
-                            return root;
-                        };
-                    }
-                })();
-            "#);
+            let shadow_root_fix = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::SHADOW_ROOT_FIX_JS);
             let _ = v8::Script::compile(scope, shadow_root_fix, None).and_then(|s| s.run(scope));
 
             // P1: Request constructor — codegen creates empty object, store url/method
-            let request_fix = crate::v8_utils::v8_string(scope, r#"
-                (function() {
-                    if (typeof Request === 'undefined') return;
-                    var origCtor = Request;
-                    function RequestShim(input, init) {
-                        var url = '';
-                        if (typeof input === 'string') {
-                            url = input;
-                        } else if (input && typeof input === 'object' && input.url) {
-                            url = input.url;
-                        }
-                        var method = (init && init.method) || 'GET';
-                        Object.defineProperty(this, 'url', { value: url, writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'method', { value: method, writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'headers', { value: (init && init.headers) || {}, writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'body', { value: (init && init.body) || null, writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'cache', { value: 'default', writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'credentials', { value: 'same-origin', writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'destination', { value: '', writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'integrity', { value: '', writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'keepalive', { value: false, writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'mode', { value: 'cors', writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'redirect', { value: 'follow', writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'referrer', { value: 'about:client', writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'referrerPolicy', { value: '', writable: true, configurable: true, enumerable: true });
-                        Object.defineProperty(this, 'signal', { value: null, writable: true, configurable: true, enumerable: true });
-                    }
-                    RequestShim.prototype = origCtor.prototype;
-                    try { Object.defineProperty(globalThis, 'Request', {
-                        value: RequestShim, writable: true, configurable: true, enumerable: true
-                    }); } catch(e) {}
-                })();
-            "#);
+            let request_fix = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::REQUEST_FIX_JS);
             let _ = v8::Script::compile(scope, request_fix, None).and_then(|s| s.run(scope));
 
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
@@ -1355,312 +1200,23 @@ try {
 
             // Fix readonly attribute setters: idlharness expects setter=undefined
             // for readonly attributes. Some accessor wrappers install a JS setter.
-            let readonly_fix_js = crate::v8_utils::v8_string(scope, r#"
-                (function() {
-                    var readonlyAttrs = {
-                        'Event': ['type','target','currentTarget','srcElement','eventPhase',
-                                  'bubbles','cancelable','timeStamp','defaultPrevented','composed'],
-                        'MouseEvent': ['screenX','screenY','clientX','clientY','ctrlKey','shiftKey',
-                                       'altKey','metaKey','button','buttons','relatedTarget','region'],
-                        'CustomEvent': ['detail'],
-                    };
-                    for (var iface in readonlyAttrs) {
-                        var ctor = globalThis[iface];
-                        if (!ctor || !ctor.prototype) continue;
-                        var attrs = readonlyAttrs[iface];
-                        for (var i = 0; i < attrs.length; i++) {
-                            var desc = Object.getOwnPropertyDescriptor(ctor.prototype, attrs[i]);
-                            if (desc && desc.get && desc.set) {
-                                try {
-                                    Object.defineProperty(ctor.prototype, attrs[i], {
-                                        get: desc.get, set: undefined,
-                                        enumerable: desc.enumerable, configurable: true
-                                    });
-                                } catch(e) {}
-                            }
-                        }
-                    }
-                })();
-            "#);
+            let readonly_fix_js = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::READONLY_FIX_JS);
             let _ = v8::Script::compile(scope, readonly_fix_js, None).and_then(|s| s.run(scope));
 
             // Fix operation .name and .length on key prototypes.
-            // codegen sets .name via set_class_name but V8 may not persist it
-            // on the function object. .length may be wrong for overloaded ops.
-            let name_length_js = crate::v8_utils::v8_string(scope, r#"
-                (function() {
-                    var fixes = {
-                        'Window': { 'postMessage': { name: 'postMessage', length: 1 } },
-                        'HTMLCanvasElement': {
-                            'getContext': { name: 'getContext', length: 1 },
-                            'toDataURL': { name: 'toDataURL', length: 0 }
-                        },
-                        'CanvasRenderingContext2D': {
-                            'setTransform': { name: 'setTransform', length: 0 }
-                        },
-                        'OffscreenCanvasRenderingContext2D': {
-                            'setTransform': { name: 'setTransform', length: 0 },
-                            'createLinearGradient': { name: 'createLinearGradient', length: 4 },
-                            'createRadialGradient': { name: 'createRadialGradient', length: 6 },
-                            'createConicGradient': { name: 'createConicGradient', length: 1 },
-                            'drawImage': { name: 'drawImage', length: 3 },
-                            'fillText': { name: 'fillText', length: 3 },
-                            'strokeText': { name: 'strokeText', length: 3 },
-                            'putImageData': { name: 'putImageData', length: 3 },
-                        },
-                    };
-                    for (var ifaceName in fixes) {
-                        try {
-                            var ctor = globalThis[ifaceName];
-                            if (!ctor || !ctor.prototype) continue;
-                            var proto = ctor.prototype;
-                            var ifaceFixes = fixes[ifaceName];
-                            for (var opName in ifaceFixes) {
-                                try {
-                                    var fn = proto[opName];
-                                    if (!fn || typeof fn !== 'function') continue;
-                                    var fix = ifaceFixes[opName];
-                                    if (fn.name !== fix.name) {
-                                        try { Object.defineProperty(fn, 'name', {
-                                            value: fix.name, writable: false,
-                                            enumerable: false, configurable: true
-                                        }); } catch(e) {}
-                                    }
-                                    if (fn.length !== fix.length) {
-                                        try { Object.defineProperty(fn, 'length', {
-                                            value: fix.length, writable: false,
-                                            enumerable: false, configurable: true
-                                        }); } catch(e) {}
-                                    }
-                                } catch(e) {}
-                            }
-                        } catch(e) {}
-                    }
-                    // Also fix [Global] operations on globalThis (not on prototype)
-                    try {
-                        var pm = globalThis.postMessage;
-                        if (pm && typeof pm === 'function') {
-                            if (pm.name !== 'postMessage') {
-                                try { Object.defineProperty(pm, 'name', {
-                                    value: 'postMessage', writable: false,
-                                    enumerable: false, configurable: true
-                                }); } catch(e) {}
-                            }
-                            if (pm.length !== 1) {
-                                try { Object.defineProperty(pm, 'length', {
-                                    value: 1, writable: false,
-                                    enumerable: false, configurable: true
-                                }); } catch(e) {}
-                            }
-                        }
-                    } catch(e) {}
-
-                    // Fix Event.prototype.initEvent length (should be 1, not 3)
-                    try {
-                        if (typeof Event !== 'undefined' && Event.prototype) {
-                            var ie = Event.prototype.initEvent;
-                            if (ie && typeof ie === 'function' && ie.length !== 1) {
-                                try { Object.defineProperty(ie, 'length', {
-                                    value: 1, writable: false,
-                                    enumerable: false, configurable: true
-                                }); } catch(e) {}
-                            }
-                        }
-                    } catch(e) {}
-
-                    // Fix CanvasRenderingContext2D createImageData length
-                    try {
-                        if (typeof CanvasRenderingContext2D !== 'undefined' && CanvasRenderingContext2D.prototype) {
-                            var cid = CanvasRenderingContext2D.prototype.createImageData;
-                            if (cid && typeof cid === 'function' && cid.length !== 1) {
-                                try { Object.defineProperty(cid, 'length', {
-                                    value: 1, writable: false,
-                                    enumerable: false, configurable: true
-                                }); } catch(e) {}
-                            }
-                        }
-                    } catch(e) {}
-
-                    // Fix OffscreenCanvasRenderingContext2D createImageData + createConicGradient
-                    try {
-                        if (typeof OffscreenCanvasRenderingContext2D !== 'undefined' && OffscreenCanvasRenderingContext2D.prototype) {
-                            var oproto = OffscreenCanvasRenderingContext2D.prototype;
-                            var ocid = oproto.createImageData;
-                            if (ocid && typeof ocid === 'function' && ocid.length !== 1) {
-                                try { Object.defineProperty(ocid, 'length', {
-                                    value: 1, writable: false,
-                                    enumerable: false, configurable: true
-                                }); } catch(e) {}
-                            }
-                            var occg = oproto.createConicGradient;
-                            if (occg && typeof occg === 'function' && occg.length !== 3) {
-                                try { Object.defineProperty(occg, 'length', {
-                                    value: 3, writable: false,
-                                    enumerable: false, configurable: true
-                                }); } catch(e) {}
-                            }
-                        }
-                    } catch(e) {}
-
-                    // Fix Navigator registerProtocolHandler/unregisterProtocolHandler length
-                    try {
-                        if (typeof Navigator !== 'undefined' && Navigator.prototype) {
-                            var rph = Navigator.prototype.registerProtocolHandler;
-                            if (rph && typeof rph === 'function' && rph.length !== 2) {
-                                try { Object.defineProperty(rph, 'length', {
-                                    value: 2, writable: false,
-                                    enumerable: false, configurable: true
-                                }); } catch(e) {}
-                            }
-                            var uph = Navigator.prototype.unregisterProtocolHandler;
-                            if (uph && typeof uph === 'function' && uph.length !== 2) {
-                                try { Object.defineProperty(uph, 'length', {
-                                    value: 2, writable: false,
-                                    enumerable: false, configurable: true
-                                }); } catch(e) {}
-                            }
-                        }
-                    } catch(e) {}
-
-                    // Wrap HTMLMediaElement.canPlayType for arg count validation
-                    try {
-                        if (typeof HTMLMediaElement !== 'undefined' && HTMLMediaElement.prototype) {
-                            var origCPT = HTMLMediaElement.prototype.canPlayType;
-                            if (origCPT && typeof origCPT === 'function') {
-                                var wCPT = function canPlayType(type) {
-                                    if (arguments.length < 1) throw new TypeError("1 argument(s) required, but only 0 present.");
-                                    return origCPT.call(this, type);
-                                };
-                                try { Object.defineProperty(wCPT, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
-                                try { Object.defineProperty(wCPT, 'name', { value: 'canPlayType', writable: false, enumerable: false, configurable: true }); } catch(e) {}
-                                Object.defineProperty(HTMLMediaElement.prototype, 'canPlayType', { value: wCPT, writable: true, configurable: true, enumerable: true });
-                            }
-                        }
-                    } catch(e) {}
-
-                    // Wrap HTMLCanvasElement.getContext for arg count validation
-                    try {
-                        if (typeof HTMLCanvasElement !== 'undefined' && HTMLCanvasElement.prototype) {
-                            var origGC = HTMLCanvasElement.prototype.getContext;
-                            if (origGC && typeof origGC === 'function') {
-                                var wGC = function getContext(contextId, options) {
-                                    if (arguments.length < 1) throw new TypeError("1 argument(s) required, but only 0 present.");
-                                    return origGC.call(this, contextId, options);
-                                };
-                                try { Object.defineProperty(wGC, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
-                                try { Object.defineProperty(wGC, 'name', { value: 'getContext', writable: false, enumerable: false, configurable: true }); } catch(e) {}
-                                Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', { value: wGC, writable: true, configurable: true, enumerable: true });
-                            }
-                        }
-                    } catch(e) {}
-                })();
-            "#);
+            let name_length_js = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::NAME_LENGTH_FIX_JS);
             let _ = v8::Script::compile(scope, name_length_js, None).and_then(|s| s.run(scope));
 
             if !worker_mode {
-                let js = crate::v8_utils::v8_string(scope, r#"
-                    (function() {
-                        var workerOnly = ['WorkerGlobalScope','DedicatedWorkerGlobalScope',
-                            'SharedWorkerGlobalScope','ServiceWorkerGlobalScope',
-                            'WorkerNavigator','WorkerLocation','WorkletGlobalScope',
-                            'AnimationWorkletGlobalScope','AudioWorkletGlobalScope',
-                            'LayoutWorkletGlobalScope','PaintWorkletGlobalScope',
-                            'RTCIdentityProviderGlobalScope'];
-                        for (var i = 0; i < workerOnly.length; i++) {
-                            try { delete globalThis[workerOnly[i]]; } catch(e) {}
-                        }
-                    })();
-                "#);
+                let js = crate::v8_utils::v8_string(scope,
+                    crate::kernel::post_hoc_fixes::WORKER_ONLY_DELETE_JS);
                 let _ = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope));
             }
 
-            let js = crate::v8_utils::v8_string(scope, r#"
-                (function() {
-                    var names = Object.getOwnPropertyNames(globalThis);
-                    for (var i = 0; i < names.length; i++) {
-                        try {
-                            var ctor = globalThis[names[i]];
-                            if (ctor && typeof ctor === 'function' && ctor.prototype) {
-                                Object.defineProperty(ctor, 'prototype', {
-                                    writable: false, enumerable: false, configurable: false
-                                });
-                                Object.preventExtensions(ctor.prototype);
-                            }
-                        } catch(e) {}
-                    }
-                })();
-                // Crypto/SubtleCrypto: Rust installs on prototype via
-                // with_prototype_and_properties (random.rs + subtle.rs)
-                // JS post-fix only sets Window.crypto accessor
-                (function() {
-                    // Window.crypto accessor
-                    if (typeof Window !== 'undefined' && Window.prototype && Object.isExtensible(Window.prototype) && typeof crypto !== 'undefined') {
-                        var _cryptoVal = crypto;
-                        Object.defineProperty(Window.prototype, 'crypto', {
-                            get: function() { return _cryptoVal; },
-                            enumerable: true, configurable: true
-                        });
-                    }
-                })();
-                // Fix FileReader/FileReaderSync: prototype chain + remove FileReaderSync
-                (function() {
-                    if (typeof FileReader !== 'undefined' && typeof EventTarget !== 'undefined') {
-                        Object.setPrototypeOf(FileReader, EventTarget);
-                    }
-                    try { delete globalThis.FileReaderSync; } catch(e) {}
-                })();
-                // Fix ScreenOrientation: set prototype chain + move methods
-                (function() {
-                    if (typeof screen === 'undefined' || typeof ScreenOrientation === 'undefined') return;
-                    var so = screen.orientation;
-                    if (!so) return;
-                    var soProto = ScreenOrientation.prototype;
-                    if (!soProto) return;
-                    // Move own properties to prototype
-                    var soNames = Object.getOwnPropertyNames(so);
-                    for (var i = 0; i < soNames.length; i++) {
-                        var prop = soNames[i];
-                        if (typeof so[prop] === 'function' && !soProto[prop]) {
-                            soProto[prop] = so[prop];
-                            delete so[prop];
-                        }
-                    }
-                    Object.setPrototypeOf(so, soProto);
-                    if (typeof EventTarget !== 'undefined') {
-                        Object.setPrototypeOf(ScreenOrientation, EventTarget);
-                    }
-                    // screen.orientation accessor on Screen.prototype
-                    if (typeof Screen !== 'undefined' && Screen.prototype && Object.isExtensible(Screen.prototype)) {
-                        var _soVal = so;
-                        Object.defineProperty(Screen.prototype, 'orientation', {
-                            get: function() { return _soVal; },
-                            enumerable: true, configurable: true
-                        });
-                    }
-                })();
-                (function() {
-                    // Performance: Rust installs on prototype (date_interceptor.rs)
-                    // JS post-fix only sets constructor __proto__ + Window accessor
-                    if (typeof Performance !== 'undefined' && typeof EventTarget !== 'undefined') {
-                        Object.setPrototypeOf(Performance, EventTarget);
-                    }
-                    if (typeof Window !== 'undefined' && Window.prototype && Object.isExtensible(Window.prototype)) {
-                        var _perfVal = performance;
-                        Object.defineProperty(Window.prototype, 'performance', {
-                            get: function() { return _perfVal; },
-                            enumerable: true, configurable: true
-                        });
-                    }
-                    // Window.crypto accessor
-                    if (typeof Window !== 'undefined' && Window.prototype && Object.isExtensible(Window.prototype) && typeof crypto !== 'undefined') {
-                        var _cryptoVal = crypto;
-                        Object.defineProperty(Window.prototype, 'crypto', {
-                            get: function() { return _cryptoVal; },
-                            enumerable: true, configurable: true
-                        });
-                    }
-                })();
-            "#);
+            let js = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::FREEZE_ALL_JS);
             let _ = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope));
         });
     }
@@ -3160,103 +2716,18 @@ impl EmbeddedV8Kernel {
                     );
 
                     // Freeze shim constructor prototypes (non-writable, non-configurable)
-                    // idlharness checks that X.prototype is not writable and
-                    // Object.setPrototypeOf(X.prototype, {}) throws TypeError.
-                    // Codegen interfaces already use read_only_prototype(), but
-                    // JS shim constructors (Event, MessageChannel, etc.) do not.
-                    let freeze_js = crate::v8_utils::v8_string(scope, r#"
-                        (function() {
-                            var names = ['Event','CustomEvent','MouseEvent','KeyboardEvent','PointerEvent',
-                                'MessageChannel','MessagePort','BroadcastChannel','Worker',
-                                'Location','Navigator','Screen','DOMRect','DOMException',
-                                'AudioContext','OfflineAudioContext','AudioBuffer','AudioNode','AudioParam'];
-                            for (var i = 0; i < names.length; i++) {
-                                var name = names[i];
-                                try {
-                                    var ctor = globalThis[name];
-                                    if (ctor && typeof ctor === 'function') {
-                                        Object.defineProperty(ctor, 'prototype', {writable: false, enumerable: false, configurable: false});
-                                    }
-                                } catch(e) {}
-                            }
-                        })();
-                    "#);
+                    let freeze_js = crate::v8_utils::v8_string(scope,
+                        crate::kernel::post_hoc_fixes::FREEZE_SHIM_PROTOTYPES_JS);
                     let _ = v8::Script::compile(scope, freeze_js, None).and_then(|s| s.run(scope));
 
-                    // Fix all getter .name properties: codegen uses set_class_name which
-                    // doesn't set Function.name. Iterate all prototypes and set
-                    // getter.name = "get " + attrName for accessor getters.
-                    // Skip [native code] getters (V8 FunctionTemplate internals are not configurable).
-                    let getter_name_fix = crate::v8_utils::v8_string(scope, r#"
-                        (function() {
-                            var ctors = Object.getOwnPropertyNames(globalThis);
-                            for (var i = 0; i < ctors.length; i++) {
-                                try {
-                                    var c = globalThis[ctors[i]];
-                                    if (!c || !c.prototype) continue;
-                                    var proto = c.prototype;
-                                    var names = Object.getOwnPropertyNames(proto);
-                                    for (var j = 0; j < names.length; j++) {
-                                        var pn = names[j];
-                                        if (pn === 'constructor') continue;
-                                        try {
-                                            var desc = Object.getOwnPropertyDescriptor(proto, pn);
-                                            if (!desc || !desc.get) continue;
-                                            var g = desc.get;
-                                            if (typeof g !== 'function') continue;
-                                            var gStr = '';
-                                            try { gStr = g.toString(); } catch(e) {}
-                                            if (gStr.indexOf('[native code]') !== -1) continue;
-                                            if (g.name !== 'get ' + pn) {
-                                                try { Object.defineProperty(g, 'name', {
-                                                    value: 'get ' + pn, writable: false,
-                                                    enumerable: false, configurable: true
-                                                }); } catch(e) {}
-                                            }
-                                            if (g.length !== 0) {
-                                                try { Object.defineProperty(g, 'length', {
-                                                    value: 0, writable: false,
-                                                    enumerable: false, configurable: true
-                                                }); } catch(e) {}
-                                            }
-                                            if (desc.set && typeof desc.set === 'function') {
-                                                var sStr = '';
-                                                try { sStr = desc.set.toString(); } catch(e) {}
-                                                if (sStr.indexOf('[native code]') === -1) {
-                                                    var s = desc.set;
-                                                    if (s.name !== 'set ' + pn) {
-                                                        try { Object.defineProperty(s, 'name', {
-                                                            value: 'set ' + pn, writable: false,
-                                                            enumerable: false, configurable: true
-                                                        }); } catch(e) {}
-                                                    }
-                                                }
-                                            }
-                                        } catch(e) {}
-                                    }
-                                } catch(e) {}
-                            }
-                        })();
-                    "#);
+                    // Fix all getter .name properties.
+                    let getter_name_fix = crate::v8_utils::v8_string(scope,
+                        crate::kernel::post_hoc_fixes::GETTER_NAME_FIX_JS);
                     let _ = v8::Script::compile(scope, getter_name_fix, None).and_then(|s| s.run(scope));
 
-                    // CDP diff fix: window.chrome should have runtime:{} and not
-                    // expose app/csi/loadTimes (IV8 internal leak).
-                    // Note: document.all [[IsHTMLDDA]] cannot be fixed from JS
-                    // (see document_props.rs:1403 comment).
-                    let chrome_fix = crate::v8_utils::v8_string(scope, r#"
-                        (function() {
-                            try {
-                                if (typeof window.chrome === 'object' && window.chrome) {
-                                    if (!window.chrome.runtime) {
-                                        try { Object.defineProperty(window.chrome, 'runtime', {
-                                            value: {}, writable: true, enumerable: true, configurable: true
-                                        }); } catch(e) {}
-                                    }
-                                }
-                            } catch(e) {}
-                        })();
-                    "#);
+                    // CDP diff fix: window.chrome should have runtime:{}.
+                    let chrome_fix = crate::v8_utils::v8_string(scope,
+                        crate::kernel::post_hoc_fixes::CHROME_FIX_JS);
                     let _ = v8::Script::compile(scope, chrome_fix, None).and_then(|s| s.run(scope));
 
                     // R10-4: Fix instanceof for returned objects.
@@ -3362,104 +2833,8 @@ impl EmbeddedV8Kernel {
                     let _ = v8::Script::compile(scope, instanceof_fix, None).and_then(|s| s.run(scope));
 
                     // R10-5: Fix descriptor issues.
-                    // LegacyUnforgeable: configurable=false for window/document/location/top
-                    // Event.isTrusted: should be accessor not data property
-                    // stringifier enumerable=true
-                    // Worker interface objects: enumerable=false
-                    let descriptor_fix = crate::v8_utils::v8_string(scope, r#"
-                        (function() {
-                            // LegacyUnforgeable: Window.window/document/location/top configurable=false
-                            var unforgeable = ['window', 'document', 'top'];
-                            for (var i = 0; i < unforgeable.length; i++) {
-                                try {
-                                    var desc = Object.getOwnPropertyDescriptor(globalThis, unforgeable[i]);
-                                    if (desc && desc.configurable) {
-                                        var newDesc = { configurable: false };
-                                        if (desc.get) { newDesc.get = desc.get; newDesc.set = desc.set; newDesc.enumerable = desc.enumerable !== false; }
-                                        else { newDesc.value = desc.value; newDesc.writable = desc.writable; newDesc.enumerable = desc.enumerable !== false; }
-                                        try { Object.defineProperty(globalThis, unforgeable[i], newDesc); } catch(e) {}
-                                    }
-                                } catch(e) {}
-                            }
-
-                            // Window.frames: enumerable=true
-                            try {
-                                var fd = Object.getOwnPropertyDescriptor(globalThis, 'frames');
-                                if (fd && fd.enumerable === false) {
-                                    try { Object.defineProperty(globalThis, 'frames', { enumerable: true, configurable: true }); } catch(e) {}
-                                }
-                            } catch(e) {}
-
-                            // Event.isTrusted: convert from data property to accessor
-                            try {
-                                if (typeof Event !== 'undefined' && Event.prototype) {
-                                    var itd = Object.getOwnPropertyDescriptor(Event.prototype, 'isTrusted');
-                                    if (itd && 'value' in itd) {
-                                        var val = itd.value;
-                                        Object.defineProperty(Event.prototype, 'isTrusted', {
-                                            get: function() { return val; },
-                                            set: undefined,
-                                            enumerable: true, configurable: true
-                                        });
-                                    }
-                                }
-                            } catch(e) {}
-
-                            // Location.href/search: convert from data to accessor
-                            try {
-                                if (typeof Location !== 'undefined' && Location.prototype) {
-                                    var locAttrs = ['href', 'search'];
-                                    for (var j = 0; j < locAttrs.length; j++) {
-                                        var ld = Object.getOwnPropertyDescriptor(Location.prototype, locAttrs[j]);
-                                        if (ld && 'value' in ld) {
-                                            (function(attr, desc) {
-                                                var v = desc.value;
-                                                Object.defineProperty(Location.prototype, attr, {
-                                                    get: function() { return v; },
-                                                    set: undefined,
-                                                    enumerable: desc.enumerable !== false, configurable: true
-                                                });
-                                            })(locAttrs[j], ld);
-                                        }
-                                    }
-                                }
-                            } catch(e) {}
-
-                            // Worker interface objects: enumerable=false
-                            // Skip — run_wpt.py worker_shim installs these with enumerable=true,
-                            // and changing enumerable may conflict with worker context init.
-                            // TODO: move this fix to worker-specific path
-                            /*
-                            var workerIfaces = ['WorkerGlobalScope', 'DedicatedWorkerGlobalScope', 'WorkerNavigator', 'WorkerLocation'];
-                            for (var k = 0; k < workerIfaces.length; k++) {
-                                try {
-                                    var wd = Object.getOwnPropertyDescriptor(globalThis, workerIfaces[k]);
-                                    if (wd && wd.enumerable) {
-                                        try { Object.defineProperty(globalThis, workerIfaces[k], { enumerable: false, configurable: true }); } catch(e) {}
-                                    }
-                                } catch(e) {}
-                            }
-                            */
-
-                            // HTMLAnchorElement/HTMLAreaElement stringifier: enumerable=true
-                            try {
-                                if (typeof HTMLAnchorElement !== 'undefined' && HTMLAnchorElement.prototype) {
-                                    var sd = Object.getOwnPropertyDescriptor(HTMLAnchorElement.prototype, 'toString');
-                                    if (sd && sd.enumerable === false) {
-                                        try { Object.defineProperty(HTMLAnchorElement.prototype, 'toString', { enumerable: true, configurable: true }); } catch(e) {}
-                                    }
-                                }
-                            } catch(e) {}
-                            try {
-                                if (typeof HTMLAreaElement !== 'undefined' && HTMLAreaElement.prototype) {
-                                    var sd2 = Object.getOwnPropertyDescriptor(HTMLAreaElement.prototype, 'toString');
-                                    if (sd2 && sd2.enumerable === false) {
-                                        try { Object.defineProperty(HTMLAreaElement.prototype, 'toString', { enumerable: true, configurable: true }); } catch(e) {}
-                                    }
-                                }
-                            } catch(e) {}
-                        })();
-                    "#);
+                    let descriptor_fix = crate::v8_utils::v8_string(scope,
+                        crate::kernel::post_hoc_fixes::DESCRIPTOR_FIX_JS);
                     let _ = v8::Script::compile(scope, descriptor_fix, None).and_then(|s| s.run(scope));
 
                     *state.dom_templates.borrow_mut() = Some(dom_templates);
