@@ -1683,3 +1683,31 @@ pub fn append_node_recursive(
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_node_id_to_usize_and_back() {
+        let id = usize_to_node_id(42).unwrap();
+        assert_eq!(node_id_to_usize(id), 42);
+    }
+
+    #[test]
+    fn test_usize_to_node_id_zero_returns_none() {
+        assert!(usize_to_node_id(0).is_none());
+    }
+
+    #[test]
+    fn test_usize_to_node_id_valid() {
+        let id = usize_to_node_id(1).unwrap();
+        assert_eq!(node_id_to_usize(id), 1);
+    }
+
+    #[test]
+    fn test_node_id_roundtrip_large() {
+        let id = usize_to_node_id(1_000_000).unwrap();
+        assert_eq!(node_id_to_usize(id), 1_000_000);
+    }
+}

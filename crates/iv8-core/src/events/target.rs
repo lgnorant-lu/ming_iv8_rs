@@ -201,6 +201,61 @@ fn build_event_path(document: &crate::dom::Document, target_id: NodeId) -> Vec<N
     path
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_event_listener_registry_new_empty() {
+        let reg = EventListenerRegistry::new();
+        let node_id = usize_to_node_id(1).unwrap();
+        let listeners = reg.get_listeners(node_id, "click", false);
+        assert!(listeners.is_empty());
+    }
+
+    #[test]
+    fn test_event_listener_registry_default() {
+        let reg = EventListenerRegistry::default();
+        let node_id = usize_to_node_id(1).unwrap();
+        let listeners = reg.get_listeners(node_id, "click", false);
+        assert!(listeners.is_empty());
+    }
+
+    #[test]
+    fn test_event_listener_registry_remove_nonexistent() {
+        let mut reg = EventListenerRegistry::new();
+        let node_id = usize_to_node_id(1).unwrap();
+        reg.remove(node_id, "click", false);
+        let listeners = reg.get_listeners(node_id, "click", false);
+        assert!(listeners.is_empty());
+    }
+
+    #[test]
+    fn test_event_listener_registry_remove_once_listeners_empty() {
+        let mut reg = EventListenerRegistry::new();
+        let node_id = usize_to_node_id(1).unwrap();
+        reg.remove_once_listeners(node_id, "click");
+        let listeners = reg.get_listeners(node_id, "click", false);
+        assert!(listeners.is_empty());
+    }
+
+    #[test]
+    fn test_event_listener_registry_get_different_phase() {
+        let mut reg = EventListenerRegistry::new();
+        let node_id = usize_to_node_id(1).unwrap();
+        // Remove on capture phase should not affect bubble phase
+        reg.remove(node_id, "click", true);
+        let bubble = reg.get_listeners(node_id, "click", false);
+        let capture = reg.get_listeners(node_id, "click", true);
+        assert!(bubble.is_empty());
+        assert!(capture.is_empty());
+    }
+
+    fn usize_to_node_id(val: usize) -> Option<NodeId> {
+        crate::dom::binding::usize_to_node_id(val)
+    }
+}
+
 /// Create a JS Event object with standard properties.
 fn create_event_object<'s>(
     scope: &v8::PinScope<'s, '_>,
