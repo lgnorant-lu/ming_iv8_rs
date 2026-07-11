@@ -262,6 +262,11 @@ insufficient.
 | Behavior coverage | Each public API has ≥1 positive and ≥1 error test | Per-function assertion count |
 | Edge case coverage | Each module has ≥1 boundary/null/empty input test | Manual review per test file |
 | Overall line coverage | ≥80% (baseline target) | cargo-tarpaulin |
+| Telemetry catalog | All COVERAGE_MATRIX entries satisfied | test_coverage_matrix_satisfied |
+| Telemetry routing | 0 direct `tracing::` calls outside telemetry.rs | test_no_direct_tracing_outside_telemetry |
+| Codegen [Global] split | [Global] attrs on instance, ops on prototype | test_codegen_global_interface |
+| K-008 workaround | readonly accessor wrappers return correct values | test_k008_accessor_workaround |
+| Worker init | WorkerGlobalScope visible in worker_mode | test_worker_init_visibility |
 
 P0 modules (补環境-critical): `native_env.rs`, `document_props.rs`, `location.rs`,
 `target.rs`, `event_loop.rs`, `timers.rs`.
@@ -271,7 +276,123 @@ P1 modules (execution-critical): `binding.rs`, `template.rs`, `fetch.rs`,
 
 ---
 
-## 7. Determinism
+## 7. Telemetry Testing
+
+### Coverage Matrix
+
+`telemetry.rs` defines `COVERAGE_MATRIX` — a const that declares expected
+coverage per category × level. `test_coverage_matrix_satisfied` validates
+this at test time.
+
+Adding a new category or level requires updating `COVERAGE_MATRIX`.
+
+### Lint Test
+
+`test_no_direct_tracing_outside_telemetry` ensures all `tracing::` calls
+go through the catalog. This is the primary enforcement mechanism for
+the logging convention.
+
+### Traced Test Pattern
+
+Use `#[traced_test]` from `tracing-test` crate to assert log events:
+
+```rust
+use tracing_test::traced_test;
+
+#[traced_test]
+#[test]
+fn test_init_emits_proto_merge_events() {
+    let _ = common::make_kernel();
+    assert!(logs_contain("iv8.init"));
+    assert!(logs_contain("proto_merge"));
+}
+```
+
+### Catalog Completeness Test
+
+Every catalog event should have at least one call site. A test can verify
+this by searching the codebase for the function name. (Future: automated
+check via grep in CI.)
+
+---
+
+## 8. Codegen Output Testing
+
+### [Global] Interface Split
+
+For [Global] interfaces (Window, WorkerGlobalScope, etc.), codegen must
+install attributes on `instance_template` and operations on
+`prototype_template`. This is validated by:
+
+```rust
+#[test]
+fn test_global_interface_operations_on_prototype() {
+    let mut k = common::make_kernel();
+    // Window.prototype must have operations (postMessage, setTimeout, etc.)
+    common::assert_js_str(&mut k,
+        "typeof Window.prototype.postMessage", "function");
+    common::assert_js_str(&mut k,
+        "typeof Window.prototype.setTimeout", "function");
+}
+```
+
+### WorkerGlobalScope Visibility
+
+In worker_mode, WorkerGlobalScope and DedicatedWorkerGlobalScope must be
+visible (not deleted by freeze_all_prototypes):
+
+```rust
+#[test]
+fn test_worker_globalscope_visible_in_worker_mode() {
+    let k = common::make_kernel_worker();
+    // WorkerGlobalScope must exist
+    common::assert_js_str(&k, "typeof WorkerGlobalScope", "function");
+}
+```
+
+---
+
+## 9. V8 Limitation Workaround Testing (K-008)
+
+V8 `set_accessor_property` getters cannot be called via JS `.call()`.
+Workarounds create return values directly instead of calling `origGet.call(this)`.
+
+### Test Pattern
+
+```rust
+#[test]
+fn test_dataset_returns_domstringmap() {
+    let mut k = common::make_kernel_with_doc("<div data-foo='bar'></div>");
+    // dataset must return a DOMStringMap, not throw Illegal invocation
+    common::assert_js_str(&mut k,
+        "document.querySelector('div').dataset.foo", "bar");
+    common::assert_js_str(&mut k,
+        "Object.prototype.toString.call(document.querySelector('div').dataset)",
+        "[object DOMStringMap]");
+}
+
+#[test]
+fn test_children_returns_htmlcollection() {
+    let mut k = common::make_kernel_with_doc("<div><span></span><p></p></div>");
+    common::assert_js_str(&mut k,
+        "document.querySelector('div').children.length", "2");
+    common::assert_js_str(&mut k,
+        "Object.prototype.toString.call(document.querySelector('div').children)",
+        "[object HTMLCollection]");
+}
+```
+
+### Adding a New K-008 Workaround
+
+1. Identify the readonly accessor that needs JS wrapping
+2. Create the wrapper function (don't call `origGet.call(this)`)
+3. Mark with `__iv8_wrapped` to prevent freeze_all_prototypes re-wrapping
+4. Add a test in `tests/test_k008_accessor_workaround.rs`
+5. Document in `docs/todo/TODO-native.md` under K-008
+
+---
+
+## 10. Determinism
 
 **Rule**: Tests that depend on `Math.random()` or `Date.now()` must use a
 fixed seed (`make_kernel_seeded()`). Tests that depend on event loop timing
@@ -279,7 +400,7 @@ must use `eventLoop.advance()` with explicit millisecond values.
 
 ---
 
-## 8. Python Tests
+## 11. Python Tests
 
 Python tests (pytest) have their own dedicated conventions document:
 `docs/conventions/python-testing-conventions.md`.
@@ -297,7 +418,7 @@ conventions in sections 1-7 and 9-10 do not apply to Python.
 
 ---
 
-## 9. Prohibited Patterns
+## 12. Prohibited Patterns
 
 | Pattern | Reason |
 |---|---|
@@ -310,7 +431,7 @@ conventions in sections 1-7 and 9-10 do not apply to Python.
 
 ---
 
-## 10. Review Checklist
+## 13. Review Checklist
 
 - [x] Test layers are defined (unit / integration / e2e)
 - [x] File naming convention is specified (`test_<layer>_<module>.rs`)
@@ -322,3 +443,7 @@ conventions in sections 1-7 and 9-10 do not apply to Python.
 - [x] Determinism requirements are specified
 - [x] Python tests are explicitly out of scope for restructuring
 - [x] Prohibited patterns are listed
+- [x] Telemetry testing pattern documented (coverage matrix, lint test, traced_test)
+- [x] Codegen output testing pattern documented ([Global] split, worker visibility)
+- [x] K-008 workaround testing pattern documented (readonly accessor workarounds)
+- [x] Coverage targets include telemetry, codegen, K-008, worker dimensions

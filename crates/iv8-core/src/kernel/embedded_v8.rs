@@ -3287,29 +3287,11 @@ impl EmbeddedV8Kernel {
                                 }
                             } catch(e) {}
 
-                            // childNodes: wrap return value with NodeList prototype
-                            try {
-                                if (typeof NodeList !== 'undefined' && typeof Node !== 'undefined' && Node.prototype) {
-                                    var origCN = Object.getOwnPropertyDescriptor(Node.prototype, 'childNodes');
-                                    if (origCN && origCN.get) {
-                                        var origGet = origCN.get;
-                                        Object.defineProperty(Node.prototype, 'childNodes', {
-                                            get: function() {
-                                                var cn = origGet.call(this);
-                                                if (cn && !(cn instanceof NodeList) && Array.isArray(cn)) {
-                                                    var nl = Object.create(NodeList.prototype);
-                                                    for (var i = 0; i < cn.length; i++) { nl[i] = cn[i]; }
-                                                    nl.length = cn.length;
-                                                    nl.item = function(i) { return cn[i] || null; };
-                                                    return nl;
-                                                }
-                                                return cn;
-                                            },
-                                            enumerable: true, configurable: true
-                                        });
-                                    }
-                                }
-                            } catch(e) {}
+                            // childNodes: K-008 — origGet.call(this) fails for V8 accessor.
+                            // Don't wrap; leave as V8 accessor (freeze_all_prototypes
+                            // skips native code getters). The returned value may be
+                            // a plain array without NodeList prototype, but it works
+                            // for property access (element.childNodes.length etc.).
 
                             // children: wrap return value with HTMLCollection prototype
                             // K-008: V8 set_accessor_property getter cannot be called
@@ -3330,22 +3312,31 @@ impl EmbeddedV8Kernel {
                                             if (!valid) throw new TypeError('Illegal invocation');
                                         }
                                         // K-008: Cannot call original V8 accessor getter via
-                                        // .call(). Use getElementsByTagName to get child elements.
+                                        // .call(). Build HTMLCollection from childNodes
+                                        // (property access triggers V8 accessor correctly).
                                         var hc = Object.create(HTMLCollection.prototype);
                                         var idx = 0;
                                         try {
-                                            var nodes = this.getElementsByTagName('*');
-                                            // Only direct children (getElementsByTagName returns all descendants)
-                                            for (var i = 0; i < nodes.length; i++) {
-                                                if (nodes[i].parentNode === this) {
-                                                    hc[idx] = nodes[i];
-                                                    if (nodes[i].id) hc[nodes[i].id] = nodes[i];
-                                                    idx++;
+                                            var cn = this.childNodes;
+                                            if (cn) {
+                                                for (var i = 0; i < cn.length; i++) {
+                                                    var node = cn[i];
+                                                    if (node && node.nodeType === 1) {
+                                                        hc[idx] = node;
+                                                        if (node.id) {
+                                                            Object.defineProperty(hc, node.id, {
+                                                                value: node, enumerable: false, configurable: true, writable: true
+                                                            });
+                                                        }
+                                                        idx++;
+                                                    }
                                                 }
                                             }
                                         } catch(e) {}
-                                        hc.length = idx;
-                                        hc.item = function(i) { return hc[i] || null; };
+                                        Object.defineProperty(hc, 'length', {
+                                            value: idx, writable: true, configurable: true, enumerable: false
+                                        });
+                                        hc.item = function(i) { return i >= 0 && i < idx ? hc[i] : null; };
                                         hc.namedItem = function(n) { return hc[n] || null; };
                                         if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
                                             try { Object.defineProperty(hc, Symbol.toStringTag, {
