@@ -155,27 +155,32 @@ unsafe extern "C" fn construct_only_dom_constructor(info: *const v8::FunctionCal
 /// Helper: install a native method on a prototype template.
 fn install_proto_method(
     scope: &v8::PinScope<'_, '_>,
+    owner: v8::Local<v8::FunctionTemplate>,
     proto: v8::Local<v8::ObjectTemplate>,
     name: &str,
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
-    install_proto_method_with_length(scope, proto, name, callback, 0);
+    install_proto_method_with_length(scope, owner, proto, name, callback, 0);
 }
 
 /// Helper: install a native method with a specific .length on a prototype template.
-/// When length > 0, the function checks arg count and throws TypeError if too few args.
+/// Uses V8 Signature so wrong receiver (null / wrong type) throws TypeError.
+/// When length > 0, also enforces min arg count via External trampoline.
 fn install_proto_method_with_length(
     scope: &v8::PinScope<'_, '_>,
+    owner: v8::Local<v8::FunctionTemplate>,
     proto: v8::Local<v8::ObjectTemplate>,
     name: &str,
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
     length: i32,
 ) {
+    let sig = v8::Signature::new(scope, owner);
     let fn_tmpl = if length > 0 {
-        // Store the real callback and min_args in V8 External data for arg checking
-        let guard_data = Box::new(MethodGuardData { callback, min_args: length });
+        let guard_data = Box::new(MethodGuardData {
+            callback,
+            min_args: length,
+        });
         let guard_ptr = Box::into_raw(guard_data) as *mut std::ffi::c_void;
-        // Register for cleanup when RuntimeState drops
         let isolate: &v8::Isolate = &*scope;
         let state = crate::state::RuntimeState::get(isolate);
         state.register_heap(guard_ptr, |p| unsafe {
@@ -184,10 +189,12 @@ fn install_proto_method_with_length(
         let external = v8::External::new(scope, guard_ptr);
         v8::FunctionTemplate::builder_raw(method_arg_guard)
             .data(external.into())
+            .signature(sig)
             .length(length)
             .build(scope)
     } else {
         v8::FunctionTemplate::builder_raw(callback)
+            .signature(sig)
             .build(scope)
     };
     let name_str = crate::v8_utils::v8_string(scope, name);
@@ -274,15 +281,16 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     let event_target = make_template(scope, "EventTarget", construct_only_dom_constructor);
     {
         let proto = event_target.prototype_template(scope);
-        install_proto_method_with_length(scope, proto, "addEventListener", add_event_listener_cb, 2);
+        install_proto_method_with_length(scope, event_target, proto, "addEventListener", add_event_listener_cb, 2);
         install_proto_method_with_length(
             scope,
+            event_target,
             proto,
             "removeEventListener",
             remove_event_listener_cb,
             2,
         );
-        install_proto_method_with_length(scope, proto, "dispatchEvent", dispatch_event_cb, 1);
+        install_proto_method_with_length(scope, event_target, proto, "dispatchEvent", dispatch_event_cb, 1);
     }
 
     // ── 2. Node (inherits EventTarget) ──────────────────────────────────────
@@ -309,13 +317,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "previousSibling", prev_sibling_getter, None);
         install_proto_accessor(scope, proto, "childNodes", child_nodes_getter, None);
         // Mutation methods
-        install_proto_method_with_length(scope, proto, "appendChild", append_child_cb, 1);
-        install_proto_method_with_length(scope, proto, "removeChild", remove_child_cb, 1);
-        install_proto_method_with_length(scope, proto, "insertBefore", insert_before_cb, 2);
-        install_proto_method_with_length(scope, proto, "cloneNode", clone_node_cb, 0);
-        install_proto_method_with_length(scope, proto, "contains", contains_cb, 1);
-        install_proto_method_with_length(scope, proto, "hasChildNodes", has_child_nodes_cb, 0);
-        install_proto_method_with_length(scope, proto, "normalize", normalize_cb, 0);
+        install_proto_method_with_length(scope, node, proto, "appendChild", append_child_cb, 1);
+        install_proto_method_with_length(scope, node, proto, "removeChild", remove_child_cb, 1);
+        install_proto_method_with_length(scope, node, proto, "insertBefore", insert_before_cb, 2);
+        install_proto_method_with_length(scope, node, proto, "cloneNode", clone_node_cb, 0);
+        install_proto_method_with_length(scope, node, proto, "contains", contains_cb, 1);
+        install_proto_method_with_length(scope, node, proto, "hasChildNodes", has_child_nodes_cb, 0);
+        install_proto_method_with_length(scope, node, proto, "normalize", normalize_cb, 0);
 
         let node_consts = [
             ("ELEMENT_NODE", 1i32), ("ATTRIBUTE_NODE", 2), ("TEXT_NODE", 3),
@@ -436,28 +444,28 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             None,
         );
         // Attribute methods
-        install_proto_method_with_length(scope, proto, "getAttribute", get_attribute_cb, 1);
-        install_proto_method_with_length(scope, proto, "setAttribute", set_attribute_cb, 2);
-        install_proto_method_with_length(scope, proto, "removeAttribute", remove_attribute_cb, 1);
-        install_proto_method_with_length(scope, proto, "hasAttribute", has_attribute_cb, 1);
-        install_proto_method_with_length(scope, proto, "getAttributeNames", get_attribute_names_cb, 0);
+        install_proto_method_with_length(scope, element, proto, "getAttribute", get_attribute_cb, 1);
+        install_proto_method_with_length(scope, element, proto, "setAttribute", set_attribute_cb, 2);
+        install_proto_method_with_length(scope, element, proto, "removeAttribute", remove_attribute_cb, 1);
+        install_proto_method_with_length(scope, element, proto, "hasAttribute", has_attribute_cb, 1);
+        install_proto_method_with_length(scope, element, proto, "getAttributeNames", get_attribute_names_cb, 0);
         // DOM mutation methods
-        install_proto_method_with_length(scope, proto, "replaceChild", replace_child_cb, 2);
-        install_proto_method_with_length(scope, proto, "insertBefore", insert_before_cb, 2);
-        install_proto_method_with_length(scope, proto, "insertAdjacentHTML", insert_adjacent_html_cb, 2);
-        install_proto_method_with_length(scope, proto, "insertAdjacentElement", insert_adjacent_element_cb, 2);
-        install_proto_method_with_length(scope, proto, "insertAdjacentText", insert_adjacent_text_cb, 2);
-        install_proto_method_with_length(scope, proto, "cloneNode", clone_node_cb, 0);
-        install_proto_method_with_length(scope, proto, "contains", contains_cb, 1);
+        install_proto_method_with_length(scope, element, proto, "replaceChild", replace_child_cb, 2);
+        install_proto_method_with_length(scope, element, proto, "insertBefore", insert_before_cb, 2);
+        install_proto_method_with_length(scope, element, proto, "insertAdjacentHTML", insert_adjacent_html_cb, 2);
+        install_proto_method_with_length(scope, element, proto, "insertAdjacentElement", insert_adjacent_element_cb, 2);
+        install_proto_method_with_length(scope, element, proto, "insertAdjacentText", insert_adjacent_text_cb, 2);
+        install_proto_method_with_length(scope, element, proto, "cloneNode", clone_node_cb, 0);
+        install_proto_method_with_length(scope, element, proto, "contains", contains_cb, 1);
         // Query methods
-        install_proto_method_with_length(scope, proto, "querySelector", query_selector_cb, 1);
-        install_proto_method_with_length(scope, proto, "querySelectorAll", query_selector_all_cb, 1);
-        install_proto_method_with_length(scope, proto, "getElementsByTagName", get_elements_by_tag_name_cb, 1);
-        install_proto_method_with_length(scope, proto, "getElementsByClassName", get_elements_by_class_name_cb, 1);
-        install_proto_method_with_length(scope, proto, "matches", matches_cb, 1);
-        install_proto_method_with_length(scope, proto, "closest", closest_cb, 1);
+        install_proto_method_with_length(scope, element, proto, "querySelector", query_selector_cb, 1);
+        install_proto_method_with_length(scope, element, proto, "querySelectorAll", query_selector_all_cb, 1);
+        install_proto_method_with_length(scope, element, proto, "getElementsByTagName", get_elements_by_tag_name_cb, 1);
+        install_proto_method_with_length(scope, element, proto, "getElementsByClassName", get_elements_by_class_name_cb, 1);
+        install_proto_method_with_length(scope, element, proto, "matches", matches_cb, 1);
+        install_proto_method_with_length(scope, element, proto, "closest", closest_cb, 1);
         // Geometry
-        install_proto_method_with_length(scope, proto, "getBoundingClientRect", get_bounding_client_rect_cb, 0);
+        install_proto_method_with_length(scope, element, proto, "getBoundingClientRect", get_bounding_client_rect_cb, 0);
         install_proto_accessor(scope, proto, "offsetWidth", offset_width_getter, None);
         install_proto_accessor(scope, proto, "offsetHeight", offset_height_getter, None);
         install_proto_accessor(scope, proto, "offsetTop", offset_top_getter, None);
@@ -480,17 +488,18 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             scroll_left_getter,
             Some(scroll_left_setter),
         );
-        install_proto_method(scope, proto, "scrollIntoView", scroll_into_view_cb);
-        install_proto_method(scope, proto, "getClientRects", get_client_rects_cb);
+        install_proto_method(scope, element, proto, "scrollIntoView", scroll_into_view_cb);
+        install_proto_method(scope, element, proto, "getClientRects", get_client_rects_cb);
         // Event methods (also on EventTarget, but Element overrides for convenience)
-        install_proto_method(scope, proto, "addEventListener", add_event_listener_cb);
+        install_proto_method(scope, element, proto, "addEventListener", add_event_listener_cb);
         install_proto_method(
             scope,
+            element,
             proto,
             "removeEventListener",
             remove_event_listener_cb,
         );
-        install_proto_method(scope, proto, "dispatchEvent", dispatch_event_cb);
+        install_proto_method(scope, element, proto, "dispatchEvent", dispatch_event_cb);
     }
 
     // ── 4. HTMLElement (inherits Element) ───────────────────────────────────
@@ -533,9 +542,9 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             None,
         );
         install_proto_accessor(scope, proto, "offsetParent", offset_parent_getter, None);
-        install_proto_method(scope, proto, "focus", focus_cb);
-        install_proto_method(scope, proto, "blur", blur_cb);
-        install_proto_method(scope, proto, "click", click_cb);
+        install_proto_method(scope, html_element, proto, "focus", focus_cb);
+        install_proto_method(scope, html_element, proto, "blur", blur_cb);
+        install_proto_method(scope, html_element, proto, "click", click_cb);
     }
 
     // ── 5. Specific HTML element types ──────────────────────────────────────
@@ -597,10 +606,10 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             Some(placeholder_setter),
         );
         install_proto_accessor(scope, proto, "name", name_getter, Some(name_setter));
-        install_proto_method(scope, proto, "focus", focus_cb);
-        install_proto_method(scope, proto, "blur", blur_cb);
-        install_proto_method(scope, proto, "select", select_cb);
-        install_proto_method(scope, proto, "click", click_cb);
+        install_proto_method(scope, html_input_element, proto, "focus", focus_cb);
+        install_proto_method(scope, html_input_element, proto, "blur", blur_cb);
+        install_proto_method(scope, html_input_element, proto, "select", select_cb);
+        install_proto_method(scope, html_input_element, proto, "click", click_cb);
     }
 
     let html_button_element = make_template(scope, "HTMLButtonElement", illegal_dom_constructor);
@@ -622,16 +631,16 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             input_type_getter,
             Some(input_type_setter),
         );
-        install_proto_method(scope, proto, "click", click_cb);
+        install_proto_method(scope, html_button_element, proto, "click", click_cb);
     }
 
     let html_form_element = make_template(scope, "HTMLFormElement", illegal_dom_constructor);
     html_form_element.inherit(html_element);
     {
         let proto = html_form_element.prototype_template(scope);
-        install_proto_method(scope, proto, "submit", submit_cb);
-        install_proto_method(scope, proto, "reset", reset_cb);
-        install_proto_method(scope, proto, "checkValidity", check_validity_cb);
+        install_proto_method(scope, html_form_element, proto, "submit", submit_cb);
+        install_proto_method(scope, html_form_element, proto, "reset", reset_cb);
+        install_proto_method(scope, html_form_element, proto, "checkValidity", check_validity_cb);
     }
 
     let html_canvas_element = make_template(scope, "HTMLCanvasElement", illegal_dom_constructor);
@@ -652,11 +661,11 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             canvas_height_getter,
             Some(canvas_height_setter),
         );
-        install_proto_method_with_length(scope, proto, "getContext", get_context_cb, 1);
-        install_proto_method_with_length(scope, proto, "toDataURL", to_data_url_cb, 0);
-        install_proto_method_with_length(scope, proto, "toBlob", to_blob_cb, 1);
-        install_proto_method(scope, proto, "captureStream", capture_stream_cb);
-        install_proto_method(scope, proto, "webkitCaptureStream", capture_stream_cb);
+        install_proto_method_with_length(scope, html_canvas_element, proto, "getContext", get_context_cb, 1);
+        install_proto_method_with_length(scope, html_canvas_element, proto, "toDataURL", to_data_url_cb, 0);
+        install_proto_method_with_length(scope, html_canvas_element, proto, "toBlob", to_blob_cb, 1);
+        install_proto_method(scope, html_canvas_element, proto, "captureStream", capture_stream_cb);
+        install_proto_method(scope, html_canvas_element, proto, "webkitCaptureStream", capture_stream_cb);
     }
 
     let html_script_element = make_template(scope, "HTMLScriptElement", illegal_dom_constructor);
@@ -716,13 +725,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "paused", paused_getter, None);
         install_proto_accessor(scope, proto, "muted", muted_getter, Some(muted_setter));
         install_proto_accessor(scope, proto, "volume", volume_getter, Some(volume_setter));
-        install_proto_method(scope, proto, "play", media_play_cb);
-        install_proto_method(scope, proto, "pause", media_pause_cb);
-        install_proto_method(scope, proto, "load", media_load_cb);
-        install_proto_method(scope, proto, "canPlayType", can_play_type_cb);
-        install_proto_method(scope, proto, "captureStream", capture_stream_cb);
-        install_proto_method(scope, proto, "mozCaptureStream", capture_stream_cb);
-        install_proto_method(scope, proto, "webkitCaptureStream", capture_stream_cb);
+        install_proto_method(scope, html_video_element, proto, "play", media_play_cb);
+        install_proto_method(scope, html_video_element, proto, "pause", media_pause_cb);
+        install_proto_method(scope, html_video_element, proto, "load", media_load_cb);
+        install_proto_method(scope, html_video_element, proto, "canPlayType", can_play_type_cb);
+        install_proto_method(scope, html_video_element, proto, "captureStream", capture_stream_cb);
+        install_proto_method(scope, html_video_element, proto, "mozCaptureStream", capture_stream_cb);
+        install_proto_method(scope, html_video_element, proto, "webkitCaptureStream", capture_stream_cb);
     }
 
     let html_audio_element = make_template(scope, "HTMLAudioElement", illegal_dom_constructor);
@@ -741,10 +750,10 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "paused", paused_getter, None);
         install_proto_accessor(scope, proto, "muted", muted_getter, Some(muted_setter));
         install_proto_accessor(scope, proto, "volume", volume_getter, Some(volume_setter));
-        install_proto_method(scope, proto, "play", media_play_cb);
-        install_proto_method(scope, proto, "pause", media_pause_cb);
-        install_proto_method(scope, proto, "load", media_load_cb);
-        install_proto_method(scope, proto, "canPlayType", can_play_type_cb);
+        install_proto_method(scope, html_audio_element, proto, "play", media_play_cb);
+        install_proto_method(scope, html_audio_element, proto, "pause", media_pause_cb);
+        install_proto_method(scope, html_audio_element, proto, "load", media_load_cb);
+        install_proto_method(scope, html_audio_element, proto, "canPlayType", can_play_type_cb);
     }
 
     let html_select_element = make_template(scope, "HTMLSelectElement", illegal_dom_constructor);
@@ -794,7 +803,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             placeholder_getter,
             Some(placeholder_setter),
         );
-        install_proto_method(scope, proto, "select", select_cb);
+        install_proto_method(scope, html_textarea_element, proto, "select", select_cb);
     }
 
     let html_head_element = make_template(scope, "HTMLHeadElement", illegal_dom_constructor);
@@ -864,11 +873,11 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         let proto = character_data.prototype_template(scope);
         install_proto_accessor(scope, proto, "data", data_getter, Some(data_setter));
         install_proto_accessor(scope, proto, "length", char_data_length_getter, None);
-        install_proto_method_with_length(scope, proto, "substringData", substring_data_cb, 2);
-        install_proto_method_with_length(scope, proto, "appendData", append_data_cb, 1);
-        install_proto_method_with_length(scope, proto, "insertData", insert_data_cb, 2);
-        install_proto_method_with_length(scope, proto, "deleteData", delete_data_cb, 2);
-        install_proto_method_with_length(scope, proto, "replaceData", replace_data_cb, 3);
+        install_proto_method_with_length(scope, character_data, proto, "substringData", substring_data_cb, 2);
+        install_proto_method_with_length(scope, character_data, proto, "appendData", append_data_cb, 1);
+        install_proto_method_with_length(scope, character_data, proto, "insertData", insert_data_cb, 2);
+        install_proto_method_with_length(scope, character_data, proto, "deleteData", delete_data_cb, 2);
+        install_proto_method_with_length(scope, character_data, proto, "replaceData", replace_data_cb, 3);
         set_to_string_tag(scope, proto, "CharacterData");
     }
 
@@ -877,7 +886,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     text_node.inherit(character_data);
     {
         let proto = text_node.prototype_template(scope);
-        install_proto_method_with_length(scope, proto, "splitText", split_text_cb, 1);
+        install_proto_method_with_length(scope, text_node, proto, "splitText", split_text_cb, 1);
         install_proto_accessor(scope, proto, "wholeText", whole_text_getter, None);
         set_to_string_tag(scope, proto, "Text");
     }
@@ -909,7 +918,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         .set_internal_field_count(2);
     {
         let proto = node_list.prototype_template(scope);
-        install_proto_method_with_length(scope, proto, "item", node_list_item_cb, 1);
+        install_proto_method_with_length(scope, node_list, proto, "item", node_list_item_cb, 1);
         install_proto_accessor(scope, proto, "length", node_list_length_getter, None);
         set_to_string_tag(scope, proto, "NodeList");
     }
@@ -921,17 +930,17 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         .set_internal_field_count(1);
     {
         let proto = dom_token_list.prototype_template(scope);
-        install_proto_method_with_length(scope, proto, "item", domtokenlist_item_cb, 1);
-        install_proto_method_with_length(scope, proto, "contains", domtokenlist_contains_cb, 1);
-        install_proto_method(scope, proto, "add", domtokenlist_add_cb);
-        install_proto_method(scope, proto, "remove", domtokenlist_remove_cb);
-        install_proto_method_with_length(scope, proto, "toggle", domtokenlist_toggle_cb, 1);
-        install_proto_method_with_length(scope, proto, "replace", domtokenlist_replace_cb, 2);
-        install_proto_method(scope, proto, "toString", domtokenlist_tostring_cb);
-        install_proto_method(scope, proto, "forEach", domtokenlist_foreach_cb);
-        install_proto_method(scope, proto, "entries", domtokenlist_entries_cb);
-        install_proto_method(scope, proto, "keys", domtokenlist_keys_cb);
-        install_proto_method(scope, proto, "values", domtokenlist_values_cb);
+        install_proto_method_with_length(scope, dom_token_list, proto, "item", domtokenlist_item_cb, 1);
+        install_proto_method_with_length(scope, dom_token_list, proto, "contains", domtokenlist_contains_cb, 1);
+        install_proto_method(scope, dom_token_list, proto, "add", domtokenlist_add_cb);
+        install_proto_method(scope, dom_token_list, proto, "remove", domtokenlist_remove_cb);
+        install_proto_method_with_length(scope, dom_token_list, proto, "toggle", domtokenlist_toggle_cb, 1);
+        install_proto_method_with_length(scope, dom_token_list, proto, "replace", domtokenlist_replace_cb, 2);
+        install_proto_method(scope, dom_token_list, proto, "toString", domtokenlist_tostring_cb);
+        install_proto_method(scope, dom_token_list, proto, "forEach", domtokenlist_foreach_cb);
+        install_proto_method(scope, dom_token_list, proto, "entries", domtokenlist_entries_cb);
+        install_proto_method(scope, dom_token_list, proto, "keys", domtokenlist_keys_cb);
+        install_proto_method(scope, dom_token_list, proto, "values", domtokenlist_values_cb);
         install_proto_accessor(scope, proto, "length", domtokenlist_length_getter, None);
         install_proto_accessor(
             scope,
@@ -950,16 +959,17 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         .set_internal_field_count(2);
     {
         let proto = css_style_declaration.prototype_template(scope);
-        install_proto_method(scope, proto, "setProperty", css_style_set_property_cb);
-        install_proto_method(scope, proto, "getPropertyValue", css_style_get_property_cb);
+        install_proto_method(scope, css_style_declaration, proto, "setProperty", css_style_set_property_cb);
+        install_proto_method(scope, css_style_declaration, proto, "getPropertyValue", css_style_get_property_cb);
         install_proto_method(
             scope,
+            css_style_declaration,
             proto,
             "getPropertyPriority",
             css_style_get_priority_cb,
         );
-        install_proto_method(scope, proto, "removeProperty", css_style_remove_property_cb);
-        install_proto_method(scope, proto, "item", css_style_item_cb);
+        install_proto_method(scope, css_style_declaration, proto, "removeProperty", css_style_remove_property_cb);
+        install_proto_method(scope, css_style_declaration, proto, "item", css_style_item_cb);
         install_proto_accessor(
             scope,
             proto,
@@ -1036,15 +1046,15 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     };
     {
         let proto = headers.prototype_template(scope);
-        install_proto_method(scope, proto, "get", headers_get_cb);
-        install_proto_method(scope, proto, "set", headers_set_cb);
-        install_proto_method(scope, proto, "has", headers_has_cb);
-        install_proto_method(scope, proto, "delete", headers_delete_cb);
-        install_proto_method(scope, proto, "append", headers_append_cb);
-        install_proto_method(scope, proto, "forEach", headers_foreach_cb);
-        install_proto_method(scope, proto, "entries", headers_entries_cb);
-        install_proto_method(scope, proto, "keys", headers_keys_cb);
-        install_proto_method(scope, proto, "values", headers_values_cb);
+        install_proto_method(scope, headers, proto, "get", headers_get_cb);
+        install_proto_method(scope, headers, proto, "set", headers_set_cb);
+        install_proto_method(scope, headers, proto, "has", headers_has_cb);
+        install_proto_method(scope, headers, proto, "delete", headers_delete_cb);
+        install_proto_method(scope, headers, proto, "append", headers_append_cb);
+        install_proto_method(scope, headers, proto, "forEach", headers_foreach_cb);
+        install_proto_method(scope, headers, proto, "entries", headers_entries_cb);
+        install_proto_method(scope, headers, proto, "keys", headers_keys_cb);
+        install_proto_method(scope, headers, proto, "values", headers_values_cb);
         set_to_string_tag(scope, proto, "Headers");
     }
 
@@ -1052,11 +1062,11 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     let response = make_template(scope, "Response", empty_dom_constructor);
     {
         let proto = response.prototype_template(scope);
-        install_proto_method(scope, proto, "text", response_text_cb);
-        install_proto_method(scope, proto, "json", response_json_cb);
-        install_proto_method(scope, proto, "arrayBuffer", response_array_buffer_cb);
-        install_proto_method(scope, proto, "blob", response_blob_cb);
-        install_proto_method(scope, proto, "clone", response_clone_cb);
+        install_proto_method(scope, response, proto, "text", response_text_cb);
+        install_proto_method(scope, response, proto, "json", response_json_cb);
+        install_proto_method(scope, response, proto, "arrayBuffer", response_array_buffer_cb);
+        install_proto_method(scope, response, proto, "blob", response_blob_cb);
+        install_proto_method(scope, response, proto, "clone", response_clone_cb);
         install_proto_accessor(scope, proto, "status", response_status_getter, None);
         install_proto_accessor(scope, proto, "ok", response_ok_getter, None);
         install_proto_accessor(
@@ -1076,7 +1086,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     let request = make_template(scope, "Request", empty_dom_constructor);
     {
         let proto = request.prototype_template(scope);
-        install_proto_method(scope, proto, "clone", request_clone_cb);
+        install_proto_method(scope, request, proto, "clone", request_clone_cb);
         install_proto_accessor(scope, proto, "url", request_url_getter, None);
         install_proto_accessor(scope, proto, "method", request_method_getter, None);
         install_proto_accessor(scope, proto, "headers", request_headers_getter, None);
