@@ -163,6 +163,7 @@ fn install_proto_method(
 }
 
 /// Helper: install a native method with a specific .length on a prototype template.
+/// When length > 0, the function checks arg count and throws TypeError if too few args.
 fn install_proto_method_with_length(
     scope: &v8::PinScope<'_, '_>,
     proto: v8::Local<v8::ObjectTemplate>,
@@ -170,12 +171,65 @@ fn install_proto_method_with_length(
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
     length: i32,
 ) {
-    let fn_tmpl = v8::FunctionTemplate::builder_raw(callback)
-        .length(length)
-        .build(scope);
+    let fn_tmpl = if length > 0 {
+        // Store the real callback and min_args in V8 External data for arg checking
+        let guard_data = Box::new(MethodGuardData { callback, min_args: length });
+        let guard_ptr = Box::into_raw(guard_data) as *mut std::ffi::c_void;
+        // Register for cleanup when RuntimeState drops
+        let isolate: &v8::Isolate = &*scope;
+        let state = crate::state::RuntimeState::get(isolate);
+        state.register_heap(guard_ptr, |p| unsafe {
+            drop(Box::from_raw(p as *mut MethodGuardData))
+        });
+        let external = v8::External::new(scope, guard_ptr);
+        v8::FunctionTemplate::builder_raw(method_arg_guard)
+            .data(external.into())
+            .length(length)
+            .build(scope)
+    } else {
+        v8::FunctionTemplate::builder_raw(callback)
+            .build(scope)
+    };
     let name_str = crate::v8_utils::v8_string(scope, name);
     fn_tmpl.set_class_name(name_str);
     proto.set(name_str.into(), fn_tmpl.into());
+}
+
+// V8 callback data for install_proto_method_with_length arg counting
+struct MethodGuardData {
+    callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
+    min_args: i32,
+}
+
+/// Generic arg-count guard for DOM template methods. Retrieves the original
+/// callback and min_args from V8 External data, checks arg count, and
+/// either throws TypeError or forwards to the real callback.
+unsafe extern "C" fn method_arg_guard(info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*info };
+    v8::callback_scope!(unsafe scope, info_ref);
+    let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+    let data = args.data();
+    if data.is_external() {
+        let ext: v8::Local<v8::External> = unsafe { v8::Local::cast_unchecked(data) };
+        let guard = unsafe { &*(ext.value() as *const MethodGuardData) };
+        if (args.length() as i32) < guard.min_args {
+            let msg = format!(
+                "{} argument(s) required, but only {} present",
+                guard.min_args,
+                args.length()
+            );
+            let msg_str = crate::v8_utils::v8_string(scope, &msg);
+            let exc = v8::Exception::type_error(scope, msg_str);
+            scope.throw_exception(exc);
+            return;
+        }
+        (guard.callback)(info);
+    } else {
+        // No guard data — this shouldn't happen
+        let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+        let exc = v8::Exception::type_error(scope, msg);
+        scope.throw_exception(exc);
+    }
 }
 
 /// Helper: install a native accessor (getter + optional setter) on a prototype template.
@@ -4756,18 +4810,7 @@ unsafe extern "C" fn to_data_url_cb(info: *const v8::FunctionCallbackInfo) {
     });
 }
 
-unsafe extern "C" fn to_blob_cb(info: *const v8::FunctionCallbackInfo) {
-    null_this_check(info);
-    let info_ref = unsafe { &*info };
-    v8::callback_scope!(unsafe scope, info_ref);
-    let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-    if args.length() < 1 {
-        let msg = crate::v8_utils::v8_string(scope, "1 argument required, but only 0 present");
-        let exc = v8::Exception::type_error(scope, msg);
-        scope.throw_exception(exc);
-        return;
-    }
-}
+unsafe extern "C" fn to_blob_cb(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
 
 // ── Image-specific ────────────────────────────────────────────────────────────
 
