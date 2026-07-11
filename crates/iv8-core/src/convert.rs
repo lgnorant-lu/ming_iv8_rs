@@ -747,4 +747,55 @@ mod tests {
             other => panic!("expected String for Symbol, got {:?}", other),
         }
     }
+
+    #[test]
+    fn test_truncate_function_body_named() {
+        let result = truncate_function_body("function foo(a, b) { return a + b; }");
+        assert_eq!(result, "function foo() { ... }");
+    }
+
+    #[test]
+    fn test_truncate_function_body_anonymous() {
+        let result = truncate_function_body("function() { return 42; }");
+        assert_eq!(result, "function() { ... }");
+    }
+
+    #[test]
+    fn test_truncate_function_body_arrow() {
+        let result = truncate_function_body("() => 42");
+        assert_eq!(result, "function() { ... }");
+    }
+
+    #[test]
+    fn test_truncate_function_body_arrow_with_params() {
+        let result = truncate_function_body("(a, b) => a + b");
+        assert_eq!(result, "function() { ... }");
+    }
+
+    #[test]
+    fn test_truncate_function_body_no_brace() {
+        let result = truncate_function_body("just a string");
+        assert_eq!(result, "function() { ... }");
+    }
+
+    #[test]
+    fn test_decode_typed_array_int8() {
+        let buf = vec![1i8, -1, 127, -128];
+        let buf_bytes: Vec<u8> = buf.iter().map(|&v| v as u8).collect();
+        let result = decode_typed_array(TypedArrayKind::Int8, &buf_bytes);
+        assert_eq!(result.len(), 4);
+    }
+
+    #[test]
+    fn test_decode_typed_array_uint8() {
+        let buf = vec![0u8, 128, 255, 1];
+        let result = decode_typed_array(TypedArrayKind::Uint8, &buf);
+        assert_eq!(result.len(), 4);
+    }
+
+    #[test]
+    fn test_decode_typed_array_empty() {
+        let result = decode_typed_array(TypedArrayKind::Int32, &[]);
+        assert!(result.is_empty());
+    }
 }

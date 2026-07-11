@@ -167,3 +167,76 @@ fn base64_decode(input: &str) -> Result<Vec<u8>, &'static str> {
 
     Ok(buf)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_base64_encode_empty() {
+        assert_eq!(base64_encode(b""), "");
+    }
+
+    #[test]
+    fn test_base64_encode_one_byte() {
+        assert_eq!(base64_encode(b"f"), "Zg==");
+    }
+
+    #[test]
+    fn test_base64_encode_two_bytes() {
+        assert_eq!(base64_encode(b"fo"), "Zm8=");
+    }
+
+    #[test]
+    fn test_base64_encode_three_bytes() {
+        assert_eq!(base64_encode(b"foo"), "Zm9v");
+    }
+
+    #[test]
+    fn test_base64_encode_roundtrip() {
+        let data = vec![0u8, 1, 2, 3, 255, 254, 253, 128, 64, 32];
+        let encoded = base64_encode(&data);
+        let decoded = base64_decode(&encoded).unwrap();
+        assert_eq!(decoded, data);
+    }
+
+    #[test]
+    fn test_base64_decode_empty() {
+        assert_eq!(base64_decode("").unwrap(), Vec::<u8>::new());
+    }
+
+    #[test]
+    fn test_base64_decode_known_values() {
+        assert_eq!(base64_decode("Zg==").unwrap(), b"f");
+        assert_eq!(base64_decode("Zm8=").unwrap(), b"fo");
+        assert_eq!(base64_decode("Zm9v").unwrap(), b"foo");
+    }
+
+    #[test]
+    fn test_base64_decode_invalid_char() {
+        assert!(base64_decode("!!!invalid!!!").is_err());
+    }
+
+    #[test]
+    fn test_base64_decode_padding() {
+        let result = base64_decode("Zm9vYg==").unwrap();
+        assert_eq!(result, b"foob");
+    }
+
+    #[test]
+    fn test_base64_encode_all_bytes() {
+        let data: Vec<u8> = (0..=255).collect();
+        let encoded = base64_encode(&data);
+        let decoded = base64_decode(&encoded).unwrap();
+        assert_eq!(decoded, data);
+    }
+
+    #[test]
+    fn test_base64_encode_binary_data() {
+        let data = vec![0xFFu8; 16];
+        let encoded = base64_encode(&data);
+        assert_eq!(encoded.len(), 24); // 16 bytes -> 24 base64 chars (no padding, 16%3!=0)
+        let decoded = base64_decode(&encoded).unwrap();
+        assert_eq!(decoded, data);
+    }
+}
