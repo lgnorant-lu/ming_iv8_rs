@@ -65,6 +65,7 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
     // Patch HTMLCanvasElement.prototype if available
     if (typeof HTMLCanvasElement !== 'undefined') {
         HTMLCanvasElement.prototype.getContext = function(type, attrs) {
+            if (this == null) throw new TypeError('Illegal invocation');
             var id = getOrCreateCanvasId(this);
             __canvas_set_size__(id, this.width || 300, this.height || 150);
             var ctx = window.__getCanvasContext__(id, type);
@@ -74,6 +75,7 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
         Object.defineProperty(HTMLCanvasElement.prototype.getContext, 'length', {value: 1});
 
         HTMLCanvasElement.prototype.toDataURL = function(type, quality) {
+            if (this == null) throw new TypeError('Illegal invocation');
             var _cached = globalThis.__iv8CanvasPrefs && globalThis.__iv8CanvasPrefs.toDataURL;
             if (_cached) return _cached;
             var id = getOrCreateCanvasId(this);
@@ -440,6 +442,7 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
     // Patch HTMLCanvasElement.prototype.getContext
     if (typeof HTMLCanvasElement !== 'undefined') {
         HTMLCanvasElement.prototype.getContext = function(type, attrs) {
+            if (this == null) throw new TypeError('Illegal invocation');
             var id = this.__canvasId__;
             if (!id) {
                 id = '__canvas_' + Math.random().toString(36).slice(2) + '__';
@@ -453,6 +456,7 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
         };
 
         HTMLCanvasElement.prototype.toDataURL = function(type, quality) {
+            if (this == null) throw new TypeError('Illegal invocation');
             var _cached = globalThis.__iv8CanvasPrefs && globalThis.__iv8CanvasPrefs.toDataURL;
             if (_cached) return _cached;
             var id = this.__canvasId__;
