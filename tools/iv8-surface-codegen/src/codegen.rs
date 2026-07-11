@@ -306,11 +306,15 @@ fn generate_domain_file(
             out.push_str(&format!("                        let attr_key = v8::String::new(scope, \"{}\").unwrap();\n", attr_name));
             out.push_str(&format!("                        let g = v8::FunctionTemplate::builder_raw({}_get_{}).length(0).build(scope);\n", fn_name, idx));
             out.push_str(&format!("                        g.set_class_name(v8::String::new(scope, \"get {}\").unwrap());\n", attr_name));
+            out.push_str("                        let gf = g.get_function(scope).unwrap();\n");
+            if has_setter {
             out.push_str(&format!("                        let s = v8::FunctionTemplate::builder_raw({}_set_{}).length(1).build(scope);\n", fn_name, idx));
             out.push_str(&format!("                        s.set_class_name(v8::String::new(scope, \"set {}\").unwrap());\n", attr_name));
-            out.push_str("                        let gf = g.get_function(scope).unwrap();\n");
             out.push_str("                        let sf = s.get_function(scope).unwrap();\n");
             out.push_str("                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());\n");
+            } else {
+            out.push_str("                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), v8::undefined(scope).into());\n");
+            }
             out.push_str("                        d.set_enumerable(true);\n");
             out.push_str("                        d.set_configurable(true);\n");
             out.push_str("                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);\n");

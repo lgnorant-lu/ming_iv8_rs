@@ -29985,9 +29985,9 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let attr_key = v8::String::new(scope, "cancelBubble").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(event_get_8).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get cancelBubble").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(event_set_8).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set cancelBubble").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -30009,9 +30009,9 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let attr_key = v8::String::new(scope, "returnValue").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(event_get_12).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get returnValue").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(event_set_12).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set returnValue").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -30033,9 +30033,9 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let attr_key = v8::String::new(scope, "returnValue").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(before_unload_event_get_1).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get returnValue").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(before_unload_event_set_1).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set returnValue").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -30057,9 +30057,9 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let attr_key = v8::String::new(scope, "onopen").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(event_source_get_4).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onopen").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(event_source_set_4).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onopen").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -30081,9 +30081,9 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let attr_key = v8::String::new(scope, "onmessage").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(event_source_get_5).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(event_source_set_5).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -30105,9 +30105,9 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let attr_key = v8::String::new(scope, "onerror").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(event_source_get_6).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(event_source_set_6).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onerror").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);

@@ -1479,9 +1479,9 @@ pub fn fix_accessors_midi(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Ob
                         let attr_key = v8::String::new(scope, "onstatechange").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(midi_access_get_3).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onstatechange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(midi_access_set_3).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onstatechange").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -1503,9 +1503,9 @@ pub fn fix_accessors_midi(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Ob
                         let attr_key = v8::String::new(scope, "onstatechange").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(midi_port_get_8).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onstatechange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(midi_port_set_8).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onstatechange").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -1527,9 +1527,9 @@ pub fn fix_accessors_midi(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Ob
                         let attr_key = v8::String::new(scope, "onmidimessage").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(midi_input_get_1).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onmidimessage").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(midi_input_set_1).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onmidimessage").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);

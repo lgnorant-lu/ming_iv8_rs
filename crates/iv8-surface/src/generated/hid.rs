@@ -989,9 +989,9 @@ pub fn fix_accessors_hid(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
                         let attr_key = v8::String::new(scope, "onconnect").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(hid_get_1).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onconnect").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(hid_set_1).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onconnect").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -1013,9 +1013,9 @@ pub fn fix_accessors_hid(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
                         let attr_key = v8::String::new(scope, "ondisconnect").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(hid_get_2).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ondisconnect").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(hid_set_2).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ondisconnect").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -1037,9 +1037,9 @@ pub fn fix_accessors_hid(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
                         let attr_key = v8::String::new(scope, "oninputreport").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(hid_device_get_1).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oninputreport").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(hid_device_set_1).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oninputreport").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);

@@ -2371,9 +2371,9 @@ pub fn fix_accessors_presentation(scope: &v8::PinScope<'_, '_>, global: v8::Loca
                         let attr_key = v8::String::new(scope, "defaultRequest").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(presentation_get_1).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get defaultRequest").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(presentation_set_1).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set defaultRequest").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -2395,9 +2395,9 @@ pub fn fix_accessors_presentation(scope: &v8::PinScope<'_, '_>, global: v8::Loca
                         let attr_key = v8::String::new(scope, "onchange").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(presentation_availability_get_2).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onchange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(presentation_availability_set_2).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onchange").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -2419,9 +2419,9 @@ pub fn fix_accessors_presentation(scope: &v8::PinScope<'_, '_>, global: v8::Loca
                         let attr_key = v8::String::new(scope, "onconnect").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(presentation_connection_get_6).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onconnect").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(presentation_connection_set_6).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onconnect").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -2443,9 +2443,9 @@ pub fn fix_accessors_presentation(scope: &v8::PinScope<'_, '_>, global: v8::Loca
                         let attr_key = v8::String::new(scope, "onclose").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(presentation_connection_get_7).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onclose").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(presentation_connection_set_7).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onclose").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -2467,9 +2467,9 @@ pub fn fix_accessors_presentation(scope: &v8::PinScope<'_, '_>, global: v8::Loca
                         let attr_key = v8::String::new(scope, "onterminate").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(presentation_connection_get_8).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onterminate").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(presentation_connection_set_8).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onterminate").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -2491,9 +2491,9 @@ pub fn fix_accessors_presentation(scope: &v8::PinScope<'_, '_>, global: v8::Loca
                         let attr_key = v8::String::new(scope, "binaryType").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(presentation_connection_get_9).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get binaryType").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(presentation_connection_set_9).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set binaryType").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -2515,9 +2515,9 @@ pub fn fix_accessors_presentation(scope: &v8::PinScope<'_, '_>, global: v8::Loca
                         let attr_key = v8::String::new(scope, "onmessage").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(presentation_connection_get_10).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(presentation_connection_set_10).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -2539,9 +2539,9 @@ pub fn fix_accessors_presentation(scope: &v8::PinScope<'_, '_>, global: v8::Loca
                         let attr_key = v8::String::new(scope, "onconnectionavailable").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(presentation_connection_list_get_2).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onconnectionavailable").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(presentation_connection_list_set_2).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onconnectionavailable").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -2563,9 +2563,9 @@ pub fn fix_accessors_presentation(scope: &v8::PinScope<'_, '_>, global: v8::Loca
                         let attr_key = v8::String::new(scope, "onconnectionavailable").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(presentation_request_get_4).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onconnectionavailable").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(presentation_request_set_4).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onconnectionavailable").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);

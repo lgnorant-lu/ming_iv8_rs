@@ -1873,9 +1873,9 @@ pub fn fix_accessors_payment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let attr_key = v8::String::new(scope, "userHint").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(payment_manager_get_1).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get userHint").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(payment_manager_set_1).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set userHint").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -1897,9 +1897,9 @@ pub fn fix_accessors_payment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let attr_key = v8::String::new(scope, "onshippingaddresschange").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(payment_request_get_8).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onshippingaddresschange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(payment_request_set_8).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onshippingaddresschange").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -1921,9 +1921,9 @@ pub fn fix_accessors_payment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let attr_key = v8::String::new(scope, "onshippingoptionchange").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(payment_request_get_9).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onshippingoptionchange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(payment_request_set_9).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onshippingoptionchange").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -1945,9 +1945,9 @@ pub fn fix_accessors_payment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let attr_key = v8::String::new(scope, "onpaymentmethodchange").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(payment_request_get_10).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onpaymentmethodchange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(payment_request_set_10).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onpaymentmethodchange").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
@@ -1969,9 +1969,9 @@ pub fn fix_accessors_payment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let attr_key = v8::String::new(scope, "onpayerdetailchange").unwrap();
                         let g = v8::FunctionTemplate::builder_raw(payment_response_get_12).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onpayerdetailchange").unwrap());
+                        let gf = g.get_function(scope).unwrap();
                         let s = v8::FunctionTemplate::builder_raw(payment_response_set_12).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onpayerdetailchange").unwrap());
-                        let gf = g.get_function(scope).unwrap();
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);

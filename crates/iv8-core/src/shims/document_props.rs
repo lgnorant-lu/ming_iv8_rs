@@ -1550,25 +1550,48 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     } catch(e) {}
 
     // DOMStringMap — set Symbol.toStringTag on dataset
+    // K-008: V8 set_accessor_property getter cannot be called via .call().
+    // dataset is readonly, so fix_accessor_properties doesn't reinstall it.
+    // Create DOMStringMap directly from element attributes instead.
     try {
-        if (typeof HTMLElement !== 'undefined' && HTMLElement.prototype) {
-            var datasetDesc = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'dataset');
-            if (datasetDesc && datasetDesc.get && !datasetDesc.__iv8DatasetPatched) {
-                var origDatasetGet = datasetDesc.get;
-                var wrappedDatasetGet = function dataset() {
-                    var ds = origDatasetGet.call(this);
-                    if (ds && typeof Symbol !== 'undefined' && Symbol.toStringTag && !ds[Symbol.toStringTag]) {
-                        try { Object.defineProperty(ds, Symbol.toStringTag, {
-                            value: 'DOMStringMap', writable: false, configurable: true, enumerable: false
-                        }); } catch(e) {}
+        if (typeof HTMLElement !== 'undefined' && HTMLElement.prototype && !HTMLElement.prototype.__iv8DatasetPatched) {
+            var wrappedDatasetGet = function dataset() {
+                // Receiver check: must be HTMLElement instance
+                if (this !== globalThis) {
+                    var cur = Object.getPrototypeOf(this);
+                    var valid = false;
+                    for (var k = 0; k < 30; k++) {
+                        if (cur === HTMLElement.prototype) { valid = true; break; }
+                        if (!cur) break;
+                        cur = Object.getPrototypeOf(cur);
                     }
-                    return ds;
-                };
-                try { Object.defineProperty(wrappedDatasetGet, 'name', { value: 'get dataset' }); } catch(e) {}
-                Object.defineProperty(HTMLElement.prototype, 'dataset', {
-                    get: wrappedDatasetGet, set: undefined, enumerable: true, configurable: true
-                });
-            }
+                    if (!valid) throw new TypeError('Illegal invocation');
+                }
+                // Create DOMStringMap with correct prototype
+                var ds = Object.create(typeof DOMStringMap !== 'undefined' ? DOMStringMap.prototype : Object.prototype);
+                if (this && this.attributes) {
+                    for (var i = 0; i < this.attributes.length; i++) {
+                        var attr = this.attributes[i];
+                        if (attr.name && attr.name.indexOf('data-') === 0) {
+                            ds[attr.name.slice(5)] = attr.value;
+                        }
+                    }
+                }
+                if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+                    try { Object.defineProperty(ds, Symbol.toStringTag, {
+                        value: 'DOMStringMap', writable: false, configurable: true, enumerable: false
+                    }); } catch(e) {}
+                }
+                return ds;
+            };
+            try { Object.defineProperty(wrappedDatasetGet, 'name', { value: 'get dataset' }); } catch(e) {}
+            try { Object.defineProperty(wrappedDatasetGet, '__iv8_wrapped', { value: true, writable: false, enumerable: false, configurable: false }); } catch(e) {}
+            Object.defineProperty(HTMLElement.prototype, 'dataset', {
+                get: wrappedDatasetGet, set: undefined, enumerable: true, configurable: true
+            });
+            Object.defineProperty(HTMLElement.prototype, '__iv8DatasetPatched', {
+                value: true, writable: true, configurable: true, enumerable: false
+            });
         }
     } catch(e) {}
 
