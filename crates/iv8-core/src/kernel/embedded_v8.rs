@@ -3312,27 +3312,56 @@ impl EmbeddedV8Kernel {
                             } catch(e) {}
 
                             // children: wrap return value with HTMLCollection prototype
+                            // K-008: V8 set_accessor_property getter cannot be called
+                            // via .call(). Create HTMLCollection directly from
+                            // element's childNodes (filtering element nodes only).
                             try {
-                                if (typeof HTMLCollection !== 'undefined' && typeof Element !== 'undefined' && Element.prototype) {
-                                    var origCh = Object.getOwnPropertyDescriptor(Element.prototype, 'children');
-                                    if (origCh && origCh.get) {
-                                        var origGet = origCh.get;
-                                        Object.defineProperty(Element.prototype, 'children', {
-                                            get: function() {
-                                                var ch = origGet.call(this);
-                                                if (ch && !(ch instanceof HTMLCollection) && Array.isArray(ch)) {
-                                                    var hc = Object.create(HTMLCollection.prototype);
-                                                    for (var i = 0; i < ch.length; i++) { hc[i] = ch[i]; }
-                                                    hc.length = ch.length;
-                                                    hc.item = function(i) { return ch[i] || null; };
-                                                    hc.namedItem = function(n) { return ch[n] || null; };
-                                                    return hc;
+                                if (typeof HTMLCollection !== 'undefined' && typeof Element !== 'undefined' && Element.prototype && !Element.prototype.__iv8ChildrenPatched) {
+                                    var wrappedChildrenGet = function children() {
+                                        // Receiver check
+                                        if (this !== globalThis) {
+                                            var cur = Object.getPrototypeOf(this);
+                                            var valid = false;
+                                            for (var k = 0; k < 30; k++) {
+                                                if (cur === Element.prototype) { valid = true; break; }
+                                                if (!cur) break;
+                                                cur = Object.getPrototypeOf(cur);
+                                            }
+                                            if (!valid) throw new TypeError('Illegal invocation');
+                                        }
+                                        // K-008: Cannot call original V8 accessor getter via
+                                        // .call(). Use getElementsByTagName to get child elements.
+                                        var hc = Object.create(HTMLCollection.prototype);
+                                        var idx = 0;
+                                        try {
+                                            var nodes = this.getElementsByTagName('*');
+                                            // Only direct children (getElementsByTagName returns all descendants)
+                                            for (var i = 0; i < nodes.length; i++) {
+                                                if (nodes[i].parentNode === this) {
+                                                    hc[idx] = nodes[i];
+                                                    if (nodes[i].id) hc[nodes[i].id] = nodes[i];
+                                                    idx++;
                                                 }
-                                                return ch;
-                                            },
-                                            enumerable: true, configurable: true
-                                        });
-                                    }
+                                            }
+                                        } catch(e) {}
+                                        hc.length = idx;
+                                        hc.item = function(i) { return hc[i] || null; };
+                                        hc.namedItem = function(n) { return hc[n] || null; };
+                                        if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+                                            try { Object.defineProperty(hc, Symbol.toStringTag, {
+                                                value: 'HTMLCollection', writable: false, configurable: true, enumerable: false
+                                            }); } catch(e) {}
+                                        }
+                                        return hc;
+                                    };
+                                    try { Object.defineProperty(wrappedChildrenGet, 'name', { value: 'get children' }); } catch(e) {}
+                                    try { Object.defineProperty(wrappedChildrenGet, '__iv8_wrapped', { value: true, writable: false, enumerable: false, configurable: false }); } catch(e) {}
+                                    Object.defineProperty(Element.prototype, 'children', {
+                                        get: wrappedChildrenGet, set: undefined, enumerable: true, configurable: true
+                                    });
+                                    Object.defineProperty(Element.prototype, '__iv8ChildrenPatched', {
+                                        value: true, writable: true, configurable: true, enumerable: false
+                                    });
                                 }
                             } catch(e) {}
                         })();
