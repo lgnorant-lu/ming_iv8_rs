@@ -219,7 +219,26 @@ pub(crate) unsafe extern "C" fn css_numeric_array_op_2(_info: *const v8::Functio
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for CSSNumericArray.
@@ -425,14 +444,17 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_get_2(_info: *const v8::Funct
             let __ctor_name = v8::String::new(scope, "Element").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -507,14 +529,17 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_get_3(_info: *const v8::Funct
             let __ctor_name = v8::String::new(scope, "Element").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -648,7 +673,26 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_op_5(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSPseudoElement").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_pseudo_element_op_6(_info: *const v8::FunctionCallbackInfo) {
@@ -766,7 +810,26 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_op_7(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "DOMQuad").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_pseudo_element_op_8(_info: *const v8::FunctionCallbackInfo) {
@@ -828,7 +891,26 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_op_8(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "DOMQuad").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_pseudo_element_op_9(_info: *const v8::FunctionCallbackInfo) {
@@ -890,7 +972,26 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_op_9(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "DOMPoint").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for CSSPseudoElement.
@@ -1167,14 +1268,17 @@ pub(crate) unsafe extern "C" fn css_rule_get_2(_info: *const v8::FunctionCallbac
             let __ctor_name = v8::String::new(scope, "CSSRule").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -1249,14 +1353,17 @@ pub(crate) unsafe extern "C" fn css_rule_get_3(_info: *const v8::FunctionCallbac
             let __ctor_name = v8::String::new(scope, "CSSStyleSheet").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -1541,7 +1648,26 @@ pub(crate) unsafe extern "C" fn css_rule_list_op_1(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSRule").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_rule_list_get_2(_info: *const v8::FunctionCallbackInfo) {
@@ -2211,14 +2337,17 @@ pub(crate) unsafe extern "C" fn css_style_declaration_get_8(_info: *const v8::Fu
             let __ctor_name = v8::String::new(scope, "CSSRule").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -2419,7 +2548,26 @@ pub(crate) unsafe extern "C" fn css_style_value_op_2(_info: *const v8::FunctionC
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSStyleValue").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_style_value_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -2763,7 +2911,26 @@ pub(crate) unsafe extern "C" fn css_transform_component_op_3(_info: *const v8::F
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "DOMMatrix").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for CSSTransformComponent.
@@ -3000,14 +3167,17 @@ pub(crate) unsafe extern "C" fn css_variable_reference_value_get_2(_info: *const
             let __ctor_name = v8::String::new(scope, "CSSUnparsedValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -3947,14 +4117,17 @@ pub(crate) unsafe extern "C" fn screen_get_7(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "ScreenOrientation").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -4437,14 +4610,17 @@ pub(crate) unsafe extern "C" fn style_sheet_get_3(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "Element").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -4519,14 +4695,17 @@ pub(crate) unsafe extern "C" fn style_sheet_get_4(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "CSSStyleSheet").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -4667,14 +4846,17 @@ pub(crate) unsafe extern "C" fn style_sheet_get_6(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "MediaList").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -5000,7 +5182,26 @@ pub(crate) unsafe extern "C" fn style_sheet_list_op_1(_info: *const v8::Function
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSStyleSheet").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn style_sheet_list_get_2(_info: *const v8::FunctionCallbackInfo) {
@@ -8472,14 +8673,17 @@ pub(crate) unsafe extern "C" fn css_custom_media_rule_get_2(_info: *const v8::Fu
             let __ctor_name = v8::String::new(scope, "CustomMediaQuery").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -8590,14 +8794,17 @@ pub(crate) unsafe extern "C" fn css_font_face_rule_get_1(_info: *const v8::Funct
             let __ctor_name = v8::String::new(scope, "CSSFontFaceDescriptors").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -8889,14 +9096,17 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_2(_info: *const
             let __ctor_name = v8::String::new(scope, "CSSFontFeatureValuesMap").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -8971,14 +9181,17 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_3(_info: *const
             let __ctor_name = v8::String::new(scope, "CSSFontFeatureValuesMap").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -9053,14 +9266,17 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_4(_info: *const
             let __ctor_name = v8::String::new(scope, "CSSFontFeatureValuesMap").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -9135,14 +9351,17 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_5(_info: *const
             let __ctor_name = v8::String::new(scope, "CSSFontFeatureValuesMap").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -9217,14 +9436,17 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_6(_info: *const
             let __ctor_name = v8::String::new(scope, "CSSFontFeatureValuesMap").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -9299,14 +9521,17 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_7(_info: *const
             let __ctor_name = v8::String::new(scope, "CSSFontFeatureValuesMap").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -9381,14 +9606,17 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_8(_info: *const
             let __ctor_name = v8::String::new(scope, "CSSFontFeatureValuesMap").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -9857,14 +10085,17 @@ pub(crate) unsafe extern "C" fn css_function_declarations_get_1(_info: *const v8
             let __ctor_name = v8::String::new(scope, "CSSFunctionDescriptors").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -10030,14 +10261,17 @@ pub(crate) unsafe extern "C" fn css_grouping_rule_get_1(_info: *const v8::Functi
             let __ctor_name = v8::String::new(scope, "CSSRuleList").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -10345,14 +10579,17 @@ pub(crate) unsafe extern "C" fn css_import_rule_get_2(_info: *const v8::Function
             let __ctor_name = v8::String::new(scope, "MediaList").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -10487,14 +10724,17 @@ pub(crate) unsafe extern "C" fn css_import_rule_get_3(_info: *const v8::Function
             let __ctor_name = v8::String::new(scope, "CSSStyleSheet").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -10886,14 +11126,17 @@ pub(crate) unsafe extern "C" fn css_keyframe_rule_get_2(_info: *const v8::Functi
             let __ctor_name = v8::String::new(scope, "CSSStyleProperties").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -11194,14 +11437,17 @@ pub(crate) unsafe extern "C" fn css_keyframes_rule_get_2(_info: *const v8::Funct
             let __ctor_name = v8::String::new(scope, "CSSRuleList").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -11335,7 +11581,26 @@ pub(crate) unsafe extern "C" fn css_keyframes_rule_op_4(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSKeyframeRule").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_keyframes_rule_op_5(_info: *const v8::FunctionCallbackInfo) {
@@ -11521,7 +11786,26 @@ pub(crate) unsafe extern "C" fn css_keyframes_rule_op_7(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSKeyframeRule").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for CSSKeyframesRule.
@@ -11824,14 +12108,17 @@ pub(crate) unsafe extern "C" fn css_margin_rule_get_2(_info: *const v8::Function
             let __ctor_name = v8::String::new(scope, "CSSStyleDeclaration").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -12172,14 +12459,17 @@ pub(crate) unsafe extern "C" fn css_nested_declarations_get_1(_info: *const v8::
             let __ctor_name = v8::String::new(scope, "CSSStyleProperties").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -12411,14 +12701,17 @@ pub(crate) unsafe extern "C" fn css_position_try_rule_get_2(_info: *const v8::Fu
             let __ctor_name = v8::String::new(scope, "CSSPositionTryDescriptors").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -30380,7 +30673,26 @@ pub(crate) unsafe extern "C" fn css_color_value_op_1(_info: *const v8::FunctionC
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSColorValue").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for CSSColorValue.
@@ -30647,7 +30959,26 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_1(_info: *const v8::Functio
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_numeric_value_op_2(_info: *const v8::FunctionCallbackInfo) {
@@ -30703,7 +31034,26 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_2(_info: *const v8::Functio
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_numeric_value_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -30759,7 +31109,26 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_3(_info: *const v8::Functio
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_numeric_value_op_4(_info: *const v8::FunctionCallbackInfo) {
@@ -30815,7 +31184,26 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_4(_info: *const v8::Functio
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_numeric_value_op_5(_info: *const v8::FunctionCallbackInfo) {
@@ -30871,7 +31259,26 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_5(_info: *const v8::Functio
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_numeric_value_op_6(_info: *const v8::FunctionCallbackInfo) {
@@ -30927,7 +31334,26 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_6(_info: *const v8::Functio
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_numeric_value_op_7(_info: *const v8::FunctionCallbackInfo) {
@@ -31045,7 +31471,26 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_8(_info: *const v8::Functio
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSUnitValue").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_numeric_value_op_9(_info: *const v8::FunctionCallbackInfo) {
@@ -31101,7 +31546,26 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_9(_info: *const v8::Functio
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSMathSum").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_numeric_value_op_10(_info: *const v8::FunctionCallbackInfo) {
@@ -31157,7 +31621,26 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_10(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSNumericType").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_numeric_value_op_11(_info: *const v8::FunctionCallbackInfo) {
@@ -31219,7 +31702,26 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_11(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for CSSNumericValue.
@@ -31449,7 +31951,26 @@ pub(crate) unsafe extern "C" fn css_transform_value_op_2(_info: *const v8::Funct
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSTransformComponent").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_transform_value_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -31633,7 +32154,26 @@ pub(crate) unsafe extern "C" fn css_transform_value_op_5(_info: *const v8::Funct
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "DOMMatrix").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for CSSTransformValue.
@@ -31818,7 +32358,26 @@ pub(crate) unsafe extern "C" fn css_unparsed_value_op_2(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "CSSUnparsedSegment").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn css_unparsed_value_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -31992,14 +32551,17 @@ pub(crate) unsafe extern "C" fn css_matrix_component_get_1(_info: *const v8::Fun
             let __ctor_name = v8::String::new(scope, "DOMMatrix").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -32165,14 +32727,17 @@ pub(crate) unsafe extern "C" fn css_perspective_get_1(_info: *const v8::Function
             let __ctor_name = v8::String::new(scope, "CSSPerspectiveValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -32338,14 +32903,17 @@ pub(crate) unsafe extern "C" fn css_rotate_get_1(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -32480,14 +33048,17 @@ pub(crate) unsafe extern "C" fn css_rotate_get_2(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -32622,14 +33193,17 @@ pub(crate) unsafe extern "C" fn css_rotate_get_3(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -32764,14 +33338,17 @@ pub(crate) unsafe extern "C" fn css_rotate_get_4(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -32964,14 +33541,17 @@ pub(crate) unsafe extern "C" fn css_scale_get_1(_info: *const v8::FunctionCallba
             let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -33106,14 +33686,17 @@ pub(crate) unsafe extern "C" fn css_scale_get_2(_info: *const v8::FunctionCallba
             let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -33248,14 +33831,17 @@ pub(crate) unsafe extern "C" fn css_scale_get_3(_info: *const v8::FunctionCallba
             let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -33439,14 +34025,17 @@ pub(crate) unsafe extern "C" fn css_skew_get_1(_info: *const v8::FunctionCallbac
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -33581,14 +34170,17 @@ pub(crate) unsafe extern "C" fn css_skew_get_2(_info: *const v8::FunctionCallbac
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -33763,14 +34355,17 @@ pub(crate) unsafe extern "C" fn css_skew_x_get_1(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -33936,14 +34531,17 @@ pub(crate) unsafe extern "C" fn css_skew_y_get_1(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -34109,14 +34707,17 @@ pub(crate) unsafe extern "C" fn css_translate_get_1(_info: *const v8::FunctionCa
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -34251,14 +34852,17 @@ pub(crate) unsafe extern "C" fn css_translate_get_2(_info: *const v8::FunctionCa
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -34393,14 +34997,17 @@ pub(crate) unsafe extern "C" fn css_translate_get_3(_info: *const v8::FunctionCa
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -35522,14 +36129,17 @@ pub(crate) unsafe extern "C" fn css_style_sheet_get_1(_info: *const v8::Function
             let __ctor_name = v8::String::new(scope, "CSSRule").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -35604,14 +36214,17 @@ pub(crate) unsafe extern "C" fn css_style_sheet_get_2(_info: *const v8::Function
             let __ctor_name = v8::String::new(scope, "CSSRuleList").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -35887,14 +36500,17 @@ pub(crate) unsafe extern "C" fn css_style_sheet_get_7(_info: *const v8::Function
             let __ctor_name = v8::String::new(scope, "CSSRuleList").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -37124,14 +37740,17 @@ pub(crate) unsafe extern "C" fn css_page_rule_get_2(_info: *const v8::FunctionCa
             let __ctor_name = v8::String::new(scope, "CSSPageDescriptors").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -37622,14 +38241,17 @@ pub(crate) unsafe extern "C" fn css_style_rule_get_2(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "CSSStyleProperties").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -37764,14 +38386,17 @@ pub(crate) unsafe extern "C" fn css_style_rule_get_3(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "StylePropertyMap").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -37988,14 +38613,17 @@ pub(crate) unsafe extern "C" fn css_color_get_1(_info: *const v8::FunctionCallba
             let __ctor_name = v8::String::new(scope, "CSSKeywordish").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -38130,14 +38758,17 @@ pub(crate) unsafe extern "C" fn css_color_get_2(_info: *const v8::FunctionCallba
             let __ctor_name = v8::String::new(scope, "ObservableArray<CSSColorPercent>").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -38272,14 +38903,17 @@ pub(crate) unsafe extern "C" fn css_color_get_3(_info: *const v8::FunctionCallba
             let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -38463,14 +39097,17 @@ pub(crate) unsafe extern "C" fn csshsl_get_1(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorAngle").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -38605,14 +39242,17 @@ pub(crate) unsafe extern "C" fn csshsl_get_2(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -38747,14 +39387,17 @@ pub(crate) unsafe extern "C" fn csshsl_get_3(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -38889,14 +39532,17 @@ pub(crate) unsafe extern "C" fn csshsl_get_4(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -39089,14 +39735,17 @@ pub(crate) unsafe extern "C" fn csshwb_get_1(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -39231,14 +39880,17 @@ pub(crate) unsafe extern "C" fn csshwb_get_2(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -39373,14 +40025,17 @@ pub(crate) unsafe extern "C" fn csshwb_get_3(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -39515,14 +40170,17 @@ pub(crate) unsafe extern "C" fn csshwb_get_4(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -39715,14 +40373,17 @@ pub(crate) unsafe extern "C" fn csslch_get_1(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -39857,14 +40518,17 @@ pub(crate) unsafe extern "C" fn csslch_get_2(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -39999,14 +40663,17 @@ pub(crate) unsafe extern "C" fn csslch_get_3(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorAngle").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -40141,14 +40808,17 @@ pub(crate) unsafe extern "C" fn csslch_get_4(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -40341,14 +41011,17 @@ pub(crate) unsafe extern "C" fn css_lab_get_1(_info: *const v8::FunctionCallback
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -40483,14 +41156,17 @@ pub(crate) unsafe extern "C" fn css_lab_get_2(_info: *const v8::FunctionCallback
             let __ctor_name = v8::String::new(scope, "CSSColorNumber").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -40625,14 +41301,17 @@ pub(crate) unsafe extern "C" fn css_lab_get_3(_info: *const v8::FunctionCallback
             let __ctor_name = v8::String::new(scope, "CSSColorNumber").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -40767,14 +41446,17 @@ pub(crate) unsafe extern "C" fn css_lab_get_4(_info: *const v8::FunctionCallback
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -40967,14 +41649,17 @@ pub(crate) unsafe extern "C" fn cssoklch_get_1(_info: *const v8::FunctionCallbac
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -41109,14 +41794,17 @@ pub(crate) unsafe extern "C" fn cssoklch_get_2(_info: *const v8::FunctionCallbac
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -41251,14 +41939,17 @@ pub(crate) unsafe extern "C" fn cssoklch_get_3(_info: *const v8::FunctionCallbac
             let __ctor_name = v8::String::new(scope, "CSSColorAngle").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -41393,14 +42084,17 @@ pub(crate) unsafe extern "C" fn cssoklch_get_4(_info: *const v8::FunctionCallbac
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -41593,14 +42287,17 @@ pub(crate) unsafe extern "C" fn cssok_lab_get_1(_info: *const v8::FunctionCallba
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -41735,14 +42432,17 @@ pub(crate) unsafe extern "C" fn cssok_lab_get_2(_info: *const v8::FunctionCallba
             let __ctor_name = v8::String::new(scope, "CSSColorNumber").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -41877,14 +42577,17 @@ pub(crate) unsafe extern "C" fn cssok_lab_get_3(_info: *const v8::FunctionCallba
             let __ctor_name = v8::String::new(scope, "CSSColorNumber").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -42019,14 +42722,17 @@ pub(crate) unsafe extern "C" fn cssok_lab_get_4(_info: *const v8::FunctionCallba
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -42219,14 +42925,17 @@ pub(crate) unsafe extern "C" fn cssrgb_get_1(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorRGBComp").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -42361,14 +43070,17 @@ pub(crate) unsafe extern "C" fn cssrgb_get_2(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorRGBComp").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -42503,14 +43215,17 @@ pub(crate) unsafe extern "C" fn cssrgb_get_3(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorRGBComp").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -42645,14 +43360,17 @@ pub(crate) unsafe extern "C" fn cssrgb_get_4(_info: *const v8::FunctionCallbackI
             let __ctor_name = v8::String::new(scope, "CSSColorPercent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -43601,14 +44319,17 @@ pub(crate) unsafe extern "C" fn css_media_rule_get_1(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "MediaList").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -43942,14 +44663,17 @@ pub(crate) unsafe extern "C" fn css_math_clamp_get_1(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -44024,14 +44748,17 @@ pub(crate) unsafe extern "C" fn css_math_clamp_get_2(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -44106,14 +44833,17 @@ pub(crate) unsafe extern "C" fn css_math_clamp_get_3(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -44231,14 +44961,17 @@ pub(crate) unsafe extern "C" fn css_math_invert_get_1(_info: *const v8::Function
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -44342,14 +45075,17 @@ pub(crate) unsafe extern "C" fn css_math_max_get_1(_info: *const v8::FunctionCal
             let __ctor_name = v8::String::new(scope, "CSSNumericArray").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -44453,14 +45189,17 @@ pub(crate) unsafe extern "C" fn css_math_min_get_1(_info: *const v8::FunctionCal
             let __ctor_name = v8::String::new(scope, "CSSNumericArray").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -44564,14 +45303,17 @@ pub(crate) unsafe extern "C" fn css_math_negate_get_1(_info: *const v8::Function
             let __ctor_name = v8::String::new(scope, "CSSNumericValue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -44675,14 +45417,17 @@ pub(crate) unsafe extern "C" fn css_math_product_get_1(_info: *const v8::Functio
             let __ctor_name = v8::String::new(scope, "CSSNumericArray").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -44786,14 +45531,17 @@ pub(crate) unsafe extern "C" fn css_math_sum_get_1(_info: *const v8::FunctionCal
             let __ctor_name = v8::String::new(scope, "CSSNumericArray").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }

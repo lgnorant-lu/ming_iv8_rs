@@ -2440,7 +2440,26 @@ pub(crate) unsafe extern "C" fn chrome_i18n_op_3(_info: *const v8::FunctionCallb
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeI18n") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_i18n_op_4(_info: *const v8::FunctionCallbackInfo) {
@@ -2455,7 +2474,26 @@ pub(crate) unsafe extern "C" fn chrome_i18n_op_4(_info: *const v8::FunctionCallb
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for ChromeI18n.
@@ -5012,14 +5050,17 @@ pub(crate) unsafe extern "C" fn chrome_port_get_2(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -5154,14 +5195,17 @@ pub(crate) unsafe extern "C" fn chrome_port_get_3(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -5664,14 +5708,17 @@ pub(crate) unsafe extern "C" fn chrome_runtime_get_1(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -5806,14 +5853,17 @@ pub(crate) unsafe extern "C" fn chrome_runtime_get_2(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -5948,14 +5998,17 @@ pub(crate) unsafe extern "C" fn chrome_runtime_get_3(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -6090,14 +6143,17 @@ pub(crate) unsafe extern "C" fn chrome_runtime_get_4(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -6232,14 +6288,17 @@ pub(crate) unsafe extern "C" fn chrome_runtime_get_5(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -6374,14 +6433,17 @@ pub(crate) unsafe extern "C" fn chrome_runtime_get_6(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -6516,14 +6578,17 @@ pub(crate) unsafe extern "C" fn chrome_runtime_get_7(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -6658,14 +6723,17 @@ pub(crate) unsafe extern "C" fn chrome_runtime_get_8(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -6800,14 +6868,17 @@ pub(crate) unsafe extern "C" fn chrome_runtime_get_9(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -7014,7 +7085,26 @@ pub(crate) unsafe extern "C" fn chrome_runtime_op_11(_info: *const v8::FunctionC
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_runtime_op_12(_info: *const v8::FunctionCallbackInfo) {
@@ -7188,7 +7278,26 @@ pub(crate) unsafe extern "C" fn chrome_runtime_op_14(_info: *const v8::FunctionC
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "ChromePort").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_runtime_op_15(_info: *const v8::FunctionCallbackInfo) {
@@ -7250,7 +7359,26 @@ pub(crate) unsafe extern "C" fn chrome_runtime_op_15(_info: *const v8::FunctionC
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "ChromePort").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_runtime_op_16(_info: *const v8::FunctionCallbackInfo) {
@@ -7258,7 +7386,26 @@ pub(crate) unsafe extern "C" fn chrome_runtime_op_16(_info: *const v8::FunctionC
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_runtime_op_17(_info: *const v8::FunctionCallbackInfo) {
@@ -7314,7 +7461,26 @@ pub(crate) unsafe extern "C" fn chrome_runtime_op_17(_info: *const v8::FunctionC
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "WindowProxy").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_runtime_op_18(_info: *const v8::FunctionCallbackInfo) {
@@ -7322,7 +7488,26 @@ pub(crate) unsafe extern "C" fn chrome_runtime_op_18(_info: *const v8::FunctionC
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_runtime_op_19(_info: *const v8::FunctionCallbackInfo) {
@@ -7337,7 +7522,26 @@ pub(crate) unsafe extern "C" fn chrome_runtime_op_19(_info: *const v8::FunctionC
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_runtime_op_20(_info: *const v8::FunctionCallbackInfo) {
@@ -7401,7 +7605,26 @@ pub(crate) unsafe extern "C" fn chrome_runtime_op_21(_info: *const v8::FunctionC
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeRuntime") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_runtime_op_22(_info: *const v8::FunctionCallbackInfo) {
@@ -8029,14 +8252,17 @@ pub(crate) unsafe extern "C" fn chrome_storage_get_1(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeStorageArea").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -8171,14 +8397,17 @@ pub(crate) unsafe extern "C" fn chrome_storage_get_2(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeStorageArea").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -8313,14 +8542,17 @@ pub(crate) unsafe extern "C" fn chrome_storage_get_3(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeStorageArea").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -8455,14 +8687,17 @@ pub(crate) unsafe extern "C" fn chrome_storage_get_4(_info: *const v8::FunctionC
             let __ctor_name = v8::String::new(scope, "ChromeStorageArea").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -8591,7 +8826,26 @@ pub(crate) unsafe extern "C" fn chrome_storage_area_op_1(_info: *const v8::Funct
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeStorageArea") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_storage_area_op_2(_info: *const v8::FunctionCallbackInfo) {
@@ -8606,7 +8860,26 @@ pub(crate) unsafe extern "C" fn chrome_storage_area_op_2(_info: *const v8::Funct
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_storage_area_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -8621,7 +8894,26 @@ pub(crate) unsafe extern "C" fn chrome_storage_area_op_3(_info: *const v8::Funct
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_storage_area_op_4(_info: *const v8::FunctionCallbackInfo) {
@@ -8629,7 +8921,26 @@ pub(crate) unsafe extern "C" fn chrome_storage_area_op_4(_info: *const v8::Funct
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeStorageArea") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_storage_area_op_5(_info: *const v8::FunctionCallbackInfo) {
@@ -8637,7 +8948,26 @@ pub(crate) unsafe extern "C" fn chrome_storage_area_op_5(_info: *const v8::Funct
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ChromeStorageArea") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "Promise").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn chrome_storage_area_get_6(_info: *const v8::FunctionCallbackInfo) {
@@ -8706,14 +9036,17 @@ pub(crate) unsafe extern "C" fn chrome_storage_area_get_6(_info: *const v8::Func
             let __ctor_name = v8::String::new(scope, "ChromeEvent").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }

@@ -67,7 +67,7 @@ pub(crate) unsafe extern "C" fn gpu_op_2(_info: *const v8::FunctionCallbackInfo)
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    rv.set(v8::String::new(scope, "").unwrap().into());
 }
 
 pub(crate) unsafe extern "C" fn gpu_get_3(_info: *const v8::FunctionCallbackInfo) {
@@ -136,14 +136,17 @@ pub(crate) unsafe extern "C" fn gpu_get_3(_info: *const v8::FunctionCallbackInfo
             let __ctor_name = v8::String::new(scope, "WGSLLanguageFeatures").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -258,14 +261,17 @@ pub(crate) unsafe extern "C" fn gpu_adapter_get_1(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "GPUSupportedFeatures").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -340,14 +346,17 @@ pub(crate) unsafe extern "C" fn gpu_adapter_get_2(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "GPUSupportedLimits").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -422,14 +431,17 @@ pub(crate) unsafe extern "C" fn gpu_adapter_get_3(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "GPUAdapterInfo").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -1397,14 +1409,17 @@ pub(crate) unsafe extern "C" fn gpu_buffer_get_1(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "GPUSize64Out").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -1479,14 +1494,17 @@ pub(crate) unsafe extern "C" fn gpu_buffer_get_2(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "GPUFlagsConstant").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -2013,14 +2031,17 @@ pub(crate) unsafe extern "C" fn gpu_canvas_context_get_1(_info: *const v8::Funct
             let __ctor_name = v8::String::new(scope, "HTMLCanvasElement").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -2200,7 +2221,26 @@ pub(crate) unsafe extern "C" fn gpu_canvas_context_op_4(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUCanvasConfiguration").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_canvas_context_op_5(_info: *const v8::FunctionCallbackInfo) {
@@ -2256,7 +2296,26 @@ pub(crate) unsafe extern "C" fn gpu_canvas_context_op_5(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUTexture").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for GPUCanvasContext.
@@ -2526,7 +2585,26 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_1(_info: *const v8::Funct
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPURenderPassEncoder").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_command_encoder_op_2(_info: *const v8::FunctionCallbackInfo) {
@@ -2582,7 +2660,26 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_2(_info: *const v8::Funct
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUComputePassEncoder").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_command_encoder_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -3072,7 +3169,26 @@ pub(crate) unsafe extern "C" fn gpu_command_encoder_op_10(_info: *const v8::Func
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUCommandBuffer").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_command_encoder_get_11(_info: *const v8::FunctionCallbackInfo) {
@@ -5006,7 +5122,26 @@ pub(crate) unsafe extern "C" fn gpu_compute_pipeline_op_2(_info: *const v8::Func
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUBindGroupLayout").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for GPUComputePipeline.
@@ -5797,14 +5932,17 @@ pub(crate) unsafe extern "C" fn gpu_query_set_get_3(_info: *const v8::FunctionCa
             let __ctor_name = v8::String::new(scope, "GPUSize32Out").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -6640,7 +6778,26 @@ pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_op_1(_info: *const v8:
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPURenderBundle").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_render_bundle_encoder_get_2(_info: *const v8::FunctionCallbackInfo) {
@@ -9349,7 +9506,26 @@ pub(crate) unsafe extern "C" fn gpu_render_pipeline_op_2(_info: *const v8::Funct
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUBindGroupLayout").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 /// Create FunctionTemplate for GPURenderPipeline.
@@ -12446,7 +12622,26 @@ pub(crate) unsafe extern "C" fn gpu_texture_op_1(_info: *const v8::FunctionCallb
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUTextureView").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_texture_op_2(_info: *const v8::FunctionCallbackInfo) {
@@ -12571,14 +12766,17 @@ pub(crate) unsafe extern "C" fn gpu_texture_get_3(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "GPUIntegerCoordinateOut").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -12653,14 +12851,17 @@ pub(crate) unsafe extern "C" fn gpu_texture_get_4(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "GPUIntegerCoordinateOut").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -12735,14 +12936,17 @@ pub(crate) unsafe extern "C" fn gpu_texture_get_5(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "GPUIntegerCoordinateOut").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -12817,14 +13021,17 @@ pub(crate) unsafe extern "C" fn gpu_texture_get_6(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "GPUIntegerCoordinateOut").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -12899,14 +13106,17 @@ pub(crate) unsafe extern "C" fn gpu_texture_get_7(_info: *const v8::FunctionCall
             let __ctor_name = v8::String::new(scope, "GPUSize32Out").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -13113,14 +13323,17 @@ pub(crate) unsafe extern "C" fn gpu_texture_get_10(_info: *const v8::FunctionCal
             let __ctor_name = v8::String::new(scope, "GPUFlagsConstant").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -13750,14 +13963,17 @@ pub(crate) unsafe extern "C" fn gpu_device_get_1(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "GPUSupportedFeatures").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -13832,14 +14048,17 @@ pub(crate) unsafe extern "C" fn gpu_device_get_2(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "GPUSupportedLimits").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -13914,14 +14133,17 @@ pub(crate) unsafe extern "C" fn gpu_device_get_3(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "GPUAdapterInfo").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -13996,14 +14218,17 @@ pub(crate) unsafe extern "C" fn gpu_device_get_4(_info: *const v8::FunctionCallb
             let __ctor_name = v8::String::new(scope, "GPUQueue").unwrap();
             let __ctx = scope.get_current_context();
             let __global = __ctx.global(scope);
-            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {
-                if __ctor.is_object() {
+            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+                if __ctor_val.is_function() {
+                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
                     let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
+                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                        if __proto.is_object() {
+                            let __obj = v8::Object::new(scope);
+                            __obj.set_prototype(scope, __proto);
+                            rv.set(__obj.into());
+                            return;
+                        }
                     }
                 }
             }
@@ -14127,7 +14352,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_6(_info: *const v8::FunctionCallba
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUBuffer").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_7(_info: *const v8::FunctionCallbackInfo) {
@@ -14189,7 +14433,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_7(_info: *const v8::FunctionCallba
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUTexture").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_8(_info: *const v8::FunctionCallbackInfo) {
@@ -14245,7 +14508,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_8(_info: *const v8::FunctionCallba
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUSampler").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_9(_info: *const v8::FunctionCallbackInfo) {
@@ -14307,7 +14589,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_9(_info: *const v8::FunctionCallba
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUExternalTexture").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_10(_info: *const v8::FunctionCallbackInfo) {
@@ -14369,7 +14670,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_10(_info: *const v8::FunctionCallb
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUBindGroupLayout").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_11(_info: *const v8::FunctionCallbackInfo) {
@@ -14431,7 +14751,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_11(_info: *const v8::FunctionCallb
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUPipelineLayout").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_12(_info: *const v8::FunctionCallbackInfo) {
@@ -14493,7 +14832,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_12(_info: *const v8::FunctionCallb
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUBindGroup").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_13(_info: *const v8::FunctionCallbackInfo) {
@@ -14555,7 +14913,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_13(_info: *const v8::FunctionCallb
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUShaderModule").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_14(_info: *const v8::FunctionCallbackInfo) {
@@ -14617,7 +14994,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_14(_info: *const v8::FunctionCallb
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUComputePipeline").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_15(_info: *const v8::FunctionCallbackInfo) {
@@ -14679,7 +15075,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_15(_info: *const v8::FunctionCallb
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPURenderPipeline").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_16(_info: *const v8::FunctionCallbackInfo) {
@@ -14765,7 +15180,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_18(_info: *const v8::FunctionCallb
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUCommandEncoder").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_19(_info: *const v8::FunctionCallbackInfo) {
@@ -14827,7 +15261,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_19(_info: *const v8::FunctionCallb
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPURenderBundleEncoder").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_op_20(_info: *const v8::FunctionCallbackInfo) {
@@ -14889,7 +15342,26 @@ pub(crate) unsafe extern "C" fn gpu_device_op_20(_info: *const v8::FunctionCallb
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    {
+        let __ctor_name = v8::String::new(scope, "GPUQuerySet").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
 }
 
 pub(crate) unsafe extern "C" fn gpu_device_get_21(_info: *const v8::FunctionCallbackInfo) {

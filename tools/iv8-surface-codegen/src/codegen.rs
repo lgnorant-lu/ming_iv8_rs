@@ -526,7 +526,7 @@ fn generate_callbacks(def: &Definition, fn_name: &str, enum_names: &std::collect
                 out.push_str("        rv.set(v8::String::new(scope, \"\").unwrap().into());\n");
             } else if is_interface_type(type_name) {
                 out.push_str(&format!(
-                    "        {{\n            let __ctor_name = v8::String::new(scope, \"{}\").unwrap();\n            let __ctx = scope.get_current_context();\n            let __global = __ctx.global(scope);\n            if let Some(__ctor) = __global.get(scope, __ctor_name.into()) {{\n                if __ctor.is_object() {{\n                    let __proto_key = v8::String::new(scope, \"prototype\").unwrap();\n                    if let Some(__proto) = __ctor.to_object(scope).and_then(|o| o.get(scope, __proto_key.into())) {{\n                        let __obj = v8::Object::new(scope);\n                        __obj.set_prototype(scope, __proto);\n                        rv.set(__obj.into());\n                        return;\n                    }}\n                }}\n            }}\n            rv.set(v8::Object::new(scope).into());\n        }}\n",
+                    "        {{\n            let __ctor_name = v8::String::new(scope, \"{}\").unwrap();\n            let __ctx = scope.get_current_context();\n            let __global = __ctx.global(scope);\n            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {{\n                if __ctor_val.is_function() {{\n                    let __ctor = unsafe {{ v8::Local::<v8::Function>::cast_unchecked(__ctor_val) }};\n                    let __proto_key = v8::String::new(scope, \"prototype\").unwrap();\n                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {{\n                        if __proto.is_object() {{\n                            let __obj = v8::Object::new(scope);\n                            __obj.set_prototype(scope, __proto);\n                            rv.set(__obj.into());\n                            return;\n                        }}\n                    }}\n                }}\n            }}\n            rv.set(v8::Object::new(scope).into());\n        }}\n",
                     type_name
                 ));
             } else {
@@ -605,7 +605,17 @@ fn generate_callbacks(def: &Definition, fn_name: &str, enum_names: &std::collect
             out.push_str(
                 "    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);\n",
             );
-            out.push_str(&format!("    rv.set({});\n", tm.default_value));
+            let bare_ret = ret_name.trim_end_matches('?').trim();
+            if enum_names.contains(bare_ret) {
+                out.push_str("    rv.set(v8::String::new(scope, \"\").unwrap().into());\n");
+            } else if is_interface_type(ret_name) {
+                out.push_str(&format!(
+                    "    {{\n        let __ctor_name = v8::String::new(scope, \"{}\").unwrap();\n        let __ctx = scope.get_current_context();\n        let __global = __ctx.global(scope);\n        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {{\n            if __ctor_val.is_function() {{\n                let __ctor = unsafe {{ v8::Local::<v8::Function>::cast_unchecked(__ctor_val) }};\n                let __proto_key = v8::String::new(scope, \"prototype\").unwrap();\n                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {{\n                    if __proto.is_object() {{\n                        let __obj = v8::Object::new(scope);\n                        __obj.set_prototype(scope, __proto);\n                        rv.set(__obj.into());\n                        return;\n                    }}\n                }}\n            }}\n        }}\n        rv.set(v8::undefined(scope).into());\n    }}\n",
+                    ret_name
+                ));
+            } else {
+                out.push_str(&format!("    rv.set({});\n", tm.default_value));
+            }
             out.push_str("}\n\n");
         }
     }
