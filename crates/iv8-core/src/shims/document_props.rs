@@ -1101,11 +1101,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
-    // window.close — no-op in non-browser context
-    if (typeof globalThis.close === 'undefined') {
-        globalThis.close = function close() {};
-        try { Object.defineProperty(globalThis.close, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
-    }
+    // window.close — installed by window_extras.rs _winOps with receiver check
 
     // window.external — legacy IE API. Must be instanceof External.
     // Real Chrome has window.external as an External instance.
@@ -1131,12 +1127,12 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     try {
         if (typeof External !== 'undefined' && External.prototype) {
             if (!External.prototype.AddSearchProvider) {
-                External.prototype.AddSearchProvider = function AddSearchProvider() {};
+                External.prototype.AddSearchProvider = function AddSearchProvider() { if (this == null) throw new TypeError('Illegal invocation'); };
                 try { Object.defineProperty(External.prototype.AddSearchProvider, 'name', { value: 'AddSearchProvider' }); } catch(e) {}
                 try { Object.defineProperty(External.prototype.AddSearchProvider, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
             }
             if (!External.prototype.IsSearchProviderInstalled) {
-                External.prototype.IsSearchProviderInstalled = function IsSearchProviderInstalled() { return 0; };
+                External.prototype.IsSearchProviderInstalled = function IsSearchProviderInstalled() { if (this == null) throw new TypeError('Illegal invocation'); return 0; };
                 try { Object.defineProperty(External.prototype.IsSearchProviderInstalled, 'name', { value: 'IsSearchProviderInstalled' }); } catch(e) {}
                 try { Object.defineProperty(External.prototype.IsSearchProviderInstalled, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
             }
@@ -1243,6 +1239,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         var _origPostMessage = globalThis.postMessage;
         if (_origPostMessage && typeof _origPostMessage === 'function') {
             var _wrappedPostMessage = function postMessage(message, targetOrigin, transfer) {
+                if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation');
                 if (arguments.length < 2) throw new TypeError('2 argument(s) required, but only ' + arguments.length + ' present.');
                 // Structured clone the message per HTML spec §2.9.5.
                 // structuredClone is provided by window_extras.rs polyfill.

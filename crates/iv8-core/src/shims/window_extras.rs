@@ -8,6 +8,7 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     if (typeof window === 'undefined') return;
 
     var _winOps = {
+        close: function close() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
         stop: function stop() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
         focus: function focus() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
         blur: function blur() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
@@ -36,7 +37,13 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         matchMedia: function matchMedia(query) { 'use strict'; if (this === null || this === undefined) throw new TypeError('Illegal invocation'); if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return { matches: false, media: query, addListener: function() {}, removeListener: function() {}, addEventListener: function() {}, removeEventListener: function() {}, dispatchEvent: function() { return true; }, onchange: null }; }
     };
     Object.keys(_winOps).forEach(function(k) {
-        if (typeof globalThis[k] === 'undefined') {
+        // Only install if Window.prototype does NOT already have this method
+        // (codegen-generated methods have receiver checks and correct types).
+        // close is special: document_props installs it without receiver check,
+        // so we must override.
+        var protoHas = (typeof Window !== 'undefined' && Window.prototype &&
+            typeof Window.prototype[k] === 'function');
+        if (!protoHas || k === 'close') {
             globalThis[k] = _winOps[k];
         }
     });
