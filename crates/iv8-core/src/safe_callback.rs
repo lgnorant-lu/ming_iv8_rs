@@ -17,7 +17,7 @@
 ///
 /// If the body panics:
 /// 1. The panic is caught (never unwinds to V8/C++)
-/// 2. A `tracing::error!` log is emitted
+/// 2. A `callback_panic` telemetry event is emitted
 /// 3. A JS Error is thrown back into V8 via `scope.throw_exception()`
 #[macro_export]
 macro_rules! safe_callback {
@@ -27,7 +27,7 @@ macro_rules! safe_callback {
         }));
         if let Err(__panic_payload) = __result {
             let __msg = $crate::error::extract_panic_msg(&*__panic_payload);
-            ::tracing::error!(panic_msg = %__msg, "V8 callback panic caught");
+            $crate::telemetry::callback_panic("safe_callback", &__msg);
             // Throw a JS Error back into V8 so JS code sees the error
             let err_msg = v8::String::new($scope, &format!("internal error: {}", __msg));
             if let Some(err_msg) = err_msg {

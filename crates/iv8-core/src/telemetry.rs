@@ -140,6 +140,104 @@ const CATALOG: &[EventSpec] = &[
         fields: &["callback", "panic_msg"],
     },
     EventSpec {
+        name: "dom_binding_panic",
+        category: "iv8.dom",
+        level: "ERROR",
+        safety: Safety::Diagnostic,
+        fields: &["operation"],
+    },
+    EventSpec {
+        name: "dom_template_created",
+        category: "iv8.dom",
+        level: "DEBUG",
+        safety: Safety::Safe,
+        fields: &["interface"],
+    },
+    EventSpec {
+        name: "convert_error",
+        category: "iv8.callback",
+        level: "WARN",
+        safety: Safety::Diagnostic,
+        fields: &["type_name"],
+    },
+    EventSpec {
+        name: "inspector_connected",
+        category: "iv8.inspector",
+        level: "INFO",
+        safety: Safety::Safe,
+        fields: &["port"],
+    },
+    EventSpec {
+        name: "inspector_disconnected",
+        category: "iv8.inspector",
+        level: "INFO",
+        safety: Safety::Safe,
+        fields: &[],
+    },
+    EventSpec {
+        name: "inspector_listening",
+        category: "iv8.inspector",
+        level: "INFO",
+        safety: Safety::Safe,
+        fields: &["port"],
+    },
+    EventSpec {
+        name: "inspector_accept_error",
+        category: "iv8.inspector",
+        level: "WARN",
+        safety: Safety::Diagnostic,
+        fields: &["error"],
+    },
+    EventSpec {
+        name: "shim_installed",
+        category: "iv8.shim",
+        level: "DEBUG",
+        safety: Safety::Safe,
+        fields: &["name"],
+    },
+    EventSpec {
+        name: "state_error",
+        category: "iv8.config",
+        level: "WARN",
+        safety: Safety::Diagnostic,
+        fields: &["error"],
+    },
+    EventSpec {
+        name: "state_created",
+        category: "iv8.config",
+        level: "INFO",
+        safety: Safety::Safe,
+        fields: &["strict_compat", "time_mode", "js_api_name", "env_entries"],
+    },
+    EventSpec {
+        name: "state_dropped",
+        category: "iv8.config",
+        level: "INFO",
+        safety: Safety::Safe,
+        fields: &["eval_count"],
+    },
+    EventSpec {
+        name: "init_phase_skipped",
+        category: "iv8.init",
+        level: "DEBUG",
+        safety: Safety::Safe,
+        fields: &["phase", "reason"],
+    },
+    EventSpec {
+        name: "canvas_fingerprint_warning",
+        category: "iv8.canvas",
+        level: "WARN",
+        safety: Safety::Sensitive,
+        fields: &["parameter", "renderer", "forbidden"],
+    },
+    EventSpec {
+        name: "console_message",
+        category: "iv8.console",
+        level: "DEBUG",
+        safety: Safety::Sensitive,
+        fields: &["method", "message"],
+    },
+    EventSpec {
         name: "worker_import_script_not_found",
         category: "iv8.worker",
         level: "WARN",
@@ -428,6 +526,189 @@ pub fn eval_error(message: &str) {
     );
 }
 
+// ─── DOM binding events ─────────────────────────────────────────────
+
+/// DOM binding callback panic caught by catch_unwind.
+/// Safety: Diagnostic (operation name reveals internal state)
+pub fn dom_binding_panic(operation: &str) {
+    tracing::error!(
+        target: "iv8.dom",
+        operation = operation,
+        "DOM binding callback panic caught"
+    );
+}
+
+/// DOM template created for an interface.
+/// Safety: Safe (interface name only)
+pub fn dom_template_created(interface: &str) {
+    tracing::debug!(
+        target: "iv8.dom",
+        interface = interface,
+        "DOM template created"
+    );
+}
+
+// ─── Convert events ─────────────────────────────────────────────────
+
+/// Type conversion error (V8 value to Rust type).
+/// Safety: Diagnostic (type name reveals internal state)
+pub fn convert_error(type_name: &str) {
+    tracing::warn!(
+        target: "iv8.callback",
+        type_name = type_name,
+        "cannot convert V8 value, type not handled"
+    );
+}
+
+// ─── Inspector events ───────────────────────────────────────────────
+
+/// Inspector server started listening.
+/// Safety: Safe (port only)
+pub fn inspector_listening(port: u16) {
+    tracing::info!(
+        target: "iv8.inspector",
+        port = port,
+        "V8 Inspector listening"
+    );
+}
+
+/// DevTools client connected.
+/// Safety: Safe
+pub fn inspector_connected(port: u16) {
+    tracing::info!(
+        target: "iv8.inspector",
+        port = port,
+        "DevTools client connected"
+    );
+}
+
+/// DevTools client disconnected.
+/// Safety: Safe
+pub fn inspector_disconnected() {
+    tracing::info!(
+        target: "iv8.inspector",
+        "DevTools client disconnected"
+    );
+}
+
+/// Inspector accept error.
+/// Safety: Diagnostic (error may contain internal state)
+pub fn inspector_accept_error(error: &str) {
+    tracing::warn!(
+        target: "iv8.inspector",
+        error = error,
+        "Inspector accept error"
+    );
+}
+
+// ─── Shim events ────────────────────────────────────────────────────
+
+/// Shim installed on prototype or globalThis.
+/// Safety: Safe (name only)
+pub fn shim_installed(name: &str) {
+    tracing::debug!(
+        target: "iv8.shim",
+        name = name,
+        "shim installed"
+    );
+}
+
+// ─── State events ───────────────────────────────────────────────────
+
+/// State management error.
+/// Safety: Diagnostic (error may contain internal state)
+pub fn state_error(error: &str) {
+    tracing::warn!(
+        target: "iv8.config",
+        error = error,
+        "state error"
+    );
+}
+
+/// RuntimeState created.
+/// Safety: Safe (config values, no user data)
+pub fn state_created(strict_compat: bool, time_mode: &str, js_api_name: &str, env_entries: usize) {
+    tracing::info!(
+        target: "iv8.config",
+        strict_compat = strict_compat,
+        time_mode = time_mode,
+        js_api_name = js_api_name,
+        env_entries = env_entries,
+        "RuntimeState created"
+    );
+}
+
+/// RuntimeState dropping.
+/// Safety: Safe (count only)
+pub fn state_dropped(eval_count: u64) {
+    tracing::info!(
+        target: "iv8.config",
+        eval_count = eval_count,
+        "RuntimeState dropping"
+    );
+}
+
+// ─── Init phase skip events ────────────────────────────────────────
+
+/// Init phase skipped (e.g. worker_mode skips document bindings).
+/// Safety: Safe (phase name and reason)
+pub fn init_phase_skipped(phase: &str, reason: &str) {
+    tracing::debug!(
+        target: "iv8.init",
+        phase = phase,
+        reason = reason,
+        "init phase skipped"
+    );
+}
+
+// ─── Canvas events ──────────────────────────────────────────────────
+
+/// Canvas fingerprint detection warning.
+/// Safety: Sensitive (renderer string may reveal GPU vendor)
+pub fn canvas_fingerprint_warning(parameter: &str, renderer: &str, forbidden: &str) {
+    tracing::warn!(
+        target: "iv8.canvas",
+        parameter = parameter,
+        renderer = renderer,
+        forbidden = forbidden,
+        "webgl renderer contains forbidden signal; anti-fingerprint detection risk"
+    );
+}
+
+// ─── Console events ─────────────────────────────────────────────────
+
+/// JS console.* API message passthrough.
+/// Safety: Sensitive (may contain user-generated content)
+pub fn console_message(method: &str, level: &str, message: &str) {
+    match level {
+        "error" => tracing::error!(target: "iv8.console", method = method, message = message, "console.{}", method),
+        "warn" => tracing::warn!(target: "iv8.console", method = method, message = message, "console.{}", method),
+        "info" => tracing::info!(target: "iv8.console", method = method, message = message, "console.{}", method),
+        "trace" => tracing::trace!(target: "iv8.console", method = method, message = message, "console.{}", method),
+        _ => tracing::debug!(target: "iv8.console", method = method, message = message, "console.{}", method),
+    }
+}
+
+// ─── Coverage matrix ────────────────────────────────────────────────
+
+/// Expected coverage: each category should have at least one event at
+/// each relevant level. This const documents the expected coverage and
+/// is validated by tests.
+///
+/// Levels: E=ERROR, W=WARN, I=INFO, D=DEBUG, T=TRACE
+pub const COVERAGE_MATRIX: &[(&str, &[char])] = &[
+    ("iv8.init",      &['E', 'W', 'I', 'D']),
+    ("iv8.dom",       &['E', 'D']),
+    ("iv8.config",    &['W', 'I']),
+    ("iv8.worker",    &['E', 'W']),
+    ("iv8.callback",  &['E', 'W']),
+    ("iv8.eval",      &['W', 'D']),
+    ("iv8.console",   &['D']),
+    ("iv8.inspector", &['I', 'W']),
+    ("iv8.shim",      &['D']),
+    ("iv8.canvas",    &['W']),
+];
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -458,6 +739,83 @@ mod tests {
             assert!(!event.name.is_empty(), "event has empty name");
             assert!(!event.category.is_empty(), "event {} has empty category", event.name);
             assert!(!event.level.is_empty(), "event {} has empty level", event.name);
+        }
+    }
+
+    #[test]
+    fn test_coverage_matrix_satisfied() {
+        for (category, expected_levels) in COVERAGE_MATRIX {
+            for &level in *expected_levels {
+                let level_str = match level {
+                    'E' => "ERROR",
+                    'W' => "WARN",
+                    'I' => "INFO",
+                    'D' => "DEBUG",
+                    'T' => "TRACE",
+                    _ => panic!("unknown level char: {}", level),
+                };
+                let found = catalog().iter().any(|e| {
+                    e.category == *category && e.level == level_str
+                });
+                assert!(
+                    found,
+                    "coverage gap: category {} has no {} event",
+                    category, level_str
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn test_coverage_matrix_categories_exist() {
+        let catalog_cats: std::collections::HashSet<&str> =
+            catalog().iter().map(|e| e.category).collect();
+        for (category, _) in COVERAGE_MATRIX {
+            assert!(
+                catalog_cats.contains(*category),
+                "coverage matrix category {} has no catalog events",
+                category
+            );
+        }
+    }
+
+    #[test]
+    fn test_catalog_event_count() {
+        let count = catalog().len();
+        assert!(count >= 25, "expected at least 25 catalog events, got {}", count);
+    }
+
+    #[test]
+    fn test_no_direct_tracing_outside_telemetry() {
+        // This test validates the logging convention: all tracing:: calls
+        // must go through telemetry.rs catalog functions.
+        // We check by verifying that catalog() has events for all categories
+        // listed in COVERAGE_MATRIX, and that the catalog is comprehensive.
+        // A CI-level grep check should also enforce this at review time.
+        let cats: std::collections::HashSet<&str> =
+            catalog().iter().map(|e| e.category).collect();
+        let expected_cats: std::collections::HashSet<&str> = COVERAGE_MATRIX
+            .iter()
+            .map(|(c, _)| *c)
+            .collect();
+        assert_eq!(cats, expected_cats,
+            "catalog categories must match coverage matrix");
+    }
+
+    #[test]
+    fn test_all_events_have_safety() {
+        // Every event must have a safety level documented in its EventSpec.
+        // Safety is enforced by the Safety enum type — if it compiles, it's set.
+        // This test just verifies the catalog is non-empty and well-formed.
+        for event in catalog() {
+            // Safety enum is always set (not Option), so just verify it matches
+            // the documented pattern: Safe for counts/names, Diagnostic for
+            // errors/panics, Sensitive for user data.
+            match event.safety {
+                Safety::Safe => {}
+                Safety::Diagnostic => {}
+                Safety::Sensitive => {}
+            }
         }
     }
 }

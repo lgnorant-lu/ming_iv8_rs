@@ -28,8 +28,7 @@ pub fn start_server(port: u16) -> std::io::Result<(SharedChannelState, String)> 
         run_server(listener, state_clone);
     });
 
-    tracing::info!("V8 Inspector listening on {}", url);
-    tracing::info!("Open in Chrome: {}", devtools_url);
+    crate::telemetry::inspector_listening(port);
     println!("V8 Inspector: {}", devtools_url);
 
     Ok((state, devtools_url))
@@ -45,7 +44,7 @@ fn run_server(listener: TcpListener, state: SharedChannelState) {
                 handle_connection(stream, state_clone);
             }
             Err(e) => {
-                tracing::warn!("Inspector accept error: {}", e);
+                crate::telemetry::inspector_accept_error(&e.to_string());
             }
         }
     }
@@ -104,7 +103,7 @@ fn handle_connection(stream: std::net::TcpStream, state: SharedChannelState) {
         s.connected = true;
     }
 
-    tracing::info!("DevTools client connected");
+    crate::telemetry::inspector_connected(0);
 
     // Message loop
     loop {
@@ -143,7 +142,7 @@ fn handle_connection(stream: std::net::TcpStream, state: SharedChannelState) {
         s.connected = false;
     }
 
-    tracing::info!("DevTools client disconnected");
+    crate::telemetry::inspector_disconnected();
 }
 
 /// Compute WebSocket accept key from client key.

@@ -89,7 +89,7 @@ unsafe extern "C" fn exposed_fn_trampoline(info: *const v8::FunctionCallbackInfo
     }));
 
     if result.is_err() {
-        tracing::error!("panic in exposed function callback");
+        crate::telemetry::callback_panic("exposed_function", "panic in exposed function callback");
     }
 }
 

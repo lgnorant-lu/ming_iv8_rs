@@ -51,7 +51,7 @@ impl InspectorSession {
     ) {
         self.inspector = Some(inspector);
         self.session = Some(session);
-        tracing::info!("V8 Inspector initialized on port {}", self.config.port);
+        crate::telemetry::inspector_listening(self.config.port);
     }
 
     /// Get a reference to the underlying V8InspectorSession (for CDP client).
@@ -79,11 +79,11 @@ impl InspectorSession {
         let deadline = std::time::Instant::now() + Duration::from_millis(timeout_ms);
         loop {
             if lock_channel_state(&self.channel_state).connected {
-                tracing::info!("DevTools client connected");
+                crate::telemetry::inspector_connected(0);
                 break;
             }
             if std::time::Instant::now() >= deadline {
-                tracing::warn!("DevTools connection timeout after {}ms", timeout_ms);
+                crate::telemetry::inspector_accept_error("connection timeout");
                 break;
             }
             thread::sleep(Duration::from_millis(50));

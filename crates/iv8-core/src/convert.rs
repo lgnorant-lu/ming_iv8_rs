@@ -275,7 +275,7 @@ fn v8_to_rust_with_seen(
     if value.is_big_int() {
         if current_strict_compat(scope) {
             // iv8 0.1.2 bug-compat: BigInt → Null + error log
-            tracing::error!("[ERROR] cannot convert value, type not handled: V8 bigint");
+            crate::telemetry::convert_error("V8 bigint");
             return RustValue::Null;
         }
         // strict_compat=false: extract sign + words

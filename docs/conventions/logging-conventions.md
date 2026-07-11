@@ -56,13 +56,16 @@ EnvFilter matches by prefix.
 
 | Category | Scope | Example events |
 |----------|-------|----------------|
-| `iv8.init` | Kernel init phases | proto_merge, dom_templates_built |
-| `iv8.dom` | DOM template/binding | (future: element_created, append_child) |
-| `iv8.config` | Config resolution | (future: config_resolved, config_fallback) |
+| `iv8.init` | Kernel init phases | proto_merge, dom_templates_built, phase_skipped |
+| `iv8.dom` | DOM template/binding | dom_template_created, dom_binding_panic |
+| `iv8.config` | Config resolution, state | state_created, state_dropped, state_error |
 | `iv8.worker` | Worker lifecycle | worker_script_error |
-| `iv8.callback` | V8 callback execution | callback_panic |
-| `iv8.eval` | JS evaluation | (future: eval_start, eval_complete) |
-| `iv8.console` | JS console.* | console.log, console.warn |
+| `iv8.callback` | V8 callback execution | callback_panic, convert_error |
+| `iv8.eval` | JS evaluation | eval_complete, eval_error |
+| `iv8.console` | JS console.* | console_message |
+| `iv8.inspector` | Inspector lifecycle | inspector_listening, inspector_connected |
+| `iv8.shim` | Shim installation | shim_installed |
+| `iv8.canvas` | Canvas/WebGL | canvas_fingerprint_warning |
 
 ## Log Event Catalog
 
@@ -81,8 +84,32 @@ a typed function. The function list IS the documentation.
 | `init_proto_merge` | iv8.init | DEBUG | Safe | interface, proto_copied, proto_skipped, ctor_copied, same_ctor |
 | `init_proto_merge_complete` | iv8.init | DEBUG | Safe | (none) |
 | `init_same_ctor_warning` | iv8.init | WARN | Diagnostic | interface |
+| `init_phase_start` | iv8.init | INFO | Safe | phase |
+| `init_phase_complete` | iv8.init | INFO | Safe | phase, duration_ms |
+| `init_phase_failed` | iv8.init | ERROR | Diagnostic | phase, error |
+| `init_phase_skipped` | iv8.init | DEBUG | Safe | phase, reason |
+| `dom_template_created` | iv8.dom | DEBUG | Safe | interface |
+| `dom_binding_panic` | iv8.dom | ERROR | Diagnostic | operation |
+| `state_created` | iv8.config | INFO | Safe | strict_compat, time_mode, js_api_name, env_entries |
+| `state_dropped` | iv8.config | INFO | Safe | eval_count |
+| `state_error` | iv8.config | WARN | Diagnostic | error |
 | `worker_script_error` | iv8.worker | ERROR | Diagnostic | error |
+| `worker_import_script_not_found` | iv8.worker | WARN | Diagnostic | url |
 | `callback_panic` | iv8.callback | ERROR | Diagnostic | callback, panic_msg |
+| `convert_error` | iv8.callback | WARN | Diagnostic | type_name |
+| `v8_fatal_error` | iv8.callback | ERROR | Diagnostic | file, line, message |
+| `v8_oom` | iv8.callback | ERROR | Safe | location, is_heap_oom |
+| `v8_uncaught_exception` | iv8.eval | ERROR | Diagnostic | message |
+| `rust_panic` | iv8.callback | ERROR | Diagnostic | msg |
+| `eval_complete` | iv8.eval | DEBUG | Safe | success, duration_ms |
+| `eval_error` | iv8.eval | WARN | Diagnostic | message |
+| `console_message` | iv8.console | DEBUG | Sensitive | method, message |
+| `inspector_listening` | iv8.inspector | INFO | Safe | port |
+| `inspector_connected` | iv8.inspector | INFO | Safe | port |
+| `inspector_disconnected` | iv8.inspector | INFO | Safe | (none) |
+| `inspector_accept_error` | iv8.inspector | WARN | Diagnostic | error |
+| `shim_installed` | iv8.shim | DEBUG | Safe | name |
+| `canvas_fingerprint_warning` | iv8.canvas | WARN | Sensitive | parameter, renderer, forbidden |
 
 ### Adding a new event
 
@@ -175,3 +202,33 @@ IV8 is an anti-detection tool. Logging could be a detection signal.
 - [ ] Safety level set for each event
 - [ ] `IV8_LOG` filtering tested for at least one category
 - [ ] Key tests have `#[traced_test]` log assertions
+- [ ] `test_coverage_matrix_satisfied` passes (category x level coverage)
+- [ ] `test_no_direct_tracing_outside_telemetry` passes
+
+## Coverage Matrix
+
+The `COVERAGE_MATRIX` const in `telemetry.rs` defines expected coverage:
+each category must have at least one event at each listed level.
+
+| Category | ERROR | WARN | INFO | DEBUG | TRACE |
+|----------|-------|------|------|-------|-------|
+| iv8.init | x | x | x | x | |
+| iv8.dom | x | | | x | |
+| iv8.config | | x | x | | |
+| iv8.worker | x | x | | | |
+| iv8.callback | x | x | | | |
+| iv8.eval | | x | | x | |
+| iv8.console | | | | x | |
+| iv8.inspector | | x | x | | |
+| iv8.shim | | | | x | |
+| iv8.canvas | | x | | | |
+
+`test_coverage_matrix_satisfied` validates this matrix at test time.
+
+### Adding coverage
+
+1. Identify the category and level needed
+2. Add an `EventSpec` to the `CATALOG` const
+3. Add a typed function
+4. If adding a new level to an existing category, update `COVERAGE_MATRIX`
+5. The test will fail until coverage is satisfied

@@ -186,13 +186,7 @@ impl RuntimeState {
         profile: Option<&'static crate::shims::browser_profile::BrowserProfile>,
         local_storage: Option<crate::dom::local_storage::LocalStorageStore>,
     ) -> Self {
-        tracing::info!(
-            %strict_compat,
-            ?time_mode,
-            %js_api_name,
-            env_entries = environment.len(),
-            "RuntimeState created"
-        );
+        crate::telemetry::state_created(strict_compat, &format!("{:?}", time_mode), &js_api_name, environment.len());
         Self {
             strict_compat,
             time_mode,
@@ -277,10 +271,7 @@ impl RuntimeState {
 
 impl Drop for RuntimeState {
     fn drop(&mut self) {
-        tracing::info!(
-            eval_count = *self.eval_count.borrow(),
-            "RuntimeState dropping"
-        );
+        crate::telemetry::state_dropped(*self.eval_count.borrow());
         for (ptr, free_fn) in self.heap_registry.borrow_mut().drain(..) {
             free_fn(ptr);
         }

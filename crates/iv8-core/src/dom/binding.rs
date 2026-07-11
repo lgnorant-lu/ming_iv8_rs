@@ -616,7 +616,7 @@ unsafe extern "C" fn get_element_by_id(info: *const v8::FunctionCallbackInfo) {
         }
     }));
     if result.is_err() {
-        tracing::error!("panic in getElementById callback");
+        crate::telemetry::dom_binding_panic("getElementById");
     }
 }
 
@@ -655,7 +655,7 @@ unsafe extern "C" fn query_selector(info: *const v8::FunctionCallbackInfo) {
         }
     }));
     if result.is_err() {
-        tracing::error!("panic in querySelector callback");
+        crate::telemetry::dom_binding_panic("querySelector");
     }
 }
 
@@ -691,7 +691,7 @@ unsafe extern "C" fn query_selector_all(info: *const v8::FunctionCallbackInfo) {
         rv.set(list);
     }));
     if result.is_err() {
-        tracing::error!("panic in querySelectorAll callback");
+        crate::telemetry::dom_binding_panic("querySelectorAll");
     }
 }
 
@@ -727,7 +727,7 @@ unsafe extern "C" fn get_elements_by_tag_name(info: *const v8::FunctionCallbackI
         rv.set(list);
     }));
     if result.is_err() {
-        tracing::error!("panic in getElementsByTagName callback");
+        crate::telemetry::dom_binding_panic("getElementsByTagName");
     }
 }
 
@@ -780,7 +780,7 @@ unsafe extern "C" fn get_elements_by_class_name(info: *const v8::FunctionCallbac
         rv.set(list);
     }));
     if result.is_err() {
-        tracing::error!("panic in getElementsByClassName callback");
+        crate::telemetry::dom_binding_panic("getElementsByClassName");
     }
 }
 
@@ -816,7 +816,7 @@ unsafe extern "C" fn get_attribute_callback(info: *const v8::FunctionCallbackInf
         rv.set(v8::null(scope).into());
     }));
     if result.is_err() {
-        tracing::error!("panic in getAttribute callback");
+        crate::telemetry::dom_binding_panic("getAttribute");
     }
 }
 
@@ -860,7 +860,7 @@ unsafe extern "C" fn create_element(info: *const v8::FunctionCallbackInfo) {
         }
     }));
     if result.is_err() {
-        tracing::error!("panic in createElement callback");
+        crate::telemetry::dom_binding_panic("createElement");
     }
 }
 
@@ -911,7 +911,7 @@ unsafe extern "C" fn create_element_ns(info: *const v8::FunctionCallbackInfo) {
         }
     }));
     if result.is_err() {
-        tracing::error!("panic in createElementNS callback");
+        crate::telemetry::dom_binding_panic("createElementNS");
     }
 }
 
@@ -958,7 +958,7 @@ unsafe extern "C" fn append_child_callback(info: *const v8::FunctionCallbackInfo
         rv.set(child_arg);
     }));
     if result.is_err() {
-        tracing::error!("panic in appendChild callback");
+        crate::telemetry::dom_binding_panic("appendChild");
     }
 }
 
@@ -994,7 +994,7 @@ unsafe extern "C" fn remove_child_callback(info: *const v8::FunctionCallbackInfo
         rv.set(child_arg);
     }));
     if result.is_err() {
-        tracing::error!("panic in removeChild callback");
+        crate::telemetry::dom_binding_panic("removeChild");
     }
 }
 
@@ -1352,7 +1352,7 @@ unsafe extern "C" fn set_attribute_callback(info: *const v8::FunctionCallbackInf
         }
     }));
     if result.is_err() {
-        tracing::error!("panic in setAttribute callback");
+        crate::telemetry::dom_binding_panic("setAttribute");
     }
 }
 

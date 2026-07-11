@@ -412,22 +412,10 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
         const FORBIDDEN_RENDERER_SUBSTRINGS: &[&str] = &["SwiftShader", "llvmpipe"];
         for forbidden in FORBIDDEN_RENDERER_SUBSTRINGS {
             if unmasked_renderer.contains(forbidden) {
-                tracing::warn!(
-                    target: "iv8.canvas",
-                    renderer = unmasked_renderer,
-                    forbidden = forbidden,
-                    "webgl.UNMASKED_RENDERER_WEBGL contains a cloud VM/headless signal; \
-                     anti-fingerprint scripts may detect this as headless"
-                );
+                crate::telemetry::canvas_fingerprint_warning("UNMASKED_RENDERER", unmasked_renderer, forbidden);
             }
             if renderer.contains(forbidden) {
-                tracing::warn!(
-                    target: "iv8.canvas",
-                    renderer = renderer,
-                    forbidden = forbidden,
-                    "webgl.RENDERER contains a cloud VM/headless signal; \
-                     anti-fingerprint scripts may detect this as headless"
-                );
+                crate::telemetry::canvas_fingerprint_warning("RENDERER", renderer, forbidden);
             }
         }
 

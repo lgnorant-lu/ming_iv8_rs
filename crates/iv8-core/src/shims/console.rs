@@ -89,7 +89,7 @@ unsafe extern "C" fn console_log_cb(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let msg = format_args(scope, &args);
-        tracing::info!(target: "iv8::console", "[console.log] {}", msg);
+        crate::telemetry::console_message("log", "info", &msg);
         let isolate: &v8::Isolate = &*scope;
         store_message(RuntimeState::get(isolate), "log", &msg);
     }));
@@ -101,7 +101,7 @@ unsafe extern "C" fn console_info_cb(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let msg = format_args(scope, &args);
-        tracing::info!(target: "iv8::console", "[console.info] {}", msg);
+        crate::telemetry::console_message("info", "info", &msg);
         let isolate: &v8::Isolate = &*scope;
         store_message(RuntimeState::get(isolate), "info", &msg);
     }));
@@ -113,7 +113,7 @@ unsafe extern "C" fn console_warn_cb(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let msg = format_args(scope, &args);
-        tracing::warn!(target: "iv8::console", "[console.warn] {}", msg);
+        crate::telemetry::console_message("warn", "warn", &msg);
         let isolate: &v8::Isolate = &*scope;
         store_message(RuntimeState::get(isolate), "warn", &msg);
     }));
@@ -125,7 +125,7 @@ unsafe extern "C" fn console_error_cb(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let msg = format_args(scope, &args);
-        tracing::error!(target: "iv8::console", "[console.error] {}", msg);
+        crate::telemetry::console_message("error", "error", &msg);
         let isolate: &v8::Isolate = &*scope;
         store_message(RuntimeState::get(isolate), "error", &msg);
     }));
@@ -137,7 +137,7 @@ unsafe extern "C" fn console_debug_cb(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let msg = format_args(scope, &args);
-        tracing::debug!(target: "iv8::console", "[console.debug] {}", msg);
+        crate::telemetry::console_message("debug", "debug", &msg);
         let isolate: &v8::Isolate = &*scope;
         store_message(RuntimeState::get(isolate), "debug", &msg);
     }));
@@ -149,7 +149,7 @@ unsafe extern "C" fn console_trace_cb(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let msg = format_args(scope, &args);
-        tracing::trace!(target: "iv8::console", "[console.trace] {}", msg);
+        crate::telemetry::console_message("trace", "trace", &msg);
         let isolate: &v8::Isolate = &*scope;
         store_message(RuntimeState::get(isolate), "trace", &msg);
     }));
@@ -161,7 +161,7 @@ unsafe extern "C" fn console_dir_cb(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let msg = format_args(scope, &args);
-        tracing::info!(target: "iv8::console", "[console.dir] {}", msg);
+        crate::telemetry::console_message("dir", "info", &msg);
     }));
 }
 
@@ -171,7 +171,7 @@ unsafe extern "C" fn console_table_cb(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let msg = format_args(scope, &args);
-        tracing::info!(target: "iv8::console", "[console.table] {}", msg);
+        crate::telemetry::console_message("table", "info", &msg);
     }));
 }
 
@@ -181,7 +181,7 @@ unsafe extern "C" fn console_group_cb(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let msg = format_args(scope, &args);
-        tracing::info!(target: "iv8::console", "[console.group] {}", msg);
+        crate::telemetry::console_message("group", "info", &msg);
     }));
 }
 
@@ -197,7 +197,7 @@ unsafe extern "C" fn console_time_cb(info: *const v8::FunctionCallbackInfo) {
         } else {
             "default".to_string()
         };
-        tracing::debug!(target: "iv8::console", "[console.time] {}", label);
+        crate::telemetry::console_message("time", "debug", &label);
     }));
 }
 
@@ -211,7 +211,7 @@ unsafe extern "C" fn console_time_end_cb(info: *const v8::FunctionCallbackInfo) 
         } else {
             "default".to_string()
         };
-        tracing::debug!(target: "iv8::console", "[console.timeEnd] {}", label);
+        crate::telemetry::console_message("timeEnd", "debug", &label);
     }));
 }
 
@@ -225,7 +225,7 @@ unsafe extern "C" fn console_count_cb(info: *const v8::FunctionCallbackInfo) {
         } else {
             "default".to_string()
         };
-        tracing::debug!(target: "iv8::console", "[console.count] {}", label);
+        crate::telemetry::console_message("count", "debug", &label);
     }));
 }
 
@@ -247,7 +247,7 @@ unsafe extern "C" fn console_assert_cb(info: *const v8::FunctionCallbackInfo) {
         } else {
             "Assertion failed".to_string()
         };
-        tracing::error!(target: "iv8::console", "[console.assert] {}", msg);
+        crate::telemetry::console_message("assert", "error", &msg);
         let isolate: &v8::Isolate = &*scope;
         store_message(RuntimeState::get(isolate), "assert", &msg);
     }));

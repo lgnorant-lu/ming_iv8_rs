@@ -3473,10 +3473,10 @@ impl EmbeddedV8Kernel {
                     let count = registry.interface_count();
                     *state.surface_registry.borrow_mut() = Some(registry);
                     *state.behavior_callbacks.borrow_mut() = Some(callbacks);
-                    tracing::info!(interfaces = count, "BrowserSurface installation complete");
+                    crate::telemetry::init_browser_surface_installed(count);
                 }
                 Err(e) => {
-                    tracing::error!("BrowserSurface installation failed: {}", e);
+                    crate::telemetry::init_phase_failed("browser_surface", &e.to_string());
                 }
             }
         }
@@ -3507,7 +3507,7 @@ impl EmbeddedV8Kernel {
         } else {
             // Worker mode: document should not exist on globalThis.
             // Log for debugging.
-            tracing::debug!("set_document: skipping install_document_bindings (worker_mode)");
+            crate::telemetry::init_phase_skipped("document_bindings", "worker_mode");
         }
         // NOTE: DOM_NAV_SHIM_JS removed — navigation properties (parentNode, childNodes, etc.)
         // are now native accessors on the ObjectTemplate prototype chain (dom/template.rs).
@@ -3690,7 +3690,7 @@ impl EmbeddedV8Kernel {
                         column_offset: 0,
                     };
                     if let Err(e) = self.eval(&src_code, opts) {
-                        tracing::warn!("external script {} error: {:?}", i, e);
+                        crate::telemetry::eval_error(&format!("external script {} error: {:?}", i, e));
                     }
                 }
 
@@ -3748,7 +3748,7 @@ impl EmbeddedV8Kernel {
                     column_offset: 0,
                 };
                 if let Err(e) = self.eval(inline_src, opts) {
-                    tracing::warn!("inline script {} error: {:?}", i, e);
+                    crate::telemetry::eval_error(&format!("inline script {} error: {:?}", i, e));
                 }
             }
         }
