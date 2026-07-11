@@ -834,196 +834,117 @@ impl EmbeddedV8Kernel {
             // fix_operation_callbacks runs in install_browser_surface_init
             // (before shim JS evals) to avoid overwriting shim operations.
 
-            // Post-fix: convert [Global] data properties to accessor properties.
-            // Shims install real values as data properties (history, customElements, etc.).
-            // idlharness expects accessor properties (descriptor.get === function).
-            // For each [Global] attribute that is a configurable data property:
-            //   read value → store in closure → install accessor getter returning value.
-            // Skip non-configurable (V8 built-in name/length) and already-accessor.
-            let global_attr_names: &[&str] = iv8_surface::generated::install_all::GLOBAL_ATTR_NAMES;
-            let attr_names_js = global_attr_names
+            // Comprehensive [Global] attribute accessor fix.
+            // Uses GLOBAL_ATTR_METADATA from codegen to know which attrs are readonly/Replaceable.
+            // For each [Global] attribute:
+            //   - Missing -> install accessor (getter returns undefined, optional setter)
+            //   - Data property -> convert to accessor (preserve value, optional setter)
+            //   - Accessor -> wrap getter with receiver check, fix setter based on metadata
+            // This replaces the old convert_js + extra_accessor_js blobs.
+            let global_attr_meta: &[(&str, bool, bool)] =
+                iv8_surface::generated::install_all::GLOBAL_ATTR_METADATA;
+            let meta_js = global_attr_meta
                 .iter()
-                .map(|n| format!("'{}'", n))
+                .map(|(n, ro, rep)| format!("[\"{}\",{},{}]", n, ro, rep))
                 .collect::<Vec<_>>()
                 .join(",");
-            let convert_js = format!(r#"
+            let global_accessor_fix = format!(r#"
                 (function() {{
-                    var attrs = [{names}];
+                    var meta = [{meta}];
                     var windowCtor = globalThis.Window;
                     var windowProto = windowCtor && windowCtor.prototype;
-                    for (var i = 0; i < attrs.length; i++) {{
-                        (function(name) {{
-                        try {{
-                            // Skip length/name: these are function-intrinsic
-                            // name/length: Function-intrinsic data properties
-                            // on the global object. idlharness [Global]
-                            // checks require them to be accessor properties
-                            // (descriptor.get === function). Since they are
-                            // configurable on V8's global, we can convert them.
-                            var desc = Object.getOwnPropertyDescriptor(globalThis, name);
-                            if (!desc) return;
-                            if (!desc.configurable) return;
-                            if (desc.get || desc.set) {{
-                                // Accessor property (shim-installed getter/setter)
-                                // Wrap getter with receiver check
-                                if (desc.get && typeof desc.get === 'function') {{
-                                    let origGet = desc.get;
-                                    let wproto2 = windowProto;
-                                    var wrappedGet = function() {{
-                                        if (wproto2 && this !== globalThis && this !== wproto2) {{
-                                            var cur = Object.getPrototypeOf(this);
-                                            var found = false;
-                                            for (var k = 0; k < 30; k++) {{
-                                                if (cur === wproto2) {{ found = true; break; }}
-                                                if (!cur) break;
-                                                cur = Object.getPrototypeOf(cur);
+                    for (var i = 0; i < meta.length; i++) {{
+                        (function(name, isReadonly, hasReplaceable) {{
+                            var needsSetter = !isReadonly || hasReplaceable;
+                            try {{
+                                var desc = Object.getOwnPropertyDescriptor(globalThis, name);
+                                if (!desc) {{
+                                    var getter = function() {{ return undefined; }};
+                                    try {{ Object.defineProperty(getter, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
+                                    try {{ Object.defineProperty(getter, 'length', {{ value: 0, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
+                                    var setter = needsSetter ? (function(nm, wp) {{
+                                        return function(v) {{
+                                            if (wp && this !== globalThis && this !== wp) {{
+                                                var cur = Object.getPrototypeOf(this); var found = false;
+                                                for (var k = 0; k < 30; k++) {{ if (cur === wp) {{ found = true; break; }} if (!cur) break; cur = Object.getPrototypeOf(cur); }}
+                                                if (!found) throw new TypeError('Illegal invocation');
                                             }}
+                                            Object.defineProperty(globalThis, nm, {{ value: v, writable: true, enumerable: true, configurable: true }});
+                                        }};
+                                    }})(name, windowProto) : undefined;
+                                    if (setter) {{
+                                        try {{ Object.defineProperty(setter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
+                                        try {{ Object.defineProperty(setter, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
+                                    }}
+                                    Object.defineProperty(globalThis, name, {{ get: getter, set: setter, enumerable: true, configurable: true }});
+                                    return;
+                                }}
+                                if (desc.get || desc.set) {{
+                                    if (desc.get && typeof desc.get === 'function') {{
+                                        var origGet = desc.get;
+                                        var wrappedGet = function() {{
+                                            if (windowProto && this !== globalThis && this !== windowProto) {{
+                                                var cur = Object.getPrototypeOf(this); var found = false;
+                                                for (var k = 0; k < 30; k++) {{ if (cur === windowProto) {{ found = true; break; }} if (!cur) break; cur = Object.getPrototypeOf(cur); }}
+                                                if (!found) throw new TypeError('Illegal invocation');
+                                            }}
+                                            if (name === 'self' || name === 'window' || name === 'top' || name === 'parent' || name === 'frames') return globalThis;
+                                            return origGet.call(globalThis);
+                                        }};
+                                        try {{ Object.defineProperty(wrappedGet, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
+                                        var newSetter;
+                                        if (needsSetter) {{
+                                            if (desc.set && typeof desc.set === 'function') {{ newSetter = desc.set; }}
+                                            else {{
+                                                newSetter = (function(nm, wp) {{
+                                                    return function(v) {{
+                                                        if (wp && this !== globalThis && this !== wp) throw new TypeError('Illegal invocation');
+                                                        Object.defineProperty(globalThis, nm, {{ value: v, writable: true, enumerable: true, configurable: true }});
+                                                    }};
+                                                }})(name, windowProto);
+                                                try {{ Object.defineProperty(newSetter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
+                                            }}
+                                        }}
+                                        Object.defineProperty(globalThis, name, {{ get: wrappedGet, set: newSetter, enumerable: desc.enumerable !== false, configurable: true }});
+                                    }}
+                                    return;
+                                }}
+                                if (!desc.configurable) return;
+                                var value = desc.value;
+                                var getter = (function(v, wp) {{
+                                    return function() {{
+                                        if (wp && this !== globalThis && this !== wp) {{
+                                            var cur = Object.getPrototypeOf(this); var found = false;
+                                            for (var k = 0; k < 30; k++) {{ if (cur === wp) {{ found = true; break; }} if (!cur) break; cur = Object.getPrototypeOf(cur); }}
                                             if (!found) throw new TypeError('Illegal invocation');
                                         }}
-                                        // Use globalThis directly for self/window to avoid
-                                        // getter recursion (self returns window, window returns window)
-                                        if (name === 'self' || name === 'window' || name === 'top' || name === 'parent' || name === 'frames') {{
-                                            return globalThis;
-                                        }}
-                                        return origGet.call(globalThis);
+                                        return v;
                                     }};
-                                    try {{ Object.defineProperty(wrappedGet, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
-                                    Object.defineProperty(globalThis, name, {{
-                                        get: wrappedGet,
-                                        set: desc.set,
-                                        enumerable: desc.enumerable !== false,
-                                        configurable: true
-                                    }});
+                                }})(value, windowProto);
+                                try {{ Object.defineProperty(getter, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
+                                try {{ Object.defineProperty(getter, 'length', {{ value: 0, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
+                                var setter = needsSetter ? (function(nm, wp) {{
+                                    return function(v) {{
+                                        if (wp && this !== globalThis && this !== wp) {{
+                                            var cur = Object.getPrototypeOf(this); var found = false;
+                                            for (var k = 0; k < 30; k++) {{ if (cur === wp) {{ found = true; break; }} if (!cur) break; cur = Object.getPrototypeOf(cur); }}
+                                            if (!found) throw new TypeError('Illegal invocation');
+                                        }}
+                                        Object.defineProperty(globalThis, nm, {{ value: v, writable: true, enumerable: true, configurable: true }});
+                                    }};
+                                }})(name, windowProto) : undefined;
+                                if (setter) {{
+                                    try {{ Object.defineProperty(setter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
+                                    try {{ Object.defineProperty(setter, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
                                 }}
-                                return;
-                            }}
-                            var value = desc.value;
-                            var getter = (function(v, wproto) {{
-                                return function() {{
-                                    // Receiver check: this must be the global object
-                                    // (which has Window.prototype in its chain)
-                                    if (wproto && this !== globalThis && this !== wproto) {{
-                                        var cur = Object.getPrototypeOf(this);
-                                        var found = false;
-                                        for (var k = 0; k < 30; k++) {{
-                                            if (cur === wproto) {{ found = true; break; }}
-                                            if (!cur) break;
-                                            cur = Object.getPrototypeOf(cur);
-                                        }}
-                                        if (!found) throw new TypeError('Illegal invocation');
-                                    }}
-                                    return v;
-                                }};
-                            }})(value, windowProto);
-                            try {{ Object.defineProperty(getter, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
-                            // Create setter for writable attributes.
-                            // idlharness checks typeof desc.set === "function"
-                            // for non-readonly / PutForwards / Replaceable attrs.
-                            var setter = (function(nm, wproto) {{
-                                return function(v) {{
-                                    // Receiver check
-                                    if (wproto && this !== globalThis && this !== wproto) {{
-                                        var cur = Object.getPrototypeOf(this);
-                                        var found = false;
-                                        for (var k = 0; k < 30; k++) {{
-                                            if (cur === wproto) {{ found = true; break; }}
-                                            if (!cur) break;
-                                            cur = Object.getPrototypeOf(cur);
-                                        }}
-                                        if (!found) throw new TypeError('Illegal invocation');
-                                    }}
-                                    // Store value as data property (Replaceable semantics)
-                                    Object.defineProperty(globalThis, nm, {{
-                                        value: v, writable: true,
-                                        enumerable: true, configurable: true
-                                    }});
-                                }};
-                            }})(name, windowProto);
-                            try {{ Object.defineProperty(setter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
-                            try {{ Object.defineProperty(setter, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
-                            Object.defineProperty(globalThis, name, {{
-                                get: getter,
-                                set: setter,
-                                enumerable: desc.enumerable !== false,
-                                configurable: true
-                            }});
-                        }} catch(e) {{}}
-                        }})(attrs[i]);
+                                Object.defineProperty(globalThis, name, {{ get: getter, set: setter, enumerable: desc.enumerable !== false, configurable: true }});
+                            }} catch(e) {{}}
+                        }})(meta[i][0], meta[i][1], meta[i][2]);
                     }}
                 }})();
-            "#, names = attr_names_js);
-            let convert_js_str = crate::v8_utils::v8_string(scope, &convert_js);
-            let _ = v8::Script::compile(scope, convert_js_str, None).and_then(|s| s.run(scope));
-
-            let extra_accessor_js = crate::v8_utils::v8_string(scope, r#"
-    (function() {
-        var extras = ['name', 'status', 'closed'];
-        var windowCtor = globalThis.Window;
-        var windowProto = windowCtor && windowCtor.prototype;
-        for (var i = 0; i < extras.length; i++) {
-            (function(name) {
-                try {
-                    var desc = Object.getOwnPropertyDescriptor(globalThis, name);
-                    if (!desc) {
-                        // Property doesn't exist on globalThis — install it
-                        var getter = function() { return null; };
-                        try { Object.defineProperty(getter, 'name', { value: 'get ' + name }); } catch(e) {}
-                        try { Object.defineProperty(getter, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
-                        var setter = (name === 'status') ? function(v) {
-                            Object.defineProperty(globalThis, name, { value: v, writable: true, enumerable: true, configurable: true });
-                        } : undefined;
-                        if (setter) {
-                            try { Object.defineProperty(setter, 'name', { value: 'set ' + name }); } catch(e) {}
-                            try { Object.defineProperty(setter, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
-                        }
-                        Object.defineProperty(globalThis, name, {
-                            get: getter, set: setter,
-                            enumerable: true, configurable: true
-                        });
-                        return;
-                    }
-                    if (desc.get || desc.set) return; // Already accessor
-                    if (!desc.configurable) return;
-                    var value = desc.value;
-                    var getter = (function(v) {
-                        return function() {
-                            if (windowProto && this !== globalThis && this !== windowProto) {
-                                var cur = Object.getPrototypeOf(this);
-                                var found = false;
-                                for (var k = 0; k < 30; k++) {
-                                    if (cur === windowProto) { found = true; break; }
-                                    if (!cur) break;
-                                    cur = Object.getPrototypeOf(cur);
-                                }
-                                if (!found) throw new TypeError('Illegal invocation');
-                            }
-                            return v;
-                        };
-                    })(value);
-                    try { Object.defineProperty(getter, 'name', { value: 'get ' + name }); } catch(e) {}
-                    try { Object.defineProperty(getter, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
-                    var setter = (name === 'status') ? (function(nm, wproto) {
-                        return function(v) {
-                            if (wproto && this !== globalThis && this !== wproto) {
-                                throw new TypeError('Illegal invocation');
-                            }
-                            Object.defineProperty(globalThis, nm, { value: v, writable: true, enumerable: true, configurable: true });
-                        };
-                    })(name, windowProto) : undefined;
-                    if (setter) {
-                        try { Object.defineProperty(setter, 'name', { value: 'set ' + name }); } catch(e) {}
-                        try { Object.defineProperty(setter, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
-                    }
-                    Object.defineProperty(globalThis, name, {
-                        get: getter, set: setter,
-                        enumerable: desc.enumerable !== false, configurable: true
-                    });
-                } catch(e) {}
-            })(extras[i]);
-        }
-    })();
-"#);
-            let _ = v8::Script::compile(scope, extra_accessor_js, None).and_then(|s| s.run(scope));
+            "#, meta = meta_js);
+            let global_accessor_fix_str = crate::v8_utils::v8_string(scope, &global_accessor_fix);
+            let _ = v8::Script::compile(scope, global_accessor_fix_str, None).and_then(|s| s.run(scope));
 
             // JS op callback replacement — disabled for now
             // let op_fix_js = crate::v8_utils::v8_string(scope, r#"
