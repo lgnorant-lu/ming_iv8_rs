@@ -52,13 +52,16 @@ pub const STORAGE_JS: &str = r#"
     // Install methods on StorageCtor.prototype
     var p = StorageCtor.prototype;
     p.getItem = function getItem(key) {
+        if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
         return this._data.hasOwnProperty(key) ? this._data[key] : null;
     };
     p.setItem = function setItem(key, value) {
+        if (arguments.length < 2) throw new TypeError('2 argument(s) required, but only ' + arguments.length + ' present.');
         if (!this._data.hasOwnProperty(key)) this.length++;
         this._data[key] = String(value);
     };
     p.removeItem = function removeItem(key) {
+        if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
         if (this._data.hasOwnProperty(key)) {
             delete this._data[key];
             this.length--;
@@ -69,6 +72,7 @@ pub const STORAGE_JS: &str = r#"
         this.length = 0;
     };
     p.key = function key(index) {
+        if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
         var keys = Object.keys(this._data);
         return index < keys.length ? keys[index] : null;
     };
