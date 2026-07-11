@@ -598,6 +598,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         } else {
             var _mediaCanPlay = HTMLMediaElement.prototype.canPlayType;
             var _canPlayOverride = function canPlayType(type) {
+                if (arguments.length < 1) throw new TypeError("1 argument required, but only 0 present");
                 if (/avc1|mp4a|aac|h\.264|h264/i.test(type)) return 'probably';
                 return _mediaCanPlay.call(this, type);
             };
