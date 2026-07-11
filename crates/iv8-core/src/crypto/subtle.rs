@@ -2997,3 +2997,169 @@ fn extract_pkcs8_key(der: &[u8]) -> Option<Vec<u8>> {
     }
     None
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_b64_encode_roundtrip() {
+        let data = vec![0, 1, 2, 3, 255, 254, 253];
+        let encoded = b64_encode(&data);
+        let decoded = b64_decode(&encoded).unwrap();
+        assert_eq!(decoded, data);
+    }
+
+    #[test]
+    fn test_b64_encode_empty() {
+        assert_eq!(b64_encode(&[]), "");
+        assert_eq!(b64_decode("").unwrap(), Vec::<u8>::new());
+    }
+
+    #[test]
+    fn test_b64_decode_invalid() {
+        assert!(b64_decode("!!!invalid!!!").is_err());
+    }
+
+    #[test]
+    fn test_hmac_sign_verify_sha256() {
+        let key = b"secret-key-1234567890123456789012";
+        let data = b"message to authenticate";
+        let sig = hmac_sign("SHA-256", key, data).unwrap();
+        assert!(!sig.is_empty());
+        assert!(hmac_verify("SHA-256", key, data, &sig));
+    }
+
+    #[test]
+    fn test_hmac_sign_verify_sha1() {
+        let key = b"secret-key";
+        let data = b"data";
+        let sig = hmac_sign("SHA-1", key, data).unwrap();
+        assert!(hmac_verify("SHA-1", key, data, &sig));
+    }
+
+    #[test]
+    fn test_hmac_verify_wrong_data() {
+        let key = b"secret-key";
+        let sig = hmac_sign("SHA-256", key, b"original").unwrap();
+        assert!(!hmac_verify("SHA-256", key, b"tampered", &sig));
+    }
+
+    #[test]
+    fn test_hmac_verify_wrong_key() {
+        let sig = hmac_sign("SHA-256", b"key1", b"data").unwrap();
+        assert!(!hmac_verify("SHA-256", b"key2", b"data", &sig));
+    }
+
+    #[test]
+    fn test_aes_gcm_encrypt_decrypt_roundtrip() {
+        let key = [0u8; 32]; // AES-256
+        let iv = [0u8; 12];
+        let plaintext = b"secret message for AES-GCM";
+        let ciphertext = aes_gcm_encrypt(&key, &iv, plaintext).unwrap();
+        assert_ne!(&ciphertext[..], plaintext);
+        let decrypted = aes_gcm_decrypt(&key, &iv, &ciphertext).unwrap();
+        assert_eq!(decrypted, plaintext);
+    }
+
+    #[test]
+    fn test_aes_gcm_decrypt_wrong_key() {
+        let key = [0u8; 32];
+        let iv = [0u8; 12];
+        let ciphertext = aes_gcm_encrypt(&key, &iv, b"data").unwrap();
+        let wrong_key = [1u8; 32];
+        assert!(aes_gcm_decrypt(&wrong_key, &iv, &ciphertext).is_err());
+    }
+
+    #[test]
+    fn test_aes_cbc_encrypt_decrypt_roundtrip() {
+        let key = [0u8; 16]; // AES-128
+        let iv = [0u8; 16];
+        let plaintext = b"1234567890123456"; // exactly 16 bytes (1 block)
+        let ciphertext = aes_cbc_encrypt(&key, &iv, plaintext).unwrap();
+        let decrypted = aes_cbc_decrypt(&key, &iv, &ciphertext).unwrap();
+        assert_eq!(decrypted, plaintext);
+    }
+
+    #[test]
+    fn test_pbkdf2_sha256_produces_output() {
+        let password = b"password";
+        let salt = b"salt1234salt1234";
+        let mut output = [0u8; 32];
+        pbkdf2_sha256(password, salt, 1000, &mut output);
+        assert!(output.iter().any(|&b| b != 0));
+    }
+
+    #[test]
+    fn test_pbkdf2_sha1_produces_output() {
+        let password = b"password";
+        let salt = b"salt";
+        let mut output = [0u8; 20];
+        pbkdf2_sha1(password, salt, 1000, &mut output);
+        assert!(output.iter().any(|&b| b != 0));
+    }
+
+    #[test]
+    fn test_pbkdf2_derive_sha256() {
+        let output = pbkdf2_derive(b"password", b"salt", 1000, "SHA-256", 32).unwrap();
+        assert_eq!(output.len(), 32);
+        assert!(output.iter().any(|&b| b != 0));
+    }
+
+    #[test]
+    fn test_pbkdf2_derive_sha1() {
+        let output = pbkdf2_derive(b"password", b"salt", 1000, "SHA-1", 20).unwrap();
+        assert_eq!(output.len(), 20);
+    }
+
+    #[test]
+    fn test_pbkdf2_derive_invalid_hash() {
+        assert!(pbkdf2_derive(b"password", b"salt", 1000, "SHA-999", 32).is_err());
+    }
+
+    #[test]
+    fn test_hkdf_derive_sha256() {
+        let ikm = b"input key material";
+        let salt = b"salt";
+        let info = b"info";
+        let output = hkdf_derive(ikm, salt, info, "SHA-256", 32).unwrap();
+        assert_eq!(output.len(), 32);
+        assert!(output.iter().any(|&b| b != 0));
+    }
+
+    #[test]
+    fn test_hkdf_derive_sha1() {
+        let output = hkdf_derive(b"ikm", b"salt", b"info", "SHA-1", 20).unwrap();
+        assert_eq!(output.len(), 20);
+    }
+
+    #[test]
+    fn test_hkdf_derive_invalid_hash() {
+        assert!(hkdf_derive(b"ikm", b"salt", b"info", "SHA-999", 32).is_err());
+    }
+
+    #[test]
+    fn test_extract_pkcs8_key_finds_key() {
+        // Construct a minimal fake PKCS8 with 0x04 0x20 pattern
+        let mut der = vec![0x30, 0x20];
+        der.push(0x04);
+        der.push(0x20);
+        der.extend_from_slice(&[0xAB; 32]);
+        der.extend_from_slice(&[0x00; 10]);
+        let key = extract_pkcs8_key(&der);
+        assert!(key.is_some());
+        assert_eq!(key.unwrap(), vec![0xAB; 32]);
+    }
+
+    #[test]
+    fn test_extract_pkcs8_key_no_match() {
+        let der = vec![0x00; 40];
+        assert!(extract_pkcs8_key(&der).is_none());
+    }
+
+    #[test]
+    fn test_extract_pkcs8_key_short_input() {
+        let der = vec![0x04, 0x20];
+        assert!(extract_pkcs8_key(&der).is_none());
+    }
+}
