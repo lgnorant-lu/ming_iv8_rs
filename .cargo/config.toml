@@ -2,3 +2,6 @@
 opt-level = 0
 debug = 0
 incremental = true
+
+[env]
+RUST_MIN_STACK = "1342177128"

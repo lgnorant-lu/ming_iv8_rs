@@ -378,10 +378,12 @@ fn hex_digit(b: u8) -> Option<u8> {
 impl EmbeddedV8Kernel {
     /// Create a new embedded V8 kernel with the given configuration.
     ///
-    /// The caller MUST ensure sufficient thread stack size (>= 32MB) for
-    /// V8 template creation. On the Python side, JSContext() handles this
-    /// via threading.stack_size(). On the Rust test side, the test harness
-    /// must use thread::Builder::new().stack_size(32 * 1024 * 1024).
+    /// Stack size is configured automatically (K-010):
+    /// - Cargo: `.cargo/config.toml` `[env]` sets `RUST_MIN_STACK`
+    /// - Rust embedders: `ensure_v8_initialized()` sets it if unset
+    /// - Python: `threading.stack_size(128MB)` at module import
+    ///
+    /// For manual thread creation, use `thread::Builder::new().stack_size(128 * 1024 * 1024)`.
     pub fn new(config: KernelConfig) -> Result<Self, IV8Error> {
         ensure_v8_initialized();
 

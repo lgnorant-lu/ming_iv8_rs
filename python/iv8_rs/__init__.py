@@ -2,6 +2,7 @@
 
 import json
 import os
+import threading
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -174,6 +175,19 @@ from iv8_rs.vm_reports import (
     vm_handler_table_to_dict,
 )
 
+# --- Stack size configuration (K-010) ---
+# V8 FunctionTemplate creation (1287 interfaces, 9223 members after mixin
+# merge) requires deep C++ stack recursion. Ensure Python threads have
+# sufficient stack before any JSContext creation. 128MB is virtual memory
+# with lazy physical commit — actual RSS is far smaller.
+_PYTHON_MIN_STACK = 128 * 1024 * 1024
+try:
+    _current_stack = threading.stack_size()
+    if _current_stack == 0 or _current_stack < _PYTHON_MIN_STACK:
+        threading.stack_size(_PYTHON_MIN_STACK)
+except (ValueError, OSError):
+    pass
+
 # --- Profile System ---
 
 _PROFILES_DIR = Path(__file__).parent / "profiles"
@@ -232,14 +246,10 @@ def _merge_profile_env(profile: str | None, environment: dict | None) -> dict | 
 # PyO3 #[pyclass(frozen)] doesn't support Python subclassing.
 # Use a factory function approach instead.
 #
-# V8 FunctionTemplate creation (1287 interfaces, 9223 members after mixin
-# merge) requires ~4MB+ of stack. On Windows, the default thread stack
-# (1MB) is insufficient. Python's threading.stack_size() must be called
-# as a MODULE-LEVEL function (not as a thread attribute) to properly
-# set the stack reservation size. V8 isolates are thread-bound (rusty-v8
-# #643, #1467) and cannot be transferred between threads after creation.
-# Therefore JSContext must be created AND used on the same thread with
-# sufficient stack size.
+# V8 isolates are thread-bound (rusty-v8 #643, #1467) and cannot be
+# transferred between threads after creation. JSContext must be created
+# AND used on the same thread. Stack size is configured at module import
+# time via threading.stack_size(128MB) — see K-010 above.
 
 _RustJSContext = _JSContextRust
 
@@ -250,11 +260,8 @@ def JSContext(*args, profile=None, **kwargs):
     The `profile` parameter loads a JSON file and merges it with the
     environment dict. Priority: environment > profile > defaults.
 
-    Note: V8 template creation (1287 interfaces, 9223 members after mixin
-    merge) requires ~4MB+ of stack. On Windows, the default thread stack
-    (1MB) is insufficient. Use threading.stack_size(64*1024*1024) before
-    creating JSContext, or call JSContext from a thread with sufficient stack.
-    The Rust test harness uses RUST_MIN_STACK=67108864.
+    Stack size is configured automatically at module import time
+    (threading.stack_size(128MB)). No manual stack configuration needed.
 
     Args:
         profile: Path to profile JSON, or "default" for built-in preset.
