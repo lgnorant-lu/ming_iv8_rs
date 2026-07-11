@@ -109,7 +109,7 @@ a typed function. The function list IS the documentation.
 | `inspector_disconnected` | iv8.inspector | INFO | Safe | (none) |
 | `inspector_accept_error` | iv8.inspector | WARN | Diagnostic | error |
 | `shim_installed` | iv8.shim | DEBUG | Safe | name |
-| `canvas_fingerprint_warning` | iv8.canvas | WARN | Sensitive | parameter, renderer, forbidden |
+| `canvas_fingerprint_warning` | iv8.canvas | WARN | Diagnostic | parameter, renderer, forbidden |
 
 ### Adding a new event
 

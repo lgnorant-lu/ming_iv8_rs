@@ -227,7 +227,7 @@ const CATALOG: &[EventSpec] = &[
         name: "canvas_fingerprint_warning",
         category: "iv8.canvas",
         level: "WARN",
-        safety: Safety::Sensitive,
+        safety: Safety::Diagnostic,
         fields: &["parameter", "renderer", "forbidden"],
     },
     EventSpec {
@@ -664,7 +664,7 @@ pub fn init_phase_skipped(phase: &str, reason: &str) {
 // ─── Canvas events ──────────────────────────────────────────────────
 
 /// Canvas fingerprint detection warning.
-/// Safety: Sensitive (renderer string may reveal GPU vendor)
+/// Safety: Diagnostic (renderer string reveals GPU info, not user data)
 pub fn canvas_fingerprint_warning(parameter: &str, renderer: &str, forbidden: &str) {
     tracing::warn!(
         target: "iv8.canvas",

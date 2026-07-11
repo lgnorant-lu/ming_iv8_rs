@@ -112,3 +112,10 @@ pub fn make_kernel_with_profile(
 ) -> EmbeddedV8Kernel {
     EmbeddedV8Kernel::new(KernelConfig::default().with_browser_profile(profile)).unwrap()
 }
+
+/// Create a kernel in worker mode (simulates DedicatedWorkerGlobalScope).
+pub fn make_kernel_worker() -> EmbeddedV8Kernel {
+    let mut cfg = KernelConfig::default();
+    cfg.worker_mode = true;
+    EmbeddedV8Kernel::new(cfg).unwrap()
+}

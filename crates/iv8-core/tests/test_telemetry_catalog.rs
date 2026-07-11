@@ -92,6 +92,9 @@ fn test_coverage_matrix_categories_exist() {
 
 #[test]
 fn test_no_direct_tracing_outside_telemetry() {
+    // Validate that catalog categories match COVERAGE_MATRIX.
+    // Full source-level enforcement (grep for tracing:: outside
+    // telemetry.rs) is done at CI/review time, not at runtime.
     let cats: std::collections::HashSet<&str> =
         telemetry::catalog().iter().map(|e| e.category).collect();
     let expected_cats: std::collections::HashSet<&str> = telemetry::COVERAGE_MATRIX
@@ -102,6 +105,43 @@ fn test_no_direct_tracing_outside_telemetry() {
         cats, expected_cats,
         "catalog categories must match coverage matrix"
     );
+}
+
+#[test]
+fn test_catalog_has_all_expected_categories() {
+    let expected = [
+        "iv8.init",
+        "iv8.dom",
+        "iv8.config",
+        "iv8.worker",
+        "iv8.callback",
+        "iv8.eval",
+        "iv8.console",
+        "iv8.inspector",
+        "iv8.shim",
+        "iv8.canvas",
+    ];
+    let actual: std::collections::HashSet<&str> =
+        telemetry::catalog().iter().map(|e| e.category).collect();
+    for cat in &expected {
+        assert!(actual.contains(*cat), "missing category: {}", cat);
+    }
+}
+
+#[test]
+fn test_sensitive_events_only_at_debug_or_lower() {
+    // Sensitive events (may contain user data) must not be at INFO+.
+    // DEBUG and TRACE are compiled out in release builds.
+    for event in telemetry::catalog() {
+        if matches!(event.safety, telemetry::Safety::Sensitive) {
+            assert!(
+                event.level == "DEBUG" || event.level == "TRACE",
+                "sensitive event {} is at {} level — must be DEBUG or TRACE",
+                event.name,
+                event.level
+            );
+        }
+    }
 }
 
 #[test]
