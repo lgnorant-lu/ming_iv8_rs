@@ -64,12 +64,21 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
         ts_tmpl2.into(),
     );
 
-    // assign/replace/reload → no-op
-    for name in &["assign", "replace", "reload"] {
-        let noop = v8::FunctionTemplate::builder_raw(noop_callback).build(scope);
-        loc_tmpl
-            .prototype_template(scope)
-            .set(crate::v8_utils::v8_string(scope, name).into(), noop.into());
+    // assign/replace/reload → no-op with arg count enforcement via JS wrapper
+    {
+        let proto = loc_tmpl.prototype_template(scope);
+        let assign_js = crate::v8_utils::v8_string(scope, "assign");
+        let assign_fn = v8::FunctionTemplate::builder_raw(noop_min1_callback).length(1).build(scope);
+        assign_fn.set_class_name(assign_js);
+        proto.set(assign_js.into(), assign_fn.into());
+        let replace_js = crate::v8_utils::v8_string(scope, "replace");
+        let replace_fn = v8::FunctionTemplate::builder_raw(noop_min1_callback).length(1).build(scope);
+        replace_fn.set_class_name(replace_js);
+        proto.set(replace_js.into(), replace_fn.into());
+        let reload_js = crate::v8_utils::v8_string(scope, "reload");
+        let reload_fn = v8::FunctionTemplate::builder_raw(noop_callback).length(0).build(scope);
+        reload_fn.set_class_name(reload_js);
+        proto.set(reload_js.into(), reload_fn.into());
     }
 
     let obj = loc_tmpl
@@ -333,3 +342,14 @@ unsafe extern "C" fn loc_to_string(info: *const v8::FunctionCallbackInfo) {
 }
 
 unsafe extern "C" fn noop_callback(_info: *const v8::FunctionCallbackInfo) {}
+
+unsafe extern "C" fn noop_min1_callback(info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*info };
+    v8::callback_scope!(unsafe scope, info_ref);
+    let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+    if args.length() < 1 {
+        let msg = crate::v8_utils::v8_string(scope, "1 argument required, but only 0 present");
+        let exc = v8::Exception::type_error(scope, msg);
+        scope.throw_exception(exc);
+    }
+}

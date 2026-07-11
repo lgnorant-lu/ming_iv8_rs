@@ -26,15 +26,15 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         cancelAnimationFrame: function cancelAnimationFrame(id) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
         reportError: function reportError(e) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (typeof console !== 'undefined' && console.error) console.error(e); },
         createImageBitmap: function createImageBitmap() { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return Promise.reject(new TypeError('Not supported')); },
-        moveTo: function moveTo(x, y) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
-        moveBy: function moveBy(dx, dy) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
-        resizeTo: function resizeTo(w, h) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
-        resizeBy: function resizeBy(dw, dh) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        moveTo: function moveTo(x, y) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (arguments.length < 2) throw new TypeError('2 argument(s) required, but only ' + arguments.length + ' present.'); },
+        moveBy: function moveBy(dx, dy) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (arguments.length < 2) throw new TypeError('2 argument(s) required, but only ' + arguments.length + ' present.'); },
+        resizeTo: function resizeTo(w, h) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (arguments.length < 2) throw new TypeError('2 argument(s) required, but only ' + arguments.length + ' present.'); },
+        resizeBy: function resizeBy(dw, dh) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (arguments.length < 2) throw new TypeError('2 argument(s) required, but only ' + arguments.length + ' present.'); },
         scroll: function scroll(x, y) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
         scrollTo: function scrollTo(x, y) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
         scrollBy: function scrollBy(dx, dy) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
         getComputedStyle: function getComputedStyle(el, pseudo) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return { getPropertyValue: function(prop) { return ''; }, getPropertyPriority: function(prop) { return ''; }, length: 0, item: function(i) { return ''; } }; },
-        matchMedia: function matchMedia(query) { 'use strict'; if (this === null || this === undefined) throw new TypeError('Illegal invocation'); if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return { matches: false, media: query, addListener: function() {}, removeListener: function() {}, addEventListener: function() {}, removeEventListener: function() {}, dispatchEvent: function() { return true; }, onchange: null }; }
+        matchMedia: function matchMedia(query) { 'use strict'; if (this === null || this === undefined) throw new TypeError('Illegal invocation'); if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.'); return { matches: false, media: query, addListener: function() {}, removeListener: function() {}, addEventListener: function() {}, removeEventListener: function() {}, dispatchEvent: function() { return true; }, onchange: null }; }
     };
     Object.keys(_winOps).forEach(function(k) {
         // Only install if Window.prototype does NOT already have this method
