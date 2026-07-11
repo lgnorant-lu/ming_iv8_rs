@@ -4657,11 +4657,13 @@ unsafe extern "C" fn canvas_height_setter(info: *const v8::FunctionCallbackInfo)
 
 unsafe extern "C" fn get_context_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, rv, _state, node_id| {
-        let ctx_type = if args.length() >= 1 {
-            args.get(0).to_rust_string_lossy(scope)
-        } else {
-            "2d".to_string()
-        };
+        if args.length() < 1 {
+            let msg = crate::v8_utils::v8_string(scope, "1 argument required, but only 0 present");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let ctx_type = args.get(0).to_rust_string_lossy(scope);
         let global = scope.get_current_context().global(scope);
 
         // Use node_id as canvas ID for stable identity, or generate a random one
@@ -4754,7 +4756,18 @@ unsafe extern "C" fn to_data_url_cb(info: *const v8::FunctionCallbackInfo) {
     });
 }
 
-unsafe extern "C" fn to_blob_cb(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn to_blob_cb(info: *const v8::FunctionCallbackInfo) {
+    null_this_check(info);
+    let info_ref = unsafe { &*info };
+    v8::callback_scope!(unsafe scope, info_ref);
+    let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+    if args.length() < 1 {
+        let msg = crate::v8_utils::v8_string(scope, "1 argument required, but only 0 present");
+        let exc = v8::Exception::type_error(scope, msg);
+        scope.throw_exception(exc);
+        return;
+    }
+}
 
 // ── Image-specific ────────────────────────────────────────────────────────────
 
