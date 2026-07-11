@@ -51,3 +51,76 @@ pub fn lock_channel_state(state: &SharedChannelState) -> std::sync::MutexGuard<'
         Err(poisoned) => poisoned.into_inner(),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_channel_state_new_defaults() {
+        let state = ChannelState::new();
+        assert!(state.outgoing.is_empty());
+        assert!(state.incoming.is_empty());
+        assert!(!state.connected);
+        assert!(!state.paused);
+    }
+
+    #[test]
+    fn test_channel_state_default_trait() {
+        let state = ChannelState::default();
+        assert!(!state.connected);
+        assert!(!state.paused);
+    }
+
+    #[test]
+    fn test_inspector_message_response_variant() {
+        let msg = InspectorMessage::Response {
+            call_id: 42,
+            message: "{\"id\":42}".to_string(),
+        };
+        match msg {
+            InspectorMessage::Response { call_id, message } => {
+                assert_eq!(call_id, 42);
+                assert!(message.contains("42"));
+            }
+            _ => panic!("expected Response variant"),
+        }
+    }
+
+    #[test]
+    fn test_inspector_message_notification_variant() {
+        let msg = InspectorMessage::Notification {
+            message: "Debugger.paused".to_string(),
+        };
+        match msg {
+            InspectorMessage::Notification { message } => {
+                assert_eq!(message, "Debugger.paused");
+            }
+            _ => panic!("expected Notification variant"),
+        }
+    }
+
+    #[test]
+    fn test_lock_channel_state_acquires_lock() {
+        let state: SharedChannelState = std::sync::Arc::new(std::sync::Mutex::new(ChannelState::new()));
+        {
+            let mut guard = lock_channel_state(&state);
+            guard.connected = true;
+        }
+        let guard = lock_channel_state(&state);
+        assert!(guard.connected);
+    }
+
+    #[test]
+    fn test_lock_channel_state_recovers_from_poison() {
+        let state: SharedChannelState = std::sync::Arc::new(std::sync::Mutex::new(ChannelState::new()));
+        // Poison the mutex by panicking while holding the lock
+        let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let _guard = state.lock().unwrap();
+            panic!("intentional poison");
+        }));
+        // lock_channel_state should recover from poison
+        let guard = lock_channel_state(&state);
+        assert!(!guard.connected);
+    }
+}

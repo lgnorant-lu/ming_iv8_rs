@@ -258,3 +258,49 @@ impl CdpClient {
             .unwrap_or(serde_json::Value::Null))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::inspector::channel::ChannelState;
+
+    fn make_client() -> CdpClient {
+        let state: SharedChannelState = std::sync::Arc::new(std::sync::Mutex::new(
+            ChannelState::new(),
+        ));
+        CdpClient::new(state)
+    }
+
+    #[test]
+    fn test_cdp_client_new_defaults() {
+        let client = make_client();
+        assert!(!client.debugger_enabled);
+        assert!(!client.is_paused);
+        assert!(client.last_paused_frames.is_none());
+    }
+
+    #[test]
+    fn test_cdp_client_get_call_frames_none_initially() {
+        let client = make_client();
+        assert!(client.get_call_frames().is_none());
+    }
+
+    #[test]
+    fn test_cdp_client_get_call_frames_returns_set_value() {
+        let mut client = make_client();
+        let frames = serde_json::json!([{"callFrameId": "0", "functionName": "test"}]);
+        client.last_paused_frames = Some(frames.clone());
+        let result = client.get_call_frames().unwrap();
+        assert_eq!(result, &frames);
+    }
+
+    #[test]
+    fn test_cdp_client_next_id_starts_at_1000() {
+        let state: SharedChannelState = std::sync::Arc::new(std::sync::Mutex::new(
+            ChannelState::new(),
+        ));
+        let client = CdpClient::new(state.clone());
+        let id = client.next_id.fetch_add(1, Ordering::SeqCst);
+        assert_eq!(id, 1000);
+    }
+}

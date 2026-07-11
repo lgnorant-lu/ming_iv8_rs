@@ -19,6 +19,66 @@ pub enum WorkerMessage {
     Terminate,
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_worker_message_post_message_variant() {
+        let msg = WorkerMessage::PostMessage(vec![1, 2, 3]);
+        match msg {
+            WorkerMessage::PostMessage(data) => assert_eq!(data, vec![1, 2, 3]),
+            WorkerMessage::Terminate => panic!("expected PostMessage"),
+        }
+    }
+
+    #[test]
+    fn test_worker_message_terminate_variant() {
+        let msg = WorkerMessage::Terminate;
+        match msg {
+            WorkerMessage::Terminate => {}
+            _ => panic!("expected Terminate"),
+        }
+    }
+
+    #[test]
+    fn test_worker_message_channel_send_receive() {
+        let (tx, rx) = std::sync::mpsc::channel();
+        tx.send(WorkerMessage::PostMessage(vec![42])).unwrap();
+        let msg = rx.recv().unwrap();
+        match msg {
+            WorkerMessage::PostMessage(data) => assert_eq!(data, vec![42]),
+            _ => panic!("expected PostMessage"),
+        }
+    }
+
+    #[test]
+    fn test_worker_message_channel_terminate() {
+        let (tx, rx) = std::sync::mpsc::channel();
+        tx.send(WorkerMessage::Terminate).unwrap();
+        let msg = rx.recv().unwrap();
+        matches!(msg, WorkerMessage::Terminate);
+    }
+
+    #[test]
+    fn test_worker_message_channel_closed_returns_error() {
+        let (tx, rx) = std::sync::mpsc::channel::<WorkerMessage>();
+        drop(tx);
+        assert!(rx.recv().is_err());
+    }
+
+    #[test]
+    fn test_worker_bootstrap_js_is_non_empty() {
+        assert!(!WORKER_BOOTSTRAP_JS.is_empty());
+        assert!(WORKER_BOOTSTRAP_JS.contains("function"));
+    }
+
+    #[test]
+    fn test_worker_js_stub_is_non_empty() {
+        assert!(!WORKER_JS_STUB.is_empty());
+    }
+}
+
 struct WorkerSlot {
     main_tx: Sender<Vec<u8>>,
     closed: std::cell::Cell<bool>,

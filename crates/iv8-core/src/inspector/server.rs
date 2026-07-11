@@ -34,6 +34,38 @@ pub fn start_server(port: u16) -> std::io::Result<(SharedChannelState, String)> 
     Ok((state, devtools_url))
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_start_server_binds_port() {
+        let (state, url) = start_server(0).unwrap();
+        assert!(url.starts_with("devtools://"));
+        assert!(url.contains("127.0.0.1"));
+        let guard = lock_channel_state(&state);
+        assert!(!guard.connected);
+    }
+
+    #[test]
+    fn test_start_server_returns_valid_url() {
+        let (_state, url) = start_server(0).unwrap();
+        assert!(url.contains("ws=127.0.0.1"));
+    }
+
+    #[test]
+    fn test_start_server_multiple_instances() {
+        let (state1, _url1) = start_server(0).unwrap();
+        let (state2, _url2) = start_server(0).unwrap();
+        {
+            let mut g1 = lock_channel_state(&state1);
+            g1.connected = true;
+        }
+        let g2 = lock_channel_state(&state2);
+        assert!(!g2.connected, "channel state should be independent");
+    }
+}
+
 fn run_server(listener: TcpListener, state: SharedChannelState) {
     // Accept one connection at a time
     for stream in listener.incoming() {

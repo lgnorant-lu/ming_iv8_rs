@@ -218,3 +218,62 @@ impl v8::inspector::ChannelImpl for InspectorChannelImpl {
 
     fn flush_protocol_notifications(&self) {}
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_inspector_config_default() {
+        let config = InspectorConfig::default();
+        assert_eq!(config.port, 9229);
+        assert!(config.watch_apis.is_empty());
+        assert!(config.enable_console);
+    }
+
+    #[test]
+    fn test_inspector_config_custom_port() {
+        let config = InspectorConfig {
+            port: 8080,
+            watch_apis: vec!["console.log".to_string()],
+            enable_console: false,
+        };
+        assert_eq!(config.port, 8080);
+        assert_eq!(config.watch_apis.len(), 1);
+        assert!(!config.enable_console);
+    }
+
+    #[test]
+    fn test_vdebugger_js_contains_define_property() {
+        let js = InspectorSession::vdebugger_js();
+        assert!(js.contains("defineProperty"));
+        assert!(js.contains("vdebugger"));
+        assert!(js.contains("debugger"));
+    }
+
+    #[test]
+    fn test_vdebugger_js_is_valid_js_skeleton() {
+        let js = InspectorSession::vdebugger_js();
+        assert!(js.trim_start().starts_with("(function"));
+        assert!(js.trim_end().ends_with(")();"));
+    }
+
+    #[test]
+    fn test_inspector_client_impl_new() {
+        let state: SharedChannelState = std::sync::Arc::new(std::sync::Mutex::new(
+            crate::inspector::channel::ChannelState::new(),
+        ));
+        let client = InspectorClientImpl::new(state);
+        // Just verify it was created without panic
+        let _ = &client;
+    }
+
+    #[test]
+    fn test_inspector_channel_impl_new() {
+        let state: SharedChannelState = std::sync::Arc::new(std::sync::Mutex::new(
+            crate::inspector::channel::ChannelState::new(),
+        ));
+        let channel = InspectorChannelImpl::new(state);
+        let _ = &channel;
+    }
+}
