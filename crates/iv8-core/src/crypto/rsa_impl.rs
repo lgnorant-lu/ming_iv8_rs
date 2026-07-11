@@ -385,3 +385,98 @@ fn unwrap_impl<C: aes::cipher::BlockCipher + aes::cipher::KeyInit + aes::cipher:
     }
     Ok(result)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_rsa_generate_key_2048() {
+        let (pub_key, priv_key) = rsa_generate_key(2048).unwrap();
+        let pub_spki = export_rsa_public_key_spki(&pub_key).unwrap();
+        assert!(pub_spki.len() > 100);
+        let priv_pkcs8 = export_rsa_private_key_pkcs8(&priv_key).unwrap();
+        assert!(priv_pkcs8.len() > 100);
+    }
+
+    #[test]
+    fn test_rsa_oaep_encrypt_decrypt_roundtrip() {
+        let (pub_key, priv_key) = rsa_generate_key(2048).unwrap();
+        let data = b"secret message";
+        let encrypted = rsa_oaep_encrypt(&pub_key, data, "SHA-256").unwrap();
+        assert_ne!(encrypted, data);
+        let decrypted = rsa_oaep_decrypt(&priv_key, &encrypted, "SHA-256").unwrap();
+        assert_eq!(decrypted, data);
+    }
+
+    #[test]
+    fn test_rsa_pss_sign_verify_roundtrip() {
+        let (pub_key, priv_key) = rsa_generate_key(2048).unwrap();
+        let data = b"message to sign";
+        let sig = rsa_pss_sign(&priv_key, data, "SHA-256", 32).unwrap();
+        assert!(rsa_pss_verify(&pub_key, data, &sig, "SHA-256"));
+    }
+
+    #[test]
+    fn test_rsa_pss_verify_wrong_data_fails() {
+        let (pub_key, priv_key) = rsa_generate_key(2048).unwrap();
+        let sig = rsa_pss_sign(&priv_key, b"original", "SHA-256", 32).unwrap();
+        assert!(!rsa_pss_verify(&pub_key, b"tampered", &sig, "SHA-256"));
+    }
+
+    #[test]
+    fn test_rsa_pkcs1_sign_verify_roundtrip() {
+        let (pub_key, priv_key) = rsa_generate_key(2048).unwrap();
+        let data = b"pkcs1 test";
+        let sig = rsa_pkcs1_sign(&priv_key, data, "SHA-256").unwrap();
+        assert!(rsa_pkcs1_verify(&pub_key, data, &sig, "SHA-256"));
+    }
+
+    #[test]
+    fn test_rsa_export_import_public_key_spki_roundtrip() {
+        let (pub_key, _priv_key) = rsa_generate_key(2048).unwrap();
+        let spki = export_rsa_public_key_spki(&pub_key).unwrap();
+        let imported = import_rsa_public_key_spki(&spki).unwrap();
+        let spki2 = export_rsa_public_key_spki(&imported).unwrap();
+        assert_eq!(spki, spki2);
+    }
+
+    #[test]
+    fn test_rsa_export_import_private_key_pkcs8_roundtrip() {
+        let (_pub_key, priv_key) = rsa_generate_key(2048).unwrap();
+        let pkcs8 = export_rsa_private_key_pkcs8(&priv_key).unwrap();
+        let imported = import_rsa_private_key_pkcs8(&pkcs8).unwrap();
+        let pkcs8_2 = export_rsa_private_key_pkcs8(&imported).unwrap();
+        assert_eq!(pkcs8, pkcs8_2);
+    }
+
+    #[test]
+    fn test_aes_kw_wrap_unwrap_roundtrip() {
+        let kek = [0u8; 16]; // AES-128 key
+        let key_data = [0x42u8; 16]; // 128-bit key to wrap
+        let wrapped = aes_kw_wrap(&kek, &key_data).unwrap();
+        assert_ne!(wrapped, key_data);
+        let unwrapped = aes_kw_unwrap(&kek, &wrapped).unwrap();
+        assert_eq!(unwrapped, key_data);
+    }
+
+    #[test]
+    fn test_aes_kw_unwrap_bad_data_fails() {
+        let kek = [0u8; 16];
+        let bad_wrapped = vec![0xFFu8; 24];
+        let result = aes_kw_unwrap(&kek, &bad_wrapped);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_import_rsa_public_key_spki_invalid_der() {
+        let bad_der = vec![0x00, 0x01, 0x02];
+        assert!(import_rsa_public_key_spki(&bad_der).is_err());
+    }
+
+    #[test]
+    fn test_import_rsa_private_key_pkcs8_invalid_der() {
+        let bad_der = vec![0x00, 0x01, 0x02];
+        assert!(import_rsa_private_key_pkcs8(&bad_der).is_err());
+    }
+}

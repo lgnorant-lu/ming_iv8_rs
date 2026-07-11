@@ -53,8 +53,9 @@ pub fn ed25519_generate_key() -> (VerifyingKey, SigningKey) {
 pub fn x25519_generate_key() -> (X25519PublicKey, Vec<u8>) {
     let mut private_bytes = [0u8; 32];
     rand::rngs::OsRng.fill_bytes(&mut private_bytes);
-    let public = X25519PublicKey::from(private_bytes);
-    (public, private_bytes.to_vec())
+    let public = x25519_dalek::x25519(private_bytes, x25519_dalek::X25519_BASEPOINT_BYTES);
+    let pub_key = X25519PublicKey::from(public);
+    (pub_key, private_bytes.to_vec())
 }
 
 /// X25519 deriveBits (shared secret).
@@ -94,4 +95,99 @@ pub fn export_ed25519_public_raw(key: &VerifyingKey) -> Vec<u8> {
 /// Export Ed25519 private key to raw 32 bytes.
 pub fn export_ed25519_private_raw(key: &SigningKey) -> Vec<u8> {
     key.to_bytes().to_vec()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_ed25519_sign_verify_roundtrip() {
+        let (vk, sk) = ed25519_generate_key();
+        let data = b"hello world";
+        let sig = ed25519_sign(&sk, data);
+        assert_eq!(sig.len(), 64);
+        assert!(ed25519_verify(&vk, data, &sig));
+    }
+
+    #[test]
+    fn test_ed25519_verify_wrong_data_fails() {
+        let (vk, sk) = ed25519_generate_key();
+        let sig = ed25519_sign(&sk, b"original");
+        assert!(!ed25519_verify(&vk, b"tampered", &sig));
+    }
+
+    #[test]
+    fn test_ed25519_verify_wrong_signature_fails() {
+        let (vk, _sk) = ed25519_generate_key();
+        let bad_sig = vec![0u8; 64];
+        assert!(!ed25519_verify(&vk, b"data", &bad_sig));
+    }
+
+    #[test]
+    fn test_ed25519_verify_short_signature_fails() {
+        let (vk, _sk) = ed25519_generate_key();
+        let short_sig = vec![0u8; 32];
+        assert!(!ed25519_verify(&vk, b"data", &short_sig));
+    }
+
+    #[test]
+    fn test_ed25519_import_export_public_raw_roundtrip() {
+        let (vk, _sk) = ed25519_generate_key();
+        let raw = export_ed25519_public_raw(&vk);
+        assert_eq!(raw.len(), 32);
+        let imported = import_ed25519_public_raw(&raw).unwrap();
+        assert_eq!(export_ed25519_public_raw(&imported), raw);
+    }
+
+    #[test]
+    fn test_ed25519_import_public_raw_wrong_length() {
+        let result = import_ed25519_public_raw(&[0u8; 16]);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_ed25519_import_private_raw_wrong_length() {
+        let result = import_ed25519_private_raw(&[0u8; 16]);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_ed25519_import_export_private_raw_roundtrip() {
+        let (_vk, sk) = ed25519_generate_key();
+        let raw = export_ed25519_private_raw(&sk);
+        assert_eq!(raw.len(), 32);
+        let imported = import_ed25519_private_raw(&raw).unwrap();
+        let sig1 = ed25519_sign(&sk, b"test");
+        let sig2 = ed25519_sign(&imported, b"test");
+        assert_eq!(sig1, sig2);
+    }
+
+    #[test]
+    fn test_x25519_generate_key_length() {
+        let (pub_key, priv_key) = x25519_generate_key();
+        assert_eq!(pub_key.as_bytes().len(), 32);
+        assert_eq!(priv_key.len(), 32);
+    }
+
+    #[test]
+    fn test_x25519_derive_bits_roundtrip() {
+        let (pub_a, priv_a) = x25519_generate_key();
+        let (pub_b, priv_b) = x25519_generate_key();
+        let priv_a_arr: [u8; 32] = priv_a.try_into().unwrap();
+        let priv_b_arr: [u8; 32] = priv_b.try_into().unwrap();
+        let shared_a = x25519_derive_bits(&priv_a_arr, pub_b.as_bytes()).unwrap();
+        let shared_b = x25519_derive_bits(&priv_b_arr, pub_a.as_bytes()).unwrap();
+        // DH should produce the same shared secret from both sides
+        assert_eq!(shared_a, shared_b, "X25519 DH shared secrets must match");
+        assert_eq!(shared_a.len(), 32);
+    }
+
+    #[test]
+    fn test_x25519_derive_bits_all_zero_returns_error() {
+        let zero_priv = [0u8; 32];
+        let zero_pub = [0u8; 32];
+        let result = x25519_derive_bits(&zero_priv, &zero_pub);
+        assert!(result.is_err());
+    }
 }

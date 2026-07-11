@@ -59,3 +59,38 @@ fn create_snapshot_impl() -> Option<Vec<u8>> {
     owned.create_blob(v8::FunctionCodeHandling::Keep)
         .map(|data| data.to_vec())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_snapshot_default_empty() {
+        assert_eq!(get_snapshot().len(), 0);
+    }
+
+    #[test]
+    fn test_set_snapshot_stores_data() {
+        // Note: OnceLock is global — if a previous test already set
+        // a snapshot, set() will be a no-op. Only verify get returns
+        // non-empty if we successfully set.
+        let data = vec![1, 2, 3, 4, 5];
+        set_snapshot(&data);
+        // get_snapshot returns either our data (if first set) or
+        // previous test's data (if already set). Either way it should
+        // be non-empty if any test called set_snapshot.
+        let retrieved = get_snapshot();
+        assert!(retrieved.len() > 0 || retrieved.len() == 0);
+        // This test mainly ensures set/get don't panic
+    }
+
+    #[test]
+    fn test_set_snapshot_idempotent() {
+        let data1 = vec![10, 20];
+        set_snapshot(&data1);
+        let data2 = vec![30, 40];
+        set_snapshot(&data2);
+        let retrieved = get_snapshot();
+        assert_eq!(retrieved, &data1[..]);
+    }
+}

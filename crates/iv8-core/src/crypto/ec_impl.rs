@@ -245,3 +245,98 @@ pub fn ecdh_derive_bits(
         _ => Err("ECDH: key curve mismatch or wrong key type".to_string()),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_ecdsa_generate_key_p256() {
+        let (priv_key, pub_key) = ecdsa_generate_key(EcCurve::P256).unwrap();
+        assert_eq!(pub_key.curve(), EcCurve::P256);
+        assert_eq!(priv_key.curve(), EcCurve::P256);
+        assert_eq!(pub_key.key_type(), "public");
+        assert_eq!(priv_key.key_type(), "private");
+    }
+
+    #[test]
+    fn test_ecdsa_generate_key_p384() {
+        let (priv_key, pub_key) = ecdsa_generate_key(EcCurve::P384).unwrap();
+        assert_eq!(pub_key.curve(), EcCurve::P384);
+        assert_eq!(priv_key.curve(), EcCurve::P384);
+    }
+
+    #[test]
+    fn test_ecdsa_sign_verify_p256_roundtrip() {
+        let (priv_key, pub_key) = ecdsa_generate_key(EcCurve::P256).unwrap();
+        let data = b"ecdsa test message";
+        let sig = ecdsa_sign(&priv_key, data, "SHA-256").unwrap();
+        assert!(ecdsa_verify(&pub_key, data, &sig));
+    }
+
+    #[test]
+    fn test_ecdsa_sign_verify_p384_roundtrip() {
+        let (priv_key, pub_key) = ecdsa_generate_key(EcCurve::P384).unwrap();
+        let data = b"p384 test";
+        let sig = ecdsa_sign(&priv_key, data, "SHA-384").unwrap();
+        assert!(ecdsa_verify(&pub_key, data, &sig));
+    }
+
+    #[test]
+    fn test_ecdsa_verify_wrong_data_fails() {
+        let (priv_key, pub_key) = ecdsa_generate_key(EcCurve::P256).unwrap();
+        let sig = ecdsa_sign(&priv_key, b"original", "SHA-256").unwrap();
+        assert!(!ecdsa_verify(&pub_key, b"tampered", &sig));
+    }
+
+    #[test]
+    fn test_ec_key_raw_bytes_roundtrip_p256() {
+        let (_priv_key, pub_key) = ecdsa_generate_key(EcCurve::P256).unwrap();
+        let raw = pub_key.to_raw_bytes();
+        assert!(!raw.is_empty());
+        let imported = import_ec_key_raw(&raw, EcCurve::P256, "public").unwrap();
+        assert_eq!(imported.to_raw_bytes(), raw);
+    }
+
+    #[test]
+    fn test_ec_key_spki_der_roundtrip() {
+        let (_priv_key, pub_key) = ecdsa_generate_key(EcCurve::P256).unwrap();
+        let spki = pub_key.to_spki_der().unwrap();
+        let imported = import_ec_public_key_spki(&spki, EcCurve::P256).unwrap();
+        assert_eq!(imported.to_spki_der().unwrap(), spki);
+    }
+
+    #[test]
+    fn test_ec_key_pkcs8_der_roundtrip() {
+        let (priv_key, _pub_key) = ecdsa_generate_key(EcCurve::P256).unwrap();
+        let pkcs8 = priv_key.to_pkcs8_der().unwrap();
+        let imported = import_ec_private_key_pkcs8(&pkcs8, EcCurve::P256).unwrap();
+        assert_eq!(imported.to_pkcs8_der().unwrap(), pkcs8);
+    }
+
+    #[test]
+    fn test_ecdh_derive_bits_p256_roundtrip() {
+        let (priv_a, pub_a) = ecdsa_generate_key(EcCurve::P256).unwrap();
+        let (priv_b, pub_b) = ecdsa_generate_key(EcCurve::P256).unwrap();
+        let shared_a = ecdh_derive_bits(&priv_a, &pub_b, 256).unwrap();
+        let shared_b = ecdh_derive_bits(&priv_b, &pub_a, 256).unwrap();
+        assert_eq!(shared_a, shared_b);
+        assert_eq!(shared_a.len(), 32);
+    }
+
+    #[test]
+    fn test_ecdh_derive_bits_curve_mismatch_fails() {
+        let (priv_a, _pub_a) = ecdsa_generate_key(EcCurve::P256).unwrap();
+        let (_priv_b, pub_b) = ecdsa_generate_key(EcCurve::P384).unwrap();
+        let result = ecdh_derive_bits(&priv_a, &pub_b, 256);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_ec_curve_from_name() {
+        assert_eq!(EcCurve::from_name("P-256"), Some(EcCurve::P256));
+        assert_eq!(EcCurve::from_name("P-384"), Some(EcCurve::P384));
+        assert_eq!(EcCurve::from_name("P-521"), None);
+        assert_eq!(EcCurve::from_name("invalid"), None);
+    }
+}
