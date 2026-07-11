@@ -825,12 +825,13 @@ impl EmbeddedV8Kernel {
             let _ = v8::Script::compile(scope, request_fix, None).and_then(|s| s.run(scope));
 
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
-            // [Global] accessor fix is Window-only — skip in worker mode to avoid
-            // installing document/window/top etc. on worker globalThis.
-            if !worker_mode {
-                iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
-                iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);
-            }
+            // [Global] accessor fix — run in both Window and Worker mode.
+            // In worker mode, fix_global_accessor_properties installs
+            // WorkerGlobalScope attributes (self, location, navigator, etc.)
+            // on globalThis. Window-only attributes are skipped via should_skip
+            // check (they don't exist in worker context).
+            iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
+            iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);
             // fix_operation_callbacks runs in install_browser_surface_init
             // (before shim JS evals) to avoid overwriting shim operations.
 
@@ -1554,17 +1555,25 @@ try {
             "#);
             let _ = v8::Script::compile(scope, name_length_js, None).and_then(|s| s.run(scope));
 
+            if !worker_mode {
+                let js = crate::v8_utils::v8_string(scope, r#"
+                    (function() {
+                        var workerOnly = ['WorkerGlobalScope','DedicatedWorkerGlobalScope',
+                            'SharedWorkerGlobalScope','ServiceWorkerGlobalScope',
+                            'WorkerNavigator','WorkerLocation','WorkletGlobalScope',
+                            'AnimationWorkletGlobalScope','AudioWorkletGlobalScope',
+                            'LayoutWorkletGlobalScope','PaintWorkletGlobalScope',
+                            'RTCIdentityProviderGlobalScope'];
+                        for (var i = 0; i < workerOnly.length; i++) {
+                            try { delete globalThis[workerOnly[i]]; } catch(e) {}
+                        }
+                    })();
+                "#);
+                let _ = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope));
+            }
+
             let js = crate::v8_utils::v8_string(scope, r#"
                 (function() {
-                    var workerOnly = ['WorkerGlobalScope','DedicatedWorkerGlobalScope',
-                        'SharedWorkerGlobalScope','ServiceWorkerGlobalScope',
-                        'WorkerNavigator','WorkerLocation','WorkletGlobalScope',
-                        'AnimationWorkletGlobalScope','AudioWorkletGlobalScope',
-                        'LayoutWorkletGlobalScope','PaintWorkletGlobalScope',
-                        'RTCIdentityProviderGlobalScope'];
-                    for (var i = 0; i < workerOnly.length; i++) {
-                        try { delete globalThis[workerOnly[i]]; } catch(e) {}
-                    }
                     var names = Object.getOwnPropertyNames(globalThis);
                     for (var i = 0; i < names.length; i++) {
                         try {

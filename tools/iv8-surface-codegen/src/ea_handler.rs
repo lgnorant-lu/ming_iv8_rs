@@ -77,6 +77,17 @@ pub fn process_interface_ea(def: &Definition) -> EaResult {
         }
     }
 
+    // WorkerGlobalScope is [Global=Worker] in the WebIDL spec but the IR
+    // parser drops [Global] when the value is a plain string. Hardcode
+    // override to ensure correct codegen behavior.
+    if !result.is_global {
+        if let Some(name) = &def.name {
+            if name == "WorkerGlobalScope" {
+                result.is_global = true;
+            }
+        }
+    }
+
     // Check for [Exposed=Worker] or [Exposed=(Window,Worker)]
     for attr in &def.ext_attrs {
         if attr.starts_with("Exposed") {

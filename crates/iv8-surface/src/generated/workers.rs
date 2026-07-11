@@ -9218,39 +9218,40 @@ pub fn create_worker_global_scope_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    let inst = tmpl.instance_template(scope);
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WorkerGlobalScope").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    install_worker_global_scope_members_1(scope, proto);
-    install_worker_global_scope_members_2(scope, proto);
-    install_worker_global_scope_members_3(scope, proto);
+    install_worker_global_scope_members_1(scope, inst, proto);
+    install_worker_global_scope_members_2(scope, inst, proto);
+    install_worker_global_scope_members_3(scope, inst, proto);
 
     tmpl
 }
 
-fn install_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
+fn install_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, inst: v8::Local<'s, v8::ObjectTemplate>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: self
     {
         let name = v8::String::new(scope, "self").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(worker_global_scope_get_1).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get self").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: location
     {
         let name = v8::String::new(scope, "location").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(worker_global_scope_get_2).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get location").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: navigator
     {
         let name = v8::String::new(scope, "navigator").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(worker_global_scope_get_3).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get navigator").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: importScripts()
     {
@@ -9266,7 +9267,7 @@ fn install_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
         getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(worker_global_scope_set_5).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onlanguagechange
     {
@@ -9275,7 +9276,7 @@ fn install_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
         getter.set_class_name(v8::String::new(scope, "get onlanguagechange").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(worker_global_scope_set_6).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onlanguagechange").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onoffline
     {
@@ -9284,7 +9285,7 @@ fn install_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
         getter.set_class_name(v8::String::new(scope, "get onoffline").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(worker_global_scope_set_7).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onoffline").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ononline
     {
@@ -9293,7 +9294,7 @@ fn install_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
         getter.set_class_name(v8::String::new(scope, "get ononline").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(worker_global_scope_set_8).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ononline").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onrejectionhandled
     {
@@ -9302,7 +9303,7 @@ fn install_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
         getter.set_class_name(v8::String::new(scope, "get onrejectionhandled").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(worker_global_scope_set_9).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onrejectionhandled").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onunhandledrejection
     {
@@ -9311,17 +9312,17 @@ fn install_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
         getter.set_class_name(v8::String::new(scope, "get onunhandledrejection").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(worker_global_scope_set_10).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onunhandledrejection").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
 
-fn install_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
+fn install_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_>, inst: v8::Local<'s, v8::ObjectTemplate>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: fonts
     {
         let name = v8::String::new(scope, "fonts").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(worker_global_scope_get_11).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get fonts").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: origin
     {
@@ -9330,21 +9331,21 @@ fn install_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
         getter.set_class_name(v8::String::new(scope, "get origin").unwrap());
         let setter = v8::FunctionTemplate::builder_raw(worker_global_scope_set_12).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set origin").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: isSecureContext
     {
         let name = v8::String::new(scope, "isSecureContext").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(worker_global_scope_get_13).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get isSecureContext").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: crossOriginIsolated
     {
         let name = v8::String::new(scope, "crossOriginIsolated").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(worker_global_scope_get_14).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get crossOriginIsolated").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        inst.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: reportError()
     {
@@ -9390,7 +9391,7 @@ fn install_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     }
 }
 
-fn install_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
+fn install_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_>, inst: v8::Local<'s, v8::ObjectTemplate>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: clearInterval()
     {
         let name = v8::String::new(scope, "clearInterval").unwrap();
@@ -12695,174 +12696,6 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
             }
         }
     }
-    {
-        let ctor_key = v8::String::new(scope, "WorkerGlobalScope").unwrap();
-        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
-            if ctor_val.is_function() {
-                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
-                let proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
-                    if let Some(proto_obj) = proto_val.to_object(scope) {
-                        let attr_key = v8::String::new(scope, "onerror").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(worker_global_scope_get_5).length(0).build(scope);
-                        g.set_class_name(v8::String::new(scope, "get onerror").unwrap());
-                        let s = v8::FunctionTemplate::builder_raw(worker_global_scope_set_5).length(1).build(scope);
-                        s.set_class_name(v8::String::new(scope, "set onerror").unwrap());
-                        let gf = g.get_function(scope).unwrap();
-                        let sf = s.get_function(scope).unwrap();
-                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
-                        d.set_enumerable(true);
-                        d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
-                    }
-                }
-            }
-        }
-    }
-    {
-        let ctor_key = v8::String::new(scope, "WorkerGlobalScope").unwrap();
-        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
-            if ctor_val.is_function() {
-                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
-                let proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
-                    if let Some(proto_obj) = proto_val.to_object(scope) {
-                        let attr_key = v8::String::new(scope, "onlanguagechange").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(worker_global_scope_get_6).length(0).build(scope);
-                        g.set_class_name(v8::String::new(scope, "get onlanguagechange").unwrap());
-                        let s = v8::FunctionTemplate::builder_raw(worker_global_scope_set_6).length(1).build(scope);
-                        s.set_class_name(v8::String::new(scope, "set onlanguagechange").unwrap());
-                        let gf = g.get_function(scope).unwrap();
-                        let sf = s.get_function(scope).unwrap();
-                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
-                        d.set_enumerable(true);
-                        d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
-                    }
-                }
-            }
-        }
-    }
-    {
-        let ctor_key = v8::String::new(scope, "WorkerGlobalScope").unwrap();
-        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
-            if ctor_val.is_function() {
-                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
-                let proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
-                    if let Some(proto_obj) = proto_val.to_object(scope) {
-                        let attr_key = v8::String::new(scope, "onoffline").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(worker_global_scope_get_7).length(0).build(scope);
-                        g.set_class_name(v8::String::new(scope, "get onoffline").unwrap());
-                        let s = v8::FunctionTemplate::builder_raw(worker_global_scope_set_7).length(1).build(scope);
-                        s.set_class_name(v8::String::new(scope, "set onoffline").unwrap());
-                        let gf = g.get_function(scope).unwrap();
-                        let sf = s.get_function(scope).unwrap();
-                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
-                        d.set_enumerable(true);
-                        d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
-                    }
-                }
-            }
-        }
-    }
-    {
-        let ctor_key = v8::String::new(scope, "WorkerGlobalScope").unwrap();
-        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
-            if ctor_val.is_function() {
-                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
-                let proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
-                    if let Some(proto_obj) = proto_val.to_object(scope) {
-                        let attr_key = v8::String::new(scope, "ononline").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(worker_global_scope_get_8).length(0).build(scope);
-                        g.set_class_name(v8::String::new(scope, "get ononline").unwrap());
-                        let s = v8::FunctionTemplate::builder_raw(worker_global_scope_set_8).length(1).build(scope);
-                        s.set_class_name(v8::String::new(scope, "set ononline").unwrap());
-                        let gf = g.get_function(scope).unwrap();
-                        let sf = s.get_function(scope).unwrap();
-                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
-                        d.set_enumerable(true);
-                        d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
-                    }
-                }
-            }
-        }
-    }
-    {
-        let ctor_key = v8::String::new(scope, "WorkerGlobalScope").unwrap();
-        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
-            if ctor_val.is_function() {
-                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
-                let proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
-                    if let Some(proto_obj) = proto_val.to_object(scope) {
-                        let attr_key = v8::String::new(scope, "onrejectionhandled").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(worker_global_scope_get_9).length(0).build(scope);
-                        g.set_class_name(v8::String::new(scope, "get onrejectionhandled").unwrap());
-                        let s = v8::FunctionTemplate::builder_raw(worker_global_scope_set_9).length(1).build(scope);
-                        s.set_class_name(v8::String::new(scope, "set onrejectionhandled").unwrap());
-                        let gf = g.get_function(scope).unwrap();
-                        let sf = s.get_function(scope).unwrap();
-                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
-                        d.set_enumerable(true);
-                        d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
-                    }
-                }
-            }
-        }
-    }
-    {
-        let ctor_key = v8::String::new(scope, "WorkerGlobalScope").unwrap();
-        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
-            if ctor_val.is_function() {
-                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
-                let proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
-                    if let Some(proto_obj) = proto_val.to_object(scope) {
-                        let attr_key = v8::String::new(scope, "onunhandledrejection").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(worker_global_scope_get_10).length(0).build(scope);
-                        g.set_class_name(v8::String::new(scope, "get onunhandledrejection").unwrap());
-                        let s = v8::FunctionTemplate::builder_raw(worker_global_scope_set_10).length(1).build(scope);
-                        s.set_class_name(v8::String::new(scope, "set onunhandledrejection").unwrap());
-                        let gf = g.get_function(scope).unwrap();
-                        let sf = s.get_function(scope).unwrap();
-                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
-                        d.set_enumerable(true);
-                        d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
-                    }
-                }
-            }
-        }
-    }
-    {
-        let ctor_key = v8::String::new(scope, "WorkerGlobalScope").unwrap();
-        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
-            if ctor_val.is_function() {
-                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
-                let proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
-                    if let Some(proto_obj) = proto_val.to_object(scope) {
-                        let attr_key = v8::String::new(scope, "origin").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(worker_global_scope_get_12).length(0).build(scope);
-                        g.set_class_name(v8::String::new(scope, "get origin").unwrap());
-                        let s = v8::FunctionTemplate::builder_raw(worker_global_scope_set_12).length(1).build(scope);
-                        s.set_class_name(v8::String::new(scope, "set origin").unwrap());
-                        let gf = g.get_function(scope).unwrap();
-                        let sf = s.get_function(scope).unwrap();
-                        let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
-                        d.set_enumerable(true);
-                        d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
-                    }
-                }
-            }
-        }
-    }
-    // fixed 19 accessors
+    // fixed 12 accessors
 }
 
