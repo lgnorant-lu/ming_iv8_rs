@@ -227,6 +227,7 @@ pub const REQUEST_FIX_JS: &str = r#"
             Object.defineProperty(this, 'signal', { value: null, writable: true, configurable: true, enumerable: true });
         }
         RequestShim.prototype = origCtor.prototype;
+        Object.defineProperty(RequestShim.prototype, 'constructor', {value: RequestShim, writable: true, configurable: true, enumerable: false});
         try { Object.defineProperty(globalThis, 'Request', {
             value: RequestShim, writable: true, configurable: true, enumerable: true
         }); } catch(e) {}
