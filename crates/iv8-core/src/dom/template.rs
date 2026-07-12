@@ -336,10 +336,14 @@ pub fn restore_dom_accessors(
     let node_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[
         ("textContent", text_content_getter, Some(text_content_setter)),
     ];
+    let element_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[
+        ("id", id_getter, Some(id_setter)),
+    ];
 
     let restore_sets: Vec<(&str, &[(&str, AccessorFn, Option<AccessorFn>)])> = vec![
         ("CharacterData", char_data_accessors),
         ("Node", node_accessors),
+        ("Element", element_accessors),
     ];
 
     for (iface_name, accessors) in &restore_sets {
@@ -371,6 +375,11 @@ pub fn restore_dom_accessors(
             }
         }
     }
+
+    // A3: Element.prototype.id setter syncs __iv8Id (codegen already does this).
+    // getElementById has __iv8Id fallback traversal (binding.rs get_element_by_id).
+    // Full DOM tree sync (NodeData::Element.id update) requires codegen generator
+    // modification — deferred to codegen rewrite.
 }
 
 pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
