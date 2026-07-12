@@ -55,8 +55,32 @@ pub fn extract_node_id(scope: &v8::PinScope<'_, '_>, obj: v8::Local<v8::Object>)
 /// Install DOM query bindings on the `document` global object.
 /// Call this after a Document has been set in RuntimeState.
 pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
-    // Create the document object
-    let doc_obj = v8::Object::new(scope);
+    let isolate: &v8::Isolate = &*scope;
+    let state = RuntimeState::get(isolate);
+
+    let root_id = {
+        let doc = state.document.borrow();
+        doc.as_ref().map(|d| d.root_id())
+    };
+
+    let doc_obj: v8::Local<v8::Object> = if let Some(root_id) = root_id {
+        if let Some(ref templates) = *state.dom_templates.borrow() {
+            let doc_tmpl = v8::Local::new(scope, &templates.document_node);
+            let inst_tmpl = doc_tmpl.instance_template(scope);
+            if let Some(obj) = inst_tmpl.new_instance(scope) {
+                let nid_usize = node_id_to_usize(root_id);
+                let external = v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
+                obj.set_internal_field(crate::dom::template::NODE_ID_FIELD as usize, external.into());
+                obj
+            } else {
+                v8::Object::new(scope)
+            }
+        } else {
+            v8::Object::new(scope)
+        }
+    } else {
+        v8::Object::new(scope)
+    };
 
     // Install methods
     install_method(scope, doc_obj, "getElementById", get_element_by_id);
@@ -138,29 +162,6 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     // Set document on global
     let key = crate::v8_utils::v8_string(scope, "document");
     global.set(scope, key.into(), doc_obj.into());
-
-    // Install Node interface properties as own properties on document.
-    // document is a plain V8 Object (not a DOM template instance), so it
-    // has no internal fields. DOM template's Node.prototype nodeType/nodeName
-    // getters call extract_node_id_from_internal which fails → "Illegal invocation".
-    // Setting own properties prevents prototype chain lookup.
-    let node_type_key = crate::v8_utils::v8_string(scope, "nodeType");
-    let node_type_val = v8::Integer::new(scope, 9);
-    doc_obj.define_own_property(
-        scope,
-        node_type_key.into(),
-        node_type_val.into(),
-        v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
-    );
-
-    let node_name_key = crate::v8_utils::v8_string(scope, "nodeName");
-    let node_name_val = crate::v8_utils::v8_string(scope, "#document");
-    doc_obj.define_own_property(
-        scope,
-        node_name_key.into(),
-        node_name_val.into(),
-        v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
-    );
 }
 
 /// Helper to install a native accessor (getter) on an object.
