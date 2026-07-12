@@ -244,7 +244,13 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         document.createTextNode = function(data) {
             if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
             if (typeof Text !== 'undefined' && Text.prototype) {
-                return Object.create(Text.prototype);
+                var node = Object.create(Text.prototype);
+                Object.defineProperty(node, 'nodeType', { value: 3, writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(node, 'nodeName', { value: '#text', writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(node, 'nodeValue', { value: String(data), writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(node, 'textContent', { value: String(data), writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
+                return node;
             }
             return { nodeType: 3, textContent: data, data: data, nodeName: '#text' };
         };
@@ -253,18 +259,25 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         document.createComment = function(data) {
             if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
             if (typeof Comment !== 'undefined' && Comment.prototype) {
-                return Object.create(Comment.prototype);
+                var node = Object.create(Comment.prototype);
+                Object.defineProperty(node, 'nodeType', { value: 8, writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(node, 'nodeName', { value: '#comment', writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(node, 'nodeValue', { value: String(data), writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(node, 'textContent', { value: String(data), writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
+                return node;
             }
             return { nodeType: 8, textContent: data, data: data, nodeName: '#comment' };
         };
     }
     if (!document.createDocumentFragment) {
         document.createDocumentFragment = function() {
-            // Use codegen DocumentFragment constructor's prototype if available.
-            // This ensures the fragment has the correct prototype chain:
-            // fragment → DocumentFragment.prototype → Node.prototype → EventTarget.prototype
             if (typeof DocumentFragment !== 'undefined' && DocumentFragment.prototype) {
                 var frag = Object.create(DocumentFragment.prototype);
+                Object.defineProperty(frag, 'nodeType', { value: 11, writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(frag, 'nodeName', { value: '#document-fragment', writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(frag, 'nodeValue', { value: null, writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(frag, 'textContent', { value: '', writable: true, enumerable: true, configurable: true });
                 return frag;
             }
             return { nodeType: 11, nodeName: '#document-fragment', childNodes: [], appendChild: function(n) { this.childNodes.push(n); return n; }, children: [] };
@@ -475,17 +488,35 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             doc.createCDATASection = function createCDATASection(data) {
                 if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
                 var textProto = (typeof Text !== 'undefined') ? Text.prototype : Object.prototype;
-                return Object.create(textProto);
+                var node = Object.create(textProto);
+                Object.defineProperty(node, 'nodeType', { value: 4, writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(node, 'nodeName', { value: '#cdata-section', writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(node, 'nodeValue', { value: String(data), writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(node, 'textContent', { value: String(data), writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
+                return node;
             };
             doc.createTextNode = function createTextNode(data) {
                 if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
                 var textProto = (typeof Text !== 'undefined') ? Text.prototype : Object.prototype;
-                return Object.create(textProto);
+                var node = Object.create(textProto);
+                Object.defineProperty(node, 'nodeType', { value: 3, writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(node, 'nodeName', { value: '#text', writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(node, 'nodeValue', { value: String(data), writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(node, 'textContent', { value: String(data), writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
+                return node;
             };
             doc.createComment = function createComment(data) {
                 if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
                 var commentProto = (typeof Comment !== 'undefined') ? Comment.prototype : Object.prototype;
-                return Object.create(commentProto);
+                var node = Object.create(commentProto);
+                Object.defineProperty(node, 'nodeType', { value: 8, writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(node, 'nodeName', { value: '#comment', writable: false, enumerable: true, configurable: false });
+                Object.defineProperty(node, 'nodeValue', { value: String(data), writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(node, 'textContent', { value: String(data), writable: true, enumerable: true, configurable: true });
+                Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
+                return node;
             };
             return doc;
         }, writable: true, configurable: true, enumerable: true });

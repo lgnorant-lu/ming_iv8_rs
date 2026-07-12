@@ -132,6 +132,29 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     // Set document on global
     let key = crate::v8_utils::v8_string(scope, "document");
     global.set(scope, key.into(), doc_obj.into());
+
+    // Install Node interface properties as own properties on document.
+    // document is a plain V8 Object (not a DOM template instance), so it
+    // has no internal fields. DOM template's Node.prototype nodeType/nodeName
+    // getters call extract_node_id_from_internal which fails → "Illegal invocation".
+    // Setting own properties prevents prototype chain lookup.
+    let node_type_key = crate::v8_utils::v8_string(scope, "nodeType");
+    let node_type_val = v8::Integer::new(scope, 9);
+    doc_obj.define_own_property(
+        scope,
+        node_type_key.into(),
+        node_type_val.into(),
+        v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
+    );
+
+    let node_name_key = crate::v8_utils::v8_string(scope, "nodeName");
+    let node_name_val = crate::v8_utils::v8_string(scope, "#document");
+    doc_obj.define_own_property(
+        scope,
+        node_name_key.into(),
+        node_name_val.into(),
+        v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
+    );
 }
 
 /// Helper to install a native accessor (getter) on an object.
