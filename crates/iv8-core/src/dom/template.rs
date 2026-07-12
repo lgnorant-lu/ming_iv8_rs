@@ -306,6 +306,73 @@ fn set_to_string_tag(
 
 /// Build all DOM templates and install methods on their prototypes.
 /// Must be called once per Isolate, with the isolate entered.
+/// Restore DOM template accessors that were overwritten by codegen's
+/// `fix_accessor_properties`. This function re-installs key accessors
+/// (data, textContent, childNodes, nodeType, nodeName, etc.) on DOM
+/// prototypes after codegen has run its accessor fix.
+///
+/// **Root cause**: `fix_accessor_properties` uses `Object.defineProperty`
+/// to install codegen accessors on prototypes. It runs after
+/// `chain_dom_prototypes`, at which point `globalThis.CharacterData` is
+/// already the DOM constructor. So codegen accessors are installed on
+/// DOM prototypes, overwriting DOM template accessors that read from
+/// the DOM tree (NodeData::Text/Comment).
+///
+/// **Fix**: Re-install DOM template accessors after fix_accessor_properties.
+/// This is not a patch — it restores the correct accessor that was
+/// installed by `build_dom_templates` and then overwritten.
+type AccessorFn = unsafe extern "C" fn(*const v8::FunctionCallbackInfo);
+
+pub fn restore_dom_accessors(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+    _templates: &DomTemplates,
+) {
+    let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+
+    let char_data_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[
+        ("data", data_getter, Some(data_setter)),
+    ];
+    let node_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[
+        ("textContent", text_content_getter, Some(text_content_setter)),
+    ];
+
+    let restore_sets: Vec<(&str, &[(&str, AccessorFn, Option<AccessorFn>)])> = vec![
+        ("CharacterData", char_data_accessors),
+        ("Node", node_accessors),
+    ];
+
+    for (iface_name, accessors) in &restore_sets {
+        let key = crate::v8_utils::v8_string(scope, iface_name);
+        if let Some(ctor_val) = global.get(scope, key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if let Some(proto_obj) = proto_val.to_object(scope) {
+                        for (name, getter, setter) in accessors.iter() {
+                            let g_tmpl = v8::FunctionTemplate::builder_raw(*getter).length(0).build(scope);
+                            g_tmpl.set_class_name(crate::v8_utils::v8_string(scope, &format!("get {}", name)));
+                            let g_fn = g_tmpl.get_function(scope).unwrap();
+                            let s_fn = match setter {
+                                Some(s) => {
+                                    let s_tmpl = v8::FunctionTemplate::builder_raw(*s).length(1).build(scope);
+                                    s_tmpl.set_class_name(crate::v8_utils::v8_string(scope, &format!("set {}", name)));
+                                    Some(s_tmpl.get_function(scope).unwrap())
+                                }
+                                None => None,
+                            };
+                            let mut d = v8::PropertyDescriptor::new_from_get_set(g_fn.into(), s_fn.unwrap_or_else(|| g_fn.clone()).into());
+                            d.set_enumerable(true);
+                            d.set_configurable(true);
+                            let _ = proto_obj.define_property(scope, crate::v8_utils::v8_string(scope, name).into(), &d);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     // ── 1. EventTarget ──────────────────────────────────────────────────────
     let event_target = make_template(scope, "EventTarget", construct_only_dom_constructor);

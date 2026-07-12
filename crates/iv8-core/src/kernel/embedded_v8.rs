@@ -683,8 +683,18 @@ impl EmbeddedV8Kernel {
             let ok = v8::Script::compile(scope, request_fix, None).and_then(|s| s.run(scope)).is_some();
             crate::telemetry::post_hoc_fix_complete("REQUEST_FIX_JS", ok);
 
-            // fix_accessor_properties moved to install_browser_surface_with_callbacks
-            // (before install_dom_constructors) to avoid overwriting DOM template accessors.
+            // fix_accessor_properties installs codegen accessors on prototypes.
+            // Runs AFTER chain_dom_prototypes, so it operates on DOM prototypes
+            // (globalThis.CharacterData is already DOM constructor).
+            // TODO: add get_own_property_descriptor check to skip properties
+            // already installed by DOM template (e.g., data_getter on
+            // CharacterData.prototype). Currently overwrites DOM template
+            // accessors for data/textContent on Text/Comment nodes.
+            iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
+            let state = RuntimeState::get(&*scope);
+            if let Some(ref templates) = *state.dom_templates.borrow() {
+                crate::dom::template::restore_dom_accessors(scope, global, templates);
+            }
             // [Global] accessor fix — run in both Window and Worker mode.
             // In worker mode, fix_global_accessor_properties installs
             // WorkerGlobalScope attributes (self, location, navigator, etc.)
@@ -2179,15 +2189,6 @@ impl EmbeddedV8Kernel {
             match iv8_surface::install_browser_surface(scope, global, &callbacks, worker_mode) {
                 Ok(registry) => {
                     let state = RuntimeState::get(&*scope);
-                    // fix_accessor_properties must run BEFORE install_dom_constructors
-                    // and chain_dom_prototypes. It installs codegen accessors on
-                    // codegen prototypes (globalThis.CharacterData is still codegen
-                    // constructor at this point). If run after, it would install
-                    // codegen accessors on DOM prototypes, overwriting DOM template
-                    // accessors (e.g., data_getter on CharacterData.prototype).
-                    iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
-                    iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
-                    iv8_surface::generated::install_all::fix_global_operation_lengths(scope, global);
                     let codegen_protos =
                         crate::dom::template::capture_codegen_prototypes(scope, global);
                     crate::telemetry::init_codegen_prototypes_captured(codegen_protos.len());
