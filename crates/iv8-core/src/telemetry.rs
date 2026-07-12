@@ -661,6 +661,29 @@ pub fn init_phase_skipped(phase: &str, reason: &str) {
     );
 }
 
+// ─── Post-hoc fix events (K-016) ──────────────────────────────────
+
+/// A post-hoc JS fix is about to be applied.
+/// Safety: Safe (fix name only, no user data)
+pub fn post_hoc_fix_start(fix_name: &str) {
+    tracing::debug!(
+        target: "iv8.init",
+        fix = fix_name,
+        "post-hoc fix start"
+    );
+}
+
+/// A post-hoc JS fix completed.
+/// Safety: Safe (fix name and success status)
+pub fn post_hoc_fix_complete(fix_name: &str, success: bool) {
+    tracing::debug!(
+        target: "iv8.init",
+        fix = fix_name,
+        success = success,
+        "post-hoc fix complete"
+    );
+}
+
 // ─── Canvas events ──────────────────────────────────────────────────
 
 /// Canvas fingerprint detection warning.

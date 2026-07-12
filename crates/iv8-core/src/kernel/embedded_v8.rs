@@ -641,35 +641,47 @@ impl EmbeddedV8Kernel {
             // P0 boundary fix: delete navigator.webdriver from Navigator.prototype.
             // Real Chrome: Object.getOwnPropertyDescriptor(Navigator.prototype, 'webdriver') === undefined.
             // IV8 installs it as a getter returning false, which is detectable.
+            crate::telemetry::post_hoc_fix_start("WEBDRIVER_FIX_JS");
             let webdriver_fix = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::WEBDRIVER_FIX_JS);
-            let _ = v8::Script::compile(scope, webdriver_fix, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, webdriver_fix, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("WEBDRIVER_FIX_JS", ok);
 
             // P0 boundary fix: patch document.createElement toString to return native code.
+            crate::telemetry::post_hoc_fix_start("CREATE_ELEMENT_FIX_JS");
             let create_element_fix = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::CREATE_ELEMENT_FIX_JS);
-            let _ = v8::Script::compile(scope, create_element_fix, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, create_element_fix, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("CREATE_ELEMENT_FIX_JS", ok);
 
             // P0 boundary fix: navigator.plugins instanceof PluginArray must be true.
+            crate::telemetry::post_hoc_fix_start("PLUGINS_FIX_JS");
             let plugins_fix = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::PLUGINS_FIX_JS);
-            let _ = v8::Script::compile(scope, plugins_fix, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, plugins_fix, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("PLUGINS_FIX_JS", ok);
 
             // P0-BT-5 fix: iframe contentWindow.navigator missing.
+            crate::telemetry::post_hoc_fix_start("IFRAME_FIX_JS");
             let iframe_fix = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::IFRAME_FIX_JS);
-            let _ = v8::Script::compile(scope, iframe_fix, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, iframe_fix, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("IFRAME_FIX_JS", ok);
 
             // ROOT CAUSE: Element.prototype.shadowRoot returns {} by default but
             // should return null. VMP checks this API and takes wrong branch.
+            crate::telemetry::post_hoc_fix_start("SHADOW_ROOT_FIX_JS");
             let shadow_root_fix = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::SHADOW_ROOT_FIX_JS);
-            let _ = v8::Script::compile(scope, shadow_root_fix, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, shadow_root_fix, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("SHADOW_ROOT_FIX_JS", ok);
 
             // P1: Request constructor — codegen creates empty object, store url/method
+            crate::telemetry::post_hoc_fix_start("REQUEST_FIX_JS");
             let request_fix = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::REQUEST_FIX_JS);
-            let _ = v8::Script::compile(scope, request_fix, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, request_fix, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("REQUEST_FIX_JS", ok);
 
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
             // [Global] accessor fix — run in both Window and Worker mode.
@@ -1196,40 +1208,56 @@ try {
                     }
                 })();
             "#);
-            let _ = v8::Script::compile(scope, fix_proto_js, None).and_then(|s| s.run(scope));
+            crate::telemetry::post_hoc_fix_start("fix_proto_js");
+            let ok = v8::Script::compile(scope, fix_proto_js, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("fix_proto_js", ok);
 
             // Fix readonly attribute setters: idlharness expects setter=undefined
             // for readonly attributes. Some accessor wrappers install a JS setter.
+            crate::telemetry::post_hoc_fix_start("READONLY_FIX_JS");
             let readonly_fix_js = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::READONLY_FIX_JS);
-            let _ = v8::Script::compile(scope, readonly_fix_js, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, readonly_fix_js, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("READONLY_FIX_JS", ok);
 
             // Fix operation .name and .length on key prototypes.
+            crate::telemetry::post_hoc_fix_start("NAME_LENGTH_FIX_JS");
             let name_length_js = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::NAME_LENGTH_FIX_JS);
-            let _ = v8::Script::compile(scope, name_length_js, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, name_length_js, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("NAME_LENGTH_FIX_JS", ok);
 
+            crate::telemetry::post_hoc_fix_start("DESCRIPTOR_FIX_JS");
             let descriptor_fix = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::DESCRIPTOR_FIX_JS);
-            let _ = v8::Script::compile(scope, descriptor_fix, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, descriptor_fix, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("DESCRIPTOR_FIX_JS", ok);
 
+            crate::telemetry::post_hoc_fix_start("DOM_GETTER_FIX_JS");
             let dom_getter_fix = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::DOM_GETTER_FIX_JS);
-            let _ = v8::Script::compile(scope, dom_getter_fix, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, dom_getter_fix, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("DOM_GETTER_FIX_JS", ok);
 
+            crate::telemetry::post_hoc_fix_start("TO_STRING_TAG_FIX_JS");
             let tostring_tag_fix = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::TO_STRING_TAG_FIX_JS);
-            let _ = v8::Script::compile(scope, tostring_tag_fix, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, tostring_tag_fix, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("TO_STRING_TAG_FIX_JS", ok);
 
             if !worker_mode {
+                crate::telemetry::post_hoc_fix_start("WORKER_ONLY_DELETE_JS");
                 let js = crate::v8_utils::v8_string(scope,
                     crate::kernel::post_hoc_fixes::WORKER_ONLY_DELETE_JS);
-                let _ = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope));
+                let ok = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope)).is_some();
+                crate::telemetry::post_hoc_fix_complete("WORKER_ONLY_DELETE_JS", ok);
             }
 
+            crate::telemetry::post_hoc_fix_start("FREEZE_ALL_JS");
             let js = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::FREEZE_ALL_JS);
-            let _ = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("FREEZE_ALL_JS", ok);
         });
     }
 
@@ -2728,19 +2756,25 @@ impl EmbeddedV8Kernel {
                     );
 
                     // Freeze shim constructor prototypes (non-writable, non-configurable)
+                    crate::telemetry::post_hoc_fix_start("FREEZE_SHIM_PROTOTYPES_JS (page_load)");
                     let freeze_js = crate::v8_utils::v8_string(scope,
                         crate::kernel::post_hoc_fixes::FREEZE_SHIM_PROTOTYPES_JS);
-                    let _ = v8::Script::compile(scope, freeze_js, None).and_then(|s| s.run(scope));
+                    let ok = v8::Script::compile(scope, freeze_js, None).and_then(|s| s.run(scope)).is_some();
+                    crate::telemetry::post_hoc_fix_complete("FREEZE_SHIM_PROTOTYPES_JS (page_load)", ok);
 
                     // Fix all getter .name properties.
+                    crate::telemetry::post_hoc_fix_start("GETTER_NAME_FIX_JS (page_load)");
                     let getter_name_fix = crate::v8_utils::v8_string(scope,
                         crate::kernel::post_hoc_fixes::GETTER_NAME_FIX_JS);
-                    let _ = v8::Script::compile(scope, getter_name_fix, None).and_then(|s| s.run(scope));
+                    let ok = v8::Script::compile(scope, getter_name_fix, None).and_then(|s| s.run(scope)).is_some();
+                    crate::telemetry::post_hoc_fix_complete("GETTER_NAME_FIX_JS (page_load)", ok);
 
                     // CDP diff fix: window.chrome should have runtime:{}.
+                    crate::telemetry::post_hoc_fix_start("CHROME_FIX_JS (page_load)");
                     let chrome_fix = crate::v8_utils::v8_string(scope,
                         crate::kernel::post_hoc_fixes::CHROME_FIX_JS);
-                    let _ = v8::Script::compile(scope, chrome_fix, None).and_then(|s| s.run(scope));
+                    let ok = v8::Script::compile(scope, chrome_fix, None).and_then(|s| s.run(scope)).is_some();
+                    crate::telemetry::post_hoc_fix_complete("CHROME_FIX_JS (page_load)", ok);
 
                     // R10-4: Fix instanceof for returned objects.
                     // customElements/navigation need correct prototype;
@@ -2845,9 +2879,11 @@ impl EmbeddedV8Kernel {
                     let _ = v8::Script::compile(scope, instanceof_fix, None).and_then(|s| s.run(scope));
 
                     // R10-5: Fix descriptor issues.
+                    crate::telemetry::post_hoc_fix_start("DESCRIPTOR_FIX_JS (page_load)");
                     let descriptor_fix = crate::v8_utils::v8_string(scope,
                         crate::kernel::post_hoc_fixes::DESCRIPTOR_FIX_JS);
-                    let _ = v8::Script::compile(scope, descriptor_fix, None).and_then(|s| s.run(scope));
+                    let ok = v8::Script::compile(scope, descriptor_fix, None).and_then(|s| s.run(scope)).is_some();
+                    crate::telemetry::post_hoc_fix_complete("DESCRIPTOR_FIX_JS (page_load)", ok);
 
                     *state.dom_templates.borrow_mut() = Some(dom_templates);
                     let count = registry.interface_count();
@@ -3213,11 +3249,12 @@ impl EmbeddedV8Kernel {
         // page_load re-evals AUDIO_CONTEXT_JS / WINDOW_EXTRAS_JS which
         // replace globalThis constructors, discarding toStringTag installed
         // during freeze_all_prototypes. Re-apply here.
-        self.eval(
+        crate::telemetry::post_hoc_fix_start("TO_STRING_TAG_FIX_JS (page_load re-apply)");
+        let _ok = self.eval(
             crate::kernel::post_hoc_fixes::TO_STRING_TAG_FIX_JS,
             crate::kernel::EvalOpts::default(),
-        )
-        .ok();
+        ).is_ok();
+        crate::telemetry::post_hoc_fix_complete("TO_STRING_TAG_FIX_JS (page_load re-apply)", _ok);
 
         // 10. Drain microtasks
         self.drain_microtasks();
