@@ -6,6 +6,46 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.90] - 2026-07-12
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Mode: Lightweight Increment.
+
+### Fixed
+- K-018: WPT runner V8 weak handle panic — `v8::Weak` first_pass_callback double-take race
+  - Root cause: `v8::handle.rs:926` `weak_data.pointer.take().unwrap()` panics when pointer already None
+  - Fix: Replace `v8::Weak<v8::Object>` with `v8::Global<v8::Object>` in `node_cache` (strong ref, no weak callback)
+  - Impact: WPT baseline 9354/9640 (97.03%) full run, no panic (previously crashed mid-run)
+- K-016: Post-hoc JS fix tracing — 16 fixes now have `post_hoc_fix_start`/`complete` DEBUG telemetry events
+  - Usage: `IV8_LOG=iv8.init=debug` or `enable_logging("debug")`
+- A4: `Request.prototype.constructor` not pointing to shim wrapper — added `Object.defineProperty` for constructor
+
+### Changed
+- North Star Phase 1: Event family shim (5 interfaces) preserves codegen prototype
+  - `event_constructors.rs`: Uses `Reflect.construct(CodegenEvent, [], new.target)` + `Object.setPrototypeOf` instead of `Object.create`
+  - Eliminates TO_STRING_TAG_FIX_JS root cause for Event/CustomEvent/MouseEvent/KeyboardEvent/PointerEvent
+- North Star Phase 1: Audio family shim (11 interfaces) preserves codegen prototype
+  - `audio_context.rs`: Same Reflect.construct + setPrototypeOf pattern
+  - Added `_overrideValue(proto, name)` helper to install JS accessors overriding codegen native getters
+  - Eliminates TO_STRING_TAG_FIX_JS + FREEZE_SHIM_PROTOTYPES_JS root cause for Audio family
+- A3 audit: Navigator/Screen/Location already preserve codegen prototype via native Rust FunctionTemplate strategy
+
+### Added
+- H05b setter side effects audit harness (scripts/evaluate_h05b_setter.py, 256 lines)
+  - 50 setter tests across Element/Input/Textarea/Anchor/Img/Option/Label/Document
+  - Result: OVERALL PASS (49/50 PASS, 1 NO_SETTER outerHTML skip_get)
+- H05c method return value audit harness (scripts/evaluate_h05c_method.py, 221 lines)
+  - 60 method tests across DOM/Element/Event/EventTarget/JS builtins
+  - Result: OVERALL PASS (59/60 PASS, 1 THROW splitText K-008 known codegen limit)
+- H06a window/iframe property consistency audit harness (scripts/evaluate_h06_window_iframe.py, 256 lines)
+  - 43 properties across Navigator/Screen/Window/Crypto/Misc
+  - Result: OVERALL PASS (43/43 PASS, 0 VALUE_DIFF, 0 TYPE_DIFF)
+- H05a expanded to top 200 interfaces (1566 attributes across 162 interfaces)
+  - Default --top 50 still OVERALL PASS (1012/1063, 0 TYPE_FAIL, 0 THROW)
+  - --top 200 exposes 6 known codegen limits (AnimationEvent/TransitionEvent/HTMLDListElement/BeforeUnloadEvent)
+- H06 registered in HARNESS-CHARTER registry
+- D-141~D-143 in decision register
+
 ## [v0.8.89] - 2026-07-12
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.
