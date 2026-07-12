@@ -1725,6 +1725,7 @@ pub fn template_for_tag<'s>(
 /// lifetime tying to &Isolate, and D-025 bounds.
 #[allow(unsafe_code)]
 #[allow(invalid_reference_casting)]
+#[allow(dead_code)]
 pub(crate) fn isolate_mut_from_scope<'s>(scope: &v8::PinScope<'s, '_>) -> &'s mut v8::Isolate {
     let isolate_ref: &v8::Isolate = scope.as_ref();
     let ptr: *const v8::Isolate = isolate_ref;
@@ -1732,16 +1733,22 @@ pub(crate) fn isolate_mut_from_scope<'s>(scope: &v8::PinScope<'s, '_>) -> &'s mu
 }
 
 /// Bump the lazy sweep counter and trigger a full sweep if threshold is reached.
+/// With Global (strong ref) cache, sweep removes entries for nodes no longer
+/// in the document tree (stale entries from removed nodes).
 pub(crate) fn bump_and_maybe_sweep(
     state: &RuntimeState,
-    cache: &mut std::collections::HashMap<crate::dom::NodeId, v8::Weak<v8::Object>>,
+    cache: &mut std::collections::HashMap<crate::dom::NodeId, v8::Global<v8::Object>>,
     _scope: &v8::PinScope<'_, '_>,
 ) {
     let ops = state.node_cache_ops.get() + 1;
     state.node_cache_ops.set(ops);
     if ops >= state.node_cache_sweep_threshold {
         state.node_cache_ops.set(0);
-        cache.retain(|_, weak| !weak.is_empty());
+        // With Global refs, we can't check liveness via is_empty.
+        // Instead, prune entries whose NodeId no longer exists in the document.
+        if let Some(doc) = state.document.borrow().as_ref() {
+            cache.retain(|nid, _| doc.get(*nid).is_some());
+        }
     }
 }
 
@@ -1750,17 +1757,14 @@ pub fn create_node_object<'s>(
     state: &RuntimeState,
     node_id: NodeId,
 ) -> Option<v8::Local<'s, v8::Value>> {
-    // Check identity cache (Weak reference)
+    // Check identity cache (Global reference — strong, prevents GC)
     {
         let mut cache = state.node_cache.borrow_mut();
-        if let Some(weak) = cache.get(&node_id) {
-            if let Some(local) = weak.to_local(scope) {
-                // Cache hit — bump op counter and maybe sweep
-                bump_and_maybe_sweep(state, &mut cache, scope);
-                return Some(local.into());
-            }
-            // Weak reference is empty (GC collected) — remove stale entry
-            cache.remove(&node_id);
+        if let Some(global) = cache.get(&node_id) {
+            let local = v8::Local::new(scope, global);
+            // Cache hit — bump op counter and maybe sweep
+            bump_and_maybe_sweep(state, &mut cache, scope);
+            return Some(local.into());
         }
     }
 
@@ -1797,11 +1801,9 @@ pub fn create_node_object<'s>(
     let external = v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
     obj.set_internal_field(NODE_ID_FIELD as usize, external.into());
 
-    // Cache as Weak reference
+    // Cache as Global reference (strong — prevents GC of cached nodes)
     let global_obj = v8::Global::new(scope, obj);
-    let weak = v8::Weak::new(isolate_mut_from_scope(scope), &global_obj);
-    state.node_cache.borrow_mut().insert(node_id, weak);
-    // global_obj drops here — Weak is the only Rust reference
+    state.node_cache.borrow_mut().insert(node_id, global_obj);
 
     Some(obj.into())
 }

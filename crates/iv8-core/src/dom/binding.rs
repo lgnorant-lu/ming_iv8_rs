@@ -354,15 +354,13 @@ fn node_to_v8_object_plain<'s>(
     state: &RuntimeState,
     node_id: NodeId,
 ) -> Option<v8::Local<'s, v8::Value>> {
-    // Identity cache: return same object for same NodeId (Weak reference)
+    // Identity cache: return same object for same NodeId (Global reference)
     {
         let mut cache = state.node_cache.borrow_mut();
-        if let Some(weak) = cache.get(&node_id) {
-            if let Some(local) = weak.to_local(scope) {
-                crate::dom::template::bump_and_maybe_sweep(state, &mut cache, scope);
-                return Some(local.into());
-            }
-            cache.remove(&node_id);
+        if let Some(global) = cache.get(&node_id) {
+            let local = v8::Local::new(scope, global);
+            crate::dom::template::bump_and_maybe_sweep(state, &mut cache, scope);
+            return Some(local.into());
         }
     }
 
@@ -563,13 +561,9 @@ fn node_to_v8_object_plain<'s>(
         }
     }
 
-    // Store in identity cache as Weak reference
+    // Store in identity cache as Global reference (strong — K-018 fix)
     let global_obj = v8::Global::new(scope, obj);
-    let weak = v8::Weak::new(
-        crate::dom::template::isolate_mut_from_scope(scope),
-        &global_obj,
-    );
-    state.node_cache.borrow_mut().insert(node_id, weak);
+    state.node_cache.borrow_mut().insert(node_id, global_obj);
 
     Some(obj.into())
 }

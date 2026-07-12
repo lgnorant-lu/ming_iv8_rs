@@ -54,14 +54,17 @@ pub struct RuntimeState {
     pub resource_bundle: RefCell<ResourceBundle>,
 
     /// DOM node identity cache: same NodeId → same V8 object.
-    /// Uses v8::Weak to allow V8 GC to collect objects no longer referenced
-    /// from JS, reducing memory from ~9MB to ~1.5MB at 5000 nodes.
-    pub node_cache: RefCell<std::collections::HashMap<crate::dom::NodeId, v8::Weak<v8::Object>>>,
+    /// Uses v8::Global (strong reference) to avoid V8 weak handle callback
+    /// panic (K-018). Objects in cache prevent GC; cleared on page_load
+    /// and periodically via sweep. Memory overhead is bounded because
+    /// cache is cleared on navigation.
+    pub node_cache: RefCell<std::collections::HashMap<crate::dom::NodeId, v8::Global<v8::Object>>>,
 
     /// Lazy sweep operation counter for periodic full cache sweep.
     pub node_cache_ops: std::cell::Cell<u32>,
 
     /// Threshold for periodic full sweep (default: 500 operations).
+    /// When ops reach this, stale entries (dead nodes) are removed.
     pub node_cache_sweep_threshold: u32,
 
     /// CSSStyleDeclaration instance cache per element node
