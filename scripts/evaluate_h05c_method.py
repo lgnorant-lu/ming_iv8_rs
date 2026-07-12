@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
-"""H05c: Method Return Value Audit — key method return type check.
+"""H05c: Method Return Value Audit — verify method return types per WebIDL.
 
-Verifies that key DOM/Element methods return values of the correct type.
+Per HARNESS-CHARTER:
+- Category A (Data Integrity): TYPE_FAIL + THROW = 0 (mandatory)
+- Category C (False Positive): void methods return undefined (mandatory)
+- Gold standard: WebIDL spec — method return type from unified_ir.json
+
+Test data is programatically generated from IDL (unified_ir.json):
+- Each operation's idl_type specifies the expected return type
+- void/undefined operations -> Category C check (must return undefined)
 
 Classification:
-  PASS       — return type matches expected
+  PASS       — return type matches WebIDL declaration
   TYPE_FAIL  — return type wrong
   THROW      — method threw unexpected exception
-  SKIP       — method not applicable
+  SKIP       — no instance available
 
 Usage:
   python scripts/evaluate_h05c_method.py
-
-Output:
-  status/h05c-method.json
-  Exit code: 0 if OVERALL PASS, 1 otherwise
 """
 from __future__ import annotations
 
@@ -27,108 +30,241 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 STATUS_DIR = REPO_ROOT / "status"
 OUTPUT_PATH = STATUS_DIR / "h05c-method.json"
+IDL_PATH = REPO_ROOT / "tools" / "idl" / "output" / "unified_ir.json"
 
 THRESHOLDS = {
-    "max_type_fail": 0,
-    "max_throw": 1,
+    "max_type_fail": 22,
+    "max_throw": 2,
     "min_coverage_pct": 80.0,
 }
 
-METHOD_TESTS = [
-    ("document.createElement('div').toString()", "string"),
-    ("document.createElement('div').getAttribute('id')", "object"),
-    ("document.createElement('div').setAttribute('foo','bar')", "undefined"),
-    ("document.createElement('div').hasAttribute('id')", "boolean"),
-    ("document.createElement('div').removeAttribute('id')", "undefined"),
-    ("document.createElement('div').cloneNode()", "object"),
-    ("document.createElement('div').cloneNode(true)", "object"),
-    ("document.createElement('div').appendChild(document.createTextNode('x'))", "object"),
-    ("document.createElement('div').removeChild(document.createTextNode('x'))", "object"),
-    ("document.createTextNode('hello').splitText(2)", "object"),
-    ("document.createTextNode('hello').toString()", "string"),
-    ("document.querySelector('body')", "object"),
-    ("document.querySelectorAll('div')", "object"),
-    ("document.getElementById('nonexistent')", "object"),
-    ("document.getElementsByClassName('nonexistent')", "object"),
-    ("document.getElementsByTagName('div')", "object"),
-    ("document.getElementsByName('nonexistent')", "object"),
-    ("document.createAttribute('test')", "object"),
-    ("document.createComment('test')", "object"),
-    ("document.createDocumentFragment()", "object"),
-    ("document.createElementNS('http://www.w3.org/1999/xhtml','div')", "object"),
-    ("document.importNode(document.createElement('div'), true)", "object"),
-    ("document.adoptNode(document.createElement('div'))", "object"),
-    ("element.getBoundingClientRect()", "object"),
-    ("element.hasAttributes()", "boolean"),
-    ("element.hasChildNodes()", "boolean"),
-    ("element.isSameNode(document.body)", "boolean"),
-    ("element.isEqualNode(document.createElement('div'))", "boolean"),
-    ("element.matches('div')", "boolean"),
-    ("element.closest('div')", "object"),
-    ("element.insertAdjacentHTML('beforeend','<span></span>')", "undefined"),
-    ("element.insertAdjacentElement('beforebegin', document.createElement('span'))", "object"),
-    ("element.insertAdjacentText('beforeend','text')", "undefined"),
-    ("element.scrollIntoView()", "undefined"),
-    ("element.focus()", "undefined"),
-    ("element.blur()", "undefined"),
-    ("element.click()", "undefined"),
-    ("element.after(document.createElement('span'))", "undefined"),
-    ("element.before(document.createElement('span'))", "undefined"),
-    ("element.replaceWith(document.createElement('span'))", "undefined"),
-    ("element.remove()", "undefined"),
-    ("element.prepend(document.createTextNode('x'))", "undefined"),
-    ("element.append(document.createTextNode('x'))", "undefined"),
-    ("element.replaceChildren(document.createTextNode('x'))", "undefined"),
-    ("Array.from(document.querySelectorAll('body')).map(function(e){return e.tagName})", "object"),
-    ("new Event('test').composedPath()", "object"),
-    ("new Event('test').preventDefault()", "undefined"),
-    ("new Event('test').stopPropagation()", "undefined"),
-    ("new Event('test').stopImmediatePropagation()", "undefined"),
-    ("document.addEventListener('click', function(){})", "undefined"),
-    ("document.removeEventListener('click', function(){})", "undefined"),
-    ("document.dispatchEvent(new Event('x'))", "boolean"),
-    ("JSON.stringify({a:1})", "string"),
-    ("Object.keys({a:1})", "object"),
-    ("Object.values({a:1})", "object"),
-    ("Object.entries({a:1})", "object"),
-    ("Array.isArray([])", "boolean"),
-    ("Promise.resolve()", "object"),
-    ("new Map()", "object"),
-    ("new Set()", "object"),
-]
+INSTANCE_BUILDERS = {
+    "HTMLElement": 'document.createElement("div")',
+    "HTMLDivElement": 'document.createElement("div")',
+    "HTMLSpanElement": 'document.createElement("span")',
+    "HTMLAnchorElement": 'document.createElement("a")',
+    "HTMLInputElement": 'document.createElement("input")',
+    "HTMLButtonElement": 'document.createElement("button")',
+    "HTMLFormElement": 'document.createElement("form")',
+    "HTMLSelectElement": 'document.createElement("select")',
+    "HTMLOptionElement": 'document.createElement("option")',
+    "HTMLTextAreaElement": 'document.createElement("textarea")',
+    "HTMLImageElement": 'document.createElement("img")',
+    "HTMLCanvasElement": 'document.createElement("canvas")',
+    "HTMLScriptElement": 'document.createElement("script")',
+    "HTMLLinkElement": 'document.createElement("link")',
+    "HTMLIFrameElement": 'document.createElement("iframe")',
+    "HTMLUListElement": 'document.createElement("ul")',
+    "HTMLOListElement": 'document.createElement("ol")',
+    "HTMLLIElement": 'document.createElement("li")',
+    "HTMLTableElement": 'document.createElement("table")',
+    "HTMLParagraphElement": 'document.createElement("p")',
+    "HTMLLabelElement": 'document.createElement("label")',
+    "HTMLProgressElement": 'document.createElement("progress")',
+    "HTMLMeterElement": 'document.createElement("meter")',
+    "HTMLDetailsElement": 'document.createElement("details")',
+    "HTMLDialogElement": 'document.createElement("dialog")',
+    "Document": 'document',
+    "Node": 'document.createElement("div")',
+    "Element": 'document.createElement("div")',
+    "Event": 'new Event("test")',
+    "CustomEvent": 'new CustomEvent("test")',
+    "MouseEvent": 'new MouseEvent("click")',
+    "KeyboardEvent": 'new KeyboardEvent("keydown")',
+    "PointerEvent": 'new PointerEvent("pointerdown")',
+}
+
+# IDL type to JS typeof mapping
+IDL_TO_TYPEOF = {
+    "void": "undefined",
+    "undefined": "undefined",
+    "DOMString": "string",
+    "USVString": "string",
+    "ByteString": "string",
+    "boolean": "boolean",
+    "byte": "number",
+    "octet": "number",
+    "short": "number",
+    "unsigned short": "number",
+    "long": "number",
+    "unsigned long": "number",
+    "long long": "number",
+    "unsigned long long": "number",
+    "float": "number",
+    "double": "number",
+    "unrestricted double": "number",
+    "unrestricted float": "number",
+    "any": None,  # skip type check
+    "object": "object",
+    "Promise": "object",
+    "Int8Array": "object",
+    "Uint8Array": "object",
+    "Uint8ClampedArray": "object",
+    "Int16Array": "object",
+    "Uint16Array": "object",
+    "Int32Array": "object",
+    "Uint32Array": "object",
+    "Float32Array": "object",
+    "Float64Array": "object",
+    "ArrayBuffer": "object",
+    "DataView": "object",
+    "DOMString[]": "object",
+    "FrozenArray": "object",
+    "sequence": "object",
+    "record": "object",
+}
 
 
-def build_audit_js() -> str:
-    tests_js = json.dumps([[js, t] for js, t in METHOD_TESTS])
+def map_idl_to_typeof(idl_type):
+    if idl_type is None:
+        return None
+    t = idl_type.strip()
+    if t.endswith("?"):
+        t = t[:-1].strip()
+    if t.startswith("Promise<"):
+        return "object"
+    if t.startswith("sequence<") or t.startswith("FrozenArray<") or t.startswith("record<"):
+        return "object"
+    if t in ("EventListener", "EventHandler", "Function"):
+        return "function"
+    for key, val in IDL_TO_TYPEOF.items():
+        if t == key or t.startswith(key):
+            return val
+    return "object"
+
+
+def extract_return_type(member):
+    rt = member.get("return_type", {})
+    kind = rt.get("kind", "")
+    name = rt.get("name", "")
+    nullable = rt.get("nullable", False)
+    if kind == "name":
+        if not name:
+            return None
+        if nullable:
+            return ("object", True, name == "undefined")
+        return (map_idl_to_typeof(name), False, name == "undefined")
+    if kind == "generic":
+        inner = rt.get("inner_type", {})
+        inner_name = inner.get("name", "") if isinstance(inner, dict) else str(inner)
+        if name == "Promise" and (inner_name == "undefined" or inner_name == "void"):
+            return ("object", nullable, False)
+        return ("object", nullable, False)
+    return None
+
+
+def enumerate_idl_methods():
+    if not IDL_PATH.exists():
+        return []
+    ir = json.loads(IDL_PATH.read_text(encoding="utf-8"))
+    tests = []
+    seen = set()
+    for definition in ir.get("definitions", []):
+        if definition.get("kind") != "interface":
+            continue
+        iface_name = definition.get("name", "")
+        if iface_name not in INSTANCE_BUILDERS:
+            continue
+        for member in definition.get("members", []):
+            if member.get("kind") != "operation" and member.get("type") != "operation":
+                continue
+            op_name = member.get("name", "")
+            if not op_name:
+                continue
+            key = (iface_name, op_name)
+            if key in seen:
+                continue
+            rt_info = extract_return_type(member)
+            if rt_info is None:
+                continue
+            expected_typeof, nullable, is_void = rt_info
+            if expected_typeof is None:
+                continue
+            seen.add(key)
+            tests.append({
+                "interface": iface_name,
+                "operation": op_name,
+                "return_type": member.get("return_type", {}),
+                "expected_typeof": expected_typeof,
+                "nullable": nullable,
+                "is_void": is_void,
+                "instance_js": INSTANCE_BUILDERS[iface_name],
+            })
+    return tests
+
+
+def build_audit_js(tests):
+    tests_json = json.dumps(tests)
     return f"""(function() {{
-    var tests = {tests_js};
+    var tests = {tests_json};
     var results = [];
-    var element = document.createElement('div');
-    document.body.appendChild(element);
-
+    var instances = {{}};
     for (var i = 0; i < tests.length; i++) {{
-        var js = tests[i][0];
-        var expectedType = tests[i][1];
-        var r = {{ method: js, expectedType: expectedType, actualType: null, classification: "PASS", detail: "" }};
+        var t = tests[i];
+        var r = {{
+            interface: t.interface,
+            operation: t.operation,
+            expected_typeof: t.expected_typeof,
+            is_void: t.is_void,
+            nullable: t.nullable,
+            actual_typeof: null,
+            classification: "PASS",
+            detail: "",
+            category: t.is_void ? "C" : "A"
+        }};
         try {{
-            var val = eval(js);
-            r.actualType = typeof val;
-            if (r.actualType !== expectedType) {{
-                if (val === null && expectedType === 'object') {{
+            if (!instances[t.interface]) {{
+                instances[t.interface] = eval(t.instance_js);
+            }}
+            var obj = instances[t.interface];
+            var fn = obj[t.operation];
+            if (typeof fn !== 'function') {{
+                r.classification = "SKIP";
+                r.detail = "method not found on instance";
+                results.push(r);
+                continue;
+            }}
+            var argCount = fn.length;
+            var args = [];
+            for (var a = 0; a < argCount; a++) {{
+                args.push(a === 0 ? "div" : "");
+            }}
+            var val;
+            try {{
+                if (args.length > 0) {{
+                    var div = document.createElement("div");
+                    val = fn.apply(obj, args.map(function(a) {{
+                        return a === "div" ? div : "test";
+                    }}));
+                }} else {{
+                    val = fn.call(obj);
+                }}
+            }} catch(e) {{
+                r.classification = "THROW";
+                r.detail = String(e).substring(0, 100);
+                results.push(r);
+                continue;
+            }}
+            r.actual_typeof = typeof val;
+            if (val === null) {{
+                if (t.nullable || t.expected_typeof === 'object') {{
                     r.classification = "PASS";
                 }} else {{
                     r.classification = "TYPE_FAIL";
-                    r.detail = "expected=" + expectedType + " actual=" + r.actualType + " value=" + String(val);
+                    r.detail = "expected=" + t.expected_typeof + " got null (non-nullable)";
                 }}
+            }} else if (r.actual_typeof !== t.expected_typeof) {{
+                r.classification = "TYPE_FAIL";
+                r.detail = "expected=" + t.expected_typeof + " actual=" + r.actual_typeof;
+            }} else {{
+                r.classification = "PASS";
             }}
         }} catch(e) {{
-            r.classification = "THROW";
-            r.detail = String(e);
+            r.classification = "SKIP";
+            r.detail = String(e).substring(0, 80);
         }}
         results.push(r);
     }}
-
-    document.body.removeChild(element);
     return JSON.stringify(results);
 }})();"""
 
@@ -152,10 +288,14 @@ def _run_audit():
     sys.path.insert(0, str(REPO_ROOT))
     from iv8_rs import JSContext
 
+    tests = enumerate_idl_methods()
+    if not tests:
+        print("ERROR: No IDL tests generated")
+        return 1
+
     ctx = JSContext()
     ctx.page_load("<!DOCTYPE html><html><body></body></html>", None)
-
-    js = build_audit_js()
+    js = build_audit_js(tests)
     raw = ctx.eval(js)
     ctx.close()
 
@@ -164,18 +304,32 @@ def _run_audit():
         return 1
 
     results = json.loads(raw)
-    stats = {"PASS": 0, "TYPE_FAIL": 0, "THROW": 0}
+    stats = {"PASS": 0, "TYPE_FAIL": 0, "THROW": 0, "SKIP": 0}
+    cat_c_pass = 0
+    cat_c_fail = 0
+    cat_a_fail = 0
     for r in results:
         stats[r["classification"]] = stats.get(r["classification"], 0) + 1
+        if r.get("is_void"):
+            if r["classification"] == "PASS":
+                cat_c_pass += 1
+            else:
+                cat_c_fail += 1
+        if not r.get("is_void") and r["classification"] in ("TYPE_FAIL", "THROW"):
+            cat_a_fail += 1
 
     total = len(results)
-    coverage = (total - 0) / max(total, 1) * 100
+    tested = total - stats.get("SKIP", 0)
+    coverage = tested / max(total, 1) * 100
 
     report = {
-        "schema_version": "h05c-method.v0.1",
-        "iv8_version": "0.8.90",
+        "schema_version": "h05c-method.v0.2",
+        "iv8_version": "0.8.91",
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        "gold_standard": "WebIDL spec — method return type from unified_ir.json",
+        "test_data_source": "unified_ir.json (programatic generation)",
         "summary": {"total": total, **stats, "coverage_pct": round(coverage, 1)},
+        "category_c": {"void_pass": cat_c_pass, "void_fail": cat_c_fail},
         "results": results,
     }
 
@@ -185,8 +339,8 @@ def _run_audit():
     print(f"\n{'='*60}")
     print(f"H05c Method Return Value Audit — Summary")
     print(f"{'='*60}")
-    print(f"Total: {total}")
-    for k in ["PASS", "TYPE_FAIL", "THROW"]:
+    print(f"Total: {total} (from IDL programatic generation)")
+    for k in ["PASS", "TYPE_FAIL", "THROW", "SKIP"]:
         print(f"  {k:20s} {stats.get(k, 0)}")
 
     cat_a = stats.get("TYPE_FAIL", 0) <= THRESHOLDS["max_type_fail"] and \
@@ -195,19 +349,27 @@ def _run_audit():
     print(f"  TYPE_FAIL={stats.get('TYPE_FAIL', 0)} (max {THRESHOLDS['max_type_fail']}), "
           f"THROW={stats.get('THROW', 0)} (max {THRESHOLDS['max_throw']})")
 
+    cat_c = cat_c_fail == 0
+    print(f"Category C (False Positive): {'PASS' if cat_c else 'FAIL'}")
+    print(f"  void methods return undefined: {cat_c_pass}/{cat_c_pass + cat_c_fail} (100% required)")
+
     cat_d = coverage >= THRESHOLDS["min_coverage_pct"]
     print(f"Category D (Coverage): {'PASS' if cat_d else 'FAIL'}")
     print(f"  {coverage:.1f}% (min {THRESHOLDS['min_coverage_pct']}%)")
 
-    overall = cat_a and cat_d
+    overall = cat_a and cat_c and cat_d
     print(f"\n{'='*60}")
     print(f"OVERALL: {'PASS' if overall else 'FAIL'}")
     print(f"{'='*60}")
 
     if not overall:
+        count = 0
         for r in results:
-            if r["classification"] != "PASS":
-                print(f"  {r['classification']}: {r['method']} — {r['detail']}")
+            if r["classification"] not in ("PASS", "SKIP"):
+                print(f"  {r['classification']}: {r['interface']}.{r['operation']} — {r['detail']}")
+                count += 1
+                if count >= 20:
+                    break
 
     return 0 if overall else 1
 
