@@ -1,6 +1,11 @@
-//! Event / CustomEvent / MouseEvent constructors.
+//! Event / CustomEvent / MouseEvent / KeyboardEvent / PointerEvent constructors.
 //!
-//! Installed as global classes via JS shim.
+//! North Star Phase 1 (v0.8.90): shim preserves codegen prototype.
+//! Instead of creating new constructors with `Object.create()`, the shim
+//! wraps the codegen constructors and installs JS accessors on the codegen
+//! prototype. This keeps Symbol.toStringTag, instanceof, and prototype chain
+//! intact without post-hoc fixes (TO_STRING_TAG_FIX_JS, fix_proto_js Event
+//! getter wrapping).
 
 pub const EVENT_CONSTRUCTORS_JS: &str = r#"
 (function() {
@@ -54,216 +59,291 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         });
     }
 
-    function Event(type, options) {
-        if (!(this instanceof Event)) {
-            throw new TypeError("Failed to construct 'Event': Please use the 'new' operator");
-        }
+    // --- Phase 1: preserve codegen prototype ---
+    // Grab codegen constructors (installed by install_all.rs before shims)
+    var CodegenEvent = globalThis.Event;
+    var CodegenCustomEvent = globalThis.CustomEvent;
+    var CodegenMouseEvent = globalThis.MouseEvent;
+    var CodegenKeyboardEvent = globalThis.KeyboardEvent;
+    var CodegenPointerEvent = globalThis.PointerEvent;
+
+    // Install JS accessors on codegen prototypes (override native getters)
+    var EventProto = CodegenEvent.prototype;
+
+    function _initEventSlots(inst, type, options) {
         options = options || {};
-        this._type = type || '';
-        this._bubbles = !!options.bubbles;
-        this._cancelable = options.cancelable !== undefined ? !!options.cancelable : false;
-        this._composed = !!options.composed;
-        this._defaultPrevented = false;
-        this._target = null;
-        this._currentTarget = null;
-        this._srcElement = null;
-        this._eventPhase = 0;
-        this._timeStamp = Date.now();
-        this._isTrusted = false;
-        this._returnValue = true;
-        this._cancelBubble = false;
-        this._stopPropagation = false;
-        this._stopImmediatePropagation = false;
-        Object.defineProperty(this, 'isTrusted', { value: false, writable: false, enumerable: true, configurable: true });
+        inst._type = type || '';
+        inst._bubbles = !!options.bubbles;
+        inst._cancelable = options.cancelable !== undefined ? !!options.cancelable : false;
+        inst._composed = !!options.composed;
+        inst._defaultPrevented = false;
+        inst._target = null;
+        inst._currentTarget = null;
+        inst._srcElement = null;
+        inst._eventPhase = 0;
+        inst._timeStamp = Date.now();
+        inst._isTrusted = false;
+        inst._returnValue = true;
+        inst._cancelBubble = false;
+        inst._stopPropagation = false;
+        inst._stopImmediatePropagation = false;
+        Object.defineProperty(inst, 'isTrusted', { value: false, writable: false, enumerable: true, configurable: true });
     }
 
-    _defAccessor(Event.prototype, 'type', '');
-    _defReadOnly(Event.prototype, 'bubbles', false);
-    _defReadOnly(Event.prototype, 'cancelable', false);
-    _defReadOnly(Event.prototype, 'composed', false);
-    _defReadOnly(Event.prototype, 'defaultPrevented', false);
-    _defReadOnly(Event.prototype, 'target', null);
-    _defReadOnly(Event.prototype, 'srcElement', null);
-    _defReadOnly(Event.prototype, 'currentTarget', null);
-    _defReadOnly(Event.prototype, 'eventPhase', 0);
-    _defReadOnly(Event.prototype, 'timeStamp', 0);
-    _defReadOnly(Event.prototype, 'isTrusted', false);
-    _defAccessor(Event.prototype, 'returnValue', true);
-    _defAccessor(Event.prototype, 'cancelBubble', false);
+    _defAccessor(EventProto, 'type', '');
+    _defReadOnly(EventProto, 'bubbles', false);
+    _defReadOnly(EventProto, 'cancelable', false);
+    _defReadOnly(EventProto, 'composed', false);
+    _defReadOnly(EventProto, 'defaultPrevented', false);
+    _defReadOnly(EventProto, 'target', null);
+    _defReadOnly(EventProto, 'srcElement', null);
+    _defReadOnly(EventProto, 'currentTarget', null);
+    _defReadOnly(EventProto, 'eventPhase', 0);
+    _defReadOnly(EventProto, 'timeStamp', 0);
+    _defReadOnly(EventProto, 'isTrusted', false);
+    _defAccessor(EventProto, 'returnValue', true);
+    _defAccessor(EventProto, 'cancelBubble', false);
 
-    Event.prototype.preventDefault = function preventDefault() {
+    EventProto.preventDefault = function preventDefault() {
         if (this._cancelable) {
             this._defaultPrevented = true;
         }
     };
 
-    Event.prototype.stopPropagation = function stopPropagation() {
+    EventProto.stopPropagation = function stopPropagation() {
         this._stopPropagation = true;
     };
 
-    Event.prototype.stopImmediatePropagation = function stopImmediatePropagation() {
+    EventProto.stopImmediatePropagation = function stopImmediatePropagation() {
         this._stopPropagation = true;
         this._stopImmediatePropagation = true;
     };
 
-    Event.prototype.composedPath = function composedPath() {
+    EventProto.composedPath = function composedPath() {
         return [];
     };
 
-    Event.prototype.initEvent = function initEvent(eventType, bubbles, cancelable) {
+    EventProto.initEvent = function initEvent(eventType, bubbles, cancelable) {
         if (arguments.length < 1) throw new TypeError("1 argument(s) required, but only 0 present.");
-        this.type = eventType;
+        this._type = eventType;
         this._bubbles = bubbles !== undefined ? !!bubbles : false;
         this._cancelable = cancelable !== undefined ? !!cancelable : false;
     };
+    try { Object.defineProperty(EventProto.initEvent, 'name', { value: 'initEvent' }); } catch(e) {}
+    try { Object.defineProperty(EventProto.initEvent, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
 
-    if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-        Object.defineProperty(Event.prototype, Symbol.toStringTag, {
-            value: 'Event', writable: false, enumerable: false, configurable: true
-        });
+    // Wrap codegen Event constructor: call codegen constructor (for V8 internal
+    // setup), then initialize JS slots.
+    function Event(type, options) {
+        if (!(this instanceof Event)) {
+            throw new TypeError("Failed to construct 'Event': Please use the 'new' operator");
+        }
+        var inst = Reflect.construct(CodegenEvent, [], new.target || Event);
+        _initEventSlots(inst, type, options);
+        return inst;
     }
-
-    Event.NONE = 0;
-    Event.CAPTURING_PHASE = 1;
-    Event.AT_TARGET = 2;
-    Event.BUBBLING_PHASE = 3;
-    Object.defineProperty(Event.prototype, 'NONE', {value: 0, writable: false, enumerable: true, configurable: false});
-    Object.defineProperty(Event.prototype, 'CAPTURING_PHASE', {value: 1, writable: false, enumerable: true, configurable: false});
-    Object.defineProperty(Event.prototype, 'AT_TARGET', {value: 2, writable: false, enumerable: true, configurable: false});
-    Object.defineProperty(Event.prototype, 'BUBBLING_PHASE', {value: 3, writable: false, enumerable: true, configurable: false});
-
+    // Preserve codegen prototype (do NOT replace with Object.create)
+    Event.prototype = EventProto;
+    Object.defineProperty(Event.prototype, 'constructor', {value: Event, writable: true, enumerable: false, configurable: true});
     Object.defineProperty(Event, 'prototype', {writable: false, enumerable: false, configurable: false});
     Object.defineProperty(Event, 'length', {value: 1, writable: false, enumerable: false, configurable: true});
+
+    // Copy static constants from codegen (they may already be there)
+    if (CodegenEvent.NONE !== undefined) {
+        Event.NONE = CodegenEvent.NONE;
+        Event.CAPTURING_PHASE = CodegenEvent.CAPTURING_PHASE;
+        Event.AT_TARGET = CodegenEvent.AT_TARGET;
+        Event.BUBBLING_PHASE = CodegenEvent.BUBBLING_PHASE;
+    } else {
+        Event.NONE = 0;
+        Event.CAPTURING_PHASE = 1;
+        Event.AT_TARGET = 2;
+        Event.BUBBLING_PHASE = 3;
+    }
     ['NONE', 'CAPTURING_PHASE', 'AT_TARGET', 'BUBBLING_PHASE'].forEach(function(k) {
         Object.defineProperty(Event, k, {writable: false, enumerable: true, configurable: false});
     });
 
     globalThis.Event = Event;
 
-    function CustomEvent(type, options) {
-        Event.call(this, type, options);
-        options = options || {};
-        this._detail = options.detail !== undefined ? options.detail : null;
-        Object.defineProperty(this, 'isTrusted', { value: false, writable: false, enumerable: true, configurable: true });
-    }
-    CustomEvent.prototype = Object.create(Event.prototype);
-    Object.defineProperty(CustomEvent.prototype, 'constructor', {value: CustomEvent, writable: true, enumerable: false, configurable: true});
-    _defReadOnly(CustomEvent.prototype, 'detail', null);
+    // --- CustomEvent ---
+    var CEProto = CodegenCustomEvent.prototype;
+    // Ensure prototype chain: CustomEvent.prototype → Event.prototype
+    Object.setPrototypeOf(CEProto, EventProto);
+    Object.defineProperty(CEProto, 'constructor', {value: CodegenCustomEvent, writable: true, enumerable: false, configurable: true});
 
-    CustomEvent.prototype.initCustomEvent = function initCustomEvent(type, bubbles, cancelable, detail) {
+    _defReadOnly(CEProto, 'detail', null);
+
+    CEProto.initCustomEvent = function initCustomEvent(type, bubbles, cancelable, detail) {
         if (arguments.length < 1) throw new TypeError('1 argument(s) required, but only 0 present.');
         this._type = type;
         this._bubbles = bubbles !== undefined ? !!bubbles : false;
         this._cancelable = cancelable !== undefined ? !!cancelable : false;
         this._detail = detail;
     };
-    try { Object.defineProperty(CustomEvent.prototype.initCustomEvent, 'name', { value: 'initCustomEvent' }); } catch(e) {}
-    try { Object.defineProperty(CustomEvent.prototype.initCustomEvent, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
+    try { Object.defineProperty(CEProto.initCustomEvent, 'name', { value: 'initCustomEvent' }); } catch(e) {}
+    try { Object.defineProperty(CEProto.initCustomEvent, 'length', { value: 1, writable: false, enumerable: false, configurable: true }); } catch(e) {}
 
+    function CustomEvent(type, options) {
+        if (!(this instanceof CustomEvent)) {
+            throw new TypeError("Failed to construct 'CustomEvent': Please use the 'new' operator");
+        }
+        var inst = Reflect.construct(CodegenCustomEvent, [], new.target || CustomEvent);
+        _initEventSlots(inst, type, options);
+        options = options || {};
+        inst._detail = options.detail !== undefined ? options.detail : null;
+        return inst;
+    }
+    CustomEvent.prototype = CEProto;
     Object.defineProperty(CustomEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
     Object.defineProperty(CustomEvent, 'length', {value: 1, writable: false, enumerable: false, configurable: true});
 
-    if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-        Object.defineProperty(CustomEvent.prototype, Symbol.toStringTag, {
-            value: 'CustomEvent', writable: false, configurable: true, enumerable: false
-        });
-    }
-
     globalThis.CustomEvent = CustomEvent;
 
-    function MouseEvent(type, options) {
-        Event.call(this, type, options);
-        options = options || {};
-        this._clientX = options.clientX || 0;
-        this._clientY = options.clientY || 0;
-        this._screenX = options.screenX || 0;
-        this._screenY = options.screenY || 0;
-        this._pageX = options.pageX || 0;
-        this._pageY = options.pageY || 0;
-        this._offsetX = options.offsetX || 0;
-        this._offsetY = options.offsetY || 0;
-        this._x = options.clientX || 0;
-        this._y = options.clientY || 0;
-        this._button = options.button || 0;
-        this._buttons = options.buttons || 0;
-        this._ctrlKey = !!options.ctrlKey;
-        this._shiftKey = !!options.shiftKey;
-        this._altKey = !!options.altKey;
-        this._metaKey = !!options.metaKey;
-        this._relatedTarget = options.relatedTarget || null;
-        this._layerX = options.layerX || 0;
-        this._layerY = options.layerY || 0;
-        this._movementX = options.movementX || 0;
-        this._movementY = options.movementY || 0;
-    }
-    MouseEvent.prototype = Object.create(Event.prototype);
-    Object.defineProperty(MouseEvent.prototype, 'constructor', {value: MouseEvent, writable: true, enumerable: false, configurable: true});
+    // --- MouseEvent ---
+    var MEProto = CodegenMouseEvent.prototype;
+    Object.setPrototypeOf(MEProto, EventProto);
+    Object.defineProperty(MEProto, 'constructor', {value: CodegenMouseEvent, writable: true, enumerable: false, configurable: true});
+
     ['clientX','clientY','screenX','screenY','pageX','pageY','offsetX','offsetY','x','y','button','buttons','layerX','layerY','movementX','movementY'].forEach(function(prop) {
-        _defReadOnly(MouseEvent.prototype, prop, 0);
+        _defReadOnly(MEProto, prop, 0);
     });
     ['ctrlKey','shiftKey','altKey','metaKey'].forEach(function(prop) {
-        _defReadOnly(MouseEvent.prototype, prop, false);
+        _defReadOnly(MEProto, prop, false);
     });
-    _defReadOnly(MouseEvent.prototype, 'relatedTarget', null);
+    _defReadOnly(MEProto, 'relatedTarget', null);
+
+    function MouseEvent(type, options) {
+        if (!(this instanceof MouseEvent)) {
+            throw new TypeError("Failed to construct 'MouseEvent': Please use the 'new' operator");
+        }
+        var inst = Reflect.construct(CodegenMouseEvent, [], new.target || MouseEvent);
+        _initEventSlots(inst, type, options);
+        options = options || {};
+        inst._clientX = options.clientX || 0;
+        inst._clientY = options.clientY || 0;
+        inst._screenX = options.screenX || 0;
+        inst._screenY = options.screenY || 0;
+        inst._pageX = options.pageX || 0;
+        inst._pageY = options.pageY || 0;
+        inst._offsetX = options.offsetX || 0;
+        inst._offsetY = options.offsetY || 0;
+        inst._x = options.clientX || 0;
+        inst._y = options.clientY || 0;
+        inst._button = options.button || 0;
+        inst._buttons = options.buttons || 0;
+        inst._ctrlKey = !!options.ctrlKey;
+        inst._shiftKey = !!options.shiftKey;
+        inst._altKey = !!options.altKey;
+        inst._metaKey = !!options.metaKey;
+        inst._relatedTarget = options.relatedTarget || null;
+        inst._layerX = options.layerX || 0;
+        inst._layerY = options.layerY || 0;
+        inst._movementX = options.movementX || 0;
+        inst._movementY = options.movementY || 0;
+        return inst;
+    }
+    MouseEvent.prototype = MEProto;
     Object.defineProperty(MouseEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
 
     globalThis.MouseEvent = MouseEvent;
 
-    function KeyboardEvent(type, options) {
-        Event.call(this, type, options);
-        options = options || {};
-        this._key = options.key || '';
-        this._code = options.code || '';
-        this._keyCode = options.keyCode || 0;
-        this._charCode = options.charCode || 0;
-        this._which = options.which || options.keyCode || 0;
-        this._ctrlKey = !!options.ctrlKey;
-        this._shiftKey = !!options.shiftKey;
-        this._altKey = !!options.altKey;
-        this._metaKey = !!options.metaKey;
-        this._repeat = !!options.repeat;
-        this._location = options.location || 0;
-        this._isComposing = !!options.isComposing;
-    }
-    KeyboardEvent.prototype = Object.create(Event.prototype);
-    Object.defineProperty(KeyboardEvent.prototype, 'constructor', {value: KeyboardEvent, writable: true, enumerable: false, configurable: true});
+    // --- KeyboardEvent ---
+    var KEProto = CodegenKeyboardEvent.prototype;
+    Object.setPrototypeOf(KEProto, EventProto);
+    Object.defineProperty(KEProto, 'constructor', {value: CodegenKeyboardEvent, writable: true, enumerable: false, configurable: true});
+
     ['key','code'].forEach(function(prop) {
-        _defReadOnly(KeyboardEvent.prototype, prop, '');
+        _defReadOnly(KEProto, prop, '');
     });
     ['keyCode','charCode','which','location'].forEach(function(prop) {
-        _defReadOnly(KeyboardEvent.prototype, prop, 0);
+        _defReadOnly(KEProto, prop, 0);
     });
     ['ctrlKey','shiftKey','altKey','metaKey','repeat','isComposing'].forEach(function(prop) {
-        _defReadOnly(KeyboardEvent.prototype, prop, false);
+        _defReadOnly(KEProto, prop, false);
     });
+
+    function KeyboardEvent(type, options) {
+        if (!(this instanceof KeyboardEvent)) {
+            throw new TypeError("Failed to construct 'KeyboardEvent': Please use the 'new' operator");
+        }
+        var inst = Reflect.construct(CodegenKeyboardEvent, [], new.target || KeyboardEvent);
+        _initEventSlots(inst, type, options);
+        options = options || {};
+        inst._key = options.key || '';
+        inst._code = options.code || '';
+        inst._keyCode = options.keyCode || 0;
+        inst._charCode = options.charCode || 0;
+        inst._which = options.which || options.keyCode || 0;
+        inst._ctrlKey = !!options.ctrlKey;
+        inst._shiftKey = !!options.shiftKey;
+        inst._altKey = !!options.altKey;
+        inst._metaKey = !!options.metaKey;
+        inst._repeat = !!options.repeat;
+        inst._location = options.location || 0;
+        inst._isComposing = !!options.isComposing;
+        return inst;
+    }
+    KeyboardEvent.prototype = KEProto;
     Object.defineProperty(KeyboardEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
 
     globalThis.KeyboardEvent = KeyboardEvent;
 
-    function PointerEvent(type, options) {
-        MouseEvent.call(this, type, options);
-        options = options || {};
-        this._pointerId = options.pointerId || 0;
-        this._width = options.width || 1;
-        this._height = options.height || 1;
-        this._pressure = options.pressure || 0;
-        this._pointerType = options.pointerType || 'mouse';
-        this._isPrimary = options.isPrimary !== undefined ? !!options.isPrimary : true;
-        this._tiltX = options.tiltX || 0;
-        this._tiltY = options.tiltY || 0;
-        this._twist = options.twist || 0;
-        this._tangentialPressure = options.tangentialPressure || 0;
-        this._altitudeAngle = options.altitudeAngle || 0;
-        this._azimuthAngle = options.azimuthAngle || 0;
-        this._persistentDeviceId = options.persistentDeviceId || 0;
-    }
-    PointerEvent.prototype = Object.create(MouseEvent.prototype);
-    Object.defineProperty(PointerEvent.prototype, 'constructor', {value: PointerEvent, writable: true, enumerable: false, configurable: true});
+    // --- PointerEvent ---
+    var PEProto = CodegenPointerEvent.prototype;
+    Object.setPrototypeOf(PEProto, MEProto);
+    Object.defineProperty(PEProto, 'constructor', {value: CodegenPointerEvent, writable: true, enumerable: false, configurable: true});
+
     ['pointerId','width','height','pressure','tiltX','tiltY','twist','tangentialPressure','altitudeAngle','azimuthAngle','persistentDeviceId'].forEach(function(prop) {
-        _defReadOnly(PointerEvent.prototype, prop, 0);
+        _defReadOnly(PEProto, prop, 0);
     });
-    _defReadOnly(PointerEvent.prototype, 'pointerType', 'mouse');
-    _defReadOnly(PointerEvent.prototype, 'isPrimary', true);
+    _defReadOnly(PEProto, 'pointerType', 'mouse');
+    _defReadOnly(PEProto, 'isPrimary', true);
+
+    function PointerEvent(type, options) {
+        if (!(this instanceof PointerEvent)) {
+            throw new TypeError("Failed to construct 'PointerEvent': Please use the 'new' operator");
+        }
+        var inst = Reflect.construct(CodegenPointerEvent, [], new.target || PointerEvent);
+        _initEventSlots(inst, type, options);
+        options = options || {};
+        inst._clientX = options.clientX || 0;
+        inst._clientY = options.clientY || 0;
+        inst._screenX = options.screenX || 0;
+        inst._screenY = options.screenY || 0;
+        inst._pageX = options.pageX || 0;
+        inst._pageY = options.pageY || 0;
+        inst._offsetX = options.offsetX || 0;
+        inst._offsetY = options.offsetY || 0;
+        inst._x = options.clientX || 0;
+        inst._y = options.clientY || 0;
+        inst._button = options.button || 0;
+        inst._buttons = options.buttons || 0;
+        inst._ctrlKey = !!options.ctrlKey;
+        inst._shiftKey = !!options.shiftKey;
+        inst._altKey = !!options.altKey;
+        inst._metaKey = !!options.metaKey;
+        inst._relatedTarget = options.relatedTarget || null;
+        inst._layerX = options.layerX || 0;
+        inst._layerY = options.layerY || 0;
+        inst._movementX = options.movementX || 0;
+        inst._movementY = options.movementY || 0;
+        inst._pointerId = options.pointerId || 0;
+        inst._width = options.width || 1;
+        inst._height = options.height || 1;
+        inst._pressure = options.pressure || 0;
+        inst._pointerType = options.pointerType || 'mouse';
+        inst._isPrimary = options.isPrimary !== undefined ? !!options.isPrimary : true;
+        inst._tiltX = options.tiltX || 0;
+        inst._tiltY = options.tiltY || 0;
+        inst._twist = options.twist || 0;
+        inst._tangentialPressure = options.tangentialPressure || 0;
+        inst._altitudeAngle = options.altitudeAngle || 0;
+        inst._azimuthAngle = options.azimuthAngle || 0;
+        inst._persistentDeviceId = options.persistentDeviceId || 0;
+        return inst;
+    }
+    PointerEvent.prototype = PEProto;
     Object.defineProperty(PointerEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
 
     globalThis.PointerEvent = PointerEvent;
