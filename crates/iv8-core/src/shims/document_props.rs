@@ -496,6 +496,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                 Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
                 return node;
             };
+            if (!doc.createTextNode) {
             doc.createTextNode = function createTextNode(data) {
                 if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
                 var textProto = (typeof Text !== 'undefined') ? Text.prototype : Object.prototype;
@@ -507,6 +508,8 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                 Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
                 return node;
             };
+            }
+            if (!doc.createComment) {
             doc.createComment = function createComment(data) {
                 if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
                 var commentProto = (typeof Comment !== 'undefined') ? Comment.prototype : Object.prototype;
@@ -518,6 +521,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                 Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
                 return node;
             };
+            }
             return doc;
         }, writable: true, configurable: true, enumerable: true });
         // createDocumentType: return a DocumentType-like object

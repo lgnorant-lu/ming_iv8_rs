@@ -954,23 +954,7 @@ unsafe extern "C" fn create_text_node(info: *const v8::FunctionCallbackInfo) {
 
         if let Some(nid) = node_id {
             if let Some(obj) = node_to_v8_object(scope, state, nid) {
-                let obj_local: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(obj) };
-                let data_key = crate::v8_utils::v8_string(scope, "data");
-                let data_val = crate::v8_utils::v8_string(scope, &data);
-                let _ = obj_local.define_own_property(
-                    scope,
-                    data_key.into(),
-                    data_val.into(),
-                    v8::PropertyAttribute::NONE,
-                );
-                let tc_key = crate::v8_utils::v8_string(scope, "textContent");
-                let _ = obj_local.define_own_property(
-                    scope,
-                    tc_key.into(),
-                    data_val.into(),
-                    v8::PropertyAttribute::NONE,
-                );
-                rv.set(obj_local.into());
+                rv.set(obj);
             }
         }
     }));

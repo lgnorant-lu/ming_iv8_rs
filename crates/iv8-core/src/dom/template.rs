@@ -1437,11 +1437,6 @@ pub fn chain_dom_prototypes(
         if name == "EventTarget" {
             let _ = dom_proto.set_prototype(scope, codegen_proto.into());
         } else {
-            // For non-EventTarget interfaces, set dom_proto.__proto__ to
-            // codegen_proto so the inheritance chain is correct.
-            // codegen_proto already has correct __proto__ chain via tmpl.inherit(parent).
-            // Only set if dom_proto doesn't already have a non-null __proto__
-            // pointing to a codegen prototype (avoid double-chaining).
             let current_proto = dom_proto.get_prototype(scope);
             let need_chain = current_proto.is_none()
                 || current_proto.is_some_and(|p| p.is_null_or_undefined());
@@ -2441,10 +2436,26 @@ unsafe extern "C" fn child_nodes_getter(info: *const v8::FunctionCallbackInfo) {
                 .map(|n| n.children().map(|c| c.id()).collect())
                 .unwrap_or_default()
         };
+        let ctx = scope.get_current_context();
+        let global = ctx.global(scope);
+        let nl_key = crate::v8_utils::v8_string(scope, "NodeList");
+        let nl_val = global.get(scope, nl_key.into());
         let arr = v8::Array::new(scope, child_ids.len() as i32);
         for (i, cid) in child_ids.iter().enumerate() {
             if let Some(obj) = create_node_object(scope, state, *cid) {
                 arr.set_index(scope, i as u32, obj);
+            }
+        }
+        if let Some(nl_val) = nl_val {
+            if nl_val.is_function() {
+                let nl_ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(nl_val) };
+                let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+                if let Some(proto_val) = nl_ctor.get(scope, proto_key.into()) {
+                    if proto_val.is_object() {
+                        let arr_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(arr) };
+                        let _ = arr_obj.set_prototype(scope, proto_val);
+                    }
+                }
             }
         }
         rv.set(arr.into());
