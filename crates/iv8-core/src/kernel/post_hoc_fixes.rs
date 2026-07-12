@@ -920,6 +920,7 @@ pub fn global_accessor_fix_js(attr_meta: &[(&str, bool, bool)]) -> String {
                                 return origGet.call(globalThis);
                             }};
                             try {{ Object.defineProperty(wrappedGet, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
+                            wrappedGet.__iv8_native = true;
                             var newSetter;
                             if (needsSetter) {{
                                 if (desc.set && typeof desc.set === 'function') {{ newSetter = desc.set; }}
@@ -1295,4 +1296,84 @@ pub const FIX_PROTO_JS: &str = r#"
                         } catch(e) {}
                     }
                 })();
+"#;
+
+/// Function.prototype.toString camouflage.
+///
+/// Chrome returns `function name() { [native code] }` for all built-in
+/// functions. IV8's JS wrapper functions (global_accessor_fix, fix_proto_js,
+/// shim getters) return JS source code, which is detectable.
+///
+/// This fix overrides Function.prototype.toString to return
+/// `function <name>() { [native code] }` for functions that are either:
+/// 1. Already returning [native code] (V8 built-in / codegen FunctionTemplate)
+/// 2. Marked with __iv8_native flag (shim wrappers)
+///
+/// Functions without __iv8_native flag and without [native code] in their
+/// original toString are left unchanged (user JS functions).
+///
+/// This is the A1 codegen API: instead of creating a separate replace_getter
+/// mechanism, we make ALL wrapper functions appear native via toString.
+pub const FUNCTION_TO_STRING_FIX_JS: &str = r#"
+    (function() {
+        // Mark all accessor getters/setters on key prototypes as __iv8_native
+        var ifaces = Object.getOwnPropertyNames(globalThis);
+        for (var i = 0; i < ifaces.length; i++) {
+            try {
+                var ctor = globalThis[ifaces[i]];
+                if (ctor && typeof ctor === 'function' && ctor.prototype) {
+                    var proto = ctor.prototype;
+                    var pnames = Object.getOwnPropertyNames(proto);
+                    for (var j = 0; j < pnames.length; j++) {
+                        try {
+                            var desc = Object.getOwnPropertyDescriptor(proto, pnames[j]);
+                            if (desc) {
+                                if (desc.get && typeof desc.get === 'function') {
+                                    try { desc.get.__iv8_native = true; } catch(e) {}
+                                }
+                                if (desc.set && typeof desc.set === 'function') {
+                                    try { desc.set.__iv8_native = true; } catch(e) {}
+                                }
+                                if (typeof desc.value === 'function') {
+                                    try { desc.value.__iv8_native = true; } catch(e) {}
+                                }
+                            }
+                        } catch(e) {}
+                    }
+                }
+            } catch(e) {}
+        }
+        // Mark globalThis accessor getters/setters
+        var gnames = Object.getOwnPropertyNames(globalThis);
+        for (var i = 0; i < gnames.length; i++) {
+            try {
+                var desc = Object.getOwnPropertyDescriptor(globalThis, gnames[i]);
+                if (desc) {
+                    if (desc.get && typeof desc.get === 'function') {
+                        try { desc.get.__iv8_native = true; } catch(e) {}
+                    }
+                    if (desc.set && typeof desc.set === 'function') {
+                        try { desc.set.__iv8_native = true; } catch(e) {}
+                    }
+                }
+            } catch(e) {}
+        }
+        // Override Function.prototype.toString
+        var origToString = Function.prototype.toString;
+        var nativePattern = /\[native code\]/;
+        Function.prototype.toString = function toString() {
+            var s = '';
+            try { s = origToString.call(this); } catch(e) { return 'function () { [native code] }'; }
+            if (nativePattern.test(s)) return s;
+            if (this.__iv8_native) {
+                var name = '';
+                try { name = this.name || ''; } catch(e) {}
+                if (name) return 'function ' + name + '() { [native code] }';
+                return 'function () { [native code] }';
+            }
+            return s;
+        };
+        try { Object.defineProperty(Function.prototype.toString, 'name', { value: 'toString' }); } catch(e) {}
+        try { Function.prototype.toString.__iv8_native = true; } catch(e) {}
+    })();
 "#;

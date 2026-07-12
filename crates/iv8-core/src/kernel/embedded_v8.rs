@@ -800,6 +800,12 @@ impl EmbeddedV8Kernel {
                 crate::kernel::post_hoc_fixes::FREEZE_ALL_JS);
             let ok = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope)).is_some();
             crate::telemetry::post_hoc_fix_complete("FREEZE_ALL_JS", ok);
+
+            crate::telemetry::post_hoc_fix_start("FUNCTION_TO_STRING_FIX_JS");
+            let js = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::FUNCTION_TO_STRING_FIX_JS);
+            let ok = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("FUNCTION_TO_STRING_FIX_JS", ok);
         });
     }
 
