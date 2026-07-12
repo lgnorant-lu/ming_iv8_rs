@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<script src="/resources/testharness.js"></script>
+<script>
+test(function() {
+    var el = document.createElement('div');
+    assert_equals(el.tagName, 'DIV');
+}, 'createElement div tagName');
+
+test(function() {
+    var el = document.createElement('span');
+    assert_equals(el.tagName, 'SPAN');
+}, 'createElement span tagName');
+</script>

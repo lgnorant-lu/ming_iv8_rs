@@ -31,6 +31,153 @@ STATUS_DIR = WPT_DIR / "status"
 VERSIONS_PATH = WPT_DIR / "versions.json"
 DATA_DIR = REPO_ROOT / "data"
 OUT_PATH = DATA_DIR / "wpt-report.json"
+FUNCTIONAL_OUT_PATH = DATA_DIR / "wpt-functional-report.json"
+
+FUNCTIONAL_TESTHARNESS_SHIM = r"""
+var __iv8Results = [];
+var __iv8TestStatus = "PASS";
+var __iv8TestMessage = "";
+function __iv8Assert(actual, expected, message) {
+    if (actual !== expected) {
+        throw new Error((message || "assert_equals") + ": expected " + JSON.stringify(expected) + " but got " + JSON.stringify(actual));
+    }
+}
+globalThis.assert_equals = function(actual, expected, message) {
+    __iv8Assert(actual, expected, message);
+};
+globalThis.assert_true = function(actual, message) {
+    __iv8Assert(actual, true, message);
+};
+globalThis.assert_false = function(actual, message) {
+    __iv8Assert(actual, false, message);
+};
+globalThis.assert_not_equals = function(actual, expected, message) {
+    if (actual === expected) {
+        throw new Error((message || "assert_not_equals") + ": got " + JSON.stringify(actual));
+    }
+};
+globalThis.assert_array_equals = function(actual, expected, message) {
+    if (!Array.isArray(actual) || !Array.isArray(expected) || actual.length !== expected.length) {
+        throw new Error((message || "assert_array_equals") + ": array mismatch");
+    }
+    for (var i = 0; i < actual.length; i++) {
+        if (actual[i] !== expected[i]) {
+            throw new Error((message || "assert_array_equals") + ": index " + i + " expected " + JSON.stringify(expected[i]) + " but got " + JSON.stringify(actual[i]));
+        }
+    }
+};
+globalThis.assert_throws = function(code, func, message) {
+    try {
+        func();
+    } catch(e) {
+        return;
+    }
+    throw new Error((message || "assert_throws") + ": did not throw");
+};
+globalThis.assert_unreached = function(message) {
+    throw new Error(message || "assert_unreached: reached unreachable code");
+};
+globalThis.assert_class_string = function(object, class_string, message) {
+    var actual = Object.prototype.toString.call(object).slice(8, -1);
+    __iv8Assert(actual, class_string, message || "assert_class_string");
+};
+globalThis.test = function(fn, name) {
+    var result = {name: name || "unnamed test", status: "PASS", message: ""};
+    try {
+        fn();
+    } catch(e) {
+        result.status = "FAIL";
+        result.message = String(e && e.message ? e.message : e);
+    }
+    __iv8Results.push(result);
+};
+globalThis.async_test = function(fn, name) {
+    var result = {name: name || "unnamed async test", status: "PASS", message: ""};
+    var done_called = false;
+    var t = {
+        done: function() {
+            if (!done_called) {
+                done_called = true;
+                __iv8Results.push(result);
+            }
+        },
+        step_func: function(f) {
+            return function() {
+                try {
+                    f.apply(this, arguments);
+                } catch(e) {
+                    if (!done_called) {
+                        done_called = true;
+                        result.status = "FAIL";
+                        result.message = String(e && e.message ? e.message : e);
+                        __iv8Results.push(result);
+                    }
+                }
+            };
+        },
+        step_func_done: function(f) {
+            return function() {
+                try {
+                    f.apply(this, arguments);
+                    if (!done_called) {
+                        done_called = true;
+                        __iv8Results.push(result);
+                    }
+                } catch(e) {
+                    if (!done_called) {
+                        done_called = true;
+                        result.status = "FAIL";
+                        result.message = String(e && e.message ? e.message : e);
+                        __iv8Results.push(result);
+                    }
+                }
+            };
+        }
+    };
+    try {
+        if (typeof fn === 'function') {
+            fn(t);
+        }
+        if (!done_called) {
+            done_called = true;
+            __iv8Results.push(result);
+        }
+    } catch(e) {
+        result.status = "FAIL";
+        result.message = String(e && e.message ? e.message : e);
+        if (!done_called) {
+            done_called = true;
+            __iv8Results.push(result);
+        }
+    }
+    return t;
+};
+globalThis.promise_test = function(fn, name) {
+    var result = {name: name || "unnamed promise test", status: "PASS", message: ""};
+    __iv8Results.push(result);
+    try {
+        Promise.resolve(fn()).catch(function(e) {
+            result.status = "FAIL";
+            result.message = String(e && e.message ? e.message : e);
+        });
+    } catch(e) {
+        result.status = "FAIL";
+        result.message = String(e && e.message ? e.message : e);
+    }
+    return Promise.resolve();
+};
+globalThis.done = function() {};
+globalThis.setup = function() {};
+globalThis.subsetTest = function(test, name) {
+    return test;
+};
+globalThis.step_timeout = function(fn, ms) {
+    try {
+        fn();
+    } catch(e) {}
+    return 0;
+};
+"""
 
 # WPT test suites to run
 # Each suite maps to a WPT official test file and its variants
@@ -2726,6 +2873,91 @@ def fetch_chrome_baseline() -> dict:
     return baselines
 
 
+def find_functional_test_files(suite_name: str) -> list[Path]:
+    suite_dir = FIXTURES_DIR / suite_name
+    if not suite_dir.exists():
+        return []
+    html_files = sorted(suite_dir.rglob("*.html"))
+    anyjs_files = sorted(suite_dir.rglob("*.any.js"))
+    all_files = html_files + anyjs_files
+    result = []
+    for f in all_files:
+        if f.name.startswith("idlharness"):
+            continue
+        result.append(f)
+    return result
+
+
+def run_functional_suite(suite_name: str) -> dict:
+    import iv8_rs as iv8
+
+    test_files = find_functional_test_files(suite_name)
+    if not test_files:
+        print(f"No functional test files found for suite: {suite_name}")
+        return {
+            "suite": suite_name,
+            "run_status": "no test files found",
+            "total": 0,
+            "pass": 0,
+            "fail": 0,
+            "tests": [],
+        }
+
+    all_tests = []
+
+    for test_file in test_files:
+        rel_path = test_file.relative_to(FIXTURES_DIR)
+        print(f"  Running: {rel_path}")
+
+        if test_file.suffix == ".html":
+            test_code = extract_script_from_html(test_file)
+        else:
+            test_code = test_file.read_text(encoding="utf-8")
+            test_code = re.sub(r'^//\s*META:.*$', '', test_code, flags=re.MULTILINE)
+
+        ctx = iv8.JSContext()
+        try:
+            ctx.page_load("<!DOCTYPE html><html><body></body></html>", None)
+
+            ctx.eval(FUNCTIONAL_TESTHARNESS_SHIM, name="iv8-functional-shim.js")
+
+            try:
+                ctx.eval(test_code, name=str(rel_path))
+                run_status = "completed"
+            except Exception as e:
+                run_status = f"error: {e}"
+                print(f"    Execution error: {e}")
+
+            try:
+                results_json = ctx.eval("JSON.stringify(__iv8Results)")
+                results = json.loads(results_json)
+            except Exception:
+                results = []
+
+            for r in results:
+                r["file"] = str(rel_path)
+            all_tests.extend(results)
+
+        finally:
+            ctx.close()
+
+    pass_count = sum(1 for r in all_tests if r["status"] == "PASS")
+    fail_count = sum(1 for r in all_tests if r["status"] != "PASS")
+
+    return {
+        "suite": suite_name,
+        "run_status": "completed",
+        "total": len(all_tests),
+        "pass": pass_count,
+        "fail": fail_count,
+        "tests": all_tests,
+    }
+
+
+def run_functional_tests(suites: list[str]) -> list[dict]:
+    return [run_functional_suite(s) for s in suites]
+
+
 def main() -> None:
     import argparse
 
@@ -2735,8 +2967,75 @@ def main() -> None:
                         help="Only run Chrome baseline 10 files (9640 tests)")
     parser.add_argument("--update", action="store_true",
                         help="Update status files to match current results")
-    parser.add_argument("--output", "-o", default=str(OUT_PATH))
+    parser.add_argument("--functional", metavar="SUITE",
+                        help="Run functional tests (not idlharness) for the given suite (e.g. dom, html/dom)")
+    parser.add_argument("--output", "-o", default=None)
     args = parser.parse_args()
+
+    if args.functional:
+        output_path = Path(args.output) if args.output else FUNCTIONAL_OUT_PATH
+        suites_to_run = [s.strip() for s in args.functional.split(",") if s.strip()]
+
+        threading.stack_size(128 * 1024 * 1024)
+        result_holder = {}
+
+        def functional_worker():
+            try:
+                all_results = run_functional_tests(suites_to_run)
+                result_holder["results"] = all_results
+            except Exception as e:
+                result_holder["error"] = repr(e)
+
+        t = threading.Thread(target=functional_worker)
+        t.start()
+        t.join()
+
+        if "error" in result_holder:
+            print(f"ERROR: {result_holder['error']}")
+            sys.exit(1)
+
+        results = result_holder["results"]
+        total_tests = sum(r["total"] for r in results)
+        total_pass = sum(r["pass"] for r in results)
+        total_fail = sum(r["fail"] for r in results)
+
+        report = {
+            "schema_version": "wpt-functional-report.v0.1",
+            "source": "WPT functional test files",
+            "suites": results,
+            "summary": {
+                "total_tests": total_tests,
+                "total_pass": total_pass,
+                "total_fail": total_fail,
+                "pass_rate": round(total_pass / total_tests * 100, 2) if total_tests > 0 else 0,
+            },
+        }
+
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(
+            json.dumps(report, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+
+        print("\n" + "=" * 60)
+        print("WPT Functional Test Report")
+        print("=" * 60)
+        print(f"Total: {total_pass} PASS, {total_fail} FAIL / {total_tests} "
+              f"({report['summary']['pass_rate']}%)")
+        print()
+
+        for r in results:
+            print(f"  {r['suite']}: {r['pass']}/{r['total']} PASS "
+                  f"({r['run_status']})")
+
+        print(f"\nReport written to {output_path}")
+
+        no_files = all(r["run_status"] == "no test files found" for r in results)
+        if no_files:
+            sys.exit(0)
+        sys.exit(0 if total_fail == 0 else 1)
+
+    output_path = Path(args.output) if args.output else OUT_PATH
 
     # Set stack size for V8 template creation
     threading.stack_size(128 * 1024 * 1024)
@@ -2801,7 +3100,6 @@ def main() -> None:
         },
     }
 
-    output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     try:
         report_str = json.dumps(report, indent=2, ensure_ascii=False)
