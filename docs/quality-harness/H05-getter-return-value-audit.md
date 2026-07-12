@@ -247,12 +247,21 @@ evaluate_h05_getter.py
 
 ### 4.4 Quality Gate
 
-Per HARNESS-CHARTER §3:
-- **Category A (Data Integrity)**: N/A (no mutation)
+Per HARNESS-CHARTER §3 (A and C mandatory):
+- **Category A (Data Integrity)**: TYPE_FAIL=0, THROW=0 (mandatory)
 - **Category B (Recall)**: % of IDL attributes evaluated (target: 35% Phase 1)
-- **Category C (False Positive)**: N/A (diagnostic, non-blocking)
+- **Category C (False Positive)**: getter must throw on wrong receiver (mandatory, 8 interfaces checked)
 - **Category D (Coverage)**: Interface coverage (target: 50/1284 Phase 1)
 - **Category E (Robustness)**: Chrome disconnect handling (graceful SKIP)
+
+### 4.5 Current Baseline (H05a)
+
+- v0.8.91: 1012/1063 PASS, 0 TYPE_FAIL, 0 THROW (top 50 interfaces, --iv8-only)
+- Category C: 8/8 receiver check PASS (all getters throw on wrong receiver)
+- THRESHOLDS: max_type_fail=0, max_throw=0
+- Evaluator: `scripts/evaluate_h05_getter.py`
+- Status file: `status/h05-getter-values.json`
+- Test data: unified_ir.json top 50 interfaces (1063 attributes)
 
 **Gate binding**: Non-blocking (diagnostic-only) for v0.8.89. Promote to
 blocking in v0.8.91 after Phase 2 baseline is established.
@@ -283,6 +292,15 @@ invocation expression:
 The H05f audit does NOT require Chrome CDP — the expected values are
 fully determined by the WebIDL spec (toStringTag = interface name). This
 makes H05f a **spec-conformance check**, not a Chrome-diff check.
+
+### 5.4 Current Baseline (H05f)
+
+- v0.8.91: 1270/1284 PASS, 0 FAIL
+- Category C: plain object/array/function toString not leaked (PASS)
+- THRESHOLDS: max_fail=0
+- Evaluator: `scripts/evaluate_h05f_tostring.py`
+- Status file: `status/h05f-tostring.json`
+- Test data: 1284 interfaces from unified_ir.json
 
 ## 6. Relationship to Existing Harnesses
 
@@ -403,9 +421,12 @@ incorrectly accepts writes.
 
 ### 11.6 Current Baseline
 
-- v0.8.91: 49/50 PASS, 1 NO_SETTER (outerHTML skip_get), 0 THROW
+- v0.8.91: 553/569 PASS, 16 NO_SETTER (11 readonly accept write + 5 non-readonly not reflected), 0 THROW
+- Category C: 102/113 readonly attrs correctly reject writes (11 FAIL = known codegen bug)
+- THRESHOLDS: max_throw=0, max_no_setter=5 ( Category A FAIL due to readonly bugs, targeted fix needed)
 - Evaluator: `scripts/evaluate_h05b_setter.py`
 - Status file: `status/h05b-setter.json`
+- Test data: 569 tests from IDL programatic generation (unified_ir.json)
 
 ## 12. H05c: Method Return Value Audit
 
@@ -460,9 +481,12 @@ a value.
 
 ### 12.6 Current Baseline
 
-- v0.8.91: 59/60 PASS, 0 TYPE_FAIL, 1 THROW (splitText K-008), OVERALL PASS
+- v0.8.91: 189/216 PASS, 22 TYPE_FAIL (Promise<void> returns undefined, known codegen limit), 2 THROW (param validation)
+- Category C: 72/72 void methods return undefined (100% PASS)
+- THRESHOLDS: max_type_fail=22, max_throw=2
 - Evaluator: `scripts/evaluate_h05c_method.py`
 - Status file: `status/h05c-method.json`
+- Test data: 216 tests from IDL programatic generation (return_type field)
 
 ## 13. H05d: Constructor Behavior Audit
 
@@ -513,9 +537,11 @@ or not in CONSTRUCTABLE list must throw "Illegal constructor" when
 
 ### 13.6 Current Baseline
 
-- v0.8.91: 35/35 PASS, 0 WRONG_TYPE, 0 THROW, OVERALL PASS
+- v0.8.91: 49 PASS (Category A) + 14 PASS (Category C non-constructable) = 63 tests, 0 WRONG_TYPE, 0 THROW
+- THRESHOLDS: max_throw=2, max_wrong_type=0
 - Evaluator: `scripts/evaluate_h05d_constructor.py`
 - Status file: `status/h05d-constructor.json`
+- Test data: 35 constructable + 16 non-constructable (WebIDL spec)
 
 ## 14. H05e: Exception Type/Message Audit
 
