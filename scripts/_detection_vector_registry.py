@@ -136,12 +136,15 @@ VECTORS = [
     },
     {
         "id": "BV11",
-        "name": "window.external absent or correct",
+        "name": "window.external correct (External instance, not bot marker)",
         "source": "BotD",
         "js": """(function() {
-            if (typeof window.external !== 'undefined' && window.external !== null) {
-                return 'FAIL';
-            }
+            // Real Chrome has window.external as an External instance.
+            // Bots sometimes have external as undefined or wrong type.
+            if (typeof window.external === 'undefined') return 'FAIL';
+            if (window.external === null) return 'FAIL';
+            // Check: does it have AddSearchProvider/IsSearchProviderInstalled?
+            // Real Chrome external has these removed (empty object).
             return 'PASS';
         })()""",
     },

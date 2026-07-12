@@ -1084,8 +1084,8 @@ try {
                                 try {
                                     var desc = Object.getOwnPropertyDescriptor(proto, pname);
                                     if (!desc || !desc.get) continue;
-                                    var origGet = desc.get;
-                                    var origSet = desc.set;
+                                    let origGet = desc.get;
+                                    let origSet = desc.set;
                                     var alreadyWrapped = desc.get && desc.get.__iv8_wrapped;
                                     if (alreadyWrapped && (!desc.set || desc.set.__iv8_set_wrapped)) continue;
                                     // Skip [native code] getters: V8 does not invoke
@@ -1126,7 +1126,7 @@ try {
                                             // which would throw "Illegal invocation".
                                             return null;
                                         }
-                                        return origGet.call(this);
+                                    return origGet.call(this);
                                     };
                                     wrappedGet.__iv8_wrapped = true;
                                     try { Object.defineProperty(wrappedGet, 'name', { value: 'get ' + pname }); } catch(e) {}
@@ -1208,6 +1208,10 @@ try {
             let name_length_js = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::NAME_LENGTH_FIX_JS);
             let _ = v8::Script::compile(scope, name_length_js, None).and_then(|s| s.run(scope));
+
+            let descriptor_fix = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::DESCRIPTOR_FIX_JS);
+            let _ = v8::Script::compile(scope, descriptor_fix, None).and_then(|s| s.run(scope));
 
             if !worker_mode {
                 let js = crate::v8_utils::v8_string(scope,

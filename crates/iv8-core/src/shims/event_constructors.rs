@@ -191,10 +191,14 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         this._altKey = !!options.altKey;
         this._metaKey = !!options.metaKey;
         this._relatedTarget = options.relatedTarget || null;
+        this._layerX = options.layerX || 0;
+        this._layerY = options.layerY || 0;
+        this._movementX = options.movementX || 0;
+        this._movementY = options.movementY || 0;
     }
     MouseEvent.prototype = Object.create(Event.prototype);
     Object.defineProperty(MouseEvent.prototype, 'constructor', {value: MouseEvent, writable: true, enumerable: false, configurable: true});
-    ['clientX','clientY','screenX','screenY','pageX','pageY','offsetX','offsetY','x','y','button','buttons'].forEach(function(prop) {
+    ['clientX','clientY','screenX','screenY','pageX','pageY','offsetX','offsetY','x','y','button','buttons','layerX','layerY','movementX','movementY'].forEach(function(prop) {
         _defReadOnly(MouseEvent.prototype, prop, 0);
     });
     ['ctrlKey','shiftKey','altKey','metaKey'].forEach(function(prop) {
@@ -219,6 +223,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         this._metaKey = !!options.metaKey;
         this._repeat = !!options.repeat;
         this._location = options.location || 0;
+        this._isComposing = !!options.isComposing;
     }
     KeyboardEvent.prototype = Object.create(Event.prototype);
     Object.defineProperty(KeyboardEvent.prototype, 'constructor', {value: KeyboardEvent, writable: true, enumerable: false, configurable: true});
@@ -228,7 +233,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
     ['keyCode','charCode','which','location'].forEach(function(prop) {
         _defReadOnly(KeyboardEvent.prototype, prop, 0);
     });
-    ['ctrlKey','shiftKey','altKey','metaKey','repeat'].forEach(function(prop) {
+    ['ctrlKey','shiftKey','altKey','metaKey','repeat','isComposing'].forEach(function(prop) {
         _defReadOnly(KeyboardEvent.prototype, prop, false);
     });
     Object.defineProperty(KeyboardEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
@@ -244,10 +249,17 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         this._pressure = options.pressure || 0;
         this._pointerType = options.pointerType || 'mouse';
         this._isPrimary = options.isPrimary !== undefined ? !!options.isPrimary : true;
+        this._tiltX = options.tiltX || 0;
+        this._tiltY = options.tiltY || 0;
+        this._twist = options.twist || 0;
+        this._tangentialPressure = options.tangentialPressure || 0;
+        this._altitudeAngle = options.altitudeAngle || 0;
+        this._azimuthAngle = options.azimuthAngle || 0;
+        this._persistentDeviceId = options.persistentDeviceId || 0;
     }
     PointerEvent.prototype = Object.create(MouseEvent.prototype);
     Object.defineProperty(PointerEvent.prototype, 'constructor', {value: PointerEvent, writable: true, enumerable: false, configurable: true});
-    ['pointerId','width','height','pressure'].forEach(function(prop) {
+    ['pointerId','width','height','pressure','tiltX','tiltY','twist','tangentialPressure','altitudeAngle','azimuthAngle','persistentDeviceId'].forEach(function(prop) {
         _defReadOnly(PointerEvent.prototype, prop, 0);
     });
     _defReadOnly(PointerEvent.prototype, 'pointerType', 'mouse');

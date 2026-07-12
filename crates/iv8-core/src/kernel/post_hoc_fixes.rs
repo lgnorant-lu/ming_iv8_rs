@@ -718,5 +718,7 @@ pub const DESCRIPTOR_FIX_JS: &str = r#"
                 }
             }
         } catch(e) {}
+
+        try { delete globalThis.external; } catch(e) {}
     })();
 "#;
