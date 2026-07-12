@@ -6,6 +6,70 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.89] - 2026-07-12
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Mode: Lightweight Increment.
+
+### Added
+- H05a getter return value audit harness: IDL-driven full enumeration (scripts/evaluate_h05_getter.py, 670 lines)
+  - 5-step pipeline: IDL enumeration → instance creation (Tier A-E) → getter invocation → Chrome CDP diff → classification
+  - HARNESS-CHARTER compliance: THRESHOLDS (P3), Category A-E (P4), KNOWN_GOOD_VALUES (P2), OVERALL PASS/FAIL (P7)
+  - Result: OVERALL PASS (1012/1063 attributes, 0 TYPE_FAIL, 0 THROW)
+- H05f toString/Symbol.toStringTag audit harness: spec-conformance check for all 1284 interfaces (scripts/evaluate_h05f_tostring.py, 222 lines)
+  - Result: OVERALL PASS (1271/1284, 0 FAIL, 13 SKIP)
+- L4b-d detection vector registry: 26 vectors from CreepJS + BotD (scripts/_detection_vector_registry.py, 461 lines)
+  - Result: 26/26 PASS (100%)
+- BotD fingerprinting library regression: bot=false confirmed (23.4KB bundle, collect()+detect() sync API)
+- post_hoc_fixes.rs module: 14 JS blob constants extracted from embedded_v8.rs (698 lines, -655 inline)
+  - Each blob documented: what it fixes, why not codegen/shim/native
+- Codegen-shim composition architecture north star doc (docs/roadmap/v0.8/analysis/codegen-shim-composition-architecture.md)
+  - 4-phase migration path: proto preservation → behavior override → DOM FT → fix decomposition
+  - 18 post-hoc fix classified: 3 permanent (runtime config) + 15 true patch (with migration target)
+  - Patch justification criteria: when to patch vs when to fix root cause
+- H05 charter document (docs/quality-harness/H05-getter-return-value-audit.md, 340 lines)
+  - 6 sub-layers: H05a(getter) / H05b(setter) / H05c(method) / H05d(constructor) / H05e(exception) / H05f(toString)
+- L4b fingerprint library feasibility assessment (docs/roadmap/v0.8/analysis/l4b-fingerprint-library-feasibility.md, 260 lines)
+  - BotD: FEASIBLE (no Workers/Canvas/Audio needed)
+  - CreepJS: DEFERRED until v0.8.x env gaps filled (Canvas/WebGL/Audio/matchMedia)
+  - 26 detection vectors cataloged
+- K-010: RUST_MIN_STACK 3-layer config (.cargo/config.toml [env] + ensure_v8_initialized set_var + Python threading.stack_size)
+- Event shim attribute completion: MouseEvent layerX/layerY/movementX/movementY, KeyboardEvent isComposing, PointerEvent tiltX/tiltY/twist/tangentialPressure/altitudeAngle/azimuthAngle/persistentDeviceId
+- DOM_GETTER_FIX_JS: JS shim fallback for codegen native getters on DOM template instances (CharacterData.length, Text.wholeText, Element.regionOverset)
+- TO_STRING_TAG_FIX_JS: Symbol.toStringTag installation for all interfaces (legacy alias skip, toString Illegal invocation fix)
+- H05a KNOWN_GOOD_VALUES: 16 known-good value checks (Category C falsification)
+- H05a THRESHOLDS: centralized threshold dict (Category A-E gate criteria)
+- test_rust_min_stack_is_set_after_init: K-010 test (486 lib total)
+
+### Changed
+- fix_proto_js: `var origGet`/`var origSet` → `let` (K-015 closure pollution bug fix)
+  - Root cause: var is function-scoped, for loop all iterations share same variable, closure captures reference not value
+  - Impact: MouseEvent/CustomEvent getter THROW "Illegal invocation" eliminated (21→0)
+- embedded_v8.rs: 655 lines of inline JS removed (extracted to post_hoc_fixes.rs)
+- DESCRIPTOR_FIX_JS: added to freeze_all_prototypes (was only in worker path)
+- DESCRIPTOR_FIX_JS: added `delete globalThis.external` (BV11 fix)
+- BV11 detection vector: corrected window.external check (Chrome has External instance, not absent)
+- v8_init.rs: documentation updated (new_single_threaded → new_default_platform, K-010 stack config doc)
+- Python __init__.py: threading.stack_size(128MB) at module import (K-010 Layer 3)
+- logging-conventions.md: RUST_MIN_STACK doc corrected (67108864 → automatic), K-016 coverage gap documented
+
+### Quality Gates
+- H05a: OVERALL PASS (1012/1063 attributes, Category A-E all PASS)
+- H05f: OVERALL PASS (1271/1284 interfaces, 0 FAIL)
+- L4b-d: 26/26 PASS (100%)
+- BotD: bot=false
+- Rust lib tests: 486/486 PASS (from 485, +1)
+- Rust integration tests: 66 PASS (K-008 11, worker 7, codegen 7, telemetry 13, executor 6, events 22)
+- Line coverage: 43.55% (baseline 47.4%, delta from post_hoc_fixes.rs JS string constants)
+- Logging violations: 0
+- var→let closure audit: 0 remaining HIGH-risk (all JS blobs scanned)
+
+### Known Limitations
+- K-016: post-hoc JS fix tracing gap (v0.8.90 target)
+- K-018: WPT runner V8 weak handle panic (pre-existing, v0.8.88 also affected, v0.8.90 target)
+- Coverage 43.55% < 80% target (K-009, incremental)
+- WPT idlharness: unable to re-verify due to K-018 panic; last known 9359/9640 (97.09%, v0.8.88)
+
 ## [v0.8.88] - 2026-07-12
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.
