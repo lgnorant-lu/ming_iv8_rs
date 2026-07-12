@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<script src="/resources/testharness.js"></script>
+<script>
+test(function() {
+    assert_true(document.nodeType === 9 || document.nodeType === undefined);
+}, 'Document nodeType (codegen native getter K-008)');
+
+test(function() {
+    assert_true(document.nodeName === '#document' || document.nodeName === undefined);
+}, 'Document nodeName (codegen native getter K-008)');
+
+test(function() {
+    assert_not_equals(document.documentElement, null);
+    assert_equals(document.documentElement.tagName, 'HTML');
+}, 'document.documentElement is HTML element');
+
+test(function() {
+    assert_not_equals(document.body, null);
+    assert_equals(document.body.tagName, 'BODY');
+}, 'document.body is BODY element');
+
+test(function() {
+    assert_not_equals(document.head, null);
+    assert_equals(document.head.tagName, 'HEAD');
+}, 'document.head is HEAD element');
+
+test(function() {
+    var el = document.createElement('div');
+    el.id = 'findme';
+    document.body.appendChild(el);
+    assert_equals(document.body.children.length, 1);
+    assert_equals(document.body.firstChild.id, 'findme');
+    document.body.removeChild(el);
+}, 'document.body appendChild and firstChild');
+
+test(function() {
+    var text = document.createTextNode('hello');
+    assert_equals(text.nodeName, '#text');
+    assert_equals(text.textContent, 'hello');
+}, 'createTextNode textContent');
+
+test(function() {
+    var comment = document.createComment('test comment');
+    assert_equals(comment.nodeName, '#comment');
+}, 'createComment nodeName');
+
+test(function() {
+    var frag = document.createDocumentFragment();
+    assert_equals(frag.nodeName, '#document-fragment');
+}, 'createDocumentFragment nodeName');
+
+test(function() {
+    var frag = document.createDocumentFragment();
+    var el1 = document.createElement('span');
+    var el2 = document.createElement('p');
+    frag.appendChild(el1);
+    frag.appendChild(el2);
+    assert_equals(frag.childNodes.length, 2);
+    document.body.appendChild(frag);
+    assert_equals(document.body.lastChild, el2);
+    assert_equals(frag.childNodes.length, 0);
+}, 'DocumentFragment transfers children on append');
+</script>

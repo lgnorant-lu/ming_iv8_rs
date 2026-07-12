@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<script src="/resources/testharness.js"></script>
+<script>
+test(function() {
+    var el = document.createElement('div');
+    assert_equals(el.nodeType, 1);
+}, 'Element nodeType is 1');
+
+test(function() {
+    var el = document.createElement('div');
+    assert_equals(el.nodeName, 'DIV');
+}, 'Element nodeName is tagName');
+
+test(function() {
+    var el = document.createElement('div');
+    assert_equals(el.tagName, 'DIV');
+}, 'createElement div tagName uppercase');
+
+test(function() {
+    var el = document.createElement('span');
+    assert_equals(el.tagName, 'SPAN');
+}, 'createElement span tagName');
+
+test(function() {
+    var el = document.createElement('input');
+    assert_equals(el.tagName, 'INPUT');
+}, 'createElement input tagName');
+
+test(function() {
+    var el = document.createElement('a');
+    el.href = 'https://example.com/path?q=1';
+    assert_equals(el.href, 'https://example.com/path?q=1');
+}, 'anchor href set/get');
+
+test(function() {
+    var el = document.createElement('div');
+    el.id = 'testid';
+    assert_equals(el.id, 'testid');
+}, 'element id set/get');
+
+test(function() {
+    var el = document.createElement('div');
+    el.className = 'foo bar';
+    assert_equals(el.className, 'foo bar');
+}, 'element className set/get');
+
+test(function() {
+    var el = document.createElement('div');
+    el.textContent = 'hello world';
+    assert_equals(el.textContent, 'hello world');
+}, 'element textContent set/get');
+
+test(function() {
+    var el = document.createElement('div');
+    el.innerHTML = '<span>inner</span>';
+    assert_true(el.childNodes.length >= 0);
+}, 'element innerHTML set does not throw');
+
+test(function() {
+    var el = document.createElement('div');
+    assert_equals(el.parentNode, null);
+}, 'orphan element parentNode is null');
+
+test(function() {
+    var parent = document.createElement('div');
+    var child = document.createElement('span');
+    parent.appendChild(child);
+    assert_equals(child.parentNode, parent);
+    assert_equals(parent.firstChild, child);
+    assert_equals(parent.lastChild, child);
+    assert_equals(parent.children.length, 1);
+}, 'appendChild sets parent/child relationship');
+
+test(function() {
+    var parent = document.createElement('div');
+    var c1 = document.createElement('span');
+    var c2 = document.createElement('p');
+    parent.appendChild(c1);
+    parent.appendChild(c2);
+    assert_equals(parent.children.length, 2);
+    assert_equals(parent.firstChild, c1);
+    assert_equals(parent.lastChild, c2);
+}, 'appendChild multiple children order');
+
+test(function() {
+    var parent = document.createElement('div');
+    var c1 = document.createElement('span');
+    var c2 = document.createElement('p');
+    parent.appendChild(c1);
+    parent.appendChild(c2);
+    parent.removeChild(c1);
+    assert_equals(parent.children.length, 1);
+    assert_equals(parent.firstChild, c2);
+}, 'removeChild updates children');
+
+test(function() {
+    var parent = document.createElement('div');
+    var c1 = document.createElement('span');
+    var c2 = document.createElement('p');
+    var c3 = document.createElement('div');
+    parent.appendChild(c1);
+    parent.appendChild(c3);
+    parent.insertBefore(c2, c3);
+    assert_equals(parent.children.length, 3);
+    assert_equals(parent.children[0], c1);
+    assert_equals(parent.children[1], c2);
+    assert_equals(parent.children[2], c3);
+}, 'insertBefore inserts at correct position');
+
+test(function() {
+    var el = document.createElement('div');
+    assert_equals(el.children.length, 0);
+}, 'empty element children length is 0');
+
+test(function() {
+    var el = document.createElement('div');
+    assert_true(el.hasChildNodes() === false);
+}, 'empty element hasChildNodes is false');
+
+test(function() {
+    var el = document.createElement('div');
+    var text = document.createTextNode('hello');
+    el.appendChild(text);
+    assert_equals(el.childNodes.length, 1);
+}, 'element with text node has childNodes');
+
+test(function() {
+    var el = document.createElement('div');
+    el.setAttribute('data-test', 'value1');
+    assert_equals(el.getAttribute('data-test'), 'value1');
+}, 'setAttribute/getAttribute data-*');
+
+test(function() {
+    var el = document.createElement('div');
+    el.setAttribute('data-test', 'value1');
+    assert_true(el.hasAttribute('data-test'));
+    el.removeAttribute('data-test');
+    assert_false(el.hasAttribute('data-test'));
+}, 'hasAttribute/removeAttribute');
+
+test(function() {
+    var el = document.createElement('div');
+    assert_false(el.hasAttribute('nonexistent'));
+}, 'hasAttribute nonexistent returns false');
+
+test(function() {
+    var el = document.createElement('div');
+    var clone = el.cloneNode(false);
+    assert_equals(clone.tagName, 'DIV');
+    assert_not_equals(clone, el);
+    assert_equals(clone.children.length, 0);
+}, 'cloneNode(false) shallow clone');
+
+test(function() {
+    var el = document.createElement('div');
+    var child = document.createElement('span');
+    el.appendChild(child);
+    var clone = el.cloneNode(true);
+    assert_equals(clone.children.length, 1);
+    assert_equals(clone.firstChild.tagName, 'SPAN');
+}, 'cloneNode(true) deep clone');
+</script>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<script src="/resources/testharness.js"></script>
+<script>
+test(function() {
+    var el = document.createElement('div');
+    assert_equals(typeof el.addEventListener, 'function');
+}, 'Element has addEventListener');
+
+test(function() {
+    var el = document.createElement('div');
+    assert_equals(typeof el.removeEventListener, 'function');
+}, 'Element has removeEventListener');
+
+test(function() {
+    var el = document.createElement('div');
+    var called = false;
+    el.addEventListener('click', function() { called = true; });
+    el.dispatchEvent(new Event('click'));
+    assert_true(called);
+}, 'addEventListener + dispatchEvent triggers callback');
+
+test(function() {
+    var el = document.createElement('div');
+    var called = false;
+    function handler() { called = true; }
+    el.addEventListener('click', handler);
+    el.removeEventListener('click', handler);
+    el.dispatchEvent(new Event('click'));
+    assert_false(called);
+}, 'removeEventListener prevents callback');
+
+test(function() {
+    var el = document.createElement('div');
+    var count = 0;
+    el.addEventListener('click', function() { count++; });
+    el.dispatchEvent(new Event('click'));
+    el.dispatchEvent(new Event('click'));
+    el.dispatchEvent(new Event('click'));
+    assert_equals(count, 3);
+}, 'dispatchEvent triggers callback multiple times');
+
+test(function() {
+    var event = new Event('test');
+    assert_equals(event.type, 'test');
+    assert_false(event.bubbles);
+    assert_false(event.cancelable);
+}, 'Event default properties');
+
+test(function() {
+    var event = new Event('test', {bubbles: true, cancelable: true});
+    assert_true(event.bubbles);
+    assert_true(event.cancelable);
+}, 'Event with options');
+
+test(function() {
+    var event = new CustomEvent('test', {detail: {a: 1, b: 2}});
+    assert_equals(event.type, 'test');
+    assert_equals(event.detail.a, 1);
+    assert_equals(event.detail.b, 2);
+}, 'CustomEvent detail');
+
+test(function() {
+    var event = new MouseEvent('click', {clientX: 100, clientY: 200});
+    assert_equals(event.clientX, 100);
+    assert_equals(event.clientY, 200);
+    assert_true(event instanceof MouseEvent);
+    assert_true(event instanceof Event);
+}, 'MouseEvent properties and instanceof');
+
+test(function() {
+    var event = new KeyboardEvent('keydown', {key: 'Enter', code: 'Enter'});
+    assert_equals(event.key, 'Enter');
+    assert_equals(event.code, 'Enter');
+    assert_true(event instanceof KeyboardEvent);
+    assert_true(event instanceof Event);
+}, 'KeyboardEvent properties and instanceof');
+
+test(function() {
+    var event = new Event('test', {cancelable: true});
+    event.preventDefault();
+    assert_true(event.defaultPrevented);
+}, 'preventDefault sets defaultPrevented for cancelable event');
+
+test(function() {
+    var event = new Event('test');
+    event.preventDefault();
+    assert_false(event.defaultPrevented);
+}, 'preventDefault does not set defaultPrevented for non-cancelable');
+
+test(function() {
+    var event = new Event('test');
+    event.stopPropagation();
+}, 'stopPropagation does not throw');
+
+test(function() {
+    var event = new Event('test');
+    assert_equals(event.eventPhase, 0);
+    assert_false(event.isTrusted);
+    assert_true(event.timeStamp >= 0);
+}, 'Event phase, isTrusted, timeStamp');
+</script>
