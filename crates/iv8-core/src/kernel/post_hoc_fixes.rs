@@ -248,6 +248,13 @@ pub const READONLY_FIX_JS: &str = r#"
             'MouseEvent': ['screenX','screenY','clientX','clientY','ctrlKey','shiftKey',
                            'altKey','metaKey','button','buttons','relatedTarget','region'],
             'CustomEvent': ['detail'],
+            'HTMLIFrameElement': ['sandbox'],
+            'Document': ['implementation','timeline','fonts'],
+            'HTMLElement': ['style'],
+            'HTMLLinkElement': ['relList','sizes','blocking'],
+            'HTMLAnchorElement': ['relList'],
+            'HTMLFormElement': ['relList'],
+            'HTMLScriptElement': ['blocking'],
         };
         for (var iface in readonlyAttrs) {
             var ctor = globalThis[iface];
@@ -255,7 +262,7 @@ pub const READONLY_FIX_JS: &str = r#"
             var attrs = readonlyAttrs[iface];
             for (var i = 0; i < attrs.length; i++) {
                 var desc = Object.getOwnPropertyDescriptor(ctor.prototype, attrs[i]);
-                if (desc && desc.get && desc.set) {
+                if (desc && desc.get) {
                     try {
                         Object.defineProperty(ctor.prototype, attrs[i], {
                             get: desc.get, set: undefined,
