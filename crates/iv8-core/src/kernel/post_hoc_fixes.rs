@@ -972,3 +972,327 @@ pub fn global_accessor_fix_js(attr_meta: &[(&str, bool, bool)]) -> String {
     }})();
 "#, meta = meta_js)
 }
+
+/// Prototype chain + constructor + receiver check fix.
+///
+/// This is the largest post-hoc fix (~360 lines of JS). It handles:
+/// 1. Prototype chain: setPrototypeOf for 60+ interfaces (child→parent)
+/// 2. Constructor pointer: prototype.constructor = ctor for 20 interfaces
+/// 3. Constructor __proto__: setPrototypeOf(ctor, Function.prototype) for 4 interfaces
+/// 4. Operation receiver check: wrap shim JS methods with TypeError on wrong receiver
+/// 5. Getter/setter receiver check: wrap shim JS accessors with TypeError on wrong receiver
+///
+/// **Why not codegen?** Codegen's `fix_accessor_properties` installs native
+/// FunctionTemplate getters that already have R3 receiver check. But shim-
+/// installed JS functions (event_constructors.rs, document_props.rs, etc.)
+/// don't have receiver check. This fix wraps them.
+///
+/// **Phase 2 target**: Migrate receiver check wrapping to codegen layer
+/// (add receiver check to shim installation code). Phase 4 (v0.8.93) will
+/// decompose this into per-concern fixes.
+pub const FIX_PROTO_JS: &str = r#"
+                (function() {
+                    var shimEvent = globalThis.Event;
+                    var shimMouseEvent = globalThis.MouseEvent;
+                    var fixes = [
+                        ['TrackEvent','Event'], ['SubmitEvent','Event'], ['FormDataEvent','Event'],
+                        ['ToggleEvent','Event'], ['CommandEvent','Event'],
+                        ['DragEvent','MouseEvent'],
+                        ['AudioTrackList','EventTarget'], ['VideoTrackList','EventTarget'],
+                        ['TextTrackList','EventTarget'], ['TextTrack','EventTarget'],
+                        ['TextTrackCue','EventTarget'], ['OffscreenCanvas','EventTarget'],
+                        ['CloseWatcher','EventTarget'], ['Navigation','EventTarget'],
+                        ['NavigationHistoryEntry','EventTarget'],
+                        ['NavigateEvent','Event'], ['NavigationCurrentEntryChangeEvent','Event'],
+                        ['PopStateEvent','Event'], ['HashChangeEvent','Event'],
+                        ['PageSwapEvent','Event'], ['PageRevealEvent','Event'],
+                        ['PageTransitionEvent','Event'], ['BeforeUnloadEvent','Event'],
+                        ['ErrorEvent','Event'], ['PromiseRejectionEvent','Event'],
+                        ['MessageEvent','Event'], ['StorageEvent','Event'],
+                        ['EventSource','EventTarget'], ['MessagePort','EventTarget'],
+                        ['BroadcastChannel','EventTarget'], ['Worker','EventTarget'],
+                        ['SharedWorker','EventTarget'], ['Storage','EventTarget'],
+                        ['RadioNodeList','NodeList'],
+                        ['CustomEvent','Event'],
+                        ['AbortSignal','EventTarget'],
+                        ['XMLDocument','Document'],
+                        ['DocumentType','Node'],
+                        ['DocumentFragment','Node'],
+                        ['Attr','Node'],
+                        ['Navigator','EventTarget'],
+                        ['EventTarget','Object'],
+                        ['MediaQueryList','EventTarget'],
+                        ['MediaQueryListEvent','Event'],
+                        ['CharacterData','Node'],
+                        ['Text','CharacterData'],
+                        ['CDATASection','Text'],
+                        ['Comment','CharacterData'],
+                        ['ProcessingInstruction','CharacterData'],
+                        ['Node','EventTarget'],
+                        ['Element','Node'],
+                        ['HTMLElement','Element'],
+                        ['Screen','Object'],
+                        ['VisualViewport','EventTarget'],
+                        ['Location','Object'],
+                        ['IDBRequest','EventTarget'], ['IDBDatabase','EventTarget'],
+                        ['IDBTransaction','EventTarget'], ['IDBVersionChangeEvent','Event'],
+                        ['IDBOpenDBRequest','IDBRequest'],
+                        ['Performance','EventTarget'],
+                        ['ScreenOrientation','EventTarget'],
+                        ['PerformanceEntry','Object'],
+                        ['PerformanceResourceTiming','PerformanceEntry'],
+                        ['PerformanceNavigationTiming','PerformanceResourceTiming'],
+                        ['PerformanceObserver','EventTarget'],
+                        ['XMLHttpRequestEventTarget','EventTarget'],
+                        ['XMLHttpRequest','XMLHttpRequestEventTarget'],
+                        ['XMLHttpRequestUpload','XMLHttpRequestEventTarget'],
+                        ['WebSocket','EventTarget'],
+                        ['Animation','EventTarget'],
+                        ['FileReader','EventTarget'],
+                    ];
+                    for (var i = 0; i < fixes.length; i++) {
+                        var child = fixes[i][0], parent = fixes[i][1];
+                        try {
+                            var childCtor = globalThis[child];
+                            var parentCtor = globalThis[parent];
+                            if (childCtor && parentCtor) {
+                                Object.setPrototypeOf(childCtor, parentCtor);
+                                var childProto = childCtor.prototype;
+                                var parentProto = parentCtor.prototype;
+                                if (childProto && parentProto) {
+                                    Object.setPrototypeOf(childProto, parentProto);
+                                }
+                            }
+                        } catch(e) {}
+                    }
+                    var ctorFixes = [
+                        'Location', 'Navigator', 'BroadcastChannel', 'MessagePort',
+                        'Worker', 'SharedWorker', 'Storage', 'Screen',
+                        'EventTarget', 'Node', 'Document', 'Element', 'HTMLElement',
+                        'CharacterData', 'Text', 'Comment', 'Event', 'CustomEvent',
+                        'MouseEvent', 'VisualViewport', 'MediaQueryList',
+                    ];
+                    for (var i = 0; i < ctorFixes.length; i++) {
+                        try {
+                            var ctor = globalThis[ctorFixes[i]];
+                            if (ctor && ctor.prototype) {
+                                Object.defineProperty(ctor.prototype, 'constructor', {
+                                    value: ctor, writable: true, configurable: true, enumerable: false
+                                });
+                            }
+                        } catch(e) {}
+                    }
+                    var functionProto = Function.prototype;
+                    var protoFixes = [
+                        'Location', 'Navigator', 'Storage', 'Screen',
+                    ];
+                    for (var i = 0; i < protoFixes.length; i++) {
+                        try {
+                            var ctor = globalThis[protoFixes[i]];
+                            if (ctor && typeof ctor === 'function') {
+                                Object.setPrototypeOf(ctor, functionProto);
+                            }
+                        } catch(e) {}
+                    }
+                    var etCtor = globalThis.EventTarget;
+                    var etInheritors = [
+                        'MessagePort', 'BroadcastChannel', 'Worker', 'SharedWorker',
+                        'EventSource', 'AbortSignal', 'Navigation',
+                    ];
+                    for (var i = 0; i < etInheritors.length; i++) {
+                        try {
+                            var ctor = globalThis[etInheritors[i]];
+                            if (ctor && typeof ctor === 'function' && etCtor) {
+                                Object.setPrototypeOf(ctor, etCtor);
+                            }
+                        } catch(e) {}
+                    }
+                    try {
+                        var storageCtor = globalThis.Storage;
+                        if (storageCtor && storageCtor.prototype) {
+                            Object.setPrototypeOf(storageCtor.prototype, Object.prototype);
+                        }
+                    } catch(e) {}
+                    var shimOpInterfaces = [
+                        'Event', 'CustomEvent', 'MouseEvent',
+                        'MessagePort', 'BroadcastChannel', 'Worker', 'SharedWorker',
+                        'Storage', 'Navigator',
+                        'NodeList', 'MutationObserver', 'DOMTokenList',
+                    ];
+                    for (let i = 0; i < shimOpInterfaces.length; i++) {
+                        try {
+                            var ctor = globalThis[shimOpInterfaces[i]];
+                            if (!ctor || !ctor.prototype) continue;
+                            var proto = ctor.prototype;
+                            var names = Object.getOwnPropertyNames(proto);
+                            for (let j = 0; j < names.length; j++) {
+                                let pname = names[j];
+                                if (pname === 'constructor') continue;
+                                try {
+                                    var desc = Object.getOwnPropertyDescriptor(proto, pname);
+                                    if (!desc || typeof desc.value !== 'function') continue;
+                                    if (desc.value.__iv8_op_wrapped) continue;
+                                    var fnStr = '';
+                                    try { fnStr = desc.value.toString(); } catch(e) { continue; }
+                                    var isNative = fnStr.indexOf('[native code]') !== -1;
+                                    var alreadyThrows = false;
+                                    if (isNative) {
+                                        try {
+                                            desc.value.call({});
+                                        } catch(e) {
+                                            alreadyThrows = true;
+                                        }
+                                    }
+                                    if (alreadyThrows) continue;
+                                    let origFn = desc.value;
+                                    let expectedTag = shimOpInterfaces[i];
+                                    let origName = origFn.name || pname;
+                                    let origLen = origFn.length;
+                                    let wrappedFn = function() {
+                                        var thisTag = '';
+                                        try { thisTag = this[Symbol.toStringTag]; } catch(e) {}
+                                        if (thisTag !== expectedTag && this !== globalThis[shimOpInterfaces[i]].prototype) {
+                                            var isValid = false;
+                                            try {
+                                                var cur = Object.getPrototypeOf(this);
+                                                var expectedProto = globalThis[expectedTag].prototype;
+                                                for (var k = 0; k < 30; k++) {
+                                                    if (cur === expectedProto) { isValid = true; break; }
+                                                    if (!cur) break;
+                                                    cur = Object.getPrototypeOf(cur);
+                                                }
+                                            } catch(e) {}
+                                            if (!isValid) {
+                                                throw new TypeError('Illegal invocation');
+                                            }
+                                        }
+                                        return origFn.apply(this, arguments);
+                                    };
+                                    wrappedFn.__iv8_op_wrapped = true;
+                                    try { Object.defineProperty(wrappedFn, 'name', { value: origName }); } catch(e) {}
+                                    try { Object.defineProperty(wrappedFn, 'length', { value: origLen }); } catch(e) {}
+                                    Object.defineProperty(proto, pname, {
+                                        value: wrappedFn,
+                                        writable: desc.writable,
+                                        enumerable: desc.enumerable,
+                                        configurable: true
+                                    });
+                                } catch(e) {}
+                            }
+                        } catch(e) {}
+                    }
+                    var receiverCheckInterfaces = [
+                        'Document', 'CustomEvent', 'MouseEvent',
+                        'HTMLElement', 'Element', 'Node', 'Window',
+                        'NavigationTransition', 'ShadowRoot',
+                    ];
+                    for (let i = 0; i < receiverCheckInterfaces.length; i++) {
+                        let ifaceName = receiverCheckInterfaces[i];
+                        try {
+                            var ctor = globalThis[ifaceName];
+                            if (!ctor || !ctor.prototype) continue;
+                            var proto = ctor.prototype;
+                            var names = Object.getOwnPropertyNames(proto);
+                            for (let j = 0; j < names.length; j++) {
+                                let pname = names[j];
+                                if (pname === 'constructor') continue;
+                                if (pname === 'attributes') continue;
+                                if (pname.startsWith('on')) continue;
+                                try {
+                                    var desc = Object.getOwnPropertyDescriptor(proto, pname);
+                                    if (!desc || !desc.get) continue;
+                                    let origGet = desc.get;
+                                    let origSet = desc.set;
+                                    var alreadyWrapped = desc.get && desc.get.__iv8_wrapped;
+                                    if (alreadyWrapped && (!desc.set || desc.set.__iv8_set_wrapped)) continue;
+                                    if (origGet.toString().indexOf('[native code]') !== -1) continue;
+                                    let thisIfaceName = ifaceName;
+                                    var wrappedGet;
+                                    if (alreadyWrapped) {
+                                        wrappedGet = origGet;
+                                    } else {
+                                        wrappedGet = function() {
+                                            var thisCtor = globalThis[thisIfaceName];
+                                            if (thisCtor && thisCtor.prototype) {
+                                                if (this === thisCtor.prototype) {
+                                                    throw new TypeError('Illegal invocation');
+                                                }
+                                                var isValid = false;
+                                                var cur = Object.getPrototypeOf(this);
+                                                for (var k = 0; k < 30; k++) {
+                                                    if (cur === thisCtor.prototype) { isValid = true; break; }
+                                                    if (!cur) break;
+                                                    cur = Object.getPrototypeOf(cur);
+                                                }
+                                                if (!isValid) {
+                                                    throw new TypeError('Illegal invocation');
+                                                }
+                                            }
+                                            if (pname.indexOf('on') === 0 && pname.length > 2) {
+                                                var hv = this['__iv8_' + pname];
+                                                if (hv !== undefined) return hv;
+                                                return null;
+                                            }
+                                            return origGet.call(this);
+                                        };
+                                        wrappedGet.__iv8_wrapped = true;
+                                        try { Object.defineProperty(wrappedGet, 'name', { value: 'get ' + pname }); } catch(e) {}
+                                    }
+                                    var wrappedSet = origSet;
+                                    if (typeof origSet === 'function' && origSet.toString().indexOf('[native code]') === -1) {
+                                        if (pname.indexOf('on') === 0 && pname.length > 2) {
+                                            wrappedSet = function(v) {
+                                                var thisCtor2 = globalThis[thisIfaceName];
+                                                if (thisCtor2 && thisCtor2.prototype) {
+                                                    if (this === thisCtor2.prototype) {
+                                                        throw new TypeError('Illegal invocation');
+                                                    }
+                                                    var isValid2 = false;
+                                                    var cur2 = Object.getPrototypeOf(this);
+                                                    for (var k2 = 0; k2 < 30; k2++) {
+                                                        if (cur2 === thisCtor2.prototype) { isValid2 = true; break; }
+                                                        if (!cur2) break;
+                                                        cur2 = Object.getPrototypeOf(cur2);
+                                                    }
+                                                    if (!isValid2) {
+                                                        throw new TypeError('Illegal invocation');
+                                                    }
+                                                }
+                                                Object.defineProperty(this, '__iv8_' + pname, { value: v, writable: true, enumerable: false, configurable: true });
+                                            };
+                                        } else {
+                                            wrappedSet = function(v) {
+                                                var thisCtor2 = globalThis[thisIfaceName];
+                                                if (thisCtor2 && thisCtor2.prototype) {
+                                                    if (this === thisCtor2.prototype) {
+                                                        throw new TypeError('Illegal invocation');
+                                                    }
+                                                    var isValid2 = false;
+                                                    var cur2 = Object.getPrototypeOf(this);
+                                                    for (var k2 = 0; k2 < 30; k2++) {
+                                                        if (cur2 === thisCtor2.prototype) { isValid2 = true; break; }
+                                                        if (!cur2) break;
+                                                        cur2 = Object.getPrototypeOf(cur2);
+                                                    }
+                                                    if (!isValid2) {
+                                                        throw new TypeError('Illegal invocation');
+                                                    }
+                                                }
+                                                Object.defineProperty(this, pname, { value: v, writable: true, enumerable: true, configurable: true });
+                                            };
+                                        }
+                                        try { Object.defineProperty(wrappedSet, 'name', { value: 'set ' + pname }); } catch(e) {}
+                                        wrappedSet.__iv8_set_wrapped = true;
+                                    }
+                                    Object.defineProperty(proto, pname, {
+                                        get: wrappedGet,
+                                        set: wrappedSet,
+                                        enumerable: desc.enumerable,
+                                        configurable: true
+                                    });
+                                } catch(e) {}
+                            }
+                        } catch(e) {}
+                    }
+                })();
+"#;
