@@ -683,13 +683,12 @@ impl EmbeddedV8Kernel {
             let ok = v8::Script::compile(scope, request_fix, None).and_then(|s| s.run(scope)).is_some();
             crate::telemetry::post_hoc_fix_complete("REQUEST_FIX_JS", ok);
 
-            // fix_accessor_properties installs codegen accessors on prototypes.
-            // Runs AFTER chain_dom_prototypes, so it operates on DOM prototypes
-            // (globalThis.CharacterData is already DOM constructor).
-            // TODO: add get_own_property_descriptor check to skip properties
-            // already installed by DOM template (e.g., data_getter on
-            // CharacterData.prototype). Currently overwrites DOM template
-            // accessors for data/textContent on Text/Comment nodes.
+            // fix_accessor_properties installs codegen accessors on prototypes
+            // via V8 Rust API (proto_obj.define_property), which bypasses JS
+            // Object.defineProperty guards. restore_dom_accessors re-installs
+            // DOM template accessors (data, textContent) after codegen overwrites them.
+            // TODO: modify codegen generator to add get_own_property_descriptor
+            // check in fix_accessors_* functions (Phase 3 codegen rewrite).
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
             let state = RuntimeState::get(&*scope);
             if let Some(ref templates) = *state.dom_templates.borrow() {
