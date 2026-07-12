@@ -700,111 +700,13 @@ impl EmbeddedV8Kernel {
             //   - Missing -> install accessor (getter returns undefined, optional setter)
             //   - Data property -> convert to accessor (preserve value, optional setter)
             //   - Accessor -> wrap getter with receiver check, fix setter based on metadata
-            // This replaces the old convert_js + extra_accessor_js blobs.
+            crate::telemetry::post_hoc_fix_start("global_accessor_fix");
             let global_attr_meta: &[(&str, bool, bool)] =
                 iv8_surface::generated::install_all::GLOBAL_ATTR_METADATA;
-            let meta_js = global_attr_meta
-                .iter()
-                .map(|(n, ro, rep)| format!("[\"{}\",{},{}]", n, ro, rep))
-                .collect::<Vec<_>>()
-                .join(",");
-            let global_accessor_fix = format!(r#"
-                (function() {{
-                    var meta = [{meta}];
-                    var windowCtor = globalThis.Window;
-                    var windowProto = windowCtor && windowCtor.prototype;
-                    for (var i = 0; i < meta.length; i++) {{
-                        (function(name, isReadonly, hasReplaceable) {{
-                            var needsSetter = !isReadonly || hasReplaceable;
-                            try {{
-                                var desc = Object.getOwnPropertyDescriptor(globalThis, name);
-                                if (!desc) {{
-                                    var getter = function() {{ return undefined; }};
-                                    try {{ Object.defineProperty(getter, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
-                                    try {{ Object.defineProperty(getter, 'length', {{ value: 0, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
-                                    var setter = needsSetter ? (function(nm, wp) {{
-                                        return function(v) {{
-                                            if (wp && this !== globalThis && this !== wp) {{
-                                                var cur = Object.getPrototypeOf(this); var found = false;
-                                                for (var k = 0; k < 30; k++) {{ if (cur === wp) {{ found = true; break; }} if (!cur) break; cur = Object.getPrototypeOf(cur); }}
-                                                if (!found) throw new TypeError('Illegal invocation');
-                                            }}
-                                            Object.defineProperty(globalThis, nm, {{ value: v, writable: true, enumerable: true, configurable: true }});
-                                        }};
-                                    }})(name, windowProto) : undefined;
-                                    if (setter) {{
-                                        try {{ Object.defineProperty(setter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
-                                        try {{ Object.defineProperty(setter, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
-                                    }}
-                                    Object.defineProperty(globalThis, name, {{ get: getter, set: setter, enumerable: true, configurable: true }});
-                                    return;
-                                }}
-                                if (desc.get || desc.set) {{
-                                    if (desc.get && typeof desc.get === 'function') {{
-                                        var origGet = desc.get;
-                                        var wrappedGet = function() {{
-                                            if (windowProto && this !== globalThis && this !== windowProto) {{
-                                                var cur = Object.getPrototypeOf(this); var found = false;
-                                                for (var k = 0; k < 30; k++) {{ if (cur === windowProto) {{ found = true; break; }} if (!cur) break; cur = Object.getPrototypeOf(cur); }}
-                                                if (!found) throw new TypeError('Illegal invocation');
-                                            }}
-                                            if (name === 'self' || name === 'window' || name === 'top' || name === 'parent' || name === 'frames') return globalThis;
-                                            return origGet.call(globalThis);
-                                        }};
-                                        try {{ Object.defineProperty(wrappedGet, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
-                                        var newSetter;
-                                        if (needsSetter) {{
-                                            if (desc.set && typeof desc.set === 'function') {{ newSetter = desc.set; }}
-                                            else {{
-                                                newSetter = (function(nm, wp) {{
-                                                    return function(v) {{
-                                                        if (wp && this !== globalThis && this !== wp) throw new TypeError('Illegal invocation');
-                                                        Object.defineProperty(globalThis, nm, {{ value: v, writable: true, enumerable: true, configurable: true }});
-                                                    }};
-                                                }})(name, windowProto);
-                                                try {{ Object.defineProperty(newSetter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
-                                            }}
-                                        }}
-                                        Object.defineProperty(globalThis, name, {{ get: wrappedGet, set: newSetter, enumerable: desc.enumerable !== false, configurable: true }});
-                                    }}
-                                    return;
-                                }}
-                                if (!desc.configurable) return;
-                                var value = desc.value;
-                                var getter = (function(v, wp) {{
-                                    return function() {{
-                                        if (wp && this !== globalThis && this !== wp) {{
-                                            var cur = Object.getPrototypeOf(this); var found = false;
-                                            for (var k = 0; k < 30; k++) {{ if (cur === wp) {{ found = true; break; }} if (!cur) break; cur = Object.getPrototypeOf(cur); }}
-                                            if (!found) throw new TypeError('Illegal invocation');
-                                        }}
-                                        return v;
-                                    }};
-                                }})(value, windowProto);
-                                try {{ Object.defineProperty(getter, 'name', {{ value: 'get ' + name }}); }} catch(e) {{}}
-                                try {{ Object.defineProperty(getter, 'length', {{ value: 0, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
-                                var setter = needsSetter ? (function(nm, wp) {{
-                                    return function(v) {{
-                                        if (wp && this !== globalThis && this !== wp) {{
-                                            var cur = Object.getPrototypeOf(this); var found = false;
-                                            for (var k = 0; k < 30; k++) {{ if (cur === wp) {{ found = true; break; }} if (!cur) break; cur = Object.getPrototypeOf(cur); }}
-                                            if (!found) throw new TypeError('Illegal invocation');
-                                        }}
-                                        Object.defineProperty(globalThis, nm, {{ value: v, writable: true, enumerable: true, configurable: true }});
-                                    }};
-                                }})(name, windowProto) : undefined;
-                                if (setter) {{
-                                    try {{ Object.defineProperty(setter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
-                                    try {{ Object.defineProperty(setter, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
-                                }}
-                                Object.defineProperty(globalThis, name, {{ get: getter, set: setter, enumerable: desc.enumerable !== false, configurable: true }});
-                            }} catch(e) {{}}
-                        }})(meta[i][0], meta[i][1], meta[i][2]);
-                    }}
-                }})();
-            "#, meta = meta_js);
+            let global_accessor_fix = crate::kernel::post_hoc_fixes::global_accessor_fix_js(global_attr_meta);
             let global_accessor_fix_str = crate::v8_utils::v8_string(scope, &global_accessor_fix);
-            let _ = v8::Script::compile(scope, global_accessor_fix_str, None).and_then(|s| s.run(scope));
+            let ok = v8::Script::compile(scope, global_accessor_fix_str, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("global_accessor_fix", ok);
 
             // JS op callback replacement — disabled for now
             // let op_fix_js = crate::v8_utils::v8_string(scope, r#"
