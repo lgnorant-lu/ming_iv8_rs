@@ -48,9 +48,12 @@ def build_audit_js(interface_names: list[str]) -> str:
     names_js = json.dumps(interface_names)
     return f"""(function() {{
     var names = {names_js};
+    // Legacy aliases share prototype with canonical — skip them
+    var aliases = {{'webkitAudioContext': true, 'Option': true, 'webkitOfflineAudioContext': true}};
     var results = [];
     for (var i = 0; i < names.length; i++) {{
         var name = names[i];
+        if (aliases[name]) continue;
         var r = {{ name: name, toStringTag: null, toStringResult: null, protoToString: null, errors: [] }};
         try {{
             var ctor = globalThis[name];

@@ -788,16 +788,25 @@ pub const DOM_GETTER_FIX_JS: &str = r#"
 /// This JS fix is simpler and more maintainable.
 pub const TO_STRING_TAG_FIX_JS: &str = r#"
     (function() {
+        // Legacy aliases: key = alias name, value = canonical name
+        // The alias should NOT override the canonical constructor's toStringTag.
+        var aliases = {
+            'webkitAudioContext': 'AudioContext',
+            'Option': 'HTMLOptionElement',
+            'webkitOfflineAudioContext': 'OfflineAudioContext',
+        };
         var names = Object.getOwnPropertyNames(globalThis);
-        var fixed = 0;
+        var seenCtors = [];
+        var canonicalTags = {};
         for (var i = 0; i < names.length; i++) {
             var name = names[i];
             try {
                 var ctor = globalThis[name];
                 if (!ctor || typeof ctor !== 'function' || !ctor.prototype) continue;
+                // Skip legacy aliases — they share prototype with canonical
+                if (aliases[name]) continue;
                 var proto = ctor.prototype;
                 var existingDesc = Object.getOwnPropertyDescriptor(proto, Symbol.toStringTag);
-                // Install if missing, or if value is wrong (e.g., "Object" instead of interface name)
                 if (!existingDesc || existingDesc.value !== name) {
                     try {
                         Object.defineProperty(proto, Symbol.toStringTag, {
@@ -806,20 +815,13 @@ pub const TO_STRING_TAG_FIX_JS: &str = r#"
                             enumerable: false,
                             configurable: true
                         });
-                        fixed++;
                     } catch(e) {}
                 }
                 // Fix proto.toString() that throws "Illegal invocation"
-                // Some codegen toString methods have receiver checks that reject
-                // prototype-as-this. Override with a safe toString.
-                if (typeof proto.toString !== 'function' || proto.toString === Object.prototype.toString) {
-                    // skip — already using Object.prototype.toString or no toString
-                } else {
+                if (typeof proto.toString === 'function' && proto.toString !== Object.prototype.toString) {
                     try {
                         var origToString = proto.toString;
-                        // Test if it throws
                         try { origToString.call(proto); } catch(e) {
-                            // It throws — override with spec-compliant version
                             proto.toString = function toString() {
                                 return '[object ' + name + ']';
                             };

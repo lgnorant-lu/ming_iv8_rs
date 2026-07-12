@@ -3209,6 +3209,16 @@ impl EmbeddedV8Kernel {
         )
         .ok();
 
+        // 9c. Re-apply Symbol.toStringTag fix after shim re-eval.
+        // page_load re-evals AUDIO_CONTEXT_JS / WINDOW_EXTRAS_JS which
+        // replace globalThis constructors, discarding toStringTag installed
+        // during freeze_all_prototypes. Re-apply here.
+        self.eval(
+            crate::kernel::post_hoc_fixes::TO_STRING_TAG_FIX_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
         // 10. Drain microtasks
         self.drain_microtasks();
     }
