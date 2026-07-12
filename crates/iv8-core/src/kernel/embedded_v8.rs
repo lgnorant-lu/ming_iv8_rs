@@ -117,25 +117,145 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
 /// real Uint8Array / string results regardless of which constructor is in use.
 const TEXT_ENCODER_SHIM: &str = r#"
 (function() {
-    // Override the (possibly skeleton) prototype methods with working ones.
     TextEncoder.prototype.encode = function(str) {
         str = str === undefined ? '' : String(str);
         var arr = [];
         for (var i = 0; i < str.length; i++) {
             var c = str.charCodeAt(i);
-            if (c < 128) { arr.push(c); }
-            else if (c < 2048) { arr.push((c >> 6) | 192); arr.push((c & 63) | 128); }
-            else { arr.push((c >> 12) | 224); arr.push(((c >> 6) & 63) | 128); arr.push((c & 63) | 128); }
+            if (c < 0x80) { arr.push(c); }
+            else if (c < 0x800) { arr.push(0xC0 | (c >> 6)); arr.push(0x80 | (c & 0x3F)); }
+            else if (c >= 0xD800 && c <= 0xDBFF) {
+                var c2 = str.charCodeAt(++i);
+                var cp = 0x10000 + ((c - 0xD800) << 10) + (c2 - 0xDC00);
+                arr.push(0xF0 | (cp >> 18));
+                arr.push(0x80 | ((cp >> 12) & 0x3F));
+                arr.push(0x80 | ((cp >> 6) & 0x3F));
+                arr.push(0x80 | (cp & 0x3F));
+            }
+            else { arr.push(0xE0 | (c >> 12)); arr.push(0x80 | ((c >> 6) & 0x3F)); arr.push(0x80 | (c & 0x3F)); }
         }
         return new Uint8Array(arr);
     };
-    TextDecoder.prototype.decode = function(buf) {
-        if (buf === undefined || buf === null) { return ''; }
-        var arr = new Uint8Array(buf.buffer ? buf.buffer : buf);
+    Object.defineProperty(TextEncoder.prototype, 'encoding', {
+        get: function() { return 'utf-8'; },
+        enumerable: true, configurable: true
+    });
+
+    var _decoders = new WeakMap();
+    function _getDecoderState(dec) {
+        var s = _decoders.get(dec);
+        if (!s) { s = { encoding: 'utf-8', fatal: false, ignoreBOM: false, pending: [] }; _decoders.set(dec, s); }
+        return s;
+    }
+    function _decodeUTF8(bytes, fatal) {
         var str = '';
-        for (var i = 0; i < arr.length; i++) { str += String.fromCharCode(arr[i]); }
+        var i = 0;
+        while (i < bytes.length) {
+            var b = bytes[i];
+            if (b < 0x80) { str += String.fromCharCode(b); i++; }
+            else if (b < 0xC0) {
+                if (fatal) throw new TypeError('Invalid UTF-8 sequence');
+                str += '\uFFFD'; i++;
+            }
+            else if (b < 0xE0) {
+                if (i + 1 >= bytes.length) { if (fatal) throw new TypeError('Invalid UTF-8'); str += '\uFFFD'; i++; continue; }
+                var b2 = bytes[i+1];
+                if ((b2 & 0xC0) !== 0x80) { if (fatal) throw new TypeError('Invalid UTF-8'); str += '\uFFFD'; i++; continue; }
+                str += String.fromCharCode(((b & 0x1F) << 6) | (b2 & 0x3F));
+                i += 2;
+            }
+            else if (b < 0xF0) {
+                if (i + 2 >= bytes.length) { if (fatal) throw new TypeError('Invalid UTF-8'); str += '\uFFFD'; i++; continue; }
+                var b2 = bytes[i+1], b3 = bytes[i+2];
+                if ((b2 & 0xC0) !== 0x80 || (b3 & 0xC0) !== 0x80) { if (fatal) throw new TypeError('Invalid UTF-8'); str += '\uFFFD'; i++; continue; }
+                var cp = ((b & 0x0F) << 12) | ((b2 & 0x3F) << 6) | (b3 & 0x3F);
+                if (cp >= 0xD800 && cp <= 0xDFFF) { if (fatal) throw new TypeError('Invalid UTF-8'); str += '\uFFFD'; }
+                else { str += String.fromCharCode(cp); }
+                i += 3;
+            }
+            else {
+                if (i + 3 >= bytes.length) { if (fatal) throw new TypeError('Invalid UTF-8'); str += '\uFFFD'; i++; continue; }
+                var b2 = bytes[i+1], b3 = bytes[i+2], b4 = bytes[i+3];
+                if ((b2 & 0xC0) !== 0x80 || (b3 & 0xC0) !== 0x80 || (b4 & 0xC0) !== 0x80) { if (fatal) throw new TypeError('Invalid UTF-8'); str += '\uFFFD'; i++; continue; }
+                var cp = ((b & 0x07) << 18) | ((b2 & 0x3F) << 12) | ((b3 & 0x3F) << 6) | (b4 & 0x3F);
+                cp -= 0x10000;
+                str += String.fromCharCode(0xD800 | (cp >> 10), 0xDC00 | (cp & 0x3FF));
+                i += 4;
+            }
+        }
         return str;
+    }
+    TextDecoder.prototype.decode = function(buf, options) {
+        var state = _getDecoderState(this);
+        if (buf === undefined || buf === null) { return ''; }
+        var arr;
+        if (buf instanceof ArrayBuffer) { arr = new Uint8Array(buf); }
+        else if (buf instanceof Uint8Array) { arr = buf; }
+        else if (buf.buffer) { arr = new Uint8Array(buf.buffer, buf.byteOffset || 0, buf.byteLength); }
+        else { arr = new Uint8Array(buf); }
+
+        var bytes;
+        var stream = options && options.stream;
+        if (stream && state.pending.length > 0) {
+            bytes = new Uint8Array(state.pending.concat(Array.from(arr)));
+            state.pending = [];
+        } else {
+            bytes = arr;
+        }
+
+        // Check for incomplete sequence at end
+        var validLen = bytes.length;
+        if (stream) {
+            var last = bytes.length - 1;
+            while (last >= 0 && validLen > 0) {
+                var b = bytes[last];
+                if (b < 0x80) { break; }
+                if (b >= 0xC0) {
+                    var expected = b < 0xE0 ? 2 : (b < 0xF0 ? 3 : 4);
+                    if (bytes.length - last < expected) {
+                        validLen = last;
+                        for (var k = last; k < bytes.length; k++) { state.pending.push(bytes[k]); }
+                    }
+                    break;
+                }
+                last--;
+            }
+        }
+
+        var slice = validLen < bytes.length ? bytes.subarray(0, validLen) : bytes;
+        return _decodeUTF8(slice, state.fatal);
     };
+    Object.defineProperty(TextDecoder.prototype, 'encoding', {
+        get: function() { return _getDecoderState(this).encoding; },
+        enumerable: true, configurable: true
+    });
+    Object.defineProperty(TextDecoder.prototype, 'fatal', {
+        get: function() { return _getDecoderState(this).fatal; },
+        enumerable: true, configurable: true
+    });
+    Object.defineProperty(TextDecoder.prototype, 'ignoreBOM', {
+        get: function() { return _getDecoderState(this).ignoreBOM; },
+        enumerable: true, configurable: true
+    });
+    var origTDC = TextDecoder;
+    TextDecoder = function TextDecoder(label, options) {
+        var obj = Object.create(origTDC.prototype);
+        var state = { encoding: 'utf-8', fatal: false, ignoreBOM: false, pending: [] };
+        if (options) {
+            state.fatal = !!options.fatal;
+            state.ignoreBOM = !!options.ignoreBOM;
+        }
+        if (label && typeof label === 'string') {
+            var l = label.toLowerCase();
+            if (l === 'utf-8' || l === 'utf8' || l === 'utf-8' || l === 'unicode-1-1-utf-8') {
+                state.encoding = 'utf-8';
+            }
+        }
+        _decoders.set(obj, state);
+        return obj;
+    };
+    TextDecoder.prototype = origTDC.prototype;
+    Object.defineProperty(TextDecoder.prototype, 'constructor', { value: TextDecoder, writable: true, configurable: true, enumerable: false });
 })();
 "#;
 
