@@ -778,6 +778,41 @@ pub const DOM_GETTER_FIX_JS: &str = r#"
                 return 'unset';
             });
         }
+
+        // AnimationEvent.animationName/pseudoElement — codegen returns object
+        // instead of string. Default empty string per spec.
+        if (typeof AnimationEvent !== 'undefined' && AnimationEvent.prototype) {
+            _installGetter(AnimationEvent.prototype, 'animationName', function() {
+                return this.__iv8AnimationName || '';
+            });
+            _installGetter(AnimationEvent.prototype, 'pseudoElement', function() {
+                return this.__iv8PseudoElement || '';
+            });
+        }
+
+        // TransitionEvent.propertyName/pseudoElement — codegen returns object
+        if (typeof TransitionEvent !== 'undefined' && TransitionEvent.prototype) {
+            _installGetter(TransitionEvent.prototype, 'propertyName', function() {
+                return this.__iv8PropertyName || '';
+            });
+            _installGetter(TransitionEvent.prototype, 'pseudoElement', function() {
+                return this.__iv8PseudoElement || '';
+            });
+        }
+
+        // HTMLDListElement.compact — codegen returns undefined instead of boolean
+        if (typeof HTMLDListElement !== 'undefined' && HTMLDListElement.prototype) {
+            _installGetter(HTMLDListElement.prototype, 'compact', function() {
+                return this.__iv8Compact || false;
+            });
+        }
+
+        // BeforeUnloadEvent.returnValue — codegen throws Illegal invocation
+        if (typeof BeforeUnloadEvent !== 'undefined' && BeforeUnloadEvent.prototype) {
+            _installGetter(BeforeUnloadEvent.prototype, 'returnValue', function() {
+                return this.__iv8ReturnValue !== undefined ? this.__iv8ReturnValue : true;
+            });
+        }
     })();
 "#;
 
