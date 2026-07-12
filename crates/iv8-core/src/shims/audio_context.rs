@@ -4,34 +4,85 @@
 //! Extracted from document_props.rs for code organization.
 //!
 //! Dependencies: performance.now(), setTimeout (events/timers.rs)
+//!
+//! North Star Phase 1 (v0.8.90): shim preserves codegen prototype.
+//! Instead of creating new constructors with `Object.create()`, the shim
+//! wraps the codegen constructors and installs JS methods on the codegen
+//! prototype. This keeps Symbol.toStringTag, instanceof, and prototype chain
+//! intact without post-hoc fixes (TO_STRING_TAG_FIX_JS).
 
 pub const AUDIO_CONTEXT_JS: &str = r#"
 (function() {
+    var CodegenAudioContext = globalThis.AudioContext;
+    var CodegenOfflineAudioContext = globalThis.OfflineAudioContext;
+    var CodegenAudioBuffer = globalThis.AudioBuffer;
+    var CodegenAudioNode = globalThis.AudioNode;
+    var CodegenAudioParam = globalThis.AudioParam;
+    var CodegenGainNode = globalThis.GainNode;
+    var CodegenOscillatorNode = globalThis.OscillatorNode;
+    var CodegenAnalyserNode = globalThis.AnalyserNode;
+    var CodegenDynamicsCompressorNode = globalThis.DynamicsCompressorNode;
+    var CodegenBaseAudioContext = globalThis.BaseAudioContext;
+    var CodegenAudioDestinationNode = globalThis.AudioDestinationNode;
+
+    var AudioParamProto = CodegenAudioParam.prototype;
+    var AudioNodeProto = CodegenAudioNode.prototype;
+    var OscillatorNodeProto = CodegenOscillatorNode.prototype;
+    var DynamicsCompressorNodeProto = CodegenDynamicsCompressorNode.prototype;
+    var AnalyserNodeProto = CodegenAnalyserNode.prototype;
+    var GainNodeProto = CodegenGainNode.prototype;
+    var AudioDestinationNodeProto = CodegenAudioDestinationNode.prototype;
+    var AudioBufferProto = CodegenAudioBuffer.prototype;
+    var BaseAudioContextProto = CodegenBaseAudioContext.prototype;
+    var AudioContextProto = CodegenAudioContext.prototype;
+    var OfflineAudioContextProto = CodegenOfflineAudioContext.prototype;
+
+    var _audioPrefs = (typeof globalThis.__iv8AudioPrefs === 'object' && globalThis.__iv8AudioPrefs) ? globalThis.__iv8AudioPrefs : {};
+    var _defaultSampleRate = (_audioPrefs.sampleRate !== undefined) ? _audioPrefs.sampleRate : 48000;
+
+    function _override(proto, name, getter, setter) {
+        Object.defineProperty(proto, name, {
+            get: getter, set: setter,
+            enumerable: true, configurable: true
+        });
+    }
+    function _overrideValue(proto, name) {
+        var slot = '_' + name;
+        _override(proto, name, function() { return this[slot]; }, function(v) { this[slot] = v; });
+    }
+
     // AudioParam stub
     function AudioParam(value) {
         throw new TypeError('Illegal constructor');
         _initAudioParam(this, value);
     }
     function _initAudioParam(self, value) {
-        self.value = value !== undefined ? value : 0;
-        self.defaultValue = self.value;
-        self.minValue = -3.4028234663852886e+38;
-        self.maxValue = 3.4028234663852886e+38;
-        self.automationRate = 'a-rate';
+        self._value = value !== undefined ? value : 0;
+        self._defaultValue = self._value;
+        self._minValue = -3.4028234663852886e+38;
+        self._maxValue = 3.4028234663852886e+38;
+        self._automationRate = 'a-rate';
     }
-    AudioParam.prototype.setValueAtTime = function(v, t) { this.value = v; return this; };
-    AudioParam.prototype.linearRampToValueAtTime = function(v, t) { return this; };
-    AudioParam.prototype.exponentialRampToValueAtTime = function(v, t) { return this; };
-    AudioParam.prototype.setTargetAtTime = function(v, t, tc) { return this; };
-    AudioParam.prototype.setValueCurveAtTime = function(vs, t, d) { return this; };
-    AudioParam.prototype.cancelScheduledValues = function(t) { return this; };
-    AudioParam.prototype.cancelAndHoldAtTime = function(t) { return this; };
+    AudioParam.prototype = AudioParamProto;
+    Object.defineProperty(AudioParam.prototype, 'constructor', {value: AudioParam, writable: true, enumerable: false, configurable: true});
+    _overrideValue(AudioParamProto, 'value');
+    _overrideValue(AudioParamProto, 'defaultValue');
+    _overrideValue(AudioParamProto, 'minValue');
+    _overrideValue(AudioParamProto, 'maxValue');
+    _overrideValue(AudioParamProto, 'automationRate');
+    AudioParamProto.setValueAtTime = function(v, t) { this.value = v; return this; };
+    AudioParamProto.linearRampToValueAtTime = function(v, t) { return this; };
+    AudioParamProto.exponentialRampToValueAtTime = function(v, t) { return this; };
+    AudioParamProto.setTargetAtTime = function(v, t, tc) { return this; };
+    AudioParamProto.setValueCurveAtTime = function(vs, t, d) { return this; };
+    AudioParamProto.cancelScheduledValues = function(t) { return this; };
+    AudioParamProto.cancelAndHoldAtTime = function(t) { return this; };
 
     // Internal factory: creates AudioParam without requiring `new` (bypasses
     // the illegal-constructor guard). Used by node constructors and factory
     // methods so external `new AudioParam()` throws but internal creation works.
     function _createAudioParam(value) {
-        var p = Object.create(AudioParam.prototype);
+        var p = Object.create(CodegenAudioParam.prototype);
         _initAudioParam(p, value);
         return p;
     }
@@ -42,23 +93,31 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initAudioNode(this, ctx);
     }
     function _initAudioNode(self, ctx) {
-        self.context = ctx;
-        self.numberOfInputs = 0;
-        self.numberOfOutputs = 1;
-        self.channelCount = 2;
-        self.channelCountMode = 'max';
-        self.channelInterpretation = 'speakers';
+        self._context = ctx;
+        self._numberOfInputs = 0;
+        self._numberOfOutputs = 1;
+        self._channelCount = 2;
+        self._channelCountMode = 'max';
+        self._channelInterpretation = 'speakers';
     }
+    AudioNode.prototype = AudioNodeProto;
+    Object.defineProperty(AudioNode.prototype, 'constructor', {value: AudioNode, writable: true, enumerable: false, configurable: true});
+    _overrideValue(AudioNodeProto, 'context');
+    _overrideValue(AudioNodeProto, 'numberOfInputs');
+    _overrideValue(AudioNodeProto, 'numberOfOutputs');
+    _overrideValue(AudioNodeProto, 'channelCount');
+    _overrideValue(AudioNodeProto, 'channelCountMode');
+    _overrideValue(AudioNodeProto, 'channelInterpretation');
+    AudioNodeProto.connect = function(dest) { return dest; };
+    AudioNodeProto.disconnect = function() {};
+    AudioNodeProto.addEventListener = function() {};
+    AudioNodeProto.removeEventListener = function() {};
+    AudioNodeProto.dispatchEvent = function() { return true; };
     function _createAudioNode(ctx) {
-        var node = Object.create(AudioNode.prototype);
+        var node = Object.create(CodegenAudioNode.prototype);
         _initAudioNode(node, ctx);
         return node;
     }
-    AudioNode.prototype.connect = function(dest) { return dest; };
-    AudioNode.prototype.disconnect = function() {};
-    AudioNode.prototype.addEventListener = function() {};
-    AudioNode.prototype.removeEventListener = function() {};
-    AudioNode.prototype.dispatchEvent = function() { return true; };
 
     // OscillatorNode
     function OscillatorNode(ctx, options) {
@@ -67,19 +126,25 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     }
     function _initOscillatorNode(self, ctx, options) {
         _initAudioNode(self, ctx);
-        self.type = (options && options.type) || 'sine';
-        self.frequency = _createAudioParam((options && options.frequency) || 440);
-        self.detune = _createAudioParam(0);
-        self.onended = null;
+        self._type = (options && options.type) || 'sine';
+        self._frequency = _createAudioParam((options && options.frequency) || 440);
+        self._detune = _createAudioParam(0);
+        self._onended = null;
     }
+    OscillatorNode.prototype = OscillatorNodeProto;
+    Object.defineProperty(OscillatorNode.prototype, 'constructor', {value: OscillatorNode, writable: true, enumerable: false, configurable: true});
+    Object.setPrototypeOf(OscillatorNodeProto, AudioNodeProto);
+    _overrideValue(OscillatorNodeProto, 'type');
+    _overrideValue(OscillatorNodeProto, 'frequency');
+    _overrideValue(OscillatorNodeProto, 'detune');
+    _overrideValue(OscillatorNodeProto, 'onended');
+    OscillatorNodeProto.start = function(when) {};
+    OscillatorNodeProto.stop = function(when) {};
     function _createOscillatorNode(ctx, options) {
-        var node = Object.create(OscillatorNode.prototype);
+        var node = Object.create(CodegenOscillatorNode.prototype);
         _initOscillatorNode(node, ctx, options);
         return node;
     }
-    OscillatorNode.prototype = Object.create(AudioNode.prototype);
-    OscillatorNode.prototype.start = function(when) {};
-    OscillatorNode.prototype.stop = function(when) {};
 
     // DynamicsCompressorNode
     function DynamicsCompressorNode(ctx, options) {
@@ -89,19 +154,27 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     function _initDynamicsCompressorNode(self, ctx, options) {
         _initAudioNode(self, ctx);
         var _comp = (_audioPrefs && _audioPrefs.compressor) ? _audioPrefs.compressor : {};
-        self.threshold = _createAudioParam((options && options.threshold !== undefined) ? options.threshold : (_comp.threshold !== undefined ? _comp.threshold : -24));
-        self.knee = _createAudioParam((options && options.knee !== undefined) ? options.knee : (_comp.knee !== undefined ? _comp.knee : 30));
-        self.ratio = _createAudioParam((options && options.ratio !== undefined) ? options.ratio : (_comp.ratio !== undefined ? _comp.ratio : 12));
-        self.attack = _createAudioParam((options && options.attack !== undefined) ? options.attack : (_comp.attack !== undefined ? _comp.attack : 0.003));
-        self.release = _createAudioParam((options && options.release !== undefined) ? options.release : (_comp.release !== undefined ? _comp.release : 0.25));
-        self.reduction = (_comp.reduction !== undefined) ? _comp.reduction : 0;
+        self._threshold = _createAudioParam((options && options.threshold !== undefined) ? options.threshold : (_comp.threshold !== undefined ? _comp.threshold : -24));
+        self._knee = _createAudioParam((options && options.knee !== undefined) ? options.knee : (_comp.knee !== undefined ? _comp.knee : 30));
+        self._ratio = _createAudioParam((options && options.ratio !== undefined) ? options.ratio : (_comp.ratio !== undefined ? _comp.ratio : 12));
+        self._attack = _createAudioParam((options && options.attack !== undefined) ? options.attack : (_comp.attack !== undefined ? _comp.attack : 0.003));
+        self._release = _createAudioParam((options && options.release !== undefined) ? options.release : (_comp.release !== undefined ? _comp.release : 0.25));
+        self._reduction = (_comp.reduction !== undefined) ? _comp.reduction : 0;
     }
+    DynamicsCompressorNode.prototype = DynamicsCompressorNodeProto;
+    Object.defineProperty(DynamicsCompressorNode.prototype, 'constructor', {value: DynamicsCompressorNode, writable: true, enumerable: false, configurable: true});
+    Object.setPrototypeOf(DynamicsCompressorNodeProto, AudioNodeProto);
+    _overrideValue(DynamicsCompressorNodeProto, 'threshold');
+    _overrideValue(DynamicsCompressorNodeProto, 'knee');
+    _overrideValue(DynamicsCompressorNodeProto, 'ratio');
+    _overrideValue(DynamicsCompressorNodeProto, 'attack');
+    _overrideValue(DynamicsCompressorNodeProto, 'release');
+    _overrideValue(DynamicsCompressorNodeProto, 'reduction');
     function _createDynamicsCompressorNode(ctx, options) {
-        var node = Object.create(DynamicsCompressorNode.prototype);
+        var node = Object.create(CodegenDynamicsCompressorNode.prototype);
         _initDynamicsCompressorNode(node, ctx, options);
         return node;
     }
-    DynamicsCompressorNode.prototype = Object.create(AudioNode.prototype);
 
     // AnalyserNode
     function AnalyserNode(ctx, options) {
@@ -110,19 +183,21 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     }
     function _initAnalyserNode(self, ctx, options) {
         _initAudioNode(self, ctx);
-        self.fftSize = (options && options.fftSize) || 2048;
-        self.frequencyBinCount = self.fftSize / 2;
-        self.minDecibels = -100;
-        self.maxDecibels = -30;
-        self.smoothingTimeConstant = 0.8;
+        self._fftSize = (options && options.fftSize) || 2048;
+        self._frequencyBinCount = self._fftSize / 2;
+        self._minDecibels = -100;
+        self._maxDecibels = -30;
+        self._smoothingTimeConstant = 0.8;
     }
-    function _createAnalyserNode(ctx, options) {
-        var node = Object.create(AnalyserNode.prototype);
-        _initAnalyserNode(node, ctx, options);
-        return node;
-    }
-    AnalyserNode.prototype = Object.create(AudioNode.prototype);
-    AnalyserNode.prototype.getFloatFrequencyData = function(arr) {
+    AnalyserNode.prototype = AnalyserNodeProto;
+    Object.defineProperty(AnalyserNode.prototype, 'constructor', {value: AnalyserNode, writable: true, enumerable: false, configurable: true});
+    Object.setPrototypeOf(AnalyserNodeProto, AudioNodeProto);
+    _overrideValue(AnalyserNodeProto, 'fftSize');
+    _overrideValue(AnalyserNodeProto, 'frequencyBinCount');
+    _overrideValue(AnalyserNodeProto, 'minDecibels');
+    _overrideValue(AnalyserNodeProto, 'maxDecibels');
+    _overrideValue(AnalyserNodeProto, 'smoothingTimeConstant');
+    AnalyserNodeProto.getFloatFrequencyData = function(arr) {
         var n = arr.length;
         var prefs = _audioPrefs.analyserData;
         if (prefs && prefs.floatFrequency) {
@@ -137,7 +212,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         }
         for (var i = 0; i < n; i++) { arr[i] = -Infinity; }
     };
-    AnalyserNode.prototype.getByteFrequencyData = function(arr) {
+    AnalyserNodeProto.getByteFrequencyData = function(arr) {
         var n = arr.length;
         var prefs = _audioPrefs.analyserData;
         if (prefs && prefs.byteFrequency) {
@@ -152,7 +227,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         }
         for (var i = 0; i < n; i++) { arr[i] = 0; }
     };
-    AnalyserNode.prototype.getFloatTimeDomainData = function(arr) {
+    AnalyserNodeProto.getFloatTimeDomainData = function(arr) {
         var n = arr.length;
         var prefs = _audioPrefs.analyserData;
         if (prefs && prefs.floatTimeDomain) {
@@ -167,10 +242,15 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         }
         for (var i = 0; i < n; i++) { arr[i] = 0; }
     };
-    AnalyserNode.prototype.getByteTimeDomainData = function(arr) {
+    AnalyserNodeProto.getByteTimeDomainData = function(arr) {
         var n = arr.length;
         for (var i = 0; i < n; i++) { arr[i] = 128; }
     };
+    function _createAnalyserNode(ctx, options) {
+        var node = Object.create(CodegenAnalyserNode.prototype);
+        _initAnalyserNode(node, ctx, options);
+        return node;
+    }
 
     // GainNode
     function GainNode(ctx, options) {
@@ -179,14 +259,17 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     }
     function _initGainNode(self, ctx, options) {
         _initAudioNode(self, ctx);
-        self.gain = _createAudioParam((options && options.gain !== undefined) ? options.gain : 1);
+        self._gain = _createAudioParam((options && options.gain !== undefined) ? options.gain : 1);
     }
+    GainNode.prototype = GainNodeProto;
+    Object.defineProperty(GainNode.prototype, 'constructor', {value: GainNode, writable: true, enumerable: false, configurable: true});
+    Object.setPrototypeOf(GainNodeProto, AudioNodeProto);
+    _overrideValue(GainNodeProto, 'gain');
     function _createGainNode(ctx, options) {
-        var node = Object.create(GainNode.prototype);
+        var node = Object.create(CodegenGainNode.prototype);
         _initGainNode(node, ctx, options);
         return node;
     }
-    GainNode.prototype = Object.create(AudioNode.prototype);
 
     // AudioDestinationNode
     function AudioDestinationNode(ctx) {
@@ -195,16 +278,19 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     }
     function _initAudioDestinationNode(self, ctx) {
         _initAudioNode(self, ctx);
-        self.maxChannelCount = 2;
-        self.numberOfInputs = 1;
-        self.numberOfOutputs = 0;
+        self._maxChannelCount = 2;
+        self._numberOfInputs = 1;
+        self._numberOfOutputs = 0;
     }
+    AudioDestinationNode.prototype = AudioDestinationNodeProto;
+    Object.defineProperty(AudioDestinationNode.prototype, 'constructor', {value: AudioDestinationNode, writable: true, enumerable: false, configurable: true});
+    Object.setPrototypeOf(AudioDestinationNodeProto, AudioNodeProto);
+    _overrideValue(AudioDestinationNodeProto, 'maxChannelCount');
     function _createAudioDestinationNode(ctx) {
-        var node = Object.create(AudioDestinationNode.prototype);
+        var node = Object.create(CodegenAudioDestinationNode.prototype);
         _initAudioDestinationNode(node, ctx);
         return node;
     }
-    AudioDestinationNode.prototype = Object.create(AudioNode.prototype);
 
     // AudioBuffer stub
     function AudioBuffer(options) {
@@ -212,19 +298,25 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initAudioBuffer(this, options);
     }
     function _initAudioBuffer(self, options) {
-        self.sampleRate = (options && options.sampleRate) || _defaultSampleRate;
-        self.length = (options && options.length) || 0;
-        self.duration = self.length / self.sampleRate;
-        self.numberOfChannels = (options && options.numberOfChannels) || 1;
-        self._data = new Float32Array(self.length);
+        self._sampleRate = (options && options.sampleRate) || _defaultSampleRate;
+        self._length = (options && options.length) || 0;
+        self._duration = self._length / self._sampleRate;
+        self._numberOfChannels = (options && options.numberOfChannels) || 1;
+        self._data = new Float32Array(self._length);
     }
+    AudioBuffer.prototype = AudioBufferProto;
+    Object.defineProperty(AudioBuffer.prototype, 'constructor', {value: AudioBuffer, writable: true, enumerable: false, configurable: true});
+    _overrideValue(AudioBufferProto, 'sampleRate');
+    _overrideValue(AudioBufferProto, 'length');
+    _overrideValue(AudioBufferProto, 'duration');
+    _overrideValue(AudioBufferProto, 'numberOfChannels');
     function _createAudioBuffer(options) {
-        var buf = Object.create(AudioBuffer.prototype);
+        var buf = Object.create(CodegenAudioBuffer.prototype);
         _initAudioBuffer(buf, options);
         return buf;
     }
-    AudioBuffer.prototype.getChannelData = function(channel) {
-        var data = new Float32Array(this.length);
+    AudioBufferProto.getChannelData = function(channel) {
+        var data = new Float32Array(this._length);
         // Profile-driven fingerprint injection: captured channel data
         var fpData = _audioPrefs.channelData;
         if (fpData) {
@@ -276,8 +368,8 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         }
         return data;
     };
-    AudioBuffer.prototype.copyFromChannel = function(dest, channel, offset) {};
-    AudioBuffer.prototype.copyToChannel = function(src, channel, offset) {};
+    AudioBufferProto.copyFromChannel = function(dest, channel, offset) {};
+    AudioBufferProto.copyToChannel = function(src, channel, offset) {};
 
     // BaseAudioContext
     function BaseAudioContext(sampleRate) {
@@ -292,28 +384,30 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         self._state = 'suspended';
         self._onstatechange = null;
     }
-    Object.defineProperty(BaseAudioContext.prototype, 'sampleRate', { get: function() { return this._sampleRate; }, enumerable: true, configurable: true });
-    Object.defineProperty(BaseAudioContext.prototype, 'currentTime', { get: function() { return this._currentTime; }, enumerable: true, configurable: true });
-    Object.defineProperty(BaseAudioContext.prototype, 'destination', { get: function() { return this._destination; }, enumerable: true, configurable: true });
-    Object.defineProperty(BaseAudioContext.prototype, 'listener', { get: function() { return this._listener; }, enumerable: true, configurable: true });
-    Object.defineProperty(BaseAudioContext.prototype, 'state', { get: function() { return this._state; }, enumerable: true, configurable: true });
-    Object.defineProperty(BaseAudioContext.prototype, 'onstatechange', { get: function() { return this._onstatechange; }, set: function(v) { this._onstatechange = v; }, enumerable: true, configurable: true });
-    BaseAudioContext.prototype.createOscillator = function(options) {
+    BaseAudioContext.prototype = BaseAudioContextProto;
+    Object.defineProperty(BaseAudioContext.prototype, 'constructor', {value: BaseAudioContext, writable: true, enumerable: false, configurable: true});
+    _overrideValue(BaseAudioContextProto, 'sampleRate');
+    _overrideValue(BaseAudioContextProto, 'currentTime');
+    _overrideValue(BaseAudioContextProto, 'destination');
+    _overrideValue(BaseAudioContextProto, 'listener');
+    _overrideValue(BaseAudioContextProto, 'state');
+    _overrideValue(BaseAudioContextProto, 'onstatechange');
+    BaseAudioContextProto.createOscillator = function(options) {
         return _createOscillatorNode(this, options);
     };
-    BaseAudioContext.prototype.createDynamicsCompressor = function(options) {
+    BaseAudioContextProto.createDynamicsCompressor = function(options) {
         return _createDynamicsCompressorNode(this, options);
     };
-    BaseAudioContext.prototype.createAnalyser = function(options) {
+    BaseAudioContextProto.createAnalyser = function(options) {
         return _createAnalyserNode(this, options);
     };
-    BaseAudioContext.prototype.createGain = function(options) {
+    BaseAudioContextProto.createGain = function(options) {
         return _createGainNode(this, options);
     };
-    BaseAudioContext.prototype.createBuffer = function(channels, length, sampleRate) {
+    BaseAudioContextProto.createBuffer = function(channels, length, sampleRate) {
         return _createAudioBuffer({ numberOfChannels: channels, length: length, sampleRate: sampleRate });
     };
-    BaseAudioContext.prototype.createBufferSource = function() {
+    BaseAudioContextProto.createBufferSource = function() {
         var node = _createAudioNode(this);
         node.buffer = null;
         node.loop = false;
@@ -326,34 +420,34 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         node.stop = function() {};
         return node;
     };
-    BaseAudioContext.prototype.createScriptProcessor = function(bufferSize, inputChannels, outputChannels) {
+    BaseAudioContextProto.createScriptProcessor = function(bufferSize, inputChannels, outputChannels) {
         var node = _createAudioNode(this);
         node.bufferSize = bufferSize || 4096;
         node.onaudioprocess = null;
         return node;
     };
-    BaseAudioContext.prototype.createChannelSplitter = function(n) {
+    BaseAudioContextProto.createChannelSplitter = function(n) {
         var node = _createAudioNode(this);
         node.numberOfOutputs = n || 6;
         return node;
     };
-    BaseAudioContext.prototype.createChannelMerger = function(n) {
+    BaseAudioContextProto.createChannelMerger = function(n) {
         var node = _createAudioNode(this);
         node.numberOfInputs = n || 6;
         return node;
     };
-    BaseAudioContext.prototype.createConvolver = function() {
+    BaseAudioContextProto.createConvolver = function() {
         var node = _createAudioNode(this);
         node.buffer = null;
         node.normalize = true;
         return node;
     };
-    BaseAudioContext.prototype.createDelay = function(maxDelay) {
+    BaseAudioContextProto.createDelay = function(maxDelay) {
         var node = _createAudioNode(this);
         node.delayTime = _createAudioParam(0);
         return node;
     };
-    BaseAudioContext.prototype.createBiquadFilter = function() {
+    BaseAudioContextProto.createBiquadFilter = function() {
         var node = _createAudioNode(this);
         node.type = 'lowpass';
         node.frequency = _createAudioParam(350);
@@ -363,18 +457,18 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         node.getFrequencyResponse = function() {};
         return node;
     };
-    BaseAudioContext.prototype.createWaveShaper = function() {
+    BaseAudioContextProto.createWaveShaper = function() {
         var node = _createAudioNode(this);
         node.curve = null;
         node.oversample = 'none';
         return node;
     };
-    BaseAudioContext.prototype.createStereoPanner = function() {
+    BaseAudioContextProto.createStereoPanner = function() {
         var node = _createAudioNode(this);
         node.pan = _createAudioParam(0);
         return node;
     };
-    BaseAudioContext.prototype.createPanner = function() {
+    BaseAudioContextProto.createPanner = function() {
         var node = _createAudioNode(this);
         node.panningModel = 'equalpower';
         node.distanceModel = 'inverse';
@@ -392,63 +486,71 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         node.coneOuterGain = 0;
         return node;
     };
-    BaseAudioContext.prototype.decodeAudioData = function(buffer, successCb, errorCb) {
+    BaseAudioContextProto.decodeAudioData = function(buffer, successCb, errorCb) {
         var ab = _createAudioBuffer({ length: 1, sampleRate: this.sampleRate });
         if (successCb) { setTimeout(function() { successCb(ab); }, 0); return; }
         return Promise.resolve(ab);
     };
-    BaseAudioContext.prototype.resume = function() { this._state = 'running'; return Promise.resolve(); };
-    BaseAudioContext.prototype.suspend = function() { this._state = 'suspended'; return Promise.resolve(); };
-    BaseAudioContext.prototype.close = function() { this._state = 'closed'; return Promise.resolve(); };
-    BaseAudioContext.prototype.addEventListener = function() {};
-    BaseAudioContext.prototype.removeEventListener = function() {};
-    BaseAudioContext.prototype.dispatchEvent = function() { return true; };
+    BaseAudioContextProto.resume = function() { this._state = 'running'; return Promise.resolve(); };
+    BaseAudioContextProto.suspend = function() { this._state = 'suspended'; return Promise.resolve(); };
+    BaseAudioContextProto.close = function() { this._state = 'closed'; return Promise.resolve(); };
+    BaseAudioContextProto.addEventListener = function() {};
+    BaseAudioContextProto.removeEventListener = function() {};
+    BaseAudioContextProto.dispatchEvent = function() { return true; };
 
     // AudioContext
-    var _audioPrefs = (typeof globalThis.__iv8AudioPrefs === 'object' && globalThis.__iv8AudioPrefs) ? globalThis.__iv8AudioPrefs : {};
-    var _defaultSampleRate = (_audioPrefs.sampleRate !== undefined) ? _audioPrefs.sampleRate : 48000;
     function AudioContext(options) {
-        _initBaseAudioContext(this, (options && options.sampleRate) || _defaultSampleRate);
-        this._baseLatency = _audioPrefs.baseLatency != null ? _audioPrefs.baseLatency : 0.05;
-        this._outputLatency = _audioPrefs.outputLatency != null ? _audioPrefs.outputLatency : 0;
+        if (!(this instanceof AudioContext)) {
+            throw new TypeError("Failed to construct 'AudioContext': Please use the 'new' operator");
+        }
+        var inst = Reflect.construct(CodegenAudioContext, [], new.target || AudioContext);
+        _initBaseAudioContext(inst, (options && options.sampleRate) || _defaultSampleRate);
+        inst._baseLatency = _audioPrefs.baseLatency != null ? _audioPrefs.baseLatency : 0.05;
+        inst._outputLatency = _audioPrefs.outputLatency != null ? _audioPrefs.outputLatency : 0;
+        return inst;
     }
-    AudioContext.prototype = Object.create(BaseAudioContext.prototype);
-    AudioContext.prototype.constructor = AudioContext;
-    Object.defineProperty(AudioContext.prototype, 'baseLatency', { get: function() { return this._baseLatency; }, enumerable: true, configurable: true });
-    Object.defineProperty(AudioContext.prototype, 'outputLatency', { get: function() { return this._outputLatency; }, enumerable: true, configurable: true });
-    AudioContext.prototype.getOutputTimestamp = function() {
+    AudioContext.prototype = AudioContextProto;
+    Object.defineProperty(AudioContext.prototype, 'constructor', {value: AudioContext, writable: true, enumerable: false, configurable: true});
+    Object.defineProperty(AudioContext, 'prototype', {writable: false, enumerable: false, configurable: false});
+    Object.setPrototypeOf(AudioContextProto, BaseAudioContextProto);
+    _overrideValue(AudioContextProto, 'baseLatency');
+    _overrideValue(AudioContextProto, 'outputLatency');
+    AudioContextProto.getOutputTimestamp = function() {
         return { contextTime: this._currentTime, performanceTime: performance.now() };
     };
-    AudioContext.prototype.createMediaStreamSource = function(stream) { return _createAudioNode(this); };
-    AudioContext.prototype.createMediaStreamDestination = function() {
+    AudioContextProto.createMediaStreamSource = function(stream) { return _createAudioNode(this); };
+    AudioContextProto.createMediaStreamDestination = function() {
         var node = _createAudioNode(this);
         node.stream = { getTracks: function() { return []; }, getAudioTracks: function() { return []; } };
         return node;
     };
-    AudioContext.prototype.createMediaElementSource = function(el) { return _createAudioNode(this); };
+    AudioContextProto.createMediaElementSource = function(el) { return _createAudioNode(this); };
 
-    AudioContext.prototype.audioWorklet = undefined;
-    AudioContext.prototype.createConstantSource = function() {
+    AudioContextProto.audioWorklet = undefined;
+    AudioContextProto.createConstantSource = function() {
         var node = _createAudioNode(this);
         node.offset = _createAudioParam(0);
         return node;
     };
-    AudioContext.prototype.createIIRFilter = function(feedforward, feedback) {
+    AudioContextProto.createIIRFilter = function(feedforward, feedback) {
         var node = _createAudioNode(this);
         return node;
     };
-    AudioContext.prototype.createPeriodicWave = function(real, imag, constraints) {
+    AudioContextProto.createPeriodicWave = function(real, imag, constraints) {
         var wave = { _real: real, _imag: imag };
         return wave;
     };
-    Object.defineProperty(AudioContext.prototype, 'onerror', { get: function() { return this._onerror || null; }, set: function(v) { this._onerror = v; }, enumerable: true, configurable: true });
-    Object.defineProperty(AudioContext.prototype, 'onsinkchange', { get: function() { return this._onsinkchange || null; }, set: function(v) { this._onsinkchange = v; }, enumerable: true, configurable: true });
-    Object.defineProperty(AudioContext.prototype, 'playbackStats', { get: function() { return {}; }, enumerable: true, configurable: true });
-    AudioContext.prototype.setSinkId = function(sinkId) { return Promise.resolve(); };
-    Object.defineProperty(AudioContext.prototype, 'sinkId', { get: function() { return ''; }, enumerable: true, configurable: true });
+    Object.defineProperty(AudioContextProto, 'onerror', { get: function() { return this._onerror || null; }, set: function(v) { this._onerror = v; }, enumerable: true, configurable: true });
+    Object.defineProperty(AudioContextProto, 'onsinkchange', { get: function() { return this._onsinkchange || null; }, set: function(v) { this._onsinkchange = v; }, enumerable: true, configurable: true });
+    Object.defineProperty(AudioContextProto, 'playbackStats', { get: function() { return {}; }, enumerable: true, configurable: true });
+    AudioContextProto.setSinkId = function(sinkId) { return Promise.resolve(); };
+    Object.defineProperty(AudioContextProto, 'sinkId', { get: function() { return ''; }, enumerable: true, configurable: true });
 
     // OfflineAudioContext
     function OfflineAudioContext(numberOfChannels, length, sampleRate) {
+        if (!(this instanceof OfflineAudioContext)) {
+            throw new TypeError("Failed to construct 'OfflineAudioContext': Please use the 'new' operator");
+        }
         if (typeof numberOfChannels === 'object') {
             var opts = numberOfChannels;
             numberOfChannels = opts.numberOfChannels || 1;
@@ -456,19 +558,25 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
             sampleRate = opts.sampleRate || _defaultSampleRate;
         }
         sampleRate = sampleRate || _defaultSampleRate;
-        _initBaseAudioContext(this, sampleRate);
-        this.length = length;
-        this.numberOfChannels = numberOfChannels;
-        this._buffer = _createAudioBuffer({ numberOfChannels: numberOfChannels, length: length, sampleRate: sampleRate });
+        var inst = Reflect.construct(CodegenOfflineAudioContext, [], new.target || OfflineAudioContext);
+        _initBaseAudioContext(inst, sampleRate);
+        inst._length = length;
+        inst._numberOfChannels = numberOfChannels;
+        inst._buffer = _createAudioBuffer({ numberOfChannels: numberOfChannels, length: length, sampleRate: sampleRate });
+        return inst;
     }
-    OfflineAudioContext.prototype = Object.create(BaseAudioContext.prototype);
-    OfflineAudioContext.prototype.constructor = OfflineAudioContext;
-    OfflineAudioContext.prototype.startRendering = function() {
+    OfflineAudioContext.prototype = OfflineAudioContextProto;
+    Object.defineProperty(OfflineAudioContext.prototype, 'constructor', {value: OfflineAudioContext, writable: true, enumerable: false, configurable: true});
+    Object.defineProperty(OfflineAudioContext, 'prototype', {writable: false, enumerable: false, configurable: false});
+    Object.setPrototypeOf(OfflineAudioContextProto, BaseAudioContextProto);
+    _overrideValue(OfflineAudioContextProto, 'length');
+    _overrideValue(OfflineAudioContextProto, 'numberOfChannels');
+    OfflineAudioContextProto.startRendering = function() {
         var self = this;
         return Promise.resolve(self._buffer);
     };
-    OfflineAudioContext.prototype.suspend = function(suspendTime) { return Promise.resolve(); };
-    OfflineAudioContext.prototype.resume = function() { return Promise.resolve(); };
+    OfflineAudioContextProto.suspend = function(suspendTime) { return Promise.resolve(); };
+    OfflineAudioContextProto.resume = function() { return Promise.resolve(); };
 
     // Install on globalThis
     globalThis.AudioContext = AudioContext;
