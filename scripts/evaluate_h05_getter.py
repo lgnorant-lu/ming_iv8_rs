@@ -49,6 +49,43 @@ OUTPUT_PATH = STATUS_DIR / "h05-getter-values.json"
 
 DEFAULT_CHROME_PATH = r"D:\Download\Softwares\chromium-debug\chrome.exe"
 
+# --- THRESHOLDS (P3: explicit, centralized) ---
+# Change thresholds → must justify in commit body (HARNESS-CHARTER §6 rule 4).
+THRESHOLDS = {
+    # Category A (Data Integrity): error count must be 0
+    "max_type_fail": 0,        # TYPE_FAIL = wrong typeof (codegen bug)
+    "max_throw": 0,            # THROW = getter threw unexpected exception
+    # Category B (Recall): % of IDL attributes evaluated
+    "min_evaluated_pct": 80.0, # at least 80% of attributes must be evaluable
+    # Category C (False Positive): known-good values must PASS
+    "min_known_good_pass_pct": 100.0, # all known-good values must PASS
+    # Category D (Coverage): interface coverage
+    "min_interface_coverage_pct": 35.0, # Phase 1: top 50 of 1284 = ~4%
+    # Category E (Robustness): Chrome disconnect handling
+    "chrome_disconnect_is_skip": True, # Chrome unavailable → SKIP, not FAIL
+}
+
+# Category C: known-good values that MUST pass (P2: falsification)
+# These are values we know Chrome returns — if IV8 FAILS these, it's a real bug.
+KNOWN_GOOD_VALUES = {
+    ("Navigator", "userAgent"): ("string", None),  # type check only (value is profile-dependent)
+    ("Navigator", "platform"): ("string", None),
+    ("Navigator", "language"): ("string", None),
+    ("Navigator", "hardwareConcurrency"): ("number", None),
+    ("Screen", "width"): ("number", None),
+    ("Screen", "height"): ("number", None),
+    ("Screen", "colorDepth"): ("number", None),
+    ("Window", "innerWidth"): ("number", None),
+    ("Window", "innerHeight"): ("number", None),
+    ("Event", "bubbles"): ("boolean", False),
+    ("Event", "cancelable"): ("boolean", False),
+    ("MouseEvent", "screenX"): ("number", 0),
+    ("MouseEvent", "ctrlKey"): ("boolean", False),
+    ("KeyboardEvent", "key"): ("string", ""),
+    ("KeyboardEvent", "isComposing"): ("boolean", False),
+    ("PointerEvent", "pointerId"): ("number", 0),
+}
+
 # Top 50 interfaces by WPT idlharness test count + fingerprinting relevance.
 # Tier A (global singletons) and Tier B (createElement) are prioritized.
 TOP_50_INTERFACES = [
@@ -638,10 +675,73 @@ def _run_audit(args):
     print(f"  SKIP_ASYNC:        {stats['SKIP_ASYNC']}")
     print(f"Output: {output_path}")
 
+    # --- Category A: Data Integrity (mandatory per HARNESS-CHARTER §3) ---
+    cat_a_pass = stats["TYPE_FAIL"] <= THRESHOLDS["max_type_fail"] and \
+                 stats["THROW"] <= THRESHOLDS["max_throw"]
+    print(f"\nCategory A (Data Integrity): {'PASS' if cat_a_pass else 'FAIL'}")
+    print(f"  TYPE_FAIL={stats['TYPE_FAIL']} (max {THRESHOLDS['max_type_fail']}), "
+          f"THROW={stats['THROW']} (max {THRESHOLDS['max_throw']})")
+
+    # --- Category B: Recall ---
+    evaluated_pct = (len(results) - stats["SKIP_NO_INSTANCE"]) / max(len(attrs), 1) * 100
+    cat_b_pass = evaluated_pct >= THRESHOLDS["min_evaluated_pct"]
+    print(f"Category B (Recall): {'PASS' if cat_b_pass else 'FAIL'}")
+    print(f"  Evaluated {evaluated_pct:.1f}% (min {THRESHOLDS['min_evaluated_pct']}%)")
+
+    # --- Category C: False Positive / Safety (mandatory) ---
+    # Check known-good values
+    cat_c_pass = True
+    cat_c_details = []
+    for (iface, attr), (expected_type, expected_val) in KNOWN_GOOD_VALUES.items():
+        found = False
+        for r in results:
+            if r["interface"] == iface and r["attribute"] == attr:
+                found = True
+                iv8 = r.get("iv8", {})
+                actual_type = iv8.get("typeof", "undefined")
+                if r["classification"] != "PASS":
+                    cat_c_pass = False
+                    cat_c_details.append(f"{iface}.{attr}: {r['classification']} (expected PASS)")
+                elif expected_type and actual_type != expected_type:
+                    cat_c_pass = False
+                    cat_c_details.append(f"{iface}.{attr}: typeof={actual_type} (expected {expected_type})")
+                break
+        if not found:
+            cat_c_details.append(f"{iface}.{attr}: NOT FOUND in results")
+            cat_c_pass = False
+    print(f"Category C (False Positive): {'PASS' if cat_c_pass else 'FAIL'}")
+    if cat_c_details:
+        for d in cat_c_details:
+            print(f"  {d}")
+
+    # --- Category D: Coverage ---
+    ifaces_evaluated = len(set(a["interface"] for a in attrs if a["interface"] in
+                               set(r["interface"] for r in results if r["classification"] != "SKIP_NO_INSTANCE")))
+    total_ifaces = len(set(a["interface"] for a in attrs))
+    coverage_pct = ifaces_evaluated / max(total_ifaces, 1) * 100
+    cat_d_pass = coverage_pct >= THRESHOLDS["min_interface_coverage_pct"]
+    print(f"Category D (Coverage): {'PASS' if cat_d_pass else 'FAIL'}")
+    print(f"  {ifaces_evaluated}/{total_ifaces} interfaces ({coverage_pct:.1f}%, "
+          f"min {THRESHOLDS['min_interface_coverage_pct']}%)")
+
+    # --- Category E: Robustness ---
+    cat_e_pass = True
+    if not chrome and not args.iv8_only:
+        cat_e_pass = False
+    elif not chrome and args.iv8_only:
+        cat_e_pass = True  # IV8-only mode is intentional, not a failure
+    print(f"Category E (Robustness): {'PASS' if cat_e_pass else 'FAIL'}")
+
+    # --- Overall ---
+    overall_pass = cat_a_pass and cat_c_pass  # A and C are mandatory
+    print(f"\n{'='*60}")
+    print(f"OVERALL: {'PASS' if overall_pass else 'FAIL'}")
+    print(f"{'='*60}")
+
     if chrome:
         chrome.close()
 
-    return 1 if (stats["TYPE_FAIL"] > 0 or stats["THROW"] > 0) else 0
+    return 0 if overall_pass else 1
 
 
 def main():

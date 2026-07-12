@@ -157,7 +157,9 @@ iv8_rs.enable_logging("debug")  # all categories
 ### Rust Tests
 
 ```bash
-RUST_MIN_STACK=67108864 IV8_LOG=iv8.init=debug cargo test -p iv8-core --lib
+# RUST_MIN_STACK is now set automatically via .cargo/config.toml [env] (K-010)
+# No manual env var needed.
+IV8_LOG=iv8.init=debug cargo test -p iv8-core --lib
 ```
 
 ## Test Log Assertions
@@ -232,3 +234,22 @@ each category must have at least one event at each listed level.
 3. Add a typed function
 4. If adding a new level to an existing category, update `COVERAGE_MATRIX`
 5. The test will fail until coverage is satisfied
+
+### Known coverage gaps (K-016)
+
+The following init phases have **no tracing** — debugging these is harder:
+
+| Phase | Current tracing | Gap |
+|-------|----------------|-----|
+| `fix_proto_js` (prototype chain + receiver check wrapping) | None | No log of wrapped getter/op count, interface names |
+| `freeze_all_prototypes` (JS post-hoc fixes) | None | No log of frozen interface count, blob execution result |
+| `event_constructors.rs` (Event/MouseEvent/etc. shim) | `shim_installed` only | No log of installed attribute count |
+| `document_props.rs` (document property shims) | None | No log of installed properties |
+| `global_accessor_fix` (K-008 Window [Global] wrapper) | None | No log of wrapped attribute count |
+
+**Impact**: The `var`→`let` closure bug in `fix_proto_js` (K-015) took 2+ hours
+to diagnose. With tracing (logging `origGet` type per wrapped getter), the bug
+would have been immediately visible: `origGet` was a `customElementRegistry`
+native getter instead of the expected `_defReadOnly` JS function.
+
+**Plan (v0.8.90)**: Add `iv8.init` events for post-hoc fix phases.

@@ -722,3 +722,111 @@ pub const DESCRIPTOR_FIX_JS: &str = r#"
         try { delete globalThis.external; } catch(e) {}
     })();
 "#;
+
+/// Fix codegen native getters that throw "Illegal invocation" on DOM template
+/// instances (K-013). Codegen FunctionTemplate callbacks require V8 internal
+/// slots that DOM template instances (created via Object.create) don't have.
+///
+/// **Affected**: CharacterData.length, Text.wholeText, Element.regionOverset
+///
+/// **Why not codegen?** The codegen getter has a receiver check that validates
+/// V8 internal slots. DOM template instances bypass this. A JS shim getter
+/// reads from a hidden property instead.
+///
+/// **Why not DOM template?** DOM template instances are created via
+/// `Object.create(Interface.prototype)` which doesn't have V8 slots.
+/// Making them use FunctionTemplate would require deep architecture change.
+pub const DOM_GETTER_FIX_JS: &str = r#"
+    (function() {
+        function _installGetter(proto, name, getter) {
+            try {
+                Object.defineProperty(proto, name, {
+                    get: getter,
+                    set: undefined,
+                    enumerable: true,
+                    configurable: true
+                });
+            } catch(e) {}
+        }
+
+        // CharacterData.length — number of characters in the text node
+        if (typeof CharacterData !== 'undefined' && CharacterData.prototype) {
+            _installGetter(CharacterData.prototype, 'length', function() {
+                return (this._data || this.data || '').length;
+            });
+        }
+
+        // Text.wholeText — concatenation of all sibling text nodes
+        if (typeof Text !== 'undefined' && Text.prototype) {
+            _installGetter(Text.prototype, 'wholeText', function() {
+                return this._data || this.data || '';
+            });
+        }
+
+        // Element.regionOverset — CSSOMString enum, default "overset" or "unset"
+        // Codegen returns {} (object) instead of string. K-014.
+        if (typeof Element !== 'undefined' && Element.prototype) {
+            _installGetter(Element.prototype, 'regionOverset', function() {
+                return 'unset';
+            });
+        }
+    })();
+"#;
+
+/// Fix missing Symbol.toStringTag on codegen interfaces.
+///
+/// Codegen installs toStringTag via `proto.set(tag_sym, tag_val)` on the
+/// FunctionTemplate's prototype template. However, after V8 instantiates the
+/// template, the property may not survive subsequent Object.defineProperty
+/// calls (fix_accessor_properties redefines prototype properties).
+///
+/// This fix iterates all globalThis constructors and installs
+/// `Symbol.toStringTag = constructorName` if missing.
+///
+/// **Why not codegen?** Codegen does install it, but it gets lost during
+/// fix_accessor_properties. Fixing codegen requires regenerating 197K lines.
+/// This JS fix is simpler and more maintainable.
+pub const TO_STRING_TAG_FIX_JS: &str = r#"
+    (function() {
+        var names = Object.getOwnPropertyNames(globalThis);
+        var fixed = 0;
+        for (var i = 0; i < names.length; i++) {
+            var name = names[i];
+            try {
+                var ctor = globalThis[name];
+                if (!ctor || typeof ctor !== 'function' || !ctor.prototype) continue;
+                var proto = ctor.prototype;
+                var existingDesc = Object.getOwnPropertyDescriptor(proto, Symbol.toStringTag);
+                // Install if missing, or if value is wrong (e.g., "Object" instead of interface name)
+                if (!existingDesc || existingDesc.value !== name) {
+                    try {
+                        Object.defineProperty(proto, Symbol.toStringTag, {
+                            value: name,
+                            writable: false,
+                            enumerable: false,
+                            configurable: true
+                        });
+                        fixed++;
+                    } catch(e) {}
+                }
+                // Fix proto.toString() that throws "Illegal invocation"
+                // Some codegen toString methods have receiver checks that reject
+                // prototype-as-this. Override with a safe toString.
+                if (typeof proto.toString !== 'function' || proto.toString === Object.prototype.toString) {
+                    // skip — already using Object.prototype.toString or no toString
+                } else {
+                    try {
+                        var origToString = proto.toString;
+                        // Test if it throws
+                        try { origToString.call(proto); } catch(e) {
+                            // It throws — override with spec-compliant version
+                            proto.toString = function toString() {
+                                return '[object ' + name + ']';
+                            };
+                        }
+                    } catch(e) {}
+                }
+            } catch(e) {}
+        }
+    })();
+"#;

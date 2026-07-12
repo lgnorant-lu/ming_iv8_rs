@@ -1213,6 +1213,14 @@ try {
                 crate::kernel::post_hoc_fixes::DESCRIPTOR_FIX_JS);
             let _ = v8::Script::compile(scope, descriptor_fix, None).and_then(|s| s.run(scope));
 
+            let dom_getter_fix = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::DOM_GETTER_FIX_JS);
+            let _ = v8::Script::compile(scope, dom_getter_fix, None).and_then(|s| s.run(scope));
+
+            let tostring_tag_fix = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::TO_STRING_TAG_FIX_JS);
+            let _ = v8::Script::compile(scope, tostring_tag_fix, None).and_then(|s| s.run(scope));
+
             if !worker_mode {
                 let js = crate::v8_utils::v8_string(scope,
                     crate::kernel::post_hoc_fixes::WORKER_ONLY_DELETE_JS);

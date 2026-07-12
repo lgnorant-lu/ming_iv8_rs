@@ -116,6 +116,7 @@ Definition of Done。本宪法是这些成熟实践在 iv8-rs 的本地化落地
 | H02 | Env Consistency | `H02-env-consistency.md` | `scripts/evaluate_env_consistency.py` | `env-consistency-quality-gate.md` | candidate (Phase 4 合并入 H04) |
 | H03 | Surface Accuracy | `H03-surface-accuracy.md` | `scripts/evaluate_surface_accuracy.py` | `surface-accuracy-quality-gate.md` | candidate (Phase 4 合并入 H04) |
 | H04 | Surface Integrity Matrix | `H04-surface-integrity-matrix.md` | `scripts/evaluate_surface_integrity.py` | `surface-integrity-quality-gate.md` | candidate (Phase 1 待实施) |
+| H05 | Getter Return Value Audit | `H05-getter-return-value-audit.md` | `scripts/evaluate_h05_getter.py` | (pending) | candidate (Phase 1 baseline 1009/1063 PASS) |
 
 > H04 是 H02/H03 的超集（D-102），Phase 4 完成后 H02/H03 标记 DEPRECATED。
 
