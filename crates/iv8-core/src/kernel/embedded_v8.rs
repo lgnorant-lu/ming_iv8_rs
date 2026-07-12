@@ -690,6 +690,10 @@ impl EmbeddedV8Kernel {
             // TODO: modify codegen generator to add get_own_property_descriptor
             // check in fix_accessors_* functions (Phase 3 codegen rewrite).
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
+            // fix_accessor_properties has get_own_property_descriptor skip check
+            // in dom_core.rs and events.rs. DOM template accessors (data, textContent)
+            // are preserved by skip check. Element.id setter needs restore_dom_accessors
+            // to sync DOM tree (codegen element_set_5 only stores __iv8Id JS property).
             let state = RuntimeState::get(&*scope);
             if let Some(ref templates) = *state.dom_templates.borrow() {
                 crate::dom::template::restore_dom_accessors(scope, global, templates);

@@ -330,12 +330,8 @@ pub fn restore_dom_accessors(
 ) {
     let proto_key = crate::v8_utils::v8_string(scope, "prototype");
 
-    let char_data_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[
-        ("data", data_getter, Some(data_setter)),
-    ];
-    let node_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[
-        ("textContent", text_content_getter, Some(text_content_setter)),
-    ];
+    let char_data_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[];
+    let node_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[];
     let element_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[
         ("id", id_getter, Some(id_setter)),
     ];
