@@ -6,6 +6,54 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.91] - 2026-07-13
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Mode: Lightweight Increment.
+
+### Fixed (kernel root causes)
+- fix_accessor_properties overwrites DOM template accessors — `restore_dom_accessors()` re-installs DOM template `data`/`textContent` getters after codegen's `fix_accessor_properties` overwrites them
+- createTextNode/createComment/createDocumentFragment reimplemented as Rust callbacks — create real DOM nodes with internal field, enabling correct `data`/`textContent`/`childNodes` via DOM template getters
+- getElementById returns null — `extract_node_id` now reads internal field first (falls back to `__nodeId__` JS property); `getElementById` has `__iv8Id` fallback traversal when DOM tree id_index misses
+- DocumentFragment appendChild child transfer — `append_child_cb` and `append_child_callback` now transfer all children from DocumentFragment to new parent, leaving fragment empty (DOM spec)
+- text_content_of leaf nodes — Text/Comment nodes return own text content instead of traversing descendants (which are empty for leaf nodes)
+- childNodes returns NodeList — `child_nodes_getter` now sets `NodeList.prototype` as the array's prototype instead of returning plain Array
+- document.nodeType/nodeName — set as own properties on `document` (plain V8 Object without internal field)
+- document_props.rs JS shim — `createTextNode`/`createComment` on impl object now check `if (!doc.createTextNode)` to preserve Rust callback
+
+### Added
+- FUNCTION_TO_STRING_FIX_JS — overrides `Function.prototype.toString` to return `[native code]` for all wrapper functions marked `__iv8_native`. All 162 [Global] attribute getters now return `[native code]` (previously 7 native, 155 JS source exposed)
+- WPT `--functional` mode — `run_wpt.py` supports non-idlharness functional tests with testharness.js shim
+- WPT functional test suites: dom/ (49 tests), html/dom/ (40 tests), css/cssom-view/ (24 tests), WebCryptoAPI/ (18 tests) — 131/131 PASS
+- WPT functional status file (`tools/wpt/fixtures/functional-status.json`)
+- H05b setter audit — IDL programatic generation (569 tests from unified_ir.json), Category C readonly negative test
+- H05c method return value audit — IDL programatic generation (216 tests from return_type field), Category C void method negative test
+- H05d constructor behavior audit — 63 tests, Category C non-constructable interface negative test (14 interfaces)
+- H05e exception type/message audit — 37 tests, Category C NoThrow negative test
+- H05 spec updated — sections 11-14 (H05b-e sub-layers), section 4.4 Category A/C mandatory, section 4.5/5.4 current baselines
+- H06 spec created — `H06-cross-context-consistency.md` with gold standard (HTML spec section 7.1.4)
+- HARNESS-CHARTER registry updated — H05 (6 sub-layers) + H06 registered
+- Category C negative tests added to H05a (receiver check), H05f (toString leak), H06a (distinct context)
+
+### Changed
+- global_accessor_fix extracted from inline `format!` JS to `post_hoc_fixes.rs::global_accessor_fix_js()` function with tracing
+- FIX_PROTO_JS (360 lines) extracted from inline JS to `post_hoc_fixes.rs::FIX_PROTO_JS` constant
+- Native [Global] getters preserved — `global_accessor_fix` now skips native getters (toString contains `[native code]`), only wraps JS-installed getters
+- READONLY_FIX_JS expanded — 8 new interfaces (HTMLIFrameElement/Document/HTMLElement/HTMLLinkElement/HTMLAnchorElement/HTMLFormElement/HTMLScriptElement)
+- `fix_accessor_property` set:undefined fix — now redefines accessor even when no setter exists (prevents sloppy mode own property creation on readonly attrs)
+- .kiro directory removed (legacy Kiro IDE, not used by opencode)
+- HARNESS-CHARTER gate path updated from `.kiro/steering/` to `.opencode/steering/`
+
+### WPT Results
+- idlharness: 9346/9640 (96.95%)
+- functional: 131/131 (100%)
+
+### Known Limitations (Phase 3 targets)
+- global_accessor_fix not fully eliminated (needs codegen generator modification)
+- fix_proto_js not reduced below 100 lines (needs codegen-level receiver check)
+- document is plain V8 Object (needs DOM template FunctionTemplate)
+- 3 Document readonly attrs accept writes (document lacks internal field)
+
 ## [v0.8.90] - 2026-07-12
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.

@@ -48,7 +48,7 @@ Definition of Done。本宪法是这些成熟实践在 iv8-rs 的本地化落地
 |---|---|---|---|
 | **实现** (impl) | `scripts/evaluate_<domain>.py` | orchestrator，跑全部类别，输出 scorecard + 退出码 | 是 |
 | **规范** (spec) | `docs/quality-harness/H<NN>-<domain>.md` | 指标定义、阈值、金标准来源、工作流、已知局限、当前基线 | 是 |
-| **门禁** (gate) | `.kiro/steering/<domain>-quality-gate.md` | 文件触发自动加载的强制工作流条款 | 本地（.kiro 被 gitignore） |
+| **门禁** (gate) | `.opencode/steering/<domain>-quality-gate.md` or equivalent | 文件触发自动加载的强制工作流条款 | 本地（gitignored） |
 
 实现脚本可调用若干子验证脚本，但**对外只暴露一个 orchestrator 入口**（P7）。
 
@@ -116,8 +116,8 @@ Definition of Done。本宪法是这些成熟实践在 iv8-rs 的本地化落地
 | H02 | Env Consistency | `H02-env-consistency.md` | `scripts/evaluate_env_consistency.py` | `env-consistency-quality-gate.md` | candidate (Phase 4 合并入 H04) |
 | H03 | Surface Accuracy | `H03-surface-accuracy.md` | `scripts/evaluate_surface_accuracy.py` | `surface-accuracy-quality-gate.md` | candidate (Phase 4 合并入 H04) |
 | H04 | Surface Integrity Matrix | `H04-surface-integrity-matrix.md` | `scripts/evaluate_surface_integrity.py` | `surface-integrity-quality-gate.md` | candidate (Phase 1 待实施) |
-| H05 | Getter Return Value Audit | `H05-getter-return-value-audit.md` | `scripts/evaluate_h05_getter.py` (H05a), `scripts/evaluate_h05b_setter.py` (H05b), `scripts/evaluate_h05c_method.py` (H05c), `scripts/evaluate_h05d_constructor.py` (H05d), `scripts/evaluate_h05e_exception.py` (H05e), `scripts/evaluate_h05f_tostring.py` (H05f) | (pending: gate path migration to opencode) | candidate (H05a 1012/1063, H05b 553/569, H05c 189/216, H05d 63/63, H05e 17/37+20, H05f 1270/1284) |
-| H06 | Cross-Context Consistency | `H06-cross-context-consistency.md` | `scripts/evaluate_h06_window_iframe.py` | (pending: gate path migration to opencode) | candidate (H06a 43/43 PASS, H06b deferred) |
+| H05 | Getter Return Value Audit | `H05-getter-return-value-audit.md` | `scripts/evaluate_h05_getter.py` (H05a), `scripts/evaluate_h05b_setter.py` (H05b), `scripts/evaluate_h05c_method.py` (H05c), `scripts/evaluate_h05d_constructor.py` (H05d), `scripts/evaluate_h05e_exception.py` (H05e), `scripts/evaluate_h05f_tostring.py` (H05f) | (pending: gate migration to opencode) | candidate (H05a 1012/1063, H05b 553/569, H05c 189/216, H05d 63/63, H05e 17/37+20, H05f 1270/1284) |
+| H06 | Cross-Context Consistency | `H06-cross-context-consistency.md` | `scripts/evaluate_h06_window_iframe.py` | (pending: gate migration to opencode) | candidate (H06a 43/43 PASS, H06b deferred) |
 
 > H04 是 H02/H03 的超集（D-102），Phase 4 完成后 H02/H03 标记 DEPRECATED。
 
