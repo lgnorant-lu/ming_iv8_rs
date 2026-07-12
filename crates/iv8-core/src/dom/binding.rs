@@ -76,6 +76,9 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     );
     install_method(scope, doc_obj, "createElement", create_element);
     install_method(scope, doc_obj, "createElementNS", create_element_ns);
+    install_method(scope, doc_obj, "createTextNode", create_text_node);
+    install_method(scope, doc_obj, "createComment", create_comment);
+    install_method(scope, doc_obj, "createDocumentFragment", create_document_fragment);
 
     // EventTarget methods on document (v0.2: L-03 fix).
     //
@@ -917,6 +920,136 @@ unsafe extern "C" fn create_element(info: *const v8::FunctionCallbackInfo) {
     }));
     if result.is_err() {
         crate::telemetry::dom_binding_panic("createElement");
+    }
+}
+
+/// document.createTextNode(data) callback
+unsafe extern "C" fn create_text_node(info: *const v8::FunctionCallbackInfo) {
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+
+        if args.length() < 1 {
+            return;
+        }
+
+        let data = args.get(0).to_rust_string_lossy(scope);
+
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+
+        let node_id = {
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut doc) = *doc {
+                let root_id = doc.root_id();
+                let nid = doc.append_child(root_id, NodeData::text(&data));
+                doc.detach(nid);
+                Some(nid)
+            } else {
+                None
+            }
+        };
+
+        if let Some(nid) = node_id {
+            if let Some(obj) = node_to_v8_object(scope, state, nid) {
+                let obj_local: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(obj) };
+                let data_key = crate::v8_utils::v8_string(scope, "data");
+                let data_val = crate::v8_utils::v8_string(scope, &data);
+                let _ = obj_local.define_own_property(
+                    scope,
+                    data_key.into(),
+                    data_val.into(),
+                    v8::PropertyAttribute::NONE,
+                );
+                let tc_key = crate::v8_utils::v8_string(scope, "textContent");
+                let _ = obj_local.define_own_property(
+                    scope,
+                    tc_key.into(),
+                    data_val.into(),
+                    v8::PropertyAttribute::NONE,
+                );
+                rv.set(obj_local.into());
+            }
+        }
+    }));
+    if result.is_err() {
+        crate::telemetry::dom_binding_panic("createTextNode");
+    }
+}
+
+/// document.createComment(data) callback
+unsafe extern "C" fn create_comment(info: *const v8::FunctionCallbackInfo) {
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+
+        if args.length() < 1 {
+            return;
+        }
+
+        let data = args.get(0).to_rust_string_lossy(scope);
+
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+
+        let node_id = {
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut doc) = *doc {
+                let root_id = doc.root_id();
+                let nid = doc.append_child(root_id, NodeData::comment(&data));
+                doc.detach(nid);
+                Some(nid)
+            } else {
+                None
+            }
+        };
+
+        if let Some(nid) = node_id {
+            if let Some(obj) = node_to_v8_object(scope, state, nid) {
+                rv.set(obj);
+            }
+        }
+    }));
+    if result.is_err() {
+        crate::telemetry::dom_binding_panic("createComment");
+    }
+}
+
+/// document.createDocumentFragment() callback
+unsafe extern "C" fn create_document_fragment(info: *const v8::FunctionCallbackInfo) {
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+
+        let node_id = {
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut doc) = *doc {
+                let root_id = doc.root_id();
+                let nid = doc.append_child(root_id, NodeData::DocumentFragment);
+                doc.detach(nid);
+                Some(nid)
+            } else {
+                None
+            }
+        };
+
+        if let Some(nid) = node_id {
+            if let Some(obj) = node_to_v8_object(scope, state, nid) {
+                rv.set(obj);
+            }
+        }
+    }));
+    if result.is_err() {
+        crate::telemetry::dom_binding_panic("createDocumentFragment");
     }
 }
 

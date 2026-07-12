@@ -533,6 +533,10 @@ impl Document {
     pub fn text_content_of(&self, node_id: NodeId) -> String {
         let mut result = String::new();
         if let Some(node_ref) = self.tree.get(node_id) {
+            match node_ref.value() {
+                NodeData::Text(s) | NodeData::Comment(s) => return s.clone(),
+                _ => {}
+            }
             for descendant in node_ref.descendants() {
                 if let NodeData::Text(ref text) = descendant.value() {
                     result.push_str(text);
