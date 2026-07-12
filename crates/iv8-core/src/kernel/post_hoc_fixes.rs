@@ -886,7 +886,29 @@ pub fn global_accessor_fix_js(attr_meta: &[(&str, bool, bool)]) -> String {
                         return;
                     }}
                     if (desc.get || desc.set) {{
+                        // Phase 2 (v0.8.91): Preserve native [Global] getters.
+                        // Codegen installs native FunctionTemplate getters that already
+                        // have receiver check in the callback (web_apis.rs window_get_N).
+                        // Replacing them with JS wrappers loses [native code] toString,
+                        // which is detectable. Only wrap non-native (shim-installed) getters.
                         if (desc.get && typeof desc.get === 'function') {{
+                            var fnStr = '';
+                            try {{ fnStr = desc.get.toString(); }} catch(e) {{}}
+                            if (fnStr.indexOf('[native code]') !== -1) {{
+                                // Native getter — preserve as-is, only fix setter if needed
+                                if (needsSetter && (!desc.set || typeof desc.set !== 'function')) {{
+                                    var newSetter = (function(nm, wp) {{
+                                        return function(v) {{
+                                            if (wp && this !== globalThis && this !== wp) throw new TypeError('Illegal invocation');
+                                            Object.defineProperty(globalThis, nm, {{ value: v, writable: true, enumerable: true, configurable: true }});
+                                        }};
+                                    }})(name, windowProto);
+                                    try {{ Object.defineProperty(newSetter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
+                                    Object.defineProperty(globalThis, name, {{ get: desc.get, set: newSetter, enumerable: desc.enumerable !== false, configurable: true }});
+                                }}
+                                return;
+                            }}
+                            // JS getter (shim-installed) — wrap with receiver check
                             var origGet = desc.get;
                             var wrappedGet = function() {{
                                 if (windowProto && this !== globalThis && this !== windowProto) {{
