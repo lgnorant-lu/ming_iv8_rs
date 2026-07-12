@@ -213,7 +213,7 @@ pub const REQUEST_FIX_JS: &str = r#"
             var method = (init && init.method) || 'GET';
             Object.defineProperty(this, 'url', { value: url, writable: true, configurable: true, enumerable: true });
             Object.defineProperty(this, 'method', { value: method, writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'headers', { value: (init && init.headers) || {}, writable: true, configurable: true, enumerable: true });
+            Object.defineProperty(this, 'headers', { value: (init && init.headers) || new Headers(), writable: true, configurable: true, enumerable: true });
             Object.defineProperty(this, 'body', { value: (init && init.body) || null, writable: true, configurable: true, enumerable: true });
             Object.defineProperty(this, 'cache', { value: 'default', writable: true, configurable: true, enumerable: true });
             Object.defineProperty(this, 'credentials', { value: 'same-origin', writable: true, configurable: true, enumerable: true });
@@ -811,6 +811,35 @@ pub const DOM_GETTER_FIX_JS: &str = r#"
         if (typeof BeforeUnloadEvent !== 'undefined' && BeforeUnloadEvent.prototype) {
             _installGetter(BeforeUnloadEvent.prototype, 'returnValue', function() {
                 return this.__iv8ReturnValue !== undefined ? this.__iv8ReturnValue : true;
+            });
+        }
+
+        // AbortController.abort() — codegen abort() is no-op, doesn't
+        // update signal.aborted. Override to set hidden key on signal.
+        if (typeof AbortController !== 'undefined' && AbortController.prototype) {
+            try {
+                Object.defineProperty(AbortController.prototype, 'abort', {
+                    value: function abort() {
+                        if (this.signal) {
+                            Object.defineProperty(this.signal, '__aborted', {
+                                value: true, writable: false, enumerable: false, configurable: false
+                            });
+                        }
+                    },
+                    writable: true, enumerable: true, configurable: true
+                });
+            } catch(e) { /* may be frozen */ }
+            // Also try direct assignment as fallback
+            try { AbortController.prototype.abort = function abort() {
+                if (this.signal) {
+                    try { this.signal.__aborted = true; } catch(e2) {}
+                }
+            }; } catch(e2) {}
+        }
+        // AbortSignal.aborted — codegen reads hidden key, add fallback
+        if (typeof AbortSignal !== 'undefined' && AbortSignal.prototype) {
+            _installGetter(AbortSignal.prototype, 'aborted', function() {
+                return this.__aborted === true;
             });
         }
     })();

@@ -139,6 +139,118 @@ unsafe extern "C" fn illegal_dom_constructor(info: *const v8::FunctionCallbackIn
 /// is handled by JS shims layered on top.
 unsafe extern "C" fn empty_dom_constructor(_info: *const v8::FunctionCallbackInfo) {}
 
+/// Response constructor — parses options and sets hidden keys for
+/// status/ok/statusText/headers getters.
+unsafe extern "C" fn response_constructor(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let this = args.this();
+
+        let (status, status_text) = parse_response_options(scope, &args);
+        set_response_state(scope, this, status, &status_text);
+    }));
+}
+
+/// Request constructor — parses options and sets hidden keys for
+/// url/method/headers getters.
+unsafe extern "C" fn request_constructor(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let this = args.this();
+
+        if args.length() >= 1 {
+            let url = args.get(0).to_rust_string_lossy(scope);
+            let url_key = crate::v8_utils::v8_string(scope, "__url__");
+            let url_val = crate::v8_utils::v8_string(scope, &url);
+            let _ = this.set(scope, url_key.into(), url_val.into());
+        }
+
+        let mut method = String::from("GET");
+        if args.length() >= 2 {
+            let opts = args.get(1);
+            if opts.is_object() && !opts.is_null() {
+                let opts_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(opts) };
+                let m_key = crate::v8_utils::v8_string(scope, "method");
+                if let Some(m_val) = opts_obj.get(scope, m_key.into()) {
+                    if m_val.is_string() {
+                        method = m_val.to_rust_string_lossy(scope);
+                    }
+                }
+            }
+        }
+        let m_key = crate::v8_utils::v8_string(scope, "__method__");
+        let m_val = crate::v8_utils::v8_string(scope, &method);
+        let _ = this.set(scope, m_key.into(), m_val.into());
+
+        let headers_key = crate::v8_utils::v8_string(scope, "__headers__");
+        let ctx = scope.get_current_context();
+        let global = ctx.global(scope);
+        let headers_ctor_key = crate::v8_utils::v8_string(scope, "Headers");
+        if let Some(headers_ctor_val) = global.get(scope, headers_ctor_key.into()) {
+            if headers_ctor_val.is_function() {
+                let headers_ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(headers_ctor_val) };
+                if let Some(headers_obj) = headers_ctor.new_instance(scope, &[]) {
+                    let _ = this.set(scope, headers_key.into(), headers_obj.into());
+                }
+            }
+        }
+    }));
+}
+
+fn parse_response_options(scope: &v8::PinScope<'_, '_>, args: &v8::FunctionCallbackArguments) -> (u32, String) {
+    let mut status = 200u32;
+    let mut status_text = String::new();
+    if args.length() >= 2 {
+        let opts = args.get(1);
+        if opts.is_object() && !opts.is_null() {
+            let opts_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(opts) };
+            let status_key = crate::v8_utils::v8_string(scope, "status");
+            if let Some(status_val) = opts_obj.get(scope, status_key.into()) {
+                if status_val.is_number() {
+                    status = status_val.uint32_value(scope).unwrap_or(200);
+                }
+            }
+            let st_key = crate::v8_utils::v8_string(scope, "statusText");
+            if let Some(st_val) = opts_obj.get(scope, st_key.into()) {
+                if st_val.is_string() {
+                    status_text = st_val.to_rust_string_lossy(scope);
+                }
+            }
+        }
+    }
+    (status, status_text)
+}
+
+fn set_response_state(scope: &v8::PinScope<'_, '_>, this: v8::Local<v8::Object>, status: u32, status_text: &str) {
+    let sk = crate::v8_utils::v8_string(scope, "__status__");
+    let _ = this.set(scope, sk.into(), v8::Integer::new(scope, status as i32).into());
+
+    let ok = status >= 200 && status < 300;
+    let ok_key = crate::v8_utils::v8_string(scope, "__ok__");
+    let _ = this.set(scope, ok_key.into(), v8::Boolean::new(scope, ok).into());
+
+    let st_key = crate::v8_utils::v8_string(scope, "__statusText__");
+    let st_val = crate::v8_utils::v8_string(scope, status_text);
+    let _ = this.set(scope, st_key.into(), st_val.into());
+
+    let headers_key = crate::v8_utils::v8_string(scope, "__headers__");
+    let ctx = scope.get_current_context();
+    let global = ctx.global(scope);
+    let headers_ctor_key = crate::v8_utils::v8_string(scope, "Headers");
+    if let Some(headers_ctor_val) = global.get(scope, headers_ctor_key.into()) {
+        if headers_ctor_val.is_function() {
+            let headers_ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(headers_ctor_val) };
+            if let Some(headers_obj) = headers_ctor.new_instance(scope, &[]) {
+                let _ = this.set(scope, headers_key.into(), headers_obj.into());
+            }
+        }
+    }
+}
+
 /// Construct-only callback — allows `new X()` but throws TypeError on `X()`
 /// without `new`. Used for interfaces like EventTarget that are constructable
 /// but not callable.
@@ -1160,7 +1272,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 15. Response ────────────────────────────────────────────────────────
-    let response = make_template(scope, "Response", empty_dom_constructor);
+    let response = make_template(scope, "Response", response_constructor);
     {
         let proto = response.prototype_template(scope);
         install_proto_method_sig(scope, response, proto, "text", response_text_cb);
@@ -1184,7 +1296,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 16. Request ─────────────────────────────────────────────────────────
-    let request = make_template(scope, "Request", empty_dom_constructor);
+    let request = make_template(scope, "Request", request_constructor);
     {
         let proto = request.prototype_template(scope);
         install_proto_method_sig(scope, request, proto, "clone", request_clone_cb);
