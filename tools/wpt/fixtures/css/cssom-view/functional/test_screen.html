@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<script src="/resources/testharness.js"></script>
+<script>
+test(function() {
+    assert_equals(typeof screen, 'object');
+}, 'screen is object');
+
+test(function() {
+    assert_true(screen.width > 0);
+}, 'screen.width is positive');
+
+test(function() {
+    assert_true(screen.height > 0);
+}, 'screen.height is positive');
+
+test(function() {
+    assert_true(screen.availWidth > 0);
+}, 'screen.availWidth is positive');
+
+test(function() {
+    assert_true(screen.availHeight > 0);
+}, 'screen.availHeight is positive');
+
+test(function() {
+    assert_true(screen.colorDepth > 0);
+}, 'screen.colorDepth is positive');
+
+test(function() {
+    assert_equals(screen.colorDepth, screen.pixelDepth);
+}, 'screen.colorDepth equals pixelDepth');
+
+test(function() {
+    assert_true(screen.availWidth <= screen.width);
+}, 'screen.availWidth <= screen.width');
+
+test(function() {
+    assert_true(screen.availHeight <= screen.height);
+}, 'screen.availHeight <= screen.height');
+
+test(function() {
+    assert_true(screen.availLeft >= 0);
+}, 'screen.availLeft is non-negative');
+
+test(function() {
+    assert_true(screen.availTop >= 0);
+}, 'screen.availTop is non-negative');
+
+test(function() {
+    assert_equals(typeof screen.orientation, 'object');
+}, 'screen.orientation is object');
+
+test(function() {
+    assert_equals(typeof screen.orientation.type, 'string');
+}, 'screen.orientation.type is string');
+
+test(function() {
+    assert_equals(typeof screen.orientation.angle, 'number');
+}, 'screen.orientation.angle is number');
+
+test(function() {
+    assert_equals(typeof window.matchMedia, 'function');
+}, 'window.matchMedia is function');
+
+test(function() {
+    var mql = window.matchMedia('(min-width: 1px)');
+    assert_true(mql.matches);
+}, 'matchMedia min-width 1px matches');
+
+test(function() {
+    var mql = window.matchMedia('(max-width: 99999px)');
+    assert_true(mql.matches);
+}, 'matchMedia max-width 99999px matches');
+
+test(function() {
+    var mql = window.matchMedia('(min-width: 99999px)');
+    assert_false(mql.matches);
+}, 'matchMedia min-width 99999px does not match');
+
+test(function() {
+    assert_equals(typeof window.innerWidth, 'number');
+}, 'window.innerWidth is number');
+
+test(function() {
+    assert_equals(typeof window.innerHeight, 'number');
+}, 'window.innerHeight is number');
+
+test(function() {
+    assert_equals(typeof window.scrollX, 'number');
+}, 'window.scrollX is number');
+
+test(function() {
+    assert_equals(typeof window.scrollY, 'number');
+}, 'window.scrollY is number');
+
+test(function() {
+    assert_equals(typeof window.devicePixelRatio, 'number');
+}, 'window.devicePixelRatio is number');
+
+test(function() {
+    assert_true(window.devicePixelRatio > 0);
+}, 'window.devicePixelRatio is positive');
+</script>

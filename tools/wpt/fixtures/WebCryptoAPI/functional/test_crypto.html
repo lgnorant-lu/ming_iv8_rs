@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<script src="/resources/testharness.js"></script>
+<script>
+test(function() {
+    assert_equals(typeof crypto, 'object');
+}, 'crypto is object');
+
+test(function() {
+    assert_equals(typeof crypto.subtle, 'object');
+}, 'crypto.subtle is object');
+
+test(function() {
+    assert_equals(typeof crypto.getRandomValues, 'function');
+}, 'crypto.getRandomValues is function');
+
+test(function() {
+    var arr = new Uint8Array(16);
+    var result = crypto.getRandomValues(arr);
+    assert_true(result === arr || result instanceof Uint8Array);
+}, 'crypto.getRandomValues returns array');
+
+test(function() {
+    var arr = new Uint8Array(4);
+    crypto.getRandomValues(arr);
+    var allZero = arr[0] === 0 && arr[1] === 0 && arr[2] === 0 && arr[3] === 0;
+    assert_false(allZero);
+}, 'crypto.getRandomValues produces non-zero values');
+
+test(function() {
+    var arr = new Int32Array(4);
+    crypto.getRandomValues(arr);
+    assert_true(arr.length === 4);
+}, 'crypto.getRandomValues works with Int32Array');
+
+test(function() {
+    assert_equals(typeof crypto.subtle.digest, 'function');
+}, 'crypto.subtle.digest is function');
+
+test(function() {
+    assert_equals(typeof crypto.subtle.encrypt, 'function');
+}, 'crypto.subtle.encrypt is function');
+
+test(function() {
+    assert_equals(typeof crypto.subtle.decrypt, 'function');
+}, 'crypto.subtle.decrypt is function');
+
+test(function() {
+    assert_equals(typeof crypto.subtle.sign, 'function');
+}, 'crypto.subtle.sign is function');
+
+test(function() {
+    assert_equals(typeof crypto.subtle.verify, 'function');
+}, 'crypto.subtle.verify is function');
+
+test(function() {
+    assert_equals(typeof crypto.subtle.generateKey, 'function');
+}, 'crypto.subtle.generateKey is function');
+
+test(function() {
+    assert_equals(typeof crypto.subtle.deriveKey, 'function');
+}, 'crypto.subtle.deriveKey is function');
+
+test(function() {
+    assert_equals(typeof crypto.subtle.importKey, 'function');
+}, 'crypto.subtle.importKey is function');
+
+test(function() {
+    assert_equals(typeof crypto.subtle.exportKey, 'function');
+}, 'crypto.subtle.exportKey is function');
+
+test(function() {
+    assert_equals(typeof crypto.randomUUID, 'function');
+}, 'crypto.randomUUID is function');
+
+test(function() {
+    var uuid = crypto.randomUUID();
+    assert_true(typeof uuid === 'string');
+    assert_equals(uuid.length, 36);
+}, 'crypto.randomUUID returns 36-char string');
+
+test(function() {
+    var uuid = crypto.randomUUID();
+    var regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+    assert_true(regex.test(uuid));
+}, 'crypto.randomUUID matches UUID format');
+</script>

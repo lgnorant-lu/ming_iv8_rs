@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<script src="/resources/testharness.js"></script>
+<script>
+test(function() {
+    assert_equals(typeof window, 'object');
+}, 'window is object');
+
+test(function() {
+    assert_true(window === globalThis);
+}, 'window === globalThis');
+
+test(function() {
+    assert_equals(typeof window.navigator, 'object');
+}, 'window.navigator is object');
+
+test(function() {
+    assert_equals(typeof window.navigator.userAgent, 'string');
+}, 'navigator.userAgent is string');
+
+test(function() {
+    assert_true(window.navigator.userAgent.length > 0);
+}, 'navigator.userAgent is non-empty');
+
+test(function() {
+    assert_equals(typeof window.navigator.platform, 'string');
+}, 'navigator.platform is string');
+
+test(function() {
+    assert_equals(typeof window.navigator.language, 'string');
+}, 'navigator.language is string');
+
+test(function() {
+    assert_true(Array.isArray(window.navigator.languages));
+}, 'navigator.languages is array');
+
+test(function() {
+    assert_equals(typeof window.navigator.hardwareConcurrency, 'number');
+    assert_true(window.navigator.hardwareConcurrency > 0);
+}, 'navigator.hardwareConcurrency is positive number');
+
+test(function() {
+    assert_equals(typeof window.navigator.onLine, 'boolean');
+}, 'navigator.onLine is boolean');
+
+test(function() {
+    assert_false(window.navigator.webdriver);
+}, 'navigator.webdriver is false');
+
+test(function() {
+    assert_equals(typeof window.screen, 'object');
+}, 'window.screen is object');
+
+test(function() {
+    assert_true(window.screen.width > 0);
+}, 'screen.width is positive');
+
+test(function() {
+    assert_true(window.screen.height > 0);
+}, 'screen.height is positive');
+
+test(function() {
+    assert_true(window.innerWidth >= 0);
+}, 'innerWidth is non-negative');
+
+test(function() {
+    assert_true(window.innerHeight >= 0);
+}, 'innerHeight is non-negative');
+
+test(function() {
+    assert_true(window.devicePixelRatio > 0);
+}, 'devicePixelRatio is positive');
+
+test(function() {
+    assert_equals(typeof window.location, 'object');
+}, 'window.location is object');
+
+test(function() {
+    assert_equals(typeof window.location.href, 'string');
+}, 'location.href is string');
+
+test(function() {
+    assert_equals(typeof window.location.protocol, 'string');
+}, 'location.protocol is string');
+
+test(function() {
+    assert_equals(typeof window.history, 'object');
+}, 'window.history is object');
+
+test(function() {
+    assert_equals(typeof window.history.length, 'number');
+}, 'history.length is number');
+
+test(function() {
+    assert_equals(typeof window.localStorage, 'object');
+}, 'window.localStorage is object');
+
+test(function() {
+    assert_equals(typeof window.sessionStorage, 'object');
+}, 'window.sessionStorage is object');
+
+test(function() {
+    assert_equals(typeof window.crypto, 'object');
+}, 'window.crypto is object');
+
+test(function() {
+    assert_equals(typeof window.crypto.subtle, 'object');
+}, 'window.crypto.subtle is object');
+
+test(function() {
+    assert_equals(typeof window.crypto.getRandomValues, 'function');
+}, 'window.crypto.getRandomValues is function');
+
+test(function() {
+    var arr = new Uint8Array(4);
+    window.crypto.getRandomValues(arr);
+    assert_true(arr[0] !== 0 || arr[1] !== 0 || arr[2] !== 0 || arr[3] !== 0);
+}, 'crypto.getRandomValues fills array');
+
+test(function() {
+    assert_equals(typeof window.performance, 'object');
+}, 'window.performance is object');
+
+test(function() {
+    assert_equals(typeof window.performance.now, 'function');
+}, 'performance.now is function');
+
+test(function() {
+    assert_true(window.performance.now() > 0);
+}, 'performance.now returns positive number');
+
+test(function() {
+    assert_equals(typeof window.btoa, 'function');
+}, 'window.btoa is function');
+
+test(function() {
+    assert_equals(window.btoa('hello'), 'aGVsbG8=');
+}, 'btoa encodes string');
+
+test(function() {
+    assert_equals(typeof window.atob, 'function');
+}, 'window.atob is function');
+
+test(function() {
+    assert_equals(window.atob('aGVsbG8='), 'hello');
+}, 'atob decodes string');
+
+test(function() {
+    assert_equals(typeof window.setTimeout, 'function');
+}, 'window.setTimeout is function');
+
+test(function() {
+    assert_equals(typeof window.clearTimeout, 'function');
+}, 'window.clearTimeout is function');
+
+test(function() {
+    assert_equals(typeof window.setInterval, 'function');
+}, 'window.setInterval is function');
+
+test(function() {
+    assert_equals(typeof window.clearInterval, 'function');
+}, 'window.clearInterval is function');
+
+test(function() {
+    assert_equals(typeof window.requestAnimationFrame, 'function');
+}, 'window.requestAnimationFrame is function');
+</script>

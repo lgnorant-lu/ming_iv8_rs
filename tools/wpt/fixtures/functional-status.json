@@ -1,0 +1,24 @@
+{
+  "schema_version": "wpt-functional-status.v0.1",
+  "description": "Expected fail/skip status for WPT functional tests. Tests listed here are known limitations, not regressions.",
+  "dom": {
+    "expected_fail": [],
+    "expected_skip": [],
+    "notes": "All 49 dom/ functional tests PASS (100%)"
+  },
+  "html/dom": {
+    "expected_fail": [],
+    "expected_skip": [],
+    "notes": "All 40 html/dom/ functional tests PASS (100%)"
+  },
+  "css/cssom-view": {
+    "expected_fail": [],
+    "expected_skip": [],
+    "notes": "Not yet implemented — deferred to B5"
+  },
+  "WebCryptoAPI": {
+    "expected_fail": [],
+    "expected_skip": [],
+    "notes": "Not yet implemented — deferred to B6"
+  }
+}
