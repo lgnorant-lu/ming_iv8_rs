@@ -3834,12 +3834,30 @@ unsafe extern "C" fn append_child_cb(info: *const v8::FunctionCallbackInfo) {
                     if let Some(child_id) = extract_node_id_from_internal(scope, child_obj) {
                         let mut doc = state.document.borrow_mut();
                         if let Some(ref mut doc) = *doc {
-                            doc.detach(child_id);
-                            if let Some(mut parent) = doc.tree.get_mut(parent_id) {
-                                parent.append_id(child_id);
+                            // DocumentFragment transfer: DOM spec requires all
+                            // children of the fragment to be moved to the new
+                            // parent, leaving the fragment empty.
+                            let is_fragment = doc.get(child_id)
+                                .map(|n| matches!(n.value(), NodeData::DocumentFragment))
+                                .unwrap_or(false);
+
+                            if is_fragment {
+                                let child_ids: Vec<_> = doc.tree.get(child_id)
+                                    .map(|frag| frag.children().map(|c| c.id()).collect())
+                                    .unwrap_or_default();
+                                for grandchild_id in child_ids {
+                                    doc.detach(grandchild_id);
+                                    if let Some(mut parent) = doc.tree.get_mut(parent_id) {
+                                        parent.append_id(grandchild_id);
+                                    }
+                                }
+                            } else {
+                                doc.detach(child_id);
+                                if let Some(mut parent) = doc.tree.get_mut(parent_id) {
+                                    parent.append_id(child_id);
+                                }
                             }
                             doc.invalidate_tag_index();
-                            // Rebuild id index to pick up id attributes in appended subtree
                             doc.rebuild_id_index();
                         }
                     }

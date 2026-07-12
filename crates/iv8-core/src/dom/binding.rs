@@ -1132,13 +1132,31 @@ unsafe extern "C" fn append_child_callback(info: *const v8::FunctionCallbackInfo
             let state = RuntimeState::get(isolate);
             let mut doc = state.document.borrow_mut();
             if let Some(ref mut doc) = *doc {
-                // Detach child from current parent (if any), then append to new parent
-                doc.detach(cid);
-                if let Some(mut parent) = doc.tree.get_mut(pid) {
-                    parent.append_id(cid);
+                // Check if child is a DocumentFragment — DOM spec requires
+                // transferring all children to the new parent, leaving the
+                // fragment empty.
+                let is_fragment = doc.get(cid)
+                    .map(|n| matches!(n.value(), NodeData::DocumentFragment))
+                    .unwrap_or(false);
+
+                if is_fragment {
+                    let child_ids: Vec<_> = doc.tree.get(cid)
+                        .map(|frag| frag.children().map(|c| c.id()).collect())
+                        .unwrap_or_default();
+                    for grandchild_id in child_ids {
+                        doc.detach(grandchild_id);
+                        if let Some(mut parent) = doc.tree.get_mut(pid) {
+                            parent.append_id(grandchild_id);
+                        }
+                    }
+                } else {
+                    // Normal append: detach child from current parent, append to new parent
+                    doc.detach(cid);
+                    if let Some(mut parent) = doc.tree.get_mut(pid) {
+                        parent.append_id(cid);
+                    }
                 }
                 doc.invalidate_tag_index();
-                // Rebuild id index to pick up any id attributes in the appended subtree
                 doc.rebuild_id_index();
             }
         }
