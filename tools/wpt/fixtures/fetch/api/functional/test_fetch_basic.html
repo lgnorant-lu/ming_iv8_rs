@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<script src="/resources/testharness.js"></script>
+<script>
+test(function() {
+    assert_equals(typeof fetch, 'function');
+}, 'fetch is function');
+
+test(function() {
+    assert_equals(typeof Request, 'function');
+}, 'Request is function');
+
+test(function() {
+    assert_equals(typeof Response, 'function');
+}, 'Response is function');
+
+test(function() {
+    assert_equals(typeof Headers, 'function');
+}, 'Headers is function');
+
+test(function() {
+    var r = new Request('https://example.com');
+    assert_equals(r.url, 'https://example.com');
+}, 'Request.url');
+
+test(function() {
+    var r = new Request('https://example.com', {method: 'POST'});
+    assert_equals(r.method, 'POST');
+}, 'Request.method');
+
+test(function() {
+    var r = new Request('https://example.com');
+    assert_equals(r.method, 'GET');
+}, 'Request.method default GET');
+
+test(function() {
+    var r = new Request('https://example.com');
+    assert_equals(r.mode, 'cors');
+}, 'Request.mode default cors');
+
+test(function() {
+    var r = new Request('https://example.com');
+    assert_equals(r.credentials, 'same-origin');
+}, 'Request.credentials default');
+
+test(function() {
+    var r = new Request('https://example.com');
+    assert_equals(r.cache, 'default');
+}, 'Request.cache default');
+
+test(function() {
+    var r = new Request('https://example.com');
+    assert_equals(r.redirect, 'follow');
+}, 'Request.redirect default');
+
+test(function() {
+    var r = new Request('https://example.com');
+    assert_equals(r.referrer, 'about:client');
+}, 'Request.referrer default');
+
+test(function() {
+    var r = new Response('hello');
+    assert_true(r instanceof Response);
+}, 'Response constructor');
+
+test(function() {
+    var h = new Headers([['a', '1'], ['b', '2']]);
+    assert_equals(h.get('a'), '1');
+    assert_equals(h.get('b'), '2');
+}, 'Headers from array');
+
+test(function() {
+    var h = new Headers();
+    h.append('x', '1');
+    assert_equals(h.get('x'), '1');
+    h.append('x', '2');
+    assert_equals(h.get('x'), '1, 2');
+}, 'Headers append');
+
+test(function() {
+    var h = new Headers();
+    h.set('x', '1');
+    assert_equals(h.get('x'), '1');
+    h.set('x', '2');
+    assert_equals(h.get('x'), '2');
+}, 'Headers set');
+
+test(function() {
+    var h = new Headers([['x', '1']]);
+    h.delete('x');
+    assert_equals(h.get('x'), null);
+}, 'Headers delete');
+
+test(function() {
+    var h = new Headers([['a', '1'], ['b', '2']]);
+    var keys = [];
+    h.forEach(function(v, k) { keys.push(k); });
+    assert_true(keys.length >= 2);
+}, 'Headers forEach');
+
+test(function() {
+    var r = new Request('https://example.com');
+    assert_true(r.headers instanceof Headers);
+}, 'Request.headers instanceof Headers');
+
+test(function() {
+    var r = new Response();
+    assert_true(r.headers instanceof Headers);
+}, 'Response.headers instanceof Headers');
+
+test(function() {
+    var r = new Response('hello');
+    assert_equals(r.status, 200);
+}, 'Response.status default 200');
+
+test(function() {
+    var r = new Response(null, {status: 404});
+    assert_equals(r.status, 404);
+}, 'Response.status custom');
+
+test(function() {
+    var r = new Response();
+    assert_equals(r.ok, true);
+}, 'Response.ok for 200');
+
+test(function() {
+    var r = new Response(null, {status: 404});
+    assert_equals(r.ok, false);
+}, 'Response.ok false for 404');
+
+test(function() {
+    var r = new Response(null, {status: 200, statusText: 'OK'});
+    assert_equals(r.statusText, 'OK');
+}, 'Response.statusText');
+
+test(function() {
+    assert_equals(typeof AbortController, 'function');
+}, 'AbortController is function');
+
+test(function() {
+    var ac = new AbortController();
+    assert_false(ac.signal.aborted);
+    ac.abort();
+    assert_true(ac.signal.aborted);
+}, 'AbortController abort');
+</script>

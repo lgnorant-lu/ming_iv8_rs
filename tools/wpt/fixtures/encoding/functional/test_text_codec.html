@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<script src="/resources/testharness.js"></script>
+<script>
+test(function() {
+    assert_equals(typeof TextEncoder, 'function');
+}, 'TextEncoder is function');
+
+test(function() {
+    assert_equals(typeof TextDecoder, 'function');
+}, 'TextDecoder is function');
+
+test(function() {
+    var enc = new TextEncoder();
+    var bytes = enc.encode('hello');
+    assert_true(bytes instanceof Uint8Array);
+    assert_equals(bytes.length, 5);
+    assert_equals(bytes[0], 104);
+}, 'TextEncoder encode hello');
+
+test(function() {
+    var enc = new TextEncoder();
+    var bytes = enc.encode('');
+    assert_equals(bytes.length, 0);
+}, 'TextEncoder encode empty');
+
+test(function() {
+    var enc = new TextEncoder();
+    var bytes = enc.encode('ABC');
+    assert_equals(bytes[0], 65);
+    assert_equals(bytes[1], 66);
+    assert_equals(bytes[2], 67);
+}, 'TextEncoder encode ABC');
+
+test(function() {
+    var dec = new TextDecoder();
+    var str = dec.decode(new Uint8Array([104, 101, 108, 108, 111]));
+    assert_equals(str, 'hello');
+}, 'TextDecoder decode hello');
+
+test(function() {
+    var dec = new TextDecoder();
+    var str = dec.decode(new Uint8Array([]));
+    assert_equals(str, '');
+}, 'TextDecoder decode empty');
+
+test(function() {
+    var enc = new TextEncoder();
+    var dec = new TextDecoder();
+    var original = 'test string 123';
+    var encoded = enc.encode(original);
+    var decoded = dec.decode(encoded);
+    assert_equals(decoded, original);
+}, 'TextEncoder/TextDecoder roundtrip');
+
+test(function() {
+    var enc = new TextEncoder();
+    var bytes = enc.encode('\u00e9');
+    assert_equals(bytes.length, 2);
+    assert_equals(bytes[0], 0xc3);
+    assert_equals(bytes[1], 0xa9);
+}, 'TextEncoder encode UTF-8 multibyte');
+
+test(function() {
+    var dec = new TextDecoder('utf-8');
+    var str = dec.decode(new Uint8Array([0xc3, 0xa9]));
+    assert_equals(str, '\u00e9');
+}, 'TextDecoder decode UTF-8 multibyte');
+
+test(function() {
+    var dec = new TextDecoder();
+    assert_equals(dec.encoding, 'utf-8');
+}, 'TextDecoder encoding default utf-8');
+
+test(function() {
+    var enc = new TextEncoder();
+    assert_equals(enc.encoding, 'utf-8');
+}, 'TextEncoder encoding utf-8');
+
+test(function() {
+    var dec = new TextDecoder('utf-8', {fatal: true});
+    assert_equals(dec.fatal, true);
+}, 'TextDecoder fatal option');
+
+test(function() {
+    var dec = new TextDecoder('utf-8', {ignoreBOM: true});
+    assert_equals(dec.ignoreBOM, true);
+}, 'TextDecoder ignoreBOM option');
+
+test(function() {
+    var dec = new TextDecoder();
+    assert_equals(dec.fatal, false);
+    assert_equals(dec.ignoreBOM, false);
+}, 'TextDecoder default options');
+
+test(function() {
+    var enc = new TextEncoder();
+    var bytes = enc.encode('hello world');
+    var dec = new TextDecoder();
+    var stream = dec.decode(bytes.subarray(0, 5), {stream: true});
+    var rest = dec.decode(bytes.subarray(5));
+    assert_equals(stream + rest, 'hello world');
+}, 'TextDecoder stream option');
+
+test(function() {
+    var enc = new TextEncoder();
+    var bytes = enc.encode('a\uD800b');
+    assert_true(bytes.length > 3);
+}, 'TextEncoder handles lone surrogates');
+
+test(function() {
+    var enc = new TextEncoder();
+    var dec = new TextDecoder();
+    var text = '\u4f60\u597d\u4e16\u754c';
+    var encoded = enc.encode(text);
+    var decoded = dec.decode(encoded);
+    assert_equals(decoded, text);
+}, 'TextEncoder/TextDecoder CJK roundtrip');
+</script>

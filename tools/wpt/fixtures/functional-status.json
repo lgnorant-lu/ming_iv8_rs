@@ -1,6 +1,6 @@
 {
-  "schema_version": "wpt-functional-status.v0.1",
-  "description": "Expected fail/skip status for WPT functional tests. Tests listed here are known limitations, not regressions.",
+  "schema_version": "wpt-functional-status.v0.2",
+  "description": "Expected fail/skip status for WPT functional tests.",
   "dom": {
     "expected_fail": [],
     "expected_skip": [],
@@ -14,11 +14,36 @@
   "css/cssom-view": {
     "expected_fail": [],
     "expected_skip": [],
-    "notes": "Not yet implemented — deferred to B5"
+    "notes": "All 24 css/cssom-view/ functional tests PASS (100%)"
   },
   "WebCryptoAPI": {
     "expected_fail": [],
     "expected_skip": [],
-    "notes": "Not yet implemented — deferred to B6"
+    "notes": "All 18 WebCryptoAPI/ functional tests PASS (100%)"
+  },
+  "fetch/api": {
+    "expected_fail": [
+      "Request.headers instanceof Headers",
+      "Response.headers instanceof Headers",
+      "Response.status custom",
+      "Response.ok false for 404",
+      "Response.statusText",
+      "AbortController abort"
+    ],
+    "expected_skip": [],
+    "notes": "21/27 PASS. 6 FAIL: Response/Headers shim incomplete, AbortController signal.aborted not synced"
+  },
+  "encoding": {
+    "expected_fail": [
+      "TextDecoder decode UTF-8 multibyte",
+      "TextDecoder encoding default utf-8",
+      "TextEncoder encoding utf-8",
+      "TextDecoder fatal option",
+      "TextDecoder ignoreBOM option",
+      "TextDecoder stream option",
+      "TextEncoder/TextDecoder CJK roundtrip"
+    ],
+    "expected_skip": [],
+    "notes": "11/18 PASS. 7 FAIL: TextDecoder shim incomplete (encoding property, fatal/ignoreBOM options, multibyte decode, stream)"
   }
 }
