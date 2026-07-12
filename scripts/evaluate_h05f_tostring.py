@@ -190,6 +190,39 @@ def _run_audit():
     cat_a_pass = stats["FAIL"] <= THRESHOLDS["max_fail"]
     cat_d_pass = coverage >= THRESHOLDS["min_coverage_pct"]
 
+    # Category C negative: Object.prototype.toString.call on a plain object
+    # must return "[object Object]", NOT an interface toStringTag.
+    # This verifies that toStringTag is NOT globally leaked.
+    cat_c_pass = True
+    cat_c_details = []
+    if ctx:
+        neg_js = """
+            var results = [];
+            var plain = {};
+            var tag = Object.prototype.toString.call(plain);
+            if (tag !== '[object Object]') {
+                results.push('FAIL: plain object toString = ' + tag + ' (expected [object Object])');
+            }
+            var arr = [];
+            var arrTag = Object.prototype.toString.call(arr);
+            if (arrTag !== '[object Array]') {
+                results.push('FAIL: array toString = ' + arrTag + ' (expected [object Array])');
+            }
+            var fn = function(){};
+            var fnTag = Object.prototype.toString.call(fn);
+            if (fnTag !== '[object Function]') {
+                results.push('FAIL: function toString = ' + fnTag + ' (expected [object Function])');
+            }
+            if (results.length === 0) { 'PASS'; } else { results.join('; '); }
+        """
+        try:
+            neg_result = ctx.eval(neg_js)
+            if neg_result and not neg_result.startswith("PASS"):
+                cat_c_pass = False
+                cat_c_details.append(neg_result)
+        except Exception as e:
+            cat_c_details.append(f"SKIP: eval error: {e}")
+
     print(f"\n{'='*60}")
     print(f"H05f toString / Symbol.toStringTag Audit — Summary")
     print(f"{'='*60}")
@@ -206,10 +239,14 @@ def _run_audit():
 
     print(f"\nCategory A (Data Integrity): {'PASS' if cat_a_pass else 'FAIL'}")
     print(f"  FAIL={stats['FAIL']} (max {THRESHOLDS['max_fail']})")
+    print(f"Category C (False Positive): {'PASS' if cat_c_pass else 'FAIL'}")
+    if cat_c_details:
+        for d in cat_c_details:
+            print(f"  {d}")
     print(f"Category D (Coverage): {'PASS' if cat_d_pass else 'FAIL'}")
     print(f"  {coverage:.1f}% (min {THRESHOLDS['min_coverage_pct']}%)")
 
-    overall = cat_a_pass and cat_d_pass
+    overall = cat_a_pass and cat_c_pass and cat_d_pass
     print(f"\nOVERALL: {'PASS' if overall else 'FAIL'}")
     print(f"Output: {OUTPUT_PATH}")
 

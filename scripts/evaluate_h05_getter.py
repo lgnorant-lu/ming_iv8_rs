@@ -86,6 +86,21 @@ KNOWN_GOOD_VALUES = {
     ("PointerEvent", "pointerId"): ("number", 0),
 }
 
+# Category C negative test: calling getter with wrong receiver must throw.
+# Per WebIDL spec, attribute getters must throw TypeError when `this`
+# is not an instance of the interface (e.g., calling on the prototype
+# object itself or on an unrelated object).
+RECEIVER_CHECK_INTERFACES = [
+    ("Navigator", "userAgent"),
+    ("Screen", "width"),
+    ("Document", "title"),
+    ("Element", "tagName"),
+    ("HTMLElement", "hidden"),
+    ("Event", "type"),
+    ("MouseEvent", "clientX"),
+    ("KeyboardEvent", "key"),
+]
+
 # Top 50 interfaces by WPT idlharness test count + fingerprinting relevance.
 # Tier A (global singletons) and Tier B (createElement) are prioritized.
 TOP_50_INTERFACES = [
@@ -817,6 +832,47 @@ def _run_audit(args):
     if cat_c_details:
         for d in cat_c_details:
             print(f"  {d}")
+
+    # Category C negative: getter must throw on wrong receiver (P2 falsification)
+    cat_c_neg_pass = True
+    cat_c_neg_details = []
+    if ctx:
+        for iface, attr in RECEIVER_CHECK_INTERFACES:
+            js = f"""
+                try {{
+                    var proto = {iface}.prototype;
+                    var desc = Object.getOwnPropertyDescriptor(proto, "{attr}");
+                    if (!desc || !desc.get) {{
+                        "SKIP: no getter on {iface}.prototype.{attr}";
+                    }} else {{
+                        try {{
+                            desc.get.call({{}});
+                            "NO_THROW: {iface}.{attr} getter did not throw on wrong receiver";
+                        }} catch(e) {{
+                            "PASS: {iface}.{attr} threw " + e.constructor.name;
+                        }}
+                    }}
+                }} catch(e) {{
+                    "SKIP: " + String(e).substring(0, 60);
+                }}
+            """
+            try:
+                result = ctx.eval(js)
+                if result and result.startswith("NO_THROW"):
+                    cat_c_neg_pass = False
+                    cat_c_neg_details.append(result)
+                elif result and result.startswith("SKIP"):
+                    cat_c_neg_details.append(result)
+            except Exception as e:
+                cat_c_neg_details.append(f"SKIP: {iface}.{attr} eval error: {e}")
+    if not cat_c_neg_pass:
+        print(f"Category C negative (receiver check): FAIL")
+        for d in cat_c_neg_details:
+            if d.startswith("NO_THROW"):
+                print(f"  {d}")
+    else:
+        print(f"Category C negative (receiver check): PASS")
+    cat_c_pass = cat_c_pass and cat_c_neg_pass
 
     # --- Category D: Coverage ---
     ifaces_evaluated = len(set(a["interface"] for a in attrs if a["interface"] in

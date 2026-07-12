@@ -234,7 +234,36 @@ def _run_audit():
     print("PASS" if cat_d else "FAIL")
     print(f"  {coverage:.1f}% (min {THRESHOLDS['min_coverage_pct']}%)")
 
-    overall = cat_a and cat_d
+    # Category C negative: iframe.contentWindow must NOT be the same
+    # object as the main window. They must be distinct contexts.
+    cat_c = True
+    cat_c_details = []
+    if ctx:
+        neg_js = """
+            var iframe = document.createElement('iframe');
+            document.body.appendChild(iframe);
+            var iwin = iframe.contentWindow;
+            var results = [];
+            if (iwin === globalThis) { results.push('FAIL: iframe.contentWindow === window'); }
+            if (iwin.document === document) { results.push('FAIL: iframe.contentWindow.document === document'); }
+            if (iwin.navigator === navigator) { results.push('FAIL: iframe.contentWindow.navigator === navigator'); }
+            document.body.removeChild(iframe);
+            if (results.length === 0) { 'PASS'; } else { results.join('; '); }
+        """
+        try:
+            neg_result = ctx.eval(neg_js)
+            if neg_result and not neg_result.startswith("PASS"):
+                cat_c = False
+                cat_c_details.append(neg_result)
+        except Exception as e:
+            cat_c_details.append(f"SKIP: eval error: {e}")
+    print(f"Category C (False Positive): ", end="")
+    print("PASS" if cat_c else "FAIL")
+    if cat_c_details:
+        for d in cat_c_details:
+            print(f"  {d}")
+
+    overall = cat_a and cat_c and cat_d
     print(f"\n{'='*60}")
     print(f"OVERALL: {'PASS' if overall else 'FAIL'}")
     print(f"{'='*60}")
