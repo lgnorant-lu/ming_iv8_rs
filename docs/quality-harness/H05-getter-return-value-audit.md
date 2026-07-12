@@ -322,8 +322,7 @@ that idlharness cannot detect (estimated 100+ issues).
 
 ## 9. Non-Goals
 
-- H05b-e implementation (v0.8.90-91)
-- H06 cross-context consistency (v0.8.90)
+- H06 cross-context consistency implementation (v0.8.90, spec separate)
 - WPT functional test execution (v0.8.91+)
 - Multi-browser consensus (Chrome-only for v0.8.89)
 - Performance benchmarking
@@ -332,9 +331,248 @@ that idlharness cannot detect (estimated 100+ issues).
 
 ## 10. Success Criteria
 
-- [ ] H05 charter document exists (this file)
-- [ ] `scripts/evaluate_h05_getter.py` evaluator script exists
-- [ ] Phase 1 (top 50 interfaces) initial run completed
-- [ ] `status/h05-getter-values.json` baseline file committed
-- [ ] H05f toString audit completed for all 1284 interfaces
-- [ ] No regression in existing harnesses (H01-H04)
+- [x] H05 charter document exists (this file)
+- [x] `scripts/evaluate_h05_getter.py` evaluator script exists
+- [x] Phase 1 (top 50 interfaces) initial run completed
+- [x] `status/h05-getter-values.json` baseline file committed
+- [x] H05f toString audit completed for all 1284 interfaces
+- [x] No regression in existing harnesses (H01-H04)
+
+## 11. H05b: Setter Side Effects Audit
+
+### 11.1 Problem Statement
+
+H05a verifies getter return values. H05b verifies that **setting an
+attribute produces the expected reflected value** — the setter must
+store the value so a subsequent getter call returns it.
+
+**Example**: `el.className = "foo"` must cause `el.className === "foo"`.
+If the setter is missing or broken, the getter returns the old value.
+
+### 11.2 Gold Standard
+
+**Source**: WebIDL spec — every non-readonly attribute has a setter
+that stores the value. Per [WebIDL §3.2.4](
+https://webidl.spec.whatwg.org/#attributes), a regular attribute's
+setter performs "the attribute set" which stores the value.
+
+For readonly attributes (`[LegacyUnforgeable] readonly`), the setter
+must be `undefined` — attempting to set must silently fail in sloppy
+mode or throw TypeError in strict mode.
+
+**Expected behavior** (from WebIDL spec):
+- Non-readonly attribute: `set(x)` → `get() === x`
+- Readonly attribute: `set(x)` → `get() !== x` (no effect)
+- `[LegacyUnforgeable]` attribute: setter = undefined
+
+### 11.3 Test Data Generation
+
+Tests are **programatically generated from IDL**:
+```
+for each interface in unified_ir.json:
+    for each attribute in interface.members:
+        if attribute is readonly:
+            generate readonly_test (set should not change value)
+        else:
+            generate reflection_test (set x → get x)
+```
+
+Not hand-picked — all IDL attributes with available instances are tested.
+
+### 11.4 Classification
+
+| Classification | Condition |
+|---|---|
+| **PASS** | Set value, get returns same value |
+| **NO_SETTER** | Setter exists but value not reflected (readonly or broken) |
+| **THROW** | Setter threw unexpected exception |
+| **SKIP** | No instance available |
+
+### 11.5 Quality Gate (per HARNESS-CHARTER §3)
+
+| Category | Metric | Threshold | Status |
+|---|---|---|---|
+| A (Data Integrity) | THROW count | max 0 | **Mandatory** |
+| B (Recall) | Reflection coverage | ≥80% | Optional |
+| C (False Positive) | Readonly attrs not writable | 100% must NO_SETTER | **Mandatory** |
+| D (Coverage) | % of IDL attrs tested | ≥80% | Optional |
+
+**Category C negative test**: readonly attributes must NOT reflect
+the set value. This catches cases where a readonly attribute
+incorrectly accepts writes.
+
+### 11.6 Current Baseline
+
+- v0.8.91: 49/50 PASS, 1 NO_SETTER (outerHTML skip_get), 0 THROW
+- Evaluator: `scripts/evaluate_h05b_setter.py`
+- Status file: `status/h05b-setter.json`
+
+## 12. H05c: Method Return Value Audit
+
+### 12.1 Problem Statement
+
+H05a verifies attribute getters. H05c verifies **method return values**
+match the expected type per WebIDL. A method declared as returning
+`DOMString` must return a string, not undefined or object.
+
+### 12.2 Gold Standard
+
+**Source**: WebIDL spec — method return type from `unified_ir.json`.
+Each method's `idl_type` field specifies the expected return type.
+
+**Expected behavior**:
+- `DOMString` return → typeof === "string"
+- `boolean` return → typeof === "boolean"
+- `long`/`double` return → typeof === "number"
+- `void`/`undefined` return → typeof === "undefined"
+- Interface return (e.g., `Element`) → typeof === "object" + non-null
+- `null` return for nullable → typeof === "object" + null value
+
+### 12.3 Test Data Generation
+
+Tests are **programatically generated from IDL**:
+```
+for each interface in unified_ir.json:
+    for each operation in interface.members:
+        generate type_check(method, expected_return_type)
+```
+
+### 12.4 Classification
+
+| Classification | Condition |
+|---|---|
+| **PASS** | Return type matches WebIDL declaration |
+| **TYPE_FAIL** | Return type wrong |
+| **THROW** | Method threw unexpected exception |
+| **SKIP** | No instance available |
+
+### 12.5 Quality Gate
+
+| Category | Metric | Threshold | Status |
+|---|---|---|---|
+| A (Data Integrity) | TYPE_FAIL + THROW | max 1 (K-008 known limit) | **Mandatory** |
+| C (False Positive) | void methods return undefined | 100% | **Mandatory** |
+| D (Coverage) | % of key methods tested | ≥80% | Optional |
+
+**Category C negative test**: methods declared `void` must return
+`undefined`, not a value. This catches methods that incorrectly return
+a value.
+
+### 12.6 Current Baseline
+
+- v0.8.91: 59/60 PASS, 0 TYPE_FAIL, 1 THROW (splitText K-008), OVERALL PASS
+- Evaluator: `scripts/evaluate_h05c_method.py`
+- Status file: `status/h05c-method.json`
+
+## 13. H05d: Constructor Behavior Audit
+
+### 13.1 Problem Statement
+
+Verify that constructors produce instances of the correct type and
+that constructor arguments are properly handled.
+
+### 13.2 Gold Standard
+
+**Source**: WebIDL spec — constructor return type is the interface
+itself. Per [WebIDL §3.11.1](
+https://webidl.spec.whatwg.org/#constructor-object), `new Interface()`
+must return an object whose `[[Prototype]]` is `Interface.prototype`.
+
+**Expected behavior**:
+- `new Interface()` returns object, not undefined/null
+- `result instanceof Interface` === true
+- `result.constructor === Interface`
+- `Object.prototype.toString.call(result)` === `"[object InterfaceName]"`
+- Missing required arguments → TypeError
+
+### 13.3 Test Data Generation
+
+Tests generated from IDL constructors list + known constructable
+interfaces (Tier C from §3.3).
+
+### 13.4 Classification
+
+| Classification | Condition |
+|---|---|
+| **PASS** | Return type matches, instanceof correct |
+| **WRONG_TYPE** | Return type wrong |
+| **THROW** | Constructor threw (unexpected) |
+| **SKIP** | Not constructable |
+
+### 13.5 Quality Gate
+
+| Category | Metric | Threshold | Status |
+|---|---|---|---|
+| A (Data Integrity) | WRONG_TYPE + THROW | max 0 | **Mandatory** |
+| C (False Positive) | Non-constructable throws | 100% must THROW | **Mandatory** |
+| D (Coverage) | % of constructable tested | ≥80% | Optional |
+
+**Category C negative test**: interfaces marked `[LegacyNoInterfaceObject]`
+or not in CONSTRUCTABLE list must throw "Illegal constructor" when
+`new`'d.
+
+### 13.6 Current Baseline
+
+- v0.8.91: 35/35 PASS, 0 WRONG_TYPE, 0 THROW, OVERALL PASS
+- Evaluator: `scripts/evaluate_h05d_constructor.py`
+- Status file: `status/h05d-constructor.json`
+
+## 14. H05e: Exception Type/Message Audit
+
+### 14.1 Problem Statement
+
+Verify that error paths throw the correct exception type per spec.
+Wrong exception types (e.g., RangeError instead of TypeError) are
+detectable by fingerprinting scripts.
+
+### 14.2 Gold Standard
+
+**Source**: WebIDL spec — per [WebIDL §3.11.3](
+https://webidl.spec.whatwg.org/#dfn-throw), the following exception
+types are specified:
+- Missing required argument → `TypeError`
+- Invalid enum value → `TypeError`
+- `null` receiver on non-nullable → `TypeError`
+- Invalid JSON → `SyntaxError` (ECMAScript spec)
+- Invalid URI → `URIError` (ECMAScript spec)
+
+**Expected behavior**:
+- `appendChild(null)` → TypeError
+- `new Event()` (missing arg) → TypeError
+- `JSON.parse('invalid')` → SyntaxError
+- `decodeURIComponent('%')` → URIError
+
+### 14.3 Test Data Generation
+
+Tests derived from WebIDL "must throw" requirements + ECMAScript spec
+error paths. Each test specifies expected exception constructor name.
+
+### 14.4 Classification
+
+| Classification | Condition |
+|---|---|
+| **PASS** | Correct exception type or correct NoThrow |
+| **WRONG_TYPE** | Threw wrong exception type |
+| **NO_THROW** | Expected throw but no exception |
+| **UNEXPECTED_THROW** | Expected NoThrow but threw |
+
+### 14.5 Quality Gate
+
+| Category | Metric | Threshold | Status |
+|---|---|---|---|
+| A (Data Integrity) | WRONG_TYPE + UNEXPECTED_THROW | max 0 | **Mandatory** |
+| C (False Positive) | NoThrow cases don't throw | 100% | **Mandatory** |
+| D (Coverage) | % of error paths tested | ≥40% | Optional |
+
+**Category C negative test**: operations that should NOT throw
+(e.g., `parseInt('xyz')` returns NaN, not throw) must indeed not throw.
+
+**Known limitation**: Many codegen callbacks don't validate argument
+count/types (Phase 3, v0.8.92 target). NO_THROW threshold = 20
+accommodates this known gap.
+
+### 14.6 Current Baseline
+
+- v0.8.91: 17 PASS, 20 NO_THROW (codegen param validation gap), 0 WRONG_TYPE
+- Evaluator: `scripts/evaluate_h05e_exception.py`
+- Status file: `status/h05e-exception.json`

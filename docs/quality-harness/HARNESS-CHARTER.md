@@ -116,8 +116,8 @@ Definition of Done。本宪法是这些成熟实践在 iv8-rs 的本地化落地
 | H02 | Env Consistency | `H02-env-consistency.md` | `scripts/evaluate_env_consistency.py` | `env-consistency-quality-gate.md` | candidate (Phase 4 合并入 H04) |
 | H03 | Surface Accuracy | `H03-surface-accuracy.md` | `scripts/evaluate_surface_accuracy.py` | `surface-accuracy-quality-gate.md` | candidate (Phase 4 合并入 H04) |
 | H04 | Surface Integrity Matrix | `H04-surface-integrity-matrix.md` | `scripts/evaluate_surface_integrity.py` | `surface-integrity-quality-gate.md` | candidate (Phase 1 待实施) |
-| H05 | Getter Return Value Audit | `H05-getter-return-value-audit.md` | `scripts/evaluate_h05_getter.py` | (pending) | candidate (Phase 1 baseline 1009/1063 PASS) |
-| H06 | Cross-Context Consistency | (pending) | `scripts/evaluate_h06_window_iframe.py` | (pending) | candidate (Phase 1: H06a 43/43 PASS) |
+| H05 | Getter Return Value Audit | `H05-getter-return-value-audit.md` | `scripts/evaluate_h05_getter.py` (H05a), `scripts/evaluate_h05b_setter.py` (H05b), `scripts/evaluate_h05c_method.py` (H05c), `scripts/evaluate_h05d_constructor.py` (H05d), `scripts/evaluate_h05e_exception.py` (H05e), `scripts/evaluate_h05f_tostring.py` (H05f) | (pending) | candidate (H05a 1012/1063, H05b 49/50, H05c 59/60, H05d 35/35, H05e 17/37+20, H05f 1270/1284 OVERALL PASS) |
+| H06 | Cross-Context Consistency | `H06-cross-context-consistency.md` | `scripts/evaluate_h06_window_iframe.py` | (pending) | candidate (H06a 43/43 PASS, H06b deferred) |
 
 > H04 是 H02/H03 的超集（D-102），Phase 4 完成后 H02/H03 标记 DEPRECATED。
 
