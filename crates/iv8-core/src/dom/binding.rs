@@ -39,6 +39,9 @@ pub fn usize_to_node_id(val: usize) -> Option<NodeId> {
 
 /// Extract __nodeId__ from a V8 object, returning the NodeId.
 pub fn extract_node_id(scope: &v8::PinScope<'_, '_>, obj: v8::Local<v8::Object>) -> Option<NodeId> {
+    if let Some(nid) = crate::dom::template::extract_node_id_from_internal(scope, obj) {
+        return Some(nid);
+    }
     let key = v8::String::new(scope, "__nodeId__")?;
     let val = obj.get(scope, key.into())?;
     if val.is_number() {
@@ -615,7 +618,6 @@ unsafe extern "C" fn get_element_by_id(info: *const v8::FunctionCallbackInfo) {
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
 
-        // Borrow, find node_id, then release borrow before calling node_to_v8_object
         let node_id = {
             let doc = state.document.borrow();
             doc.as_ref().and_then(|d| d.get_element_by_id(&id_str))
@@ -626,10 +628,47 @@ unsafe extern "C" fn get_element_by_id(info: *const v8::FunctionCallbackInfo) {
                 rv.set(obj);
             }
         }
-        // If not found, return value stays undefined → caller gets null via JS semantics
-        // Actually we should set null explicitly
         else {
-            rv.set(v8::null(scope).into());
+            let id_key = crate::v8_utils::v8_string(scope, "__iv8Id");
+            let root_id = {
+                let doc = state.document.borrow();
+                doc.as_ref().map(|d| d.root_id())
+            };
+            if let Some(root_id) = root_id {
+                let found_nid = {
+                    let doc = state.document.borrow();
+                    doc.as_ref().and_then(|d| {
+                        d.tree.get(root_id).and_then(|root| {
+                            root.descendants().find_map(|n| {
+                                let nid = n.id();
+                                if let Some(obj) = crate::dom::template::create_node_object(scope, state, nid) {
+                                    let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(obj) };
+                                    if let Some(val) = obj.get(scope, id_key.into()) {
+                                        if val.is_string() {
+                                            let v = val.to_rust_string_lossy(scope);
+                                            if v == id_str {
+                                                return Some(nid);
+                                            }
+                                        }
+                                    }
+                                }
+                                None
+                            })
+                        })
+                    })
+                };
+                if let Some(nid) = found_nid {
+                    if let Some(obj) = node_to_v8_object(scope, state, nid) {
+                        rv.set(obj);
+                    }
+                }
+                else {
+                    rv.set(v8::null(scope).into());
+                }
+            }
+            else {
+                rv.set(v8::null(scope).into());
+            }
         }
     }));
     if result.is_err() {
