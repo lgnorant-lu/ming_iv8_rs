@@ -578,7 +578,6 @@ impl EmbeddedV8Kernel {
             std::panic::set_hook(Box::new(move |info| {
                 let msg = info.to_string();
                 crate::telemetry::rust_panic(&msg);
-                eprintln!("[iv8-panic] {}", msg);
                 default_hook(info);
             }));
         });
@@ -588,7 +587,6 @@ impl EmbeddedV8Kernel {
         V8_FATAL_INSTALLED.call_once(|| {
             fn fatal_handler(file: &str, line: i32, message: &str) {
                 crate::telemetry::v8_fatal_error(file, line, message);
-                eprintln!("[v8-fatal] {}:{} {}", file, line, message);
             }
             v8::V8::set_fatal_error_handler(fatal_handler);
         });
@@ -613,7 +611,6 @@ impl EmbeddedV8Kernel {
                     .unwrap_or("<invalid>")
             };
             crate::telemetry::v8_oom(loc, details.is_heap_oom);
-            eprintln!("[v8-oom] {} heap={}", loc, details.is_heap_oom);
         }
         isolate.set_oom_error_handler(oom_handler);
 
