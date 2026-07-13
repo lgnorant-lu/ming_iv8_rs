@@ -154,7 +154,7 @@ unsafe extern "C" fn response_constructor(info: *const v8::FunctionCallbackInfo)
 }
 
 /// Request constructor — parses options and sets hidden keys for
-/// url/method/headers getters.
+/// url/method/headers and other Request properties.
 unsafe extern "C" fn request_constructor(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -164,29 +164,76 @@ unsafe extern "C" fn request_constructor(info: *const v8::FunctionCallbackInfo) 
 
         if args.length() >= 1 {
             let url = args.get(0).to_rust_string_lossy(scope);
-            let url_key = crate::v8_utils::v8_string(scope, "__url__");
+            let url_key = crate::v8_utils::v8_string(scope, "__iv8Url");
             let url_val = crate::v8_utils::v8_string(scope, &url);
             let _ = this.set(scope, url_key.into(), url_val.into());
         }
 
         let mut method = String::from("GET");
+        let mut mode = String::from("cors");
+        let mut credentials = String::from("same-origin");
+        let mut cache = String::from("default");
+        let mut redirect = String::from("follow");
+        let mut referrer = String::from("about:client");
+        let mut referrer_policy = String::new();
+        let mut destination = String::new();
+        let mut integrity = String::new();
+        let mut keepalive = false;
+
         if args.length() >= 2 {
             let opts = args.get(1);
             if opts.is_object() && !opts.is_null() {
                 let opts_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(opts) };
                 let m_key = crate::v8_utils::v8_string(scope, "method");
                 if let Some(m_val) = opts_obj.get(scope, m_key.into()) {
-                    if m_val.is_string() {
-                        method = m_val.to_rust_string_lossy(scope);
-                    }
+                    if m_val.is_string() { method = m_val.to_rust_string_lossy(scope); }
+                }
+                let mode_key = crate::v8_utils::v8_string(scope, "mode");
+                if let Some(v) = opts_obj.get(scope, mode_key.into()) {
+                    if v.is_string() { mode = v.to_rust_string_lossy(scope); }
+                }
+                let cred_key = crate::v8_utils::v8_string(scope, "credentials");
+                if let Some(v) = opts_obj.get(scope, cred_key.into()) {
+                    if v.is_string() { credentials = v.to_rust_string_lossy(scope); }
+                }
+                let cache_key = crate::v8_utils::v8_string(scope, "cache");
+                if let Some(v) = opts_obj.get(scope, cache_key.into()) {
+                    if v.is_string() { cache = v.to_rust_string_lossy(scope); }
+                }
+                let redir_key = crate::v8_utils::v8_string(scope, "redirect");
+                if let Some(v) = opts_obj.get(scope, redir_key.into()) {
+                    if v.is_string() { redirect = v.to_rust_string_lossy(scope); }
                 }
             }
         }
-        let m_key = crate::v8_utils::v8_string(scope, "__method__");
-        let m_val = crate::v8_utils::v8_string(scope, &method);
-        let _ = this.set(scope, m_key.into(), m_val.into());
 
-        let headers_key = crate::v8_utils::v8_string(scope, "__headers__");
+        let set_str = |scope: &v8::PinScope<'_, '_>, this: v8::Local<v8::Object>, key_name: &str, val: &str| {
+            let k = crate::v8_utils::v8_string(scope, key_name);
+            let v = crate::v8_utils::v8_string(scope, val);
+            let _ = this.set(scope, k.into(), v.into());
+        };
+        let set_bool = |scope: &v8::PinScope<'_, '_>, this: v8::Local<v8::Object>, key_name: &str, val: bool| {
+            let k = crate::v8_utils::v8_string(scope, key_name);
+            let _ = this.set(scope, k.into(), v8::Boolean::new(scope, val).into());
+        };
+
+        set_str(scope, this, "__iv8Method", &method);
+        set_str(scope, this, "__iv8Mode", &mode);
+        set_str(scope, this, "__iv8Credentials", &credentials);
+        set_str(scope, this, "__iv8Cache", &cache);
+        set_str(scope, this, "__iv8Redirect", &redirect);
+        set_str(scope, this, "__iv8Referrer", &referrer);
+        set_str(scope, this, "__iv8ReferrerPolicy", &referrer_policy);
+        set_str(scope, this, "__iv8Destination", &destination);
+        set_str(scope, this, "__iv8Integrity", &integrity);
+        set_bool(scope, this, "__iv8Keepalive", keepalive);
+
+        let body_key = crate::v8_utils::v8_string(scope, "__iv8Body");
+        let _ = this.set(scope, body_key.into(), v8::null(scope).into());
+        let sig_key = crate::v8_utils::v8_string(scope, "__iv8Signal");
+        let _ = this.set(scope, sig_key.into(), v8::null(scope).into());
+
+        let headers_key = crate::v8_utils::v8_string(scope, "__iv8Headers");
         let ctx = scope.get_current_context();
         let global = ctx.global(scope);
         let headers_ctor_key = crate::v8_utils::v8_string(scope, "Headers");
@@ -226,18 +273,24 @@ fn parse_response_options(scope: &v8::PinScope<'_, '_>, args: &v8::FunctionCallb
 }
 
 fn set_response_state(scope: &v8::PinScope<'_, '_>, this: v8::Local<v8::Object>, status: u32, status_text: &str) {
-    let sk = crate::v8_utils::v8_string(scope, "__status__");
+    let sk = crate::v8_utils::v8_string(scope, "__iv8Status");
     let _ = this.set(scope, sk.into(), v8::Integer::new(scope, status as i32).into());
 
     let ok = status >= 200 && status < 300;
-    let ok_key = crate::v8_utils::v8_string(scope, "__ok__");
+    let ok_key = crate::v8_utils::v8_string(scope, "__iv8Ok");
     let _ = this.set(scope, ok_key.into(), v8::Boolean::new(scope, ok).into());
 
-    let st_key = crate::v8_utils::v8_string(scope, "__statusText__");
+    let st_key = crate::v8_utils::v8_string(scope, "__iv8StatusText");
     let st_val = crate::v8_utils::v8_string(scope, status_text);
     let _ = this.set(scope, st_key.into(), st_val.into());
 
-    let headers_key = crate::v8_utils::v8_string(scope, "__headers__");
+    let url_key = crate::v8_utils::v8_string(scope, "__iv8Url");
+    let _ = this.set(scope, url_key.into(), crate::v8_utils::v8_string(scope, "").into());
+
+    let body_used_key = crate::v8_utils::v8_string(scope, "__iv8BodyUsed");
+    let _ = this.set(scope, body_used_key.into(), v8::Boolean::new(scope, false).into());
+
+    let headers_key = crate::v8_utils::v8_string(scope, "__iv8Headers");
     let ctx = scope.get_current_context();
     let global = ctx.global(scope);
     let headers_ctor_key = crate::v8_utils::v8_string(scope, "Headers");
@@ -1280,29 +1333,18 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method_sig(scope, response, proto, "arrayBuffer", response_array_buffer_cb);
         install_proto_method_sig(scope, response, proto, "blob", response_blob_cb);
         install_proto_method_sig(scope, response, proto, "clone", response_clone_cb);
-        install_proto_accessor(scope, proto, "status", response_status_getter, None);
-        install_proto_accessor(scope, proto, "ok", response_ok_getter, None);
-        install_proto_accessor(
-            scope,
-            proto,
-            "statusText",
-            response_status_text_getter,
-            None,
-        );
-        install_proto_accessor(scope, proto, "url", response_url_getter, None);
-        install_proto_accessor(scope, proto, "headers", response_headers_getter, None);
-        install_proto_accessor(scope, proto, "bodyUsed", body_used_getter, None);
         set_to_string_tag(scope, proto, "Response");
     }
 
     // ── 16. Request ─────────────────────────────────────────────────────────
+    // Request accessor 全部由 codegen fix_accessor_properties 安装
+    // (读取 __iv8Url/__iv8Method/__iv8Mode 等 hidden key)。
+    // DOM template 不安装 Request accessor — 避免两套机制分叉。
+    // request_constructor 设置 codegen hidden key。
     let request = make_template(scope, "Request", request_constructor);
     {
         let proto = request.prototype_template(scope);
         install_proto_method_sig(scope, request, proto, "clone", request_clone_cb);
-        install_proto_accessor(scope, proto, "url", request_url_getter, None);
-        install_proto_accessor(scope, proto, "method", request_method_getter, None);
-        install_proto_accessor(scope, proto, "headers", request_headers_getter, None);
         set_to_string_tag(scope, proto, "Request");
     }
 

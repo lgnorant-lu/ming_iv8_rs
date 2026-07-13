@@ -203,34 +203,26 @@ pub const REQUEST_FIX_JS: &str = r#"
     (function() {
         if (typeof Request === 'undefined') return;
         var origCtor = Request;
-        function RequestShim(input, init) {
-            var url = '';
-            if (typeof input === 'string') {
-                url = input;
-            } else if (input && typeof input === 'object' && input.url) {
-                url = input.url;
-            }
-            var method = (init && init.method) || 'GET';
-            Object.defineProperty(this, 'url', { value: url, writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'method', { value: method, writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'headers', { value: (init && init.headers) || new Headers(), writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'body', { value: (init && init.body) || null, writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'cache', { value: 'default', writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'credentials', { value: 'same-origin', writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'destination', { value: '', writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'integrity', { value: '', writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'keepalive', { value: false, writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'mode', { value: 'cors', writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'redirect', { value: 'follow', writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'referrer', { value: 'about:client', writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'referrerPolicy', { value: '', writable: true, configurable: true, enumerable: true });
-            Object.defineProperty(this, 'signal', { value: null, writable: true, configurable: true, enumerable: true });
+        // Request constructor is now handled by DOM template (request_constructor).
+        // Only install fetch() polyfill here.
+        if (typeof fetch === 'undefined') {
+            globalThis.fetch = function fetch(input, init) {
+                var url = typeof input === 'string' ? input : (input && input.url) || '';
+                var method = (init && init.method) || 'GET';
+                return Promise.resolve({
+                    ok: true,
+                    status: 200,
+                    statusText: 'OK',
+                    url: url,
+                    headers: new Headers(),
+                    text: function() { return Promise.resolve(''); },
+                    json: function() { return Promise.resolve({}); },
+                    arrayBuffer: function() { return Promise.resolve(new ArrayBuffer(0)); },
+                    clone: function() { return this; }
+                });
+            };
+            try { Object.defineProperty(globalThis.fetch, 'name', { value: 'fetch' }); } catch(e) {}
         }
-        RequestShim.prototype = origCtor.prototype;
-        Object.defineProperty(RequestShim.prototype, 'constructor', {value: RequestShim, writable: true, configurable: true, enumerable: false});
-        try { Object.defineProperty(globalThis, 'Request', {
-            value: RequestShim, writable: true, configurable: true, enumerable: true
-        }); } catch(e) {}
     })();
 "#;
 
