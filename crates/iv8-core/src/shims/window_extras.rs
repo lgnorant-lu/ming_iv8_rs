@@ -30,21 +30,37 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         moveBy: function moveBy(dx, dy) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (arguments.length < 2) throw new TypeError('2 argument(s) required, but only ' + arguments.length + ' present.'); },
         resizeTo: function resizeTo(w, h) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (arguments.length < 2) throw new TypeError('2 argument(s) required, but only ' + arguments.length + ' present.'); },
         resizeBy: function resizeBy(dw, dh) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (arguments.length < 2) throw new TypeError('2 argument(s) required, but only ' + arguments.length + ' present.'); },
-        scroll: function scroll(x, y) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
-        scrollTo: function scrollTo(x, y) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
-        scrollBy: function scrollBy(dx, dy) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); },
+        scroll: function scroll(x, y) {
+            var self = (this == null || this === undefined) ? globalThis : this;
+            if (self !== globalThis && self !== window) throw new TypeError('Illegal invocation');
+        },
+        scrollTo: function scrollTo(x, y) {
+            var self = (this == null || this === undefined) ? globalThis : this;
+            if (self !== globalThis && self !== window) throw new TypeError('Illegal invocation');
+        },
+        scrollBy: function scrollBy(dx, dy) {
+            var self = (this == null || this === undefined) ? globalThis : this;
+            if (self !== globalThis && self !== window) throw new TypeError('Illegal invocation');
+        },
         getComputedStyle: function getComputedStyle(el, pseudo) { if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); return { getPropertyValue: function(prop) { return ''; }, getPropertyPriority: function(prop) { return ''; }, length: 0, item: function(i) { return ''; } }; },
         matchMedia: function matchMedia(query) { 'use strict'; if (this === null || this === undefined) throw new TypeError('Illegal invocation'); if (this !== globalThis && this !== window) throw new TypeError('Illegal invocation'); if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.'); return { matches: false, media: query, addListener: function() {}, removeListener: function() {}, addEventListener: function() {}, removeEventListener: function() {}, dispatchEvent: function() { return true; }, onchange: null }; }
     };
     Object.keys(_winOps).forEach(function(k) {
-        // Only install if Window.prototype does NOT already have this method
-        // (codegen-generated methods have receiver checks and correct types).
-        // close is special: document_props installs it without receiver check,
-        // so we must override.
+        // Prefer codegen methods when they exist, except ops that need
+        // stricter Window receiver checks (CG-6 residual).
+        var force = {
+            close: true, scroll: true, scrollTo: true, scrollBy: true,
+            postMessage: false
+        };
         var protoHas = (typeof Window !== 'undefined' && Window.prototype &&
             typeof Window.prototype[k] === 'function');
-        if (!protoHas || k === 'close') {
+        if (!protoHas || force[k]) {
             globalThis[k] = _winOps[k];
+            try {
+                if (typeof Window !== 'undefined' && Window.prototype) {
+                    Window.prototype[k] = _winOps[k];
+                }
+            } catch (e) {}
         }
     });
 
