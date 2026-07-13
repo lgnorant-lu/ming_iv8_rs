@@ -56,6 +56,10 @@ pub struct DomTemplates {
     pub html_audio_element: v8::Global<v8::FunctionTemplate>,
     /// HTMLSelectElement — inherits HTMLElement.
     pub html_select_element: v8::Global<v8::FunctionTemplate>,
+    /// HTMLOptionElement — inherits HTMLElement.
+    pub html_option_element: v8::Global<v8::FunctionTemplate>,
+    /// HTMLIFrameElement — inherits HTMLElement.
+    pub html_iframe_element: v8::Global<v8::FunctionTemplate>,
     /// HTMLTextAreaElement — inherits HTMLElement.
     pub html_textarea_element: v8::Global<v8::FunctionTemplate>,
     /// HTMLHeadElement — inherits HTMLElement.
@@ -101,6 +105,8 @@ pub struct DomTemplates {
     pub headers: v8::Global<v8::FunctionTemplate>,
     pub response: v8::Global<v8::FunctionTemplate>,
     pub request: v8::Global<v8::FunctionTemplate>,
+    /// Attr — attribute node view over Element.attrs (live value).
+    pub attr: v8::Global<v8::FunctionTemplate>,
 }
 
 /// Helper: create a FunctionTemplate with a class name and internal field count.
@@ -471,77 +477,8 @@ fn set_to_string_tag(
 
 /// Build all DOM templates and install methods on their prototypes.
 /// Must be called once per Isolate, with the isolate entered.
-/// Restore DOM template accessors that were overwritten by codegen's
-/// `fix_accessor_properties`. This function re-installs key accessors
-/// (data, textContent, childNodes, nodeType, nodeName, etc.) on DOM
-/// prototypes after codegen has run its accessor fix.
-///
-/// **Root cause**: `fix_accessor_properties` uses `Object.defineProperty`
-/// to install codegen accessors on prototypes. It runs after
-/// `chain_dom_prototypes`, at which point `globalThis.CharacterData` is
-/// already the DOM constructor. So codegen accessors are installed on
-/// DOM prototypes, overwriting DOM template accessors that read from
-/// the DOM tree (NodeData::Text/Comment).
-///
-/// **Fix**: Re-install DOM template accessors after fix_accessor_properties.
-/// This is not a patch — it restores the correct accessor that was
-/// installed by `build_dom_templates` and then overwritten.
-type AccessorFn = unsafe extern "C" fn(*const v8::FunctionCallbackInfo);
-
-pub fn restore_dom_accessors(
-    scope: &v8::PinScope<'_, '_>,
-    global: v8::Local<v8::Object>,
-    _templates: &DomTemplates,
-) {
-    let proto_key = crate::v8_utils::v8_string(scope, "prototype");
-
-    let char_data_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[];
-    let node_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[];
-    let element_accessors: &[(&str, AccessorFn, Option<AccessorFn>)] = &[
-        ("id", id_getter, Some(id_setter)),
-    ];
-
-    let restore_sets: Vec<(&str, &[(&str, AccessorFn, Option<AccessorFn>)])> = vec![
-        ("CharacterData", char_data_accessors),
-        ("Node", node_accessors),
-        ("Element", element_accessors),
-    ];
-
-    for (iface_name, accessors) in &restore_sets {
-        let key = crate::v8_utils::v8_string(scope, iface_name);
-        if let Some(ctor_val) = global.get(scope, key.into()) {
-            if ctor_val.is_function() {
-                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
-                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
-                    if let Some(proto_obj) = proto_val.to_object(scope) {
-                        for (name, getter, setter) in accessors.iter() {
-                            let g_tmpl = v8::FunctionTemplate::builder_raw(*getter).length(0).build(scope);
-                            g_tmpl.set_class_name(crate::v8_utils::v8_string(scope, &format!("get {}", name)));
-                            let g_fn = g_tmpl.get_function(scope).unwrap();
-                            let s_fn = match setter {
-                                Some(s) => {
-                                    let s_tmpl = v8::FunctionTemplate::builder_raw(*s).length(1).build(scope);
-                                    s_tmpl.set_class_name(crate::v8_utils::v8_string(scope, &format!("set {}", name)));
-                                    Some(s_tmpl.get_function(scope).unwrap())
-                                }
-                                None => None,
-                            };
-                            let mut d = v8::PropertyDescriptor::new_from_get_set(g_fn.into(), s_fn.unwrap_or_else(|| g_fn.clone()).into());
-                            d.set_enumerable(true);
-                            d.set_configurable(true);
-                            let _ = proto_obj.define_property(scope, crate::v8_utils::v8_string(scope, name).into(), &d);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // A3: Element.prototype.id setter syncs __iv8Id (codegen already does this).
-    // getElementById has __iv8Id fallback traversal (binding.rs get_element_by_id).
-    // Full DOM tree sync (NodeData::Element.id update) requires codegen generator
-    // modification — deferred to codegen rewrite.
-}
+// restore_dom_accessors removed (v0.8.92 P0): generator skip-if-own-accessor
+// + chain_dom_prototypes non-accessor copy preserve DOM template accessors.
 
 pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     // ── 1. EventTarget ──────────────────────────────────────────────────────
@@ -587,6 +524,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method_sig_with_length(scope, node, proto, "appendChild", append_child_cb, 1);
         install_proto_method_sig_with_length(scope, node, proto, "removeChild", remove_child_cb, 1);
         install_proto_method_sig_with_length(scope, node, proto, "insertBefore", insert_before_cb, 2);
+        install_proto_method_sig_with_length(scope, node, proto, "replaceChild", replace_child_cb, 2);
         install_proto_method_sig_with_length(scope, node, proto, "cloneNode", clone_node_cb, 0);
         install_proto_method_sig_with_length(scope, node, proto, "contains", contains_cb, 1);
         install_proto_method_sig_with_length(scope, node, proto, "hasChildNodes", has_child_nodes_cb, 0);
@@ -715,15 +653,17 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method_sig_with_length(scope, element, proto, "setAttribute", set_attribute_cb, 2);
         install_proto_method_sig_with_length(scope, element, proto, "removeAttribute", remove_attribute_cb, 1);
         install_proto_method_sig_with_length(scope, element, proto, "hasAttribute", has_attribute_cb, 1);
+        // NS variants: L3 stores local name only (HTML namespace-less). Required after
+        // EXCLUDED_OPERATIONS removed codegen skeletons (H05c SKIP → real methods).
+        install_proto_method_sig_with_length(scope, element, proto, "getAttributeNS", get_attribute_ns_cb, 2);
+        install_proto_method_sig_with_length(scope, element, proto, "setAttributeNS", set_attribute_ns_cb, 3);
+        install_proto_method_sig_with_length(scope, element, proto, "removeAttributeNS", remove_attribute_ns_cb, 2);
+        install_proto_method_sig_with_length(scope, element, proto, "hasAttributeNS", has_attribute_ns_cb, 2);
         install_proto_method_sig_with_length(scope, element, proto, "getAttributeNames", get_attribute_names_cb, 0);
-        // DOM mutation methods
-        install_proto_method_sig_with_length(scope, element, proto, "replaceChild", replace_child_cb, 2);
-        install_proto_method_sig_with_length(scope, element, proto, "insertBefore", insert_before_cb, 2);
+        // Node mutation methods live on Node only (RD-05). Element keeps Element-only APIs.
         install_proto_method_sig_with_length(scope, element, proto, "insertAdjacentHTML", insert_adjacent_html_cb, 2);
         install_proto_method_sig_with_length(scope, element, proto, "insertAdjacentElement", insert_adjacent_element_cb, 2);
         install_proto_method_sig_with_length(scope, element, proto, "insertAdjacentText", insert_adjacent_text_cb, 2);
-        install_proto_method_sig_with_length(scope, element, proto, "cloneNode", clone_node_cb, 0);
-        install_proto_method_sig_with_length(scope, element, proto, "contains", contains_cb, 1);
         // Query methods
         install_proto_method_sig_with_length(scope, element, proto, "querySelector", query_selector_cb, 1);
         install_proto_method_sig_with_length(scope, element, proto, "querySelectorAll", query_selector_all_cb, 1);
@@ -756,6 +696,25 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             Some(scroll_left_setter),
         );
         install_proto_method_sig(scope, element, proto, "scrollIntoView", scroll_into_view_cb);
+        install_proto_method_sig(scope, element, proto, "scroll", scroll_promise_cb);
+        install_proto_method_sig(scope, element, proto, "scrollTo", scroll_promise_cb);
+        install_proto_method_sig(scope, element, proto, "scrollBy", scroll_promise_cb);
+        install_proto_method_sig(scope, element, proto, "requestFullscreen", scroll_promise_cb);
+        install_proto_method_sig(scope, element, proto, "requestPointerLock", scroll_promise_cb);
+        install_proto_method_sig_with_length(scope, element, proto, "getAttributeNode", get_attribute_node_cb, 1);
+        install_proto_method_sig_with_length(scope, element, proto, "getAttributeNodeNS", get_attribute_node_ns_cb, 2);
+        install_proto_method_sig_with_length(scope, element, proto, "setAttributeNode", set_attribute_node_cb, 1);
+        install_proto_method_sig_with_length(scope, element, proto, "setAttributeNodeNS", set_attribute_node_cb, 1);
+        // Nullable Node/CSSPseudoElement APIs without layout/CSSOM engine → null.
+        install_proto_method_sig_with_length(
+            scope,
+            element,
+            proto,
+            "spatialNavigationSearch",
+            element_null_result_cb,
+            1,
+        );
+        install_proto_method_sig_with_length(scope, element, proto, "pseudo", element_null_result_cb, 1);
         install_proto_method_sig(scope, element, proto, "getClientRects", get_client_rects_cb);
         // Event methods (also on EventTarget, but Element overrides for convenience)
         install_proto_method_sig(scope, element, proto, "addEventListener", add_event_listener_cb);
@@ -827,14 +786,38 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "href", href_getter, Some(href_setter));
         install_proto_accessor(scope, proto, "target", target_getter, Some(target_setter));
         install_proto_accessor(scope, proto, "rel", rel_getter, Some(rel_setter));
-        // Computed URL properties (read-only, parsed from href)
-        install_proto_accessor(scope, proto, "pathname", anchor_pathname_getter, None);
-        install_proto_accessor(scope, proto, "hostname", anchor_hostname_getter, None);
-        install_proto_accessor(scope, proto, "protocol", anchor_protocol_getter, None);
-        install_proto_accessor(scope, proto, "host", anchor_host_getter, None);
-        install_proto_accessor(scope, proto, "port", anchor_port_getter, None);
-        install_proto_accessor(scope, proto, "search", anchor_search_getter, None);
-        install_proto_accessor(scope, proto, "hash", anchor_hash_getter, None);
+        // Computed URL properties (HTML: writable components rewrite href)
+        install_proto_accessor(
+            scope,
+            proto,
+            "pathname",
+            anchor_pathname_getter,
+            Some(anchor_pathname_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "hostname",
+            anchor_hostname_getter,
+            Some(anchor_hostname_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "protocol",
+            anchor_protocol_getter,
+            Some(anchor_protocol_setter),
+        );
+        install_proto_accessor(scope, proto, "host", anchor_host_getter, Some(anchor_host_setter));
+        install_proto_accessor(scope, proto, "port", anchor_port_getter, Some(anchor_port_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "search",
+            anchor_search_getter,
+            Some(anchor_search_setter),
+        );
+        install_proto_accessor(scope, proto, "hash", anchor_hash_getter, Some(anchor_hash_setter));
         install_proto_accessor(scope, proto, "origin", anchor_origin_getter, None);
     }
 
@@ -973,6 +956,8 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "naturalWidth", natural_width_getter, None);
         install_proto_accessor(scope, proto, "naturalHeight", natural_height_getter, None);
         install_proto_accessor(scope, proto, "complete", img_complete_getter, None);
+        // decode(): no network image pipeline — resolve immediately (spec allows).
+        install_proto_method_sig(scope, html_image_element, proto, "decode", scroll_promise_cb);
     }
 
     let html_video_element = make_template(scope, "HTMLVideoElement", illegal_dom_constructor);
@@ -1034,6 +1019,14 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             selected_index_getter,
             Some(selected_index_setter),
         );
+        install_proto_accessor(scope, proto, "options", select_options_getter, None);
+        install_proto_accessor(
+            scope,
+            proto,
+            "length",
+            select_length_getter,
+            Some(select_length_setter),
+        );
         install_proto_accessor(
             scope,
             proto,
@@ -1047,6 +1040,71 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             "multiple",
             multiple_getter,
             Some(multiple_setter),
+        );
+        install_proto_method_sig_with_length(scope, html_select_element, proto, "item", select_item_cb, 1);
+        install_proto_method_sig_with_length(
+            scope,
+            html_select_element,
+            proto,
+            "namedItem",
+            select_named_item_cb,
+            1,
+        );
+    }
+
+    // HTMLOptionElement: value falls back to text content (HTML spec).
+    let html_option_element = make_template(scope, "HTMLOptionElement", illegal_dom_constructor);
+    html_option_element.inherit(html_element);
+    {
+        let proto = html_option_element.prototype_template(scope);
+        install_proto_accessor(scope, proto, "value", value_getter, Some(value_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "selected",
+            option_selected_getter,
+            Some(option_selected_setter),
+        );
+        install_proto_accessor(scope, proto, "disabled", disabled_getter, Some(disabled_setter));
+        install_proto_accessor(scope, proto, "label", option_label_getter, Some(option_label_setter));
+        install_proto_accessor(scope, proto, "text", option_text_getter, Some(option_text_setter));
+        install_proto_accessor(scope, proto, "index", option_index_getter, None);
+    }
+
+    // HTMLIFrameElement: contentDocument/contentWindow null without nested browsing;
+    // readonly attrs use no-op setters (H05b Category C).
+    let html_iframe_element = make_template(scope, "HTMLIFrameElement", illegal_dom_constructor);
+    html_iframe_element.inherit(html_element);
+    {
+        let proto = html_iframe_element.prototype_template(scope);
+        install_proto_accessor(scope, proto, "src", src_getter, Some(src_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "contentDocument",
+            iframe_content_document_getter,
+            Some(iframe_readonly_noop_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "contentWindow",
+            iframe_content_window_getter,
+            Some(iframe_readonly_noop_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "permissionsPolicy",
+            iframe_null_getter,
+            Some(iframe_readonly_noop_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "sandbox",
+            iframe_null_getter,
+            Some(iframe_readonly_noop_setter),
         );
     }
 
@@ -1348,6 +1406,21 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         set_to_string_tag(scope, proto, "Request");
     }
 
+    // ── 17. Attr (view over Element.attrs; value is live) ────────────────────
+    let attr = make_template(scope, "Attr", illegal_dom_constructor);
+    attr.inherit(node);
+    {
+        let proto = attr.prototype_template(scope);
+        install_proto_accessor(scope, proto, "name", attr_name_getter, None);
+        install_proto_accessor(scope, proto, "localName", attr_name_getter, None);
+        install_proto_accessor(scope, proto, "value", attr_value_getter, Some(attr_value_setter));
+        install_proto_accessor(scope, proto, "ownerElement", attr_owner_element_getter, None);
+        install_proto_accessor(scope, proto, "namespaceURI", attr_namespace_uri_getter, None);
+        install_proto_accessor(scope, proto, "prefix", attr_prefix_getter, None);
+        install_proto_accessor(scope, proto, "specified", attr_specified_getter, None);
+        set_to_string_tag(scope, proto, "Attr");
+    }
+
     // Convert all to Globals
     DomTemplates {
         event_target: v8::Global::new(scope, event_target),
@@ -1366,6 +1439,8 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         html_video_element: v8::Global::new(scope, html_video_element),
         html_audio_element: v8::Global::new(scope, html_audio_element),
         html_select_element: v8::Global::new(scope, html_select_element),
+        html_option_element: v8::Global::new(scope, html_option_element),
+        html_iframe_element: v8::Global::new(scope, html_iframe_element),
         html_textarea_element: v8::Global::new(scope, html_textarea_element),
         html_head_element: v8::Global::new(scope, html_head_element),
         html_body_element: v8::Global::new(scope, html_body_element),
@@ -1385,6 +1460,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         character_data: v8::Global::new(scope, character_data),
         document_fragment: v8::Global::new(scope, document_fragment),
         document_node: v8::Global::new(scope, document_node),
+        attr: v8::Global::new(scope, attr),
         node_list: v8::Global::new(scope, node_list),
         dom_token_list: v8::Global::new(scope, dom_token_list),
         css_style_declaration: v8::Global::new(scope, css_style_declaration),
@@ -1419,6 +1495,8 @@ pub fn install_dom_constructors(
         ("HTMLVideoElement", &templates.html_video_element),
         ("HTMLAudioElement", &templates.html_audio_element),
         ("HTMLSelectElement", &templates.html_select_element),
+        ("HTMLOptionElement", &templates.html_option_element),
+        ("HTMLIFrameElement", &templates.html_iframe_element),
         ("HTMLTextAreaElement", &templates.html_textarea_element),
         ("HTMLHeadElement", &templates.html_head_element),
         ("HTMLBodyElement", &templates.html_body_element),
@@ -1489,6 +1567,8 @@ pub fn install_dom_constructors(
         ("HTMLVideoElement", "HTMLMediaElement"),
         ("HTMLAudioElement", "HTMLMediaElement"),
         ("HTMLSelectElement", "HTMLElement"),
+        ("HTMLOptionElement", "HTMLElement"),
+        ("HTMLIFrameElement", "HTMLElement"),
         ("HTMLTextAreaElement", "HTMLElement"),
         ("HTMLHeadElement", "HTMLElement"),
         ("HTMLBodyElement", "HTMLElement"),
@@ -1564,7 +1644,7 @@ pub fn capture_codegen_prototypes(
         "HTMLInputElement", "HTMLButtonElement", "HTMLFormElement",
         "HTMLCanvasElement", "HTMLScriptElement", "HTMLImageElement",
         "HTMLVideoElement", "HTMLAudioElement", "HTMLSelectElement",
-        "HTMLTextAreaElement", "HTMLHeadElement", "HTMLBodyElement",
+        "HTMLOptionElement", "HTMLIFrameElement", "HTMLTextAreaElement", "HTMLHeadElement", "HTMLBodyElement",
         "HTMLHtmlElement", "HTMLParagraphElement", "HTMLHeadingElement",
         "HTMLUListElement", "HTMLOListElement", "HTMLLIElement",
         "HTMLTableElement", "HTMLStyleElement", "HTMLLinkElement",
@@ -1701,6 +1781,11 @@ pub fn chain_dom_prototypes(
                         let getter = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "get").into());
                         let setter = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "set").into());
                         let value = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "value").into());
+                        // v0.8.92 P0: copy when DOM does not already own the property
+                        // (check above). Accessors that DOM already installed (id, data,
+                        // textContent, ...) are skipped. Accessors only on codegen
+                        // (e.g. Element.regionOverset) are still copied. fix_accessor
+                        // skip-if-own prevents later overwrite of DOM-owned accessors.
                         let writable_val = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "writable").into());
                         let configurable_val = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "configurable").into());
                         let src_writable = writable_val
@@ -1740,7 +1825,6 @@ pub fn chain_dom_prototypes(
                             p.set_enumerable(true);
                             p
                         };
-                        // AD-1a fix: check define_property return value (R3 suggestion)
                         let ok = dom_proto.define_property(scope, prop_name, &pd);
                         if ok.unwrap_or(false) { proto_copied += 1; } else { proto_define_failed += 1; }
                     }
@@ -1950,6 +2034,8 @@ pub fn template_for_tag<'s>(
         "video" => &templates.html_video_element,
         "audio" => &templates.html_audio_element,
         "select" => &templates.html_select_element,
+        "option" => &templates.html_option_element,
+        "iframe" => &templates.html_iframe_element,
         "textarea" => &templates.html_textarea_element,
         "head" => &templates.html_head_element,
         "body" => &templates.html_body_element,
@@ -1966,8 +2052,8 @@ pub fn template_for_tag<'s>(
         "meta" => &templates.html_meta_element,
         "section" | "article" | "nav" | "aside" | "header" | "footer" | "main" | "address"
         | "figure" | "figcaption" | "details" | "summary" | "dl" | "dt" | "dd" | "hr" | "br"
-        | "pre" | "code" | "blockquote" | "iframe" | "embed" | "object" | "progress" | "meter"
-        | "label" | "fieldset" | "legend" | "optgroup" | "option" | "template" | "slot"
+        | "pre" | "code" | "blockquote" | "embed" | "object" | "progress" | "meter"
+        | "label" | "fieldset" | "legend" | "optgroup" | "template" | "slot"
         | "data" | "time" | "mark" | "ruby" | "rt" | "rp" | "wbr" | "b" | "i" | "u" | "s"
         | "small" | "strong" | "em" | "sub" | "sup" | "abbr" | "cite" | "dfn" | "kbd" | "q"
         | "samp" | "var" | "del" | "ins" | "output" | "picture" | "source" => {
@@ -3533,6 +3619,91 @@ unsafe extern "C" fn set_attribute_cb(info: *const v8::FunctionCallbackInfo) {
     });
 }
 
+/// setAttributeNS(namespace, qualifiedName, value) — L3: ignore namespace, store local name.
+unsafe extern "C" fn set_attribute_ns_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 3 {
+                let qname = args.get(1).to_rust_string_lossy(scope);
+                let local = qname.rsplit(':').next().unwrap_or(&qname).to_string();
+                let value = args.get(2).to_rust_string_lossy(scope);
+                set_attr_str(state, nid, &local, value);
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn get_attribute_ns_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, mut rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 2 {
+                let qname = args.get(1).to_rust_string_lossy(scope);
+                let local = qname.rsplit(':').next().unwrap_or(&qname);
+                let val = get_attr_str(state, nid, local);
+                if val.is_empty() {
+                    // Distinguish missing vs empty: check presence
+                    let present = {
+                        let doc = state.document.borrow();
+                        doc.as_ref()
+                            .and_then(|d| d.get(nid))
+                            .and_then(|n| n.value().get_attr(local))
+                            .is_some()
+                    };
+                    if !present {
+                        rv.set(v8::null(scope).into());
+                        return;
+                    }
+                }
+                if let Some(s) = v8::String::new(scope, &val) {
+                    rv.set(s.into());
+                    return;
+                }
+            }
+        }
+        rv.set(v8::null(scope).into());
+    });
+}
+
+unsafe extern "C" fn remove_attribute_ns_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 2 {
+                let qname = args.get(1).to_rust_string_lossy(scope);
+                let local = qname.rsplit(':').next().unwrap_or(&qname).to_string();
+                let mut doc = state.document.borrow_mut();
+                if let Some(ref mut d) = *doc {
+                    if let Some(mut node) = d.tree.get_mut(nid) {
+                        if let NodeData::Element { ref mut attrs, .. } = node.value() {
+                            attrs.retain(|(k, _)| k != &local);
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn has_attribute_ns_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, mut rv, state, node_id| {
+        let present = if let Some(nid) = node_id {
+            if args.length() >= 2 {
+                let qname = args.get(1).to_rust_string_lossy(scope);
+                let local = qname.rsplit(':').next().unwrap_or(&qname);
+                let doc = state.document.borrow();
+                doc.as_ref()
+                    .and_then(|d| d.get(nid))
+                    .and_then(|n| n.value().get_attr(local))
+                    .is_some()
+            } else {
+                false
+            }
+        } else {
+            false
+        };
+        rv.set(v8::Boolean::new(scope, present).into());
+    });
+}
+
 unsafe extern "C" fn remove_attribute_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, _rv, state, node_id| {
         if let Some(nid) = node_id {
@@ -3611,37 +3782,54 @@ unsafe extern "C" fn get_attribute_names_cb(info: *const v8::FunctionCallbackInf
 unsafe extern "C" fn replace_child_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, rv, state, _node_id| {
         if args.length() < 2 {
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "Failed to execute 'replaceChild' on 'Node': 2 arguments required, but only fewer present.",
+            );
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
             return;
         }
         let new_arg = args.get(0);
         let old_arg = args.get(1);
         if !new_arg.is_object() || !old_arg.is_object() {
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "Failed to execute 'replaceChild' on 'Node': parameter is not of type 'Node'.",
+            );
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
             return;
         }
         let new_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(new_arg) };
         let old_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(old_arg) };
         let new_id = extract_node_id_from_internal(scope, new_obj);
         let old_id = extract_node_id_from_internal(scope, old_obj);
-        if let (Some(nid), Some(oid)) = (new_id, old_id) {
-            // Edge case: replaceChild(node, node) — replacing a node with itself.
-            // Real browsers treat this as a no-op. Return the old child reference.
-            if nid == oid {
-                rv.set(old_arg);
-                return;
+        if new_id.is_none() || old_id.is_none() {
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "Failed to execute 'replaceChild' on 'Node': parameter is not of type 'Node'.",
+            );
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let nid = new_id.unwrap();
+        let oid = old_id.unwrap();
+        // Edge case: replaceChild(node, node) — no-op; return old child.
+        if nid == oid {
+            rv.set(old_arg);
+            return;
+        }
+        let mut doc = state.document.borrow_mut();
+        if let Some(ref mut doc) = *doc {
+            doc.detach(nid);
+            if let Some(mut old_node) = doc.tree.get_mut(oid) {
+                old_node.insert_id_before(nid);
             }
-            let mut doc = state.document.borrow_mut();
-            if let Some(ref mut doc) = *doc {
-                // Detach new node from wherever it currently is
-                doc.detach(nid);
-                // Insert new node before old node
-                if let Some(mut old_node) = doc.tree.get_mut(oid) {
-                    old_node.insert_id_before(nid);
-                }
-                // Remove old node
-                doc.detach(oid);
-                doc.invalidate_tag_index();
-                doc.rebuild_id_index();
-            }
+            doc.detach(oid);
+            doc.invalidate_tag_index();
+            doc.rebuild_id_index();
         }
         rv.set(old_arg);
     });
@@ -4300,7 +4488,308 @@ unsafe extern "C" fn get_client_rects_cb(info: *const v8::FunctionCallbackInfo) 
     });
 }
 
-unsafe extern "C" fn scroll_into_view_cb(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+fn resolved_promise_undefined(
+    scope: &v8::PinScope<'_, '_>,
+    rv: &mut v8::ReturnValue<'_>,
+) {
+    let resolver = crate::v8_utils::v8_resolver(scope);
+    let _ = resolver.resolve(scope, v8::undefined(scope).into());
+    rv.set(resolver.get_promise(scope).into());
+}
+
+unsafe extern "C" fn scroll_into_view_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, _args, rv, _state, _node_id| {
+        resolved_promise_undefined(scope, rv);
+    });
+}
+
+unsafe extern "C" fn scroll_promise_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, _args, rv, _state, _node_id| {
+        resolved_promise_undefined(scope, rv);
+    });
+}
+
+unsafe extern "C" fn element_null_result_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, _args, rv, _state, _node_id| {
+        rv.set(v8::null(scope).into());
+    });
+}
+
+const ATTR_NAME_KEY: &str = "__iv8AttrName";
+
+/// Create or reuse an Attr object bound to (owner Element, attr name).
+/// Value is live from Element.attrs via getters — single store with setAttribute.
+fn create_attr_object<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    state: &RuntimeState,
+    owner_id: NodeId,
+    name: &str,
+) -> Option<v8::Local<'s, v8::Value>> {
+    let key = (owner_id, name.to_string());
+    {
+        let cache = state.attr_cache.borrow();
+        if let Some(global) = cache.get(&key) {
+            return Some(v8::Local::new(scope, global).into());
+        }
+    }
+    let templates = state.dom_templates.borrow();
+    let templates = templates.as_ref()?;
+    let tmpl = v8::Local::new(scope, &templates.attr);
+    let inst = tmpl.instance_template(scope);
+    let obj = inst.new_instance(scope)?;
+    let nid_usize = super::binding::node_id_to_usize(owner_id);
+    let external = v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
+    obj.set_internal_field(NODE_ID_FIELD as usize, external.into());
+    let name_key = crate::v8_utils::v8_string(scope, ATTR_NAME_KEY);
+    let name_val = crate::v8_utils::v8_string(scope, name);
+    let _ = obj.define_own_property(
+        scope,
+        name_key.into(),
+        name_val.into(),
+        v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE,
+    );
+    let global = v8::Global::new(scope, obj);
+    state.attr_cache.borrow_mut().insert(key, global);
+    Some(obj.into())
+}
+
+fn attr_name_of(scope: &v8::PinScope<'_, '_>, this: v8::Local<v8::Object>) -> Option<String> {
+    let key = crate::v8_utils::v8_string(scope, ATTR_NAME_KEY);
+    let val = this.get(scope, key.into())?;
+    if val.is_string() {
+        Some(val.to_rust_string_lossy(scope))
+    } else {
+        None
+    }
+}
+
+unsafe extern "C" fn attr_name_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _state, _owner_id| {
+        let info_ref = unsafe { &*info };
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let this = args.this();
+        if let Some(name) = attr_name_of(scope, this) {
+            if let Some(s) = v8::String::new(scope, &name) {
+                rv.set(s.into());
+                return;
+            }
+        }
+        rv.set(crate::v8_utils::v8_string(scope, "").into());
+    });
+}
+
+unsafe extern "C" fn attr_value_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, owner_id| {
+        let info_ref = unsafe { &*info };
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let this = args.this();
+        let name = attr_name_of(scope, this).unwrap_or_default();
+        let doc = state.document.borrow();
+        let val = doc
+            .as_ref()
+            .and_then(|d| d.get(owner_id))
+            .and_then(|n| n.value().get_attr(&name).map(|s| s.to_string()))
+            .unwrap_or_default();
+        if let Some(s) = v8::String::new(scope, &val) {
+            rv.set(s.into());
+        }
+    });
+}
+
+unsafe extern "C" fn attr_value_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, owner_id| {
+        if let Some(oid) = owner_id {
+            if args.length() < 1 {
+                return;
+            }
+            let this = args.this();
+            let Some(name) = attr_name_of(scope, this) else { return };
+            let value = args.get(0).to_rust_string_lossy(scope);
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut doc) = *doc {
+                if let Some(mut node) = doc.tree.get_mut(oid) {
+                    if let NodeData::Element {
+                        ref mut attrs,
+                        ref mut id,
+                        ref mut classes,
+                        ..
+                    } = node.value()
+                    {
+                        if let Some(e) = attrs.iter_mut().find(|(k, _)| k == &name) {
+                            e.1 = value.clone();
+                        } else {
+                            attrs.push((name.clone(), value.clone()));
+                        }
+                        if name == "id" {
+                            *id = Some(value.clone());
+                        }
+                        if name == "class" {
+                            *classes = value.split_whitespace().map(|s| s.to_string()).collect();
+                        }
+                    }
+                }
+                if name == "id" {
+                    doc.register_id(value, oid);
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn attr_owner_element_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, owner_id| {
+        if let Some(obj) = create_node_object(scope, state, owner_id) {
+            rv.set(obj);
+        } else {
+            rv.set(v8::null(scope).into());
+        }
+    });
+}
+
+unsafe extern "C" fn attr_namespace_uri_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _state, _owner_id| {
+        rv.set(v8::null(scope).into());
+    });
+}
+
+unsafe extern "C" fn attr_prefix_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _state, _owner_id| {
+        rv.set(v8::null(scope).into());
+    });
+}
+
+unsafe extern "C" fn attr_specified_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _state, _owner_id| {
+        rv.set(v8::Boolean::new(scope, true).into());
+    });
+}
+
+unsafe extern "C" fn get_attribute_node_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let name = args.get(0).to_rust_string_lossy(scope);
+                let has = {
+                    let doc = state.document.borrow();
+                    doc.as_ref()
+                        .and_then(|d| d.get(nid))
+                        .and_then(|n| n.value().get_attr(&name))
+                        .is_some()
+                };
+                if has {
+                    if let Some(attr) = create_attr_object(scope, state, nid, &name) {
+                        rv.set(attr);
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::null(scope).into());
+    });
+}
+
+unsafe extern "C" fn get_attribute_node_ns_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, rv, state, node_id| {
+        // No namespace support in Element.attrs yet: only null-namespace names.
+        if let Some(nid) = node_id {
+            if args.length() >= 2 {
+                let ns = args.get(0);
+                let local = args.get(1).to_rust_string_lossy(scope);
+                let ns_null = ns.is_null_or_undefined()
+                    || (ns.is_string() && ns.to_rust_string_lossy(scope).is_empty());
+                if ns_null {
+                    let has = {
+                        let doc = state.document.borrow();
+                        doc.as_ref()
+                            .and_then(|d| d.get(nid))
+                            .and_then(|n| n.value().get_attr(&local))
+                            .is_some()
+                    };
+                    if has {
+                        if let Some(attr) = create_attr_object(scope, state, nid, &local) {
+                            rv.set(attr);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        rv.set(v8::null(scope).into());
+    });
+}
+
+unsafe extern "C" fn set_attribute_node_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 && args.get(0).is_object() {
+                let attr_obj: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(args.get(0)) };
+                if let Some(name) = attr_name_of(scope, attr_obj) {
+                    let value = {
+                        let key = crate::v8_utils::v8_string(scope, "value");
+                        attr_obj
+                            .get(scope, key.into())
+                            .map(|v| v.to_rust_string_lossy(scope))
+                            .unwrap_or_default()
+                    };
+                    let old_had = {
+                        let doc = state.document.borrow();
+                        doc.as_ref()
+                            .and_then(|d| d.get(nid))
+                            .and_then(|n| n.value().get_attr(&name))
+                            .is_some()
+                    };
+                    let old_attr = if old_had {
+                        create_attr_object(scope, state, nid, &name)
+                    } else {
+                        None
+                    };
+                    {
+                        let mut doc = state.document.borrow_mut();
+                        if let Some(ref mut doc) = *doc {
+                            if let Some(mut node) = doc.tree.get_mut(nid) {
+                                if let NodeData::Element {
+                                    ref mut attrs,
+                                    ref mut id,
+                                    ref mut classes,
+                                    ..
+                                } = node.value()
+                                {
+                                    if let Some(e) = attrs.iter_mut().find(|(k, _)| k == &name) {
+                                        e.1 = value.clone();
+                                    } else {
+                                        attrs.push((name.clone(), value.clone()));
+                                    }
+                                    if name == "id" {
+                                        *id = Some(value.clone());
+                                    }
+                                    if name == "class" {
+                                        *classes =
+                                            value.split_whitespace().map(|s| s.to_string()).collect();
+                                    }
+                                }
+                            }
+                            if name == "id" {
+                                doc.register_id(value, nid);
+                            }
+                        }
+                    }
+                    // Rebind Attr owner to this element
+                    let nid_usize = super::binding::node_id_to_usize(nid);
+                    let external = v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
+                    attr_obj.set_internal_field(NODE_ID_FIELD as usize, external.into());
+                    if let Some(old) = old_attr {
+                        rv.set(old);
+                    } else {
+                        rv.set(v8::null(scope).into());
+                    }
+                    return;
+                }
+            }
+        }
+        rv.set(v8::null(scope).into());
+    });
+}
 
 /// Read a layout value from environment config with fallback chain.
 /// Checks: primary_path → fallback_path → default_value.
@@ -4833,7 +5322,16 @@ unsafe extern "C" fn tab_index_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Integer::new(scope, val).into());
     });
 }
-unsafe extern "C" fn tab_index_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn tab_index_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let n = args.get(0).number_value(scope).unwrap_or(0.0) as i32;
+                set_str_attr(state, nid, "tabindex", n.to_string());
+            }
+        }
+    });
+}
 
 // Generic attribute-backed accessor helper
 fn get_attr_str(state: &RuntimeState, node_id: NodeId, attr: &str) -> String {
@@ -4929,6 +5427,99 @@ anchor_url_getter!(anchor_search_getter, "search");
 anchor_url_getter!(anchor_hash_getter, "hash");
 anchor_url_getter!(anchor_origin_getter, "origin");
 
+fn anchor_set_url_component(state: &RuntimeState, node_id: NodeId, component: &str, value: &str) {
+    let href = get_attr_str(state, node_id, "href");
+    let base = if href.is_empty() {
+        "https://example.com/".to_string()
+    } else if href.contains("://") {
+        href
+    } else {
+        format!("https://{}", href)
+    };
+    let Ok(mut parsed) = Url::parse(&base) else {
+        return;
+    };
+    match component {
+        "protocol" => {
+            let scheme = value.trim_end_matches(':');
+            let _ = parsed.set_scheme(scheme);
+        }
+        "hostname" => {
+            let _ = parsed.set_host(Some(value));
+        }
+        "port" => {
+            if value.is_empty() {
+                let _ = parsed.set_port(None);
+            } else if let Ok(p) = value.parse::<u16>() {
+                let _ = parsed.set_port(Some(p));
+            }
+        }
+        "host" => {
+            // host may be "hostname:port"
+            if let Some((h, p)) = value.rsplit_once(':') {
+                if p.chars().all(|c| c.is_ascii_digit()) {
+                    let _ = parsed.set_host(Some(h));
+                    if let Ok(pn) = p.parse::<u16>() {
+                        let _ = parsed.set_port(Some(pn));
+                    }
+                    set_attr_str(state, node_id, "href", parsed.to_string());
+                    return;
+                }
+            }
+            let _ = parsed.set_host(Some(value));
+        }
+        "pathname" => {
+            let path = if value.starts_with('/') {
+                value.to_string()
+            } else {
+                format!("/{}", value.trim_start_matches('/'))
+            };
+            parsed.set_path(&path);
+        }
+        "search" => {
+            let q = value.trim_start_matches('?');
+            if q.is_empty() {
+                parsed.set_query(None);
+            } else {
+                parsed.set_query(Some(q));
+            }
+        }
+        "hash" => {
+            let f = value.trim_start_matches('#');
+            if f.is_empty() {
+                parsed.set_fragment(None);
+            } else {
+                parsed.set_fragment(Some(f));
+            }
+        }
+        _ => return,
+    }
+    set_attr_str(state, node_id, "href", parsed.to_string());
+}
+
+macro_rules! anchor_url_setter {
+    ($name:ident, $component:literal) => {
+        unsafe extern "C" fn $name(info: *const v8::FunctionCallbackInfo) {
+            run_callback(info, |scope, args, _rv, state, node_id| {
+                if let Some(nid) = node_id {
+                    if args.length() >= 1 {
+                        let v = args.get(0).to_rust_string_lossy(scope);
+                        anchor_set_url_component(state, nid, $component, &v);
+                    }
+                }
+            });
+        }
+    };
+}
+
+anchor_url_setter!(anchor_pathname_setter, "pathname");
+anchor_url_setter!(anchor_hostname_setter, "hostname");
+anchor_url_setter!(anchor_protocol_setter, "protocol");
+anchor_url_setter!(anchor_host_setter, "host");
+anchor_url_setter!(anchor_port_setter, "port");
+anchor_url_setter!(anchor_search_setter, "search");
+anchor_url_setter!(anchor_hash_setter, "hash");
+
 // Attribute-backed accessors using the helper
 macro_rules! attr_rw {
     ($getter:ident, $setter:ident, $attr:literal) => {
@@ -4960,7 +5551,45 @@ attr_rw!(target_getter, target_setter, "target");
 attr_rw!(rel_getter, rel_setter, "rel");
 attr_rw!(src_getter, src_setter, "src");
 attr_rw!(alt_getter, alt_setter, "alt");
-attr_rw!(value_getter, value_setter, "value");
+// option.value: HTML uses text content when the value attribute is missing.
+unsafe extern "C" fn value_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let val = {
+            let doc = state.document.borrow();
+            if let Some(ref d) = *doc {
+                if let Some(n) = d.get(node_id) {
+                    if let Some(v) = n.value().get_attr("value") {
+                        v.to_string()
+                    } else if let Some(tag) = n.value().tag_name() {
+                        if tag.eq_ignore_ascii_case("option") {
+                            d.text_content_of(node_id)
+                        } else {
+                            String::new()
+                        }
+                    } else {
+                        String::new()
+                    }
+                } else {
+                    String::new()
+                }
+            } else {
+                String::new()
+            }
+        };
+        if let Some(s) = v8::String::new(scope, &val) {
+            rv.set(s.into());
+        }
+    });
+}
+unsafe extern "C" fn value_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                set_attr_str(state, nid, "value", args.get(0).to_rust_string_lossy(scope));
+            }
+        }
+    });
+}
 attr_rw!(placeholder_getter, placeholder_setter, "placeholder");
 attr_rw!(name_getter, name_setter, "name");
 attr_rw!(content_getter, content_setter, "content");
@@ -5002,7 +5631,33 @@ unsafe extern "C" fn checked_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
-unsafe extern "C" fn checked_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+/// Reflect boolean IDL attribute to presence of content attribute.
+fn set_bool_attr(state: &RuntimeState, node_id: NodeId, attr: &str, on: bool) {
+    let mut doc = state.document.borrow_mut();
+    if let Some(ref mut d) = *doc {
+        if let Some(mut node) = d.tree.get_mut(node_id) {
+            if let NodeData::Element { ref mut attrs, .. } = node.value() {
+                attrs.retain(|(k, _)| !k.eq_ignore_ascii_case(attr));
+                if on {
+                    attrs.push((attr.to_string(), "".to_string()));
+                }
+            }
+        }
+    }
+}
+
+fn set_str_attr(state: &RuntimeState, node_id: NodeId, attr: &str, value: String) {
+    set_attr_str(state, node_id, attr, value);
+}
+
+unsafe extern "C" fn checked_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let on = args.length() >= 1 && args.get(0).boolean_value(scope);
+            set_bool_attr(state, nid, "checked", on);
+        }
+    });
+}
 
 unsafe extern "C" fn disabled_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -5016,7 +5671,14 @@ unsafe extern "C" fn disabled_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
-unsafe extern "C" fn disabled_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn disabled_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let on = args.length() >= 1 && args.get(0).boolean_value(scope);
+            set_bool_attr(state, nid, "disabled", on);
+        }
+    });
+}
 
 unsafe extern "C" fn draggable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -5031,7 +5693,18 @@ unsafe extern "C" fn draggable_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
-unsafe extern "C" fn draggable_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn draggable_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let on = args.length() >= 1 && args.get(0).boolean_value(scope);
+            if on {
+                set_str_attr(state, nid, "draggable", "true".into());
+            } else {
+                set_bool_attr(state, nid, "draggable", false);
+            }
+        }
+    });
+}
 
 unsafe extern "C" fn content_editable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -5048,7 +5721,16 @@ unsafe extern "C" fn content_editable_getter(info: *const v8::FunctionCallbackIn
         }
     });
 }
-unsafe extern "C" fn content_editable_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn content_editable_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let v = args.get(0).to_rust_string_lossy(scope);
+                set_str_attr(state, nid, "contenteditable", v);
+            }
+        }
+    });
+}
 
 unsafe extern "C" fn is_content_editable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -5079,7 +5761,16 @@ unsafe extern "C" fn canvas_width_getter(info: *const v8::FunctionCallbackInfo) 
         rv.set(v8::Number::new(scope, val).into());
     });
 }
-unsafe extern "C" fn canvas_width_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn canvas_width_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let n = args.get(0).number_value(scope).unwrap_or(300.0).max(0.0) as u32;
+                set_str_attr(state, nid, "width", n.to_string());
+            }
+        }
+    });
+}
 
 unsafe extern "C" fn canvas_height_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -5094,7 +5785,16 @@ unsafe extern "C" fn canvas_height_getter(info: *const v8::FunctionCallbackInfo)
         rv.set(v8::Number::new(scope, val).into());
     });
 }
-unsafe extern "C" fn canvas_height_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn canvas_height_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let n = args.get(0).number_value(scope).unwrap_or(150.0).max(0.0) as u32;
+                set_str_attr(state, nid, "height", n.to_string());
+            }
+        }
+    });
+}
 
 unsafe extern "C" fn get_context_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, rv, _state, node_id| {
@@ -5231,7 +5931,14 @@ unsafe extern "C" fn async_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
-unsafe extern "C" fn async_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn async_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let on = args.length() >= 1 && args.get(0).boolean_value(scope);
+            set_bool_attr(state, nid, "async", on);
+        }
+    });
+}
 
 unsafe extern "C" fn defer_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -5245,7 +5952,14 @@ unsafe extern "C" fn defer_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
-unsafe extern "C" fn defer_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn defer_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let on = args.length() >= 1 && args.get(0).boolean_value(scope);
+            set_bool_attr(state, nid, "defer", on);
+        }
+    });
+}
 
 // ── Media-specific ────────────────────────────────────────────────────────────
 
@@ -5325,17 +6039,375 @@ unsafe extern "C" fn can_play_type_cb(info: *const v8::FunctionCallbackInfo) {
     });
 }
 
-// ── Select-specific ───────────────────────────────────────────────────────────
+// ── iframe ───────────────────────────────────────────────────────────────────
 
-unsafe extern "C" fn selected_index_getter(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn iframe_content_document_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
-        rv.set(v8::Integer::new(scope, -1).into());
+        // Nested browsing context not modeled → null (valid DOM)
+        rv.set(v8::null(scope).into());
     });
 }
-unsafe extern "C" fn selected_index_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
-unsafe extern "C" fn multiple_getter(info: *const v8::FunctionCallbackInfo) {
+
+unsafe extern "C" fn iframe_content_window_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
-        rv.set(v8::Boolean::new(scope, false).into());
+        rv.set(v8::null(scope).into());
+    });
+}
+
+unsafe extern "C" fn iframe_null_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::null(scope).into());
+    });
+}
+
+unsafe extern "C" fn iframe_readonly_noop_setter(info: *const v8::FunctionCallbackInfo) {
+    // Accept set without changing value (prevent own data property shadow).
+    null_this_check(info);
+}
+
+// ── Select-specific ───────────────────────────────────────────────────────────
+
+unsafe extern "C" fn option_selected_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let selected = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.value().get_attr("selected"))
+                .is_some()
+        };
+        rv.set(v8::Boolean::new(scope, selected).into());
+    });
+}
+
+unsafe extern "C" fn option_selected_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let on = if args.length() >= 1 {
+                args.get(0).boolean_value(scope)
+            } else {
+                false
+            };
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut d) = *doc {
+                if let Some(mut node) = d.tree.get_mut(nid) {
+                    if let NodeData::Element { ref mut attrs, .. } = node.value() {
+                        attrs.retain(|(k, _)| !k.eq_ignore_ascii_case("selected"));
+                        if on {
+                            attrs.push(("selected".into(), "".into()));
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn option_label_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let val = {
+            let doc = state.document.borrow();
+            if let Some(ref d) = *doc {
+                if let Some(n) = d.get(node_id) {
+                    if let Some(v) = n.value().get_attr("label") {
+                        v.to_string()
+                    } else {
+                        d.text_content_of(node_id)
+                    }
+                } else {
+                    String::new()
+                }
+            } else {
+                String::new()
+            }
+        };
+        if let Some(s) = v8::String::new(scope, &val) {
+            rv.set(s.into());
+        }
+    });
+}
+
+unsafe extern "C" fn option_label_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                set_str_attr(state, nid, "label", args.get(0).to_rust_string_lossy(scope));
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn option_text_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .map(|d| d.text_content_of(node_id))
+                .unwrap_or_default()
+        };
+        if let Some(s) = v8::String::new(scope, &val) {
+            rv.set(s.into());
+        }
+    });
+}
+
+unsafe extern "C" fn option_text_setter(info: *const v8::FunctionCallbackInfo) {
+    // textContent setter path for option text
+    text_content_setter(info);
+}
+
+unsafe extern "C" fn option_index_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let idx = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| {
+                    let parent = d.parent_id(node_id)?;
+                    // parent may be select or optgroup
+                    let select_id = {
+                        if let Some(p) = d.get(parent) {
+                            if let Some(tag) = p.value().tag_name() {
+                                if tag.eq_ignore_ascii_case("select") {
+                                    parent
+                                } else if tag.eq_ignore_ascii_case("optgroup") {
+                                    d.parent_id(parent)?
+                                } else {
+                                    return None;
+                                }
+                            } else {
+                                return None;
+                            }
+                        } else {
+                            return None;
+                        }
+                    };
+                    let opts = collect_select_options(d, select_id);
+                    opts.iter().position(|&id| id == node_id).map(|i| i as i32)
+                })
+                .unwrap_or(0)
+        };
+        rv.set(v8::Integer::new(scope, idx).into());
+    });
+}
+
+unsafe extern "C" fn selected_index_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let idx = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .map(|d| {
+                    let opts = collect_select_options(d, node_id);
+                    if opts.is_empty() {
+                        return -1i32;
+                    }
+                    let mut found = -1i32;
+                    for (i, oid) in opts.iter().enumerate() {
+                        if let Some(n) = d.get(*oid) {
+                            if n.value().get_attr("selected").is_some() {
+                                found = i as i32;
+                            }
+                        }
+                    }
+                    // HTML: if none selected, default is first option (index 0)
+                    // for single-select; keep -1 only when empty (handled above).
+                    if found < 0 { 0 } else { found }
+                })
+                .unwrap_or(-1)
+        };
+        rv.set(v8::Integer::new(scope, idx).into());
+    });
+}
+
+unsafe extern "C" fn selected_index_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() < 1 {
+                return;
+            }
+            let idx = args.get(0).number_value(scope).unwrap_or(-1.0) as i64;
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut d) = *doc {
+                let opts = collect_select_options(d, nid);
+                for (i, oid) in opts.iter().enumerate() {
+                    if let Some(mut n) = d.tree.get_mut(*oid) {
+                        if let NodeData::Element { attrs, .. } = n.value() {
+                            attrs.retain(|(k, _)| !k.eq_ignore_ascii_case("selected"));
+                            if idx >= 0 && i as i64 == idx {
+                                attrs.push(("selected".into(), "".into()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn select_options_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let opts = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .map(|d| collect_select_options(d, node_id))
+                .unwrap_or_default()
+        };
+        // Array-like options list (length + indexed access). Full
+        // HTMLOptionsCollection shape can follow; select.item/namedItem exist.
+        let arr = v8::Array::new(scope, opts.len() as i32);
+        for (i, oid) in opts.iter().enumerate() {
+            if let Some(obj) = create_node_object(scope, state, *oid) {
+                let _ = arr.set_index(scope, i as u32, obj);
+            }
+        }
+        rv.set(arr.into());
+    });
+}
+
+unsafe extern "C" fn select_length_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let n = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .map(|d| collect_select_options(d, node_id).len() as i32)
+                .unwrap_or(0)
+        };
+        rv.set(v8::Integer::new(scope, n).into());
+    });
+}
+
+/// HTMLSelectElement.length setter: grow/shrink option list (HTML).
+unsafe extern "C" fn select_length_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() < 1 {
+                return;
+            }
+            let target = args
+                .get(0)
+                .number_value(scope)
+                .map(|n| if n.is_nan() { 0.0 } else { n.trunc().max(0.0) })
+                .unwrap_or(0.0) as usize;
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut d) = *doc {
+                let mut opts = collect_select_options(d, nid);
+                while opts.len() > target {
+                    if let Some(oid) = opts.pop() {
+                        d.detach(oid);
+                    }
+                }
+                while opts.len() < target {
+                    let oid = d.append_child(
+                        nid,
+                        NodeData::element("option", "http://www.w3.org/1999/xhtml", vec![]),
+                    );
+                    opts.push(oid);
+                }
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn multiple_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .map(|n| n.value().get_attr("multiple").is_some())
+                .unwrap_or(false)
+        };
+        rv.set(v8::Boolean::new(scope, val).into());
+    });
+}
+
+/// Collect option NodeIds under a select element (direct + optgroup children).
+fn collect_select_options(doc: &crate::dom::Document, select_id: NodeId) -> Vec<NodeId> {
+    let mut out = Vec::new();
+    if let Some(sel) = doc.get(select_id) {
+        for child in sel.children() {
+            let cid = child.id();
+            match child.value() {
+                NodeData::Element { tag_name, .. } if tag_name.eq_ignore_ascii_case("option") => {
+                    out.push(cid);
+                }
+                NodeData::Element { tag_name, .. } if tag_name.eq_ignore_ascii_case("optgroup") => {
+                    if let Some(group) = doc.get(cid) {
+                        for gc in group.children() {
+                            if let NodeData::Element { tag_name, .. } = gc.value() {
+                                if tag_name.eq_ignore_ascii_case("option") {
+                                    out.push(gc.id());
+                                }
+                            }
+                        }
+                    }
+                }
+                _ => {}
+            }
+        }
+    }
+    out
+}
+
+unsafe extern "C" fn select_item_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let idx = args.get(0).number_value(scope).unwrap_or(-1.0) as i64;
+                if idx >= 0 {
+                    let opt_id = {
+                        let doc = state.document.borrow();
+                        doc.as_ref().and_then(|d| {
+                            let opts = collect_select_options(d, nid);
+                            opts.get(idx as usize).copied()
+                        })
+                    };
+                    if let Some(oid) = opt_id {
+                        if let Some(obj) = create_node_object(scope, state, oid) {
+                            rv.set(obj);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        rv.set(v8::null(scope).into());
+    });
+}
+
+unsafe extern "C" fn select_named_item_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let name = args.get(0).to_rust_string_lossy(scope);
+                let opt_id = {
+                    let doc = state.document.borrow();
+                    doc.as_ref().and_then(|d| {
+                        for oid in collect_select_options(d, nid) {
+                            if let Some(n) = d.get(oid) {
+                                if let Some(v) = n.value().get_attr("id") {
+                                    if v == name {
+                                        return Some(oid);
+                                    }
+                                }
+                                if let Some(v) = n.value().get_attr("name") {
+                                    if v == name {
+                                        return Some(oid);
+                                    }
+                                }
+                            }
+                        }
+                        None
+                    })
+                };
+                if let Some(oid) = opt_id {
+                    if let Some(obj) = create_node_object(scope, state, oid) {
+                        rv.set(obj);
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::null(scope).into());
     });
 }
 
@@ -6006,7 +7078,14 @@ unsafe extern "C" fn request_headers_getter(info: *const v8::FunctionCallbackInf
         rv.set(v8::null(scope).into());
     }));
 }
-unsafe extern "C" fn multiple_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn multiple_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let on = args.length() >= 1 && args.get(0).boolean_value(scope);
+            set_bool_attr(state, nid, "multiple", on);
+        }
+    });
+}
 
 #[cfg(test)]
 mod tests {

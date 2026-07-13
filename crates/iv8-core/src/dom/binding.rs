@@ -37,7 +37,9 @@ pub fn usize_to_node_id(val: usize) -> Option<NodeId> {
     Some(unsafe { std::mem::transmute::<std::num::NonZeroUsize, NodeId>(nz) })
 }
 
-/// Extract __nodeId__ from a V8 object, returning the NodeId.
+/// Extract NodeId from a V8 object.
+/// Prefer V8 internal field (DOM FunctionTemplate instances). Own-property
+/// `__nodeId__` is fallback only for the plain-object path (no templates).
 pub fn extract_node_id(scope: &v8::PinScope<'_, '_>, obj: v8::Local<v8::Object>) -> Option<NodeId> {
     if let Some(nid) = crate::dom::template::extract_node_id_from_internal(scope, obj) {
         return Some(nid);
@@ -63,6 +65,7 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
         doc.as_ref().map(|d| d.root_id())
     };
 
+    let mut used_internal_field = false;
     let doc_obj: v8::Local<v8::Object> = if let Some(root_id) = root_id {
         if let Some(ref templates) = *state.dom_templates.borrow() {
             let doc_tmpl = v8::Local::new(scope, &templates.document_node);
@@ -71,6 +74,7 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
                 let nid_usize = node_id_to_usize(root_id);
                 let external = v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
                 obj.set_internal_field(crate::dom::template::NODE_ID_FIELD as usize, external.into());
+                used_internal_field = true;
                 obj
             } else {
                 v8::Object::new(scope)
@@ -82,107 +86,264 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
         v8::Object::new(scope)
     };
 
-    // Install methods
-    install_method(scope, doc_obj, "getElementById", get_element_by_id);
-    install_method(scope, doc_obj, "querySelector", query_selector);
-    install_method(scope, doc_obj, "querySelectorAll", query_selector_all);
-    install_method(
-        scope,
-        doc_obj,
-        "getElementsByTagName",
-        get_elements_by_tag_name,
-    );
-    install_method(
-        scope,
-        doc_obj,
-        "getElementsByClassName",
-        get_elements_by_class_name,
-    );
-    install_method(scope, doc_obj, "createElement", create_element);
-    install_method(scope, doc_obj, "createElementNS", create_element_ns);
-    install_method(scope, doc_obj, "createTextNode", create_text_node);
-    install_method(scope, doc_obj, "createComment", create_comment);
-    install_method(scope, doc_obj, "createDocumentFragment", create_document_fragment);
-
-    // EventTarget methods on document (v0.2: L-03 fix).
-    //
-    // Real DOM exposes addEventListener/removeEventListener/dispatchEvent on
-    // document because Document inherits from EventTarget. v0.1 had stub
-    // versions installed via document_props.js that did nothing. v0.2 wires
-    // them to the EventListenerRegistry using the DOM tree's root NodeId.
-    install_method(
-        scope,
-        doc_obj,
-        "addEventListener",
-        add_event_listener_callback,
-    );
-    install_method(
-        scope,
-        doc_obj,
-        "removeEventListener",
-        remove_event_listener_callback,
-    );
-    install_method(scope, doc_obj, "dispatchEvent", dispatch_event_callback);
-
-    // Install document.documentElement / document.body / document.head as accessors
-    install_doc_accessor(scope, doc_obj, "documentElement", doc_document_element);
-    install_doc_accessor(scope, doc_obj, "body", doc_body);
-    install_doc_accessor(scope, doc_obj, "head", doc_head);
-
-    // Install document.title as an accessor (reads <title> element text)
-    install_doc_accessor(scope, doc_obj, "title", doc_title);
-
-    // Install document.URL / document.documentURI as accessors (= location.href)
-    install_doc_accessor(scope, doc_obj, "URL", doc_url);
-    install_doc_accessor(scope, doc_obj, "documentURI", doc_url);
-
-    // Install document.location as accessor (= window.location)
-    install_doc_accessor(scope, doc_obj, "location", doc_location);
-
-    // Bind document to the DOM tree's root NodeId so that
-    // addEventListener/dispatchEvent can locate it via extract_node_id.
-    // If no Document is loaded yet (e.g. JSContext init before page.load),
-    // skip silently — the binding will be redone when set_document/page_load runs.
-    let isolate: &v8::Isolate = scope;
-    let state = RuntimeState::get(isolate);
-    let root_id_opt = state.document.borrow().as_ref().map(|doc| doc.root_id());
-    if let Some(root_id) = root_id_opt {
-        let id_key = crate::v8_utils::v8_string(scope, "__nodeId__");
-        let nz: std::num::NonZeroUsize = unsafe { std::mem::transmute(root_id) };
-        let id_val = v8::Number::new(scope, nz.get() as f64);
-        // Use DontEnum so Object.keys(document) doesn't show __nodeId__.
-        doc_obj.define_own_property(
-            scope,
-            id_key.into(),
-            id_val.into(),
-            v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
-        );
+    // Tree-backed Document ops must land on every prototype the document may
+    // inherit (FT instance [[Prototype]] and/or global Document.prototype).
+    // Codegen no longer installs these (RD-16); dual targets close FT vs global
+    // prototype splits after freeze/chain.
+    let mut targets: Vec<v8::Local<v8::Object>> = Vec::with_capacity(2);
+    if let Some(from_instance) = doc_obj.get_prototype(scope).and_then(|p| {
+        if p.is_object() && !p.is_null_or_undefined() {
+            p.to_object(scope)
+        } else {
+            None
+        }
+    }) {
+        targets.push(from_instance);
+    }
+    if let Some(global_proto) = document_prototype(scope, global) {
+        let already = targets
+            .iter()
+            .any(|t| t.strict_equals(global_proto.into()));
+        if !already {
+            targets.push(global_proto);
+        }
+    }
+    if targets.is_empty() {
+        targets.push(doc_obj);
     }
 
-    // Set document on global
+    for method_target in targets {
+        install_method(scope, method_target, "getElementById", get_element_by_id, 1);
+        install_method(scope, method_target, "querySelector", query_selector, 1);
+        install_method(scope, method_target, "querySelectorAll", query_selector_all, 1);
+        install_method(scope, method_target, "getElementsByTagName", get_elements_by_tag_name, 1);
+        install_method(scope, method_target, "getElementsByClassName", get_elements_by_class_name, 1);
+        install_method(scope, method_target, "createElement", create_element, 1);
+        install_method(scope, method_target, "createElementNS", create_element_ns, 2);
+        install_method(scope, method_target, "createTextNode", create_text_node, 1);
+        install_method(scope, method_target, "createComment", create_comment, 1);
+        install_method(scope, method_target, "createDocumentFragment", create_document_fragment, 0);
+        install_method(scope, method_target, "addEventListener", add_event_listener_callback, 2);
+        install_method(scope, method_target, "removeEventListener", remove_event_listener_callback, 2);
+        install_method(scope, method_target, "dispatchEvent", dispatch_event_callback, 1);
+        install_method(scope, method_target, "elementFromPoint", element_from_point_cb, 2);
+        install_method(scope, method_target, "caretPositionFromPoint", caret_position_from_point_cb, 2);
+        install_method(scope, method_target, "exitPictureInPicture", document_resolved_void_promise, 0);
+        install_method(scope, method_target, "hasUnpartitionedCookieAccess", document_resolved_false_promise, 0);
+        install_method(scope, method_target, "hasStorageAccess", document_resolved_false_promise, 0);
+        install_method(scope, method_target, "requestStorageAccess", document_resolved_void_promise, 0);
+        install_method(scope, method_target, "hasPrivateToken", document_resolved_false_promise, 1);
+        install_method(scope, method_target, "hasRedemptionRecord", document_resolved_false_promise, 1);
+        install_method(scope, method_target, "createTreeWalker", create_tree_walker_cb, 1);
+        install_method(scope, method_target, "createExpression", create_expression_cb, 1);
+
+        install_doc_accessor(scope, method_target, "documentElement", doc_document_element);
+        // body is settable in HTML (Element?); accept Element or no-op on invalid
+        install_doc_accessor_rw(scope, method_target, "body", doc_body, Some(doc_body_setter));
+        install_doc_accessor(scope, method_target, "head", doc_head);
+        install_doc_accessor_rw(scope, method_target, "title", doc_title, Some(doc_title_setter));
+        install_doc_accessor(scope, method_target, "URL", doc_url);
+        install_doc_accessor(scope, method_target, "documentURI", doc_url);
+        install_doc_accessor(scope, method_target, "location", doc_location);
+    }
+
+    // Single identity when FT instance is used: internal field only.
+    // Own `__nodeId__` only for plain-object fallback (no templates).
+    if !used_internal_field {
+        let isolate: &v8::Isolate = scope;
+        let state = RuntimeState::get(isolate);
+        let root_id_opt = state.document.borrow().as_ref().map(|doc| doc.root_id());
+        if let Some(root_id) = root_id_opt {
+            let id_key = crate::v8_utils::v8_string(scope, "__nodeId__");
+            let nz: std::num::NonZeroUsize = unsafe { std::mem::transmute(root_id) };
+            let id_val = v8::Number::new(scope, nz.get() as f64);
+            doc_obj.define_own_property(
+                scope,
+                id_key.into(),
+                id_val.into(),
+                v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
+            );
+        }
+    }
+
     let key = crate::v8_utils::v8_string(scope, "document");
     global.set(scope, key.into(), doc_obj.into());
+
+    // TreeWalker.prototype traversal (overrides codegen null stubs).
+    install_tree_walker_prototype_ops(scope, global);
+    // XPathExpression.evaluate + Document.evaluate (subset over real tree).
+    install_xpath_prototype_ops(scope, global);
+    // HTMLIFrameElement readonly attrs: no-op setters (H05b Category C).
+    install_iframe_readonly_noop_setters(scope, global);
 }
 
-/// Helper to install a native accessor (getter) on an object.
+/// Ensure HTMLIFrameElement.prototype readonly attrs have no-op setters so
+/// assignment does not create shadowing data properties.
+/// Must run before `freeze_all_prototypes` (frozen protos reject redefine).
+pub fn install_iframe_readonly_noop_setters(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+) {
+    let Some(proto) = document_prototype_named(scope, global, "HTMLIFrameElement") else {
+        return;
+    };
+    for name in [
+        "contentDocument",
+        "contentWindow",
+        "permissionsPolicy",
+        "sandbox",
+        "featurePolicy",
+    ] {
+        // Keep existing getter if present; always attach no-op setter.
+        let key = crate::v8_utils::v8_string(scope, name);
+        let existing = object_get_own_property_descriptor(scope, proto, key);
+        let getter_fn = existing.and_then(|(g, _)| g);
+        let desc = v8::Object::new(scope);
+        let get_key = crate::v8_utils::v8_string(scope, "get");
+        let set_key = crate::v8_utils::v8_string(scope, "set");
+        let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
+        let conf_key = crate::v8_utils::v8_string(scope, "configurable");
+        if let Some(g) = getter_fn {
+            desc.set(scope, get_key.into(), g.into());
+        } else {
+            let g_tmpl =
+                v8::FunctionTemplate::builder_raw(iframe_readonly_null_getter).build(scope);
+            let g = crate::v8_utils::v8_fn(scope, &g_tmpl);
+            desc.set(scope, get_key.into(), g.into());
+        }
+        let s_tmpl = v8::FunctionTemplate::builder_raw(doc_readonly_noop_setter).build(scope);
+        let s = crate::v8_utils::v8_fn(scope, &s_tmpl);
+        desc.set(scope, set_key.into(), s.into());
+        desc.set(scope, enum_key.into(), v8::Boolean::new(scope, true).into());
+        desc.set(scope, conf_key.into(), v8::Boolean::new(scope, true).into());
+        let obj_key = crate::v8_utils::v8_string(scope, "Object");
+        if let Some(obj_ctor) = global.get(scope, obj_key.into()) {
+            if obj_ctor.is_object() {
+                let obj_ctor: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(obj_ctor) };
+                let def_key = crate::v8_utils::v8_string(scope, "defineProperty");
+                if let Some(def_prop) = obj_ctor.get(scope, def_key.into()) {
+                    if def_prop.is_function() {
+                        let def_fn: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(def_prop) };
+                        let undefined = v8::undefined(scope);
+                        def_fn.call(
+                            scope,
+                            undefined.into(),
+                            &[proto.into(), key.into(), desc.into()],
+                        );
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn object_get_own_property_descriptor<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    obj: v8::Local<'s, v8::Object>,
+    key: v8::Local<'s, v8::String>,
+) -> Option<(
+    Option<v8::Local<'s, v8::Function>>,
+    Option<v8::Local<'s, v8::Function>>,
+)> {
+    let global = scope.get_current_context().global(scope);
+    let obj_key = crate::v8_utils::v8_string(scope, "Object");
+    let obj_ctor = global.get(scope, obj_key.into())?;
+    if !obj_ctor.is_object() {
+        return None;
+    }
+    let obj_ctor: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(obj_ctor) };
+    let gopd_key = crate::v8_utils::v8_string(scope, "getOwnPropertyDescriptor");
+    let gopd = obj_ctor.get(scope, gopd_key.into())?;
+    if !gopd.is_function() {
+        return None;
+    }
+    let gopd_fn: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(gopd) };
+    let undefined = v8::undefined(scope);
+    let desc_val = gopd_fn.call(scope, undefined.into(), &[obj.into(), key.into()])?;
+    if !desc_val.is_object() {
+        return None;
+    }
+    let desc: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(desc_val) };
+    let get_key = crate::v8_utils::v8_string(scope, "get");
+    let set_key = crate::v8_utils::v8_string(scope, "set");
+    let getter = desc.get(scope, get_key.into()).and_then(|v| {
+        if v.is_function() {
+            Some(unsafe { v8::Local::<v8::Function>::cast_unchecked(v) })
+        } else {
+            None
+        }
+    });
+    let setter = desc.get(scope, set_key.into()).and_then(|v| {
+        if v.is_function() {
+            Some(unsafe { v8::Local::<v8::Function>::cast_unchecked(v) })
+        } else {
+            None
+        }
+    });
+    Some((getter, setter))
+}
+
+unsafe extern "C" fn iframe_readonly_null_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+fn document_prototype<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    global: v8::Local<'s, v8::Object>,
+) -> Option<v8::Local<'s, v8::Object>> {
+    let doc_key = crate::v8_utils::v8_string(scope, "Document");
+    let ctor_val = global.get(scope, doc_key.into())?;
+    if !ctor_val.is_function() {
+        return None;
+    }
+    let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+    let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+    let proto_val = ctor.get(scope, proto_key.into())?;
+    proto_val.to_object(scope)
+}
+
+/// Helper to install a native accessor on an object.
+/// `setter = None` → readonly (set is no-op so assignment does not create a
+/// shadowing data property — H05b Category C).
 fn install_doc_accessor(
     scope: &v8::PinScope<'_, '_>,
     obj: v8::Local<v8::Object>,
     name: &str,
     getter: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
+    install_doc_accessor_rw(scope, obj, name, getter, Some(doc_readonly_noop_setter));
+}
+
+fn install_doc_accessor_rw(
+    scope: &v8::PinScope<'_, '_>,
+    obj: v8::Local<v8::Object>,
+    name: &str,
+    getter: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
+    setter: Option<unsafe extern "C" fn(*const v8::FunctionCallbackInfo)>,
+) {
     let getter_tmpl = v8::FunctionTemplate::builder_raw(getter).build(scope);
     let getter_fn = crate::v8_utils::v8_fn(scope, &getter_tmpl);
     let name_str = crate::v8_utils::v8_string(scope, name);
-    // Use defineProperty to install as a getter
     let desc = v8::Object::new(scope);
     let get_key = crate::v8_utils::v8_string(scope, "get");
     let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
     let conf_key = crate::v8_utils::v8_string(scope, "configurable");
     desc.set(scope, get_key.into(), getter_fn.into());
+    if let Some(s) = setter {
+        let setter_tmpl = v8::FunctionTemplate::builder_raw(s).build(scope);
+        let setter_fn = crate::v8_utils::v8_fn(scope, &setter_tmpl);
+        let set_key = crate::v8_utils::v8_string(scope, "set");
+        desc.set(scope, set_key.into(), setter_fn.into());
+    }
     desc.set(scope, enum_key.into(), v8::Boolean::new(scope, true).into());
     desc.set(scope, conf_key.into(), v8::Boolean::new(scope, true).into());
-    // Use Object.defineProperty via JS
     let global = scope.get_current_context().global(scope);
     let obj_key = crate::v8_utils::v8_string(scope, "Object");
     if let Some(obj_ctor) = global.get(scope, obj_key.into()) {
@@ -205,6 +366,11 @@ fn install_doc_accessor(
     }
 }
 
+/// Readonly Document attrs: accept set without changing value (no shadow data prop).
+unsafe extern "C" fn doc_readonly_noop_setter(info: *const v8::FunctionCallbackInfo) {
+    let _ = info;
+}
+
 /// document.documentElement getter — returns the <html> element
 unsafe extern "C" fn doc_document_element(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -224,6 +390,56 @@ unsafe extern "C" fn doc_document_element(info: *const v8::FunctionCallbackInfo)
             }
         }
         rv.set(v8::null(scope).into());
+    }));
+}
+
+/// document.body setter — HTML allows assigning an HTMLElement body (or null).
+/// Invalid values are ignored (no throw) for L3 fidelity without full HTML parser policy.
+unsafe extern "C" fn doc_body_setter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            return;
+        }
+        let v = args.get(0);
+        if v.is_null_or_undefined() {
+            return;
+        }
+        if !v.is_object() {
+            return;
+        }
+        let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(v) };
+        let Some(nid) = extract_node_id(scope, obj) else {
+            return;
+        };
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let mut doc = state.document.borrow_mut();
+        if let Some(ref mut d) = *doc {
+            // Only accept body/frameset-like element tags
+            let ok = d
+                .get(nid)
+                .and_then(|n| n.value().tag_name())
+                .map(|t| t.eq_ignore_ascii_case("body") || t.eq_ignore_ascii_case("frameset"))
+                .unwrap_or(false);
+            if !ok {
+                return;
+            }
+            if let Some(html) = d.document_element() {
+                // Detach existing body children under html that are body
+                if let Some(old) = d.body() {
+                    if old != nid {
+                        d.detach(old);
+                    }
+                }
+                // Ensure node is under html
+                if d.parent_id(nid) != Some(html) {
+                    d.move_to_parent(nid, html);
+                }
+            }
+        }
     }));
 }
 
@@ -300,6 +516,46 @@ unsafe extern "C" fn doc_title(info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+/// document.title setter — creates/updates <title> text content.
+unsafe extern "C" fn doc_title_setter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            return;
+        }
+        let val = args.get(0).to_rust_string_lossy(scope);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let mut doc = state.document.borrow_mut();
+        if let Some(ref mut d) = *doc {
+            let titles = d.get_elements_by_tag_name("title");
+            if let Some(&tid) = titles.first() {
+                // Replace text content of existing <title>
+                if let Some(node) = d.tree.get(tid) {
+                    let children: Vec<_> = node.children().map(|c| c.id()).collect();
+                    drop(node);
+                    for cid in children {
+                        d.detach(cid);
+                    }
+                }
+                d.append_child(tid, crate::dom::NodeData::text(&val));
+            } else if let Some(head) = d.head() {
+                let tid = d.append_child(
+                    head,
+                    crate::dom::NodeData::element(
+                        "title",
+                        "http://www.w3.org/1999/xhtml",
+                        vec![],
+                    ),
+                );
+                d.append_child(tid, crate::dom::NodeData::text(&val));
+            }
+        }
+    }));
+}
+
 /// document.URL / document.documentURI getter — returns location.href
 unsafe extern "C" fn doc_url(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -347,14 +603,615 @@ unsafe extern "C" fn doc_location(info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+/// No layout engine: hit-testing returns null (DOM allows this).
+unsafe extern "C" fn element_from_point_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+unsafe extern "C" fn caret_position_from_point_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+fn set_resolved_promise(
+    scope: &v8::PinScope<'_, '_>,
+    rv: &mut v8::ReturnValue<'_>,
+    value: v8::Local<'_, v8::Value>,
+) {
+    let resolver = crate::v8_utils::v8_resolver(scope);
+    let _ = resolver.resolve(scope, value);
+    rv.set(resolver.get_promise(scope).into());
+}
+
+unsafe extern "C" fn document_resolved_void_promise(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        set_resolved_promise(scope, &mut rv, v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn document_resolved_false_promise(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        set_resolved_promise(scope, &mut rv, v8::Boolean::new(scope, false).into());
+    }));
+}
+
+/// Install real TreeWalker traversal on TreeWalker.prototype (overrides codegen
+/// null stubs). Uses __iv8Root / __iv8CurrentNode hidden keys set by createTreeWalker.
+fn install_tree_walker_prototype_ops(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    let Some(proto) = document_prototype_named(scope, global, "TreeWalker") else {
+        return;
+    };
+    install_method(scope, proto, "nextNode", tree_walker_next_node_cb, 0);
+    install_method(scope, proto, "previousNode", tree_walker_previous_node_cb, 0);
+    install_method(scope, proto, "firstChild", tree_walker_first_child_cb, 0);
+    install_method(scope, proto, "lastChild", tree_walker_last_child_cb, 0);
+    install_method(scope, proto, "parentNode", tree_walker_parent_node_cb, 0);
+    install_method(scope, proto, "nextSibling", tree_walker_next_sibling_cb, 0);
+    install_method(scope, proto, "previousSibling", tree_walker_previous_sibling_cb, 0);
+}
+
+/// XPathExpression.evaluate + Document.evaluate — subset over real DOM tree.
+fn install_xpath_prototype_ops(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    if let Some(proto) = document_prototype_named(scope, global, "XPathExpression") {
+        install_method(scope, proto, "evaluate", xpath_expression_evaluate_cb, 1);
+    }
+    // Document.evaluate is tree-backed; override codegen skeleton.
+    if let Some(proto) = document_prototype(scope, global) {
+        install_method(scope, proto, "evaluate", document_evaluate_cb, 2);
+    }
+    // Also install on instance prototype if different from global Document.prototype.
+    // (Already handled by dual-target install loop for other methods; evaluate was
+    // not in EXCLUDED_OPERATIONS until now — install on both via re-set after freeze.)
+}
+
+fn make_xpath_result<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    state: &RuntimeState,
+    global: v8::Local<'s, v8::Object>,
+    nodes: &[NodeId],
+) -> v8::Local<'s, v8::Object> {
+    let obj = if let Some(proto) = document_prototype_named(scope, global, "XPathResult") {
+        let o = v8::Object::new(scope);
+        let _ = o.set_prototype(scope, proto.into());
+        o
+    } else {
+        v8::Object::new(scope)
+    };
+    // Snapshot array of node objects
+    let arr = v8::Array::new(scope, nodes.len() as i32);
+    for (i, nid) in nodes.iter().enumerate() {
+        if let Some(nobj) = crate::dom::template::create_node_object(scope, state, *nid) {
+            let _ = arr.set_index(scope, i as u32, nobj);
+        }
+    }
+    let snap_key = crate::v8_utils::v8_string(scope, "__iv8Snapshot");
+    let _ = obj.define_own_property(
+        scope,
+        snap_key.into(),
+        arr.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
+    let idx_key = crate::v8_utils::v8_string(scope, "__iv8IterIndex");
+    let _ = obj.define_own_property(
+        scope,
+        idx_key.into(),
+        v8::Integer::new(scope, 0).into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
+    // resultType ORDERED_NODE_SNAPSHOT_TYPE = 7
+    let rt_key = crate::v8_utils::v8_string(scope, "resultType");
+    let _ = obj.define_own_property(
+        scope,
+        rt_key.into(),
+        v8::Integer::new(scope, 7).into(),
+        v8::PropertyAttribute::NONE,
+    );
+    let snap_len_key = crate::v8_utils::v8_string(scope, "snapshotLength");
+    let _ = obj.define_own_property(
+        scope,
+        snap_len_key.into(),
+        v8::Integer::new(scope, nodes.len() as i32).into(),
+        v8::PropertyAttribute::NONE,
+    );
+    let single = if nodes.len() == 1 {
+        crate::dom::template::create_node_object(scope, state, nodes[0])
+            .unwrap_or_else(|| v8::null(scope).into())
+    } else {
+        v8::null(scope).into()
+    };
+    let single_key = crate::v8_utils::v8_string(scope, "singleNodeValue");
+    let _ = obj.define_own_property(
+        scope,
+        single_key.into(),
+        single,
+        v8::PropertyAttribute::NONE,
+    );
+    // snapshotItem / iterateNext
+    let snap_item = v8::FunctionTemplate::builder_raw(xpath_snapshot_item_cb)
+        .length(1)
+        .build(scope);
+    let snap_fn = crate::v8_utils::v8_fn(scope, &snap_item);
+    let snap_item_key = crate::v8_utils::v8_string(scope, "snapshotItem");
+    let _ = obj.set(scope, snap_item_key.into(), snap_fn.into());
+    let iter = v8::FunctionTemplate::builder_raw(xpath_iterate_next_cb)
+        .length(0)
+        .build(scope);
+    let iter_fn = crate::v8_utils::v8_fn(scope, &iter);
+    let iter_key = crate::v8_utils::v8_string(scope, "iterateNext");
+    let _ = obj.set(scope, iter_key.into(), iter_fn.into());
+    obj
+}
+
+unsafe extern "C" fn xpath_snapshot_item_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let Some(this_obj) = this.to_object(scope) else {
+            rv.set(v8::null(scope).into());
+            return;
+        };
+        let idx = if args.length() >= 1 {
+            args.get(0).uint32_value(scope).unwrap_or(0)
+        } else {
+            0
+        };
+        let snap_key = crate::v8_utils::v8_string(scope, "__iv8Snapshot");
+        if let Some(arr_val) = this_obj.get(scope, snap_key.into()) {
+            if arr_val.is_array() {
+                let arr: v8::Local<v8::Array> = unsafe { v8::Local::cast_unchecked(arr_val) };
+                if let Some(item) = arr.get_index(scope, idx) {
+                    rv.set(item);
+                    return;
+                }
+            }
+        }
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+unsafe extern "C" fn xpath_iterate_next_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let Some(this_obj) = this.to_object(scope) else {
+            rv.set(v8::null(scope).into());
+            return;
+        };
+        let idx_key = crate::v8_utils::v8_string(scope, "__iv8IterIndex");
+        let snap_key = crate::v8_utils::v8_string(scope, "__iv8Snapshot");
+        let idx = this_obj
+            .get(scope, idx_key.into())
+            .and_then(|v| v.uint32_value(scope))
+            .unwrap_or(0);
+        if let Some(arr_val) = this_obj.get(scope, snap_key.into()) {
+            if arr_val.is_array() {
+                let arr: v8::Local<v8::Array> = unsafe { v8::Local::cast_unchecked(arr_val) };
+                if let Some(item) = arr.get_index(scope, idx) {
+                    let _ = this_obj.set(
+                        scope,
+                        idx_key.into(),
+                        v8::Integer::new(scope, (idx + 1) as i32).into(),
+                    );
+                    rv.set(item);
+                    return;
+                }
+            }
+        }
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+unsafe extern "C" fn xpath_expression_evaluate_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let Some(this_obj) = this.to_object(scope) else {
+            rv.set(v8::null(scope).into());
+            return;
+        };
+        let expr_key = crate::v8_utils::v8_string(scope, "__iv8Expression");
+        let expr = this_obj
+            .get(scope, expr_key.into())
+            .map(|v| v.to_rust_string_lossy(scope))
+            .unwrap_or_default();
+        let context_id = if args.length() >= 1 && args.get(0).is_object() {
+            let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(args.get(0)) };
+            extract_node_id(scope, obj)
+        } else {
+            None
+        };
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let nodes = {
+            let doc = state.document.borrow();
+            if let Some(ref d) = *doc {
+                let ctx = context_id.unwrap_or_else(|| d.root_id());
+                d.xpath_evaluate(&expr, ctx)
+            } else {
+                Vec::new()
+            }
+        };
+        let global = scope.get_current_context().global(scope);
+        let result = make_xpath_result(scope, state, global, &nodes);
+        rv.set(result.into());
+    }));
+}
+
+unsafe extern "C" fn document_evaluate_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "Failed to execute 'evaluate' on 'Document': 1 argument required, but only 0 present.",
+            );
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let expr = args.get(0).to_rust_string_lossy(scope);
+        let context_id = if args.length() >= 2 && args.get(1).is_object() {
+            let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(args.get(1)) };
+            extract_node_id(scope, obj)
+        } else {
+            None
+        };
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let nodes = {
+            let doc = state.document.borrow();
+            if let Some(ref d) = *doc {
+                let ctx = context_id.unwrap_or_else(|| d.root_id());
+                d.xpath_evaluate(&expr, ctx)
+            } else {
+                Vec::new()
+            }
+        };
+        let global = scope.get_current_context().global(scope);
+        let result = make_xpath_result(scope, state, global, &nodes);
+        rv.set(result.into());
+    }));
+}
+
+fn document_prototype_named<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    global: v8::Local<'s, v8::Object>,
+    name: &str,
+) -> Option<v8::Local<'s, v8::Object>> {
+    let key = crate::v8_utils::v8_string(scope, name);
+    let ctor_val = global.get(scope, key.into())?;
+    if !ctor_val.is_function() {
+        return None;
+    }
+    let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+    let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+    let proto_val = ctor.get(scope, proto_key.into())?;
+    proto_val.to_object(scope)
+}
+
+fn tree_walker_hidden_node(
+    scope: &v8::PinScope<'_, '_>,
+    this: v8::Local<v8::Object>,
+    key: &str,
+) -> Option<NodeId> {
+    let k = crate::v8_utils::v8_string(scope, key);
+    let val = this.get(scope, k.into())?;
+    if !val.is_object() {
+        return None;
+    }
+    let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(val) };
+    extract_node_id(scope, obj)
+}
+
+fn tree_walker_set_current(
+    scope: &v8::PinScope<'_, '_>,
+    this: v8::Local<v8::Object>,
+    node_obj: v8::Local<v8::Value>,
+) {
+    let k = crate::v8_utils::v8_string(scope, "__iv8CurrentNode");
+    let _ = this.set(scope, k.into(), node_obj);
+}
+
+fn tree_walker_what_to_show(
+    scope: &v8::PinScope<'_, '_>,
+    this: v8::Local<v8::Object>,
+) -> u32 {
+    let k = crate::v8_utils::v8_string(scope, "__iv8WhatToShow");
+    this.get(scope, k.into())
+        .and_then(|v| v.number_value(scope))
+        .map(|n| n as u32)
+        .unwrap_or(0xFFFF_FFFF)
+}
+
+fn tree_walker_move(
+    info: *const v8::FunctionCallbackInfo,
+    step: fn(&crate::dom::Document, NodeId, NodeId, u32) -> Option<NodeId>,
+) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let Some(this_obj) = this.to_object(scope) else {
+            rv.set(v8::null(scope).into());
+            return;
+        };
+        let Some(root_id) = tree_walker_hidden_node(scope, this_obj, "__iv8Root") else {
+            rv.set(v8::null(scope).into());
+            return;
+        };
+        let Some(cur_id) = tree_walker_hidden_node(scope, this_obj, "__iv8CurrentNode") else {
+            rv.set(v8::null(scope).into());
+            return;
+        };
+        let what = tree_walker_what_to_show(scope, this_obj);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let next_id = {
+            let doc = state.document.borrow();
+            doc.as_ref().and_then(|d| step(d, root_id, cur_id, what))
+        };
+        match next_id {
+            Some(nid) => {
+                if let Some(obj) = crate::dom::template::create_node_object(scope, state, nid) {
+                    tree_walker_set_current(scope, this_obj, obj);
+                    rv.set(obj);
+                } else {
+                    rv.set(v8::null(scope).into());
+                }
+            }
+            None => rv.set(v8::null(scope).into()),
+        }
+    }));
+}
+
+unsafe extern "C" fn tree_walker_next_node_cb(info: *const v8::FunctionCallbackInfo) {
+    tree_walker_move(info, |d, root, cur, what| d.tree_walker_next(root, cur, what));
+}
+unsafe extern "C" fn tree_walker_previous_node_cb(info: *const v8::FunctionCallbackInfo) {
+    tree_walker_move(info, |d, root, cur, what| {
+        d.tree_walker_previous(root, cur, what)
+    });
+}
+unsafe extern "C" fn tree_walker_first_child_cb(info: *const v8::FunctionCallbackInfo) {
+    tree_walker_move(info, |d, root, cur, what| {
+        let _ = root;
+        let mut c = d.first_child_id(cur)?;
+        loop {
+            if d.matches_what_to_show(c, what) {
+                return Some(c);
+            }
+            c = d.next_sibling_id(c)?;
+        }
+    });
+}
+unsafe extern "C" fn tree_walker_last_child_cb(info: *const v8::FunctionCallbackInfo) {
+    tree_walker_move(info, |d, root, cur, what| {
+        let _ = root;
+        let mut c = d.last_child_id(cur)?;
+        loop {
+            if d.matches_what_to_show(c, what) {
+                return Some(c);
+            }
+            c = d.previous_sibling_id(c)?;
+        }
+    });
+}
+unsafe extern "C" fn tree_walker_parent_node_cb(info: *const v8::FunctionCallbackInfo) {
+    tree_walker_move(info, |d, root, cur, what| {
+        if cur == root {
+            return None;
+        }
+        let mut p = d.parent_id(cur)?;
+        loop {
+            if p == root {
+                return if d.matches_what_to_show(p, what) {
+                    Some(p)
+                } else {
+                    None
+                };
+            }
+            if d.matches_what_to_show(p, what) {
+                return Some(p);
+            }
+            p = d.parent_id(p)?;
+        }
+    });
+}
+unsafe extern "C" fn tree_walker_next_sibling_cb(info: *const v8::FunctionCallbackInfo) {
+    tree_walker_move(info, |d, root, cur, what| {
+        let _ = root;
+        let mut s = d.next_sibling_id(cur)?;
+        loop {
+            if d.matches_what_to_show(s, what) {
+                return Some(s);
+            }
+            s = d.next_sibling_id(s)?;
+        }
+    });
+}
+unsafe extern "C" fn tree_walker_previous_sibling_cb(info: *const v8::FunctionCallbackInfo) {
+    tree_walker_move(info, |d, root, cur, what| {
+        let _ = root;
+        let mut s = d.previous_sibling_id(cur)?;
+        loop {
+            if d.matches_what_to_show(s, what) {
+                return Some(s);
+            }
+            s = d.previous_sibling_id(s)?;
+        }
+    });
+}
+
+/// document.createTreeWalker(root, whatToShow?, filter?) — real TreeWalker shell.
+unsafe extern "C" fn create_tree_walker_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "Failed to execute 'createTreeWalker' on 'Document': 1 argument required, but only 0 present.",
+            );
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let root_arg = args.get(0);
+        if !root_arg.is_object() {
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "Failed to execute 'createTreeWalker' on 'Document': parameter 1 is not of type 'Node'.",
+            );
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let what_to_show = if args.length() >= 2 && args.get(1).is_number() {
+            args.get(1).number_value(scope).unwrap_or(4294967295.0) as u32
+        } else {
+            0xFFFFFFFFu32
+        };
+        let global = scope.get_current_context().global(scope);
+        let ctor_key = crate::v8_utils::v8_string(scope, "TreeWalker");
+        let walker = if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+                if let Some(proto) = ctor.get(scope, proto_key.into()) {
+                    let obj = v8::Object::new(scope);
+                    let _ = obj.set_prototype(scope, proto);
+                    obj
+                } else {
+                    v8::Object::new(scope)
+                }
+            } else {
+                v8::Object::new(scope)
+            }
+        } else {
+            v8::Object::new(scope)
+        };
+        let set_hidden = |scope: &v8::PinScope<'_, '_>, key: &str, val: v8::Local<v8::Value>| {
+            let k = crate::v8_utils::v8_string(scope, key);
+            let _ = walker.define_own_property(
+                scope,
+                k.into(),
+                val,
+                v8::PropertyAttribute::DONT_ENUM,
+            );
+        };
+        set_hidden(scope, "__iv8Root", root_arg);
+        set_hidden(scope, "__iv8CurrentNode", root_arg);
+        set_hidden(
+            scope,
+            "__iv8WhatToShow",
+            v8::Number::new(scope, what_to_show as f64).into(),
+        );
+        if args.length() >= 3 {
+            set_hidden(scope, "__iv8Filter", args.get(2));
+        } else {
+            set_hidden(scope, "__iv8Filter", v8::null(scope).into());
+        }
+        // Wire common TreeWalker accessors if still default stubs (read hidden keys).
+        // Prefer existing codegen accessors when they read __iv8*.
+        rv.set(walker.into());
+    }));
+}
+
+/// document.createExpression(expression, resolver?) — XPathExpression shell.
+unsafe extern "C" fn create_expression_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "Failed to execute 'createExpression' on 'Document': 1 argument required, but only 0 present.",
+            );
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let expr = args.get(0).to_rust_string_lossy(scope);
+        let global = scope.get_current_context().global(scope);
+        let ctor_key = crate::v8_utils::v8_string(scope, "XPathExpression");
+        let obj = if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+                if let Some(proto) = ctor.get(scope, proto_key.into()) {
+                    let o = v8::Object::new(scope);
+                    let _ = o.set_prototype(scope, proto);
+                    o
+                } else {
+                    v8::Object::new(scope)
+                }
+            } else {
+                v8::Object::new(scope)
+            }
+        } else {
+            v8::Object::new(scope)
+        };
+        let k = crate::v8_utils::v8_string(scope, "__iv8Expression");
+        let v = crate::v8_utils::v8_string(scope, &expr);
+        let _ = obj.define_own_property(
+            scope,
+            k.into(),
+            v.into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+        rv.set(obj.into());
+    }));
+}
+
 /// Helper to install a native method on an object.
+/// `length` is the IDL required argument count (Function.length).
 fn install_method(
     scope: &v8::PinScope<'_, '_>,
     obj: v8::Local<v8::Object>,
     name: &str,
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
+    length: i32,
 ) {
-    let tmpl = v8::FunctionTemplate::builder_raw(callback).build(scope);
+    let tmpl = if length > 0 {
+        v8::FunctionTemplate::builder_raw(callback).length(length).build(scope)
+    } else {
+        v8::FunctionTemplate::builder_raw(callback).build(scope)
+    };
     let func = crate::v8_utils::v8_fn(scope, &tmpl);
     let name_str = crate::v8_utils::v8_string(scope, name);
     func.set_name(name_str);
@@ -610,14 +1467,12 @@ unsafe extern "C" fn get_element_by_id(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
         if args.length() < 1 {
+            rv.set(v8::null(scope).into());
             return;
         }
 
-        let id_arg = args.get(0);
-        if !id_arg.is_string() {
-            return;
-        }
-        let id_str = id_arg.to_rust_string_lossy(scope);
+        // WebIDL DOMString: ToString on the argument (elements stringify to tags).
+        let id_str = args.get(0).to_rust_string_lossy(scope);
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
@@ -630,49 +1485,12 @@ unsafe extern "C" fn get_element_by_id(info: *const v8::FunctionCallbackInfo) {
         if let Some(nid) = node_id {
             if let Some(obj) = node_to_v8_object(scope, state, nid) {
                 rv.set(obj);
-            }
-        }
-        else {
-            let id_key = crate::v8_utils::v8_string(scope, "__iv8Id");
-            let root_id = {
-                let doc = state.document.borrow();
-                doc.as_ref().map(|d| d.root_id())
-            };
-            if let Some(root_id) = root_id {
-                let found_nid = {
-                    let doc = state.document.borrow();
-                    doc.as_ref().and_then(|d| {
-                        d.tree.get(root_id).and_then(|root| {
-                            root.descendants().find_map(|n| {
-                                let nid = n.id();
-                                if let Some(obj) = crate::dom::template::create_node_object(scope, state, nid) {
-                                    let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(obj) };
-                                    if let Some(val) = obj.get(scope, id_key.into()) {
-                                        if val.is_string() {
-                                            let v = val.to_rust_string_lossy(scope);
-                                            if v == id_str {
-                                                return Some(nid);
-                                            }
-                                        }
-                                    }
-                                }
-                                None
-                            })
-                        })
-                    })
-                };
-                if let Some(nid) = found_nid {
-                    if let Some(obj) = node_to_v8_object(scope, state, nid) {
-                        rv.set(obj);
-                    }
-                }
-                else {
-                    rv.set(v8::null(scope).into());
-                }
-            }
-            else {
+            } else {
                 rv.set(v8::null(scope).into());
             }
+        } else {
+            // Single id path: NodeData id_index only (DOM Element.id setter).
+            rv.set(v8::null(scope).into());
         }
     }));
     if result.is_err() {

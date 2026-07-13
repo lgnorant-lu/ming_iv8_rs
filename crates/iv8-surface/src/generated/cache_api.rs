@@ -18,7 +18,7 @@ pub(crate) unsafe extern "C" fn cache_op_1(_info: *const v8::FunctionCallbackInf
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn cache_op_2(_info: *const v8::FunctionCallbackInfo) {
@@ -26,7 +26,7 @@ pub(crate) unsafe extern "C" fn cache_op_2(_info: *const v8::FunctionCallbackInf
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "Cache") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn cache_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -41,7 +41,7 @@ pub(crate) unsafe extern "C" fn cache_op_3(_info: *const v8::FunctionCallbackInf
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn cache_op_4(_info: *const v8::FunctionCallbackInfo) {
@@ -56,7 +56,7 @@ pub(crate) unsafe extern "C" fn cache_op_4(_info: *const v8::FunctionCallbackInf
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn cache_op_5(_info: *const v8::FunctionCallbackInfo) {
@@ -71,7 +71,7 @@ pub(crate) unsafe extern "C" fn cache_op_5(_info: *const v8::FunctionCallbackInf
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn cache_op_6(_info: *const v8::FunctionCallbackInfo) {
@@ -86,7 +86,7 @@ pub(crate) unsafe extern "C" fn cache_op_6(_info: *const v8::FunctionCallbackInf
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn cache_op_7(_info: *const v8::FunctionCallbackInfo) {
@@ -94,7 +94,7 @@ pub(crate) unsafe extern "C" fn cache_op_7(_info: *const v8::FunctionCallbackInf
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "Cache") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for Cache.
@@ -177,7 +177,7 @@ pub(crate) unsafe extern "C" fn cache_storage_op_1(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn cache_storage_op_2(_info: *const v8::FunctionCallbackInfo) {
@@ -192,7 +192,7 @@ pub(crate) unsafe extern "C" fn cache_storage_op_2(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn cache_storage_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -207,7 +207,7 @@ pub(crate) unsafe extern "C" fn cache_storage_op_3(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn cache_storage_op_4(_info: *const v8::FunctionCallbackInfo) {
@@ -222,7 +222,7 @@ pub(crate) unsafe extern "C" fn cache_storage_op_4(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn cache_storage_op_5(_info: *const v8::FunctionCallbackInfo) {
@@ -230,7 +230,7 @@ pub(crate) unsafe extern "C" fn cache_storage_op_5(_info: *const v8::FunctionCal
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "CacheStorage") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for CacheStorage.

@@ -578,7 +578,7 @@ pub(crate) unsafe extern "C" fn text_decoder_stream_get_4(_info: *const v8::Func
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -663,7 +663,7 @@ pub(crate) unsafe extern "C" fn text_decoder_stream_get_5(_info: *const v8::Func
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -855,7 +855,7 @@ pub(crate) unsafe extern "C" fn text_encoder_op_2(_info: *const v8::FunctionCall
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -1111,7 +1111,7 @@ pub(crate) unsafe extern "C" fn text_encoder_stream_get_2(_info: *const v8::Func
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1196,7 +1196,7 @@ pub(crate) unsafe extern "C" fn text_encoder_stream_get_3(_info: *const v8::Func
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }

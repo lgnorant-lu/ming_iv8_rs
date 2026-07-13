@@ -135,15 +135,19 @@ def map_idl_to_typeof(idl_type):
 
 def extract_return_type(member):
     rt = member.get("return_type", {})
+    if not isinstance(rt, dict):
+        return None
     kind = rt.get("kind", "")
     name = rt.get("name", "")
     nullable = rt.get("nullable", False)
     if kind == "name":
         if not name:
             return None
+        if name in ("undefined", "void"):
+            return ("undefined", False, True)
         if nullable:
-            return ("object", True, name == "undefined")
-        return (map_idl_to_typeof(name), False, name == "undefined")
+            return ("object", True, False)
+        return (map_idl_to_typeof(name), False, False)
     if kind == "generic":
         inner = rt.get("inner_type", {})
         inner_name = inner.get("name", "") if isinstance(inner, dict) else str(inner)
@@ -151,6 +155,42 @@ def extract_return_type(member):
             return ("object", nullable, False)
         return ("object", nullable, False)
     return None
+
+
+def sample_js_for_arg(arg: dict) -> str:
+    """Build a JS expression for one IDL argument (gold: type from unified_ir)."""
+    t = arg.get("type") or {}
+    if not isinstance(t, dict):
+        return '""'
+    name = t.get("name") or ""
+    nullable = bool(t.get("nullable"))
+    nlow = name.lower()
+    if name in ("Node", "Element", "HTMLElement") or name.endswith("Element"):
+        return 'document.createElement("span")'
+    if name in ("Event", "CustomEvent", "MouseEvent"):
+        return 'new Event("test")'
+    if "boolean" in nlow:
+        return "false"
+    if any(x in nlow for x in ("long", "short", "byte", "octet", "float", "double")):
+        return "0"
+    if name in ("DOMString", "USVString", "ByteString", "CSSOMString") or "string" in nlow:
+        return '""'
+    if nullable:
+        return "null"
+    if arg.get("optional"):
+        return "undefined"
+    return "null"
+
+
+def extract_arg_samples(member: dict) -> list[str]:
+    """Required args only — optional omitted (WebIDL allows)."""
+    args = member.get("arguments") or []
+    samples = []
+    for a in args:
+        if a.get("optional") or a.get("variadic"):
+            break
+        samples.append(sample_js_for_arg(a))
+    return samples
 
 
 def enumerate_idl_methods():
@@ -188,6 +228,7 @@ def enumerate_idl_methods():
                 "expected_typeof": expected_typeof,
                 "nullable": nullable,
                 "is_void": is_void,
+                "arg_samples": extract_arg_samples(member),
                 "instance_js": INSTANCE_BUILDERS[iface_name],
             })
     return tests
@@ -224,21 +265,27 @@ def build_audit_js(tests):
                 results.push(r);
                 continue;
             }}
-            var argCount = fn.length;
-            var args = [];
-            for (var a = 0; a < argCount; a++) {{
-                args.push(a === 0 ? "div" : "");
+            // Args from IDL (unified_ir), NOT fn.length heuristics (RD-12/H05c).
+            // replaceChild/insertBefore need an existing child on the receiver.
+            var samples = t.arg_samples || [];
+            var callArgs = [];
+            for (var a = 0; a < samples.length; a++) {{
+                try {{ callArgs.push(eval(samples[a])); }} catch(e) {{ callArgs.push(null); }}
+            }}
+            if (t.operation === "replaceChild" || t.operation === "insertBefore" || t.operation === "removeChild") {{
+                var child = document.createElement("span");
+                try {{ obj.appendChild(child); }} catch(e) {{}}
+                if (t.operation === "replaceChild" && callArgs.length >= 2) {{
+                    callArgs[1] = child;
+                }} else if (t.operation === "removeChild" && callArgs.length >= 1) {{
+                    callArgs[0] = child;
+                }} else if (t.operation === "insertBefore" && callArgs.length >= 2) {{
+                    callArgs[1] = child;
+                }}
             }}
             var val;
             try {{
-                if (args.length > 0) {{
-                    var div = document.createElement("div");
-                    val = fn.apply(obj, args.map(function(a) {{
-                        return a === "div" ? div : "test";
-                    }}));
-                }} else {{
-                    val = fn.call(obj);
-                }}
+                val = fn.apply(obj, callArgs);
             }} catch(e) {{
                 r.classification = "THROW";
                 r.detail = String(e).substring(0, 100);
@@ -310,7 +357,9 @@ def _run_audit():
     cat_a_fail = 0
     for r in results:
         stats[r["classification"]] = stats.get(r["classification"], 0) + 1
-        if r.get("is_void"):
+        if r.get("is_void") and r["classification"] != "SKIP":
+            # Category C = void methods that *ran* must return undefined.
+            # SKIP (method missing) is coverage debt, not a false-positive void return.
             if r["classification"] == "PASS":
                 cat_c_pass += 1
             else:

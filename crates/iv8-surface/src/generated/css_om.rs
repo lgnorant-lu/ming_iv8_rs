@@ -230,7 +230,7 @@ pub(crate) unsafe extern "C" fn css_numeric_array_op_2(_info: *const v8::Functio
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -374,7 +374,7 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_get_1(_info: *const v8::Funct
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -451,7 +451,7 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_get_2(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -536,7 +536,7 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_get_3(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -610,7 +610,7 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_get_4(_info: *const v8::Funct
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -673,26 +673,7 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_op_5(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    {
-        let __ctor_name = v8::String::new(scope, "CSSPseudoElement").unwrap();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto.is_object() {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-        }
-        rv.set(v8::undefined(scope).into());
-    }
+    rv.set(v8::null(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn css_pseudo_element_op_6(_info: *const v8::FunctionCallbackInfo) {
@@ -821,7 +802,7 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_op_7(_info: *const v8::Functi
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -902,7 +883,7 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_op_8(_info: *const v8::Functi
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -983,7 +964,7 @@ pub(crate) unsafe extern "C" fn css_pseudo_element_op_9(_info: *const v8::Functi
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -1138,7 +1119,7 @@ pub(crate) unsafe extern "C" fn css_rule_get_1(_info: *const v8::FunctionCallbac
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -1264,26 +1245,7 @@ pub(crate) unsafe extern "C" fn css_rule_get_2(_info: *const v8::FunctionCallbac
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CSSRule").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1349,26 +1311,7 @@ pub(crate) unsafe extern "C" fn css_rule_get_3(_info: *const v8::FunctionCallbac
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CSSStyleSheet").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1648,26 +1591,7 @@ pub(crate) unsafe extern "C" fn css_rule_list_op_1(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    {
-        let __ctor_name = v8::String::new(scope, "CSSRule").unwrap();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto.is_object() {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-        }
-        rv.set(v8::undefined(scope).into());
-    }
+    rv.set(v8::null(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn css_rule_list_get_2(_info: *const v8::FunctionCallbackInfo) {
@@ -1831,7 +1755,7 @@ pub(crate) unsafe extern "C" fn css_style_declaration_get_1(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -2020,7 +1944,7 @@ pub(crate) unsafe extern "C" fn css_style_declaration_op_3(_info: *const v8::Fun
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
 pub(crate) unsafe extern "C" fn css_style_declaration_op_4(_info: *const v8::FunctionCallbackInfo) {
@@ -2082,7 +2006,7 @@ pub(crate) unsafe extern "C" fn css_style_declaration_op_4(_info: *const v8::Fun
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
 pub(crate) unsafe extern "C" fn css_style_declaration_op_5(_info: *const v8::FunctionCallbackInfo) {
@@ -2144,7 +2068,7 @@ pub(crate) unsafe extern "C" fn css_style_declaration_op_5(_info: *const v8::Fun
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
 pub(crate) unsafe extern "C" fn css_style_declaration_op_6(_info: *const v8::FunctionCallbackInfo) {
@@ -2268,7 +2192,7 @@ pub(crate) unsafe extern "C" fn css_style_declaration_op_7(_info: *const v8::Fun
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
 pub(crate) unsafe extern "C" fn css_style_declaration_get_8(_info: *const v8::FunctionCallbackInfo) {
@@ -2333,26 +2257,7 @@ pub(crate) unsafe extern "C" fn css_style_declaration_get_8(_info: *const v8::Fu
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CSSRule").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -2559,7 +2464,7 @@ pub(crate) unsafe extern "C" fn css_style_value_op_2(_info: *const v8::FunctionC
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -2922,7 +2827,7 @@ pub(crate) unsafe extern "C" fn css_transform_component_op_3(_info: *const v8::F
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -3163,26 +3068,7 @@ pub(crate) unsafe extern "C" fn css_variable_reference_value_get_2(_info: *const
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CSSUnparsedValue").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3283,7 +3169,7 @@ pub(crate) unsafe extern "C" fn media_list_get_1(_info: *const v8::FunctionCallb
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -3472,7 +3358,7 @@ pub(crate) unsafe extern "C" fn media_list_op_3(_info: *const v8::FunctionCallba
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Object::new(scope).into());
+    rv.set(v8::null(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn media_list_op_4(_info: *const v8::FunctionCallbackInfo) {
@@ -4124,7 +4010,7 @@ pub(crate) unsafe extern "C" fn screen_get_7(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -4474,7 +4360,7 @@ pub(crate) unsafe extern "C" fn style_sheet_get_1(_info: *const v8::FunctionCall
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -4540,7 +4426,7 @@ pub(crate) unsafe extern "C" fn style_sheet_get_2(_info: *const v8::FunctionCall
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -4606,26 +4492,7 @@ pub(crate) unsafe extern "C" fn style_sheet_get_3(_info: *const v8::FunctionCall
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "Element").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -4691,26 +4558,7 @@ pub(crate) unsafe extern "C" fn style_sheet_get_4(_info: *const v8::FunctionCall
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CSSStyleSheet").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -4776,7 +4624,7 @@ pub(crate) unsafe extern "C" fn style_sheet_get_5(_info: *const v8::FunctionCall
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -4853,7 +4701,7 @@ pub(crate) unsafe extern "C" fn style_sheet_get_6(_info: *const v8::FunctionCall
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -5182,26 +5030,7 @@ pub(crate) unsafe extern "C" fn style_sheet_list_op_1(_info: *const v8::Function
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    {
-        let __ctor_name = v8::String::new(scope, "CSSStyleSheet").unwrap();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto.is_object() {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-        }
-        rv.set(v8::undefined(scope).into());
-    }
+    rv.set(v8::null(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn style_sheet_list_get_2(_info: *const v8::FunctionCallbackInfo) {
@@ -6593,7 +6422,7 @@ pub(crate) unsafe extern "C" fn css_apply_statement_rule_get_1(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -6751,7 +6580,7 @@ pub(crate) unsafe extern "C" fn css_color_profile_rule_get_1(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -6817,7 +6646,7 @@ pub(crate) unsafe extern "C" fn css_color_profile_rule_get_2(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -6883,7 +6712,7 @@ pub(crate) unsafe extern "C" fn css_color_profile_rule_get_3(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -6949,7 +6778,7 @@ pub(crate) unsafe extern "C" fn css_color_profile_rule_get_4(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -7087,7 +6916,7 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_get_1(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -7213,7 +7042,7 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_get_2(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -7339,7 +7168,7 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_get_3(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -7465,7 +7294,7 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_get_4(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -7591,7 +7420,7 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_get_5(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -7717,7 +7546,7 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_get_6(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -7843,7 +7672,7 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_get_7(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -7969,7 +7798,7 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_get_8(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -8095,7 +7924,7 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_get_9(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -8221,7 +8050,7 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_get_10(_info: *const v8::
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -8347,7 +8176,7 @@ pub(crate) unsafe extern "C" fn css_counter_style_rule_get_11(_info: *const v8::
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -8603,7 +8432,7 @@ pub(crate) unsafe extern "C" fn css_custom_media_rule_get_1(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -8680,7 +8509,7 @@ pub(crate) unsafe extern "C" fn css_custom_media_rule_get_2(_info: *const v8::Fu
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -8801,7 +8630,7 @@ pub(crate) unsafe extern "C" fn css_font_face_rule_get_1(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -8966,7 +8795,7 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_1(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -9103,7 +8932,7 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_2(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9188,7 +9017,7 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_3(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9273,7 +9102,7 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_4(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9358,7 +9187,7 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_5(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9443,7 +9272,7 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_6(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9528,7 +9357,7 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_7(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9613,7 +9442,7 @@ pub(crate) unsafe extern "C" fn css_font_feature_values_rule_get_8(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9767,7 +9596,7 @@ pub(crate) unsafe extern "C" fn css_font_palette_values_rule_get_1(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -9833,7 +9662,7 @@ pub(crate) unsafe extern "C" fn css_font_palette_values_rule_get_2(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -9899,7 +9728,7 @@ pub(crate) unsafe extern "C" fn css_font_palette_values_rule_get_3(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -9965,7 +9794,7 @@ pub(crate) unsafe extern "C" fn css_font_palette_values_rule_get_4(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -10092,7 +9921,7 @@ pub(crate) unsafe extern "C" fn css_function_declarations_get_1(_info: *const v8
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -10268,7 +10097,7 @@ pub(crate) unsafe extern "C" fn css_grouping_rule_get_1(_info: *const v8::Functi
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -10586,7 +10415,7 @@ pub(crate) unsafe extern "C" fn css_import_rule_get_2(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -10720,26 +10549,7 @@ pub(crate) unsafe extern "C" fn css_import_rule_get_3(_info: *const v8::Function
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CSSStyleSheet").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -10805,7 +10615,7 @@ pub(crate) unsafe extern "C" fn css_import_rule_get_4(_info: *const v8::Function
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -10871,7 +10681,7 @@ pub(crate) unsafe extern "C" fn css_import_rule_get_5(_info: *const v8::Function
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -10996,7 +10806,7 @@ pub(crate) unsafe extern "C" fn css_keyframe_rule_get_1(_info: *const v8::Functi
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -11133,7 +10943,7 @@ pub(crate) unsafe extern "C" fn css_keyframe_rule_get_2(_info: *const v8::Functi
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -11307,7 +11117,7 @@ pub(crate) unsafe extern "C" fn css_keyframes_rule_get_1(_info: *const v8::Funct
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -11444,7 +11254,7 @@ pub(crate) unsafe extern "C" fn css_keyframes_rule_get_2(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -11592,7 +11402,7 @@ pub(crate) unsafe extern "C" fn css_keyframes_rule_op_4(_info: *const v8::Functi
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -11786,26 +11596,7 @@ pub(crate) unsafe extern "C" fn css_keyframes_rule_op_7(_info: *const v8::Functi
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    {
-        let __ctor_name = v8::String::new(scope, "CSSKeyframeRule").unwrap();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto.is_object() {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-        }
-        rv.set(v8::undefined(scope).into());
-    }
+    rv.set(v8::null(scope).into());
 }
 
 /// Create FunctionTemplate for CSSKeyframesRule.
@@ -12038,7 +11829,7 @@ pub(crate) unsafe extern "C" fn css_margin_rule_get_1(_info: *const v8::Function
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -12115,7 +11906,7 @@ pub(crate) unsafe extern "C" fn css_margin_rule_get_2(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -12287,7 +12078,7 @@ pub(crate) unsafe extern "C" fn css_namespace_rule_get_1(_info: *const v8::Funct
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -12353,7 +12144,7 @@ pub(crate) unsafe extern "C" fn css_namespace_rule_get_2(_info: *const v8::Funct
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -12466,7 +12257,7 @@ pub(crate) unsafe extern "C" fn css_nested_declarations_get_1(_info: *const v8::
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -12631,7 +12422,7 @@ pub(crate) unsafe extern "C" fn css_position_try_rule_get_1(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -12708,7 +12499,7 @@ pub(crate) unsafe extern "C" fn css_position_try_rule_get_2(_info: *const v8::Fu
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -12880,7 +12671,7 @@ pub(crate) unsafe extern "C" fn css_property_rule_get_1(_info: *const v8::Functi
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -12946,7 +12737,7 @@ pub(crate) unsafe extern "C" fn css_property_rule_get_2(_info: *const v8::Functi
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -13078,7 +12869,7 @@ pub(crate) unsafe extern "C" fn css_property_rule_get_4(_info: *const v8::Functi
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -13194,7 +12985,7 @@ pub(crate) unsafe extern "C" fn css_view_transition_rule_get_1(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -13362,7 +13153,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_1(_info: *const v8
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -13488,7 +13279,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_2(_info: *const v8
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -13614,7 +13405,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_3(_info: *const v8
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -13740,7 +13531,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_4(_info: *const v8
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -13866,7 +13657,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_5(_info: *const v8
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -13992,7 +13783,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_6(_info: *const v8
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -14118,7 +13909,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_7(_info: *const v8
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -14244,7 +14035,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_8(_info: *const v8
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -14370,7 +14161,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_9(_info: *const v8
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -14496,7 +14287,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_10(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -14622,7 +14413,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_11(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -14748,7 +14539,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_12(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -14874,7 +14665,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_13(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -15000,7 +14791,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_14(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -15126,7 +14917,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_15(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -15252,7 +15043,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_16(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -15378,7 +15169,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_17(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -15504,7 +15295,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_18(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -15630,7 +15421,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_19(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -15756,7 +15547,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_20(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -15882,7 +15673,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_21(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -16008,7 +15799,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_22(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -16134,7 +15925,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_23(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -16260,7 +16051,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_24(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -16386,7 +16177,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_25(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -16512,7 +16303,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_26(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -16638,7 +16429,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_27(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -16764,7 +16555,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_28(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -16890,7 +16681,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_29(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -17016,7 +16807,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_30(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -17142,7 +16933,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_31(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -17268,7 +17059,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_32(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -17394,7 +17185,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_33(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -17520,7 +17311,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_34(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -17646,7 +17437,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_35(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -17772,7 +17563,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_36(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -17898,7 +17689,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_37(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -18024,7 +17815,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_38(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -18150,7 +17941,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_39(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -18276,7 +18067,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_40(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -18402,7 +18193,7 @@ pub(crate) unsafe extern "C" fn css_font_face_descriptors_get_41(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -18940,7 +18731,7 @@ pub(crate) unsafe extern "C" fn css_function_descriptors_get_1(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -19097,7 +18888,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_1(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -19223,7 +19014,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_2(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -19349,7 +19140,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_3(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -19475,7 +19266,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_4(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -19601,7 +19392,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_5(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -19727,7 +19518,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_6(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -19853,7 +19644,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_7(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -19979,7 +19770,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_8(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -20105,7 +19896,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_9(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -20231,7 +20022,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_10(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -20357,7 +20148,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_11(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -20483,7 +20274,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_12(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -20609,7 +20400,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_13(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -20735,7 +20526,7 @@ pub(crate) unsafe extern "C" fn css_page_descriptors_get_14(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -21018,7 +20809,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_1(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -21144,7 +20935,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_2(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -21270,7 +21061,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_3(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -21396,7 +21187,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_4(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -21522,7 +21313,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_5(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -21648,7 +21439,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_6(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -21774,7 +21565,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_7(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -21900,7 +21691,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_8(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -22026,7 +21817,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_9(_info: *const
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -22152,7 +21943,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_10(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -22278,7 +22069,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_11(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -22404,7 +22195,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_12(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -22530,7 +22321,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_13(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -22656,7 +22447,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_14(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -22782,7 +22573,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_15(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -22908,7 +22699,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_16(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -23034,7 +22825,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_17(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -23160,7 +22951,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_18(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -23286,7 +23077,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_19(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -23412,7 +23203,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_20(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -23538,7 +23329,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_21(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -23664,7 +23455,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_22(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -23790,7 +23581,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_23(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -23916,7 +23707,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_24(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -24042,7 +23833,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_25(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -24168,7 +23959,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_26(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -24294,7 +24085,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_27(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -24420,7 +24211,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_28(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -24546,7 +24337,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_29(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -24672,7 +24463,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_30(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -24798,7 +24589,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_31(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -24924,7 +24715,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_32(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -25050,7 +24841,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_33(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -25176,7 +24967,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_34(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -25302,7 +25093,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_35(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -25428,7 +25219,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_36(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -25554,7 +25345,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_37(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -25680,7 +25471,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_38(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -25806,7 +25597,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_39(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -25932,7 +25723,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_40(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -26058,7 +25849,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_41(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -26184,7 +25975,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_42(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -26310,7 +26101,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_43(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -26436,7 +26227,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_44(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -26562,7 +26353,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_45(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -26688,7 +26479,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_46(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -26814,7 +26605,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_47(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -26940,7 +26731,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_48(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -27066,7 +26857,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_49(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -27192,7 +26983,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_50(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -27318,7 +27109,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_51(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -27444,7 +27235,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_52(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -27570,7 +27361,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_53(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -27696,7 +27487,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_54(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -27822,7 +27613,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_55(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -27948,7 +27739,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_56(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -28074,7 +27865,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_57(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -28200,7 +27991,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_58(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -28326,7 +28117,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_59(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -28452,7 +28243,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_60(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -28578,7 +28369,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_61(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -28704,7 +28495,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_62(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -28830,7 +28621,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_63(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -28956,7 +28747,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_64(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -29082,7 +28873,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_65(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -29208,7 +28999,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_66(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -29334,7 +29125,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_67(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -29460,7 +29251,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_68(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -29586,7 +29377,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_69(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -29712,7 +29503,7 @@ pub(crate) unsafe extern "C" fn css_position_try_descriptors_get_70(_info: *cons
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -30519,7 +30310,7 @@ pub(crate) unsafe extern "C" fn css_style_properties_get_1(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -30684,7 +30475,7 @@ pub(crate) unsafe extern "C" fn css_color_value_op_1(_info: *const v8::FunctionC
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -30970,7 +30761,7 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_1(_info: *const v8::Functio
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -31045,7 +30836,7 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_2(_info: *const v8::Functio
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -31120,7 +30911,7 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_3(_info: *const v8::Functio
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -31195,7 +30986,7 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_4(_info: *const v8::Functio
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -31270,7 +31061,7 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_5(_info: *const v8::Functio
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -31345,7 +31136,7 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_6(_info: *const v8::Functio
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -31482,7 +31273,7 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_8(_info: *const v8::Functio
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -31557,7 +31348,7 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_9(_info: *const v8::Functio
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -31632,7 +31423,7 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_10(_info: *const v8::Functi
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -31713,7 +31504,7 @@ pub(crate) unsafe extern "C" fn css_numeric_value_op_11(_info: *const v8::Functi
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -31962,7 +31753,7 @@ pub(crate) unsafe extern "C" fn css_transform_value_op_2(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -32165,7 +31956,7 @@ pub(crate) unsafe extern "C" fn css_transform_value_op_5(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -32369,7 +32160,7 @@ pub(crate) unsafe extern "C" fn css_unparsed_value_op_2(_info: *const v8::Functi
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -32558,7 +32349,7 @@ pub(crate) unsafe extern "C" fn css_matrix_component_get_1(_info: *const v8::Fun
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -32734,7 +32525,7 @@ pub(crate) unsafe extern "C" fn css_perspective_get_1(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -32910,7 +32701,7 @@ pub(crate) unsafe extern "C" fn css_rotate_get_1(_info: *const v8::FunctionCallb
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -33055,7 +32846,7 @@ pub(crate) unsafe extern "C" fn css_rotate_get_2(_info: *const v8::FunctionCallb
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -33200,7 +32991,7 @@ pub(crate) unsafe extern "C" fn css_rotate_get_3(_info: *const v8::FunctionCallb
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -33345,7 +33136,7 @@ pub(crate) unsafe extern "C" fn css_rotate_get_4(_info: *const v8::FunctionCallb
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -33548,7 +33339,7 @@ pub(crate) unsafe extern "C" fn css_scale_get_1(_info: *const v8::FunctionCallba
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -33693,7 +33484,7 @@ pub(crate) unsafe extern "C" fn css_scale_get_2(_info: *const v8::FunctionCallba
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -33838,7 +33629,7 @@ pub(crate) unsafe extern "C" fn css_scale_get_3(_info: *const v8::FunctionCallba
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -34032,7 +33823,7 @@ pub(crate) unsafe extern "C" fn css_skew_get_1(_info: *const v8::FunctionCallbac
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -34177,7 +33968,7 @@ pub(crate) unsafe extern "C" fn css_skew_get_2(_info: *const v8::FunctionCallbac
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -34362,7 +34153,7 @@ pub(crate) unsafe extern "C" fn css_skew_x_get_1(_info: *const v8::FunctionCallb
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -34538,7 +34329,7 @@ pub(crate) unsafe extern "C" fn css_skew_y_get_1(_info: *const v8::FunctionCallb
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -34714,7 +34505,7 @@ pub(crate) unsafe extern "C" fn css_translate_get_1(_info: *const v8::FunctionCa
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -34859,7 +34650,7 @@ pub(crate) unsafe extern "C" fn css_translate_get_2(_info: *const v8::FunctionCa
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -35004,7 +34795,7 @@ pub(crate) unsafe extern "C" fn css_translate_get_3(_info: *const v8::FunctionCa
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -36125,26 +35916,7 @@ pub(crate) unsafe extern "C" fn css_style_sheet_get_1(_info: *const v8::Function
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CSSRule").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -36221,7 +35993,7 @@ pub(crate) unsafe extern "C" fn css_style_sheet_get_2(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -36369,7 +36141,7 @@ pub(crate) unsafe extern "C" fn css_style_sheet_op_5(_info: *const v8::FunctionC
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn css_style_sheet_op_6(_info: *const v8::FunctionCallbackInfo) {
@@ -36507,7 +36279,7 @@ pub(crate) unsafe extern "C" fn css_style_sheet_get_7(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -36778,7 +36550,7 @@ pub(crate) unsafe extern "C" fn css_apply_block_rule_get_1(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -36936,7 +36708,7 @@ pub(crate) unsafe extern "C" fn css_condition_rule_get_1(_info: *const v8::Funct
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -37053,7 +36825,7 @@ pub(crate) unsafe extern "C" fn css_function_rule_get_1(_info: *const v8::Functi
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -37175,7 +36947,7 @@ pub(crate) unsafe extern "C" fn css_function_rule_get_3(_info: *const v8::Functi
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -37284,7 +37056,7 @@ pub(crate) unsafe extern "C" fn css_layer_block_rule_get_1(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -37379,7 +37151,7 @@ pub(crate) unsafe extern "C" fn css_mixin_rule_get_1(_info: *const v8::FunctionC
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -37610,7 +37382,7 @@ pub(crate) unsafe extern "C" fn css_page_rule_get_1(_info: *const v8::FunctionCa
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -37747,7 +37519,7 @@ pub(crate) unsafe extern "C" fn css_page_rule_get_2(_info: *const v8::FunctionCa
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -37921,7 +37693,7 @@ pub(crate) unsafe extern "C" fn css_scope_rule_get_1(_info: *const v8::FunctionC
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -37987,7 +37759,7 @@ pub(crate) unsafe extern "C" fn css_scope_rule_get_2(_info: *const v8::FunctionC
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -38111,7 +37883,7 @@ pub(crate) unsafe extern "C" fn css_style_rule_get_1(_info: *const v8::FunctionC
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -38248,7 +38020,7 @@ pub(crate) unsafe extern "C" fn css_style_rule_get_2(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -38393,7 +38165,7 @@ pub(crate) unsafe extern "C" fn css_style_rule_get_3(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -38514,7 +38286,7 @@ pub(crate) unsafe extern "C" fn css_supports_condition_rule_get_1(_info: *const 
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -38620,7 +38392,7 @@ pub(crate) unsafe extern "C" fn css_color_get_1(_info: *const v8::FunctionCallba
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -38765,7 +38537,7 @@ pub(crate) unsafe extern "C" fn css_color_get_2(_info: *const v8::FunctionCallba
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -38910,7 +38682,7 @@ pub(crate) unsafe extern "C" fn css_color_get_3(_info: *const v8::FunctionCallba
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -39104,7 +38876,7 @@ pub(crate) unsafe extern "C" fn csshsl_get_1(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -39249,7 +39021,7 @@ pub(crate) unsafe extern "C" fn csshsl_get_2(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -39394,7 +39166,7 @@ pub(crate) unsafe extern "C" fn csshsl_get_3(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -39539,7 +39311,7 @@ pub(crate) unsafe extern "C" fn csshsl_get_4(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -39742,7 +39514,7 @@ pub(crate) unsafe extern "C" fn csshwb_get_1(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -39887,7 +39659,7 @@ pub(crate) unsafe extern "C" fn csshwb_get_2(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -40032,7 +39804,7 @@ pub(crate) unsafe extern "C" fn csshwb_get_3(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -40177,7 +39949,7 @@ pub(crate) unsafe extern "C" fn csshwb_get_4(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -40380,7 +40152,7 @@ pub(crate) unsafe extern "C" fn csslch_get_1(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -40525,7 +40297,7 @@ pub(crate) unsafe extern "C" fn csslch_get_2(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -40670,7 +40442,7 @@ pub(crate) unsafe extern "C" fn csslch_get_3(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -40815,7 +40587,7 @@ pub(crate) unsafe extern "C" fn csslch_get_4(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -41018,7 +40790,7 @@ pub(crate) unsafe extern "C" fn css_lab_get_1(_info: *const v8::FunctionCallback
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -41163,7 +40935,7 @@ pub(crate) unsafe extern "C" fn css_lab_get_2(_info: *const v8::FunctionCallback
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -41308,7 +41080,7 @@ pub(crate) unsafe extern "C" fn css_lab_get_3(_info: *const v8::FunctionCallback
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -41453,7 +41225,7 @@ pub(crate) unsafe extern "C" fn css_lab_get_4(_info: *const v8::FunctionCallback
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -41656,7 +41428,7 @@ pub(crate) unsafe extern "C" fn cssoklch_get_1(_info: *const v8::FunctionCallbac
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -41801,7 +41573,7 @@ pub(crate) unsafe extern "C" fn cssoklch_get_2(_info: *const v8::FunctionCallbac
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -41946,7 +41718,7 @@ pub(crate) unsafe extern "C" fn cssoklch_get_3(_info: *const v8::FunctionCallbac
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -42091,7 +41863,7 @@ pub(crate) unsafe extern "C" fn cssoklch_get_4(_info: *const v8::FunctionCallbac
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -42294,7 +42066,7 @@ pub(crate) unsafe extern "C" fn cssok_lab_get_1(_info: *const v8::FunctionCallba
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -42439,7 +42211,7 @@ pub(crate) unsafe extern "C" fn cssok_lab_get_2(_info: *const v8::FunctionCallba
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -42584,7 +42356,7 @@ pub(crate) unsafe extern "C" fn cssok_lab_get_3(_info: *const v8::FunctionCallba
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -42729,7 +42501,7 @@ pub(crate) unsafe extern "C" fn cssok_lab_get_4(_info: *const v8::FunctionCallba
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -42932,7 +42704,7 @@ pub(crate) unsafe extern "C" fn cssrgb_get_1(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -43077,7 +42849,7 @@ pub(crate) unsafe extern "C" fn cssrgb_get_2(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -43222,7 +42994,7 @@ pub(crate) unsafe extern "C" fn cssrgb_get_3(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -43367,7 +43139,7 @@ pub(crate) unsafe extern "C" fn cssrgb_get_4(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -43884,7 +43656,7 @@ pub(crate) unsafe extern "C" fn css_animation_get_1(_info: *const v8::FunctionCa
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -43979,7 +43751,7 @@ pub(crate) unsafe extern "C" fn css_transition_get_1(_info: *const v8::FunctionC
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -44074,7 +43846,7 @@ pub(crate) unsafe extern "C" fn css_container_rule_get_1(_info: *const v8::Funct
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -44140,7 +43912,7 @@ pub(crate) unsafe extern "C" fn css_container_rule_get_2(_info: *const v8::Funct
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -44326,7 +44098,7 @@ pub(crate) unsafe extern "C" fn css_media_rule_get_1(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -44670,7 +44442,7 @@ pub(crate) unsafe extern "C" fn css_math_clamp_get_1(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -44755,7 +44527,7 @@ pub(crate) unsafe extern "C" fn css_math_clamp_get_2(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -44840,7 +44612,7 @@ pub(crate) unsafe extern "C" fn css_math_clamp_get_3(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -44968,7 +44740,7 @@ pub(crate) unsafe extern "C" fn css_math_invert_get_1(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -45082,7 +44854,7 @@ pub(crate) unsafe extern "C" fn css_math_max_get_1(_info: *const v8::FunctionCal
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -45196,7 +44968,7 @@ pub(crate) unsafe extern "C" fn css_math_min_get_1(_info: *const v8::FunctionCal
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -45310,7 +45082,7 @@ pub(crate) unsafe extern "C" fn css_math_negate_get_1(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -45424,7 +45196,7 @@ pub(crate) unsafe extern "C" fn css_math_product_get_1(_info: *const v8::Functio
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -45538,7 +45310,7 @@ pub(crate) unsafe extern "C" fn css_math_sum_get_1(_info: *const v8::FunctionCal
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -45598,7 +45370,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45622,7 +45397,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45646,7 +45424,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45670,7 +45451,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45694,7 +45478,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45718,7 +45505,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45742,7 +45532,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45766,7 +45559,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45790,7 +45586,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45814,7 +45613,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45838,7 +45640,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45862,7 +45667,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45886,7 +45694,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45910,7 +45721,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45934,7 +45748,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45958,7 +45775,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -45982,7 +45802,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46006,7 +45829,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46030,7 +45856,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46054,7 +45883,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46078,7 +45910,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46102,7 +45937,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46126,7 +45964,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46150,7 +45991,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46174,7 +46018,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46198,7 +46045,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46222,7 +46072,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46246,7 +46099,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46270,7 +46126,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46294,7 +46153,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46318,7 +46180,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46342,7 +46207,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46366,7 +46234,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46390,7 +46261,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46414,7 +46288,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46438,7 +46315,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46462,7 +46342,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46486,7 +46369,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46510,7 +46396,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46534,7 +46423,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46558,7 +46450,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46582,7 +46477,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46606,7 +46504,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46630,7 +46531,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46654,7 +46558,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46678,7 +46585,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46702,7 +46612,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46726,7 +46639,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46750,7 +46666,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46774,7 +46693,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46798,7 +46720,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46822,7 +46747,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46846,7 +46774,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46870,7 +46801,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46894,7 +46828,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46918,7 +46855,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46942,7 +46882,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46966,7 +46909,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -46990,7 +46936,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47014,7 +46963,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47038,7 +46990,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47062,7 +47017,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47086,7 +47044,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47110,7 +47071,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47134,7 +47098,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47158,7 +47125,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47182,7 +47152,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47206,7 +47179,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47230,7 +47206,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47254,7 +47233,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47278,7 +47260,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47302,7 +47287,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47326,7 +47314,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47350,7 +47341,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47374,7 +47368,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47398,7 +47395,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47422,7 +47422,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47446,7 +47449,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47470,7 +47476,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47494,7 +47503,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47518,7 +47530,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47542,7 +47557,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47566,7 +47584,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47590,7 +47611,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47614,7 +47638,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47638,7 +47665,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47662,7 +47692,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47686,7 +47719,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47710,7 +47746,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47734,7 +47773,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47758,7 +47800,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47782,7 +47827,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47806,7 +47854,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47830,7 +47881,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47854,7 +47908,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47878,7 +47935,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47902,7 +47962,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47926,7 +47989,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47950,7 +48016,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47974,7 +48043,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -47998,7 +48070,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48022,7 +48097,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48046,7 +48124,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48070,7 +48151,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48094,7 +48178,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48118,7 +48205,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48142,7 +48232,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48166,7 +48259,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48190,7 +48286,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48214,7 +48313,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48238,7 +48340,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48262,7 +48367,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48286,7 +48394,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48310,7 +48421,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48334,7 +48448,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48358,7 +48475,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48382,7 +48502,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48406,7 +48529,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48430,7 +48556,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48454,7 +48583,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48478,7 +48610,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48502,7 +48637,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48526,7 +48664,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48550,7 +48691,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48574,7 +48718,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48598,7 +48745,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48622,7 +48772,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48646,7 +48799,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48670,7 +48826,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48694,7 +48853,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48718,7 +48880,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48742,7 +48907,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48766,7 +48934,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48790,7 +48961,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48814,7 +48988,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48838,7 +49015,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48862,7 +49042,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48886,7 +49069,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48910,7 +49096,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48934,7 +49123,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48958,7 +49150,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -48982,7 +49177,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49006,7 +49204,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49030,7 +49231,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49054,7 +49258,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49078,7 +49285,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49102,7 +49312,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49126,7 +49339,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49150,7 +49366,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49174,7 +49393,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49198,7 +49420,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49222,7 +49447,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49246,7 +49474,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49270,7 +49501,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49294,7 +49528,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49318,7 +49555,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49342,7 +49582,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49366,7 +49609,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49390,7 +49636,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49414,7 +49663,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49438,7 +49690,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49462,7 +49717,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49486,7 +49744,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49510,7 +49771,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49534,7 +49798,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49558,7 +49825,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49582,7 +49852,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49606,7 +49879,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49630,7 +49906,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49654,7 +49933,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49678,7 +49960,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49702,7 +49987,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49726,7 +50014,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49750,7 +50041,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49774,7 +50068,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49798,7 +50095,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49822,7 +50122,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49846,7 +50149,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49870,7 +50176,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49894,7 +50203,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49918,7 +50230,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49942,7 +50257,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49966,7 +50284,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -49990,7 +50311,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50014,7 +50338,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50038,7 +50365,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50062,7 +50392,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50086,7 +50419,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50110,7 +50446,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50134,7 +50473,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50158,7 +50500,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50182,7 +50527,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50206,7 +50554,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50230,7 +50581,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50254,7 +50608,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50278,7 +50635,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50302,7 +50662,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50326,7 +50689,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50350,7 +50716,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50374,7 +50743,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50398,7 +50770,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50422,7 +50797,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50446,7 +50824,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50470,7 +50851,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50494,7 +50878,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50518,7 +50905,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50542,7 +50932,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50566,7 +50959,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50590,7 +50986,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50614,7 +51013,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50638,7 +51040,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50662,7 +51067,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -50686,7 +51094,10 @@ pub fn fix_accessors_css_om(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }

@@ -36,36 +36,52 @@ pub struct MemberData {
 }
 
 /// Extract the type name from an IDL type JSON value (recursive).
+/// Nullable types (`"nullable": true`) are returned as `T?` so type_mapper
+/// can emit null defaults (Chrome returns null for many nullable DOMStrings).
 fn extract_type_name(val: &serde_json::Value) -> Option<String> {
     match val {
         serde_json::Value::String(s) => Some(s.clone()),
         serde_json::Value::Object(map) => {
+            let nullable = map
+                .get("nullable")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false);
             // Try "name" field first
             if let Some(serde_json::Value::String(name)) = map.get("name") {
+                if nullable && !name.ends_with('?') {
+                    return Some(format!("{}?", name));
+                }
                 return Some(name.clone());
             }
+            let apply_null = |name: String| -> String {
+                if nullable && !name.ends_with('?') {
+                    format!("{}?", name)
+                } else {
+                    name
+                }
+            };
             // name may be an array of objects with idlType
             if let Some(serde_json::Value::Array(arr)) = map.get("name") {
                 if let Some(first) = arr.first() {
                     if let Some(inner_name) = extract_type_name(first) {
-                        return Some(inner_name);
+                        return Some(apply_null(inner_name));
                     }
                 }
             }
             // Try "idlType" for primitive references
             if let Some(inner) = map.get("idlType") {
-                return extract_type_name(inner);
+                return extract_type_name(inner).map(apply_null);
             }
             // Try "idl_type" (snake_case variant)
             if let Some(inner) = map.get("idl_type") {
-                return extract_type_name(inner);
+                return extract_type_name(inner).map(apply_null);
             }
             // Union type: take first type
             if let Some(serde_json::Value::Array(types)) =
                 map.get("idlType").or_else(|| map.get("types"))
             {
                 if let Some(first) = types.first() {
-                    return extract_type_name(first);
+                    return extract_type_name(first).map(apply_null);
                 }
             }
             // Generic type (e.g. Promise<T>, sequence<T>, FrozenArray<T>)
@@ -73,10 +89,10 @@ fn extract_type_name(val: &serde_json::Value) -> Option<String> {
             if let Some(generic) = map.get("generic").and_then(|g| g.as_str()) {
                 if let Some(inner) = map.get("inner") {
                     if let Some(inner_name) = extract_type_name(inner) {
-                        return Some(format!("{}<{}>", generic, inner_name));
+                        return Some(apply_null(format!("{}<{}>", generic, inner_name)));
                     }
                 }
-                return Some(generic.to_string());
+                return Some(apply_null(generic.to_string()));
             }
             None
         }

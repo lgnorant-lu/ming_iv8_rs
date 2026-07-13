@@ -34,28 +34,12 @@ pub const WEBDRIVER_FIX_JS: &str = r#"
     })();
 "#;
 
-/// P0 boundary fix: patch document.createElement toString to return [native code].
-///
-/// Shim exposes JS source in toString(). Real Chrome returns
-/// `function createElement() { [native code] }`.
-///
-/// **Why not codegen?** createElement is a DOM template operation (dom/template.rs).
-/// The DOM template installs a callback that doesn't set toString. A native
-/// fix would require `v8::Function::new` with a name, but DOM template uses
-/// `ObjectTemplate::set` which creates internal slots.
+/// CREATE_ELEMENT_FIX removed (v0.8.92 RD-17): wrapping createElement as an
+/// own property broke NodeId/internal-field identity and dual-owned Document
+/// ops. toString is covered by FUNCTION_TO_STRING_FIX_JS; behavior is owned
+/// solely by dom/binding create_element.
 pub const CREATE_ELEMENT_FIX_JS: &str = r#"
-    (function() {
-        if (typeof document !== 'undefined' && document.createElement) {
-            var orig = document.createElement;
-            var origStr = orig.toString();
-            if (origStr.indexOf('[native code]') < 0) {
-                var patched = function createElement(tagName) { return orig.call(document, tagName); };
-                patched.toString = function() { return 'function createElement() { [native code] }'; };
-                patched.toString.toString = function() { return 'function toString() { [native code] }'; };
-                try { Object.defineProperty(document, 'createElement', { value: patched, writable: true, configurable: true, enumerable: true }); } catch(e) {}
-            }
-        }
-    })();
+    (function() { /* v0.8.92: CREATE_ELEMENT_FIX_JS eliminated (RD-17) */ })();
 "#;
 
 /// P0 boundary fix: navigator.plugins/mimeTypes instanceof check.
@@ -736,105 +720,11 @@ pub const DESCRIPTOR_FIX_JS: &str = r#"
 /// **Why not DOM template?** DOM template instances are created via
 /// `Object.create(Interface.prototype)` which doesn't have V8 slots.
 /// Making them use FunctionTemplate would require deep architecture change.
+/// DOM_GETTER_FIX_JS removed (v0.8.92 P0-5): CSSOMString → empty string default
+/// in type_mapper; AbortController.abort/signal native in codegen; CharacterData
+/// length/data via DOM template. Kept as empty no-op for stable init call sites.
 pub const DOM_GETTER_FIX_JS: &str = r#"
-    (function() {
-        function _installGetter(proto, name, getter) {
-            try {
-                Object.defineProperty(proto, name, {
-                    get: getter,
-                    set: undefined,
-                    enumerable: true,
-                    configurable: true
-                });
-            } catch(e) {}
-        }
-
-        // CharacterData.length — number of characters in the text node
-        if (typeof CharacterData !== 'undefined' && CharacterData.prototype) {
-            _installGetter(CharacterData.prototype, 'length', function() {
-                return (this._data || this.data || '').length;
-            });
-        }
-
-        // Text.wholeText — concatenation of all sibling text nodes
-        if (typeof Text !== 'undefined' && Text.prototype) {
-            _installGetter(Text.prototype, 'wholeText', function() {
-                return this._data || this.data || '';
-            });
-        }
-
-        // Element.regionOverset — CSSOMString enum, default "overset" or "unset"
-        // Codegen returns {} (object) instead of string. K-014.
-        if (typeof Element !== 'undefined' && Element.prototype) {
-            _installGetter(Element.prototype, 'regionOverset', function() {
-                return 'unset';
-            });
-        }
-
-        // AnimationEvent.animationName/pseudoElement — codegen returns object
-        // instead of string. Default empty string per spec.
-        if (typeof AnimationEvent !== 'undefined' && AnimationEvent.prototype) {
-            _installGetter(AnimationEvent.prototype, 'animationName', function() {
-                return this.__iv8AnimationName || '';
-            });
-            _installGetter(AnimationEvent.prototype, 'pseudoElement', function() {
-                return this.__iv8PseudoElement || '';
-            });
-        }
-
-        // TransitionEvent.propertyName/pseudoElement — codegen returns object
-        if (typeof TransitionEvent !== 'undefined' && TransitionEvent.prototype) {
-            _installGetter(TransitionEvent.prototype, 'propertyName', function() {
-                return this.__iv8PropertyName || '';
-            });
-            _installGetter(TransitionEvent.prototype, 'pseudoElement', function() {
-                return this.__iv8PseudoElement || '';
-            });
-        }
-
-        // HTMLDListElement.compact — codegen returns undefined instead of boolean
-        if (typeof HTMLDListElement !== 'undefined' && HTMLDListElement.prototype) {
-            _installGetter(HTMLDListElement.prototype, 'compact', function() {
-                return this.__iv8Compact || false;
-            });
-        }
-
-        // BeforeUnloadEvent.returnValue — codegen throws Illegal invocation
-        if (typeof BeforeUnloadEvent !== 'undefined' && BeforeUnloadEvent.prototype) {
-            _installGetter(BeforeUnloadEvent.prototype, 'returnValue', function() {
-                return this.__iv8ReturnValue !== undefined ? this.__iv8ReturnValue : true;
-            });
-        }
-
-        // AbortController.abort() — codegen abort() is no-op, doesn't
-        // update signal.aborted. Override to set hidden key on signal.
-        if (typeof AbortController !== 'undefined' && AbortController.prototype) {
-            try {
-                Object.defineProperty(AbortController.prototype, 'abort', {
-                    value: function abort() {
-                        if (this.signal) {
-                            Object.defineProperty(this.signal, '__aborted', {
-                                value: true, writable: false, enumerable: false, configurable: false
-                            });
-                        }
-                    },
-                    writable: true, enumerable: true, configurable: true
-                });
-            } catch(e) { /* may be frozen */ }
-            // Also try direct assignment as fallback
-            try { AbortController.prototype.abort = function abort() {
-                if (this.signal) {
-                    try { this.signal.__aborted = true; } catch(e2) {}
-                }
-            }; } catch(e2) {}
-        }
-        // AbortSignal.aborted — codegen reads hidden key, add fallback
-        if (typeof AbortSignal !== 'undefined' && AbortSignal.prototype) {
-            _installGetter(AbortSignal.prototype, 'aborted', function() {
-                return this.__aborted === true;
-            });
-        }
-    })();
+    (function() { /* v0.8.92: DOM_GETTER_FIX_JS eliminated */ })();
 "#;
 
 /// Fix missing Symbol.toStringTag on codegen interfaces.

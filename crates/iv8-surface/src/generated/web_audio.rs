@@ -1108,7 +1108,7 @@ pub(crate) unsafe extern "C" fn audio_data_op_9(_info: *const v8::FunctionCallba
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -1337,7 +1337,7 @@ pub(crate) unsafe extern "C" fn audio_listener_get_1(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1422,7 +1422,7 @@ pub(crate) unsafe extern "C" fn audio_listener_get_2(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1507,7 +1507,7 @@ pub(crate) unsafe extern "C" fn audio_listener_get_3(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1592,7 +1592,7 @@ pub(crate) unsafe extern "C" fn audio_listener_get_4(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1677,7 +1677,7 @@ pub(crate) unsafe extern "C" fn audio_listener_get_5(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1762,7 +1762,7 @@ pub(crate) unsafe extern "C" fn audio_listener_get_6(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1847,7 +1847,7 @@ pub(crate) unsafe extern "C" fn audio_listener_get_7(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1932,7 +1932,7 @@ pub(crate) unsafe extern "C" fn audio_listener_get_8(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -2017,7 +2017,7 @@ pub(crate) unsafe extern "C" fn audio_listener_get_9(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -2778,7 +2778,7 @@ pub(crate) unsafe extern "C" fn audio_param_op_6(_info: *const v8::FunctionCallb
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -2859,7 +2859,7 @@ pub(crate) unsafe extern "C" fn audio_param_op_7(_info: *const v8::FunctionCallb
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -2940,7 +2940,7 @@ pub(crate) unsafe extern "C" fn audio_param_op_8(_info: *const v8::FunctionCallb
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -3021,7 +3021,7 @@ pub(crate) unsafe extern "C" fn audio_param_op_9(_info: *const v8::FunctionCallb
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -3102,7 +3102,7 @@ pub(crate) unsafe extern "C" fn audio_param_op_10(_info: *const v8::FunctionCall
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -3183,7 +3183,7 @@ pub(crate) unsafe extern "C" fn audio_param_op_11(_info: *const v8::FunctionCall
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -3264,7 +3264,7 @@ pub(crate) unsafe extern "C" fn audio_param_op_12(_info: *const v8::FunctionCall
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -4537,26 +4537,7 @@ pub(crate) unsafe extern "C" fn audio_track_get_6(_info: *const v8::FunctionCall
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "SourceBuffer").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -4696,7 +4677,7 @@ pub(crate) unsafe extern "C" fn audio_worklet_processor_get_1(_info: *const v8::
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -5121,7 +5102,7 @@ pub(crate) unsafe extern "C" fn audio_decoder_op_6(_info: *const v8::FunctionCal
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "AudioDecoder") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn audio_decoder_op_7(_info: *const v8::FunctionCallbackInfo) {
@@ -5248,7 +5229,7 @@ pub(crate) unsafe extern "C" fn audio_decoder_op_9(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for AudioDecoder.
@@ -5728,7 +5709,7 @@ pub(crate) unsafe extern "C" fn audio_encoder_op_6(_info: *const v8::FunctionCal
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "AudioEncoder") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn audio_encoder_op_7(_info: *const v8::FunctionCallbackInfo) {
@@ -5855,7 +5836,7 @@ pub(crate) unsafe extern "C" fn audio_encoder_op_9(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for AudioEncoder.
@@ -6018,7 +5999,7 @@ pub(crate) unsafe extern "C" fn audio_node_op_1(_info: *const v8::FunctionCallba
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -6592,7 +6573,7 @@ pub(crate) unsafe extern "C" fn audio_node_get_10(_info: *const v8::FunctionCall
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -7757,7 +7738,7 @@ pub(crate) unsafe extern "C" fn audio_track_list_op_2(_info: *const v8::Function
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -7827,26 +7808,7 @@ pub(crate) unsafe extern "C" fn audio_track_list_op_3(_info: *const v8::Function
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    {
-        let __ctor_name = v8::String::new(scope, "AudioTrack").unwrap();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto.is_object() {
-                        let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-        }
-        rv.set(v8::undefined(scope).into());
-    }
+    rv.set(v8::null(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn audio_track_list_get_4(_info: *const v8::FunctionCallbackInfo) {
@@ -8370,7 +8332,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_get_1(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -8587,7 +8549,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_get_4(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -8804,7 +8766,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_get_7(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9006,7 +8968,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_9(_info: *const v8::Functi
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9081,7 +9043,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_10(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9162,7 +9124,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_11(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9237,7 +9199,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_12(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9312,7 +9274,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_13(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9387,7 +9349,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_14(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9462,7 +9424,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_15(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9537,7 +9499,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_16(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9612,7 +9574,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_17(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9687,7 +9649,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_18(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9762,7 +9724,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_19(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9843,7 +9805,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_20(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9918,7 +9880,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_21(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -9993,7 +9955,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_22(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -10074,7 +10036,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_23(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -10149,7 +10111,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_24(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -10224,7 +10186,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_25(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -10299,7 +10261,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_26(_info: *const v8::Funct
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -10322,7 +10284,7 @@ pub(crate) unsafe extern "C" fn base_audio_context_op_27(_info: *const v8::Funct
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for BaseAudioContext.
@@ -10624,7 +10586,7 @@ pub(crate) unsafe extern "C" fn audio_worklet_get_1(_info: *const v8::FunctionCa
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -11064,7 +11026,7 @@ pub(crate) unsafe extern "C" fn audio_worklet_global_scope_get_6(_info: *const v
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -11592,7 +11554,7 @@ pub(crate) unsafe extern "C" fn audio_worklet_node_get_1(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -11677,7 +11639,7 @@ pub(crate) unsafe extern "C" fn audio_worklet_node_get_2(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -12059,7 +12021,7 @@ pub(crate) unsafe extern "C" fn biquad_filter_node_get_2(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -12144,7 +12106,7 @@ pub(crate) unsafe extern "C" fn biquad_filter_node_get_3(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -12229,7 +12191,7 @@ pub(crate) unsafe extern "C" fn biquad_filter_node_get_4(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -12314,7 +12276,7 @@ pub(crate) unsafe extern "C" fn biquad_filter_node_get_5(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -12527,7 +12489,7 @@ pub(crate) unsafe extern "C" fn delay_node_get_1(_info: *const v8::FunctionCallb
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -12641,7 +12603,7 @@ pub(crate) unsafe extern "C" fn gain_node_get_1(_info: *const v8::FunctionCallba
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -13205,7 +13167,7 @@ pub(crate) unsafe extern "C" fn audio_context_get_6(_info: *const v8::FunctionCa
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -13281,7 +13243,7 @@ pub(crate) unsafe extern "C" fn audio_context_op_7(_info: *const v8::FunctionCal
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -13297,7 +13259,7 @@ pub(crate) unsafe extern "C" fn audio_context_op_8(_info: *const v8::FunctionCal
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "AudioContext") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn audio_context_op_9(_info: *const v8::FunctionCallbackInfo) {
@@ -13305,7 +13267,7 @@ pub(crate) unsafe extern "C" fn audio_context_op_9(_info: *const v8::FunctionCal
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "AudioContext") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn audio_context_op_10(_info: *const v8::FunctionCallbackInfo) {
@@ -13313,7 +13275,7 @@ pub(crate) unsafe extern "C" fn audio_context_op_10(_info: *const v8::FunctionCa
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "AudioContext") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn audio_context_op_11(_info: *const v8::FunctionCallbackInfo) {
@@ -13328,7 +13290,7 @@ pub(crate) unsafe extern "C" fn audio_context_op_11(_info: *const v8::FunctionCa
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn audio_context_op_12(_info: *const v8::FunctionCallbackInfo) {
@@ -13401,7 +13363,7 @@ pub(crate) unsafe extern "C" fn audio_context_op_12(_info: *const v8::FunctionCa
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -13482,7 +13444,7 @@ pub(crate) unsafe extern "C" fn audio_context_op_13(_info: *const v8::FunctionCa
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -13563,7 +13525,7 @@ pub(crate) unsafe extern "C" fn audio_context_op_14(_info: *const v8::FunctionCa
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -13638,7 +13600,7 @@ pub(crate) unsafe extern "C" fn audio_context_op_15(_info: *const v8::FunctionCa
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -13794,7 +13756,7 @@ pub(crate) unsafe extern "C" fn offline_audio_context_op_1(_info: *const v8::Fun
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "OfflineAudioContext") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn offline_audio_context_op_2(_info: *const v8::FunctionCallbackInfo) {
@@ -13802,7 +13764,7 @@ pub(crate) unsafe extern "C" fn offline_audio_context_op_2(_info: *const v8::Fun
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "OfflineAudioContext") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn offline_audio_context_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -13817,7 +13779,7 @@ pub(crate) unsafe extern "C" fn offline_audio_context_op_3(_info: *const v8::Fun
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn offline_audio_context_get_4(_info: *const v8::FunctionCallbackInfo) {
@@ -14133,26 +14095,7 @@ pub(crate) unsafe extern "C" fn audio_buffer_source_node_get_1(_info: *const v8:
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "AudioBuffer").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -14289,7 +14232,7 @@ pub(crate) unsafe extern "C" fn audio_buffer_source_node_get_2(_info: *const v8:
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -14374,7 +14317,7 @@ pub(crate) unsafe extern "C" fn audio_buffer_source_node_get_3(_info: *const v8:
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -15098,7 +15041,7 @@ pub(crate) unsafe extern "C" fn oscillator_node_get_2(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -15183,7 +15126,7 @@ pub(crate) unsafe extern "C" fn oscillator_node_get_3(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -15328,7 +15271,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15352,7 +15298,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15376,7 +15325,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15400,7 +15352,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15424,7 +15379,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15448,7 +15406,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15472,7 +15433,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15496,7 +15460,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15520,7 +15487,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15544,7 +15514,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15568,7 +15541,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15592,7 +15568,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15616,7 +15595,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15640,7 +15622,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15664,7 +15649,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15688,7 +15676,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15712,7 +15703,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15736,7 +15730,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15760,7 +15757,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15784,7 +15784,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15808,7 +15811,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15832,7 +15838,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15856,7 +15865,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15880,7 +15892,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -15904,7 +15919,10 @@ pub fn fix_accessors_web_audio(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }

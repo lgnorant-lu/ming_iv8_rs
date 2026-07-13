@@ -60,6 +60,11 @@ pub struct RuntimeState {
     /// cache is cleared on navigation.
     pub node_cache: RefCell<std::collections::HashMap<crate::dom::NodeId, v8::Global<v8::Object>>>,
 
+    /// Attr identity cache: (owner Element NodeId, attr name) → Attr object.
+    /// Value is live from Element.attrs; cache only stabilizes object identity.
+    pub attr_cache:
+        RefCell<std::collections::HashMap<(crate::dom::NodeId, String), v8::Global<v8::Object>>>,
+
     /// Lazy sweep operation counter for periodic full cache sweep.
     pub node_cache_ops: std::cell::Cell<u32>,
 
@@ -203,6 +208,7 @@ impl RuntimeState {
             event_listeners: RefCell::new(EventListenerRegistry::new()),
             resource_bundle: RefCell::new(ResourceBundle::new()),
             node_cache: RefCell::new(std::collections::HashMap::new()),
+            attr_cache: RefCell::new(std::collections::HashMap::new()),
             node_cache_ops: std::cell::Cell::new(0),
             node_cache_sweep_threshold: 500,
             style_cache: RefCell::new(std::collections::HashMap::new()),

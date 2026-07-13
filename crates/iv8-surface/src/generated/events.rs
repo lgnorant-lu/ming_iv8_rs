@@ -555,26 +555,7 @@ pub(crate) unsafe extern "C" fn event_get_2(_info: *const v8::FunctionCallbackIn
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventTarget").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -640,26 +621,7 @@ pub(crate) unsafe extern "C" fn event_get_3(_info: *const v8::FunctionCallbackIn
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventTarget").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -725,26 +687,7 @@ pub(crate) unsafe extern "C" fn event_get_4(_info: *const v8::FunctionCallbackIn
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventTarget").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1693,7 +1636,7 @@ pub(crate) unsafe extern "C" fn event_get_17(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -2161,7 +2104,7 @@ pub(crate) unsafe extern "C" fn animation_event_get_1(_info: *const v8::Function
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -2293,7 +2236,7 @@ pub(crate) unsafe extern "C" fn animation_event_get_3(_info: *const v8::Function
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -2359,26 +2302,7 @@ pub(crate) unsafe extern "C" fn animation_event_get_4(_info: *const v8::Function
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CSSAnimation").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -2494,26 +2418,7 @@ pub(crate) unsafe extern "C" fn animation_playback_event_get_1(_info: *const v8:
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -2579,26 +2484,7 @@ pub(crate) unsafe extern "C" fn animation_playback_event_get_2(_info: *const v8:
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CSSNumberish").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -2777,7 +2663,7 @@ pub(crate) unsafe extern "C" fn audio_processing_event_get_2(_info: *const v8::F
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -2862,7 +2748,7 @@ pub(crate) unsafe extern "C" fn audio_processing_event_get_3(_info: *const v8::F
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -3045,26 +2931,7 @@ pub(crate) unsafe extern "C" fn autofill_event_get_2(_info: *const v8::FunctionC
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "RefillCallback").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3109,7 +2976,7 @@ pub(crate) unsafe extern "C" fn before_install_prompt_event_op_1(_info: *const v
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "BeforeInstallPromptEvent") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for BeforeInstallPromptEvent.
@@ -3371,7 +3238,7 @@ pub(crate) unsafe extern "C" fn blob_event_get_1(_info: *const v8::FunctionCallb
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -3456,7 +3323,7 @@ pub(crate) unsafe extern "C" fn blob_event_get_2(_info: *const v8::FunctionCallb
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -3577,7 +3444,7 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_1(_info: *const 
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -3717,7 +3584,7 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_3(_info: *const 
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3783,7 +3650,7 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_4(_info: *const 
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3849,7 +3716,7 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_5(_info: *const 
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3915,7 +3782,7 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_6(_info: *const 
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -3992,7 +3859,7 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_7(_info: *const 
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -4077,7 +3944,7 @@ pub(crate) unsafe extern "C" fn bluetooth_advertising_event_get_8(_info: *const 
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -4240,7 +4107,7 @@ pub(crate) unsafe extern "C" fn buffered_change_event_get_1(_info: *const v8::Fu
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -4325,7 +4192,7 @@ pub(crate) unsafe extern "C" fn buffered_change_event_get_2(_info: *const v8::Fu
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -5034,26 +4901,7 @@ pub(crate) unsafe extern "C" fn clipboard_event_get_1(_info: *const v8::Function
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "DataTransfer").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -5389,26 +5237,7 @@ pub(crate) unsafe extern "C" fn command_event_get_1(_info: *const v8::FunctionCa
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "Element").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -6171,26 +6000,7 @@ pub(crate) unsafe extern "C" fn device_motion_event_get_1(_info: *const v8::Func
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "DeviceMotionEventAcceleration").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -6256,26 +6066,7 @@ pub(crate) unsafe extern "C" fn device_motion_event_get_2(_info: *const v8::Func
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "DeviceMotionEventAcceleration").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -6341,26 +6132,7 @@ pub(crate) unsafe extern "C" fn device_motion_event_get_3(_info: *const v8::Func
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "DeviceMotionEventRotationRate").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -6435,7 +6207,7 @@ pub(crate) unsafe extern "C" fn device_motion_event_op_5(_info: *const v8::Funct
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "DeviceMotionEvent") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for DeviceMotionEvent.
@@ -6560,7 +6332,7 @@ pub(crate) unsafe extern "C" fn device_orientation_event_get_1(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -6626,7 +6398,7 @@ pub(crate) unsafe extern "C" fn device_orientation_event_get_2(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -6692,7 +6464,7 @@ pub(crate) unsafe extern "C" fn device_orientation_event_get_3(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -6767,7 +6539,7 @@ pub(crate) unsafe extern "C" fn device_orientation_event_op_5(_info: *const v8::
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "DeviceOrientationEvent") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for DeviceOrientationEvent.
@@ -6903,7 +6675,7 @@ pub(crate) unsafe extern "C" fn document_picture_in_picture_event_get_1(_info: *
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -7590,7 +7362,7 @@ pub(crate) unsafe extern "C" fn form_data_event_get_1(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -7704,7 +7476,7 @@ pub(crate) unsafe extern "C" fn gpu_uncaptured_error_event_get_1(_info: *const v
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -7818,7 +7590,7 @@ pub(crate) unsafe extern "C" fn gamepad_event_get_1(_info: *const v8::FunctionCa
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -7932,7 +7704,7 @@ pub(crate) unsafe extern "C" fn hid_connection_event_get_1(_info: *const v8::Fun
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -8046,7 +7818,7 @@ pub(crate) unsafe extern "C" fn hid_input_report_event_get_1(_info: *const v8::F
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -8529,7 +8301,7 @@ pub(crate) unsafe extern "C" fn idb_version_change_event_get_2(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -8631,7 +8403,7 @@ pub(crate) unsafe extern "C" fn key_frame_request_event_get_1(_info: *const v8::
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -8726,26 +8498,7 @@ pub(crate) unsafe extern "C" fn midi_connection_event_get_1(_info: *const v8::Fu
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "MIDIPort").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -8840,7 +8593,7 @@ pub(crate) unsafe extern "C" fn midi_message_event_get_1(_info: *const v8::Funct
                 return;
             }
         }
-        rv.set(crate::type_conv::default_value_for_type(scope, "Uint8Array"));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -9001,7 +8754,7 @@ pub(crate) unsafe extern "C" fn media_encrypted_event_get_2(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::ArrayBuffer::new(scope, 0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -9271,7 +9024,7 @@ pub(crate) unsafe extern "C" fn media_query_list_event_get_1(_info: *const v8::F
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -9450,7 +9203,7 @@ pub(crate) unsafe extern "C" fn media_stream_track_event_get_1(_info: *const v8:
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9751,26 +9504,7 @@ pub(crate) unsafe extern "C" fn message_event_get_4(_info: *const v8::FunctionCa
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "MessageEventSource").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -10105,7 +9839,7 @@ pub(crate) unsafe extern "C" fn ndef_reading_event_get_2(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -10292,7 +10026,7 @@ pub(crate) unsafe extern "C" fn navigate_event_get_2(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -10575,7 +10309,7 @@ pub(crate) unsafe extern "C" fn navigate_event_get_6(_info: *const v8::FunctionC
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -10649,26 +10383,7 @@ pub(crate) unsafe extern "C" fn navigate_event_get_7(_info: *const v8::FunctionC
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "FormData").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -10734,7 +10449,7 @@ pub(crate) unsafe extern "C" fn navigate_event_get_8(_info: *const v8::FunctionC
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -10932,26 +10647,7 @@ pub(crate) unsafe extern "C" fn navigate_event_get_11(_info: *const v8::Function
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "Element").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -11328,7 +11024,7 @@ pub(crate) unsafe extern "C" fn navigation_current_entry_change_event_get_2(_inf
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -11449,7 +11145,7 @@ pub(crate) unsafe extern "C" fn offline_audio_completion_event_get_1(_info: *con
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -11552,26 +11248,7 @@ pub(crate) unsafe extern "C" fn page_reveal_event_get_1(_info: *const v8::Functi
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "ViewTransition").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -11666,26 +11343,7 @@ pub(crate) unsafe extern "C" fn page_swap_event_get_1(_info: *const v8::Function
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "NavigationActivation").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -11751,26 +11409,7 @@ pub(crate) unsafe extern "C" fn page_swap_event_get_2(_info: *const v8::Function
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "ViewTransition").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -12069,7 +11708,7 @@ pub(crate) unsafe extern "C" fn picture_in_picture_event_get_1(_info: *const v8:
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -12408,7 +12047,7 @@ pub(crate) unsafe extern "C" fn portal_activate_event_op_2(_info: *const v8::Fun
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -12528,7 +12167,7 @@ pub(crate) unsafe extern "C" fn presentation_connection_available_event_get_1(_i
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -13314,7 +12953,7 @@ pub(crate) unsafe extern "C" fn rtc_data_channel_event_get_1(_info: *const v8::F
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -13428,7 +13067,7 @@ pub(crate) unsafe extern "C" fn rtc_error_event_get_1(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -13531,7 +13170,7 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_ice_error_event_get_1(_info:
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -13597,7 +13236,7 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_ice_error_event_get_2(_info:
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -13918,26 +13557,7 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_ice_event_get_1(_info: *cons
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "RTCIceCandidate").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -14003,7 +13623,7 @@ pub(crate) unsafe extern "C" fn rtc_peer_connection_ice_event_get_2(_info: *cons
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -14116,7 +13736,7 @@ pub(crate) unsafe extern "C" fn rtc_track_event_get_1(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -14201,7 +13821,7 @@ pub(crate) unsafe extern "C" fn rtc_track_event_get_2(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -14352,7 +13972,7 @@ pub(crate) unsafe extern "C" fn rtc_track_event_get_4(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -14487,7 +14107,7 @@ pub(crate) unsafe extern "C" fn rtc_transform_event_get_1(_info: *const v8::Func
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -14656,26 +14276,7 @@ pub(crate) unsafe extern "C" fn s_frame_transform_error_event_get_2(_info: *cons
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CryptoKeyID").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -15768,7 +15369,7 @@ pub(crate) unsafe extern "C" fn sensor_error_event_get_1(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -15871,26 +15472,7 @@ pub(crate) unsafe extern "C" fn snap_event_get_1(_info: *const v8::FunctionCallb
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "Node").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -15956,26 +15538,7 @@ pub(crate) unsafe extern "C" fn snap_event_get_2(_info: *const v8::FunctionCallb
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "Node").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -16322,7 +15885,7 @@ pub(crate) unsafe extern "C" fn speech_recognition_event_get_2(_info: *const v8:
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -16443,7 +16006,7 @@ pub(crate) unsafe extern "C" fn speech_synthesis_event_get_1(_info: *const v8::F
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -16838,7 +16401,7 @@ pub(crate) unsafe extern "C" fn storage_event_get_1(_info: *const v8::FunctionCa
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -16904,7 +16467,7 @@ pub(crate) unsafe extern "C" fn storage_event_get_2(_info: *const v8::FunctionCa
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -16970,7 +16533,7 @@ pub(crate) unsafe extern "C" fn storage_event_get_3(_info: *const v8::FunctionCa
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -17102,26 +16665,7 @@ pub(crate) unsafe extern "C" fn storage_event_get_5(_info: *const v8::FunctionCa
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "Storage").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -17313,26 +16857,7 @@ pub(crate) unsafe extern "C" fn submit_event_get_1(_info: *const v8::FunctionCal
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "HTMLElement").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -17994,26 +17519,7 @@ pub(crate) unsafe extern "C" fn time_event_get_1(_info: *const v8::FunctionCallb
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "WindowProxy").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -18382,26 +17888,7 @@ pub(crate) unsafe extern "C" fn toggle_event_get_3(_info: *const v8::FunctionCal
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "Element").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -18510,26 +17997,7 @@ pub(crate) unsafe extern "C" fn track_event_get_1(_info: *const v8::FunctionCall
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "VideoTrack").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -18624,7 +18092,7 @@ pub(crate) unsafe extern "C" fn transition_event_get_1(_info: *const v8::Functio
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -18756,7 +18224,7 @@ pub(crate) unsafe extern "C" fn transition_event_get_3(_info: *const v8::Functio
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -18822,26 +18290,7 @@ pub(crate) unsafe extern "C" fn transition_event_get_4(_info: *const v8::Functio
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "CSSTransition").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -18957,26 +18406,7 @@ pub(crate) unsafe extern "C" fn ui_event_get_1(_info: *const v8::FunctionCallbac
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "Window").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -19108,26 +18538,7 @@ pub(crate) unsafe extern "C" fn ui_event_get_3(_info: *const v8::FunctionCallbac
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "InputDeviceCapabilities").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -19389,7 +18800,7 @@ pub(crate) unsafe extern "C" fn usb_connection_event_get_1(_info: *const v8::Fun
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -19693,7 +19104,7 @@ pub(crate) unsafe extern "C" fn window_controls_overlay_geometry_change_event_ge
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -20612,7 +20023,7 @@ pub(crate) unsafe extern "C" fn background_fetch_event_get_1(_info: *const v8::F
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -21267,26 +20678,7 @@ pub(crate) unsafe extern "C" fn extendable_message_event_get_4(_info: *const v8:
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "Client").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -21486,7 +20878,7 @@ pub(crate) unsafe extern "C" fn fetch_event_get_1(_info: *const v8::FunctionCall
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -21560,7 +20952,7 @@ pub(crate) unsafe extern "C" fn fetch_event_get_2(_info: *const v8::FunctionCall
                 return;
             }
         }
-        rv.set(v8::undefined(scope).into());
+        rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
     }));
 }
 
@@ -21824,7 +21216,7 @@ pub(crate) unsafe extern "C" fn fetch_event_get_6(_info: *const v8::FunctionCall
                 return;
             }
         }
-        rv.set(v8::undefined(scope).into());
+        rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
     }));
 }
 
@@ -21973,7 +21365,7 @@ pub(crate) unsafe extern "C" fn install_event_op_1(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for InstallEvent.
@@ -22078,7 +21470,7 @@ pub(crate) unsafe extern "C" fn notification_event_get_1(_info: *const v8::Funct
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -22650,7 +22042,7 @@ pub(crate) unsafe extern "C" fn payment_request_event_get_7(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -22732,7 +22124,7 @@ pub(crate) unsafe extern "C" fn payment_request_event_op_9(_info: *const v8::Fun
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn payment_request_event_op_10(_info: *const v8::FunctionCallbackInfo) {
@@ -22747,7 +22139,7 @@ pub(crate) unsafe extern "C" fn payment_request_event_op_10(_info: *const v8::Fu
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn payment_request_event_op_11(_info: *const v8::FunctionCallbackInfo) {
@@ -22755,7 +22147,7 @@ pub(crate) unsafe extern "C" fn payment_request_event_op_11(_info: *const v8::Fu
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequestEvent") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn payment_request_event_op_12(_info: *const v8::FunctionCallbackInfo) {
@@ -22770,7 +22162,7 @@ pub(crate) unsafe extern "C" fn payment_request_event_op_12(_info: *const v8::Fu
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn payment_request_event_op_13(_info: *const v8::FunctionCallbackInfo) {
@@ -23114,26 +22506,7 @@ pub(crate) unsafe extern "C" fn push_event_get_1(_info: *const v8::FunctionCallb
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "PushMessageData").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -23199,26 +22572,7 @@ pub(crate) unsafe extern "C" fn push_event_get_2(_info: *const v8::FunctionCallb
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "Notification").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -23320,26 +22674,7 @@ pub(crate) unsafe extern "C" fn push_subscription_change_event_get_1(_info: *con
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "PushSubscription").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -23405,26 +22740,7 @@ pub(crate) unsafe extern "C" fn push_subscription_change_event_get_2(_info: *con
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "PushSubscription").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -23760,7 +23076,7 @@ pub(crate) unsafe extern "C" fn payment_method_change_event_get_2(_info: *const 
                 return;
             }
         }
-        rv.set(v8::Object::new(scope).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -24121,26 +23437,7 @@ pub(crate) unsafe extern "C" fn focus_event_get_1(_info: *const v8::FunctionCall
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventTarget").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -24235,7 +23532,7 @@ pub(crate) unsafe extern "C" fn input_event_get_1(_info: *const v8::FunctionCall
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -24433,26 +23730,7 @@ pub(crate) unsafe extern "C" fn input_event_get_4(_info: *const v8::FunctionCall
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "DataTransfer").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -26425,26 +25703,7 @@ pub(crate) unsafe extern "C" fn mouse_event_get_13(_info: *const v8::FunctionCal
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventTarget").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -27424,26 +26683,7 @@ pub(crate) unsafe extern "C" fn navigation_event_get_2(_info: *const v8::Functio
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "EventTarget").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -27720,7 +26960,7 @@ pub(crate) unsafe extern "C" fn touch_event_get_1(_info: *const v8::FunctionCall
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -27805,7 +27045,7 @@ pub(crate) unsafe extern "C" fn touch_event_get_2(_info: *const v8::FunctionCall
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -27890,7 +27130,7 @@ pub(crate) unsafe extern "C" fn touch_event_get_3(_info: *const v8::FunctionCall
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -28311,7 +27551,7 @@ pub(crate) unsafe extern "C" fn background_fetch_update_ui_event_op_1(_info: *co
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "BackgroundFetchUpdateUIEvent") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for BackgroundFetchUpdateUIEvent.
@@ -28405,26 +27645,7 @@ pub(crate) unsafe extern "C" fn drag_event_get_1(_info: *const v8::FunctionCallb
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "DataTransfer").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -29992,7 +29213,10 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -30016,7 +29240,10 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -30040,7 +29267,10 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -30064,7 +29294,10 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -30088,7 +29321,10 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -30112,7 +29348,10 @@ pub fn fix_accessors_events(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }

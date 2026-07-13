@@ -79,7 +79,7 @@ pub(crate) unsafe extern "C" fn crypto_get_1(_info: *const v8::FunctionCallbackI
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -161,7 +161,7 @@ pub(crate) unsafe extern "C" fn crypto_op_2(_info: *const v8::FunctionCallbackIn
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -591,7 +591,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_1(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_2(_info: *const v8::FunctionCallbackInfo) {
@@ -606,7 +606,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_2(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -621,7 +621,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_3(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_4(_info: *const v8::FunctionCallbackInfo) {
@@ -636,7 +636,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_4(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_5(_info: *const v8::FunctionCallbackInfo) {
@@ -651,7 +651,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_5(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_6(_info: *const v8::FunctionCallbackInfo) {
@@ -666,7 +666,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_6(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_7(_info: *const v8::FunctionCallbackInfo) {
@@ -681,7 +681,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_7(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_8(_info: *const v8::FunctionCallbackInfo) {
@@ -696,7 +696,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_8(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_9(_info: *const v8::FunctionCallbackInfo) {
@@ -711,7 +711,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_9(_info: *const v8::FunctionCal
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_10(_info: *const v8::FunctionCallbackInfo) {
@@ -726,7 +726,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_10(_info: *const v8::FunctionCa
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_11(_info: *const v8::FunctionCallbackInfo) {
@@ -741,7 +741,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_11(_info: *const v8::FunctionCa
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_12(_info: *const v8::FunctionCallbackInfo) {
@@ -756,7 +756,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_12(_info: *const v8::FunctionCa
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_13(_info: *const v8::FunctionCallbackInfo) {
@@ -771,7 +771,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_13(_info: *const v8::FunctionCa
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_14(_info: *const v8::FunctionCallbackInfo) {
@@ -786,7 +786,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_14(_info: *const v8::FunctionCa
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_15(_info: *const v8::FunctionCallbackInfo) {
@@ -801,7 +801,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_15(_info: *const v8::FunctionCa
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_16(_info: *const v8::FunctionCallbackInfo) {
@@ -816,7 +816,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_16(_info: *const v8::FunctionCa
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_17(_info: *const v8::FunctionCallbackInfo) {
@@ -831,7 +831,7 @@ pub(crate) unsafe extern "C" fn subtle_crypto_op_17(_info: *const v8::FunctionCa
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn subtle_crypto_op_18(_info: *const v8::FunctionCallbackInfo) {

@@ -79,7 +79,7 @@ pub(crate) unsafe extern "C" fn message_channel_get_1(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -164,7 +164,7 @@ pub(crate) unsafe extern "C" fn message_channel_get_2(_info: *const v8::Function
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -958,7 +958,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_1(_info: *const v8::Functio
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1043,7 +1043,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_2(_info: *const v8::Functio
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1128,7 +1128,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_3(_info: *const v8::Functio
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1213,7 +1213,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_4(_info: *const v8::Functio
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1298,7 +1298,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_5(_info: *const v8::Functio
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1383,7 +1383,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_6(_info: *const v8::Functio
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1400,7 +1400,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_op_7(_info: *const v8::Function
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "WorkerNavigator") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn worker_navigator_op_8(_info: *const v8::FunctionCallbackInfo) {
@@ -1408,7 +1408,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_op_8(_info: *const v8::Function
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "WorkerNavigator") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn worker_navigator_get_9(_info: *const v8::FunctionCallbackInfo) {
@@ -2474,7 +2474,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_24(_info: *const v8::Functi
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -2559,7 +2559,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_25(_info: *const v8::Functi
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -2644,7 +2644,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_26(_info: *const v8::Functi
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -2729,7 +2729,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_27(_info: *const v8::Functi
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -2814,7 +2814,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_28(_info: *const v8::Functi
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -2899,7 +2899,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_29(_info: *const v8::Functi
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -2984,7 +2984,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_30(_info: *const v8::Functi
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -4570,26 +4570,7 @@ pub(crate) unsafe extern "C" fn service_worker_container_get_1(_info: *const v8:
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "ServiceWorker").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -4655,7 +4636,7 @@ pub(crate) unsafe extern "C" fn service_worker_container_get_2(_info: *const v8:
                 return;
             }
         }
-        rv.set(v8::undefined(scope).into());
+        rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
     }));
 }
 
@@ -4671,7 +4652,7 @@ pub(crate) unsafe extern "C" fn service_worker_container_op_3(_info: *const v8::
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn service_worker_container_op_4(_info: *const v8::FunctionCallbackInfo) {
@@ -4679,7 +4660,7 @@ pub(crate) unsafe extern "C" fn service_worker_container_op_4(_info: *const v8::
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ServiceWorkerContainer") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn service_worker_container_op_5(_info: *const v8::FunctionCallbackInfo) {
@@ -4687,7 +4668,7 @@ pub(crate) unsafe extern "C" fn service_worker_container_op_5(_info: *const v8::
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ServiceWorkerContainer") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn service_worker_container_op_6(_info: *const v8::FunctionCallbackInfo) {
@@ -5277,26 +5258,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_1(_info: *const 
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "ServiceWorker").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -5362,26 +5324,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_2(_info: *const 
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "ServiceWorker").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -5447,26 +5390,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_3(_info: *const 
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "ServiceWorker").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -5543,7 +5467,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_4(_info: *const 
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -5692,7 +5616,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_op_7(_info: *const v
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ServiceWorkerRegistration") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn service_worker_registration_op_8(_info: *const v8::FunctionCallbackInfo) {
@@ -5700,7 +5624,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_op_8(_info: *const v
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ServiceWorkerRegistration") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn service_worker_registration_get_9(_info: *const v8::FunctionCallbackInfo) {
@@ -5902,7 +5826,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_10(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -5987,7 +5911,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_11(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -6072,7 +5996,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_12(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -6157,7 +6081,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_13(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -6181,7 +6105,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_op_14(_info: *const 
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn service_worker_registration_op_15(_info: *const v8::FunctionCallbackInfo) {
@@ -6189,7 +6113,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_op_15(_info: *const 
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ServiceWorkerRegistration") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn service_worker_registration_get_16(_info: *const v8::FunctionCallbackInfo) {
@@ -6265,7 +6189,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_16(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -6350,7 +6274,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_17(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -6435,7 +6359,7 @@ pub(crate) unsafe extern "C" fn service_worker_registration_get_18(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -7307,7 +7231,7 @@ pub(crate) unsafe extern "C" fn worker_global_scope_get_1(_info: *const v8::Func
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -7392,7 +7316,7 @@ pub(crate) unsafe extern "C" fn worker_global_scope_get_2(_info: *const v8::Func
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -7477,7 +7401,7 @@ pub(crate) unsafe extern "C" fn worker_global_scope_get_3(_info: *const v8::Func
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -8374,7 +8298,7 @@ pub(crate) unsafe extern "C" fn worker_global_scope_get_11(_info: *const v8::Fun
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9140,7 +9064,7 @@ pub(crate) unsafe extern "C" fn worker_global_scope_op_23(_info: *const v8::Func
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn worker_global_scope_op_24(_info: *const v8::FunctionCallbackInfo) {
@@ -9496,7 +9420,7 @@ pub(crate) unsafe extern "C" fn service_worker_global_scope_get_1(_info: *const 
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9581,7 +9505,7 @@ pub(crate) unsafe extern "C" fn service_worker_global_scope_get_2(_info: *const 
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9666,7 +9590,7 @@ pub(crate) unsafe extern "C" fn service_worker_global_scope_get_3(_info: *const 
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -9683,7 +9607,7 @@ pub(crate) unsafe extern "C" fn service_worker_global_scope_op_4(_info: *const v
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "ServiceWorkerGlobalScope") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn service_worker_global_scope_get_5(_info: *const v8::FunctionCallbackInfo) {
@@ -11145,7 +11069,7 @@ pub(crate) unsafe extern "C" fn service_worker_global_scope_get_16(_info: *const
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -12426,7 +12350,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -12450,7 +12377,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -12474,7 +12404,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -12498,7 +12431,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -12522,7 +12458,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -12546,7 +12485,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -12570,7 +12512,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -12594,7 +12539,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -12618,7 +12566,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -12642,7 +12593,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -12666,7 +12620,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -12690,7 +12647,10 @@ pub fn fix_accessors_workers(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }

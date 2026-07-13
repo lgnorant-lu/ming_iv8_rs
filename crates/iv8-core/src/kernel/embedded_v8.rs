@@ -719,7 +719,31 @@ impl EmbeddedV8Kernel {
         // Install deterministic overrides (random_seed / crypto_seed / time_freeze)
         kernel.install_deterministic_overrides_from(random_seed, crypto_seed, time_freeze);
 
+        // Readonly no-op setters on HTMLIFrameElement.prototype must land
+        // before freeze (frozen protos reject defineProperty).
+        if !kernel.worker_mode {
+            kernel.with_global_scope(|scope, global| {
+                crate::dom::binding::install_iframe_readonly_noop_setters(scope, global);
+            });
+        }
+
         kernel.freeze_all_prototypes();
+
+        // RD-24: after EXCLUDED_OPERATIONS, freeze no longer reinstalls Document
+        // tree-op skeletons. Default document from pre-freeze set_document stays
+        // valid — only re-apply shims that freeze/codegen may overwrite.
+        if !kernel.worker_mode {
+            kernel.eval(
+                crate::canvas::binding::CANVAS2D_SHIM_JS,
+                crate::kernel::EvalOpts::default(),
+            )
+            .ok();
+            kernel.eval(
+                crate::shims::url::URL_SHIM_JS,
+                crate::kernel::EvalOpts::default(),
+            )
+            .ok();
+        }
 
         // DOM templates are installed inside install_browser_surface_init
         // via install_dom_constructors() — no separate call needed.
@@ -803,21 +827,12 @@ impl EmbeddedV8Kernel {
             let ok = v8::Script::compile(scope, request_fix, None).and_then(|s| s.run(scope)).is_some();
             crate::telemetry::post_hoc_fix_complete("REQUEST_FIX_JS", ok);
 
-            // fix_accessor_properties installs codegen accessors on prototypes
-            // via V8 Rust API (proto_obj.define_property), which bypasses JS
-            // Object.defineProperty guards. restore_dom_accessors re-installs
-            // DOM template accessors (data, textContent) after codegen overwrites them.
-            // TODO: modify codegen generator to add get_own_property_descriptor
-            // check in fix_accessors_* functions (Phase 3 codegen rewrite).
+            // fix_accessor_properties installs codegen accessors only when the
+            // prototype does not already own the property (generator skip-if-own).
+            // chain_dom_prototypes no longer copies accessors onto DOM protos.
+            // Together these preserve DOM template accessors (id, data, textContent)
+            // without restore_dom_accessors.
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
-            // fix_accessor_properties has get_own_property_descriptor skip check
-            // in dom_core.rs and events.rs. DOM template accessors (data, textContent)
-            // are preserved by skip check. Element.id setter needs restore_dom_accessors
-            // to sync DOM tree (codegen element_set_5 only stores __iv8Id JS property).
-            let state = RuntimeState::get(&*scope);
-            if let Some(ref templates) = *state.dom_templates.borrow() {
-                crate::dom::template::restore_dom_accessors(scope, global, templates);
-            }
             // [Global] accessor fix — run in both Window and Worker mode.
             // In worker mode, fix_global_accessor_properties installs
             // WorkerGlobalScope attributes (self, location, navigator, etc.)
@@ -2594,6 +2609,7 @@ impl EmbeddedV8Kernel {
             let state = RuntimeState::get(&self.isolate);
             *state.document.borrow_mut() = Some(doc);
             state.node_cache.borrow_mut().clear();
+            state.attr_cache.borrow_mut().clear();
             state.style_cache.borrow_mut().clear();
         }
 
@@ -2602,6 +2618,14 @@ impl EmbeddedV8Kernel {
             self.with_global_scope(|scope, global| {
                 crate::dom::binding::install_document_bindings(scope, global);
             });
+            // Instance-own props (cookie/referrer/…) live on the document object.
+            // Replacing document via install_document_bindings drops them — re-apply
+            // DOCUMENT_PROPS (same as page_load). Tree methods stay on Document.prototype.
+            self.eval(
+                crate::shims::document_props::DOCUMENT_PROPS_JS,
+                crate::kernel::EvalOpts::default(),
+            )
+            .ok();
         } else {
             // Worker mode: document should not exist on globalThis.
             // Log for debugging.
@@ -2610,7 +2634,7 @@ impl EmbeddedV8Kernel {
         // NOTE: DOM_NAV_SHIM_JS removed — navigation properties (parentNode, childNodes, etc.)
         // are now native accessors on the ObjectTemplate prototype chain (dom/template.rs).
 
-        // Re-install Canvas2D shim (DOM bindings may reset HTMLCanvasElement.prototype)
+        // Re-install Canvas2D factory (not prototype methods — RD-20)
         self.eval(
             crate::canvas::binding::CANVAS2D_SHIM_JS,
             crate::kernel::EvalOpts::default(),
@@ -2665,6 +2689,7 @@ impl EmbeddedV8Kernel {
             let state = RuntimeState::get(&self.isolate);
             *state.document.borrow_mut() = Some(doc);
             state.node_cache.borrow_mut().clear();
+            state.attr_cache.borrow_mut().clear();
             state.style_cache.borrow_mut().clear();
         }
 

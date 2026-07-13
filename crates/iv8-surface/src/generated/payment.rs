@@ -144,7 +144,7 @@ pub(crate) unsafe extern "C" fn payment_manager_op_2(_info: *const v8::FunctionC
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for PaymentManager.
@@ -187,7 +187,7 @@ pub(crate) unsafe extern "C" fn payment_request_op_1(_info: *const v8::FunctionC
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequest") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn payment_request_op_2(_info: *const v8::FunctionCallbackInfo) {
@@ -195,7 +195,7 @@ pub(crate) unsafe extern "C" fn payment_request_op_2(_info: *const v8::FunctionC
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequest") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn payment_request_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -203,7 +203,7 @@ pub(crate) unsafe extern "C" fn payment_request_op_3(_info: *const v8::FunctionC
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequest") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn payment_request_get_4(_info: *const v8::FunctionCallbackInfo) {
@@ -334,26 +334,7 @@ pub(crate) unsafe extern "C" fn payment_request_get_5(_info: *const v8::Function
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "ContactAddress").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -419,7 +400,7 @@ pub(crate) unsafe extern "C" fn payment_request_get_6(_info: *const v8::Function
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -872,7 +853,7 @@ pub(crate) unsafe extern "C" fn payment_request_op_11(_info: *const v8::Function
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequest") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn payment_request_op_12(_info: *const v8::FunctionCallbackInfo) {
@@ -880,7 +861,7 @@ pub(crate) unsafe extern "C" fn payment_request_op_12(_info: *const v8::Function
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequest") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for PaymentRequest.
@@ -1315,26 +1296,7 @@ pub(crate) unsafe extern "C" fn payment_response_get_5(_info: *const v8::Functio
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "ContactAddress").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1400,7 +1362,7 @@ pub(crate) unsafe extern "C" fn payment_response_get_6(_info: *const v8::Functio
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1466,7 +1428,7 @@ pub(crate) unsafe extern "C" fn payment_response_get_7(_info: *const v8::Functio
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1532,7 +1494,7 @@ pub(crate) unsafe extern "C" fn payment_response_get_8(_info: *const v8::Functio
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1598,7 +1560,7 @@ pub(crate) unsafe extern "C" fn payment_response_get_9(_info: *const v8::Functio
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1607,7 +1569,7 @@ pub(crate) unsafe extern "C" fn payment_response_op_10(_info: *const v8::Functio
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentResponse") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn payment_response_op_11(_info: *const v8::FunctionCallbackInfo) {
@@ -1615,7 +1577,7 @@ pub(crate) unsafe extern "C" fn payment_response_op_11(_info: *const v8::Functio
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentResponse") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn payment_response_get_12(_info: *const v8::FunctionCallbackInfo) {
@@ -1880,7 +1842,10 @@ pub fn fix_accessors_payment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -1904,7 +1869,10 @@ pub fn fix_accessors_payment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -1928,7 +1896,10 @@ pub fn fix_accessors_payment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -1952,7 +1923,10 @@ pub fn fix_accessors_payment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -1976,7 +1950,10 @@ pub fn fix_accessors_payment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }

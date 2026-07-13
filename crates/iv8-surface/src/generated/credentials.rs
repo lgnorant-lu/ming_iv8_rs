@@ -235,7 +235,7 @@ pub(crate) unsafe extern "C" fn credential_op_3(_info: *const v8::FunctionCallba
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "Credential") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for Credential.
@@ -286,7 +286,7 @@ pub(crate) unsafe extern "C" fn credentials_container_op_1(_info: *const v8::Fun
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "CredentialsContainer") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn credentials_container_op_2(_info: *const v8::FunctionCallbackInfo) {
@@ -301,7 +301,7 @@ pub(crate) unsafe extern "C" fn credentials_container_op_2(_info: *const v8::Fun
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn credentials_container_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -309,7 +309,7 @@ pub(crate) unsafe extern "C" fn credentials_container_op_3(_info: *const v8::Fun
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "CredentialsContainer") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn credentials_container_op_4(_info: *const v8::FunctionCallbackInfo) {
@@ -317,7 +317,7 @@ pub(crate) unsafe extern "C" fn credentials_container_op_4(_info: *const v8::Fun
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "CredentialsContainer") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for CredentialsContainer.
@@ -561,7 +561,7 @@ pub(crate) unsafe extern "C" fn authenticator_assertion_response_get_3(_info: *c
                 return;
             }
         }
-        rv.set(v8::ArrayBuffer::new(scope, 0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -839,7 +839,7 @@ pub(crate) unsafe extern "C" fn authenticator_attestation_response_op_4(_info: *
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::ArrayBuffer::new(scope, 0).into());
+    rv.set(v8::null(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn authenticator_attestation_response_op_5(_info: *const v8::FunctionCallbackInfo) {
@@ -906,7 +906,7 @@ pub(crate) unsafe extern "C" fn authenticator_attestation_response_op_5(_info: *
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -1113,7 +1113,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_get_2(_info: *const v8::Fu
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -1187,7 +1187,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_get_3(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(crate::type_conv::v8_str(scope, ""));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1255,7 +1255,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_op_4(_info: *const v8::Fun
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -1271,7 +1271,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_op_5(_info: *const v8::Fun
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PublicKeyCredential") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn public_key_credential_op_6(_info: *const v8::FunctionCallbackInfo) {
@@ -1338,7 +1338,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_op_6(_info: *const v8::Fun
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -1354,7 +1354,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_op_7(_info: *const v8::Fun
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PublicKeyCredential") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn public_key_credential_op_8(_info: *const v8::FunctionCallbackInfo) {
@@ -1362,7 +1362,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_op_8(_info: *const v8::Fun
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "PublicKeyCredential") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn public_key_credential_op_9(_info: *const v8::FunctionCallbackInfo) {
@@ -1435,7 +1435,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_op_9(_info: *const v8::Fun
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -1516,7 +1516,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_op_10(_info: *const v8::Fu
                 if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                     if __proto.is_object() {
                         let __obj = v8::Object::new(scope);
-                        __obj.set_prototype(scope, __proto);
+                        let _ = __obj.set_prototype(scope, __proto);
                         rv.set(__obj.into());
                         return;
                     }
@@ -1539,7 +1539,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_op_11(_info: *const v8::Fu
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn public_key_credential_op_12(_info: *const v8::FunctionCallbackInfo) {
@@ -1554,7 +1554,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_op_12(_info: *const v8::Fu
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn public_key_credential_op_13(_info: *const v8::FunctionCallbackInfo) {
@@ -1569,7 +1569,7 @@ pub(crate) unsafe extern "C" fn public_key_credential_op_13(_info: *const v8::Fu
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for PublicKeyCredential.

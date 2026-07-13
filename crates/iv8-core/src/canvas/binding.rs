@@ -31,77 +31,22 @@ pub fn install_canvas_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
     install_fn!("__canvas_set_size__", canvas_set_size_callback);
 }
 
-/// JS shim that replaces __getCanvasContext__ with a full Canvas2D implementation.
+/// JS factory for canvas contexts. getContext/toDataURL stay on the DOM FT
+/// (template get_context_cb / to_data_url_cb). This shim only owns
+/// `__getCanvasContext__(canvasId, type)` implementation (RD-20).
 pub const CANVAS2D_SHIM_JS: &str = r#"
 (function() {
-    // Replace the stub __getCanvasContext__ with a real Canvas2D implementation
-    // that delegates draw operations to the Rust backend.
-    //
-    // Strategy: patch HTMLCanvasElement.prototype.getContext and toDataURL
-    // to use the Rust canvas backend. We do NOT override document.createElement
-    // because page_load re-installs DOM bindings and would undo the patch.
-    // Instead, we use lazy initialization: assign __canvasId__ on first getContext call.
-
+    // Signature must match DOM FT get_context_cb: (canvasId, type).
     window.__getCanvasContext__ = function(canvasId, type) {
+        if (arguments.length === 1) { type = canvasId; canvasId = '__canvas_legacy__'; }
         if (type === '2d') {
-            return createCanvas2DContext(canvasId);
+            return createCanvas2DContext(canvasId || '__canvas_anon__');
         }
         if (type === 'webgl' || type === 'experimental-webgl' ||
             type === 'webgl2' || type === 'experimental-webgl2') {
             return window.__webglContext__ || null;
         }
         return null;
-    };
-
-    // Helper: get or create canvas ID for an element
-    function getOrCreateCanvasId(el) {
-        if (!el.__canvasId__) {
-            el.__canvasId__ = '__canvas_' + Math.random().toString(36).slice(2) + '__';
-            __canvas_set_size__(el.__canvasId__, el.width || 300, el.height || 150);
-        }
-        return el.__canvasId__;
-    }
-
-    // Patch HTMLCanvasElement.prototype if available
-    if (typeof HTMLCanvasElement !== 'undefined') {
-        HTMLCanvasElement.prototype.getContext = function(type, attrs) {
-            if (this == null) throw new TypeError('Illegal invocation');
-            var id = getOrCreateCanvasId(this);
-            __canvas_set_size__(id, this.width || 300, this.height || 150);
-            var ctx = window.__getCanvasContext__(id, type);
-            if (ctx) ctx.canvas = this;
-            return ctx;
-        };
-        Object.defineProperty(HTMLCanvasElement.prototype.getContext, 'length', {value: 1});
-
-        HTMLCanvasElement.prototype.toDataURL = function(type, quality) {
-            if (this == null) throw new TypeError('Illegal invocation');
-            var _cached = globalThis.__iv8CanvasPrefs && globalThis.__iv8CanvasPrefs.toDataURL;
-            if (_cached) return _cached;
-            var id = getOrCreateCanvasId(this);
-            return __canvas_to_data_url__(id, type || 'image/png', quality || 0.92);
-        };
-        Object.defineProperty(HTMLCanvasElement.prototype.toDataURL, 'length', {value: 0});
-    }
-
-    // Also install a global helper that patches any canvas element on demand
-    // This is called by the DOM binding when a canvas element is accessed
-    window.__patchCanvasElement__ = function(el) {
-        if (!el || el.tagName !== 'CANVAS') return;
-        if (el.__canvasPatchedByIv8__) return;
-        el.__canvasPatchedByIv8__ = true;
-        var id = getOrCreateCanvasId(el);
-        el.getContext = function(type, attrs) {
-            __canvas_set_size__(id, this.width || 300, this.height || 150);
-            var ctx = window.__getCanvasContext__(id, type);
-            if (ctx) ctx.canvas = this;
-            return ctx;
-        };
-        el.toDataURL = function(type, quality) {
-            var _cached = globalThis.__iv8CanvasPrefs && globalThis.__iv8CanvasPrefs.toDataURL;
-            if (_cached) return _cached;
-            return __canvas_to_data_url__(id, type || 'image/png', quality || 0.92);
-        };
     };
 
     function createCanvas2DContext(canvasId) {
@@ -422,14 +367,16 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
         if (proto) {
             try {
                 Object.setPrototypeOf(ctx, proto);
-                // Delete own properties that shadow prototype methods/attributes.
-                // idlharness assert_inherits requires properties to NOT be own
-                // properties but to exist in the prototype chain.
+                // Only drop own *methods* that also exist as functions on proto
+                // (idlharness assert_inherits). Keep own stateful accessors
+                // (fillStyle, font, ...) — codegen proto stubs return empty.
                 var protoNames = Object.getOwnPropertyNames(proto);
                 for (var pi = 0; pi < protoNames.length; pi++) {
                     var pn = protoNames[pi];
                     if (pn === 'constructor') continue;
-                    if (ctx.hasOwnProperty(pn)) {
+                    if (!ctx.hasOwnProperty(pn)) continue;
+                    var ownDesc = Object.getOwnPropertyDescriptor(ctx, pn);
+                    if (ownDesc && typeof ownDesc.value === 'function') {
                         try { delete ctx[pn]; } catch(e) {}
                     }
                 }
@@ -439,40 +386,8 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
         return ctx;
     }
 
-    // Patch HTMLCanvasElement.prototype.getContext
-    if (typeof HTMLCanvasElement !== 'undefined') {
-        HTMLCanvasElement.prototype.getContext = function(type, attrs) {
-            if (this == null) throw new TypeError('Illegal invocation');
-            var id = this.__canvasId__;
-            if (!id) {
-                id = '__canvas_' + Math.random().toString(36).slice(2) + '__';
-                this.__canvasId__ = id;
-                // Register canvas with Rust backend
-                __canvas_set_size__(id, this.width || 300, this.height || 150);
-            }
-            var ctx = window.__getCanvasContext__(id, type);
-            if (ctx) ctx.canvas = this;
-            return ctx;
-        };
-
-        HTMLCanvasElement.prototype.toDataURL = function(type, quality) {
-            if (this == null) throw new TypeError('Illegal invocation');
-            var _cached = globalThis.__iv8CanvasPrefs && globalThis.__iv8CanvasPrefs.toDataURL;
-            if (_cached) return _cached;
-            var id = this.__canvasId__;
-            if (!id) {
-                // Initialize canvas ID and register with Rust backend
-                id = '__canvas_' + Math.random().toString(36).slice(2) + '__';
-                this.__canvasId__ = id;
-                __canvas_set_size__(id, this.width || 300, this.height || 150);
-            }
-            return __canvas_to_data_url__(id, type || 'image/png', quality || 0.92);
-        };
-
-        // Override width/height setters to update Rust backend
-        var _origWidthDesc = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'width');
-        var _origHeightDesc = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'height');
-    }
+    // getContext/toDataURL remain on HTMLCanvasElement FT (template.rs).
+    // Do not re-patch prototype here (RD-20 single ownership).
 
 })();
 "#;

@@ -48,7 +48,7 @@ INSTANCE_BUILDERS = {
     "HTMLInputElement": 'document.createElement("input")',
     "HTMLButtonElement": 'document.createElement("button")',
     "HTMLFormElement": 'document.createElement("form")',
-    "HTMLSelectElement": 'document.createElement("select")',
+    "HTMLSelectElement": '(function(){var s=document.createElement("select");var o1=document.createElement("option");o1.textContent="a";var o2=document.createElement("option");o2.textContent="b";s.appendChild(o1);s.appendChild(o2);return s})()',
     "HTMLOptionElement": 'document.createElement("option")',
     "HTMLTextAreaElement": 'document.createElement("textarea")',
     "HTMLImageElement": 'document.createElement("img")',
@@ -104,16 +104,63 @@ def enumerate_idl_setters():
             attr_name = member.get("name", "")
             if not attr_name:
                 continue
-            idl_type = member.get("idl_type", "DOMString")
-            readonly = member.get("readonly", False)
+            # unified_ir stores type as {kind,name,nullable} or legacy idl_type string
+            raw_type = member.get("type")
+            if isinstance(raw_type, dict):
+                idl_type = raw_type.get("name") or raw_type.get("idl_type") or "DOMString"
+            else:
+                idl_type = member.get("idl_type") or (
+                    raw_type if isinstance(raw_type, str) else "DOMString"
+                )
+            readonly = bool(member.get("readonly", False))
             # Pick a sample value based on type
+            tlow = str(idl_type).lower()
             sample = TYPE_SAMPLES.get(idl_type, '"test_value"')
-            if "boolean" in idl_type.lower():
+            if "boolean" in tlow:
                 sample = "true"
-            elif "long" in idl_type.lower() or "short" in idl_type.lower():
+            elif "unsigned long" in tlow or tlow in ("ulong",):
                 sample = "42"
-            elif "double" in idl_type.lower() or "float" in idl_type.lower():
+            elif "long" in tlow or "short" in tlow:
+                sample = "42"
+            elif "double" in tlow or "float" in tlow:
                 sample = "3.14"
+            elif "element" in tlow or str(idl_type).endswith("Element"):
+                # Element-typed attrs need a real node, not a string
+                sample = 'document.createElement("div")'
+            # selectedIndex: out-of-range long becomes -1 on empty/short lists
+            if attr_name == "selectedIndex":
+                sample = "0"
+            if attr_name == "length" and iface_name == "HTMLSelectElement":
+                sample = "1"
+            if attr_name in ("width", "height") and iface_name in (
+                "HTMLCanvasElement",
+                "HTMLImageElement",
+                "HTMLVideoElement",
+            ):
+                sample = "42"
+            if attr_name == "cookie" and iface_name == "Document":
+                sample = '"h05b=1"'
+            if attr_name == "body" and iface_name == "Document":
+                sample = 'document.createElement("body")'
+            if attr_name in (
+                "protocol",
+                "host",
+                "hostname",
+                "port",
+                "pathname",
+                "search",
+                "hash",
+            ) and iface_name == "HTMLAnchorElement":
+                # Component setters rewrite href; use values that round-trip
+                sample = {
+                    "protocol": '"https:"',
+                    "host": '"example.com"',
+                    "hostname": '"example.com"',
+                    "port": '"8080"',
+                    "pathname": '"/path"',
+                    "search": '"?q=1"',
+                    "hash": '"#frag"',
+                }.get(attr_name, sample)
             tests.append({
                 "interface": iface_name,
                 "attribute": attr_name,

@@ -529,6 +529,228 @@ impl Document {
         })
     }
 
+    /// NodeFilter whatToShow bit for a node type (DOM NodeFilter).
+    pub fn what_to_show_bit(node_type: u16) -> u32 {
+        if node_type == 0 || node_type > 12 {
+            return 0;
+        }
+        1u32 << (node_type - 1)
+    }
+
+    pub fn matches_what_to_show(&self, node_id: NodeId, what_to_show: u32) -> bool {
+        if what_to_show == 0xFFFF_FFFF {
+            return true;
+        }
+        self.tree
+            .get(node_id)
+            .map(|n| {
+                let bit = Self::what_to_show_bit(n.value().node_type());
+                (what_to_show & bit) != 0
+            })
+            .unwrap_or(false)
+    }
+
+    /// TreeWalker nextNode (preorder). Stays under `root`. Ignores whatToShow.
+    pub fn tree_walker_next_raw(&self, root: NodeId, current: NodeId) -> Option<NodeId> {
+        let cur = self.tree.get(current)?;
+        if let Some(child) = cur.first_child() {
+            return Some(child.id());
+        }
+        let mut node = cur;
+        loop {
+            if node.id() == root {
+                return None;
+            }
+            if let Some(sib) = node.next_sibling() {
+                return Some(sib.id());
+            }
+            match node.parent() {
+                Some(p) => node = p,
+                None => return None,
+            }
+        }
+    }
+
+    /// TreeWalker nextNode with whatToShow filter.
+    pub fn tree_walker_next(
+        &self,
+        root: NodeId,
+        current: NodeId,
+        what_to_show: u32,
+    ) -> Option<NodeId> {
+        let mut cur = current;
+        loop {
+            let next = self.tree_walker_next_raw(root, cur)?;
+            if self.matches_what_to_show(next, what_to_show) {
+                return Some(next);
+            }
+            cur = next;
+        }
+    }
+
+    /// TreeWalker previousNode (reverse preorder). Ignores whatToShow.
+    pub fn tree_walker_previous_raw(&self, root: NodeId, current: NodeId) -> Option<NodeId> {
+        if current == root {
+            return None;
+        }
+        let cur = self.tree.get(current)?;
+        if let Some(prev) = cur.prev_sibling() {
+            let mut n = prev;
+            while let Some(last) = n.last_child() {
+                n = last;
+            }
+            return Some(n.id());
+        }
+        cur.parent().map(|p| p.id())
+    }
+
+    /// TreeWalker previousNode with whatToShow filter.
+    pub fn tree_walker_previous(
+        &self,
+        root: NodeId,
+        current: NodeId,
+        what_to_show: u32,
+    ) -> Option<NodeId> {
+        let mut cur = current;
+        loop {
+            let prev = self.tree_walker_previous_raw(root, cur)?;
+            if self.matches_what_to_show(prev, what_to_show) {
+                return Some(prev);
+            }
+            cur = prev;
+        }
+    }
+
+    /// Minimal XPath 1.0 subset for anti-bot / DOM probes.
+    /// Supports: `//tag`, `//tag[@id='x']`, `//*[@id='x']`, `id('x')`,
+    /// `/html/...` absolute element path, `.//tag` under context.
+    pub fn xpath_evaluate(&self, expression: &str, context: NodeId) -> Vec<NodeId> {
+        let expr = expression.trim();
+        if expr.is_empty() {
+            return Vec::new();
+        }
+        // id('foo') / id("foo")
+        if let Some(rest) = expr.strip_prefix("id(") {
+            if let Some(end) = rest.rfind(')') {
+                let inner = rest[..end].trim().trim_matches(|c| c == '\'' || c == '"');
+                if let Some(nid) = self.get_element_by_id(inner) {
+                    return vec![nid];
+                }
+                return Vec::new();
+            }
+        }
+        // //*[@id='x'] or //tag[@id='x']
+        if let Some(caps) = xpath_id_attr(expr) {
+            if let Some(nid) = self.get_element_by_id(&caps) {
+                return vec![nid];
+            }
+            return Vec::new();
+        }
+        // //tag or .//tag
+        let (from, path) = if let Some(rest) = expr.strip_prefix(".//") {
+            (context, rest)
+        } else if let Some(rest) = expr.strip_prefix("//") {
+            (self.root_id(), rest)
+        } else if let Some(rest) = expr.strip_prefix('/') {
+            return self.xpath_absolute_path(rest);
+        } else {
+            // relative tag under context children only (simple)
+            (context, expr)
+        };
+        // strip predicates we don't support beyond id (already handled)
+        let tag = path.split(['/', '[']).next().unwrap_or("").trim();
+        if tag.is_empty() {
+            return Vec::new();
+        }
+        if tag == "*" {
+            return self.collect_elements_under(from);
+        }
+        let tag_l = tag.to_ascii_lowercase();
+        let mut out = Vec::new();
+        if let Some(start) = self.tree.get(from) {
+            for n in start.descendants() {
+                if n.id() == from {
+                    continue;
+                }
+                if let NodeData::Element { tag_name, .. } = n.value() {
+                    if tag_name.eq_ignore_ascii_case(&tag_l) {
+                        out.push(n.id());
+                    }
+                }
+            }
+        }
+        out
+    }
+
+    fn xpath_absolute_path(&self, path: &str) -> Vec<NodeId> {
+        let parts: Vec<&str> = path
+            .split('/')
+            .map(str::trim)
+            .filter(|p| !p.is_empty())
+            .collect();
+        if parts.is_empty() {
+            return Vec::new();
+        }
+        let mut cur = self.root_id();
+        for part in parts {
+            let tag = part.split('[').next().unwrap_or(part).to_ascii_lowercase();
+            let next = self.tree.get(cur).and_then(|n| {
+                n.children().find(|c| {
+                    matches!(
+                        c.value(),
+                        NodeData::Element { tag_name, .. }
+                            if tag_name.eq_ignore_ascii_case(&tag)
+                    )
+                })
+            });
+            match next {
+                Some(n) => cur = n.id(),
+                None => return Vec::new(),
+            }
+        }
+        vec![cur]
+    }
+
+    fn collect_elements_under(&self, from: NodeId) -> Vec<NodeId> {
+        let mut out = Vec::new();
+        if let Some(start) = self.tree.get(from) {
+            for n in start.descendants() {
+                if n.id() == from {
+                    continue;
+                }
+                if n.value().is_element() {
+                    out.push(n.id());
+                }
+            }
+        }
+        out
+    }
+
+    /// First child of node, if any.
+    pub fn first_child_id(&self, node: NodeId) -> Option<NodeId> {
+        self.tree.get(node)?.first_child().map(|c| c.id())
+    }
+
+    /// Last child of node, if any.
+    pub fn last_child_id(&self, node: NodeId) -> Option<NodeId> {
+        self.tree.get(node)?.last_child().map(|c| c.id())
+    }
+
+    /// Next sibling, if any.
+    pub fn next_sibling_id(&self, node: NodeId) -> Option<NodeId> {
+        self.tree.get(node)?.next_sibling().map(|c| c.id())
+    }
+
+    /// Previous sibling, if any.
+    pub fn previous_sibling_id(&self, node: NodeId) -> Option<NodeId> {
+        self.tree.get(node)?.prev_sibling().map(|c| c.id())
+    }
+
+    /// Parent node id, if any.
+    pub fn parent_id(&self, node: NodeId) -> Option<NodeId> {
+        self.tree.get(node)?.parent().map(|p| p.id())
+    }
+
     /// Collect text content of a node and all its descendants.
     pub fn text_content_of(&self, node_id: NodeId) -> String {
         let mut result = String::new();
@@ -545,6 +767,21 @@ impl Document {
         }
         result
     }
+}
+
+/// Parse `//tag[@id='x']` / `//*[@id="x"]` → Some(id).
+fn xpath_id_attr(expr: &str) -> Option<String> {
+    let e = expr.trim();
+    let rest = e.strip_prefix("//").or_else(|| e.strip_prefix(".//"))?;
+    let lb = rest.find("[@id=")?;
+    let after = &rest[lb + 5..];
+    let quote = after.chars().next()?;
+    if quote != '\'' && quote != '"' {
+        return None;
+    }
+    let body = &after[1..];
+    let end = body.find(quote)?;
+    Some(body[..end].to_string())
 }
 
 impl std::fmt::Debug for Document {

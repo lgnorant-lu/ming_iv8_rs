@@ -200,26 +200,7 @@ pub(crate) unsafe extern "C" fn sensor_get_3(_info: *const v8::FunctionCallbackI
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "DOMHighResTimeStamp").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -859,7 +840,7 @@ pub(crate) unsafe extern "C" fn accelerometer_get_1(_info: *const v8::FunctionCa
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -925,7 +906,7 @@ pub(crate) unsafe extern "C" fn accelerometer_get_2(_info: *const v8::FunctionCa
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -991,7 +972,7 @@ pub(crate) unsafe extern "C" fn accelerometer_get_3(_info: *const v8::FunctionCa
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1100,7 +1081,7 @@ pub(crate) unsafe extern "C" fn ambient_light_sensor_get_1(_info: *const v8::Fun
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1195,7 +1176,7 @@ pub(crate) unsafe extern "C" fn gyroscope_get_1(_info: *const v8::FunctionCallba
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1261,7 +1242,7 @@ pub(crate) unsafe extern "C" fn gyroscope_get_2(_info: *const v8::FunctionCallba
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1327,7 +1308,7 @@ pub(crate) unsafe extern "C" fn gyroscope_get_3(_info: *const v8::FunctionCallba
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1436,7 +1417,7 @@ pub(crate) unsafe extern "C" fn magnetometer_get_1(_info: *const v8::FunctionCal
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1502,7 +1483,7 @@ pub(crate) unsafe extern "C" fn magnetometer_get_2(_info: *const v8::FunctionCal
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1568,7 +1549,7 @@ pub(crate) unsafe extern "C" fn magnetometer_get_3(_info: *const v8::FunctionCal
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1841,7 +1822,7 @@ pub(crate) unsafe extern "C" fn proximity_sensor_get_1(_info: *const v8::Functio
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1907,7 +1888,7 @@ pub(crate) unsafe extern "C" fn proximity_sensor_get_2(_info: *const v8::Functio
                 return;
             }
         }
-        rv.set(v8::Number::new(scope, 0.0).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1973,7 +1954,7 @@ pub(crate) unsafe extern "C" fn proximity_sensor_get_3(_info: *const v8::Functio
                 return;
             }
         }
-        rv.set(v8::Boolean::new(scope, false).into());
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -2127,7 +2108,10 @@ pub fn fix_accessors_sensors(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -2151,7 +2135,10 @@ pub fn fix_accessors_sensors(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }
@@ -2175,7 +2162,10 @@ pub fn fix_accessors_sensors(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
                         d.set_enumerable(true);
                         d.set_configurable(true);
-                        let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        let __existing = proto_obj.get_own_property_descriptor(scope, attr_key.into());
+                        if __existing.is_none() || __existing.is_some_and(|d| d.is_undefined()) {
+                            let _ = proto_obj.define_property(scope, attr_key.into(), &d);
+                        }
                     }
                 }
             }

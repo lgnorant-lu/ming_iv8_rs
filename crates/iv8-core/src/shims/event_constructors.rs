@@ -11,6 +11,9 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
 (function() {
     if (globalThis.__iv8EventShimInstalled) return;
     globalThis.__iv8EventShimInstalled = true;
+    function _setSlot(inst, name, value) {
+        Object.defineProperty(inst, name, {value: value, writable: true, enumerable: false, configurable: true});
+    }
     function _defAccessor(proto, name, defaultVal) {
         var slot = '_' + name;
         var getter = function() {
@@ -74,21 +77,21 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
 
     function _initEventSlots(inst, type, options) {
         options = options || {};
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
+        _setSlot(inst, '_type', type || '');
+        _setSlot(inst, '_bubbles', !!options.bubbles);
+        _setSlot(inst, '_cancelable', options.cancelable !== undefined ? !!options.cancelable : false);
+        _setSlot(inst, '_composed', !!options.composed);
+        _setSlot(inst, '_defaultPrevented', false);
+        _setSlot(inst, '_target', null);
+        _setSlot(inst, '_currentTarget', null);
+        _setSlot(inst, '_srcElement', null);
+        _setSlot(inst, '_eventPhase', 0);
+        _setSlot(inst, '_timeStamp', Date.now());
+        _setSlot(inst, '_isTrusted', false);
+        _setSlot(inst, '_returnValue', true);
+        _setSlot(inst, '_cancelBubble', false);
+        _setSlot(inst, '_stopPropagation', false);
+        _setSlot(inst, '_stopImmediatePropagation', false);
         Object.defineProperty(inst, 'isTrusted', { value: false, writable: false, enumerable: true, configurable: true });
     }
 
@@ -170,7 +173,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
 
     // --- CustomEvent ---
     var CEProto = CodegenCustomEvent.prototype;
-    // Ensure prototype chain: CustomEvent.prototype → Event.prototype
+    // Ensure prototype chain: CustomEvent.prototype 鈫?Event.prototype
     Object.setPrototypeOf(CEProto, EventProto);
     Object.defineProperty(CEProto, 'constructor', {value: CodegenCustomEvent, writable: true, enumerable: false, configurable: true});
 
@@ -193,7 +196,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         var inst = Reflect.construct(CodegenCustomEvent, [], new.target || CustomEvent);
         _initEventSlots(inst, type, options);
         options = options || {};
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
+        _setSlot(inst, '_detail', options.detail !== undefined ? options.detail : null);
         return inst;
     }
     CustomEvent.prototype = CEProto;
@@ -222,27 +225,27 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         var inst = Reflect.construct(CodegenMouseEvent, [], new.target || MouseEvent);
         _initEventSlots(inst, type, options);
         options = options || {};
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
+        _setSlot(inst, '_clientX', options.clientX || 0);
+        _setSlot(inst, '_clientY', options.clientY || 0);
+        _setSlot(inst, '_screenX', options.screenX || 0);
+        _setSlot(inst, '_screenY', options.screenY || 0);
+        _setSlot(inst, '_pageX', options.pageX || 0);
+        _setSlot(inst, '_pageY', options.pageY || 0);
+        _setSlot(inst, '_offsetX', options.offsetX || 0);
+        _setSlot(inst, '_offsetY', options.offsetY || 0);
+        _setSlot(inst, '_x', options.clientX || 0);
+        _setSlot(inst, '_y', options.clientY || 0);
+        _setSlot(inst, '_button', options.button || 0);
+        _setSlot(inst, '_buttons', options.buttons || 0);
+        _setSlot(inst, '_ctrlKey', !!options.ctrlKey);
+        _setSlot(inst, '_shiftKey', !!options.shiftKey);
+        _setSlot(inst, '_altKey', !!options.altKey);
+        _setSlot(inst, '_metaKey', !!options.metaKey);
+        _setSlot(inst, '_relatedTarget', options.relatedTarget || null);
+        _setSlot(inst, '_layerX', options.layerX || 0);
+        _setSlot(inst, '_layerY', options.layerY || 0);
+        _setSlot(inst, '_movementX', options.movementX || 0);
+        _setSlot(inst, '_movementY', options.movementY || 0);
         return inst;
     }
     MouseEvent.prototype = MEProto;
@@ -272,18 +275,18 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         var inst = Reflect.construct(CodegenKeyboardEvent, [], new.target || KeyboardEvent);
         _initEventSlots(inst, type, options);
         options = options || {};
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
+        _setSlot(inst, '_key', options.key || '');
+        _setSlot(inst, '_code', options.code || '');
+        _setSlot(inst, '_keyCode', options.keyCode || 0);
+        _setSlot(inst, '_charCode', options.charCode || 0);
+        _setSlot(inst, '_which', options.which || options.keyCode || 0);
+        _setSlot(inst, '_ctrlKey', !!options.ctrlKey);
+        _setSlot(inst, '_shiftKey', !!options.shiftKey);
+        _setSlot(inst, '_altKey', !!options.altKey);
+        _setSlot(inst, '_metaKey', !!options.metaKey);
+        _setSlot(inst, '_repeat', !!options.repeat);
+        _setSlot(inst, '_location', options.location || 0);
+        _setSlot(inst, '_isComposing', !!options.isComposing);
         return inst;
     }
     KeyboardEvent.prototype = KEProto;
@@ -309,40 +312,40 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         var inst = Reflect.construct(CodegenPointerEvent, [], new.target || PointerEvent);
         _initEventSlots(inst, type, options);
         options = options || {};
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '', {value: , writable: true, enumerable: false, configurable: true});
+        _setSlot(inst, '_clientX', options.clientX || 0);
+        _setSlot(inst, '_clientY', options.clientY || 0);
+        _setSlot(inst, '_screenX', options.screenX || 0);
+        _setSlot(inst, '_screenY', options.screenY || 0);
+        _setSlot(inst, '_pageX', options.pageX || 0);
+        _setSlot(inst, '_pageY', options.pageY || 0);
+        _setSlot(inst, '_offsetX', options.offsetX || 0);
+        _setSlot(inst, '_offsetY', options.offsetY || 0);
+        _setSlot(inst, '_x', options.clientX || 0);
+        _setSlot(inst, '_y', options.clientY || 0);
+        _setSlot(inst, '_button', options.button || 0);
+        _setSlot(inst, '_buttons', options.buttons || 0);
+        _setSlot(inst, '_ctrlKey', !!options.ctrlKey);
+        _setSlot(inst, '_shiftKey', !!options.shiftKey);
+        _setSlot(inst, '_altKey', !!options.altKey);
+        _setSlot(inst, '_metaKey', !!options.metaKey);
+        _setSlot(inst, '_relatedTarget', options.relatedTarget || null);
+        _setSlot(inst, '_layerX', options.layerX || 0);
+        _setSlot(inst, '_layerY', options.layerY || 0);
+        _setSlot(inst, '_movementX', options.movementX || 0);
+        _setSlot(inst, '_movementY', options.movementY || 0);
+        _setSlot(inst, '_pointerId', options.pointerId || 0);
+        _setSlot(inst, '_width', options.width || 1);
+        _setSlot(inst, '_height', options.height || 1);
+        _setSlot(inst, '_pressure', options.pressure || 0);
+        _setSlot(inst, '_pointerType', options.pointerType || 'mouse');
+        _setSlot(inst, '_isPrimary', options.isPrimary !== undefined ? !!options.isPrimary : true);
+        _setSlot(inst, '_tiltX', options.tiltX || 0);
+        _setSlot(inst, '_tiltY', options.tiltY || 0);
+        _setSlot(inst, '_twist', options.twist || 0);
+        _setSlot(inst, '_tangentialPressure', options.tangentialPressure || 0);
+        _setSlot(inst, '_altitudeAngle', options.altitudeAngle || 0);
+        _setSlot(inst, '_azimuthAngle', options.azimuthAngle || 0);
+        _setSlot(inst, '_persistentDeviceId', options.persistentDeviceId || 0);
         return inst;
     }
     PointerEvent.prototype = PEProto;

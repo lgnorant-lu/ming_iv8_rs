@@ -34,8 +34,8 @@ pub fn map_idl_type(idl_type: &str) -> TypeMap {
             needs_scope: true,
         },
 
-        // String types
-        "DOMString" | "USVString" | "ByteString" => TypeMap {
+        // String types (CSSOMString is a DOMString typedef used by CSSOM/events)
+        "DOMString" | "USVString" | "ByteString" | "CSSOMString" => TypeMap {
             rust_type: "v8::Local<'s, v8::String>".into(),
             default_value: "crate::type_conv::v8_str(scope, \"\")".into(),
             needs_scope: true,
@@ -85,11 +85,24 @@ pub fn map_idl_type(idl_type: &str) -> TypeMap {
             needs_scope: true,
         },
 
-        // Promise<T>
-        name if is_promise(name) => TypeMap {
-            rust_type: "v8::Local<'s, v8::Value>".into(),
-            default_value: "v8::undefined(scope).into()".into(),
-            needs_scope: true,
+        // Promise<T> — return a resolved Promise (typeof object), not bare undefined.
+        name if is_promise(name) => {
+            let inner = name
+                .strip_prefix("Promise<")
+                .and_then(|s| s.strip_suffix('>'))
+                .unwrap_or("undefined");
+            let payload = if inner == "boolean" {
+                "v8::Boolean::new(scope, false).into()"
+            } else {
+                "v8::undefined(scope).into()"
+            };
+            TypeMap {
+                rust_type: "v8::Local<'s, v8::Value>".into(),
+                default_value: format!(
+                    "{{ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, {payload}); __r.get_promise(scope).into() }}"
+                ),
+                needs_scope: true,
+            }
         },
 
         // sequence<T> / FrozenArray<T>
@@ -283,7 +296,11 @@ mod tests {
     #[test]
     fn test_promise_mapping() {
         let m = map_idl_type("Promise<Response>");
-        assert_eq!(m.default_value, "v8::Promise::new(scope).into()");
+        assert!(
+            m.default_value.contains("PromiseResolver"),
+            "Promise ops must return a resolved Promise object, got {}",
+            m.default_value
+        );
     }
 
     #[test]

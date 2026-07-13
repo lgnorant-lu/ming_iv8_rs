@@ -299,3 +299,44 @@ fn generate_uuid_v4() -> String {
         bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15],
     )
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_fill_random_bytes_fills_buffer_with_non_all_zero() {
+        let mut a = [0u8; 32];
+        let mut b = [0u8; 32];
+        fill_random_bytes(&mut a);
+        fill_random_bytes(&mut b);
+        assert!(a.iter().any(|&x| x != 0) || b.iter().any(|&x| x != 0));
+        assert_ne!(a, b);
+    }
+
+    #[test]
+    fn test_generate_uuid_v4_format_and_version_variant() {
+        let uuid = generate_uuid_v4();
+        assert_eq!(uuid.len(), 36);
+        assert_eq!(&uuid[8..9], "-");
+        assert_eq!(&uuid[13..14], "-");
+        assert_eq!(&uuid[18..19], "-");
+        assert_eq!(&uuid[23..24], "-");
+        assert_eq!(&uuid[14..15], "4");
+        let variant_nibble = u8::from_str_radix(&uuid[19..20], 16).unwrap();
+        assert!(variant_nibble >= 8 && variant_nibble <= 0xb);
+        for (i, ch) in uuid.chars().enumerate() {
+            if matches!(i, 8 | 13 | 18 | 23) {
+                continue;
+            }
+            assert!(ch.is_ascii_hexdigit(), "non-hex at {i}: {ch}");
+        }
+    }
+
+    #[test]
+    fn test_generate_uuid_v4_unique_across_calls() {
+        let u1 = generate_uuid_v4();
+        let u2 = generate_uuid_v4();
+        assert_ne!(u1, u2);
+    }
+}

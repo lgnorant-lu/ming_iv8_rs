@@ -172,9 +172,12 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     if (window.scrollX === undefined) { window.scrollX = 0; }
     if (window.scrollY === undefined) { window.scrollY = 0; }
 
-    // Canvas context factory
+    // Canvas context factory — signature matches DOM FT get_context_cb:
+    // __getCanvasContext__(canvasId, type). CANVAS2D_SHIM_JS replaces this
+    // with the full 2d implementation when installed (RD-20).
     if (!window.__getCanvasContext__) {
-        var _getCanvasContext = function(type) {
+        var _getCanvasContext = function(canvasId, type) {
+            if (arguments.length === 1) { type = canvasId; canvasId = null; }
             if (type === '2d') {
                 return {
                     canvas: null,
@@ -182,10 +185,6 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                     lineWidth: 1, font: '10px sans-serif',
                     textAlign: 'start', textBaseline: 'alphabetic',
                     globalAlpha: 1, globalCompositeOperation: 'source-over',
-                    shadowBlur: 0, shadowColor: 'rgba(0,0,0,0)',
-                    shadowOffsetX: 0, shadowOffsetY: 0,
-                    lineCap: 'butt', lineJoin: 'miter', miterLimit: 10,
-                    imageSmoothingEnabled: true,
                     fillRect: function() {}, strokeRect: function() {},
                     clearRect: function() {}, fillText: function() {},
                     strokeText: function() {},
@@ -193,10 +192,7 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                         var font = this.font || '10px sans-serif';
                         var sizeMatch = font.match(/(\d+(?:\.\d+)?)(px|pt|em)/);
                         var fontSize = sizeMatch ? parseFloat(sizeMatch[1]) : 10;
-                        var isMonospace = /monospace|courier|mono/i.test(font);
-                        var isSerif = /serif/i.test(font) && !/sans-serif/i.test(font);
-                        var charWidth = isMonospace ? fontSize * 0.6 : isSerif ? fontSize * 0.55 : fontSize * 0.5;
-                        var width = (text || '').length * charWidth;
+                        var width = (text || '').length * fontSize * 0.5;
                         return { width: width, actualBoundingBoxAscent: fontSize * 0.8,
                                  actualBoundingBoxDescent: fontSize * 0.2,
                                  actualBoundingBoxLeft: 0, actualBoundingBoxRight: width,
@@ -204,49 +200,17 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                     },
                     beginPath: function() {}, closePath: function() {},
                     moveTo: function() {}, lineTo: function() {},
-                    arc: function() {}, arcTo: function() {},
-                    bezierCurveTo: function() {}, quadraticCurveTo: function() {},
-                    rect: function() {}, fill: function() {}, stroke: function() {},
-                    clip: function() {}, save: function() {}, restore: function() {},
-                    scale: function() {}, rotate: function() {}, translate: function() {},
-                    transform: function() {}, setTransform: function() {}, resetTransform: function() {},
-                    createLinearGradient: function(x0, y0, x1, y1) {
+                    arc: function() {}, fill: function() {}, stroke: function() {},
+                    save: function() {}, restore: function() {},
+                    createLinearGradient: function() {
                         var stops = [];
-                        var grad = {
-                            _stops: stops,
-                            _coords: {x0: x0, y0: y0, x1: x1, y1: y1},
-                            addColorStop: function(offset, color) {
-                                if (typeof offset !== 'number' || isNaN(offset) || offset < 0 || offset > 1)
-                                    throw new TypeError('The provided value is not of type \'number\'.');
-                                if (typeof color !== 'string')
-                                    throw new TypeError('The provided value is not of type \'string\'.');
-                                stops.push({offset: offset, color: color});
-                            }
-                        };
-                        Object.defineProperty(grad, Symbol.toStringTag, {value: 'CanvasGradient', configurable: true, enumerable: false, writable: false});
-                        return grad;
+                        return { addColorStop: function(o, c) { stops.push({offset: o, color: c}); } };
                     },
-                    createRadialGradient: function(x0, y0, r0, x1, y1, r1) {
+                    createRadialGradient: function() {
                         var stops = [];
-                        var grad = {
-                            _stops: stops,
-                            _coords: {x0: x0, y0: y0, r0: r0, x1: x1, y1: y1, r1: r1},
-                            addColorStop: function(offset, color) {
-                                if (typeof offset !== 'number' || isNaN(offset) || offset < 0 || offset > 1)
-                                    throw new TypeError('The provided value is not of type \'number\'.');
-                                if (typeof color !== 'string')
-                                    throw new TypeError('The provided value is not of type \'string\'.');
-                                stops.push({offset: offset, color: color});
-                            }
-                        };
-                        Object.defineProperty(grad, Symbol.toStringTag, {value: 'CanvasGradient', configurable: true, enumerable: false, writable: false});
-                        return grad;
+                        return { addColorStop: function(o, c) { stops.push({offset: o, color: c}); } };
                     },
-                    createPattern: function(image, repetition) {
-                        var pat = {_image: image, _repetition: repetition || 'repeat'};
-                        Object.defineProperty(pat, Symbol.toStringTag, {value: 'CanvasPattern', configurable: true, enumerable: false, writable: false});
-                        return pat;
-                    },
+                    createPattern: function() { return {}; },
                     drawImage: function() {},
                     createImageData: function(w, h) {
                         return {width: w, height: h, data: new Uint8ClampedArray(w*h*4)};
@@ -257,8 +221,6 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                     putImageData: function() {},
                     getLineDash: function() { return []; },
                     setLineDash: function() {},
-                    isPointInPath: function() { return false; },
-                    isPointInStroke: function() { return false; },
                 };
             }
             if (type === 'webgl' || type === 'experimental-webgl' ||

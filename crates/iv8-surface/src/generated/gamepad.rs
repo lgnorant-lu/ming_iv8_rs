@@ -277,7 +277,7 @@ pub(crate) unsafe extern "C" fn gamepad_get_4(_info: *const v8::FunctionCallback
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -626,7 +626,7 @@ pub(crate) unsafe extern "C" fn gamepad_get_9(_info: *const v8::FunctionCallback
                     if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
                         if __proto.is_object() {
                             let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
+                            let _ = __obj.set_prototype(scope, __proto);
                             rv.set(__obj.into());
                             return;
                         }
@@ -832,26 +832,7 @@ pub(crate) unsafe extern "C" fn gamepad_get_12(_info: *const v8::FunctionCallbac
                 return;
             }
         }
-        {
-            let __ctor_name = v8::String::new(scope, "GamepadPose").unwrap();
-            let __ctx = scope.get_current_context();
-            let __global = __ctx.global(scope);
-            if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-                if __ctor_val.is_function() {
-                    let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                    let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                    if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                        if __proto.is_object() {
-                            let __obj = v8::Object::new(scope);
-                            __obj.set_prototype(scope, __proto);
-                            rv.set(__obj.into());
-                            return;
-                        }
-                    }
-                }
-            }
-            rv.set(v8::Object::new(scope).into());
-        }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1283,7 +1264,7 @@ pub(crate) unsafe extern "C" fn gamepad_haptic_actuator_op_2(_info: *const v8::F
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn gamepad_haptic_actuator_op_3(_info: *const v8::FunctionCallbackInfo) {
@@ -1291,7 +1272,7 @@ pub(crate) unsafe extern "C" fn gamepad_haptic_actuator_op_3(_info: *const v8::F
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "GamepadHapticActuator") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
 pub(crate) unsafe extern "C" fn gamepad_haptic_actuator_op_4(_info: *const v8::FunctionCallbackInfo) {
@@ -1306,7 +1287,7 @@ pub(crate) unsafe extern "C" fn gamepad_haptic_actuator_op_4(_info: *const v8::F
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+    rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
 /// Create FunctionTemplate for GamepadHapticActuator.
@@ -1550,7 +1531,7 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_3(_info: *const v8::FunctionCal
                 return;
             }
         }
-        rv.set(crate::type_conv::default_value_for_type(scope, "Float32Array"));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1616,7 +1597,7 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_4(_info: *const v8::FunctionCal
                 return;
             }
         }
-        rv.set(crate::type_conv::default_value_for_type(scope, "Float32Array"));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1682,7 +1663,7 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_5(_info: *const v8::FunctionCal
                 return;
             }
         }
-        rv.set(crate::type_conv::default_value_for_type(scope, "Float32Array"));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1748,7 +1729,7 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_6(_info: *const v8::FunctionCal
                 return;
             }
         }
-        rv.set(crate::type_conv::default_value_for_type(scope, "Float32Array"));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1814,7 +1795,7 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_7(_info: *const v8::FunctionCal
                 return;
             }
         }
-        rv.set(crate::type_conv::default_value_for_type(scope, "Float32Array"));
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -1880,7 +1861,7 @@ pub(crate) unsafe extern "C" fn gamepad_pose_get_8(_info: *const v8::FunctionCal
                 return;
             }
         }
-        rv.set(crate::type_conv::default_value_for_type(scope, "Float32Array"));
+        rv.set(v8::null(scope).into());
     }));
 }
 

@@ -137,20 +137,27 @@ fn test_screen_height() {
 #[test]
 fn test_create_element_tagname() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value("document.createElement('div').tagName"));
-    assert!(
-        !val.is_empty(),
-        "kernel returned empty on 'document.createElement('div').tagName'"
-    );
+    let val = kernel.eval_to_rust_value("document.createElement('div').tagName");
+    assert_eq!(val, RustValue::String("DIV".into()));
 }
 
 #[test]
 fn test_create_element_span() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value("document.createElement('span').tagName"));
-    assert!(
-        !val.is_empty(),
-        "kernel returned empty on 'document.createElement('span').tagName'"
+    let val = kernel.eval_to_rust_value("document.createElement('span').tagName");
+    assert_eq!(val, RustValue::String("SPAN".into()));
+}
+
+#[test]
+fn test_default_kernel_document_body_and_document_element() {
+    let mut kernel = make_new_chain_kernel();
+    assert_eq!(
+        kernel.eval_to_rust_value("document.body && document.body.tagName"),
+        RustValue::String("BODY".into())
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("document.documentElement && document.documentElement.tagName"),
+        RustValue::String("HTML".into())
     );
 }
 

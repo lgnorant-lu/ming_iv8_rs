@@ -210,3 +210,244 @@ fn append_child_returns_child() {
     );
     assert_eq!(result, RustValue::String("SPAN".into()));
 }
+
+#[test]
+fn replace_child_owned_by_node_prototype_only() {
+    let mut kernel = common::make_kernel_with_doc("<div id=\"parent\"></div>");
+    let result = kernel.eval_to_rust_value(
+        r#"
+        (function () {
+          var parent = document.getElementById('parent');
+          var a = document.createElement('span');
+          var b = document.createElement('p');
+          parent.appendChild(a);
+          var returned = parent.replaceChild(b, a);
+          var throwsType = false;
+          try { parent.replaceChild(b, 'test'); } catch (e) {
+            throwsType = e instanceof TypeError;
+          }
+          return JSON.stringify({
+            hasOwnElement: Object.prototype.hasOwnProperty.call(Element.prototype, 'replaceChild'),
+            hasOwnNode: Object.prototype.hasOwnProperty.call(Node.prototype, 'replaceChild'),
+            same: parent.replaceChild === Node.prototype.replaceChild,
+            length: Node.prototype.replaceChild.length,
+            childTag: parent.firstChild && parent.firstChild.tagName,
+            returned: returned && returned.tagName,
+            throwsType: throwsType,
+            hasOwnInsertBeforeEl: Object.prototype.hasOwnProperty.call(Element.prototype, 'insertBefore'),
+            hasOwnCloneEl: Object.prototype.hasOwnProperty.call(Element.prototype, 'cloneNode'),
+            hasOwnContainsEl: Object.prototype.hasOwnProperty.call(Element.prototype, 'contains')
+          });
+        })()
+    "#,
+    );
+    let s = match result {
+        RustValue::String(v) => v,
+        other => panic!("expected string, got {other:?}"),
+    };
+    assert!(s.contains("\"hasOwnElement\":false"), "{s}");
+    assert!(s.contains("\"hasOwnNode\":true"), "{s}");
+    assert!(s.contains("\"same\":true"), "{s}");
+    assert!(s.contains("\"length\":2"), "{s}");
+    assert!(s.contains("\"childTag\":\"P\""), "{s}");
+    assert!(s.contains("\"returned\":\"SPAN\""), "{s}");
+    assert!(s.contains("\"throwsType\":true"), "{s}");
+    assert!(s.contains("\"hasOwnInsertBeforeEl\":false"), "{s}");
+    assert!(s.contains("\"hasOwnCloneEl\":false"), "{s}");
+    assert!(s.contains("\"hasOwnContainsEl\":false"), "{s}");
+}
+
+#[test]
+fn select_selected_index_and_option_value_reflect_tree() {
+    let mut kernel = common::make_kernel();
+    let s = kernel.eval_to_rust_value(
+        r#"
+        (function () {
+          var s = document.createElement('select');
+          var o1 = document.createElement('option'); o1.textContent = 'A';
+          var o2 = document.createElement('option'); o2.textContent = 'B';
+          o2.setAttribute('selected', '');
+          s.appendChild(o1); s.appendChild(o2);
+          var afterSetOk = false;
+          s.selectedIndex = 0;
+          afterSetOk = s.selectedIndex === 0 && o1.selected === true && o2.selected === false;
+          return JSON.stringify({
+            selectedIndex: s.selectedIndex === 0 ? 0 : s.selectedIndex,
+            length: s.length,
+            optionsLen: s.options.length,
+            o1val: o1.value,
+            o2val: o2.value,
+            o1idx: o1.index,
+            o2idx: o2.index,
+            instanceofOption: o1 instanceof HTMLOptionElement,
+            afterSetOk: afterSetOk
+          });
+        })()
+    "#,
+    );
+    // re-run with fresh select for initial selectedIndex==1
+    let s2 = kernel.eval_to_rust_value(
+        r#"
+        (function () {
+          var s = document.createElement('select');
+          var o1 = document.createElement('option'); o1.textContent = 'A';
+          var o2 = document.createElement('option'); o2.textContent = 'B';
+          o2.setAttribute('selected', '');
+          s.appendChild(o1); s.appendChild(o2);
+          return JSON.stringify({
+            selectedIndex: s.selectedIndex,
+            o1val: o1.value,
+            o2val: o2.value,
+            o2selected: o2.selected,
+            length: s.length
+          });
+        })()
+    "#,
+    );
+    let a = match s2 {
+        RustValue::String(v) => v,
+        other => panic!("expected string, got {other:?}"),
+    };
+    assert!(a.contains("\"selectedIndex\":1"), "{a}");
+    assert!(a.contains("\"o1val\":\"A\""), "{a}");
+    assert!(a.contains("\"o2val\":\"B\""), "{a}");
+    assert!(a.contains("\"o2selected\":true"), "{a}");
+    assert!(a.contains("\"length\":2"), "{a}");
+    let b = match s {
+        RustValue::String(v) => v,
+        other => panic!("expected string, got {other:?}"),
+    };
+    assert!(b.contains("\"afterSetOk\":true"), "{b}");
+    assert!(b.contains("\"instanceofOption\":true"), "{b}");
+}
+
+#[test]
+fn tree_walker_next_node_preorder_under_root() {
+    let mut kernel = common::make_kernel_with_doc(
+        "<html><body><div id=\"r\"><span>a</span><p>b</p></div></body></html>",
+    );
+    let result = kernel.eval_to_rust_value(
+        r#"
+        (function () {
+          var root = document.getElementById('r');
+          var tw = document.createTreeWalker(root);
+          var seq = [];
+          var n;
+          while ((n = tw.nextNode())) {
+            seq.push(n.tagName || n.nodeName);
+            if (seq.length > 10) break;
+          }
+          // SHOW_ELEMENT = 1 → no text nodes
+          var twEl = document.createTreeWalker(root, 1);
+          var seqEl = [];
+          while ((n = twEl.nextNode())) {
+            seqEl.push(n.nodeName);
+            if (seqEl.length > 10) break;
+          }
+          return JSON.stringify({
+            rootId: tw.root && tw.root.id,
+            seq: seq,
+            seqEl: seqEl,
+            firstChildTag: (function () {
+              var t2 = document.createTreeWalker(root);
+              var c = t2.firstChild();
+              return c && c.tagName;
+            })()
+          });
+        })()
+    "#,
+    );
+    let s = match result {
+        RustValue::String(v) => v,
+        other => panic!("expected string, got {other:?}"),
+    };
+    assert!(s.contains("\"rootId\":\"r\""), "{s}");
+    assert!(s.contains("SPAN"), "{s}");
+    assert!(s.contains("P"), "{s}");
+    assert!(s.contains("\"firstChildTag\":\"SPAN\""), "{s}");
+    // whatToShow=1 must drop #text
+    assert!(s.contains("\"seqEl\":[\"SPAN\",\"P\"]") || s.contains("\"seqEl\":[\"SPAN\", \"P\"]"), "{s}");
+    assert!(!s.contains("\"seqEl\":[\"SPAN\",\"#text\""), "{s}");
+}
+
+#[test]
+fn xpath_evaluate_subset_returns_real_nodes() {
+    let mut kernel = common::make_kernel_with_doc(
+        "<html><body><div id=\"r\"><span id=\"s\">a</span><p id=\"p\">b</p></div></body></html>",
+    );
+    let result = kernel.eval_to_rust_value(
+        r#"
+        (function () {
+          var xe = document.createExpression('//span');
+          var res = xe.evaluate(document);
+          var resId = document.evaluate("id('p')", document);
+          var resAttr = document.evaluate('//*[@id="s"]', document);
+          return JSON.stringify({
+            snap: res.snapshotLength,
+            item0: res.snapshotItem(0) && res.snapshotItem(0).id,
+            iter: (function () { var n = res.iterateNext(); return n && n.id; })(),
+            idSnap: resId.snapshotLength,
+            idItem: resId.snapshotItem(0) && resId.snapshotItem(0).id,
+            attrSnap: resAttr.snapshotLength,
+            attrItem: resAttr.snapshotItem(0) && resAttr.snapshotItem(0).id
+          });
+        })()
+    "#,
+    );
+    let s = match result {
+        RustValue::String(v) => v,
+        other => panic!("expected string, got {other:?}"),
+    };
+    assert!(s.contains("\"snap\":1"), "{s}");
+    assert!(s.contains("\"item0\":\"s\""), "{s}");
+    assert!(s.contains("\"iter\":\"s\""), "{s}");
+    assert!(s.contains("\"idSnap\":1"), "{s}");
+    assert!(s.contains("\"idItem\":\"p\""), "{s}");
+    assert!(s.contains("\"attrSnap\":1"), "{s}");
+    assert!(s.contains("\"attrItem\":\"s\""), "{s}");
+}
+
+#[test]
+fn document_tree_ops_on_prototype_not_own_and_cookie_survives_set_document() {
+    let mut kernel = common::make_kernel();
+    assert_eq!(
+        kernel.eval_to_rust_value("typeof Object.getOwnPropertyDescriptor(document, 'cookie')"),
+        RustValue::String("object".into())
+    );
+    kernel.set_document(
+        "<html><head><title>Hi</title></head><body></body></html>",
+        None,
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("typeof Object.getOwnPropertyDescriptor(document, 'cookie')"),
+        RustValue::String("object".into())
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("document.title"),
+        RustValue::String("Hi".into())
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("document.createElement('div').tagName"),
+        RustValue::String("DIV".into())
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("document.body.tagName"),
+        RustValue::String("BODY".into())
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value(
+            "Object.prototype.hasOwnProperty.call(document, 'createElement')"
+        ),
+        RustValue::Bool(false)
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("Object.prototype.hasOwnProperty.call(document, 'title')"),
+        RustValue::Bool(false)
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value(
+            "Object.prototype.hasOwnProperty.call(Document.prototype, 'createElement')"
+        ),
+        RustValue::Bool(true)
+    );
+}

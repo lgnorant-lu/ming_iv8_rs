@@ -182,43 +182,21 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         configurable: true,
     });
 
-    // document.domain
+    // document.domain — store value for reflection (sandbox does not change origin)
+    var _domain = (typeof location !== 'undefined' && location.hostname) ? location.hostname : '';
     Object.defineProperty(document, 'domain', {
-        get: function() { return location.hostname || ''; },
-        set: function(v) { /* WebIDL: domain is writable but no-op in sandboxed context */ },
+        get: function() { return _domain; },
+        set: function(v) { _domain = String(v); },
         enumerable: true,
         configurable: true,
     });
 
-    // document.URL
-    Object.defineProperty(document, 'URL', {
-        get: function() { return location.href; },
-        enumerable: true,
-        configurable: true,
-    });
+    // URL / title / documentURI: native Document.prototype (binding.rs).
+    // Do not define own instance shadows (RD-11).
 
-    // document.title (reads/writes <title> element text)
-    Object.defineProperty(document, 'title', {
-        get: function() {
-            var titleEl = document.querySelector ? document.querySelector('title') : null;
-            return titleEl ? (titleEl.textContent || '') : '';
-        },
-        set: function(val) {
-            var titleEl = document.querySelector ? document.querySelector('title') : null;
-            if (titleEl) { titleEl.textContent = String(val); }
-        },
-        enumerable: true,
-        configurable: true,
-    });
-
-    // document.documentURI (alias for URL)
-    Object.defineProperty(document, 'documentURI', {
-        get: function() { return location.href; },
-        enumerable: true,
-        configurable: true,
-    });
-
-    // document DOM methods (stubs for anti-bot compatibility)
+    // createTextNode / createComment / createDocumentFragment / createElement:
+    // native Document.prototype only (RD-16/17).
+    // EventTarget methods: native binding on Document.prototype (RD-11).
     if (!document.createEvent) {
         document.createEvent = function(type) {
             var e = {};
@@ -229,58 +207,6 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             e.initMouseEvent = function(t) { e.type = t; };
             e.initCustomEvent = function(t, b, c, d) { e.type = t; e.bubbles = b; e.cancelable = c; e.detail = d; };
             return e;
-        };
-    }
-    if (!document.dispatchEvent) {
-        document.dispatchEvent = function(event) { return true; };
-    }
-    if (!document.addEventListener) {
-        document.addEventListener = function(type, listener, options) {};
-    }
-    if (!document.removeEventListener) {
-        document.removeEventListener = function(type, listener, options) {};
-    }
-    if (!document.createTextNode) {
-        document.createTextNode = function(data) {
-            if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
-            if (typeof Text !== 'undefined' && Text.prototype) {
-                var node = Object.create(Text.prototype);
-                Object.defineProperty(node, 'nodeType', { value: 3, writable: false, enumerable: true, configurable: false });
-                Object.defineProperty(node, 'nodeName', { value: '#text', writable: false, enumerable: true, configurable: false });
-                Object.defineProperty(node, 'nodeValue', { value: String(data), writable: true, enumerable: true, configurable: true });
-                Object.defineProperty(node, 'textContent', { value: String(data), writable: true, enumerable: true, configurable: true });
-                Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
-                return node;
-            }
-            return { nodeType: 3, textContent: data, data: data, nodeName: '#text' };
-        };
-    }
-    if (!document.createComment) {
-        document.createComment = function(data) {
-            if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
-            if (typeof Comment !== 'undefined' && Comment.prototype) {
-                var node = Object.create(Comment.prototype);
-                Object.defineProperty(node, 'nodeType', { value: 8, writable: false, enumerable: true, configurable: false });
-                Object.defineProperty(node, 'nodeName', { value: '#comment', writable: false, enumerable: true, configurable: false });
-                Object.defineProperty(node, 'nodeValue', { value: String(data), writable: true, enumerable: true, configurable: true });
-                Object.defineProperty(node, 'textContent', { value: String(data), writable: true, enumerable: true, configurable: true });
-                Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
-                return node;
-            }
-            return { nodeType: 8, textContent: data, data: data, nodeName: '#comment' };
-        };
-    }
-    if (!document.createDocumentFragment) {
-        document.createDocumentFragment = function() {
-            if (typeof DocumentFragment !== 'undefined' && DocumentFragment.prototype) {
-                var frag = Object.create(DocumentFragment.prototype);
-                Object.defineProperty(frag, 'nodeType', { value: 11, writable: false, enumerable: true, configurable: false });
-                Object.defineProperty(frag, 'nodeName', { value: '#document-fragment', writable: false, enumerable: true, configurable: false });
-                Object.defineProperty(frag, 'nodeValue', { value: null, writable: true, enumerable: true, configurable: true });
-                Object.defineProperty(frag, 'textContent', { value: '', writable: true, enumerable: true, configurable: true });
-                return frag;
-            }
-            return { nodeType: 11, nodeName: '#document-fragment', childNodes: [], appendChild: function(n) { this.childNodes.push(n); return n; }, children: [] };
         };
     }
     if (!document.importNode) {
@@ -313,7 +239,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     if (!document.exitPointerLock) {
         document.exitPointerLock = function() {};
     }
-    if (!document.fonts) {
+    if (!Object.getOwnPropertyDescriptor(document, 'fonts') || !document.fonts) {
         var _fontPrefs = (typeof globalThis.__iv8FontPrefs === 'object' && globalThis.__iv8FontPrefs) ? globalThis.__iv8FontPrefs : {};
         var _fontFamilies = _fontPrefs.families || [];
         var _fontFaceObjects = _fontFamilies.map(function(f) {
@@ -362,10 +288,21 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         };
         // Per FontFaceSet spec: ready resolves to the FontFaceSet itself.
         _fontSet.ready = Promise.resolve(_fontSet);
-        document.fonts = _fontSet;
+        Object.defineProperty(document, 'fonts', {
+            get: function() { return _fontSet; },
+            set: function() {},
+            enumerable: true,
+            configurable: true,
+        });
     }
-    if (!document.timeline) {
-        document.timeline = { currentTime: performance.now() };
+    if (!Object.getOwnPropertyDescriptor(document, 'timeline') || !document.timeline) {
+        var _timeline = { currentTime: performance.now() };
+        Object.defineProperty(document, 'timeline', {
+            get: function() { return _timeline; },
+            set: function() {},
+            enumerable: true,
+            configurable: true,
+        });
     }
 
     // FontFace constructor — new FontFace(family, source)
@@ -496,32 +433,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                 Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
                 return node;
             };
-            if (!doc.createTextNode) {
-            doc.createTextNode = function createTextNode(data) {
-                if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
-                var textProto = (typeof Text !== 'undefined') ? Text.prototype : Object.prototype;
-                var node = Object.create(textProto);
-                Object.defineProperty(node, 'nodeType', { value: 3, writable: false, enumerable: true, configurable: false });
-                Object.defineProperty(node, 'nodeName', { value: '#text', writable: false, enumerable: true, configurable: false });
-                Object.defineProperty(node, 'nodeValue', { value: String(data), writable: true, enumerable: true, configurable: true });
-                Object.defineProperty(node, 'textContent', { value: String(data), writable: true, enumerable: true, configurable: true });
-                Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
-                return node;
-            };
-            }
-            if (!doc.createComment) {
-            doc.createComment = function createComment(data) {
-                if (arguments.length < 1) throw new TypeError('1 argument required, but only 0 present.');
-                var commentProto = (typeof Comment !== 'undefined') ? Comment.prototype : Object.prototype;
-                var node = Object.create(commentProto);
-                Object.defineProperty(node, 'nodeType', { value: 8, writable: false, enumerable: true, configurable: false });
-                Object.defineProperty(node, 'nodeName', { value: '#comment', writable: false, enumerable: true, configurable: false });
-                Object.defineProperty(node, 'nodeValue', { value: String(data), writable: true, enumerable: true, configurable: true });
-                Object.defineProperty(node, 'textContent', { value: String(data), writable: true, enumerable: true, configurable: true });
-                Object.defineProperty(node, 'data', { value: String(data), writable: true, enumerable: true, configurable: true });
-                return node;
-            };
-            }
+            // createTextNode/createComment: use Document.prototype native only
             return doc;
         }, writable: true, configurable: true, enumerable: true });
         // createDocumentType: return a DocumentType-like object
@@ -531,17 +443,29 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             var dt = Object.create(dtProto);
             return dt;
         }, writable: true, configurable: true, enumerable: true });
-        document.implementation = impl;
+        // Readonly: no-op setter so assignment does not shadow (H05b Category C).
+        Object.defineProperty(document, 'implementation', {
+            get: function() { return impl; },
+            set: function() {},
+            enumerable: true,
+            configurable: true,
+        });
     }
-    Object.defineProperty(document, 'defaultView', { get: function() { return window; }, configurable: true });
-    Object.defineProperty(document, 'ownerDocument', { get: function() { return null; }, configurable: true });
-    Object.defineProperty(document, 'baseURI', { get: function() { return location.href; }, configurable: true });
-    Object.defineProperty(document, 'characterSet', { get: function() { return 'UTF-8'; }, configurable: true });
-    Object.defineProperty(document, 'charset', { get: function() { return 'UTF-8'; }, configurable: true });
-    Object.defineProperty(document, 'inputEncoding', { get: function() { return 'UTF-8'; }, configurable: true });
-    Object.defineProperty(document, 'designMode', { get: function() { return 'off'; }, set: function() {}, configurable: true });
-    Object.defineProperty(document, 'contentType', { get: function() { return 'text/html'; }, configurable: true });
-    Object.defineProperty(document, 'compatMode', { get: function() { return 'CSS1Compat'; }, configurable: true });
+    Object.defineProperty(document, 'defaultView', { get: function() { return window; }, set: function() {}, configurable: true });
+    Object.defineProperty(document, 'ownerDocument', { get: function() { return null; }, set: function() {}, configurable: true });
+    Object.defineProperty(document, 'baseURI', { get: function() { return location.href; }, set: function() {}, configurable: true });
+    Object.defineProperty(document, 'characterSet', { get: function() { return 'UTF-8'; }, set: function() {}, configurable: true });
+    Object.defineProperty(document, 'charset', { get: function() { return 'UTF-8'; }, set: function() {}, configurable: true });
+    Object.defineProperty(document, 'inputEncoding', { get: function() { return 'UTF-8'; }, set: function() {}, configurable: true });
+    var _designMode = 'off';
+    Object.defineProperty(document, 'designMode', {
+        get: function() { return _designMode; },
+        set: function(v) { _designMode = String(v); },
+        enumerable: true,
+        configurable: true,
+    });
+    Object.defineProperty(document, 'contentType', { get: function() { return 'text/html'; }, set: function() {}, configurable: true });
+    Object.defineProperty(document, 'compatMode', { get: function() { return 'CSS1Compat'; }, set: function() {}, configurable: true });
     // Cache lastModified at install time using a non-Intl date format to
     // avoid Intl.DateTimeFormat re-entrancy OOM. Real Chrome formats this
     // as "MM/DD/YYYY HH:MM:SS" from the document's last-modified header.
@@ -948,8 +872,10 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
 
     try {
         if (typeof HTMLElement !== 'undefined' && HTMLElement.prototype) {
+            // Geometry stubs only. innerText is owned by Element FT (template.rs)
+            // and must not be overwritten with empty _innerText slots (RD-11).
             var _heProps = {
-                innerText: '', offsetTop: 0, offsetLeft: 0,
+                offsetTop: 0, offsetLeft: 0,
                 offsetWidth: 0, offsetHeight: 0,
                 clientTop: 0, clientLeft: 0,
                 clientWidth: 0, clientHeight: 0,
@@ -961,31 +887,10 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                 clientTop: true, clientLeft: true, clientWidth: true, clientHeight: true,
                 scrollWidth: true, scrollHeight: true
             };
+            // Geometry is owned by Element FT (template.rs). Do not install
+            // HTMLElement.prototype stubs that shadow native layout getters.
             Object.keys(_heProps).forEach(function(prop) {
-                var dv = _heProps[prop];
-                var proto = HTMLElement.prototype;
-                var isReadonly = _heReadonly[prop];
-                var desc = {
-                    get: function() {
-                        if (this === null || this === undefined) throw new TypeError('Illegal invocation');
-                        if (this === proto) return dv;
-                        var cur = Object.getPrototypeOf(this);
-                        var found = false;
-                        while (cur) { if (cur === proto) { found = true; break; } cur = Object.getPrototypeOf(cur); }
-                        if (!found) throw new TypeError('Illegal invocation');
-                        var s = this['_' + prop];
-                        return s !== undefined ? s : dv;
-                    },
-                    enumerable: true,
-                    configurable: true
-                };
-                if (!isReadonly) {
-                    desc.set = function(v) {
-                        if (this === null || this === undefined) throw new TypeError('Illegal invocation');
-                        this['_' + prop] = v;
-                    };
-                }
-                Object.defineProperty(proto, prop, desc);
+                if (prop in Element.prototype || prop in HTMLElement.prototype) return;
             });
         }
     } catch(e) {}
@@ -1064,89 +969,26 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         globalThis.DOMException = DOMException;
     }
 
-    // createElement prototype fix — template_for_tag maps many tags to
-    // generic HTMLElement. For tags with a specific codegen constructor,
-    // set the correct prototype so instanceof checks pass.
+    // createElement ownership: native binding + create_node_object /
+    // tag_to_interface_name (RD-16/17). Do not wrap document.createElement here.
+
+    // HTMLIFrameElement readonly attrs: ensure no-op setters so assignment
+    // does not create shadowing data properties (H05b Category C).
     try {
-        var _tagToClass = {
-            iframe: 'HTMLIFrameElement', object: 'HTMLObjectElement',
-            embed: 'HTMLEmbedElement', progress: 'HTMLProgressElement',
-            meter: 'HTMLMeterElement', label: 'HTMLLabelElement',
-            fieldset: 'HTMLFieldSetElement', legend: 'HTMLLegendElement',
-            optgroup: 'HTMLOptGroupElement', option: 'HTMLOptionElement',
-            template: 'HTMLTemplateElement', slot: 'HTMLSlotElement',
-            data: 'HTMLDataElement', time: 'HTMLTimeElement',
-            output: 'HTMLOutputElement', picture: 'HTMLPictureElement',
-            source: 'HTMLSourceElement', details: 'HTMLDetailsElement',
-            dialog: 'HTMLDialogElement', datalist: 'HTMLDataListElement',
-            track: 'HTMLTrackElement', video: 'HTMLVideoElement',
-            audio: 'HTMLAudioElement', map: 'HTMLMapElement',
-            area: 'HTMLAreaElement', base: 'HTMLBaseElement',
-            head: 'HTMLHeadElement', body: 'HTMLBodyElement',
-            html: 'HTMLHtmlElement', link: 'HTMLLinkElement',
-            meta: 'HTMLMetaElement', title: 'HTMLTitleElement',
-            style: 'HTMLStyleElement', script: 'HTMLScriptElement',
-            img: 'HTMLImageElement', canvas: 'HTMLCanvasElement',
-            select: 'HTMLSelectElement', textarea: 'HTMLTextAreaElement',
-            pre: 'HTMLPreElement', br: 'HTMLBRElement', hr: 'HTMLHRElement',
-            blockquote: 'HTMLQuoteElement', q: 'HTMLQuoteElement',
-            ins: 'HTMLModElement', del: 'HTMLModElement',
-            ul: 'HTMLUListElement', ol: 'HTMLOListElement', li: 'HTMLLIElement',
-            table: 'HTMLTableElement', td: 'HTMLTableCellElement',
-            th: 'HTMLTableCellElement', tr: 'HTMLTableRowElement',
-            thead: 'HTMLTableSectionElement', tbody: 'HTMLTableSectionElement',
-            tfoot: 'HTMLTableSectionElement', col: 'HTMLTableColElement',
-            colgroup: 'HTMLTableColElement', caption: 'HTMLTableCaptionElement',
-            frameset: 'HTMLFrameSetElement', frame: 'HTMLFrameElement',
-            marquee: 'HTMLMarqueeElement', param: 'HTMLParamElement',
-            font: 'HTMLFontElement', dir: 'HTMLDirectoryElement',
-            listing: 'HTMLPreElement', xmp: 'HTMLPreElement',
-            menu: 'HTMLMenuElement', noscript: 'HTMLElement',
-            nobr: 'HTMLElement', center: 'HTMLElement',
-            div: 'HTMLDivElement', p: 'HTMLParagraphElement',
-            a: 'HTMLAnchorElement', span: 'HTMLSpanElement',
-            h1: 'HTMLHeadingElement', h2: 'HTMLHeadingElement',
-            h3: 'HTMLHeadingElement', h4: 'HTMLHeadingElement',
-            h5: 'HTMLHeadingElement', h6: 'HTMLHeadingElement',
-            input: 'HTMLInputElement', button: 'HTMLButtonElement',
-            form: 'HTMLFormElement',
-            code: 'HTMLElement', small: 'HTMLElement',
-            strong: 'HTMLElement', em: 'HTMLElement',
-            b: 'HTMLElement', i: 'HTMLElement', u: 'HTMLElement',
-            s: 'HTMLElement', sub: 'HTMLElement', sup: 'HTMLElement',
-        };
-        var _origCreate = document.createElement;
-        if (_origCreate && !_origCreate.__iv8ElemPatched) {
-            var _wrapper = function(tagName) {
-                var el = _origCreate.call(document, tagName);
-                if (el && typeof tagName === 'string') {
-                    var cls = _tagToClass[tagName.toLowerCase()];
-                    if (cls && typeof globalThis[cls] !== 'undefined'
-                        && globalThis[cls].prototype
-                        && el.__proto__ !== globalThis[cls].prototype) {
-                        try { el.__proto__ = globalThis[cls].prototype; } catch(e) {}
-                    }
-                    // Set Symbol.toStringTag on the instance for correct class string
-                    if (cls && typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-                        try {
-                            Object.defineProperty(el, Symbol.toStringTag, {
-                                value: cls, writable: false,
-                                enumerable: false, configurable: true
-                            });
-                        } catch(e) {}
-                    }
-                }
-                return el;
-            };
-            Object.defineProperty(_wrapper, '__iv8ElemPatched', {
-                value: true, writable: true, configurable: true, enumerable: false,
+        if (typeof HTMLIFrameElement !== 'undefined' && HTMLIFrameElement.prototype) {
+            var _iframeRo = ['contentDocument', 'contentWindow', 'permissionsPolicy', 'sandbox', 'featurePolicy'];
+            _iframeRo.forEach(function(prop) {
+                var cur = Object.getOwnPropertyDescriptor(HTMLIFrameElement.prototype, prop);
+                var getter = (cur && cur.get) ? cur.get : function() { return null; };
+                Object.defineProperty(HTMLIFrameElement.prototype, prop, {
+                    get: getter,
+                    set: function() {},
+                    enumerable: true,
+                    configurable: true,
+                });
             });
-            // P0-BT fix: toString must return native code to avoid CreepJS lie detection
-            _wrapper.toString = function() { return 'function createElement() { [native code] }'; };
-            _wrapper.toString.toString = function() { return 'function toString() { [native code] }'; };
-            document.createElement = _wrapper;
         }
-    } catch(e) {}
+    } catch (e) {}
 
     // window.close — installed by window_extras.rs _winOps with receiver check
 
@@ -1457,9 +1299,8 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     //     });
     // } catch(e) {}
 
-    // Document.location — [LegacyUnforgeable] own property on every Document
-    // instance. idlharness checks assert_own_property on iframe.contentDocument,
-    // new Document(), and documentWithHandler instances.
+    // Document.location: native binding installs on Document.prototype (RD-11).
+    // Only fill if still missing after binding (should not happen post RD-16).
     try {
         if (typeof Document !== 'undefined' && Document.prototype) {
             if (!Object.getOwnPropertyDescriptor(Document.prototype, 'location')) {
@@ -1512,47 +1353,9 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
-    // TreeWalker — set __proto__ on document.createTreeWalker() result
-    try {
-        var _origCTW = document.createTreeWalker;
-        if (_origCTW && typeof TreeWalker !== 'undefined' && TreeWalker.prototype) {
-            document.createTreeWalker = function createTreeWalker() {
-                var result = _origCTW.apply(this, arguments);
-                if (result && typeof result === 'object') {
-                    try { Object.setPrototypeOf(result, TreeWalker.prototype); } catch(e) {}
-                }
-                return result;
-            };
-        }
-    } catch(e) {}
-
-    // NodeIterator — set __proto__ on document.createNodeIterator() result
-    try {
-        var _origCNI = document.createNodeIterator;
-        if (_origCNI && typeof NodeIterator !== 'undefined' && NodeIterator.prototype) {
-            document.createNodeIterator = function createNodeIterator() {
-                var result = _origCNI.apply(this, arguments);
-                if (result && typeof result === 'object') {
-                    try { Object.setPrototypeOf(result, NodeIterator.prototype); } catch(e) {}
-                }
-                return result;
-            };
-        }
-    } catch(e) {}
-
-    // XPathExpression — set __proto__ on document.createExpression() result
-    try {
-        var _origCE = document.createExpression;
-        if (_origCE && typeof XPathExpression !== 'undefined' && XPathExpression.prototype) {
-            document.createExpression = function createExpression() {
-                var result = _origCE.apply(this, arguments);
-                if (result && typeof result === 'object') {
-                    try { Object.setPrototypeOf(result, XPathExpression.prototype); } catch(e) {}
-                }
-                return result;
-            };
-        }
-    } catch(e) {}
+    // createTreeWalker / createNodeIterator / createExpression:
+    // Do NOT wrap on document instance — wrappers zero Function.length and
+    // dual-install with Document.prototype (codegen). Native/codegen path only.
 
     // TextTrack.cues — return empty TextTrackCueList-like object
     try {
