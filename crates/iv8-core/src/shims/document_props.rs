@@ -594,6 +594,8 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                 return img;
             };
             try { Object.defineProperty(_wrappedImage, 'name', { value: 'Image' }); } catch(e) {}
+            // WebIDL Image(optional unsigned long w, optional unsigned long h):
+            // minOverloadLength is 0 (all args optional) — matches Chrome.
             try { Object.defineProperty(_wrappedImage, 'length', { value: 0, writable: false, enumerable: false, configurable: true }); } catch(e) {}
             Object.defineProperty(globalThis, 'Image', {
                 value: _wrappedImage, writable: true, configurable: true, enumerable: false

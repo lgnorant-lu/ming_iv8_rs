@@ -118,13 +118,12 @@ pub const SHADOW_ROOT_FIX_JS: &str = r#"
 /// **Why not codegen?** Request constructor needs to parse input (string or
 /// Request object) and init dict. Codegen constructors are empty templates.
 /// A proper fix would be a hand-implemented constructor in hand_implemented/.
-/// TODO: move to hand_implemented/fetch.rs (v0.8.90).
+/// COMP-5: Request ctor is DOM FT; this blob is fetch() polyfill only (intentional).
 pub const REQUEST_FIX_JS: &str = r#"
     (function() {
         if (typeof Request === 'undefined') return;
-        var origCtor = Request;
-        // Request constructor is now handled by DOM template (request_constructor).
-        // Only install fetch() polyfill here.
+        // Request constructor is DOM template (request_constructor).
+        // Only install fetch() polyfill when absent.
         if (typeof fetch === 'undefined') {
             globalThis.fetch = function fetch(input, init) {
                 var url = typeof input === 'string' ? input : (input && input.url) || '';
@@ -160,9 +159,12 @@ pub const READONLY_FIX_JS: &str = r#"
             'MouseEvent': ['screenX','screenY','clientX','clientY','ctrlKey','shiftKey',
                            'altKey','metaKey','button','buttons','relatedTarget','region'],
             'CustomEvent': ['detail'],
-            'HTMLIFrameElement': ['sandbox'],
-            'Document': ['implementation','timeline','fonts'],
-            'HTMLElement': ['style'],
+            'HTMLIFrameElement': ['sandbox','contentDocument','contentWindow','permissionsPolicy'],
+            'Document': ['implementation','timeline','fonts','URL','documentURI','documentElement','head','characterSet','charset','compatMode','contentType','doctype','embeds','forms','images','links','scripts','styleSheets','currentScript','defaultView','scrollingElement','rootElement','xmlEncoding','xmlVersion','xmlStandalone','origin','fullscreenEnabled','pictureInPictureEnabled','hidden','visibilityState','wasDiscarded','prerendering','featurePolicy','children','firstElementChild','lastElementChild','childElementCount'],
+            'HTMLElement': ['style','offsetWidth','offsetHeight','offsetTop','offsetLeft','offsetParent','clientWidth','clientHeight','clientTop','clientLeft','scrollWidth','scrollHeight'],
+            'HTMLTableRowElement': ['rowIndex','sectionRowIndex','cells'],
+            'HTMLTableCellElement': ['cellIndex'],
+            'HTMLTableColElement': ['span'],
             'HTMLLinkElement': ['relList','sizes','blocking'],
             'HTMLAnchorElement': ['relList'],
             'HTMLFormElement': ['relList'],

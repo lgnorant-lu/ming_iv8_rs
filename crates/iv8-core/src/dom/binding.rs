@@ -144,7 +144,15 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
         install_doc_accessor_rw(scope, method_target, "title", doc_title, Some(doc_title_setter));
         install_doc_accessor(scope, method_target, "URL", doc_url);
         install_doc_accessor(scope, method_target, "documentURI", doc_url);
-        install_doc_accessor(scope, method_target, "location", doc_location);
+        // HTML: document.location is [PutForwards=href] / assignable navigation.
+        // Keep noop setter so assignment does not create shadow data property.
+        install_doc_accessor_rw(
+            scope,
+            method_target,
+            "location",
+            doc_location,
+            Some(doc_readonly_noop_setter),
+        );
     }
 
     // Single identity when FT instance is used: internal field only.
@@ -542,7 +550,8 @@ fn install_doc_accessor(
     name: &str,
     getter: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
-    install_doc_accessor_rw(scope, obj, name, getter, Some(doc_readonly_noop_setter));
+    // True readonly WebIDL: setter absent (undefined), not no-op setter (CG-2).
+    install_doc_accessor_rw(scope, obj, name, getter, None);
 }
 
 fn install_doc_accessor_rw(
