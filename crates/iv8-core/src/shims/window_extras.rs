@@ -54,6 +54,29 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     if (typeof globalThis.devicePixelRatio === 'undefined') {
         globalThis.devicePixelRatio = 1;
     }
+    // Web SQL openDatabase still present on Chrome desktop for compat (DET-4).
+    // Pages probe typeof; calling throws SECURITY_ERR (not available in IV8).
+    if (typeof globalThis.openDatabase === 'undefined') {
+        globalThis.openDatabase = function openDatabase() {
+            throw new DOMException(
+                "Failed to execute 'openDatabase' on 'Window': Access is denied for this document.",
+                'SecurityError'
+            );
+        };
+    }
+    // Storage Buckets API skeleton (SUR-2) — present on Window in modern Chrome.
+    if (typeof globalThis.storageBuckets === 'undefined' && typeof navigator !== 'undefined') {
+        try {
+            var _buckets = {
+                open: function open(name) { return Promise.resolve({ name: name || '', estimate: function() { return Promise.resolve({ usage: 0, quota: 0 }); }, close: function() { return Promise.resolve(); } }); },
+                keys: function keys() { return Promise.resolve([]); },
+                delete: function(name) { return Promise.resolve(); }
+            };
+            Object.defineProperty(navigator, 'storageBuckets', {
+                value: _buckets, writable: true, configurable: true, enumerable: true
+            });
+        } catch (e) {}
+    }
     if (typeof globalThis.innerWidth === 'undefined') { globalThis.innerWidth = 1920; }
     if (typeof globalThis.innerHeight === 'undefined') { globalThis.innerHeight = 1080; }
     if (typeof globalThis.outerWidth === 'undefined') { globalThis.outerWidth = 1920; }
