@@ -6488,31 +6488,48 @@ unsafe extern "C" fn iframe_content_document_getter(info: *const v8::FunctionCal
 }
 
 /// contentWindow: no nested browsing, but fingerprint/H06a need a Window-like
-/// shell sharing parent navigator (COMP-4 native ownership; replaces IFRAME_FIX_JS).
+/// shell with distinct object identity for navigator/document (same values via
+/// getters reading parent). COMP-4 native ownership; replaces IFRAME_FIX_JS.
 unsafe extern "C" fn iframe_content_window_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
         let cw = v8::Object::new(scope);
         let global = scope.get_current_context().global(scope);
-        // navigator → parent navigator
-        if let Some(nav_key) = v8::String::new(scope, "navigator") {
-            if let Some(nav) = global.get(scope, nav_key.into()) {
-                let _ = cw.define_own_property(
-                    scope,
-                    nav_key.into(),
-                    nav,
-                    v8::PropertyAttribute::NONE,
-                );
-            }
-        }
-        // document → parent document (not nested)
-        if let Some(doc_key) = v8::String::new(scope, "document") {
-            if let Some(doc) = global.get(scope, doc_key.into()) {
-                let _ = cw.define_own_property(
-                    scope,
-                    doc_key.into(),
-                    doc,
-                    v8::PropertyAttribute::NONE,
-                );
+        // Distinct navigator/document objects that forward to parent (not ===).
+        for name in ["navigator", "document", "screen", "location", "performance"] {
+            if let Some(k) = v8::String::new(scope, name) {
+                if let Some(parent_val) = global.get(scope, k.into()) {
+                    if parent_val.is_object() && !parent_val.is_null_or_undefined() {
+                        let parent_obj: v8::Local<v8::Object> =
+                            unsafe { v8::Local::cast_unchecked(parent_val) };
+                        // Shallow shell with same prototype chain when possible
+                        let shell = v8::Object::new(scope);
+                        if let Some(proto) = parent_obj.get_prototype(scope) {
+                            if proto.is_object() {
+                                let _ = shell.set_prototype(scope, proto);
+                            }
+                        }
+                        // Copy own enumerable string keys as data (snapshot)
+                        if let Some(names) = parent_obj.get_own_property_names(
+                            scope,
+                            v8::GetPropertyNamesArgsBuilder::new().build(),
+                        ) {
+                            let n = names.length();
+                            for i in 0..n {
+                                if let Some(key) = names.get_index(scope, i) {
+                                    if let Some(val) = parent_obj.get(scope, key) {
+                                        let _ = shell.set(scope, key, val);
+                                    }
+                                }
+                            }
+                        }
+                        let _ = cw.define_own_property(
+                            scope,
+                            k.into(),
+                            shell.into(),
+                            v8::PropertyAttribute::NONE,
+                        );
+                    }
+                }
             }
         }
         for name in ["parent", "top"] {
