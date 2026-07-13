@@ -49,7 +49,8 @@ def build_audit_js(interface_names: list[str]) -> str:
     return f"""(function() {{
     var names = {names_js};
     // Legacy aliases share prototype with canonical — skip them
-    var aliases = {{'webkitAudioContext': true, 'Option': true, 'webkitOfflineAudioContext': true}};
+    // Legacy aliases share prototype/toStringTag with canonical interface (Chrome).
+    var aliases = {{'webkitAudioContext': true, 'Option': true, 'webkitOfflineAudioContext': true, 'webkitURL': true}};
     var results = [];
     for (var i = 0; i < names.length; i++) {{
         var name = names[i];
