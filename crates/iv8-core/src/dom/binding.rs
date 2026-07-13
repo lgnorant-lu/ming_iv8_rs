@@ -1806,6 +1806,10 @@ unsafe extern "C" fn query_selector(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         if args.length() < 1 {
             return;
@@ -1845,6 +1849,10 @@ unsafe extern "C" fn query_selector_all(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         if args.length() < 1 {
             rv.set(v8::Array::new(scope, 0).into());
@@ -1881,6 +1889,10 @@ unsafe extern "C" fn get_elements_by_tag_name(info: *const v8::FunctionCallbackI
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         if args.length() < 1 {
             rv.set(v8::Array::new(scope, 0).into());
@@ -1917,6 +1929,10 @@ unsafe extern "C" fn get_elements_by_class_name(info: *const v8::FunctionCallbac
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         if args.length() < 1 {
             rv.set(v8::Array::new(scope, 0).into());
@@ -1970,6 +1986,10 @@ unsafe extern "C" fn get_attribute_callback(info: *const v8::FunctionCallbackInf
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         if args.length() < 1 {
             rv.set(v8::null(scope).into());
@@ -2054,6 +2074,10 @@ unsafe extern "C" fn create_text_node(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         if args.length() < 1 {
             return;
@@ -2094,6 +2118,10 @@ unsafe extern "C" fn create_comment(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         if args.length() < 1 {
             return;
@@ -2134,6 +2162,10 @@ unsafe extern "C" fn create_document_fragment(info: *const v8::FunctionCallbackI
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
@@ -2168,6 +2200,10 @@ unsafe extern "C" fn create_element_ns(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         if args.length() < 2 {
             return;
@@ -2219,6 +2255,10 @@ unsafe extern "C" fn append_child_callback(info: *const v8::FunctionCallbackInfo
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         if args.length() < 1 {
             return;
