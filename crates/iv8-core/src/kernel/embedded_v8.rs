@@ -726,17 +726,13 @@ impl EmbeddedV8Kernel {
 
         kernel.freeze_all_prototypes();
 
-        // RD-24: after EXCLUDED_OPERATIONS, freeze no longer reinstalls Document
-        // tree-op skeletons. Default document from pre-freeze set_document stays
-        // valid — only re-apply shims that freeze/codegen may overwrite.
+        // RD-24: after EXCLUDED_OPERATIONS + EXCLUDED_GLOBAL URL, freeze no longer
+        // overwrites Document tree ops or URL globals. URL_SHIM is installed once
+        // pre-freeze (install_undetect_shims). Only re-apply CANVAS2D if freeze
+        // clobbers canvas factory wiring.
         if !kernel.worker_mode {
             kernel.eval(
                 crate::canvas::binding::CANVAS2D_SHIM_JS,
-                crate::kernel::EvalOpts::default(),
-            )
-            .ok();
-            kernel.eval(
-                crate::shims::url::URL_SHIM_JS,
                 crate::kernel::EvalOpts::default(),
             )
             .ok();
