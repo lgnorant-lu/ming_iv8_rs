@@ -103,6 +103,7 @@ const EXCLUDED_ATTRIBUTES: &[(&str, &str)] = &[
     ("HTMLTableCellElement", "vAlign"),
     ("HTMLTableRowElement", "rowIndex"),
     ("HTMLTableRowElement", "sectionRowIndex"),
+    ("HTMLTableRowElement", "cells"),
     ("HTMLTableRowElement", "ch"),
     ("HTMLTableRowElement", "chOff"),
     ("HTMLTableRowElement", "vAlign"),

@@ -1172,6 +1172,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         let proto = html_table_row_element.prototype_template(scope);
         install_proto_accessor(scope, proto, "rowIndex", table_row_index_getter, None);
         install_proto_accessor(scope, proto, "sectionRowIndex", table_section_row_index_getter, None);
+        install_proto_accessor(
+            scope,
+            proto,
+            "cells",
+            table_row_cells_getter,
+            Some(iframe_readonly_noop_setter),
+        );
         install_proto_accessor(scope, proto, "ch", ch_getter, Some(ch_setter));
         install_proto_accessor(scope, proto, "chOff", ch_off_getter, Some(ch_off_setter));
         install_proto_accessor(scope, proto, "vAlign", valign_getter, Some(valign_setter));
@@ -5394,25 +5401,10 @@ unsafe extern "C" fn hidden_getter(info: *const v8::FunctionCallbackInfo) {
 }
 
 unsafe extern "C" fn hidden_setter(info: *const v8::FunctionCallbackInfo) {
-    run_callback(info, |_scope, args, _rv, state, node_id| {
+    run_callback(info, |scope, args, _rv, state, node_id| {
         if let Some(nid) = node_id {
-            if args.length() >= 1 {
-                let hidden = args.get(0).is_true();
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
-                    if let Some(mut node) = doc.tree.get_mut(nid) {
-                        if let NodeData::Element { ref mut attrs, .. } = node.value() {
-                            if hidden {
-                                if !attrs.iter().any(|(k, _)| k == "hidden") {
-                                    attrs.push(("hidden".to_string(), "".to_string()));
-                                }
-                            } else {
-                                attrs.retain(|(k, _)| k != "hidden");
-                            }
-                        }
-                    }
-                }
-            }
+            let on = args.length() >= 1 && args.get(0).boolean_value(scope);
+            set_bool_attr(state, nid, "hidden", on);
         }
     });
 }
@@ -5892,6 +5884,39 @@ fn table_row_indices(doc: &crate::dom::Document, row_id: NodeId) -> (i32, i32) {
         }
     }
     (row_idx, section_idx)
+}
+
+unsafe extern "C" fn table_row_cells_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let cells: Vec<NodeId> = {
+            let doc = state.document.borrow();
+            if let Some(ref d) = *doc {
+                if let Some(row) = d.get(node_id) {
+                    row.children()
+                        .filter_map(|c| {
+                            let tag = c.value().tag_name()?;
+                            if tag.eq_ignore_ascii_case("td") || tag.eq_ignore_ascii_case("th") {
+                                Some(c.id())
+                            } else {
+                                None
+                            }
+                        })
+                        .collect()
+                } else {
+                    Vec::new()
+                }
+            } else {
+                Vec::new()
+            }
+        };
+        let arr = v8::Array::new(scope, cells.len() as i32);
+        for (i, cid) in cells.iter().enumerate() {
+            if let Some(obj) = create_node_object(scope, state, *cid) {
+                let _ = arr.set_index(scope, i as u32, obj);
+            }
+        }
+        rv.set(arr.into());
+    });
 }
 
 unsafe extern "C" fn table_row_index_getter(info: *const v8::FunctionCallbackInfo) {

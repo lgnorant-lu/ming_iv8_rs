@@ -1762,6 +1762,10 @@ unsafe extern "C" fn get_element_by_id(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         if args.length() < 1 {
             rv.set(v8::null(scope).into());
@@ -2002,6 +2006,10 @@ unsafe extern "C" fn create_element(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
 
         if args.length() < 1 {
             return;
