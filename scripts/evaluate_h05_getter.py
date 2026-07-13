@@ -327,7 +327,7 @@ def enumerate_attributes(ir_path: Path, top_n: int | None = None) -> list[dict]:
     definitions = ir["definitions"]
     interfaces = [d for d in definitions if d["kind"] == "interface"]
 
-    if top_n:
+    if top_n and top_n > 0:
         iface_names = set(TOP_50_INTERFACES[:top_n])
         interfaces = [i for i in interfaces if i["name"] in iface_names]
 
@@ -915,7 +915,8 @@ def main():
     parser.add_argument("--no-launch", action="store_true",
                         help="Connect to already-running Chrome")
     parser.add_argument("--top", type=int, default=50,
-                        help="Limit to top N interfaces (default: 50)")
+                        help="Limit to top N interfaces from TOP_50 list (default: 50). "
+                             "Use 0 for full IDL (all interfaces in unified_ir).")
     parser.add_argument("--output", "-o", default=None,
                         help="Output JSON file")
     parser.add_argument("--iv8-only", action="store_true",

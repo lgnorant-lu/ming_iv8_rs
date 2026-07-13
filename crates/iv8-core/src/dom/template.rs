@@ -84,6 +84,10 @@ pub struct DomTemplates {
     pub html_table_row_element: v8::Global<v8::FunctionTemplate>,
     /// HTMLTableCellElement — inherits HTMLElement (td/th).
     pub html_table_cell_element: v8::Global<v8::FunctionTemplate>,
+    /// HTMLTableColElement — inherits HTMLElement (col/colgroup).
+    pub html_table_col_element: v8::Global<v8::FunctionTemplate>,
+    /// HTMLTableSectionElement — inherits HTMLElement (thead/tbody/tfoot).
+    pub html_table_section_element: v8::Global<v8::FunctionTemplate>,
     /// HTMLDialogElement — inherits HTMLElement.
     pub html_dialog_element: v8::Global<v8::FunctionTemplate>,
     /// HTMLStyleElement — inherits HTMLElement.
@@ -1202,6 +1206,26 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "vAlign", valign_getter, Some(valign_setter));
     }
 
+    let html_table_col_element = make_template(scope, "HTMLTableColElement", illegal_dom_constructor);
+    html_table_col_element.inherit(html_element);
+    {
+        let proto = html_table_col_element.prototype_template(scope);
+        install_proto_accessor(scope, proto, "span", table_col_span_getter, Some(table_col_span_setter));
+        install_proto_accessor(scope, proto, "ch", ch_getter, Some(ch_setter));
+        install_proto_accessor(scope, proto, "chOff", ch_off_getter, Some(ch_off_setter));
+        install_proto_accessor(scope, proto, "vAlign", valign_getter, Some(valign_setter));
+    }
+
+    let html_table_section_element =
+        make_template(scope, "HTMLTableSectionElement", illegal_dom_constructor);
+    html_table_section_element.inherit(html_element);
+    {
+        let proto = html_table_section_element.prototype_template(scope);
+        install_proto_accessor(scope, proto, "ch", ch_getter, Some(ch_setter));
+        install_proto_accessor(scope, proto, "chOff", ch_off_getter, Some(ch_off_setter));
+        install_proto_accessor(scope, proto, "vAlign", valign_getter, Some(valign_setter));
+    }
+
     let html_dialog_element = make_template(scope, "HTMLDialogElement", illegal_dom_constructor);
     html_dialog_element.inherit(html_element);
     {
@@ -1522,6 +1546,8 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         html_table_element: v8::Global::new(scope, html_table_element),
         html_table_row_element: v8::Global::new(scope, html_table_row_element),
         html_table_cell_element: v8::Global::new(scope, html_table_cell_element),
+        html_table_col_element: v8::Global::new(scope, html_table_col_element),
+        html_table_section_element: v8::Global::new(scope, html_table_section_element),
         html_dialog_element: v8::Global::new(scope, html_dialog_element),
         html_style_element: v8::Global::new(scope, html_style_element),
         html_link_element: v8::Global::new(scope, html_link_element),
@@ -1581,6 +1607,8 @@ pub fn install_dom_constructors(
         ("HTMLTableElement", &templates.html_table_element),
         ("HTMLTableRowElement", &templates.html_table_row_element),
         ("HTMLTableCellElement", &templates.html_table_cell_element),
+        ("HTMLTableColElement", &templates.html_table_col_element),
+        ("HTMLTableSectionElement", &templates.html_table_section_element),
         ("HTMLDialogElement", &templates.html_dialog_element),
         ("HTMLStyleElement", &templates.html_style_element),
         ("HTMLLinkElement", &templates.html_link_element),
@@ -2120,9 +2148,9 @@ pub fn template_for_tag<'s>(
         "ul" => &templates.html_ulist_element,
         "ol" => &templates.html_olist_element,
         "li" => &templates.html_li_element,
-        "table" | "thead" | "tbody" | "tfoot" | "caption" | "colgroup" | "col" => {
-            &templates.html_table_element
-        }
+        "table" | "caption" => &templates.html_table_element,
+        "thead" | "tbody" | "tfoot" => &templates.html_table_section_element,
+        "col" | "colgroup" => &templates.html_table_col_element,
         "tr" => &templates.html_table_row_element,
         "td" | "th" => &templates.html_table_cell_element,
         "dialog" => &templates.html_dialog_element,
@@ -5710,6 +5738,28 @@ fn parse_positive_ul(raw: &str, default: u32) -> u32 {
         return default;
     }
     s.parse::<u32>().unwrap_or(default).max(1)
+}
+
+unsafe extern "C" fn table_col_span_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let n = parse_positive_ul(&get_attr_str(state, node_id, "span"), 1);
+        rv.set(v8::Integer::new_from_unsigned(scope, n).into());
+    });
+}
+unsafe extern "C" fn table_col_span_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let n = args.get(0).number_value(scope).unwrap_or(1.0);
+                let v = if n.is_nan() || n < 1.0 {
+                    1u32
+                } else {
+                    n.trunc() as u32
+                };
+                set_attr_str(state, nid, "span", v.to_string());
+            }
+        }
+    });
 }
 
 unsafe extern "C" fn colspan_getter(info: *const v8::FunctionCallbackInfo) {
