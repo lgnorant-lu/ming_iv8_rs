@@ -6,6 +6,9 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_PATH = REPO_ROOT / "status" / "h05e-exception.json"
+# max_no_throw=20 is intentional honesty (Charter P3): several EXC_TESTS are
+# documented NoThrow paths (parseInt, cloneNode coerce, TextEncoder null, etc.).
+# Do not lower without reclassifying those cases as expected NoThrow in the matrix.
 THRESHOLDS = {"max_wrong_type": 0, "max_no_throw": 20, "min_coverage_pct": 40.0}
 
 EXC_TESTS = [

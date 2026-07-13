@@ -52,287 +52,185 @@ pub const WEBGL_SHIM_JS: &str = r#"
     var _getExtension = globalThis.__webgl_getExtension__;
     var _getSupportedExtensions = globalThis.__webgl_getSupportedExtensions__;
 
-    var WebGLContext = {
-        getParameter: _getParameter,
-        getExtension: _getExtension,
-        getSupportedExtensions: _getSupportedExtensions,
-        createBuffer: function() { return {}; },
-        createProgram: function() { return {}; },
-        createShader: function() { return {}; },
-        shaderSource: function(shader, source) { if (shader) { shader._source = source; } },
-        compileShader: function(shader) { if (shader) { shader.COMPILE_STATUS = true; } },
-        attachShader: function() {},
-        linkProgram: function(program) { if (program) { program.LINK_STATUS = true; } },
-        useProgram: function() {},
-        getShaderParameter: function(shader, pname) {
-            if (pname === 35713) {
-                return shader ? shader.COMPILE_STATUS === true : false;
-            }
-            return false;
-        },
-        getProgramParameter: function(program, pname) {
-            if (pname === 35714) {
-                return program ? program.LINK_STATUS === true : false;
-            }
-            if (pname === 35721) {
-                return 0;
-            }
-            if (pname === 35718) {
-                return 0;
-            }
-            return false;
-        },
-        getShaderInfoLog: function(shader) { return ''; },
-        getProgramInfoLog: function(program) { return ''; },
-        getAttribLocation: function(program, name) { return 0; },
-        getUniformLocation: function(program, name) {
-            return { _isWebGLUniformLocation: true, _program: program, _name: name };
-        },
-        enableVertexAttribArray: function() {},
-        vertexAttribPointer: function() {},
-        bindBuffer: function() {},
-        bufferData: function() {},
-        drawArrays: function() {},
-        drawElements: function() {},
-        viewport: function() {},
-        clearColor: function() {},
-        clear: function() {},
-        enable: function() {},
-        disable: function() {},
-        blendFunc: function() {},
-        // Standard WebGL constants (pname values for getParameter)
-        VENDOR: 0x1F00,
-        RENDERER: 0x1F01,
-        VERSION: 0x1F02,
-        SHADING_LANGUAGE_VERSION: 0x8B8C,
-        MAX_TEXTURE_SIZE: 0x0D33,
-        MAX_RENDERBUFFER_SIZE: 0x84E8,
-        MAX_VIEWPORT_DIMS: 0x0D3A,
-        MAX_VERTEX_ATTRIBS: 0x8869,
-        MAX_VERTEX_UNIFORM_VECTORS: 0x8DFB,
-        MAX_FRAGMENT_UNIFORM_VECTORS: 0x8DFD,
-        MAX_VARYING_VECTORS: 0x8DFC,
-        MAX_TEXTURE_IMAGE_UNITS: 0x8872,
-        MAX_COMBINED_TEXTURE_IMAGE_UNITS: 0x8B4D,
-        MAX_CUBE_MAP_TEXTURE_SIZE: 0x851C,
-        MAX_VERTEX_TEXTURE_IMAGE_UNITS: 0x8872,
-        ALIASED_LINE_WIDTH_RANGE: 0x846E,
-        ALIASED_POINT_SIZE_RANGE: 0x846D,
-        // Framebuffer bit depths / sampling (getParameter pnames; CDP C5)
-        SUBPIXEL_BITS: 0x0D50,
-        RED_BITS: 0x0D52,
-        GREEN_BITS: 0x0D53,
-        BLUE_BITS: 0x0D54,
-        ALPHA_BITS: 0x0D55,
-        DEPTH_BITS: 0x0D56,
-        STENCIL_BITS: 0x0D57,
-        SAMPLE_BUFFERS: 0x80A8,
-        SAMPLES: 0x80A9,
-        // WEBGL_debug_renderer_info (also exposed via getExtension)
-        UNMASKED_VENDOR_WEBGL: 0x9245,
-        UNMASKED_RENDERER_WEBGL: 0x9246,
-        // Draw/buffer constants
-        VERTEX_SHADER: 35633,
-        FRAGMENT_SHADER: 35632,
-        ARRAY_BUFFER: 34962,
-        STATIC_DRAW: 35044,
-        FLOAT: 5126,
-        TRIANGLES: 4,
-        COLOR_BUFFER_BIT: 16384,
-        DEPTH_BUFFER_BIT: 256,
-        STENCIL_BUFFER_BIT: 1024,
-        DEPTH_TEST: 2929,
-        BLEND: 3042,
-        CULL_FACE: 2884,
-        TEXTURE_2D: 3553,
-        RGBA: 6408,
-        UNSIGNED_BYTE: 5121,
-        NEAREST: 9728,
-        LINEAR: 9729,
-        TEXTURE_MIN_FILTER: 10241,
-        TEXTURE_MAG_FILTER: 10240,
-        TEXTURE_WRAP_S: 10242,
-        TEXTURE_WRAP_T: 10243,
-        CLAMP_TO_EDGE: 33071,
-        FRAMEBUFFER: 36160,
-        RENDERBUFFER: 36161,
-        DEPTH_COMPONENT16: 33189,
-        COLOR_ATTACHMENT0: 36064,
-        DEPTH_ATTACHMENT: 36096,
-        FRAMEBUFFER_COMPLETE: 36053,
-        LINK_STATUS: 35714,
-        COMPILE_STATUS: 35713,
-        ELEMENT_ARRAY_BUFFER: 34963,
-        UNSIGNED_SHORT: 5123,
-        LINES: 1,
-        LINE_STRIP: 3,
-        TRIANGLE_STRIP: 5,
-        TRIANGLE_FAN: 6,
-        POINTS: 0,
-        SRC_ALPHA: 770,
-        ONE_MINUS_SRC_ALPHA: 771,
-        ONE: 1,
-        ZERO: 0,
-        FUNC_ADD: 32774,
-        LEQUAL: 515,
-        LESS: 513,
-        EQUAL: 514,
-        GREATER: 516,
-        NOTEQUAL: 517,
-        GEQUAL: 518,
-        ALWAYS: 519,
-        NEVER: 512,
-        KEEP: 7680,
-        REPLACE: 7681,
-        INCR: 7682,
-        DECR: 7683,
-        INVERT: 5386,
-        INCR_WRAP: 34055,
-        DECR_WRAP: 34056,
-        FRONT: 1028,
-        BACK: 1029,
-        FRONT_AND_BACK: 1032,
-        CCW: 2305,
-        CW: 2304,
-        DYNAMIC_DRAW: 35048,
-        STREAM_DRAW: 35040,
-        INT: 5124,
-        SHORT: 5122,
-        BYTE: 5120,
-        UNSIGNED_INT: 5125,
-        FLOAT_VEC2: 35664,
-        FLOAT_VEC3: 35665,
-        FLOAT_VEC4: 35666,
-        INT_VEC2: 35667,
-        INT_VEC3: 35668,
-        INT_VEC4: 35669,
-        BOOL: 35670,
-        FLOAT_MAT2: 35674,
-        FLOAT_MAT3: 35675,
-        FLOAT_MAT4: 35676,
-        SAMPLER_2D: 35678,
-        SAMPLER_CUBE: 35680,
-        ACTIVE_ATTRIBUTES: 35721,
-        ACTIVE_UNIFORMS: 35718,
-        NO_ERROR: 0,
-        INVALID_ENUM: 1280,
-        INVALID_VALUE: 1281,
-        INVALID_OPERATION: 1282,
-        OUT_OF_MEMORY: 1285,
-        CONTEXT_LOST_WEBGL: 37442,
-        // Additional methods
-        createTexture: function() { return {}; },
-        bindTexture: function() {},
-        texImage2D: function() {},
-        texParameteri: function() {},
-        generateMipmap: function() {},
-        createFramebuffer: function() { return {}; },
-        bindFramebuffer: function() {},
-        framebufferTexture2D: function() {},
-        createRenderbuffer: function() { return {}; },
-        bindRenderbuffer: function() {},
-        renderbufferStorage: function() {},
-        framebufferRenderbuffer: function() {},
-        checkFramebufferStatus: function() { return 36053; }, // FRAMEBUFFER_COMPLETE
-        deleteBuffer: function() {},
-        deleteTexture: function() {},
-        deleteFramebuffer: function() {},
-        deleteRenderbuffer: function() {},
-        deleteShader: function() {},
-        deleteProgram: function() {},
-        getError: function() { return 0; }, // NO_ERROR
-        isContextLost: function() { return false; },
-        flush: function() {},
-        finish: function() {},
-        readPixels: function() {},
-        pixelStorei: function() {},
-        activeTexture: function() {},
-        uniform1f: function() {}, uniform2f: function() {}, uniform3f: function() {}, uniform4f: function() {},
-        uniform1i: function() {}, uniform2i: function() {}, uniform3i: function() {}, uniform4i: function() {},
-        uniform1fv: function() {}, uniform2fv: function() {}, uniform3fv: function() {}, uniform4fv: function() {},
-        uniform1iv: function() {}, uniform2iv: function() {}, uniform3iv: function() {}, uniform4iv: function() {},
-        uniformMatrix2fv: function() {}, uniformMatrix3fv: function() {}, uniformMatrix4fv: function() {},
-        vertexAttrib1f: function() {}, vertexAttrib2f: function() {}, vertexAttrib3f: function() {}, vertexAttrib4f: function() {},
-        disableVertexAttribArray: function() {},
-        scissor: function() {},
-        colorMask: function() {},
-        depthMask: function() {},
-        depthFunc: function() {},
-        depthRange: function() {},
-        stencilFunc: function() {},
-        stencilOp: function() {},
-        stencilMask: function() {},
-        cullFace: function() {},
-        frontFace: function() {},
-        lineWidth: function() {},
-        polygonOffset: function() {},
-        sampleCoverage: function() {},
-        blendColor: function() {},
-        blendEquation: function() {},
-        blendEquationSeparate: function() {},
-        blendFuncSeparate: function() {},
-        getActiveAttrib: function() { return null; },
-        getActiveUniform: function() { return null; },
-        getAttachedShaders: function() { return []; },
-        getBufferParameter: function() { return null; },
-        getContextAttributes: function() { return {alpha:true,antialias:true,depth:true,failIfMajorPerformanceCaveat:false,powerPreference:'default',premultipliedAlpha:true,preserveDrawingBuffer:false,stencil:false,desynchronized:false}; },
-        getFramebufferAttachmentParameter: function() { return null; },
-        getRenderbufferParameter: function() { return null; },
-        getShaderPrecisionFormat: function(shaderType, precisionType) {
-            // Desktop Chrome (all GPUs via ANGLE): all float precisions
-            // promoted to IEEE 32-bit, all int precisions to 32-bit int.
-            // Mobile GPUs may use real 16-bit mediump — we are desktop only.
-            if (precisionType === 36336 || precisionType === 36337 || precisionType === 36338) {
-                // LOW_FLOAT / MEDIUM_FLOAT / HIGH_FLOAT — all {127, 127, 23}
-                return { rangeMin: 127, rangeMax: 127, precision: 23 };
-            }
-            if (precisionType === 36339 || precisionType === 36340) {
-                // LOW_INT / MEDIUM_INT — {31, 30, 0} (Chrome 148 desktop verified)
-                return { rangeMin: 31, rangeMax: 30, precision: 0 };
-            }
-            if (precisionType === 36341) {
-                // HIGH_INT — {31, 30, 0} (Chrome 148 desktop verified)
-                return { rangeMin: 31, rangeMax: 30, precision: 0 };
-            }
-            return { rangeMin: 0, rangeMax: 0, precision: 0 };
-        },
-        getShaderSource: function() { return ''; },
-        getTexParameter: function() { return null; },
-        getUniform: function() { return null; },
-        getVertexAttrib: function() { return null; },
-        getVertexAttribOffset: function() { return 0; },
-        hint: function() {},
-        isBuffer: function() { return false; },
-        isEnabled: function() { return false; },
-        isFramebuffer: function() { return false; },
-        isProgram: function() { return false; },
-        isRenderbuffer: function() { return false; },
-        isShader: function() { return false; },
-        isTexture: function() { return false; },
-        validateProgram: function() {},
-        drawingBufferWidth: 300,
-        drawingBufferHeight: 150,
-        canvas: null,
-        // Surface-sample aliases used by CDP fingerprint collectors
-        extensions: null,
-        shaderPrecision: null,
+    // C5b: constants on prototype (Chrome: not own data on context instance).
+    var _glProto = (typeof WebGLRenderingContext !== 'undefined' && WebGLRenderingContext.prototype)
+        ? WebGLRenderingContext.prototype
+        : Object.create(null);
+    var _GL_CONSTS = {
+        VENDOR: 0x1F00, RENDERER: 0x1F01, VERSION: 0x1F02, SHADING_LANGUAGE_VERSION: 0x8B8C,
+        MAX_TEXTURE_SIZE: 0x0D33, MAX_RENDERBUFFER_SIZE: 0x84E8, MAX_VIEWPORT_DIMS: 0x0D3A,
+        MAX_VERTEX_ATTRIBS: 0x8869, MAX_VERTEX_UNIFORM_VECTORS: 0x8DFB,
+        MAX_FRAGMENT_UNIFORM_VECTORS: 0x8DFD, MAX_VARYING_VECTORS: 0x8DFC,
+        MAX_TEXTURE_IMAGE_UNITS: 0x8872, MAX_COMBINED_TEXTURE_IMAGE_UNITS: 0x8B4D,
+        MAX_CUBE_MAP_TEXTURE_SIZE: 0x851C, MAX_VERTEX_TEXTURE_IMAGE_UNITS: 0x8872,
+        ALIASED_LINE_WIDTH_RANGE: 0x846E, ALIASED_POINT_SIZE_RANGE: 0x846D,
+        SUBPIXEL_BITS: 0x0D50, RED_BITS: 0x0D52, GREEN_BITS: 0x0D53, BLUE_BITS: 0x0D54,
+        ALPHA_BITS: 0x0D55, DEPTH_BITS: 0x0D56, STENCIL_BITS: 0x0D57,
+        SAMPLE_BUFFERS: 0x80A8, SAMPLES: 0x80A9,
+        UNMASKED_VENDOR_WEBGL: 0x9245, UNMASKED_RENDERER_WEBGL: 0x9246,
+        VERTEX_SHADER: 35633, FRAGMENT_SHADER: 35632, ARRAY_BUFFER: 34962, STATIC_DRAW: 35044,
+        FLOAT: 5126, TRIANGLES: 4, COLOR_BUFFER_BIT: 16384, DEPTH_BUFFER_BIT: 256,
+        STENCIL_BUFFER_BIT: 1024, DEPTH_TEST: 2929, BLEND: 3042, CULL_FACE: 2884,
+        TEXTURE_2D: 3553, RGBA: 6408, UNSIGNED_BYTE: 5121, NEAREST: 9728, LINEAR: 9729,
+        TEXTURE_MIN_FILTER: 10241, TEXTURE_MAG_FILTER: 10240, TEXTURE_WRAP_S: 10242,
+        TEXTURE_WRAP_T: 10243, CLAMP_TO_EDGE: 33071, FRAMEBUFFER: 36160, RENDERBUFFER: 36161,
+        DEPTH_COMPONENT16: 33189, COLOR_ATTACHMENT0: 36064, DEPTH_ATTACHMENT: 36096,
+        FRAMEBUFFER_COMPLETE: 36053, LINK_STATUS: 35714, COMPILE_STATUS: 35713,
+        ELEMENT_ARRAY_BUFFER: 34963, UNSIGNED_SHORT: 5123, LINES: 1, LINE_STRIP: 3,
+        TRIANGLE_STRIP: 5, TRIANGLE_FAN: 6, POINTS: 0, SRC_ALPHA: 770, ONE_MINUS_SRC_ALPHA: 771,
+        ONE: 1, ZERO: 0, FUNC_ADD: 32774, LEQUAL: 515, LESS: 513, EQUAL: 514, GREATER: 516,
+        NOTEQUAL: 517, GEQUAL: 518, ALWAYS: 519, NEVER: 512, KEEP: 7680, REPLACE: 7681,
+        INCR: 7682, DECR: 7683, INVERT: 5386, INCR_WRAP: 34055, DECR_WRAP: 34056,
+        FRONT: 1028, BACK: 1029, FRONT_AND_BACK: 1032, CCW: 2305, CW: 2304,
+        DYNAMIC_DRAW: 35048, STREAM_DRAW: 35040, INT: 5124, SHORT: 5122, BYTE: 5120,
+        UNSIGNED_INT: 5125, FLOAT_VEC2: 35664, FLOAT_VEC3: 35665, FLOAT_VEC4: 35666,
+        INT_VEC2: 35667, INT_VEC3: 35668, INT_VEC4: 35669, BOOL: 35670,
+        FLOAT_MAT2: 35674, FLOAT_MAT3: 35675, FLOAT_MAT4: 35676, SAMPLER_2D: 35678,
+        SAMPLER_CUBE: 35680, ACTIVE_ATTRIBUTES: 35721, ACTIVE_UNIFORMS: 35718,
+        NO_ERROR: 0, INVALID_ENUM: 1280, INVALID_VALUE: 1281, INVALID_OPERATION: 1282,
+        OUT_OF_MEMORY: 1285, CONTEXT_LOST_WEBGL: 37442
     };
+    Object.keys(_GL_CONSTS).forEach(function(k) {
+        if (!Object.prototype.hasOwnProperty.call(_glProto, k)) {
+            try {
+                Object.defineProperty(_glProto, k, {
+                    value: _GL_CONSTS[k], writable: false, enumerable: true, configurable: false
+                });
+            } catch (e) {
+                _glProto[k] = _GL_CONSTS[k];
+            }
+        }
+    });
 
-    // Patch document.createElement to return canvas with getContext
-    var _origCreateElement = document ? document.createElement : null;
-    if (typeof document !== 'undefined' && document.createElement) {
-        var origCreate = document.createElement.bind ? document.createElement.bind(document) : document.createElement;
-        // We can't easily override createElement here since it's a native function.
-        // Instead, provide a global getContext helper.
-    }
+    var WebGLContext = Object.create(_glProto);
+    WebGLContext.getParameter = _getParameter;
+    WebGLContext.getExtension = _getExtension;
+    WebGLContext.getSupportedExtensions = _getSupportedExtensions;
+    WebGLContext.createBuffer = function() { return {}; };
+    WebGLContext.createProgram = function() { return {}; };
+    WebGLContext.createShader = function() { return {}; };
+    WebGLContext.shaderSource = function(shader, source) { if (shader) { shader._source = source; } };
+    WebGLContext.compileShader = function(shader) { if (shader) { shader.COMPILE_STATUS = true; } };
+    WebGLContext.attachShader = function() {};
+    WebGLContext.linkProgram = function(program) { if (program) { program.LINK_STATUS = true; } };
+    WebGLContext.useProgram = function() {};
+    WebGLContext.getShaderParameter = function(shader, pname) {
+        if (pname === 35713) { return shader ? shader.COMPILE_STATUS === true : false; }
+        return false;
+    };
+    WebGLContext.getProgramParameter = function(program, pname) {
+        if (pname === 35714) { return program ? program.LINK_STATUS === true : false; }
+        if (pname === 35721 || pname === 35718) { return 0; }
+        return false;
+    };
+    WebGLContext.getShaderInfoLog = function() { return ''; };
+    WebGLContext.getProgramInfoLog = function() { return ''; };
+    WebGLContext.getAttribLocation = function() { return 0; };
+    WebGLContext.getUniformLocation = function(program, name) {
+        return { _isWebGLUniformLocation: true, _program: program, _name: name };
+    };
+    WebGLContext.enableVertexAttribArray = function() {};
+    WebGLContext.vertexAttribPointer = function() {};
+    WebGLContext.bindBuffer = function() {};
+    WebGLContext.bufferData = function() {};
+    WebGLContext.drawArrays = function() {};
+    WebGLContext.drawElements = function() {};
+    WebGLContext.viewport = function() {};
+    WebGLContext.clearColor = function() {};
+    WebGLContext.clear = function() {};
+    WebGLContext.enable = function() {};
+    WebGLContext.disable = function() {};
+    WebGLContext.blendFunc = function() {};
+    WebGLContext.createTexture = function() { return {}; };
+    WebGLContext.bindTexture = function() {};
+    WebGLContext.texImage2D = function() {};
+    WebGLContext.texParameteri = function() {};
+    WebGLContext.generateMipmap = function() {};
+    WebGLContext.createFramebuffer = function() { return {}; };
+    WebGLContext.bindFramebuffer = function() {};
+    WebGLContext.framebufferTexture2D = function() {};
+    WebGLContext.createRenderbuffer = function() { return {}; };
+    WebGLContext.bindRenderbuffer = function() {};
+    WebGLContext.renderbufferStorage = function() {};
+    WebGLContext.framebufferRenderbuffer = function() {};
+    WebGLContext.checkFramebufferStatus = function() { return 36053; };
+    WebGLContext.deleteBuffer = function() {};
+    WebGLContext.deleteTexture = function() {};
+    WebGLContext.deleteFramebuffer = function() {};
+    WebGLContext.deleteRenderbuffer = function() {};
+    WebGLContext.deleteShader = function() {};
+    WebGLContext.deleteProgram = function() {};
+    WebGLContext.getError = function() { return 0; };
+    WebGLContext.isContextLost = function() { return false; };
+    WebGLContext.flush = function() {};
+    WebGLContext.finish = function() {};
+    WebGLContext.readPixels = function() {};
+    WebGLContext.pixelStorei = function() {};
+    WebGLContext.activeTexture = function() {};
+    WebGLContext.uniform1f = function() {}; WebGLContext.uniform2f = function() {};
+    WebGLContext.uniform3f = function() {}; WebGLContext.uniform4f = function() {};
+    WebGLContext.uniform1i = function() {}; WebGLContext.uniform2i = function() {};
+    WebGLContext.uniform3i = function() {}; WebGLContext.uniform4i = function() {};
+    WebGLContext.uniform1fv = function() {}; WebGLContext.uniform2fv = function() {};
+    WebGLContext.uniform3fv = function() {}; WebGLContext.uniform4fv = function() {};
+    WebGLContext.uniform1iv = function() {}; WebGLContext.uniform2iv = function() {};
+    WebGLContext.uniform3iv = function() {}; WebGLContext.uniform4iv = function() {};
+    WebGLContext.uniformMatrix2fv = function() {}; WebGLContext.uniformMatrix3fv = function() {};
+    WebGLContext.uniformMatrix4fv = function() {};
+    WebGLContext.vertexAttrib1f = function() {}; WebGLContext.vertexAttrib2f = function() {};
+    WebGLContext.vertexAttrib3f = function() {}; WebGLContext.vertexAttrib4f = function() {};
+    WebGLContext.disableVertexAttribArray = function() {};
+    WebGLContext.scissor = function() {}; WebGLContext.colorMask = function() {};
+    WebGLContext.depthMask = function() {}; WebGLContext.depthFunc = function() {};
+    WebGLContext.depthRange = function() {}; WebGLContext.stencilFunc = function() {};
+    WebGLContext.stencilOp = function() {}; WebGLContext.stencilMask = function() {};
+    WebGLContext.cullFace = function() {}; WebGLContext.frontFace = function() {};
+    WebGLContext.lineWidth = function() {}; WebGLContext.polygonOffset = function() {};
+    WebGLContext.sampleCoverage = function() {}; WebGLContext.blendColor = function() {};
+    WebGLContext.blendEquation = function() {}; WebGLContext.blendEquationSeparate = function() {};
+    WebGLContext.blendFuncSeparate = function() {};
+    WebGLContext.getActiveAttrib = function() { return null; };
+    WebGLContext.getActiveUniform = function() { return null; };
+    WebGLContext.getAttachedShaders = function() { return []; };
+    WebGLContext.getBufferParameter = function() { return null; };
+    WebGLContext.getContextAttributes = function() {
+        return {alpha:true,antialias:true,depth:true,failIfMajorPerformanceCaveat:false,
+            powerPreference:'default',premultipliedAlpha:true,preserveDrawingBuffer:false,
+            stencil:false,desynchronized:false};
+    };
+    WebGLContext.getFramebufferAttachmentParameter = function() { return null; };
+    WebGLContext.getRenderbufferParameter = function() { return null; };
+    WebGLContext.getShaderPrecisionFormat = function(shaderType, precisionType) {
+        if (precisionType === 36336 || precisionType === 36337 || precisionType === 36338) {
+            return { rangeMin: 127, rangeMax: 127, precision: 23 };
+        }
+        if (precisionType === 36339 || precisionType === 36340 || precisionType === 36341) {
+            return { rangeMin: 31, rangeMax: 30, precision: 0 };
+        }
+        return { rangeMin: 0, rangeMax: 0, precision: 0 };
+    };
+    WebGLContext.getShaderSource = function() { return ''; };
+    WebGLContext.getTexParameter = function() { return null; };
+    WebGLContext.getUniform = function() { return null; };
+    WebGLContext.getVertexAttrib = function() { return null; };
+    WebGLContext.getVertexAttribOffset = function() { return 0; };
+    WebGLContext.hint = function() {};
+    WebGLContext.isBuffer = function() { return false; };
+    WebGLContext.isEnabled = function() { return false; };
+    WebGLContext.isFramebuffer = function() { return false; };
+    WebGLContext.isProgram = function() { return false; };
+    WebGLContext.isRenderbuffer = function() { return false; };
+    WebGLContext.isShader = function() { return false; };
+    WebGLContext.isTexture = function() { return false; };
+    WebGLContext.validateProgram = function() {};
+    WebGLContext.drawingBufferWidth = 300;
+    WebGLContext.drawingBufferHeight = 150;
+    WebGLContext.canvas = null;
+    WebGLContext.extensions = null;
+    WebGLContext.shaderPrecision = null;
 
-    // Install on globalThis for direct access.
-    // Freeze shape so surface sample sees constants as own data (C5).
-    // Methods remain own for L3 stub context (no real WebGLRenderingContext proto yet).
     globalThis.__webglContext__ = WebGLContext;
 
-    // Install __iv8__.gl.callLog (REQ-WGL-002)
-    // Records all WebGL API calls for fingerprint analysis
     (function() {
         var callLog = [];
         if (!('__iv8__' in globalThis)) return;
@@ -340,8 +238,6 @@ pub const WEBGL_SHIM_JS: &str = r#"
         if (!iv8.gl) iv8.gl = {};
         iv8.gl.callLog = callLog;
         iv8.gl.clearCallLog = function() { callLog.length = 0; };
-
-        // Wrap all WebGL methods to record calls
         var methodsToLog = [
             'getParameter', 'getExtension', 'getSupportedExtensions',
             'createBuffer', 'createProgram', 'createShader', 'shaderSource',
@@ -352,7 +248,7 @@ pub const WEBGL_SHIM_JS: &str = r#"
             'viewport', 'clearColor', 'clear', 'enable', 'disable', 'blendFunc',
             'createTexture', 'bindTexture', 'texImage2D', 'texParameteri',
             'generateMipmap', 'createFramebuffer', 'bindFramebuffer',
-            'framebufferTexture2D', 'getError', 'readPixels',
+            'framebufferTexture2D', 'getError', 'readPixels'
         ];
         methodsToLog.forEach(function(name) {
             var orig = WebGLContext[name];
@@ -368,7 +264,7 @@ pub const WEBGL_SHIM_JS: &str = r#"
                         return a;
                     }),
                     result: result === undefined ? null : (typeof result === 'object' ? '[object]' : result),
-                    timestamp: typeof performance !== 'undefined' ? performance.now() : 0,
+                    timestamp: typeof performance !== 'undefined' ? performance.now() : 0
                 });
                 return result;
             };
