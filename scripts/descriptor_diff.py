@@ -142,6 +142,54 @@ def compare_values(chrome_val: dict, iv8_val: dict) -> str | None:
     return None
 
 
+INTERFACE_NAME_MAP = {
+    "audio": "AudioContext",
+    "navigator": "Navigator",
+    "screen": "Screen",
+    "webgl1": "WebGLRenderingContext",
+    "webgl2": "WebGL2RenderingContext",
+}
+
+
+def normalize_interface_name(name: str) -> str:
+    return INTERFACE_NAME_MAP.get(name, name)
+
+
+def normalize_chrome_entry(val):
+    """Normalize Chrome surface value to IV8 format: {value: {typeof, value}, descriptor: None}"""
+    if val is None:
+        return {"value": {"typeof": "undefined", "value": None}, "descriptor": None}
+    if isinstance(val, bool):
+        return {"value": {"typeof": "boolean", "value": val}, "descriptor": None}
+    if isinstance(val, (int, float)):
+        return {"value": {"typeof": "number", "value": val}, "descriptor": None}
+    if isinstance(val, str):
+        return {"value": {"typeof": "string", "value": val}, "descriptor": None}
+    if isinstance(val, dict):
+        return {"value": {"typeof": "object", "value": None, "objectKeys": list(val.keys())}, "descriptor": None}
+    if isinstance(val, list):
+        return {"value": {"typeof": "object", "value": None, "objectKeys": [str(i) for i in range(len(val))]}, "descriptor": None}
+    return {"value": {"typeof": "undefined", "value": None}, "descriptor": None}
+
+
+def normalize_chrome_surface(data: dict) -> dict:
+    """Normalize Chrome surface data to IV8 format."""
+    result = {}
+    for iface, props in data.items():
+        iface_norm = normalize_interface_name(iface)
+        if isinstance(props, dict):
+            normalized = {}
+            for prop, val in props.items():
+                if isinstance(val, dict) and "value" in val and "descriptor" in val:
+                    normalized[prop] = val
+                else:
+                    normalized[prop] = normalize_chrome_entry(val)
+            result[iface_norm] = normalized
+        else:
+            result[iface_norm] = {}
+    return result
+
+
 def diff_surfaces(chrome_data: dict, iv8_data: dict) -> dict:
     """Compute the full diff between Chrome and IV8 surface samples."""
     results = {
@@ -152,12 +200,15 @@ def diff_surfaces(chrome_data: dict, iv8_data: dict) -> dict:
         "EXTRA_IN_IV8": [],
     }
 
-    chrome_interfaces = set(chrome_data.keys())
-    iv8_interfaces = set(iv8_data.keys())
+    chrome_normalized = normalize_chrome_surface(chrome_data)
+    iv8_normalized = {normalize_interface_name(k): v for k, v in iv8_data.items()}
+
+    chrome_interfaces = set(chrome_normalized.keys())
+    iv8_interfaces = set(iv8_normalized.keys())
 
     for iface in sorted(chrome_interfaces | iv8_interfaces):
-        c_iface = chrome_data.get(iface)
-        i_iface = iv8_data.get(iface)
+        c_iface = chrome_normalized.get(iface)
+        i_iface = iv8_normalized.get(iface)
 
         if c_iface is None:
             results["EXTRA_IN_IV8"].append({
