@@ -326,7 +326,9 @@ pub const WEBGL_SHIM_JS: &str = r#"
         // Instead, provide a global getContext helper.
     }
 
-    // Install on globalThis for direct access
+    // Install on globalThis for direct access.
+    // Freeze shape so surface sample sees constants as own data (C5).
+    // Methods remain own for L3 stub context (no real WebGLRenderingContext proto yet).
     globalThis.__webglContext__ = WebGLContext;
 
     // Install __iv8__.gl.callLog (REQ-WGL-002)

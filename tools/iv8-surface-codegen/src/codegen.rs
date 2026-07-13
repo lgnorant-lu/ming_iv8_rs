@@ -47,6 +47,9 @@ const EXCLUDED_ATTRIBUTES: &[(&str, &str)] = &[
     // skeleton __iv8InnerText returned empty and shadowed FT (RD-11 residual).
     ("Element", "innerText"),
     ("HTMLElement", "innerText"),
+    // Element.id owned solely by DOM FT id_getter/id_setter + Document id_index
+    // (A3: eliminate codegen element_set dual-write __iv8Id).
+    ("Element", "id"),
     // Geometry owned by Element FT layout getters (template.rs).
     ("Element", "offsetWidth"),
     ("Element", "offsetHeight"),

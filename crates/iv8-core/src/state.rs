@@ -129,6 +129,29 @@ pub struct RuntimeState {
 
     pub workers: RefCell<Vec<crate::shims::worker::WorkerHandle>>,
     pub worker_objects: RefCell<std::collections::HashMap<u64, v8::Global<v8::Object>>>,
+
+    /// Per-node layout/media mutable slots (scrollTop/Left, media currentTime/muted/volume).
+    /// Keyed by NodeId; used by DOM FT setters (COMP-3) instead of no-op null_this_check.
+    pub node_scroll: RefCell<std::collections::HashMap<crate::dom::NodeId, (f64, f64)>>,
+    pub node_media: RefCell<std::collections::HashMap<crate::dom::NodeId, MediaNodeState>>,
+}
+
+/// Mutable media element state for HTMLMediaElement-backed FTs.
+#[derive(Debug, Clone, Copy)]
+pub struct MediaNodeState {
+    pub current_time: f64,
+    pub muted: bool,
+    pub volume: f64,
+}
+
+impl Default for MediaNodeState {
+    fn default() -> Self {
+        Self {
+            current_time: 0.0,
+            muted: false,
+            volume: 1.0,
+        }
+    }
 }
 
 /// Quantized, per-page-stable `performance.memory` snapshot.
@@ -228,6 +251,8 @@ impl RuntimeState {
             perf_now_last: std::cell::Cell::new(f64::NEG_INFINITY),
             workers: RefCell::new(Vec::new()),
             worker_objects: RefCell::new(std::collections::HashMap::new()),
+            node_scroll: RefCell::new(std::collections::HashMap::new()),
+            node_media: RefCell::new(std::collections::HashMap::new()),
         }
     }
 

@@ -389,19 +389,42 @@ def sample_chrome(chrome_path: str | None, port: int, launch: bool) -> dict | No
 # ---------------------------------------------------------------------------
 
 def sample_iv8() -> dict:
-    """Start IV8 runtime, collect surface values."""
+    """Start IV8 runtime, collect surface values.
+
+    JSContext + large DOM/codegen templates need a 128MB stack (K-010).
+    Run construction/eval on a dedicated thread so Windows default stacks
+    do not STATUS_STACK_OVERFLOW mid-sample.
+    """
+    import threading
+
     sys.path.insert(0, str(REPO_ROOT))
     from iv8_rs import JSContext
 
-    print("Initializing IV8 runtime...")
-    ctx = JSContext()
-    ctx.page_load("<!DOCTYPE html><html><body></body></html>", None)
+    result: dict = {}
+    error: list[BaseException] = []
 
-    print("Sampling surface values + descriptors...")
-    raw = ctx.eval(COLLECTOR_JS)
-    if isinstance(raw, str):
-        return json.loads(raw)
-    return raw
+    def worker():
+        try:
+            print("Initializing IV8 runtime...")
+            ctx = JSContext()
+            ctx.page_load("<!DOCTYPE html><html><body></body></html>", None)
+            print("Sampling surface values + descriptors...")
+            raw = ctx.eval(COLLECTOR_JS)
+            if isinstance(raw, str):
+                result.update(json.loads(raw))
+            elif isinstance(raw, dict):
+                result.update(raw)
+            else:
+                raise TypeError(f"unexpected sample type: {type(raw)}")
+        except BaseException as e:
+            error.append(e)
+
+    t = threading.Thread(target=worker)
+    t.start()
+    t.join()
+    if error:
+        raise error[0]
+    return result
 
 
 # ---------------------------------------------------------------------------

@@ -4930,17 +4930,53 @@ unsafe extern "C" fn scroll_height_getter(info: *const v8::FunctionCallbackInfo)
     });
 }
 unsafe extern "C" fn scroll_top_getter(info: *const v8::FunctionCallbackInfo) {
-    run_accessor(info, |scope, rv, _, _| {
-        rv.set(v8::Number::new(scope, 0.0).into());
+    run_accessor(info, |scope, rv, state, node_id| {
+        let y = state
+            .node_scroll
+            .borrow()
+            .get(&node_id)
+            .map(|p| p.1)
+            .unwrap_or(0.0);
+        rv.set(v8::Number::new(scope, y).into());
     });
 }
-unsafe extern "C" fn scroll_top_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn scroll_top_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let y = args.get(0).number_value(scope).unwrap_or(0.0);
+                let y = if y.is_nan() || y.is_infinite() { 0.0 } else { y };
+                let mut map = state.node_scroll.borrow_mut();
+                let entry = map.entry(nid).or_insert((0.0, 0.0));
+                entry.1 = y;
+            }
+        }
+    });
+}
 unsafe extern "C" fn scroll_left_getter(info: *const v8::FunctionCallbackInfo) {
-    run_accessor(info, |scope, rv, _, _| {
-        rv.set(v8::Number::new(scope, 0.0).into());
+    run_accessor(info, |scope, rv, state, node_id| {
+        let x = state
+            .node_scroll
+            .borrow()
+            .get(&node_id)
+            .map(|p| p.0)
+            .unwrap_or(0.0);
+        rv.set(v8::Number::new(scope, x).into());
     });
 }
-unsafe extern "C" fn scroll_left_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn scroll_left_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let x = args.get(0).number_value(scope).unwrap_or(0.0);
+                let x = if x.is_nan() || x.is_infinite() { 0.0 } else { x };
+                let mut map = state.node_scroll.borrow_mut();
+                let entry = map.entry(nid).or_insert((0.0, 0.0));
+                entry.0 = x;
+            }
+        }
+    });
+}
 unsafe extern "C" fn offset_parent_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
         rv.set(v8::null(scope).into());
@@ -6275,11 +6311,32 @@ unsafe extern "C" fn defer_setter(info: *const v8::FunctionCallbackInfo) {
 // ── Media-specific ────────────────────────────────────────────────────────────
 
 unsafe extern "C" fn current_time_getter(info: *const v8::FunctionCallbackInfo) {
-    run_accessor(info, |scope, rv, _, _| {
-        rv.set(v8::Number::new(scope, 0.0).into());
+    run_accessor(info, |scope, rv, state, node_id| {
+        let t = state
+            .node_media
+            .borrow()
+            .get(&node_id)
+            .map(|m| m.current_time)
+            .unwrap_or(0.0);
+        rv.set(v8::Number::new(scope, t).into());
     });
 }
-unsafe extern "C" fn current_time_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn current_time_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let t = args.get(0).number_value(scope).unwrap_or(0.0);
+                let t = if t.is_nan() || t < 0.0 { 0.0 } else { t };
+                state
+                    .node_media
+                    .borrow_mut()
+                    .entry(nid)
+                    .or_default()
+                    .current_time = t;
+            }
+        }
+    });
+}
 unsafe extern "C" fn duration_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
         rv.set(v8::Number::new(scope, 0.0).into());
@@ -6291,17 +6348,60 @@ unsafe extern "C" fn paused_getter(info: *const v8::FunctionCallbackInfo) {
     });
 }
 unsafe extern "C" fn muted_getter(info: *const v8::FunctionCallbackInfo) {
-    run_accessor(info, |scope, rv, _, _| {
-        rv.set(v8::Boolean::new(scope, false).into());
+    run_accessor(info, |scope, rv, state, node_id| {
+        let m = state
+            .node_media
+            .borrow()
+            .get(&node_id)
+            .map(|m| m.muted)
+            .unwrap_or(false);
+        rv.set(v8::Boolean::new(scope, m).into());
     });
 }
-unsafe extern "C" fn muted_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn muted_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let on = args.length() >= 1 && args.get(0).boolean_value(scope);
+            state
+                .node_media
+                .borrow_mut()
+                .entry(nid)
+                .or_default()
+                .muted = on;
+        }
+    });
+}
 unsafe extern "C" fn volume_getter(info: *const v8::FunctionCallbackInfo) {
-    run_accessor(info, |scope, rv, _, _| {
-        rv.set(v8::Number::new(scope, 1.0).into());
+    run_accessor(info, |scope, rv, state, node_id| {
+        let v = state
+            .node_media
+            .borrow()
+            .get(&node_id)
+            .map(|m| m.volume)
+            .unwrap_or(1.0);
+        rv.set(v8::Number::new(scope, v).into());
     });
 }
-unsafe extern "C" fn volume_setter(info: *const v8::FunctionCallbackInfo) { null_this_check(info); }
+unsafe extern "C" fn volume_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let mut v = args.get(0).number_value(scope).unwrap_or(1.0);
+                if v.is_nan() || v < 0.0 {
+                    v = 0.0;
+                } else if v > 1.0 {
+                    v = 1.0;
+                }
+                state
+                    .node_media
+                    .borrow_mut()
+                    .entry(nid)
+                    .or_default()
+                    .volume = v;
+            }
+        }
+    });
+}
 
 /// captureStream() stub — returns an empty MediaStream-like object.
 /// Used by fingerprint bitmask detection (bit 1).

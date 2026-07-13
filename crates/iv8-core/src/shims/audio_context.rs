@@ -42,6 +42,21 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     var _audioPrefs = (typeof globalThis.__iv8AudioPrefs === 'object' && globalThis.__iv8AudioPrefs) ? globalThis.__iv8AudioPrefs : {};
     var _defaultSampleRate = (_audioPrefs.sampleRate !== undefined) ? _audioPrefs.sampleRate : 48000;
 
+    // Off-instance slot store: avoid own `_name` / `__iv8*` keys (CDP EXTRA / getOwnPropertyNames).
+    var _slots = typeof WeakMap !== 'undefined' ? new WeakMap() : null;
+    function _bag(obj) {
+        if (_slots) {
+            var b = _slots.get(obj);
+            if (!b) { b = Object.create(null); _slots.set(obj, b); }
+            return b;
+        }
+        // Fallback (no WeakMap): non-enumerable own key (still visible to getOwnPropertyNames).
+        var k = '__iv8AudioBag';
+        if (!obj[k]) {
+            Object.defineProperty(obj, k, { value: Object.create(null), writable: true, enumerable: false, configurable: true });
+        }
+        return obj[k];
+    }
     function _override(proto, name, getter, setter) {
         Object.defineProperty(proto, name, {
             get: getter, set: setter,
@@ -49,20 +64,13 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         });
     }
     function _overrideValue(proto, name) {
-        var slot = '_' + name;
         _override(proto, name,
-            function() { return this[slot]; },
-            function(v) {
-                Object.defineProperty(this, slot, {
-                    value: v, writable: true, enumerable: false, configurable: true
-                });
-            }
+            function() { return _bag(this)[name]; },
+            function(v) { _bag(this)[name] = v; }
         );
     }
     function _setSlot(obj, name, val) {
-        Object.defineProperty(obj, '_' + name, {
-            value: val, writable: true, enumerable: false, configurable: true
-        });
+        _bag(obj)[name] = val;
     }
 
     // AudioParam stub
@@ -71,11 +79,11 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initAudioParam(this, value);
     }
     function _initAudioParam(self, value) {
-        _setSlot(self, '_value'.substring(1), value !== undefined ? value : 0);
-        _setSlot(self, '_defaultValue'.substring(1), self._value);
-        _setSlot(self, '_minValue'.substring(1), -3.4028234663852886e+38);
-        _setSlot(self, '_maxValue'.substring(1), 3.4028234663852886e+38);
-        _setSlot(self, '_automationRate'.substring(1), 'a-rate');
+        _setSlot(self, 'value', value !== undefined ? value : 0);
+        _setSlot(self, 'defaultValue', _bag(self).value);
+        _setSlot(self, 'minValue', -3.4028234663852886e+38);
+        _setSlot(self, 'maxValue', 3.4028234663852886e+38);
+        _setSlot(self, 'automationRate', 'a-rate');
     }
     AudioParam.prototype = AudioParamProto;
     Object.defineProperty(AudioParam.prototype, 'constructor', {value: AudioParam, writable: true, enumerable: false, configurable: true});
@@ -107,12 +115,12 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initAudioNode(this, ctx);
     }
     function _initAudioNode(self, ctx) {
-        _setSlot(self, '_context'.substring(1), ctx);
-        _setSlot(self, '_numberOfInputs'.substring(1), 0);
-        _setSlot(self, '_numberOfOutputs'.substring(1), 1);
-        _setSlot(self, '_channelCount'.substring(1), 2);
-        _setSlot(self, '_channelCountMode'.substring(1), 'max');
-        _setSlot(self, '_channelInterpretation'.substring(1), 'speakers');
+        _setSlot(self, 'context', ctx);
+        _setSlot(self, 'numberOfInputs', 0);
+        _setSlot(self, 'numberOfOutputs', 1);
+        _setSlot(self, 'channelCount', 2);
+        _setSlot(self, 'channelCountMode', 'max');
+        _setSlot(self, 'channelInterpretation', 'speakers');
     }
     AudioNode.prototype = AudioNodeProto;
     Object.defineProperty(AudioNode.prototype, 'constructor', {value: AudioNode, writable: true, enumerable: false, configurable: true});
@@ -140,10 +148,10 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     }
     function _initOscillatorNode(self, ctx, options) {
         _initAudioNode(self, ctx);
-        _setSlot(self, '_type'.substring(1), (options && options.type) || 'sine');
-        _setSlot(self, '_frequency'.substring(1), _createAudioParam((options && options.frequency) || 440));
-        _setSlot(self, '_detune'.substring(1), _createAudioParam(0));
-        _setSlot(self, '_onended'.substring(1), null);
+        _setSlot(self, 'type', (options && options.type) || 'sine');
+        _setSlot(self, 'frequency', _createAudioParam((options && options.frequency) || 440));
+        _setSlot(self, 'detune', _createAudioParam(0));
+        _setSlot(self, 'onended', null);
     }
     OscillatorNode.prototype = OscillatorNodeProto;
     Object.defineProperty(OscillatorNode.prototype, 'constructor', {value: OscillatorNode, writable: true, enumerable: false, configurable: true});
@@ -168,12 +176,12 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     function _initDynamicsCompressorNode(self, ctx, options) {
         _initAudioNode(self, ctx);
         var _comp = (_audioPrefs && _audioPrefs.compressor) ? _audioPrefs.compressor : {};
-        _setSlot(self, '_threshold'.substring(1), _createAudioParam((options && options.threshold !== undefined) ? options.threshold : (_comp.threshold !== undefined ? _comp.threshold : -24)));
-        _setSlot(self, '_knee'.substring(1), _createAudioParam((options && options.knee !== undefined) ? options.knee : (_comp.knee !== undefined ? _comp.knee : 30)));
-        _setSlot(self, '_ratio'.substring(1), _createAudioParam((options && options.ratio !== undefined) ? options.ratio : (_comp.ratio !== undefined ? _comp.ratio : 12)));
-        _setSlot(self, '_attack'.substring(1), _createAudioParam((options && options.attack !== undefined) ? options.attack : (_comp.attack !== undefined ? _comp.attack : 0.003)));
-        _setSlot(self, '_release'.substring(1), _createAudioParam((options && options.release !== undefined) ? options.release : (_comp.release !== undefined ? _comp.release : 0.25)));
-        _setSlot(self, '_reduction'.substring(1), (_comp.reduction !== undefined) ? _comp.reduction : 0);
+        _setSlot(self, 'threshold', _createAudioParam((options && options.threshold !== undefined) ? options.threshold : (_comp.threshold !== undefined ? _comp.threshold : -24)));
+        _setSlot(self, 'knee', _createAudioParam((options && options.knee !== undefined) ? options.knee : (_comp.knee !== undefined ? _comp.knee : 30)));
+        _setSlot(self, 'ratio', _createAudioParam((options && options.ratio !== undefined) ? options.ratio : (_comp.ratio !== undefined ? _comp.ratio : 12)));
+        _setSlot(self, 'attack', _createAudioParam((options && options.attack !== undefined) ? options.attack : (_comp.attack !== undefined ? _comp.attack : 0.003)));
+        _setSlot(self, 'release', _createAudioParam((options && options.release !== undefined) ? options.release : (_comp.release !== undefined ? _comp.release : 0.25)));
+        _setSlot(self, 'reduction', (_comp.reduction !== undefined) ? _comp.reduction : 0);
     }
     DynamicsCompressorNode.prototype = DynamicsCompressorNodeProto;
     Object.defineProperty(DynamicsCompressorNode.prototype, 'constructor', {value: DynamicsCompressorNode, writable: true, enumerable: false, configurable: true});
@@ -197,11 +205,11 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     }
     function _initAnalyserNode(self, ctx, options) {
         _initAudioNode(self, ctx);
-        _setSlot(self, '_fftSize'.substring(1), (options && options.fftSize) || 2048);
-        _setSlot(self, '_frequencyBinCount'.substring(1), self._fftSize / 2);
-        _setSlot(self, '_minDecibels'.substring(1), -100);
-        _setSlot(self, '_maxDecibels'.substring(1), -30);
-        _setSlot(self, '_smoothingTimeConstant'.substring(1), 0.8);
+        _setSlot(self, 'fftSize', (options && options.fftSize) || 2048);
+        _setSlot(self, 'frequencyBinCount', _bag(self).fftSize / 2);
+        _setSlot(self, 'minDecibels', -100);
+        _setSlot(self, 'maxDecibels', -30);
+        _setSlot(self, 'smoothingTimeConstant', 0.8);
     }
     AnalyserNode.prototype = AnalyserNodeProto;
     Object.defineProperty(AnalyserNode.prototype, 'constructor', {value: AnalyserNode, writable: true, enumerable: false, configurable: true});
@@ -273,7 +281,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     }
     function _initGainNode(self, ctx, options) {
         _initAudioNode(self, ctx);
-        _setSlot(self, '_gain'.substring(1), _createAudioParam((options && options.gain !== undefined) ? options.gain : 1));
+        _setSlot(self, 'gain', _createAudioParam((options && options.gain !== undefined) ? options.gain : 1));
     }
     GainNode.prototype = GainNodeProto;
     Object.defineProperty(GainNode.prototype, 'constructor', {value: GainNode, writable: true, enumerable: false, configurable: true});
@@ -292,9 +300,9 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     }
     function _initAudioDestinationNode(self, ctx) {
         _initAudioNode(self, ctx);
-        _setSlot(self, '_maxChannelCount'.substring(1), 2);
-        _setSlot(self, '_numberOfInputs'.substring(1), 1);
-        _setSlot(self, '_numberOfOutputs'.substring(1), 0);
+        _setSlot(self, 'maxChannelCount', 2);
+        _setSlot(self, 'numberOfInputs', 1);
+        _setSlot(self, 'numberOfOutputs', 0);
     }
     AudioDestinationNode.prototype = AudioDestinationNodeProto;
     Object.defineProperty(AudioDestinationNode.prototype, 'constructor', {value: AudioDestinationNode, writable: true, enumerable: false, configurable: true});
@@ -312,11 +320,11 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initAudioBuffer(this, options);
     }
     function _initAudioBuffer(self, options) {
-        _setSlot(self, '_sampleRate'.substring(1), (options && options.sampleRate) || _defaultSampleRate);
-        _setSlot(self, '_length'.substring(1), (options && options.length) || 0);
-        _setSlot(self, '_duration'.substring(1), self._length / self._sampleRate);
-        _setSlot(self, '_numberOfChannels'.substring(1), (options && options.numberOfChannels) || 1);
-        _setSlot(self, '_data'.substring(1), new Float32Array(self._length));
+        _setSlot(self, 'sampleRate', (options && options.sampleRate) || _defaultSampleRate);
+        _setSlot(self, 'length', (options && options.length) || 0);
+        _setSlot(self, 'duration', _bag(self).length / _bag(self).sampleRate);
+        _setSlot(self, 'numberOfChannels', (options && options.numberOfChannels) || 1);
+        _setSlot(self, 'data', new Float32Array(_bag(self).length));
     }
     AudioBuffer.prototype = AudioBufferProto;
     Object.defineProperty(AudioBuffer.prototype, 'constructor', {value: AudioBuffer, writable: true, enumerable: false, configurable: true});
@@ -330,7 +338,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         return buf;
     }
     AudioBufferProto.getChannelData = function(channel) {
-        var data = new Float32Array(this._length);
+        var data = new Float32Array(_bag(this).length);
         // Profile-driven fingerprint injection: captured channel data
         var fpData = _audioPrefs.channelData;
         if (fpData) {
@@ -391,12 +399,12 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initBaseAudioContext(this, sampleRate);
     }
     function _initBaseAudioContext(self, sampleRate) {
-        _setSlot(self, '_sampleRate'.substring(1), sampleRate || _defaultSampleRate);
-        _setSlot(self, '_currentTime'.substring(1), 0);
-        _setSlot(self, '_destination'.substring(1), _createAudioDestinationNode(self));
-        _setSlot(self, '_listener'.substring(1), {});
-        _setSlot(self, '_state'.substring(1), 'suspended');
-        _setSlot(self, '_onstatechange'.substring(1), null);
+        _setSlot(self, 'sampleRate', sampleRate || _defaultSampleRate);
+        _setSlot(self, 'currentTime', 0);
+        _setSlot(self, 'destination', _createAudioDestinationNode(self));
+        _setSlot(self, 'listener', {});
+        _setSlot(self, 'state', 'suspended');
+        _setSlot(self, 'onstatechange', null);
     }
     BaseAudioContext.prototype = BaseAudioContextProto;
     Object.defineProperty(BaseAudioContext.prototype, 'constructor', {value: BaseAudioContext, writable: true, enumerable: false, configurable: true});
@@ -505,9 +513,9 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         if (successCb) { setTimeout(function() { successCb(ab); }, 0); return; }
         return Promise.resolve(ab);
     };
-    BaseAudioContextProto.resume = function() { this._state = 'running'; return Promise.resolve(); };
-    BaseAudioContextProto.suspend = function() { this._state = 'suspended'; return Promise.resolve(); };
-    BaseAudioContextProto.close = function() { this._state = 'closed'; return Promise.resolve(); };
+    BaseAudioContextProto.resume = function() { _bag(this).state = 'running'; return Promise.resolve(); };
+    BaseAudioContextProto.suspend = function() { _bag(this).state = 'suspended'; return Promise.resolve(); };
+    BaseAudioContextProto.close = function() { _bag(this).state = 'closed'; return Promise.resolve(); };
     BaseAudioContextProto.addEventListener = function() {};
     BaseAudioContextProto.removeEventListener = function() {};
     BaseAudioContextProto.dispatchEvent = function() { return true; };
@@ -521,14 +529,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initBaseAudioContext(inst, (options && options.sampleRate) || _defaultSampleRate);
         _setSlot(inst, 'baseLatency', _audioPrefs.baseLatency != null ? _audioPrefs.baseLatency : 0.05);
         _setSlot(inst, 'outputLatency', _audioPrefs.outputLatency != null ? _audioPrefs.outputLatency : 0);
-        Object.defineProperty(inst, '__iv8BaseLatency', {value: _audioPrefs.baseLatency != null ? _audioPrefs.baseLatency : 0.05, writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '__iv8OutputLatency', {value: _audioPrefs.outputLatency != null ? _audioPrefs.outputLatency : 0, writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '__iv8SampleRate', {value: (options && options.sampleRate) || _defaultSampleRate, writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '__iv8State', {value: 'suspended', writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '__iv8Destination', {value: _createAudioDestinationNode(inst, 2), writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '__iv8CurrentTime', {value: 0, writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '__iv8Listener', {value: {}, writable: true, enumerable: false, configurable: true});
-        Object.defineProperty(inst, '__iv8Onstatechange', {value: null, writable: true, enumerable: false, configurable: true});
+        // Single slot path: non-enumerable `_name` only (C1a). No dual __iv8* own keys.
         return inst;
     }
     AudioContext.prototype = AudioContextProto;
@@ -538,7 +539,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     _overrideValue(AudioContextProto, 'baseLatency');
     _overrideValue(AudioContextProto, 'outputLatency');
     AudioContextProto.getOutputTimestamp = function() {
-        return { contextTime: this._currentTime, performanceTime: performance.now() };
+        return { contextTime: _bag(this).currentTime, performanceTime: performance.now() };
     };
     AudioContextProto.createMediaStreamSource = function(stream) { return _createAudioNode(this); };
     AudioContextProto.createMediaStreamDestination = function() {
@@ -562,8 +563,8 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         var wave = { _real: real, _imag: imag };
         return wave;
     };
-    Object.defineProperty(AudioContextProto, 'onerror', { get: function() { return this._onerror || null; }, set: function(v) { this._onerror = v; }, enumerable: true, configurable: true });
-    Object.defineProperty(AudioContextProto, 'onsinkchange', { get: function() { return this._onsinkchange || null; }, set: function(v) { this._onsinkchange = v; }, enumerable: true, configurable: true });
+    Object.defineProperty(AudioContextProto, 'onerror', { get: function() { return _bag(this).onerror || null; }, set: function(v) { _bag(this).onerror = v; }, enumerable: true, configurable: true });
+    Object.defineProperty(AudioContextProto, 'onsinkchange', { get: function() { return _bag(this).onsinkchange || null; }, set: function(v) { _bag(this).onsinkchange = v; }, enumerable: true, configurable: true });
     Object.defineProperty(AudioContextProto, 'playbackStats', { get: function() { return {}; }, enumerable: true, configurable: true });
     AudioContextProto.setSinkId = function(sinkId) { return Promise.resolve(); };
     Object.defineProperty(AudioContextProto, 'sinkId', { get: function() { return ''; }, enumerable: true, configurable: true });
@@ -595,7 +596,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     _overrideValue(OfflineAudioContextProto, 'numberOfChannels');
     OfflineAudioContextProto.startRendering = function() {
         var self = this;
-        return Promise.resolve(self._buffer);
+        return Promise.resolve(_bag(self).buffer);
     };
     OfflineAudioContextProto.suspend = function(suspendTime) { return Promise.resolve(); };
     OfflineAudioContextProto.resume = function() { return Promise.resolve(); };
@@ -614,3 +615,4 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     globalThis.BaseAudioContext = BaseAudioContext;
 })();
 "#;
+
