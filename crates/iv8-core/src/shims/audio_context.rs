@@ -521,14 +521,14 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initBaseAudioContext(inst, (options && options.sampleRate) || _defaultSampleRate);
         _setSlot(inst, 'baseLatency', _audioPrefs.baseLatency != null ? _audioPrefs.baseLatency : 0.05);
         _setSlot(inst, 'outputLatency', _audioPrefs.outputLatency != null ? _audioPrefs.outputLatency : 0);
-        inst.__iv8BaseLatency = _audioPrefs.baseLatency != null ? _audioPrefs.baseLatency : 0.05;
-        inst.__iv8OutputLatency = _audioPrefs.outputLatency != null ? _audioPrefs.outputLatency : 0;
-        inst.__iv8SampleRate = (options && options.sampleRate) || _defaultSampleRate;
-        inst.__iv8State = 'suspended';
-        inst.__iv8Destination = _createAudioDestinationNode(inst, 2);
-        inst.__iv8CurrentTime = 0;
-        inst.__iv8Listener = {};
-        inst.__iv8Onstatechange = null;
+        Object.defineProperty(inst, '__iv8BaseLatency', {value: _audioPrefs.baseLatency != null ? _audioPrefs.baseLatency : 0.05, writable: true, enumerable: false, configurable: true});
+        Object.defineProperty(inst, '__iv8OutputLatency', {value: _audioPrefs.outputLatency != null ? _audioPrefs.outputLatency : 0, writable: true, enumerable: false, configurable: true});
+        Object.defineProperty(inst, '__iv8SampleRate', {value: (options && options.sampleRate) || _defaultSampleRate, writable: true, enumerable: false, configurable: true});
+        Object.defineProperty(inst, '__iv8State', {value: 'suspended', writable: true, enumerable: false, configurable: true});
+        Object.defineProperty(inst, '__iv8Destination', {value: _createAudioDestinationNode(inst, 2), writable: true, enumerable: false, configurable: true});
+        Object.defineProperty(inst, '__iv8CurrentTime', {value: 0, writable: true, enumerable: false, configurable: true});
+        Object.defineProperty(inst, '__iv8Listener', {value: {}, writable: true, enumerable: false, configurable: true});
+        Object.defineProperty(inst, '__iv8Onstatechange', {value: null, writable: true, enumerable: false, configurable: true});
         return inst;
     }
     AudioContext.prototype = AudioContextProto;
@@ -584,7 +584,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initBaseAudioContext(inst, sampleRate);
         _setSlot(inst, 'length', length);
         _setSlot(inst, 'numberOfChannels', numberOfChannels);
-        _setSlot(inst, 'buffer', _createAudioBuffer({ numberOfChannels: numberOfChannels, length: length, sampleRate: sampleRate });
+        _setSlot(inst, 'buffer', _createAudioBuffer({ numberOfChannels: numberOfChannels, length: length, sampleRate: sampleRate }));
         return inst;
     }
     OfflineAudioContext.prototype = OfflineAudioContextProto;
