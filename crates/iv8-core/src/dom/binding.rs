@@ -371,12 +371,44 @@ unsafe extern "C" fn doc_readonly_noop_setter(info: *const v8::FunctionCallbackI
     let _ = info;
 }
 
+/// WebIDL: Document prototype accessors require `this` to be a Document node.
+/// Wrong receiver (plain object / null / Element) → TypeError "Illegal invocation".
+fn require_document_this(
+    scope: &v8::PinScope<'_, '_>,
+    this: v8::Local<v8::Value>,
+) -> bool {
+    let Some(obj) = this.to_object(scope) else {
+        return false;
+    };
+    let Some(nid) = extract_node_id(scope, obj) else {
+        return false;
+    };
+    let isolate: &v8::Isolate = &*scope;
+    let state = RuntimeState::get(isolate);
+    let doc = state.document.borrow();
+    doc.as_ref()
+        .and_then(|d| d.get(nid))
+        .map(|n| n.value().node_type() == 9)
+        .unwrap_or(false)
+}
+
+fn throw_illegal_invocation(scope: &v8::PinScope<'_, '_>) {
+    let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+    let exc = v8::Exception::type_error(scope, msg);
+    scope.throw_exception(exc);
+}
+
 /// document.documentElement getter — returns the <html> element
 unsafe extern "C" fn doc_document_element(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let node_id = {
@@ -400,6 +432,10 @@ unsafe extern "C" fn doc_body_setter(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
         if args.length() < 1 {
             return;
         }
@@ -448,7 +484,12 @@ unsafe extern "C" fn doc_body(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let node_id = {
@@ -470,7 +511,12 @@ unsafe extern "C" fn doc_head(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let node_id = {
@@ -492,7 +538,12 @@ unsafe extern "C" fn doc_title(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let title = {
@@ -522,6 +573,10 @@ unsafe extern "C" fn doc_title_setter(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
         if args.length() < 1 {
             return;
         }
@@ -561,7 +616,12 @@ unsafe extern "C" fn doc_url(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
         // Read location.href from the global
         let global = scope.get_current_context().global(scope);
         let loc_key = match v8::String::new(scope, "location") {
@@ -591,7 +651,12 @@ unsafe extern "C" fn doc_location(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if !require_document_this(scope, args.this().into()) {
+            throw_illegal_invocation(scope);
+            return;
+        }
         let global = scope.get_current_context().global(scope);
         let loc_key = match v8::String::new(scope, "location") {
             Some(k) => k,
