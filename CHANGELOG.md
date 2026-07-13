@@ -6,6 +6,39 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.92] - 2026-07-13
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+
+### Fixed (kernel)
+- document via DOM template instance — `instance_template.new_instance()` with internal field, eliminates nodeType/nodeName own-property workaround
+- fix_accessor_properties skip check — 199 `define_property` calls in dom_core.rs guarded with `get_own_property_descriptor` check, protects DOM template accessors
+- Element.id setter syncs DOM tree — `restore_dom_accessors` restores DOM template `id_setter` which updates `NodeData::Element.id` + `register_id`, `getElementById` via `id_index` directly
+- tag_to_interface_name — 40+ HTML element tag→interface mapping, `createElement("dl")` now has `HTMLDListElement.prototype` as `__proto__`
+- H05a-200 TYPE_FAIL: 5→0 (AnimationEvent/TransitionEvent/HTMLDListElement/BeforeUnloadEvent fixed)
+
+### Added
+- Response/Request constructors — parse options (status, statusText, method, mode, credentials, cache, redirect, referrer), set codegen hidden keys
+- TextEncoder/TextDecoder complete implementation — UTF-8 multibyte (1-4 byte), surrogate pairs, fatal/ignoreBOM/stream options, encoding property, CJK roundtrip
+- WPT fetch/api functional tests (27 tests, 26 PASS)
+- WPT encoding functional tests (18 tests, 18 PASS)
+- CDP diff infrastructure — Chrome retry (10x2s), golden data collection, descriptor_diff baseline
+- DOM_GETTER_FIX_JS extended — 5 new attrs (AnimationEvent.animationName/pseudoElement, TransitionEvent.propertyName/pseudoElement, HTMLDListElement.compact, BeforeUnloadEvent.returnValue)
+
+### Changed
+- Request/Response accessor mechanism unified — codegen accessor + codegen hidden key only, DOM template only installs methods + toStringTag, REQUEST_FIX_JS only retains fetch() polyfill
+- functional-status.json updated with fetch/encoding expected fails
+
+### WPT Results
+- idlharness: ~9334/9640 (non-deterministic, range 9325-9346)
+- functional: 175/176 (99.43%, dom 49 + html/dom 40 + css 24 + crypto 18 + fetch 26 + encoding 18)
+
+### Known Limitations (Phase 4 targets)
+- restore_dom_accessors still needed for Element.id (needs chain_dom_prototypes rewrite)
+- DOM_GETTER_FIX_JS extended not removed (needs codegen generator fix)
+- AbortController abort not working (read_only_prototype blocks override)
+- CDP diff EXTRA/MISSING reduction not achieved (needs property-level comparison)
+
 ## [v0.8.91] - 2026-07-13
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.

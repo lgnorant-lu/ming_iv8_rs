@@ -3,7 +3,7 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.91 (North Star Phase 2 prep: FUNCTION_TO_STRING_FIX_JS + 5 kernel root cause fixes + WPT functional baseline 131/131 + HARNESS-CHARTER P1-P10 compliance) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.92 (North Star Phase 3: document via DOM template + fix_accessor_properties skip check + Request/Response unified + TextEncoder/TextDecoder complete + tag_to_interface_name + H05a-200 0 TYPE_FAIL) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
