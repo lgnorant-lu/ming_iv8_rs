@@ -121,10 +121,13 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
         }
     }
 
-    global.set(
+    // window.location is LegacyUnforgeable-ish: non-enumerable on Window
+    // (Chrome Object.keys(window) does not list "location" as own data enum).
+    let _ = global.define_own_property(
         scope,
         crate::v8_utils::v8_string(scope, "location").into(),
         obj.into(),
+        v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
     );
 
     // Overwrite global Location constructor with illegal_constructor,

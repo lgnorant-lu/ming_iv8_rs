@@ -115,7 +115,17 @@ def enumerate_idl_setters():
             # unified_ir stores type as {kind,name,nullable} or legacy idl_type string
             raw_type = member.get("type")
             if isinstance(raw_type, dict):
-                idl_type = raw_type.get("name") or raw_type.get("idl_type") or "DOMString"
+                # Unions (e.g. HTMLElement.hidden = boolean|double|DOMString) —
+                # use first member type for sample selection.
+                if raw_type.get("kind") == "union" and raw_type.get("types"):
+                    first = raw_type["types"][0]
+                    idl_type = (
+                        first.get("name")
+                        if isinstance(first, dict)
+                        else str(first)
+                    ) or "DOMString"
+                else:
+                    idl_type = raw_type.get("name") or raw_type.get("idl_type") or "DOMString"
             else:
                 idl_type = member.get("idl_type") or (
                     raw_type if isinstance(raw_type, str) else "DOMString"
