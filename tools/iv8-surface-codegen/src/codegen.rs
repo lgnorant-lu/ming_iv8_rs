@@ -88,6 +88,18 @@ const EXCLUDED_ATTRIBUTES: &[(&str, &str)] = &[
     // which take precedence for the document instance.
 ];
 
+/// Interfaces whose global constructor is owned by a JS shim (not codegen FT).
+/// Templates may still be created for inheritance wiring, but must NOT be
+/// registered on globalThis — otherwise empty native skeletons overwrite
+/// real shim behavior (URL/URLSearchParams after FREEZE_ALL, H05a/H05d).
+const EXCLUDED_GLOBAL_INTERFACES: &[&str] = &["URL", "URLSearchParams"];
+
+fn should_skip_global_interface(interface_name: &str) -> bool {
+    EXCLUDED_GLOBAL_INTERFACES
+        .iter()
+        .any(|n| *n == interface_name)
+}
+
 /// Operations excluded from codegen install — tree-backed DOM binding owns them.
 /// Skeleton ops (e.g. document_op_9 createElement → Object.create(Element.prototype))
 /// must never land on Document.prototype (RD-16).
@@ -1415,6 +1427,14 @@ pub fn generate_install_all(
         if ea.no_interface_object {
             out.push_str(&format!(
                 "    // {}: NoInterfaceObject — skip global registration\n",
+                name
+            ));
+            continue;
+        }
+
+        if should_skip_global_interface(name) {
+            out.push_str(&format!(
+                "    // {}: shim-owned global constructor — skip codegen registration (URL_SHIM_JS)\n",
                 name
             ));
             continue;

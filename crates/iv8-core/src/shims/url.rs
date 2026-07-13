@@ -86,7 +86,7 @@ pub const URL_SHIM_JS: &str = r#"
     };
 
     Object.defineProperty(URLSearchParams.prototype, 'size', {
-        get: function get size() { return this._params.length; },
+        get: function() { return this._params.length; },
         enumerable: true, configurable: true
     });
 
@@ -175,7 +175,27 @@ pub const URL_SHIM_JS: &str = r#"
     // URLSearchParams.length should be 0 (init is optional)
     Object.defineProperty(URLSearchParams, 'length', { value: 0, writable: false, enumerable: false, configurable: true });
 
-    globalThis.URL = URL;
-    globalThis.webkitURL = URL;
+    // Force-own global constructors (overwrite empty codegen skeletons if present).
+    try {
+        Object.defineProperty(globalThis, 'URLSearchParams', {
+            value: URLSearchParams, writable: true, enumerable: false, configurable: true
+        });
+    } catch (e) {
+        globalThis.URLSearchParams = URLSearchParams;
+    }
+    try {
+        Object.defineProperty(globalThis, 'URL', {
+            value: URL, writable: true, enumerable: false, configurable: true
+        });
+    } catch (e) {
+        globalThis.URL = URL;
+    }
+    try {
+        Object.defineProperty(globalThis, 'webkitURL', {
+            value: URL, writable: true, enumerable: false, configurable: true
+        });
+    } catch (e) {
+        globalThis.webkitURL = URL;
+    }
 })();
 "#;

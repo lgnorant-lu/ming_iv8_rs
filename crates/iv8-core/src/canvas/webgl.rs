@@ -115,8 +115,22 @@ pub const WEBGL_SHIM_JS: &str = r#"
         MAX_TEXTURE_IMAGE_UNITS: 0x8872,
         MAX_COMBINED_TEXTURE_IMAGE_UNITS: 0x8B4D,
         MAX_CUBE_MAP_TEXTURE_SIZE: 0x851C,
+        MAX_VERTEX_TEXTURE_IMAGE_UNITS: 0x8872,
         ALIASED_LINE_WIDTH_RANGE: 0x846E,
         ALIASED_POINT_SIZE_RANGE: 0x846D,
+        // Framebuffer bit depths / sampling (getParameter pnames; CDP C5)
+        SUBPIXEL_BITS: 0x0D50,
+        RED_BITS: 0x0D52,
+        GREEN_BITS: 0x0D53,
+        BLUE_BITS: 0x0D54,
+        ALPHA_BITS: 0x0D55,
+        DEPTH_BITS: 0x0D56,
+        STENCIL_BITS: 0x0D57,
+        SAMPLE_BUFFERS: 0x80A8,
+        SAMPLES: 0x80A9,
+        // WEBGL_debug_renderer_info (also exposed via getExtension)
+        UNMASKED_VENDOR_WEBGL: 0x9245,
+        UNMASKED_RENDERER_WEBGL: 0x9246,
         // Draw/buffer constants
         VERTEX_SHADER: 35633,
         FRAGMENT_SHADER: 35632,
@@ -299,6 +313,9 @@ pub const WEBGL_SHIM_JS: &str = r#"
         drawingBufferWidth: 300,
         drawingBufferHeight: 150,
         canvas: null,
+        // Surface-sample aliases used by CDP fingerprint collectors
+        extensions: null,
+        shaderPrecision: null,
     };
 
     // Patch document.createElement to return canvas with getContext
