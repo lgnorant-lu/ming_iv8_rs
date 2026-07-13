@@ -80,6 +80,12 @@ pub struct DomTemplates {
     pub html_li_element: v8::Global<v8::FunctionTemplate>,
     /// HTMLTableElement — inherits HTMLElement.
     pub html_table_element: v8::Global<v8::FunctionTemplate>,
+    /// HTMLTableRowElement — inherits HTMLElement.
+    pub html_table_row_element: v8::Global<v8::FunctionTemplate>,
+    /// HTMLTableCellElement — inherits HTMLElement (td/th).
+    pub html_table_cell_element: v8::Global<v8::FunctionTemplate>,
+    /// HTMLDialogElement — inherits HTMLElement.
+    pub html_dialog_element: v8::Global<v8::FunctionTemplate>,
     /// HTMLStyleElement — inherits HTMLElement.
     pub html_style_element: v8::Global<v8::FunctionTemplate>,
     /// HTMLLinkElement — inherits HTMLElement.
@@ -1157,6 +1163,59 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     let html_table_element = make_template(scope, "HTMLTableElement", illegal_dom_constructor);
     html_table_element.inherit(html_element);
 
+    let html_table_row_element = make_template(scope, "HTMLTableRowElement", illegal_dom_constructor);
+    html_table_row_element.inherit(html_element);
+    {
+        let proto = html_table_row_element.prototype_template(scope);
+        install_proto_accessor(scope, proto, "rowIndex", table_row_index_getter, None);
+        install_proto_accessor(scope, proto, "sectionRowIndex", table_section_row_index_getter, None);
+        install_proto_accessor(scope, proto, "ch", ch_getter, Some(ch_setter));
+        install_proto_accessor(scope, proto, "chOff", ch_off_getter, Some(ch_off_setter));
+        install_proto_accessor(scope, proto, "vAlign", valign_getter, Some(valign_setter));
+    }
+
+    let html_table_cell_element = make_template(scope, "HTMLTableCellElement", illegal_dom_constructor);
+    html_table_cell_element.inherit(html_element);
+    {
+        let proto = html_table_cell_element.prototype_template(scope);
+        install_proto_accessor(scope, proto, "colSpan", colspan_getter, Some(colspan_setter));
+        install_proto_accessor(scope, proto, "rowSpan", rowspan_getter, Some(rowspan_setter));
+        install_proto_accessor(scope, proto, "headers", headers_attr_getter, Some(headers_attr_setter));
+        install_proto_accessor(scope, proto, "cellIndex", table_cell_index_getter, None);
+        install_proto_accessor(scope, proto, "scope", scope_attr_getter, Some(scope_attr_setter));
+        install_proto_accessor(scope, proto, "abbr", abbr_getter, Some(abbr_setter));
+        install_proto_accessor(scope, proto, "axis", axis_getter, Some(axis_setter));
+        install_proto_accessor(scope, proto, "height", cell_height_getter, Some(cell_height_setter));
+        install_proto_accessor(scope, proto, "ch", ch_getter, Some(ch_setter));
+        install_proto_accessor(scope, proto, "chOff", ch_off_getter, Some(ch_off_setter));
+        install_proto_accessor(scope, proto, "noWrap", nowrap_getter, Some(nowrap_setter));
+        install_proto_accessor(scope, proto, "vAlign", valign_getter, Some(valign_setter));
+    }
+
+    let html_dialog_element = make_template(scope, "HTMLDialogElement", illegal_dom_constructor);
+    html_dialog_element.inherit(html_element);
+    {
+        let proto = html_dialog_element.prototype_template(scope);
+        install_proto_accessor(scope, proto, "open", dialog_open_getter, Some(dialog_open_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "returnValue",
+            dialog_return_value_getter,
+            Some(dialog_return_value_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "closedBy",
+            dialog_closed_by_getter,
+            Some(dialog_closed_by_setter),
+        );
+        install_proto_method_sig(scope, html_dialog_element, proto, "show", dialog_show_cb);
+        install_proto_method_sig(scope, html_dialog_element, proto, "showModal", dialog_show_modal_cb);
+        install_proto_method_sig(scope, html_dialog_element, proto, "close", dialog_close_cb);
+    }
+
     let html_style_element = make_template(scope, "HTMLStyleElement", illegal_dom_constructor);
     html_style_element.inherit(html_element);
 
@@ -1451,6 +1510,9 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         html_olist_element: v8::Global::new(scope, html_olist_element),
         html_li_element: v8::Global::new(scope, html_li_element),
         html_table_element: v8::Global::new(scope, html_table_element),
+        html_table_row_element: v8::Global::new(scope, html_table_row_element),
+        html_table_cell_element: v8::Global::new(scope, html_table_cell_element),
+        html_dialog_element: v8::Global::new(scope, html_dialog_element),
         html_style_element: v8::Global::new(scope, html_style_element),
         html_link_element: v8::Global::new(scope, html_link_element),
         html_meta_element: v8::Global::new(scope, html_meta_element),
@@ -1507,6 +1569,9 @@ pub fn install_dom_constructors(
         ("HTMLOListElement", &templates.html_olist_element),
         ("HTMLLIElement", &templates.html_li_element),
         ("HTMLTableElement", &templates.html_table_element),
+        ("HTMLTableRowElement", &templates.html_table_row_element),
+        ("HTMLTableCellElement", &templates.html_table_cell_element),
+        ("HTMLDialogElement", &templates.html_dialog_element),
         ("HTMLStyleElement", &templates.html_style_element),
         ("HTMLLinkElement", &templates.html_link_element),
         ("HTMLMetaElement", &templates.html_meta_element),
@@ -1960,7 +2025,7 @@ fn tag_to_interface_name(tag_name: &str) -> Option<String> {
         | "html" | "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
         | "ul" | "ol" | "li" | "table" | "thead" | "tbody" | "tfoot" | "tr"
         | "td" | "th" | "caption" | "colgroup" | "col"
-        | "style" | "link" | "meta" | "iframe" => return None,
+        | "style" | "link" | "meta" | "iframe" | "dialog" => return None,
         _ => {}
     }
     // Map tag to interface name per HTML spec
@@ -2045,8 +2110,12 @@ pub fn template_for_tag<'s>(
         "ul" => &templates.html_ulist_element,
         "ol" => &templates.html_olist_element,
         "li" => &templates.html_li_element,
-        "table" | "thead" | "tbody" | "tfoot" | "tr" | "td" | "th" => &templates.html_table_element,
-        "caption" | "colgroup" | "col" => &templates.html_table_element,
+        "table" | "thead" | "tbody" | "tfoot" | "caption" | "colgroup" | "col" => {
+            &templates.html_table_element
+        }
+        "tr" => &templates.html_table_row_element,
+        "td" | "th" => &templates.html_table_cell_element,
+        "dialog" => &templates.html_dialog_element,
         "style" => &templates.html_style_element,
         "link" => &templates.html_link_element,
         "meta" => &templates.html_meta_element,
@@ -5593,6 +5662,248 @@ unsafe extern "C" fn value_setter(info: *const v8::FunctionCallbackInfo) {
 attr_rw!(placeholder_getter, placeholder_setter, "placeholder");
 attr_rw!(name_getter, name_setter, "name");
 attr_rw!(content_getter, content_setter, "content");
+attr_rw!(ch_getter, ch_setter, "char");
+attr_rw!(ch_off_getter, ch_off_setter, "charoff");
+attr_rw!(valign_getter, valign_setter, "valign");
+attr_rw!(headers_attr_getter, headers_attr_setter, "headers");
+attr_rw!(scope_attr_getter, scope_attr_setter, "scope");
+attr_rw!(abbr_getter, abbr_setter, "abbr");
+attr_rw!(axis_getter, axis_setter, "axis");
+attr_rw!(cell_height_getter, cell_height_setter, "height");
+attr_rw!(dialog_return_value_getter, dialog_return_value_setter, "returnvalue");
+attr_rw!(dialog_closed_by_getter, dialog_closed_by_setter, "closedby");
+
+fn parse_positive_ul(raw: &str, default: u32) -> u32 {
+    let s = raw.trim();
+    if s.is_empty() {
+        return default;
+    }
+    s.parse::<u32>().unwrap_or(default).max(1)
+}
+
+unsafe extern "C" fn colspan_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let n = parse_positive_ul(&get_attr_str(state, node_id, "colspan"), 1);
+        rv.set(v8::Integer::new_from_unsigned(scope, n).into());
+    });
+}
+unsafe extern "C" fn colspan_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let n = args.get(0).number_value(scope).unwrap_or(1.0);
+                let v = if n.is_nan() || n < 1.0 {
+                    1u32
+                } else {
+                    n.trunc() as u32
+                };
+                set_attr_str(state, nid, "colspan", v.to_string());
+            }
+        }
+    });
+}
+unsafe extern "C" fn rowspan_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let n = parse_positive_ul(&get_attr_str(state, node_id, "rowspan"), 1);
+        rv.set(v8::Integer::new_from_unsigned(scope, n).into());
+    });
+}
+unsafe extern "C" fn rowspan_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                let n = args.get(0).number_value(scope).unwrap_or(1.0);
+                let v = if n.is_nan() || n < 0.0 {
+                    1u32
+                } else {
+                    n.trunc() as u32
+                };
+                set_attr_str(state, nid, "rowspan", v.to_string());
+            }
+        }
+    });
+}
+
+unsafe extern "C" fn nowrap_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .map(|n| n.value().get_attr("nowrap").is_some())
+                .unwrap_or(false)
+        };
+        rv.set(v8::Boolean::new(scope, val).into());
+    });
+}
+unsafe extern "C" fn nowrap_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let on = args.length() >= 1 && args.get(0).boolean_value(scope);
+            set_bool_attr(state, nid, "nowrap", on);
+        }
+    });
+}
+
+unsafe extern "C" fn dialog_open_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .map(|n| n.value().get_attr("open").is_some())
+                .unwrap_or(false)
+        };
+        rv.set(v8::Boolean::new(scope, val).into());
+    });
+}
+unsafe extern "C" fn dialog_open_setter(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let on = args.length() >= 1 && args.get(0).boolean_value(scope);
+            set_bool_attr(state, nid, "open", on);
+        }
+    });
+}
+
+unsafe extern "C" fn dialog_show_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |_scope, _args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            set_bool_attr(state, nid, "open", true);
+        }
+    });
+}
+unsafe extern "C" fn dialog_show_modal_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |_scope, _args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            set_bool_attr(state, nid, "open", true);
+        }
+    });
+}
+unsafe extern "C" fn dialog_close_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, _rv, state, node_id| {
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                set_attr_str(
+                    state,
+                    nid,
+                    "returnvalue",
+                    args.get(0).to_rust_string_lossy(scope),
+                );
+            }
+            set_bool_attr(state, nid, "open", false);
+        }
+    });
+}
+
+fn table_row_indices(doc: &crate::dom::Document, row_id: NodeId) -> (i32, i32) {
+    // sectionRowIndex among tr siblings under parent; rowIndex among all tr in table.
+    let parent = doc.get(row_id).and_then(|n| n.parent()).map(|p| p.id());
+    let mut section_idx = -1i32;
+    if let Some(pid) = parent {
+        if let Some(p) = doc.get(pid) {
+            let mut i = 0i32;
+            for child in p.children() {
+                if let Some(tag) = child.value().tag_name() {
+                    if tag.eq_ignore_ascii_case("tr") {
+                        if child.id() == row_id {
+                            section_idx = i;
+                            break;
+                        }
+                        i += 1;
+                    }
+                }
+            }
+        }
+    }
+    // Walk up to table
+    let mut table_id = parent;
+    while let Some(pid) = table_id {
+        if let Some(n) = doc.get(pid) {
+            if n.value()
+                .tag_name()
+                .map(|t| t.eq_ignore_ascii_case("table"))
+                .unwrap_or(false)
+            {
+                break;
+            }
+            table_id = n.parent().map(|p| p.id());
+        } else {
+            table_id = None;
+            break;
+        }
+    }
+    let mut row_idx = -1i32;
+    if let Some(tid) = table_id {
+        if let Some(table) = doc.get(tid) {
+            let mut i = 0i32;
+            for n in table.descendants() {
+                if n.id() == tid {
+                    continue;
+                }
+                if let Some(tag) = n.value().tag_name() {
+                    if tag.eq_ignore_ascii_case("tr") {
+                        if n.id() == row_id {
+                            row_idx = i;
+                        }
+                        i += 1;
+                    }
+                }
+            }
+        }
+    }
+    (row_idx, section_idx)
+}
+
+unsafe extern "C" fn table_row_index_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let idx = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .map(|d| table_row_indices(d, node_id).0)
+                .unwrap_or(-1)
+        };
+        rv.set(v8::Integer::new(scope, idx).into());
+    });
+}
+unsafe extern "C" fn table_section_row_index_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let idx = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .map(|d| table_row_indices(d, node_id).1)
+                .unwrap_or(-1)
+        };
+        rv.set(v8::Integer::new(scope, idx).into());
+    });
+}
+
+unsafe extern "C" fn table_cell_index_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let idx = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .map(|d| {
+                    if let Some(parent) = d.get(node_id).and_then(|n| n.parent()) {
+                        let mut i = 0i32;
+                        for child in parent.children() {
+                            if let Some(tag) = child.value().tag_name() {
+                                if tag.eq_ignore_ascii_case("td") || tag.eq_ignore_ascii_case("th") {
+                                    if child.id() == node_id {
+                                        return i;
+                                    }
+                                    i += 1;
+                                }
+                            }
+                        }
+                    }
+                    -1i32
+                })
+                .unwrap_or(-1)
+        };
+        rv.set(v8::Integer::new(scope, idx).into());
+    });
+}
 
 unsafe extern "C" fn input_type_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
@@ -6251,13 +6562,51 @@ unsafe extern "C" fn select_options_getter(info: *const v8::FunctionCallbackInfo
                 .map(|d| collect_select_options(d, node_id))
                 .unwrap_or_default()
         };
-        // Array-like options list (length + indexed access). Full
-        // HTMLOptionsCollection shape can follow; select.item/namedItem exist.
+        // Array-like options + selectedIndex (HTMLOptionsCollection minimum).
         let arr = v8::Array::new(scope, opts.len() as i32);
         for (i, oid) in opts.iter().enumerate() {
             if let Some(obj) = create_node_object(scope, state, *oid) {
                 let _ = arr.set_index(scope, i as u32, obj);
             }
+        }
+        let select_id = node_id;
+        let selected_idx = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .map(|d| {
+                    let opts = collect_select_options(d, select_id);
+                    if opts.is_empty() {
+                        return -1i32;
+                    }
+                    let mut found = -1i32;
+                    for (i, oid) in opts.iter().enumerate() {
+                        if let Some(n) = d.get(*oid) {
+                            if n.value().get_attr("selected").is_some() {
+                                found = i as i32;
+                            }
+                        }
+                    }
+                    if found < 0 { 0 } else { found }
+                })
+                .unwrap_or(-1)
+        };
+        let key = crate::v8_utils::v8_string(scope, "selectedIndex");
+        let val = v8::Integer::new(scope, selected_idx);
+        let _ = arr.define_own_property(
+            scope,
+            key.into(),
+            val.into(),
+            v8::PropertyAttribute::NONE,
+        );
+        // Brand for typeof/instanceof-ish harness checks
+        let tag = v8::Symbol::get_to_string_tag(scope);
+        if let Some(tag_val) = v8::String::new(scope, "HTMLOptionsCollection") {
+            let _ = arr.define_own_property(
+                scope,
+                tag.into(),
+                tag_val.into(),
+                v8::PropertyAttribute::DONT_ENUM,
+            );
         }
         rv.set(arr.into());
     });
