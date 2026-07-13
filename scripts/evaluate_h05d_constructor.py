@@ -18,8 +18,11 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_PATH = REPO_ROOT / "status" / "h05d-constructor.json"
+IDL_PATH = REPO_ROOT / "tools" / "idl" / "output" / "unified_ir.json"
 THRESHOLDS = {"max_throw": 2, "max_wrong_type": 0, "min_coverage_pct": 80.0}
 
+# Hand-curated positive constructable probes (behavior, not just new X()).
+# NON_CONSTRUCTABLE list is IR-driven (see load_non_constructable).
 CTOR_TESTS = [
     ("new Event('test')", "object", "Event"),
     ("new Event('test').type", "string", "Event"),
@@ -58,16 +61,48 @@ CTOR_TESTS = [
     ("new Map([['a',1]]).get('a')", "number", "Map"),
 ]
 
-NON_CONSTRUCTABLE = [
-    "Node", "Element", "HTMLElement",
-    "CharacterData", "Text", "Comment", "Attr",
-    "DocumentFragment", "ShadowRoot",
-    "Navigator", "Screen", "History", "Location", "Window",
-]
+def load_non_constructable(ir_path: Path) -> list[str]:
+    """Interfaces with no constructor member and no NamedConstructor — illegal new."""
+    if not ir_path.exists():
+        return [
+            "Node", "Element", "HTMLElement", "CharacterData", "Text", "Comment",
+            "Attr", "DocumentFragment", "ShadowRoot", "Navigator", "Screen",
+            "History", "Location", "Window",
+        ]
+    ir = json.loads(ir_path.read_text(encoding="utf-8"))
+    # Prefer high-signal DOM surface for Category C (full 1284 would SKIP).
+    priority = {
+        "Node", "Element", "HTMLElement", "CharacterData", "Text", "Comment",
+        "Attr", "DocumentFragment", "ShadowRoot", "Document", "XMLDocument",
+        "Navigator", "Screen", "History", "Location", "Window",
+        "HTMLCollection", "HTMLAllCollection", "HTMLOptionsCollection",
+        "HTMLFormControlsCollection", "HTMLUnknownElement", "HTMLMediaElement",
+    }
+    found = []
+    for d in ir.get("definitions", []):
+        if d.get("kind") != "interface":
+            continue
+        name = d.get("name")
+        if not name or name not in priority:
+            continue
+        ea = {e.get("name") for e in (d.get("ext_attrs") or []) if isinstance(e, dict)}
+        if "LegacyNoInterfaceObject" in ea or "NoInterfaceObject" in ea:
+            found.append(name)
+            continue
+        has_ctor = any(m.get("kind") == "constructor" for m in d.get("members", []))
+        has_named = any(
+            e.get("name") in ("NamedConstructor", "LegacyFactoryFunction")
+            for e in (d.get("ext_attrs") or [])
+            if isinstance(e, dict)
+        )
+        if not has_ctor and not has_named:
+            found.append(name)
+    return sorted(set(found)) or list(priority)
 
-def build_audit_js():
+
+def build_audit_js(non_constructable: list[str]):
     tests_js = json.dumps([[js, t, iface] for js, t, iface in CTOR_TESTS])
-    nc_js = json.dumps(NON_CONSTRUCTABLE)
+    nc_js = json.dumps(non_constructable)
     return f"""(function() {{
     var tests = {tests_js};
     var nonConstructable = {nc_js};
@@ -122,9 +157,10 @@ def _run_in_thread(fn):
 def _run_audit():
     sys.path.insert(0, str(REPO_ROOT))
     from iv8_rs import JSContext
+    non_constructable = load_non_constructable(IDL_PATH)
     ctx = JSContext()
     ctx.page_load("<!DOCTYPE html><html><body></body></html>", None)
-    raw = ctx.eval(build_audit_js())
+    raw = ctx.eval(build_audit_js(non_constructable))
     ctx.close()
     results = json.loads(raw)
     stats = {"PASS": 0, "WRONG_TYPE": 0, "THROW": 0, "NO_THROW": 0}
