@@ -319,15 +319,7 @@ fn install_document_all(
         let getter_tmpl =
             v8::FunctionTemplate::builder_raw(document_all_proto_getter).build(scope);
         let getter_fn = crate::v8_utils::v8_fn(scope, &getter_tmpl);
-        // Store collection on prototype via private-ish key for getter
-        let store_key = crate::v8_utils::v8_string(scope, "__iv8DocumentAll");
-        let _ = doc_obj.define_own_property(
-            scope,
-            store_key.into(),
-            all_obj.into(),
-            v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
-        );
-        // Also hang on global for proto getter fallback
+        // Store only on global (not document instance) to avoid own-key leaks.
         let g_store = crate::v8_utils::v8_string(scope, "__iv8DocumentAll");
         let _ = global.define_own_property(
             scope,
