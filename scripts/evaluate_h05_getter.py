@@ -236,7 +236,7 @@ CONSTRUCTABLE = {
     "PopStateEvent": "new PopStateEvent('popstate')",
     "HashChangeEvent": "new HashChangeEvent('hashchange')",
     "PageTransitionEvent": "new PageTransitionEvent('pageshow')",
-    "BeforeUnloadEvent": "new BeforeUnloadEvent('beforeunload')",
+    "BeforeUnloadEvent": None,
     "ErrorEvent": "new ErrorEvent('error')",
     "PromiseRejectionEvent": "new PromiseRejectionEvent('unhandledrejection')",
     "MessageEvent": "new MessageEvent('message')",

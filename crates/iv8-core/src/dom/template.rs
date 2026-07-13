@@ -1864,6 +1864,74 @@ pub fn chain_dom_prototypes(
 
 /// Select the correct FunctionTemplate for a given tag name.
 /// Returns the most specific template available.
+/// Map a tag name to its WebIDL interface name.
+/// Returns None for tags that have a dedicated DOM template (handled by
+/// template_for_tag) or unknown tags.
+fn tag_to_interface_name(tag_name: &str) -> Option<String> {
+    let tag = tag_name.to_ascii_lowercase();
+    // Skip tags that already have dedicated DOM templates
+    match tag.as_str() {
+        "div" | "span" | "a" | "input" | "button" | "form" | "canvas" | "script"
+        | "img" | "video" | "audio" | "select" | "textarea" | "head" | "body"
+        | "html" | "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+        | "ul" | "ol" | "li" | "table" | "thead" | "tbody" | "tfoot" | "tr"
+        | "td" | "th" | "caption" | "colgroup" | "col"
+        | "style" | "link" | "meta" | "iframe" => return None,
+        _ => {}
+    }
+    // Map tag to interface name per HTML spec
+    let name = match tag.as_str() {
+        "dl" => "HTMLDListElement",
+        "dt" | "dd" => "HTMLElement",
+        "pre" => "HTMLPreElement",
+        "code" => "HTMLElement",
+        "blockquote" | "q" => "HTMLQuoteElement",
+        "section" | "article" | "nav" | "aside" | "header" | "footer"
+        | "main" | "address" | "figure" | "figcaption" => "HTMLElement",
+        "details" => "HTMLDetailsElement",
+        "summary" => "HTMLElement",
+        "hr" => "HTMLHRElement",
+        "br" => "HTMLBRElement",
+        "label" => "HTMLLabelElement",
+        "fieldset" => "HTMLFieldSetElement",
+        "legend" => "HTMLLegendElement",
+        "optgroup" => "HTMLOptGroupElement",
+        "option" => "HTMLOptionElement",
+        "template" => "HTMLTemplateElement",
+        "slot" => "HTMLSlotElement",
+        "data" => "HTMLDataElement",
+        "time" => "HTMLTimeElement",
+        "mark" => "HTMLElement",
+        "ruby" => "HTMLElement",
+        "rt" | "rp" => "HTMLElement",
+        "wbr" => "HTMLWbrElement",
+        "b" | "i" | "u" | "s" | "small" | "strong" | "em" | "sub" | "sup"
+        | "abbr" | "cite" | "dfn" | "kbd" | "samp" | "var" => "HTMLElement",
+        "del" | "ins" => "HTMLModElement",
+        "output" => "HTMLOutputElement",
+        "progress" => "HTMLProgressElement",
+        "meter" => "HTMLMeterElement",
+        "picture" => "HTMLPictureElement",
+        "source" => "HTMLSourceElement",
+        "embed" => "HTMLEmbedElement",
+        "object" => "HTMLObjectElement",
+        "param" => "HTMLParamElement",
+        "map" => "HTMLMapElement",
+        "area" => "HTMLAreaElement",
+        "track" => "HTMLTrackElement",
+        "title" => "HTMLTitleElement",
+        "base" => "HTMLBaseElement",
+        "basefont" => "HTMLBaseFontElement",
+        "dir" => "HTMLDirectoryElement",
+        "font" => "HTMLFontElement",
+        "frame" => "HTMLFrameElement",
+        "frameset" => "HTMLFrameSetElement",
+        "marquee" => "HTMLMarqueeElement",
+        _ => return None,
+    };
+    Some(name.to_string())
+}
+
 pub fn template_for_tag<'s>(
     scope: &v8::PinScope<'s, '_>,
     templates: &DomTemplates,
@@ -2014,6 +2082,29 @@ pub fn create_node_object<'s>(
     // instanceof checks remain correct. Same pattern as native_env.rs.
     let inst_tmpl = tmpl_local.instance_template(scope);
     let obj = inst_tmpl.new_instance(scope)?;
+
+    // For tags without a dedicated DOM template, set prototype from
+    // the codegen constructor on globalThis (e.g., HTMLDListElement for "dl").
+    // This ensures instanceof checks and property inheritance are correct.
+    if let NodeData::Element { tag_name, .. } = data {
+        let proto_ctor_name = tag_to_interface_name(tag_name);
+        if let Some(ctor_name) = proto_ctor_name {
+            let ctx = scope.get_current_context();
+            let global = ctx.global(scope);
+            let ctor_key = crate::v8_utils::v8_string(scope, &ctor_name);
+            if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+                if ctor_val.is_function() {
+                    let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                    let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+                    if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                        if proto_val.is_object() && !proto_val.is_null_or_undefined() {
+                            let _ = obj.set_prototype(scope, proto_val);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     // Store NodeId in internal field 0 as a usize via External
     let nid_usize = super::binding::node_id_to_usize(node_id);
