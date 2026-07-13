@@ -50,6 +50,9 @@ const EXCLUDED_ATTRIBUTES: &[(&str, &str)] = &[
     // Element.id owned solely by DOM FT id_getter/id_setter + Document id_index
     // (A3: eliminate codegen element_set dual-write __iv8Id).
     ("Element", "id"),
+    // Document.all is [[IsHTMLDDA]] exotic (MarkAsUndetectable) — owned by
+    // install_document_all in dom/binding.rs, not empty codegen HTMLAllCollection.
+    ("Document", "all"),
     // Geometry owned by Element FT layout getters (template.rs).
     ("Element", "offsetWidth"),
     ("Element", "offsetHeight"),

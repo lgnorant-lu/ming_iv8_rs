@@ -169,12 +169,242 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     let key = crate::v8_utils::v8_string(scope, "document");
     global.set(scope, key.into(), doc_obj.into());
 
+    // document.all — HTMLAllCollection with [[IsHTMLDDA]] (C8).
+    install_document_all(scope, global, doc_obj);
+
     // TreeWalker.prototype traversal (overrides codegen null stubs).
     install_tree_walker_prototype_ops(scope, global);
     // XPathExpression.evaluate + Document.evaluate (subset over real tree).
     install_xpath_prototype_ops(scope, global);
     // HTMLIFrameElement readonly attrs: no-op setters (H05b Category C).
     install_iframe_readonly_noop_setters(scope, global);
+}
+
+/// Call-as-function for document.all(id) → getElementById / named lookup.
+unsafe extern "C" fn document_all_call_handler(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            rv.set(v8::null(scope).into());
+            return;
+        }
+        let name = args.get(0).to_rust_string_lossy(scope);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let nid = {
+            let doc = state.document.borrow();
+            doc.as_ref().and_then(|d| d.get_element_by_id(&name))
+        };
+        if let Some(id) = nid {
+            if let Some(obj) = crate::dom::template::create_node_object(scope, state, id) {
+                rv.set(obj);
+                return;
+            }
+        }
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+/// Install `document.all` as an undetectable HTMLAllCollection-like object.
+/// Chrome: typeof document.all === 'undefined', document.all == null, callable.
+fn install_document_all(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+    doc_obj: v8::Local<v8::Object>,
+) {
+    let tmpl = v8::ObjectTemplate::new(scope);
+    // Call handler MUST be set before MarkAsUndetectable (V8 assert).
+    crate::v8_extra::set_call_as_function_handler(
+        &tmpl,
+        document_all_call_handler,
+        None,
+    );
+    crate::v8_extra::mark_as_undetectable(&tmpl);
+    let Some(all_obj) = tmpl.new_instance(scope) else {
+        return;
+    };
+
+    // Populate length + indexed elements from current document tree.
+    let isolate: &v8::Isolate = &*scope;
+    let state = RuntimeState::get(isolate);
+    let elements: Vec<NodeId> = {
+        let doc = state.document.borrow();
+        if let Some(ref d) = *doc {
+            d.tree
+                .root()
+                .descendants()
+                .filter_map(|n| {
+                    if n.value().is_element() {
+                        Some(n.id())
+                    } else {
+                        None
+                    }
+                })
+                .collect()
+        } else {
+            Vec::new()
+        }
+    };
+    let len_key = crate::v8_utils::v8_string(scope, "length");
+    let len_val = v8::Integer::new(scope, elements.len() as i32);
+    let _ = all_obj.define_own_property(
+        scope,
+        len_key.into(),
+        len_val.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
+    for (i, nid) in elements.iter().enumerate() {
+        if let Some(obj) = crate::dom::template::create_node_object(scope, state, *nid) {
+            let _ = all_obj.set_index(scope, i as u32, obj);
+        }
+    }
+    // item / namedItem
+    let item_fn = {
+        let ft = v8::FunctionTemplate::builder_raw(document_all_item_cb)
+            .length(1)
+            .build(scope);
+        crate::v8_utils::v8_fn(scope, &ft)
+    };
+    let named_fn = {
+        let ft = v8::FunctionTemplate::builder_raw(document_all_named_item_cb)
+            .length(1)
+            .build(scope);
+        crate::v8_utils::v8_fn(scope, &ft)
+    };
+    let item_key = crate::v8_utils::v8_string(scope, "item");
+    let named_key = crate::v8_utils::v8_string(scope, "namedItem");
+    let _ = all_obj.define_own_property(
+        scope,
+        item_key.into(),
+        item_fn.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
+    let _ = all_obj.define_own_property(
+        scope,
+        named_key.into(),
+        named_fn.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
+    // Brand
+    if let Some(ctor_key) = v8::String::new(scope, "HTMLAllCollection") {
+        if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+            if ctor_val.is_function() {
+                let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+                if let Some(proto_key) = v8::String::new(scope, "prototype") {
+                    if let Some(proto) = ctor.get(scope, proto_key.into()) {
+                        if proto.is_object() {
+                            let _ = all_obj.set_prototype(scope, proto);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    let all_key = crate::v8_utils::v8_string(scope, "all");
+    // Instance (document.all)
+    let _ = doc_obj.define_own_property(
+        scope,
+        all_key.into(),
+        all_obj.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
+    // Document.prototype.all as accessor returning same exotic (SameObject-ish per page)
+    if let Some(proto) = document_prototype(scope, global) {
+        let getter_tmpl =
+            v8::FunctionTemplate::builder_raw(document_all_proto_getter).build(scope);
+        let getter_fn = crate::v8_utils::v8_fn(scope, &getter_tmpl);
+        // Store collection on prototype via private-ish key for getter
+        let store_key = crate::v8_utils::v8_string(scope, "__iv8DocumentAll");
+        let _ = doc_obj.define_own_property(
+            scope,
+            store_key.into(),
+            all_obj.into(),
+            v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
+        );
+        // Also hang on global for proto getter fallback
+        let g_store = crate::v8_utils::v8_string(scope, "__iv8DocumentAll");
+        let _ = global.define_own_property(
+            scope,
+            g_store.into(),
+            all_obj.into(),
+            v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
+        );
+        let desc = v8::Object::new(scope);
+        let get_key = crate::v8_utils::v8_string(scope, "get");
+        let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
+        let conf_key = crate::v8_utils::v8_string(scope, "configurable");
+        desc.set(scope, get_key.into(), getter_fn.into());
+        desc.set(scope, enum_key.into(), v8::Boolean::new(scope, true).into());
+        desc.set(scope, conf_key.into(), v8::Boolean::new(scope, true).into());
+        let obj_key = crate::v8_utils::v8_string(scope, "Object");
+        if let Some(obj_ctor) = global.get(scope, obj_key.into()) {
+            if obj_ctor.is_object() {
+                let obj_ctor: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(obj_ctor) };
+                let def_prop_key = crate::v8_utils::v8_string(scope, "defineProperty");
+                if let Some(def_prop) = obj_ctor.get(scope, def_prop_key.into()) {
+                    if def_prop.is_function() {
+                        let def_prop_fn: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(def_prop) };
+                        let undefined = v8::undefined(scope);
+                        let name_str = crate::v8_utils::v8_string(scope, "all");
+                        def_prop_fn.call(
+                            scope,
+                            undefined.into(),
+                            &[proto.into(), name_str.into(), desc.into()],
+                        );
+                    }
+                }
+            }
+        }
+    }
+}
+
+unsafe extern "C" fn document_all_proto_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let global = scope.get_current_context().global(scope);
+        let key = crate::v8_utils::v8_string(scope, "__iv8DocumentAll");
+        if let Some(v) = global.get(scope, key.into()) {
+            rv.set(v);
+        }
+    }));
+}
+
+unsafe extern "C" fn document_all_item_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        if args.length() < 1 {
+            rv.set(v8::null(scope).into());
+            return;
+        }
+        let idx = args.get(0).number_value(scope).unwrap_or(-1.0) as i32;
+        if idx < 0 {
+            rv.set(v8::null(scope).into());
+            return;
+        }
+        if let Some(obj) = this.to_object(scope) {
+            if let Some(v) = obj.get_index(scope, idx as u32) {
+                rv.set(v);
+                return;
+            }
+        }
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+unsafe extern "C" fn document_all_named_item_cb(info: *const v8::FunctionCallbackInfo) {
+    document_all_call_handler(info);
 }
 
 /// Ensure HTMLIFrameElement.prototype readonly attrs have no-op setters so
