@@ -305,12 +305,14 @@ fn install_document_all(
     }
 
     let all_key = crate::v8_utils::v8_string(scope, "all");
-    // Instance (document.all)
+    // Instance (document.all) — readonly SameObject (H05b Category C)
     let _ = doc_obj.define_own_property(
         scope,
         all_key.into(),
         all_obj.into(),
-        v8::PropertyAttribute::DONT_ENUM,
+        v8::PropertyAttribute::READ_ONLY
+            | v8::PropertyAttribute::DONT_ENUM
+            | v8::PropertyAttribute::DONT_DELETE,
     );
     // Document.prototype.all as accessor returning same exotic (SameObject-ish per page)
     if let Some(proto) = document_prototype(scope, global) {

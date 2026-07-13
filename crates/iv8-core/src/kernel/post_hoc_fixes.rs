@@ -91,52 +91,10 @@ pub const PLUGINS_FIX_JS: &str = r#"
 /// **Why not codegen?** contentWindow is a DOM template getter. The DOM
 /// template returns a stored value (may be null). This fix wraps the getter
 /// to install navigator/document/parent on the returned object.
+/// COMP-4: contentWindow shell owned by HTMLIFrameElement FT (template.rs).
+/// Keep as no-op so freeze order telemetry stays stable.
 pub const IFRAME_FIX_JS: &str = r#"
-    (function() {
-        if (typeof HTMLIFrameElement === 'undefined') return;
-        var proto = HTMLIFrameElement.prototype;
-        var origGetter = Object.getOwnPropertyDescriptor(proto, 'contentWindow');
-        if (!origGetter || !origGetter.get) return;
-        var origGet = origGetter.get;
-        Object.defineProperty(proto, 'contentWindow', {
-            get: function contentWindow() {
-                var cw = origGet.call(this);
-                if (!cw || typeof cw !== 'object') {
-                    cw = {};
-                }
-                if (!cw.navigator) {
-                    try {
-                        Object.defineProperty(cw, 'navigator', {
-                            get: function() { return navigator; },
-                            enumerable: true,
-                            configurable: true,
-                        });
-                    } catch(e) {}
-                }
-                if (!cw.document) {
-                    try {
-                        Object.defineProperty(cw, 'document', {
-                            get: function() { return this._contentDocument || document; },
-                            enumerable: true,
-                            configurable: true,
-                        });
-                    } catch(e) {}
-                }
-                if (!('parent' in cw)) {
-                    try {
-                        Object.defineProperty(cw, 'parent', { value: window, enumerable: true, configurable: true });
-                        Object.defineProperty(cw, 'top', { value: window, enumerable: true, configurable: true });
-                        Object.defineProperty(cw, 'self', { value: cw, enumerable: true, configurable: true });
-                        Object.defineProperty(cw, 'window', { value: cw, enumerable: true, configurable: true });
-                    } catch(e) {}
-                }
-                return cw;
-            },
-            set: undefined,
-            enumerable: true,
-            configurable: true,
-        });
-    })();
+    (function() { /* no-op: iframe contentWindow native FT */ })();
 "#;
 
 /// Element.prototype.shadowRoot returns null + attachShadow stub.
@@ -148,31 +106,9 @@ pub const IFRAME_FIX_JS: &str = r#"
 /// **Why not codegen?** shadowRoot is a DOM template getter. The DOM template
 /// callback returns a default value. This fix wraps the getter to return
 /// the stored __iv8_shadowRoot or null.
+/// COMP-4: shadowRoot/attachShadow owned by Element FT (template.rs).
 pub const SHADOW_ROOT_FIX_JS: &str = r#"
-    (function() {
-        if (typeof Element === 'undefined' || typeof Element.prototype === 'undefined') {
-            return;
-        }
-        try {
-            var oldDesc = Object.getOwnPropertyDescriptor(Element.prototype, 'shadowRoot');
-            if (!oldDesc) return;
-            Object.defineProperty(Element.prototype, 'shadowRoot', {
-                get: function() {
-                    if (!this || typeof this !== 'object') return null;
-                    return this.__iv8_shadowRoot || null;
-                },
-                enumerable: true, configurable: true
-            });
-        } catch(e) { }
-        if (typeof Element.prototype.attachShadow === 'function') {
-            Element.prototype.attachShadow = function(init) {
-                var root = {};
-                try { root = Object.create(ShadowRoot.prototype); } catch(ex) {}
-                this.__iv8_shadowRoot = root;
-                return root;
-            };
-        }
-    })();
+    (function() { /* no-op: shadowRoot/attachShadow native FT */ })();
 "#;
 
 /// Request constructor shim.

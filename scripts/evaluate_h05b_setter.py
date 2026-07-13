@@ -69,6 +69,14 @@ INSTANCE_BUILDERS = {
     "HTMLMeterElement": 'document.createElement("meter")',
     "HTMLDetailsElement": 'document.createElement("details")',
     "HTMLDialogElement": 'document.createElement("dialog")',
+    "HTMLTableRowElement": 'document.createElement("tr")',
+    "HTMLTableCellElement": 'document.createElement("td")',
+    "HTMLVideoElement": 'document.createElement("video")',
+    "HTMLAudioElement": 'document.createElement("audio")',
+    "HTMLTitleElement": 'document.createElement("title")',
+    "HTMLHRElement": 'document.createElement("hr")',
+    "HTMLBRElement": 'document.createElement("br")',
+    "HTMLPreElement": 'document.createElement("pre")',
     "Document": 'document',
 }
 

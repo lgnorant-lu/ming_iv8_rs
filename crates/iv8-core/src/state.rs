@@ -134,6 +134,8 @@ pub struct RuntimeState {
     /// Keyed by NodeId; used by DOM FT setters (COMP-3) instead of no-op null_this_check.
     pub node_scroll: RefCell<std::collections::HashMap<crate::dom::NodeId, (f64, f64)>>,
     pub node_media: RefCell<std::collections::HashMap<crate::dom::NodeId, MediaNodeState>>,
+    /// Element.attachShadow mode per node ("open"/"closed"); absence ⇒ shadowRoot null.
+    pub node_shadow: RefCell<std::collections::HashMap<crate::dom::NodeId, String>>,
 }
 
 /// Mutable media element state for HTMLMediaElement-backed FTs.
@@ -253,6 +255,7 @@ impl RuntimeState {
             worker_objects: RefCell::new(std::collections::HashMap::new()),
             node_scroll: RefCell::new(std::collections::HashMap::new()),
             node_media: RefCell::new(std::collections::HashMap::new()),
+            node_shadow: RefCell::new(std::collections::HashMap::new()),
         }
     }
 

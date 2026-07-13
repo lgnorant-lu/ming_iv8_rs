@@ -64,6 +64,7 @@ const EXCLUDED_ATTRIBUTES: &[(&str, &str)] = &[
     ("Element", "scrollHeight"),
     ("Element", "scrollTop"),
     ("Element", "scrollLeft"),
+    ("Element", "shadowRoot"),
     ("HTMLElement", "offsetWidth"),
     ("HTMLElement", "offsetHeight"),
     ("HTMLElement", "offsetTop"),

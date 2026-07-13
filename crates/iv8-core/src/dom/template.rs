@@ -687,6 +687,9 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "clientHeight", client_height_getter, None);
         install_proto_accessor(scope, proto, "scrollWidth", scroll_width_getter, None);
         install_proto_accessor(scope, proto, "scrollHeight", scroll_height_getter, None);
+        // Shadow DOM L3: null until attachShadow; no nested shadow tree (COMP-4).
+        install_proto_accessor(scope, proto, "shadowRoot", shadow_root_getter, None);
+        install_proto_method_sig_with_length(scope, element, proto, "attachShadow", attach_shadow_cb, 1);
         install_proto_accessor(
             scope,
             proto,
@@ -6454,14 +6457,147 @@ unsafe extern "C" fn can_play_type_cb(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn iframe_content_document_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
-        // Nested browsing context not modeled → null (valid DOM)
+        // Nested browsing context not modeled → null (intentional L3 bound)
         rv.set(v8::null(scope).into());
     });
 }
 
+/// contentWindow: no nested browsing, but fingerprint/H06a need a Window-like
+/// shell sharing parent navigator (COMP-4 native ownership; replaces IFRAME_FIX_JS).
 unsafe extern "C" fn iframe_content_window_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _, _| {
-        rv.set(v8::null(scope).into());
+        let cw = v8::Object::new(scope);
+        let global = scope.get_current_context().global(scope);
+        // navigator → parent navigator
+        if let Some(nav_key) = v8::String::new(scope, "navigator") {
+            if let Some(nav) = global.get(scope, nav_key.into()) {
+                let _ = cw.define_own_property(
+                    scope,
+                    nav_key.into(),
+                    nav,
+                    v8::PropertyAttribute::NONE,
+                );
+            }
+        }
+        // document → parent document (not nested)
+        if let Some(doc_key) = v8::String::new(scope, "document") {
+            if let Some(doc) = global.get(scope, doc_key.into()) {
+                let _ = cw.define_own_property(
+                    scope,
+                    doc_key.into(),
+                    doc,
+                    v8::PropertyAttribute::NONE,
+                );
+            }
+        }
+        for name in ["parent", "top"] {
+            if let Some(k) = v8::String::new(scope, name) {
+                let _ = cw.define_own_property(
+                    scope,
+                    k.into(),
+                    global.into(),
+                    v8::PropertyAttribute::NONE,
+                );
+            }
+        }
+        for name in ["self", "window"] {
+            if let Some(k) = v8::String::new(scope, name) {
+                let _ = cw.define_own_property(
+                    scope,
+                    k.into(),
+                    cw.into(),
+                    v8::PropertyAttribute::NONE,
+                );
+            }
+        }
+        rv.set(cw.into());
+    });
+}
+
+unsafe extern "C" fn shadow_root_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        // Stored as data-less flag via style/attr map? Use node_media-like map on state.
+        // Prefer hidden attr not in HTML: look up node_scroll-style side table.
+        let has = state
+            .node_shadow
+            .borrow()
+            .contains_key(&node_id);
+        if !has {
+            rv.set(v8::null(scope).into());
+            return;
+        }
+        // Return a ShadowRoot-branded empty object (no nested tree).
+        let obj = v8::Object::new(scope);
+        if let Some(ctor_key) = v8::String::new(scope, "ShadowRoot") {
+            let global = scope.get_current_context().global(scope);
+            if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+                if ctor_val.is_function() {
+                    let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+                    if let Some(pk) = v8::String::new(scope, "prototype") {
+                        if let Some(proto) = ctor.get(scope, pk.into()) {
+                            if proto.is_object() {
+                                let _ = obj.set_prototype(scope, proto);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if let Some(mode_key) = v8::String::new(scope, "mode") {
+            let mode = state
+                .node_shadow
+                .borrow()
+                .get(&node_id)
+                .cloned()
+                .unwrap_or_else(|| "open".into());
+            if let Some(mv) = v8::String::new(scope, &mode) {
+                let _ = obj.define_own_property(
+                    scope,
+                    mode_key.into(),
+                    mv.into(),
+                    v8::PropertyAttribute::NONE,
+                );
+            }
+        }
+        rv.set(obj.into());
+    });
+}
+
+unsafe extern "C" fn attach_shadow_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, args, rv, state, node_id| {
+        if let Some(nid) = node_id {
+            let mut mode = "open".to_string();
+            if args.length() >= 1 && args.get(0).is_object() {
+                let opts: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(args.get(0)) };
+                if let Some(mk) = v8::String::new(scope, "mode") {
+                    if let Some(mv) = opts.get(scope, mk.into()) {
+                        if mv.is_string() {
+                            mode = mv.to_rust_string_lossy(scope);
+                        }
+                    }
+                }
+            }
+            state.node_shadow.borrow_mut().insert(nid, mode);
+            // Return via getter path shape
+            let obj = v8::Object::new(scope);
+            if let Some(ctor_key) = v8::String::new(scope, "ShadowRoot") {
+                let global = scope.get_current_context().global(scope);
+                if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+                    if ctor_val.is_function() {
+                        let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+                        if let Some(pk) = v8::String::new(scope, "prototype") {
+                            if let Some(proto) = ctor.get(scope, pk.into()) {
+                                if proto.is_object() {
+                                    let _ = obj.set_prototype(scope, proto);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            rv.set(obj.into());
+        }
     });
 }
 
