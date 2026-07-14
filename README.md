@@ -3,10 +3,11 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.93 closed (S1 install+profile D-111 + D-151 dual-track package policy + post-hoc hygiene + H05/H06/WPT hold; package metadata remains 0.8.11 by D-151) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.94 closed (S2 Window position/scroll native accessors + RM-3/RM-11 residual disposition; package 0.8.11 D-151) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
+- **v0.8.94 S2 surface fidelity**: screenX/Y/scroll/pageOffset native global accessors; WINDOW_EXTRAS dual-data removed; dual Nav / UAData / AD-2 honest bounds documented
 - **v0.8.93 S1 install+profile**: D-111 window/languages/UAData platform coherence; env_inject skip expansion; override-order tests; D-151 dual-track package policy; dead post-hoc no-op delete; Kaspersky build-script GUIDE
 - **v0.8.92 dual-path + composition**: DOM FT ownership, EXCLUDED_OPERATIONS/GLOBALS, HTMLOptionsCollection/HTMLAllCollection structure, plugins SameObject, Track C before/after (MISSING 0), H06b worker navigator 5/5, post-hoc PLUGINS/REQUEST/CHROME no longer eval'd
 - **Broad browser-like surface**: navigator / screen / window / document / location / history / performance

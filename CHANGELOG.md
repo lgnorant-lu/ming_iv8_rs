@@ -6,6 +6,26 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.94] - 2026-07-14
+
+> Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
+> Mode: Lightweight Increment. Series **S2** of post-0.92 module-bulk roadmap.
+
+### Fixed
+- Window position/scroll as native global_template accessors: screenX/Y, screenLeft/Top, scrollX/Y, pageXOffset/pageYOffset
+- WINDOW_EXTRAS no longer installs own-data dual defaults for native window metrics
+- env_inject NATIVE_WINDOW_KEYS includes pageXOffset/pageYOffset
+
+### Added
+- S2 audit residual note (own-vs-proto buckets, dual Nav honest bound, UAData shape gap, CG-1/AD-2 bound)
+- Tests: window position/scroll descriptors; env override for scroll/screenX
+
+### Quality Gates
+- cargo test -p iv8-core --lib: **498 PASS**
+- WPT functional: **176/176**
+- H05a-f + H06a/b: **OVERALL PASS**
+- Package metadata: **0.8.11** unchanged
+
 ## [v0.8.93] - 2026-07-14
 
 > Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track; supersedes D-090 freeze wording).
