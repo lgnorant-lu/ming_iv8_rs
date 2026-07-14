@@ -14,6 +14,32 @@ pub fn detect_amd_markers(source: &str) -> bool {
             || source.contains("define.amd"))
 }
 
+/// Diagnostics for AMD plugin / path-config features we **do not** implement (honest bound).
+pub fn amd_capability_bounds(source: &str) -> serde_json::Value {
+    let plugin = source.contains("!")
+        && (source.contains("text!")
+            || source.contains("json!")
+            || source.contains("css!")
+            || source.contains("requirejs")
+            || source.contains("plugin"));
+    let path_config = source.contains("require.config")
+        || source.contains("requirejs.config")
+        || source.contains("paths:")
+        || source.contains("baseUrl");
+    let async_load = source.contains("require([") && source.contains("function");
+    serde_json::json!({
+        "sync_define_require": true,
+        "relative_deps": true,
+        "loader_plugins": false,
+        "path_config": false,
+        "async_script_fetch": false,
+        "detected_plugin_syntax": plugin,
+        "detected_path_config": path_config,
+        "detected_async_require_array": async_load,
+        "policy": "almond-style subset only; plugins/path/async OUT of S7 A",
+    })
+}
+
 /// JS prelude: sync AMD registry (define + require) for preloaded modules.
 ///
 /// Supports:
@@ -153,5 +179,14 @@ globalThis.__amd_rel = require('pkg/main').n;
             k.eval_to_rust_value("globalThis.__amd_rel"),
             RustValue::Int(7)
         );
+    }
+
+    #[test]
+    fn test_amd_capability_bounds_plugins_out() {
+        let b = amd_capability_bounds("require(['text!./a.html'], function(){}); require.config({paths:{}});");
+        assert_eq!(b["loader_plugins"], false);
+        assert_eq!(b["path_config"], false);
+        assert_eq!(b["detected_path_config"], true);
+        assert_eq!(b["detected_async_require_array"], true);
     }
 }

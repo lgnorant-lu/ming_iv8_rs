@@ -102,10 +102,24 @@ pub fn summarize_source_map(source: &str) -> serde_json::Value {
 
 /// Tree-shaking / sideEffects markers (S7-11 diagnostics only).
 pub fn detect_treeshaking_markers(source: &str) -> serde_json::Value {
+    let pure = source.contains("/*#__PURE__*/") || source.contains("/*@__PURE__*/");
+    let side_effects_false = source.contains("\"sideEffects\":false")
+        || source.contains("'sideEffects':false")
+        || source.contains("\"sideEffects\": false");
+    let unused = source.contains("/* unused harmony export")
+        || source.contains("/* unused harmony reexport");
+    let harmony = source.contains("__webpack_exports__")
+        || source.contains("/* harmony export")
+        || source.contains("/* harmony import");
+    let pure_count = source.matches("/*#__PURE__*/").count()
+        + source.matches("/*@__PURE__*/").count();
     serde_json::json!({
-        "pure_annotation": source.contains("/*#__PURE__*/") || source.contains("/*@__PURE__*/"),
-        "side_effects_false": source.contains("\"sideEffects\":false") || source.contains("'sideEffects':false"),
-        "unused_export_comment": source.contains("/* unused harmony export"),
+        "pure_annotation": pure,
+        "pure_annotation_count": pure_count,
+        "side_effects_false": side_effects_false,
+        "unused_export_comment": unused,
+        "harmony_markers": harmony,
+        "note": "diagnostics only; no semantic DCE",
     })
 }
 
@@ -329,8 +343,10 @@ mod tests {
 
     #[test]
     fn test_treeshaking_markers() {
-        let m = detect_treeshaking_markers("var a=/*#__PURE__*/fn();");
+        let m = detect_treeshaking_markers("var a=/*#__PURE__*/fn(); /* harmony export */");
         assert_eq!(m["pure_annotation"], true);
+        assert_eq!(m["pure_annotation_count"], 1);
+        assert_eq!(m["harmony_markers"], true);
     }
 
     #[test]

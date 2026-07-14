@@ -223,11 +223,14 @@ fn detect_webpack_minified_bdms(source: &str) -> bool {
     if !source.contains(".exports") && !source.contains("[\"exports\"]") {
         return false;
     }
-    // webpack factory arity: function(e,t,n) / function(module,exports,require)
+    // webpack factory arity: common minified permutations (e,t,n) / (t,r,e) / (module,exports,require)
     let has_factory = source.contains("function(e,t,n)")
         || source.contains("function(t,e,n)")
+        || source.contains("function(t,r,e)")
+        || source.contains("function(e,t,r)")
         || source.contains("function(module,exports,require)")
-        || source.contains("function(module, exports, require)");
+        || source.contains("function(module, exports, require)")
+        || source.contains("function(module,exports,__webpack_require__)");
     if !has_factory {
         return false;
     }
@@ -642,5 +645,24 @@ mod tests {
         let src = "__webpack_require__(1); function(require,module,exports){}";
         let kind = classify(src, &[]);
         assert_eq!(kind, SampleKind::WebpackRuntime);
+    }
+
+    #[test]
+    fn test_bdms_factory_tre_permutation() {
+        // Real BDMS-like minified uses function(t,r,e) not only (e,t,n)
+        let src = r#"
+var t={6696:function(t,r,e){t.exports=e(5437)},5437:function(t,r,e){t.exports=function(){}},6249:function(t,r,e){t.exports=1}};
+"#;
+        assert!(
+            detect_webpack_minified_bdms(src),
+            "function(t,r,e)+numeric table should detect BDMS-like"
+        );
+        assert_eq!(classify(src, &[]), SampleKind::WebpackRuntime);
+    }
+
+    #[test]
+    fn test_bdms_negative_plain_cjs_still_false() {
+        let src = "function add(a,b){return a+b;} module.exports={add:add};";
+        assert!(!detect_webpack_minified_bdms(src));
     }
 }

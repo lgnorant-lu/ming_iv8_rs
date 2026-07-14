@@ -17,16 +17,14 @@ Avoid scattering extra `v0.8.99-*-samples.md` under roadmap.
 | **L0 synthetic** | Fast classify/plan/exec unit tests | YES (CI) | `*_minimal.js` |
 | **L1 multi-chunk synthetic** | Cross-chunk require / factory merge | YES (CI) | `webpack_multichunk_*.js`, `bdms_*.js` |
 | **L2 official-shape** | Gold shapes from webpack examples | YES (CI) | `generated/*` (pinned dist + NOTICE) |
-| **L3 historical / pressure** | Real site dumps used in past audits | **NO** (not CI) | `_ref/yy/*` (local only; see below) |
+| **L3 historical / pressure** | Real site dumps used in past audits | **NO** (not CI) | `_ref/yy/*` + BDMS; suite `test_entry_l3_pressure` `#[ignore]` |
 | **L4 deobf corpora** | Identifier recovery | OUT | Branch B only |
 
-### Honest status (R11 audit)
+### Honest status (R12)
 
-- **Before this wave:** only L0 + hand-written L1. L2 was documented but **not checked in**.
-- **Selection datasets that existed but were NOT fixture-CI:**
-  - `_ref/yy/` — real webpackJsonp multi-chunk (runtime / Page.chunk / vendor ~679KB). Historical load notes in `TODO-bundler.md` (v0.8.79). **Not copied into fixtures** (size + site origin; use as optional local pressure).
-  - `_ref/iv8-examples/js/bdms_*.js` — minified BDMS-like pressure for detection; L1 has synthetic pos/neg only.
-  - Official webpack example dist — now **pinned under `generated/`**.
+- L0–L2 checked in CI; L3 via `cargo test -p iv8-core --test test_entry_l3_pressure -- --ignored`.
+- **Never** default-load `_ref/yy/vendor.chunk.*` (~679KB).
+- Selection datasets: `_ref/yy` (runtime+Page), `_ref/iv8-examples/js/bdms_*` (classify webpack family).
 
 ## L0 (always CI)
 

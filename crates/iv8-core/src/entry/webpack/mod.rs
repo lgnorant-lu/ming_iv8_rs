@@ -784,26 +784,114 @@ pub fn install_chunk_factories_public(kernel: &mut EmbeddedV8Kernel) -> u64 {
 /// `chunks` is ordered list of JS source strings (runtime-like or webpackChunk push files).
 /// Does **not** fetch remote URLs.
 pub fn preload_chunk_sources(kernel: &mut EmbeddedV8Kernel, chunks: &[String]) -> serde_json::Value {
+    preload_chunk_sources_labeled(kernel, chunks, &[])
+}
+
+/// Like [`preload_chunk_sources`], with optional labels (same length as `chunks` preferred).
+pub fn preload_chunk_sources_labeled(
+    kernel: &mut EmbeddedV8Kernel,
+    chunks: &[String],
+    labels: &[&str],
+) -> serde_json::Value {
     let mut eval_ok = 0u64;
     let mut eval_fail = 0u64;
+    let mut per: Vec<serde_json::Value> = Vec::new();
     for (i, src) in chunks.iter().enumerate() {
+        let label = labels
+            .get(i)
+            .map(|s| (*s).to_string())
+            .unwrap_or_else(|| format!("chunk_{i}"));
         match kernel.eval(src, crate::kernel::EvalOpts::default()) {
-            Ok(_) => eval_ok += 1,
+            Ok(_) => {
+                eval_ok += 1;
+                per.push(serde_json::json!({
+                    "index": i,
+                    "label": label,
+                    "ok": true,
+                    "bytes": src.len(),
+                }));
+            }
             Err(e) => {
                 eval_fail += 1;
-                let _ = e;
-                let _ = i;
+                per.push(serde_json::json!({
+                    "index": i,
+                    "label": label,
+                    "ok": false,
+                    "error": e.to_string(),
+                    "bytes": src.len(),
+                }));
             }
         }
     }
     let installed = install_chunk_factories_into_require(kernel);
+    let bound = ensure_chunk_bound_status(kernel);
     serde_json::json!({
         "schema": "iv8-webpack-preload-chunks.v0.1",
         "chunks_eval_ok": eval_ok,
         "chunks_eval_fail": eval_fail,
         "factories_installed": installed,
+        "chunks": per,
+        "ensure_chunk": bound,
         "note": "caller-supplied chunk text only; no network ensureChunk",
     })
+}
+
+/// Report honest ensureChunk bounds after preload (no remote fetch).
+pub fn ensure_chunk_bound_status(kernel: &mut EmbeddedV8Kernel) -> serde_json::Value {
+    let js = concat!(
+        "(function(){",
+        "var r = null;",
+        "try { if (typeof __iv8_wp_require === 'function') r = __iv8_wp_require; } catch(e) {}",
+        "try { if (!r && typeof __webpack_require__ === 'function') r = __webpack_require__; } catch(e) {}",
+        "var log = [];",
+        "try {",
+        "  if (typeof __iv8_webpack_log !== 'undefined' && Array.isArray(__iv8_webpack_log)) {",
+        "    for (var i = 0; i < __iv8_webpack_log.length; i++) {",
+        "      var s = String(__iv8_webpack_log[i]);",
+        "      if (s.indexOf('chunk_ensure,') === 0) log.push(s.slice(13));",
+        "    }",
+        "  }",
+        "} catch(e) {}",
+        "return {",
+        "  require_present: !!r,",
+        "  e_wrapped: !!(r && r.__iv8_e_wrapped),",
+        "  remote_fetch: false,",
+        "  ensure_calls_seen: log,",
+        "  policy: 'sync_resolve_after_preload_only'",
+        "};",
+        "})()"
+    );
+    match kernel.eval_to_rust_value(js) {
+        RustValue::Object(map) => {
+            let mut out = serde_json::Map::new();
+            for (k, v) in map {
+                out.insert(k, rust_value_to_json(v));
+            }
+            serde_json::Value::Object(out)
+        }
+        other => serde_json::json!({ "raw": format!("{:?}", other) }),
+    }
+}
+
+fn rust_value_to_json(v: RustValue) -> serde_json::Value {
+    match v {
+        RustValue::Null => serde_json::Value::Null,
+        RustValue::Bool(b) => serde_json::json!(b),
+        RustValue::Int(n) => serde_json::json!(n),
+        RustValue::Float(n) => serde_json::json!(n),
+        RustValue::String(s) => serde_json::json!(s),
+        RustValue::Array(items) => {
+            serde_json::Value::Array(items.into_iter().map(rust_value_to_json).collect())
+        }
+        RustValue::Object(map) => {
+            let mut o = serde_json::Map::new();
+            for (k, v) in map {
+                o.insert(k, rust_value_to_json(v));
+            }
+            serde_json::Value::Object(o)
+        }
+        _ => serde_json::Value::Null,
+    }
 }
 
 /// Install factories from webpackJsonp/webpackChunk into live `__webpack_require__.m`
@@ -881,7 +969,7 @@ fn install_chunk_factories_into_require(kernel: &mut EmbeddedV8Kernel) -> u64 {
     }
 }
 
-/// Static edges: scan factory.toString() for require(number|string) when available.
+/// Static edges: scan factory.toString() for require / import() when available.
 fn collect_static_require_edges(
     kernel: &mut EmbeddedV8Kernel,
     _module_ids: &[String],
@@ -893,8 +981,13 @@ fn collect_static_require_edges(
         "try { if (!r && typeof __webpack_require__ === 'function') r = __webpack_require__; } catch(e) {}",
         "if (!r || !r.m) return [];",
         "var edges = [];",
-        // require / __webpack_require__ / single-letter minified param (r|n|e|t) + numeric id
-        "var re = /\\b(?:require|__webpack_require__|[rent])\\(\\s*[\\\"']?(\\d+)[\\\"']?\\s*\\)/g;",
+        // numeric: require(1) / r(1) / __webpack_require__(1)
+        "var reNum = /\\b(?:require|__webpack_require__|[rent])\\(\\s*[\\\"']?(\\d+)[\\\"']?\\s*\\)/g;",
+        // string module id: require(\"./x\") / r(\"vendors\")
+        "var reStr = /\\b(?:require|__webpack_require__|[rent])\\(\\s*[\\\"']([^\\\"']+)[\\\"']\\s*\\)/g;",
+        // static import() / r.e(chunkId) ensure patterns
+        "var reImport = /\\bimport\\(\\s*[\\\"']([^\\\"']+)[\\\"']\\s*\\)/g;",
+        "var reEnsure = /\\b(?:require|__webpack_require__|[rent])\\.e\\(\\s*[\\\"']?([^\\\"')\\s]+)[\\\"']?\\s*\\)/g;",
         "Object.keys(r.m).forEach(function(from){",
         "  var fn = r.m[from];",
         "  if (typeof fn !== 'function') return;",
@@ -902,17 +995,27 @@ fn collect_static_require_edges(
         "  try { src = Function.prototype.toString.call(fn); } catch(e) { return; }",
         "  if (!src || src.indexOf('[native code]') >= 0) return;",
         "  if (src.length > 200000) return;",
-        "  var m;",
-        "  re.lastIndex = 0;",
-        "  var seen = {};",
-        "  while ((m = re.exec(src)) !== null) {",
-        "    var to = m[1];",
-        "    if (String(from) === String(to)) continue;",
-        "    var key = from + '->' + to;",
-        "    if (seen[key]) continue;",
+        "  var m; var seen = {};",
+        "  function push(to, kind){",
+        "    if (to == null || to === '') return;",
+        "    to = String(to);",
+        "    if (String(from) === to) return;",
+        "    var key = kind + ':' + from + '->' + to;",
+        "    if (seen[key]) return;",
         "    seen[key] = 1;",
-        "    edges.push({from: String(from), to: String(to), kind: 'static_require'});",
+        "    edges.push({from: String(from), to: to, kind: kind});",
         "  }",
+        "  reNum.lastIndex = 0;",
+        "  while ((m = reNum.exec(src)) !== null) push(m[1], 'static_require');",
+        "  reStr.lastIndex = 0;",
+        "  while ((m = reStr.exec(src)) !== null) {",
+        "    if (/^\\d+$/.test(m[1])) continue;",
+        "    push(m[1], 'static_require_string');",
+        "  }",
+        "  reImport.lastIndex = 0;",
+        "  while ((m = reImport.exec(src)) !== null) push(m[1], 'static_import');",
+        "  reEnsure.lastIndex = 0;",
+        "  while ((m = reEnsure.exec(src)) !== null) push(m[1], 'ensure_chunk');",
         "});",
         "return edges;",
         "})()"
@@ -942,11 +1045,21 @@ fn collect_static_require_edges(
                             }
                         })
                         .unwrap_or_default();
+                    let kind = map
+                        .get("kind")
+                        .and_then(|v| {
+                            if let RustValue::String(s) = v {
+                                Some(s.clone())
+                            } else {
+                                None
+                            }
+                        })
+                        .unwrap_or_else(|| "static_require".to_string());
                     if !from.is_empty() && !to.is_empty() {
                         edges.push(serde_json::json!({
                             "from": from,
                             "to": to,
-                            "kind": "static_require",
+                            "kind": kind,
                         }));
                     }
                 }
@@ -1583,6 +1696,110 @@ __webpack_require__.c = {};
             !cycles.is_empty(),
             "expected cycle detection, cycles={:?}",
             cycles
+        );
+    }
+
+    #[test]
+    fn test_static_edges_string_import_and_ensure_kinds() {
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel
+            .eval(bridge_prelude(), crate::kernel::EvalOpts::default())
+            .unwrap();
+        kernel
+            .eval(
+                r#"
+var __webpack_require__ = function(id) {
+  if (__webpack_require__.c[id]) return __webpack_require__.c[id].exports;
+  var m = { exports: {} };
+  __webpack_require__.c[id] = m;
+  if (typeof __webpack_require__.m[id] === 'function')
+    __webpack_require__.m[id](m, m.exports, __webpack_require__);
+  return m.exports;
+};
+__webpack_require__.m = {
+  1: function(m,e,r){
+    r("./lib");
+    import("./lazy");
+    r.e("vendors");
+    e.ok = 1;
+  },
+  2: function(m,e,r){ e.x = 2; }
+};
+__webpack_require__.c = {};
+"#,
+                crate::kernel::EvalOpts::default(),
+            )
+            .unwrap();
+        let graph = collect_module_graph(&mut kernel).expect("graph");
+        let edges = graph["edges"].as_array().cloned().unwrap_or_default();
+        assert!(
+            edges
+                .iter()
+                .any(|e| e["kind"] == "static_require_string" && e["to"] == "./lib"),
+            "string require edge missing: {:?}",
+            edges
+        );
+        assert!(
+            edges
+                .iter()
+                .any(|e| e["kind"] == "static_import" && e["to"] == "./lazy"),
+            "import edge missing: {:?}",
+            edges
+        );
+        assert!(
+            edges
+                .iter()
+                .any(|e| e["kind"] == "ensure_chunk" && e["to"] == "vendors"),
+            "ensure_chunk edge missing: {:?}",
+            edges
+        );
+    }
+
+    #[test]
+    fn test_preload_labeled_and_ensure_bound_status() {
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel
+            .eval(bridge_prelude(), crate::kernel::EvalOpts::default())
+            .unwrap();
+        kernel
+            .eval(
+                r#"
+var __webpack_require__ = function(id){
+  if(__webpack_require__.c[id]) return __webpack_require__.c[id].exports;
+  var m={exports:{}}; __webpack_require__.c[id]=m;
+  var f=__webpack_require__.m[id]; if(typeof f==='function') f(m,m.exports,__webpack_require__);
+  return m.exports;
+};
+__webpack_require__.m={}; __webpack_require__.c={};
+"#,
+                crate::kernel::EvalOpts::default(),
+            )
+            .unwrap();
+        let chunk = r#"(self.webpackChunk=self.webpackChunk||[]).push([["v"],{7:function(m,e){e.ok=true;}}]);"#;
+        let rep = preload_chunk_sources_labeled(
+            &mut kernel,
+            &[chunk.to_string()],
+            &["vendor_chunk"],
+        );
+        assert_eq!(rep["chunks_eval_ok"], 1);
+        assert_eq!(rep["chunks"][0]["label"], "vendor_chunk");
+        assert_eq!(rep["ensure_chunk"]["remote_fetch"], false);
+        assert_eq!(rep["ensure_chunk"]["e_wrapped"], true);
+        // touch ensure path
+        let _ = kernel.eval("__webpack_require__.e('v')", crate::kernel::EvalOpts::default());
+        let bound = ensure_chunk_bound_status(&mut kernel);
+        assert_eq!(bound["remote_fetch"], false);
+        let calls = bound["ensure_calls_seen"].as_array().cloned().unwrap_or_default();
+        assert!(
+            calls.iter().any(|c| c.as_str() == Some("v")),
+            "ensure calls={:?}",
+            calls
         );
     }
 }

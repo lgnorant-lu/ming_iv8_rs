@@ -425,6 +425,22 @@ window.webpackChunk = [[["vendors"], { 9: function(){}, 10: function(){} }]];
     assert_eq!(n9.unwrap()["chunk_id"], "vendors");
 }
 
+#[test]
+fn test_amd_capability_bounds_exposed() {
+    let b = iv8_core::entry::amd::amd_capability_bounds("define('a',[],function(){});");
+    assert_eq!(b["sync_define_require"], true);
+    assert_eq!(b["loader_plugins"], false);
+}
+
+#[test]
+fn test_treeshaking_diagnostics_counts() {
+    let m = iv8_core::entry::source_map::detect_treeshaking_markers(
+        "/*#__PURE__*/f(); /*#__PURE__*/g(); /* harmony export */",
+    );
+    assert_eq!(m["pure_annotation_count"], 2);
+    assert_eq!(m["harmony_markers"], true);
+}
+
 /// Official webpack common-chunk-and-vendor-chunk dist (L2): named webpackChunk* global.
 #[test]
 fn test_l2_official_webpack_named_chunk_global_and_graph() {
