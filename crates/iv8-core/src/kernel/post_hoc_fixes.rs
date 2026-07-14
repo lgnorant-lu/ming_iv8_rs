@@ -829,8 +829,15 @@ pub fn global_accessor_fix_js(attr_meta: &[(&str, bool, bool)]) -> String {
                         }}
                         return;
                     }}
-                    if (!desc.configurable) return;
+                    // INIT-3: convert data → accessor. If non-configurable, try delete first.
                     var value = desc.value;
+                    if (!desc.configurable) {{
+                        try {{ delete globalThis[name]; }} catch(eDel) {{ return; }}
+                        // re-read after delete
+                        desc = Object.getOwnPropertyDescriptor(globalThis, name);
+                        if (desc && (desc.get || desc.set)) return;
+                        if (desc && !desc.configurable) return;
+                    }}
                     var getter = (function(v, wp) {{
                         return function() {{
                             if (wp && this !== globalThis && this !== wp) {{
@@ -857,7 +864,7 @@ pub fn global_accessor_fix_js(attr_meta: &[(&str, bool, bool)]) -> String {
                         try {{ Object.defineProperty(setter, 'name', {{ value: 'set ' + name }}); }} catch(e) {{}}
                         try {{ Object.defineProperty(setter, 'length', {{ value: 1, writable: false, enumerable: false, configurable: true }}); }} catch(e) {{}}
                     }}
-                    Object.defineProperty(globalThis, name, {{ get: getter, set: setter, enumerable: desc.enumerable !== false, configurable: true }});
+                    Object.defineProperty(globalThis, name, {{ get: getter, set: setter, enumerable: desc ? (desc.enumerable !== false) : true, configurable: true }});
                 }} catch(e) {{}}
             }})(meta[i][0], meta[i][1], meta[i][2]);
         }}

@@ -1713,11 +1713,19 @@ pub fn generate_install_all(
             // in freeze_all_prototypes (preserving their values).
             out.push_str("    {\n");
             out.push_str(&format!("        let attr_key = v8::String::new(scope, \"{}\").unwrap();\n", attr_name));
+            // INIT-3: only skip if already an accessor (descriptor object has function `get`).
+            // get_own_property_descriptor returns Local<Value> (JS descriptor object).
+            // Data properties must be upgraded — not skipped solely for existing.
             out.push_str("        let should_skip = {\n");
-            out.push_str("            let desc = global.get_own_property_descriptor(scope, attr_key.into());\n");
-            out.push_str("            desc.is_some()\n");
+            out.push_str("            if let Some(desc_val) = global.get_own_property_descriptor(scope, attr_key.into()) {\n");
+            out.push_str("                if desc_val.is_object() && !desc_val.is_null_or_undefined() {\n");
+            out.push_str("                    let desc_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(desc_val) };\n");
+            out.push_str("                    let get_key = v8::String::new(scope, \"get\").unwrap();\n");
+            out.push_str("                    desc_obj.get(scope, get_key.into()).map(|v| v.is_function()).unwrap_or(false)\n");
+            out.push_str("                } else { false }\n");
+            out.push_str("            } else { false }\n");
             out.push_str("        };\n");
-            out.push_str("        if should_skip { /* skip shim-set property */ } else {\n");
+            out.push_str("        if should_skip { /* already accessor */ } else {\n");
             out.push_str(&format!("        let getter_tmpl = v8::FunctionTemplate::builder_raw(super::{}::{}_get_{}).length(0).build(scope);\n", module, fn_name, idx));
             out.push_str(&format!("        getter_tmpl.set_class_name(v8::String::new(scope, \"get {}\").unwrap());\n", attr_name));
             out.push_str("        let getter_fn = getter_tmpl.get_function(scope).unwrap();\n");
