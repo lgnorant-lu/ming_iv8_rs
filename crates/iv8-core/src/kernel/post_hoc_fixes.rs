@@ -110,36 +110,9 @@ pub const RECEIVER_SHIM_FIX_JS: &str = r#"
 /// **Why not codegen?** navigator.plugins is installed by navigator_extras.rs
 /// shim (not codegen) because it needs runtime data (plugin list). The shim
 /// creates plain objects for simplicity. This fix wraps them post-hoc.
-pub const PLUGINS_FIX_JS: &str = r#"
-    (function() {
-        if (typeof PluginArray === 'undefined' || typeof MimeTypeArray === 'undefined') return;
-        if (typeof navigator === 'undefined' || !navigator.plugins) return;
-        if (!(navigator.plugins instanceof PluginArray)) {
-            var realPlugins = navigator.plugins;
-            var pa = Object.create(PluginArray.prototype);
-            for (var i = 0; i < realPlugins.length; i++) {
-                pa[i] = realPlugins[i];
-            }
-            pa.length = realPlugins.length;
-            pa.item = function(i) { return realPlugins[i]; };
-            pa.namedItem = function(n) { return realPlugins[n]; };
-            pa[Symbol.toStringTag] = 'PluginArray';
-            try { Object.defineProperty(navigator, 'plugins', { value: pa, writable: true, configurable: true, enumerable: true }); } catch(e) {}
-        }
-        if (!(navigator.mimeTypes instanceof MimeTypeArray)) {
-            var realMT = navigator.mimeTypes;
-            var ma = Object.create(MimeTypeArray.prototype);
-            for (var i = 0; i < realMT.length; i++) {
-                ma[i] = realMT[i];
-            }
-            ma.length = realMT.length;
-            ma.item = function(i) { return realMT[i]; };
-            ma.namedItem = function(n) { return realMT[n]; };
-            ma[Symbol.toStringTag] = 'MimeTypeArray';
-            try { Object.defineProperty(navigator, 'mimeTypes', { value: ma, writable: true, configurable: true, enumerable: true }); } catch(e) {}
-        }
-    })();
-"#;
+/// Historical: plugins instanceof PluginArray rewrap.
+/// Owned by native_env::nav_plugins SameObject cache (INIT-2). Not evaluated.
+pub const PLUGINS_FIX_JS: &str = r#"(function(){ /* no-op: plugins owned by native_env */ })();"#;
 
 /// Request constructor shim.
 ///

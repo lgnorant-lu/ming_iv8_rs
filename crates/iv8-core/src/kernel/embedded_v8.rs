@@ -823,12 +823,8 @@ impl EmbeddedV8Kernel {
 
             // INIT-2: skip pure no-op post-hoc blobs (CREATE_ELEMENT/IFRAME/SHADOW/DOM_GETTER).
             // WEBDRIVER_FIX kept only if still non-empty; currently no-op inventory — skip.
-            // P0 boundary fix: navigator.plugins instanceof PluginArray must be true.
-            crate::telemetry::post_hoc_fix_start("PLUGINS_FIX_JS");
-            let plugins_fix = crate::v8_utils::v8_string(scope,
-                crate::kernel::post_hoc_fixes::PLUGINS_FIX_JS);
-            let ok = v8::Script::compile(scope, plugins_fix, None).and_then(|s| s.run(scope)).is_some();
-            crate::telemetry::post_hoc_fix_complete("PLUGINS_FIX_JS", ok);
+            // PLUGINS_FIX removed: native_env caches PluginArray/MimeTypeArray
+            // with correct prototypes (INIT-2).
 
             // COMP-5: Request ctor = DOM FT; REQUEST_FIX is fetch() polyfill only.
             crate::telemetry::post_hoc_fix_start("REQUEST_FIX_JS");
