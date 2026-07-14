@@ -177,6 +177,9 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     let key = crate::v8_utils::v8_string(scope, "document");
     global.set(scope, key.into(), doc_obj.into());
 
+    // Document static parseHTML / parseHTMLUnsafe (IDL-6) — real tree Document.
+    install_document_static_parse(scope, global);
+
     // document.all — HTMLAllCollection with [[IsHTMLDDA]] (C8).
     install_document_all(scope, global, doc_obj);
 
@@ -186,6 +189,43 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     install_xpath_prototype_ops(scope, global);
     // HTMLIFrameElement readonly attrs: no-op setters (H05b Category C).
     install_iframe_readonly_noop_setters(scope, global);
+}
+
+/// Document.parseHTML / parseHTMLUnsafe — static methods on the Document interface object.
+/// Implementation uses createHTMLDocument + body.innerHTML so NodeIds stay in the live tree.
+fn install_document_static_parse(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
+    let js = r#"(function(){
+        if (typeof Document === 'undefined') return;
+        function parseHTML(html) {
+            var doc = document.implementation && document.implementation.createHTMLDocument
+                ? document.implementation.createHTMLDocument('')
+                : null;
+            if (!doc) {
+                throw new TypeError('Document.parseHTML is not available');
+            }
+            var s = html === undefined || html === null ? '' : String(html);
+            try {
+                if (doc.body) { doc.body.innerHTML = s; }
+                else if (doc.documentElement) { doc.documentElement.innerHTML = s; }
+            } catch (e) {}
+            return doc;
+        }
+        try {
+            Object.defineProperty(Document, 'parseHTML', {
+                value: parseHTML, writable: true, enumerable: true, configurable: true
+            });
+            Object.defineProperty(Document, 'parseHTMLUnsafe', {
+                value: parseHTML, writable: true, enumerable: true, configurable: true
+            });
+            try { Object.defineProperty(parseHTML, 'length', { value: 1, configurable: true }); } catch(e) {}
+            try { Object.defineProperty(parseHTML, 'name', { value: 'parseHTML' }); } catch(e) {}
+        } catch (e) {
+            Document.parseHTML = parseHTML;
+            Document.parseHTMLUnsafe = parseHTML;
+        }
+    })();"#;
+    let code = crate::v8_utils::v8_string(scope, js);
+    let _ = v8::Script::compile(scope, code, None).and_then(|s| s.run(scope));
 }
 
 /// Call-as-function for document.all(id) → getElementById / named lookup.

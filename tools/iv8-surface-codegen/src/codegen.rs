@@ -205,6 +205,9 @@ const EXCLUDED_OPERATIONS: &[(&str, &str)] = &[
     ("HTMLDialogElement", "show"),
     ("HTMLDialogElement", "showModal"),
     ("HTMLDialogElement", "close"),
+    // Document static parseHTML* — real tree Document (IDL-6), not empty skeleton.
+    ("Document", "parseHTML"),
+    ("Document", "parseHTMLUnsafe"),
     // TreeWalker / XPath — owned by dom/binding real traversal + evaluate
     ("TreeWalker", "nextNode"),
     ("TreeWalker", "previousNode"),
@@ -796,6 +799,9 @@ fn generate_callbacks(def: &Definition, fn_name: &str, enum_names: &std::collect
             let ret_name = m.return_type.as_deref().unwrap_or("undefined");
             let tm = type_mapper::map_idl_type(ret_name);
             let is_promise_ret = type_mapper::is_promise_public(ret_name);
+            // Static operations are called on the interface object (Document.parseHTML),
+            // not instances — skip prototype-chain receiver check (IDL-6 / static ops).
+            let is_static_op = m.special.as_deref() == Some("static");
             out.push_str(&format!(
                 "pub(crate) unsafe extern \"C\" fn {}_op_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                 fn_name, idx
@@ -812,7 +818,9 @@ fn generate_callbacks(def: &Definition, fn_name: &str, enum_names: &std::collect
             if !is_promise_ret || m.required_arg_count > 0 {
                 out.push_str("        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);\n");
             }
-            if is_promise_ret {
+            if is_static_op {
+                // no instance receiver check
+            } else if is_promise_ret {
                 out.push_str(&format!(
                     "        if !crate::promise_check::check_receiver_promise(scope, _info, \"{iface}\") {{ return; }}\n",
                     iface = iface_name,

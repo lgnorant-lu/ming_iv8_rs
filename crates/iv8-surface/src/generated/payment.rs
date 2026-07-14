@@ -851,7 +851,6 @@ pub(crate) unsafe extern "C" fn payment_request_set_10(_info: *const v8::Functio
 pub(crate) unsafe extern "C" fn payment_request_op_11(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequest") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
@@ -859,7 +858,6 @@ pub(crate) unsafe extern "C" fn payment_request_op_11(_info: *const v8::Function
 pub(crate) unsafe extern "C" fn payment_request_op_12(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequest") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }

@@ -987,54 +987,6 @@ pub(crate) unsafe extern "C" fn dom_matrix_read_only_op_1(_info: *const v8::Func
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMMatrixReadOnly").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     {
         let __ctor_name = v8::String::new(scope, "DOMMatrixReadOnly").unwrap();
@@ -1062,54 +1014,6 @@ pub(crate) unsafe extern "C" fn dom_matrix_read_only_op_2(_info: *const v8::Func
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMMatrixReadOnly").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -1143,54 +1047,6 @@ pub(crate) unsafe extern "C" fn dom_matrix_read_only_op_3(_info: *const v8::Func
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMMatrixReadOnly").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -4442,54 +4298,6 @@ pub(crate) unsafe extern "C" fn dom_point_read_only_op_1(_info: *const v8::Funct
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMPointReadOnly").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     {
         let __ctor_name = v8::String::new(scope, "DOMPointReadOnly").unwrap();
@@ -4983,54 +4791,6 @@ pub(crate) unsafe extern "C" fn dom_quad_op_1(_info: *const v8::FunctionCallback
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMQuad").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     {
         let __ctor_name = v8::String::new(scope, "DOMQuad").unwrap();
@@ -5058,54 +4818,6 @@ pub(crate) unsafe extern "C" fn dom_quad_op_2(_info: *const v8::FunctionCallback
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMQuad").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     {
         let __ctor_name = v8::String::new(scope, "DOMQuad").unwrap();
@@ -5683,54 +5395,6 @@ pub(crate) unsafe extern "C" fn dom_rect_read_only_op_1(_info: *const v8::Functi
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMRectReadOnly").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     {
         let __ctor_name = v8::String::new(scope, "DOMRectReadOnly").unwrap();
@@ -12084,54 +11748,6 @@ pub(crate) unsafe extern "C" fn dom_matrix_op_1(_info: *const v8::FunctionCallba
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMMatrix").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     {
         let __ctor_name = v8::String::new(scope, "DOMMatrix").unwrap();
@@ -12159,54 +11775,6 @@ pub(crate) unsafe extern "C" fn dom_matrix_op_2(_info: *const v8::FunctionCallba
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMMatrix").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -12240,54 +11808,6 @@ pub(crate) unsafe extern "C" fn dom_matrix_op_3(_info: *const v8::FunctionCallba
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMMatrix").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -16346,54 +15866,6 @@ pub(crate) unsafe extern "C" fn dom_point_op_1(_info: *const v8::FunctionCallbac
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMPoint").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     {
         let __ctor_name = v8::String::new(scope, "DOMPoint").unwrap();
@@ -16993,54 +16465,6 @@ pub(crate) unsafe extern "C" fn dom_rect_op_1(_info: *const v8::FunctionCallback
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DOMRect").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     {
         let __ctor_name = v8::String::new(scope, "DOMRect").unwrap();
@@ -17640,54 +17064,6 @@ pub(crate) unsafe extern "C" fn abort_signal_op_1(_info: *const v8::FunctionCall
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "AbortSignal").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     {
         let __ctor_name = v8::String::new(scope, "AbortSignal").unwrap();
@@ -17715,54 +17091,6 @@ pub(crate) unsafe extern "C" fn abort_signal_op_2(_info: *const v8::FunctionCall
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "AbortSignal").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -17796,54 +17124,6 @@ pub(crate) unsafe extern "C" fn abort_signal_op_3(_info: *const v8::FunctionCall
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "AbortSignal").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -24225,172 +23505,10 @@ pub(crate) unsafe extern "C" fn document_op_25(_info: *const v8::FunctionCallbac
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    {
-        let __ctor_name = v8::String::new(scope, "Document").unwrap();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto.is_object() {
-                        let __obj = v8::Object::new(scope);
-                        let _ = __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-        }
-        rv.set(v8::undefined(scope).into());
-    }
-}
-
-pub(crate) unsafe extern "C" fn document_op_26(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        if __args.length() < 1 {
-            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
-            let exc = v8::Exception::type_error(scope, msg);
-            scope.throw_exception(exc);
-            return;
-        }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    {
-        let __ctor_name = v8::String::new(scope, "Document").unwrap();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto.is_object() {
-                        let __obj = v8::Object::new(scope);
-                        let _ = __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-        }
-        rv.set(v8::undefined(scope).into());
-    }
-}
-
-pub(crate) unsafe extern "C" fn document_op_27(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        if __args.length() < 1 {
-            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
-            let exc = v8::Exception::type_error(scope, msg);
-            scope.throw_exception(exc);
-            return;
-        }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     rv.set(v8::Object::new(scope).into());
 }
 
-pub(crate) unsafe extern "C" fn document_get_28(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_26(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -24456,7 +23574,7 @@ pub(crate) unsafe extern "C" fn document_get_28(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_set_28(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_set_26(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -24516,7 +23634,7 @@ pub(crate) unsafe extern "C" fn document_set_28(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_29(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_27(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -24601,7 +23719,7 @@ pub(crate) unsafe extern "C" fn document_get_29(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_30(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_28(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -24686,7 +23804,7 @@ pub(crate) unsafe extern "C" fn document_get_30(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_31(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_29(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -24771,7 +23889,7 @@ pub(crate) unsafe extern "C" fn document_get_31(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_32(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_30(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -24856,7 +23974,7 @@ pub(crate) unsafe extern "C" fn document_get_32(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_33(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_31(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -24941,7 +24059,7 @@ pub(crate) unsafe extern "C" fn document_get_33(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_34(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_32(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -25026,7 +24144,7 @@ pub(crate) unsafe extern "C" fn document_get_34(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_op_35(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_33(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -25107,7 +24225,7 @@ pub(crate) unsafe extern "C" fn document_op_35(_info: *const v8::FunctionCallbac
     }
 }
 
-pub(crate) unsafe extern "C" fn document_op_36(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_34(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -25182,7 +24300,7 @@ pub(crate) unsafe extern "C" fn document_op_36(_info: *const v8::FunctionCallbac
     }
 }
 
-pub(crate) unsafe extern "C" fn document_op_37(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_35(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -25242,6 +24360,118 @@ pub(crate) unsafe extern "C" fn document_op_37(_info: *const v8::FunctionCallbac
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     rv.set(v8::null(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn document_op_36(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn document_op_37(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn document_op_38(_info: *const v8::FunctionCallbackInfo) {
@@ -25353,122 +24583,10 @@ pub(crate) unsafe extern "C" fn document_op_39(_info: *const v8::FunctionCallbac
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
-}
-
-pub(crate) unsafe extern "C" fn document_op_40(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
-}
-
-pub(crate) unsafe extern "C" fn document_op_41(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     rv.set(v8::Boolean::new(scope, false).into());
 }
 
-pub(crate) unsafe extern "C" fn document_get_42(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_40(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -25534,7 +24652,7 @@ pub(crate) unsafe extern "C" fn document_get_42(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_set_42(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_set_40(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -25592,6 +24710,130 @@ pub(crate) unsafe extern "C" fn document_set_42(_info: *const v8::FunctionCallba
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
+}
+
+pub(crate) unsafe extern "C" fn document_op_41(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        if __args.length() < 1 {
+            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Boolean::new(scope, false).into());
+}
+
+pub(crate) unsafe extern "C" fn document_op_42(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        if __args.length() < 1 {
+            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::Boolean::new(scope, false).into());
 }
 
 pub(crate) unsafe extern "C" fn document_op_43(_info: *const v8::FunctionCallbackInfo) {
@@ -25839,134 +25081,10 @@ pub(crate) unsafe extern "C" fn document_op_46(_info: *const v8::FunctionCallbac
             return;
         }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Boolean::new(scope, false).into());
-}
-
-pub(crate) unsafe extern "C" fn document_op_47(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        if __args.length() < 1 {
-            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
-            let exc = v8::Exception::type_error(scope, msg);
-            scope.throw_exception(exc);
-            return;
-        }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::Boolean::new(scope, false).into());
-}
-
-pub(crate) unsafe extern "C" fn document_op_48(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        if __args.length() < 1 {
-            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
-            let exc = v8::Exception::type_error(scope, msg);
-            scope.throw_exception(exc);
-            return;
-        }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     rv.set(crate::type_conv::v8_str(scope, ""));
 }
 
-pub(crate) unsafe extern "C" fn document_get_49(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_47(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -26032,7 +25150,7 @@ pub(crate) unsafe extern "C" fn document_get_49(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_set_49(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_set_47(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -26087,6 +25205,258 @@ pub(crate) unsafe extern "C" fn document_set_49(_info: *const v8::FunctionCallba
         }
         let __this = __args.this();
         let __hidden_key = v8::String::new(scope, "__iv8Onreadystatechange").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
+    }));
+}
+
+pub(crate) unsafe extern "C" fn document_get_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onvisibilitychange").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn document_set_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onvisibilitychange").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
+    }));
+}
+
+pub(crate) unsafe extern "C" fn document_get_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FgColor").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+pub(crate) unsafe extern "C" fn document_set_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8FgColor").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -26147,14 +25517,14 @@ pub(crate) unsafe extern "C" fn document_get_50(_info: *const v8::FunctionCallba
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onvisibilitychange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8LinkColor").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
                 return;
             }
         }
-        rv.set(v8::null(scope).into());
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -26212,7 +25582,7 @@ pub(crate) unsafe extern "C" fn document_set_50(_info: *const v8::FunctionCallba
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onvisibilitychange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8LinkColor").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -26273,7 +25643,7 @@ pub(crate) unsafe extern "C" fn document_get_51(_info: *const v8::FunctionCallba
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8FgColor").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8VlinkColor").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -26338,7 +25708,7 @@ pub(crate) unsafe extern "C" fn document_set_51(_info: *const v8::FunctionCallba
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8FgColor").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8VlinkColor").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -26399,7 +25769,7 @@ pub(crate) unsafe extern "C" fn document_get_52(_info: *const v8::FunctionCallba
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8LinkColor").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8AlinkColor").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -26464,7 +25834,7 @@ pub(crate) unsafe extern "C" fn document_set_52(_info: *const v8::FunctionCallba
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8LinkColor").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8AlinkColor").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -26525,7 +25895,7 @@ pub(crate) unsafe extern "C" fn document_get_53(_info: *const v8::FunctionCallba
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8VlinkColor").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8BgColor").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -26590,265 +25960,13 @@ pub(crate) unsafe extern "C" fn document_set_53(_info: *const v8::FunctionCallba
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8VlinkColor").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8BgColor").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
 pub(crate) unsafe extern "C" fn document_get_54(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8AlinkColor").unwrap();
-        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
-            if !__hidden_val.is_undefined() {
-                rv.set(__hidden_val);
-                return;
-            }
-        }
-        rv.set(crate::type_conv::v8_str(scope, ""));
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_set_54(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8AlinkColor").unwrap();
-        let __val = __args.get(0);
-        __this.set(scope, __hidden_key.into(), __val);
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_get_55(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8BgColor").unwrap();
-        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
-            if !__hidden_val.is_undefined() {
-                rv.set(__hidden_val);
-                return;
-            }
-        }
-        rv.set(crate::type_conv::v8_str(scope, ""));
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_set_55(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8BgColor").unwrap();
-        let __val = __args.get(0);
-        __this.set(scope, __hidden_key.into(), __val);
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_get_56(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -26933,7 +26051,7 @@ pub(crate) unsafe extern "C" fn document_get_56(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_57(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_55(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -27018,6 +26136,118 @@ pub(crate) unsafe extern "C" fn document_get_57(_info: *const v8::FunctionCallba
     }));
 }
 
+pub(crate) unsafe extern "C" fn document_op_56(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn document_op_57(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
+}
+
 pub(crate) unsafe extern "C" fn document_op_58(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
@@ -27074,9 +26304,10 @@ pub(crate) unsafe extern "C" fn document_op_58(_info: *const v8::FunctionCallbac
     rv.set(v8::undefined(scope).into());
 }
 
-pub(crate) unsafe extern "C" fn document_op_59(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn document_get_59(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -27126,13 +26357,23 @@ pub(crate) unsafe extern "C" fn document_op_59(_info: *const v8::FunctionCallbac
             scope.throw_exception(__exc);
             return;
         }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onfreeze").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
+        rv.set(v8::null(scope).into());
+    }));
 }
 
-pub(crate) unsafe extern "C" fn document_op_60(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
+pub(crate) unsafe extern "C" fn document_set_59(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __ctx = scope.get_current_context();
@@ -27182,263 +26423,140 @@ pub(crate) unsafe extern "C" fn document_op_60(_info: *const v8::FunctionCallbac
             scope.throw_exception(__exc);
             return;
         }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onfreeze").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
+    }));
+}
+
+pub(crate) unsafe extern "C" fn document_get_60(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onresume").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn document_set_60(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onresume").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
+    }));
 }
 
 pub(crate) unsafe extern "C" fn document_get_61(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onfreeze").unwrap();
-        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
-            if !__hidden_val.is_undefined() {
-                rv.set(__hidden_val);
-                return;
-            }
-        }
-        rv.set(v8::null(scope).into());
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_set_61(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onfreeze").unwrap();
-        let __val = __args.get(0);
-        __this.set(scope, __hidden_key.into(), __val);
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_get_62(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onresume").unwrap();
-        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
-            if !__hidden_val.is_undefined() {
-                rv.set(__hidden_val);
-                return;
-            }
-        }
-        rv.set(v8::null(scope).into());
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_set_62(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onresume").unwrap();
-        let __val = __args.get(0);
-        __this.set(scope, __hidden_key.into(), __val);
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_get_63(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -27504,7 +26622,7 @@ pub(crate) unsafe extern "C" fn document_get_63(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_64(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_62(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -27589,7 +26707,7 @@ pub(crate) unsafe extern "C" fn document_get_64(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_op_65(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_63(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "Document") { return; }
@@ -27597,7 +26715,7 @@ pub(crate) unsafe extern "C" fn document_op_65(_info: *const v8::FunctionCallbac
     rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
-pub(crate) unsafe extern "C" fn document_get_66(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_64(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -27663,7 +26781,7 @@ pub(crate) unsafe extern "C" fn document_get_66(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_set_66(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_set_64(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -27723,7 +26841,7 @@ pub(crate) unsafe extern "C" fn document_set_66(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_67(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_65(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -27789,7 +26907,7 @@ pub(crate) unsafe extern "C" fn document_get_67(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_set_67(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_set_65(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -27849,7 +26967,7 @@ pub(crate) unsafe extern "C" fn document_set_67(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_op_68(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_66(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -27905,7 +27023,7 @@ pub(crate) unsafe extern "C" fn document_op_68(_info: *const v8::FunctionCallbac
     rv.set(v8::undefined(scope).into());
 }
 
-pub(crate) unsafe extern "C" fn document_get_69(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_67(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -27971,7 +27089,7 @@ pub(crate) unsafe extern "C" fn document_get_69(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_70(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_68(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -28037,7 +27155,7 @@ pub(crate) unsafe extern "C" fn document_get_70(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_set_70(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_set_68(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -28097,7 +27215,7 @@ pub(crate) unsafe extern "C" fn document_set_70(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_op_71(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_69(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "Document") { return; }
@@ -28105,7 +27223,7 @@ pub(crate) unsafe extern "C" fn document_op_71(_info: *const v8::FunctionCallbac
     rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
-pub(crate) unsafe extern "C" fn document_get_72(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_70(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -28190,7 +27308,7 @@ pub(crate) unsafe extern "C" fn document_get_72(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_op_73(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_71(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -28246,7 +27364,7 @@ pub(crate) unsafe extern "C" fn document_op_73(_info: *const v8::FunctionCallbac
     rv.set(v8::null(scope).into());
 }
 
-pub(crate) unsafe extern "C" fn document_op_74(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_72(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "Document") { return; }
@@ -28254,7 +27372,7 @@ pub(crate) unsafe extern "C" fn document_op_74(_info: *const v8::FunctionCallbac
     rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
-pub(crate) unsafe extern "C" fn document_op_75(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_73(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         if !crate::promise_check::check_receiver_promise(scope, _info, "Document") { return; }
@@ -28262,7 +27380,7 @@ pub(crate) unsafe extern "C" fn document_op_75(_info: *const v8::FunctionCallbac
     rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
 
-pub(crate) unsafe extern "C" fn document_get_76(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_74(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -28328,7 +27446,7 @@ pub(crate) unsafe extern "C" fn document_get_76(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_op_77(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_75(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -28343,7 +27461,7 @@ pub(crate) unsafe extern "C" fn document_op_77(_info: *const v8::FunctionCallbac
     rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
-pub(crate) unsafe extern "C" fn document_op_78(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_76(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -28358,7 +27476,7 @@ pub(crate) unsafe extern "C" fn document_op_78(_info: *const v8::FunctionCallbac
     rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::Boolean::new(scope, false).into()); __r.get_promise(scope).into() });
 }
 
-pub(crate) unsafe extern "C" fn document_get_79(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_77(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -28443,7 +27561,7 @@ pub(crate) unsafe extern "C" fn document_get_79(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_80(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_78(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -28528,7 +27646,7 @@ pub(crate) unsafe extern "C" fn document_get_80(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_81(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_79(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -28613,7 +27731,7 @@ pub(crate) unsafe extern "C" fn document_get_81(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_op_82(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_80(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -28669,169 +27787,169 @@ pub(crate) unsafe extern "C" fn document_op_82(_info: *const v8::FunctionCallbac
     rv.set(v8::Array::new(scope, 0).into());
 }
 
+pub(crate) unsafe extern "C" fn document_op_81(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        if __args.length() < 2 {
+            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    {
+        let __ctor_name = v8::String::new(scope, "DOMQuad").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        let _ = __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
+}
+
+pub(crate) unsafe extern "C" fn document_op_82(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        if __args.length() < 2 {
+            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    {
+        let __ctor_name = v8::String::new(scope, "DOMQuad").unwrap();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto.is_object() {
+                        let __obj = v8::Object::new(scope);
+                        let _ = __obj.set_prototype(scope, __proto);
+                        rv.set(__obj.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }
+}
+
 pub(crate) unsafe extern "C" fn document_op_83(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        if __args.length() < 2 {
-            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
-            let exc = v8::Exception::type_error(scope, msg);
-            scope.throw_exception(exc);
-            return;
-        }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    {
-        let __ctor_name = v8::String::new(scope, "DOMQuad").unwrap();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto.is_object() {
-                        let __obj = v8::Object::new(scope);
-                        let _ = __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-        }
-        rv.set(v8::undefined(scope).into());
-    }
-}
-
-pub(crate) unsafe extern "C" fn document_op_84(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        if __args.length() < 2 {
-            let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
-            let exc = v8::Exception::type_error(scope, msg);
-            scope.throw_exception(exc);
-            return;
-        }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    {
-        let __ctor_name = v8::String::new(scope, "DOMQuad").unwrap();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        if let Some(__ctor_val) = __global.get(scope, __ctor_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto.is_object() {
-                        let __obj = v8::Object::new(scope);
-                        let _ = __obj.set_prototype(scope, __proto);
-                        rv.set(__obj.into());
-                        return;
-                    }
-                }
-            }
-        }
-        rv.set(v8::undefined(scope).into());
-    }
-}
-
-pub(crate) unsafe extern "C" fn document_op_85(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -28912,7 +28030,7 @@ pub(crate) unsafe extern "C" fn document_op_85(_info: *const v8::FunctionCallbac
     }
 }
 
-pub(crate) unsafe extern "C" fn document_get_86(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_84(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -28978,7 +28096,7 @@ pub(crate) unsafe extern "C" fn document_get_86(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_87(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_85(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -29063,7 +28181,7 @@ pub(crate) unsafe extern "C" fn document_get_87(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_88(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_86(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -29129,7 +28247,7 @@ pub(crate) unsafe extern "C" fn document_get_88(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_89(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_87(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -29195,7 +28313,7 @@ pub(crate) unsafe extern "C" fn document_get_89(_info: *const v8::FunctionCallba
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_get_90(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_88(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -29259,6 +28377,118 @@ pub(crate) unsafe extern "C" fn document_get_90(_info: *const v8::FunctionCallba
         }
         rv.set(v8::Integer::new(scope, 0).into());
     }));
+}
+
+pub(crate) unsafe extern "C" fn document_op_89(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
+}
+
+pub(crate) unsafe extern "C" fn document_op_90(_info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*_info };
+    v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(v8::undefined(scope).into());
 }
 
 pub(crate) unsafe extern "C" fn document_op_91(_info: *const v8::FunctionCallbackInfo) {
@@ -29369,118 +28599,6 @@ pub(crate) unsafe extern "C" fn document_op_92(_info: *const v8::FunctionCallbac
             scope.throw_exception(__exc);
             return;
         }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
-}
-
-pub(crate) unsafe extern "C" fn document_op_93(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-    rv.set(v8::undefined(scope).into());
-}
-
-pub(crate) unsafe extern "C" fn document_op_94(_info: *const v8::FunctionCallbackInfo) {
-    let info_ref = unsafe { &*_info };
-    v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
         if __args.length() < 2 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 2, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -29491,7 +28609,7 @@ pub(crate) unsafe extern "C" fn document_op_94(_info: *const v8::FunctionCallbac
     rv.set(v8::undefined(scope).into());
 }
 
-pub(crate) unsafe extern "C" fn document_op_95(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_93(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -29572,7 +28690,7 @@ pub(crate) unsafe extern "C" fn document_op_95(_info: *const v8::FunctionCallbac
     }
 }
 
-pub(crate) unsafe extern "C" fn document_get_96(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_get_94(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -29628,6 +28746,258 @@ pub(crate) unsafe extern "C" fn document_get_96(_info: *const v8::FunctionCallba
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
         let __hidden_key = v8::String::new(scope, "__iv8Onabort").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn document_set_94(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onabort").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
+    }));
+}
+
+pub(crate) unsafe extern "C" fn document_get_95(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onauxclick").unwrap();
+        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
+            if !__hidden_val.is_undefined() {
+                rv.set(__hidden_val);
+                return;
+            }
+        }
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+pub(crate) unsafe extern "C" fn document_set_95(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onauxclick").unwrap();
+        let __val = __args.get(0);
+        __this.set(scope, __hidden_key.into(), __val);
+    }));
+}
+
+pub(crate) unsafe extern "C" fn document_get_96(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "Document").unwrap();
+        let __ctor_val = __global.get(scope, __iface_name.into());
+        let __ctor_val = match __ctor_val {
+            Some(v) if v.is_function() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+        let __proto_key = v8::String::new(scope, "prototype").unwrap();
+        let __proto_val = __ctor.get(scope, __proto_key.into());
+        let __proto_val = match __proto_val {
+            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+            _ => {
+                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                let __exc = v8::Exception::type_error(scope, __msg);
+                scope.throw_exception(__exc);
+                return;
+            }
+        };
+        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+        if __this.strict_equals(__proto.into()) {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut __current: v8::Local<v8::Value> = __this.into();
+        let mut __found = false;
+        for _ in 0..20usize {
+            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+            __current = __parent;
+        }
+        if !__found {
+            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+            let __exc = v8::Exception::type_error(scope, __msg);
+            scope.throw_exception(__exc);
+            return;
+        }
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __hidden_key = v8::String::new(scope, "__iv8Onbeforeinput").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -29692,7 +29062,7 @@ pub(crate) unsafe extern "C" fn document_set_96(_info: *const v8::FunctionCallba
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onabort").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onbeforeinput").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -29753,7 +29123,7 @@ pub(crate) unsafe extern "C" fn document_get_97(_info: *const v8::FunctionCallba
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onauxclick").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onbeforematch").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -29818,7 +29188,7 @@ pub(crate) unsafe extern "C" fn document_set_97(_info: *const v8::FunctionCallba
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onauxclick").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onbeforematch").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -29879,7 +29249,7 @@ pub(crate) unsafe extern "C" fn document_get_98(_info: *const v8::FunctionCallba
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onbeforeinput").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onbeforetoggle").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -29944,7 +29314,7 @@ pub(crate) unsafe extern "C" fn document_set_98(_info: *const v8::FunctionCallba
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onbeforeinput").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onbeforetoggle").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -30005,7 +29375,7 @@ pub(crate) unsafe extern "C" fn document_get_99(_info: *const v8::FunctionCallba
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onbeforematch").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onblur").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -30070,7 +29440,7 @@ pub(crate) unsafe extern "C" fn document_set_99(_info: *const v8::FunctionCallba
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onbeforematch").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onblur").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -30131,7 +29501,7 @@ pub(crate) unsafe extern "C" fn document_get_100(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onbeforetoggle").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncancel").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -30196,7 +29566,7 @@ pub(crate) unsafe extern "C" fn document_set_100(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onbeforetoggle").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncancel").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -30257,7 +29627,7 @@ pub(crate) unsafe extern "C" fn document_get_101(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onblur").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncanplay").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -30322,7 +29692,7 @@ pub(crate) unsafe extern "C" fn document_set_101(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onblur").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncanplay").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -30383,7 +29753,7 @@ pub(crate) unsafe extern "C" fn document_get_102(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncancel").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncanplaythrough").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -30448,7 +29818,7 @@ pub(crate) unsafe extern "C" fn document_set_102(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncancel").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncanplaythrough").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -30509,7 +29879,7 @@ pub(crate) unsafe extern "C" fn document_get_103(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncanplay").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onchange").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -30574,7 +29944,7 @@ pub(crate) unsafe extern "C" fn document_set_103(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncanplay").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onchange").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -30635,7 +30005,7 @@ pub(crate) unsafe extern "C" fn document_get_104(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncanplaythrough").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onclick").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -30700,7 +30070,7 @@ pub(crate) unsafe extern "C" fn document_set_104(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncanplaythrough").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onclick").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -30761,7 +30131,7 @@ pub(crate) unsafe extern "C" fn document_get_105(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onchange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onclose").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -30826,7 +30196,7 @@ pub(crate) unsafe extern "C" fn document_set_105(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onchange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onclose").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -30887,7 +30257,7 @@ pub(crate) unsafe extern "C" fn document_get_106(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onclick").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncommand").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -30952,7 +30322,7 @@ pub(crate) unsafe extern "C" fn document_set_106(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onclick").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncommand").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -31013,7 +30383,7 @@ pub(crate) unsafe extern "C" fn document_get_107(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onclose").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncontextlost").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -31078,7 +30448,7 @@ pub(crate) unsafe extern "C" fn document_set_107(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onclose").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncontextlost").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -31139,7 +30509,7 @@ pub(crate) unsafe extern "C" fn document_get_108(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncommand").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncontextmenu").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -31204,7 +30574,7 @@ pub(crate) unsafe extern "C" fn document_set_108(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncommand").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncontextmenu").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -31265,7 +30635,7 @@ pub(crate) unsafe extern "C" fn document_get_109(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncontextlost").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncontextrestored").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -31330,7 +30700,7 @@ pub(crate) unsafe extern "C" fn document_set_109(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncontextlost").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncontextrestored").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -31391,7 +30761,7 @@ pub(crate) unsafe extern "C" fn document_get_110(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncontextmenu").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncopy").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -31456,7 +30826,7 @@ pub(crate) unsafe extern "C" fn document_set_110(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncontextmenu").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncopy").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -31517,7 +30887,7 @@ pub(crate) unsafe extern "C" fn document_get_111(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncontextrestored").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncuechange").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -31582,7 +30952,7 @@ pub(crate) unsafe extern "C" fn document_set_111(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncontextrestored").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncuechange").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -31643,7 +31013,7 @@ pub(crate) unsafe extern "C" fn document_get_112(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncopy").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncut").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -31708,7 +31078,7 @@ pub(crate) unsafe extern "C" fn document_set_112(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncopy").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oncut").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -31769,7 +31139,7 @@ pub(crate) unsafe extern "C" fn document_get_113(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncuechange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondblclick").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -31834,7 +31204,7 @@ pub(crate) unsafe extern "C" fn document_set_113(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncuechange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondblclick").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -31895,7 +31265,7 @@ pub(crate) unsafe extern "C" fn document_get_114(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncut").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondrag").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -31960,7 +31330,7 @@ pub(crate) unsafe extern "C" fn document_set_114(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oncut").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondrag").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -32021,7 +31391,7 @@ pub(crate) unsafe extern "C" fn document_get_115(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondblclick").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondragend").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -32086,7 +31456,7 @@ pub(crate) unsafe extern "C" fn document_set_115(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondblclick").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondragend").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -32147,7 +31517,7 @@ pub(crate) unsafe extern "C" fn document_get_116(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondrag").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondragenter").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -32212,7 +31582,7 @@ pub(crate) unsafe extern "C" fn document_set_116(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondrag").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondragenter").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -32273,7 +31643,7 @@ pub(crate) unsafe extern "C" fn document_get_117(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondragend").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondragleave").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -32338,7 +31708,7 @@ pub(crate) unsafe extern "C" fn document_set_117(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondragend").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondragleave").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -32399,7 +31769,7 @@ pub(crate) unsafe extern "C" fn document_get_118(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondragenter").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondragover").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -32464,7 +31834,7 @@ pub(crate) unsafe extern "C" fn document_set_118(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondragenter").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondragover").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -32525,7 +31895,7 @@ pub(crate) unsafe extern "C" fn document_get_119(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondragleave").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondragstart").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -32590,7 +31960,7 @@ pub(crate) unsafe extern "C" fn document_set_119(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondragleave").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondragstart").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -32651,7 +32021,7 @@ pub(crate) unsafe extern "C" fn document_get_120(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondragover").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondrop").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -32716,7 +32086,7 @@ pub(crate) unsafe extern "C" fn document_set_120(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondragover").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondrop").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -32777,7 +32147,7 @@ pub(crate) unsafe extern "C" fn document_get_121(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondragstart").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondurationchange").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -32842,7 +32212,7 @@ pub(crate) unsafe extern "C" fn document_set_121(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondragstart").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ondurationchange").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -32903,7 +32273,7 @@ pub(crate) unsafe extern "C" fn document_get_122(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondrop").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onemptied").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -32968,7 +32338,7 @@ pub(crate) unsafe extern "C" fn document_set_122(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondrop").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onemptied").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -33029,7 +32399,7 @@ pub(crate) unsafe extern "C" fn document_get_123(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondurationchange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onended").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -33094,7 +32464,7 @@ pub(crate) unsafe extern "C" fn document_set_123(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ondurationchange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onended").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -33155,7 +32525,7 @@ pub(crate) unsafe extern "C" fn document_get_124(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onemptied").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onerror").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -33220,7 +32590,7 @@ pub(crate) unsafe extern "C" fn document_set_124(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onemptied").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onerror").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -33281,7 +32651,7 @@ pub(crate) unsafe extern "C" fn document_get_125(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onended").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onfocus").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -33346,7 +32716,7 @@ pub(crate) unsafe extern "C" fn document_set_125(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onended").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onfocus").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -33407,7 +32777,7 @@ pub(crate) unsafe extern "C" fn document_get_126(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onerror").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onformdata").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -33472,7 +32842,7 @@ pub(crate) unsafe extern "C" fn document_set_126(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onerror").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onformdata").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -33533,7 +32903,7 @@ pub(crate) unsafe extern "C" fn document_get_127(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onfocus").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oninput").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -33598,7 +32968,7 @@ pub(crate) unsafe extern "C" fn document_set_127(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onfocus").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oninput").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -33659,7 +33029,7 @@ pub(crate) unsafe extern "C" fn document_get_128(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onformdata").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oninvalid").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -33724,7 +33094,7 @@ pub(crate) unsafe extern "C" fn document_set_128(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onformdata").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Oninvalid").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -33785,7 +33155,7 @@ pub(crate) unsafe extern "C" fn document_get_129(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oninput").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onkeydown").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -33850,7 +33220,7 @@ pub(crate) unsafe extern "C" fn document_set_129(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oninput").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onkeydown").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -33911,7 +33281,7 @@ pub(crate) unsafe extern "C" fn document_get_130(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oninvalid").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onkeypress").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -33976,7 +33346,7 @@ pub(crate) unsafe extern "C" fn document_set_130(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Oninvalid").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onkeypress").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -34037,7 +33407,7 @@ pub(crate) unsafe extern "C" fn document_get_131(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onkeydown").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onkeyup").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -34102,7 +33472,7 @@ pub(crate) unsafe extern "C" fn document_set_131(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onkeydown").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onkeyup").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -34163,7 +33533,7 @@ pub(crate) unsafe extern "C" fn document_get_132(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onkeypress").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onload").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -34228,7 +33598,7 @@ pub(crate) unsafe extern "C" fn document_set_132(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onkeypress").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onload").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -34289,7 +33659,7 @@ pub(crate) unsafe extern "C" fn document_get_133(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onkeyup").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onloadeddata").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -34354,7 +33724,7 @@ pub(crate) unsafe extern "C" fn document_set_133(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onkeyup").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onloadeddata").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -34415,7 +33785,7 @@ pub(crate) unsafe extern "C" fn document_get_134(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onload").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onloadedmetadata").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -34480,7 +33850,7 @@ pub(crate) unsafe extern "C" fn document_set_134(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onload").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onloadedmetadata").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -34541,7 +33911,7 @@ pub(crate) unsafe extern "C" fn document_get_135(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onloadeddata").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onloadstart").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -34606,7 +33976,7 @@ pub(crate) unsafe extern "C" fn document_set_135(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onloadeddata").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onloadstart").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -34667,7 +34037,7 @@ pub(crate) unsafe extern "C" fn document_get_136(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onloadedmetadata").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmousedown").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -34732,7 +34102,7 @@ pub(crate) unsafe extern "C" fn document_set_136(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onloadedmetadata").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmousedown").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -34793,7 +34163,7 @@ pub(crate) unsafe extern "C" fn document_get_137(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onloadstart").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmouseenter").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -34858,7 +34228,7 @@ pub(crate) unsafe extern "C" fn document_set_137(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onloadstart").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmouseenter").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -34919,7 +34289,7 @@ pub(crate) unsafe extern "C" fn document_get_138(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmousedown").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmouseleave").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -34984,7 +34354,7 @@ pub(crate) unsafe extern "C" fn document_set_138(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmousedown").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmouseleave").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -35045,7 +34415,7 @@ pub(crate) unsafe extern "C" fn document_get_139(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmouseenter").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmousemove").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -35110,7 +34480,7 @@ pub(crate) unsafe extern "C" fn document_set_139(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmouseenter").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmousemove").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -35171,7 +34541,7 @@ pub(crate) unsafe extern "C" fn document_get_140(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmouseleave").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmouseout").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -35236,7 +34606,7 @@ pub(crate) unsafe extern "C" fn document_set_140(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmouseleave").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmouseout").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -35297,7 +34667,7 @@ pub(crate) unsafe extern "C" fn document_get_141(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmousemove").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmouseover").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -35362,7 +34732,7 @@ pub(crate) unsafe extern "C" fn document_set_141(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmousemove").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmouseover").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -35423,7 +34793,7 @@ pub(crate) unsafe extern "C" fn document_get_142(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmouseout").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmouseup").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -35488,7 +34858,7 @@ pub(crate) unsafe extern "C" fn document_set_142(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmouseout").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onmouseup").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -35549,7 +34919,7 @@ pub(crate) unsafe extern "C" fn document_get_143(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmouseover").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onpaste").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -35614,7 +34984,7 @@ pub(crate) unsafe extern "C" fn document_set_143(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmouseover").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onpaste").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -35675,7 +35045,7 @@ pub(crate) unsafe extern "C" fn document_get_144(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmouseup").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onpause").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -35740,7 +35110,7 @@ pub(crate) unsafe extern "C" fn document_set_144(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onmouseup").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onpause").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -35801,7 +35171,7 @@ pub(crate) unsafe extern "C" fn document_get_145(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onpaste").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onplay").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -35866,7 +35236,7 @@ pub(crate) unsafe extern "C" fn document_set_145(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onpaste").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onplay").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -35927,7 +35297,7 @@ pub(crate) unsafe extern "C" fn document_get_146(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onpause").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onplaying").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -35992,7 +35362,7 @@ pub(crate) unsafe extern "C" fn document_set_146(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onpause").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onplaying").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -36053,7 +35423,7 @@ pub(crate) unsafe extern "C" fn document_get_147(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onplay").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onprogress").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -36118,7 +35488,7 @@ pub(crate) unsafe extern "C" fn document_set_147(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onplay").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onprogress").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -36179,7 +35549,7 @@ pub(crate) unsafe extern "C" fn document_get_148(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onplaying").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onratechange").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -36244,7 +35614,7 @@ pub(crate) unsafe extern "C" fn document_set_148(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onplaying").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onratechange").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -36305,7 +35675,7 @@ pub(crate) unsafe extern "C" fn document_get_149(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onprogress").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onreset").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -36370,7 +35740,7 @@ pub(crate) unsafe extern "C" fn document_set_149(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onprogress").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onreset").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -36431,7 +35801,7 @@ pub(crate) unsafe extern "C" fn document_get_150(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onratechange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onresize").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -36496,7 +35866,7 @@ pub(crate) unsafe extern "C" fn document_set_150(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onratechange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onresize").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -36557,7 +35927,7 @@ pub(crate) unsafe extern "C" fn document_get_151(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onreset").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onscroll").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -36622,7 +35992,7 @@ pub(crate) unsafe extern "C" fn document_set_151(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onreset").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onscroll").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -36683,7 +36053,7 @@ pub(crate) unsafe extern "C" fn document_get_152(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onresize").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onscrollend").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -36748,7 +36118,7 @@ pub(crate) unsafe extern "C" fn document_set_152(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onresize").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onscrollend").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -36809,7 +36179,7 @@ pub(crate) unsafe extern "C" fn document_get_153(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onscroll").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onsecuritypolicyviolation").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -36874,7 +36244,7 @@ pub(crate) unsafe extern "C" fn document_set_153(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onscroll").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onsecuritypolicyviolation").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -36935,7 +36305,7 @@ pub(crate) unsafe extern "C" fn document_get_154(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onscrollend").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onseeked").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -37000,7 +36370,7 @@ pub(crate) unsafe extern "C" fn document_set_154(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onscrollend").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onseeked").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -37061,7 +36431,7 @@ pub(crate) unsafe extern "C" fn document_get_155(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onsecuritypolicyviolation").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onseeking").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -37126,7 +36496,7 @@ pub(crate) unsafe extern "C" fn document_set_155(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onsecuritypolicyviolation").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onseeking").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -37187,7 +36557,7 @@ pub(crate) unsafe extern "C" fn document_get_156(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onseeked").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onselect").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -37252,7 +36622,7 @@ pub(crate) unsafe extern "C" fn document_set_156(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onseeked").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onselect").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -37313,7 +36683,7 @@ pub(crate) unsafe extern "C" fn document_get_157(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onseeking").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onslotchange").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -37378,7 +36748,7 @@ pub(crate) unsafe extern "C" fn document_set_157(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onseeking").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onslotchange").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -37439,7 +36809,7 @@ pub(crate) unsafe extern "C" fn document_get_158(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onselect").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onstalled").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -37504,7 +36874,7 @@ pub(crate) unsafe extern "C" fn document_set_158(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onselect").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onstalled").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -37565,7 +36935,7 @@ pub(crate) unsafe extern "C" fn document_get_159(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onslotchange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onsubmit").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -37630,7 +37000,7 @@ pub(crate) unsafe extern "C" fn document_set_159(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onslotchange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onsubmit").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -37691,7 +37061,7 @@ pub(crate) unsafe extern "C" fn document_get_160(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onstalled").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onsuspend").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -37756,7 +37126,7 @@ pub(crate) unsafe extern "C" fn document_set_160(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onstalled").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onsuspend").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -37817,7 +37187,7 @@ pub(crate) unsafe extern "C" fn document_get_161(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onsubmit").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ontimeupdate").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -37882,7 +37252,7 @@ pub(crate) unsafe extern "C" fn document_set_161(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onsubmit").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ontimeupdate").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -37943,7 +37313,7 @@ pub(crate) unsafe extern "C" fn document_get_162(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onsuspend").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ontoggle").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -38008,7 +37378,7 @@ pub(crate) unsafe extern "C" fn document_set_162(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onsuspend").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Ontoggle").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -38069,7 +37439,7 @@ pub(crate) unsafe extern "C" fn document_get_163(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ontimeupdate").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onvolumechange").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -38134,7 +37504,7 @@ pub(crate) unsafe extern "C" fn document_set_163(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ontimeupdate").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onvolumechange").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -38195,7 +37565,7 @@ pub(crate) unsafe extern "C" fn document_get_164(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ontoggle").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onwaiting").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -38260,7 +37630,7 @@ pub(crate) unsafe extern "C" fn document_set_164(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Ontoggle").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onwaiting").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -38321,7 +37691,7 @@ pub(crate) unsafe extern "C" fn document_get_165(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onvolumechange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationend").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -38386,7 +37756,7 @@ pub(crate) unsafe extern "C" fn document_set_165(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onvolumechange").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationend").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -38447,7 +37817,7 @@ pub(crate) unsafe extern "C" fn document_get_166(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onwaiting").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationiteration").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -38512,7 +37882,7 @@ pub(crate) unsafe extern "C" fn document_set_166(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onwaiting").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationiteration").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -38573,7 +37943,7 @@ pub(crate) unsafe extern "C" fn document_get_167(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationend").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationstart").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -38638,7 +38008,7 @@ pub(crate) unsafe extern "C" fn document_set_167(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationend").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationstart").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -38699,7 +38069,7 @@ pub(crate) unsafe extern "C" fn document_get_168(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationiteration").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onwebkittransitionend").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -38764,7 +38134,7 @@ pub(crate) unsafe extern "C" fn document_set_168(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationiteration").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onwebkittransitionend").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
@@ -38825,7 +38195,7 @@ pub(crate) unsafe extern "C" fn document_get_169(_info: *const v8::FunctionCallb
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationstart").unwrap();
+        let __hidden_key = v8::String::new(scope, "__iv8Onwheel").unwrap();
         if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
             if !__hidden_val.is_undefined() {
                 rv.set(__hidden_val);
@@ -38890,265 +38260,13 @@ pub(crate) unsafe extern "C" fn document_set_169(_info: *const v8::FunctionCallb
             return;
         }
         let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onwebkitanimationstart").unwrap();
-        let __val = __args.get(0);
-        __this.set(scope, __hidden_key.into(), __val);
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_get_170(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onwebkittransitionend").unwrap();
-        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
-            if !__hidden_val.is_undefined() {
-                rv.set(__hidden_val);
-                return;
-            }
-        }
-        rv.set(v8::null(scope).into());
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_set_170(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onwebkittransitionend").unwrap();
-        let __val = __args.get(0);
-        __this.set(scope, __hidden_key.into(), __val);
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_get_171(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __hidden_key = v8::String::new(scope, "__iv8Onwheel").unwrap();
-        if let Some(__hidden_val) = __this.get(scope, __hidden_key.into()) {
-            if !__hidden_val.is_undefined() {
-                rv.set(__hidden_val);
-                return;
-            }
-        }
-        rv.set(v8::null(scope).into());
-    }));
-}
-
-pub(crate) unsafe extern "C" fn document_set_171(_info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*_info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "Document").unwrap();
-        let __ctor_val = __global.get(scope, __iface_name.into());
-        let __ctor_val = match __ctor_val {
-            Some(v) if v.is_function() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-        let __proto_key = v8::String::new(scope, "prototype").unwrap();
-        let __proto_val = __ctor.get(scope, __proto_key.into());
-        let __proto_val = match __proto_val {
-            Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
-            _ => {
-                let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                let __exc = v8::Exception::type_error(scope, __msg);
-                scope.throw_exception(__exc);
-                return;
-            }
-        };
-        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-        if __this.strict_equals(__proto.into()) {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let mut __current: v8::Local<v8::Value> = __this.into();
-        let mut __found = false;
-        for _ in 0..20usize {
-            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-            __current = __parent;
-        }
-        if !__found {
-            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-            let __exc = v8::Exception::type_error(scope, __msg);
-            scope.throw_exception(__exc);
-            return;
-        }
-        let __this = __args.this();
         let __hidden_key = v8::String::new(scope, "__iv8Onwheel").unwrap();
         let __val = __args.get(0);
         __this.set(scope, __hidden_key.into(), __val);
     }));
 }
 
-pub(crate) unsafe extern "C" fn document_op_172(_info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn document_op_170(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
@@ -39245,24 +38363,6 @@ pub fn create_document_template<'s>(
     install_document_members_15(scope, proto);
     install_document_members_16(scope, proto);
     install_document_members_17(scope, proto);
-    if let Some(ctor) = tmpl.get_function(scope) {
-    // static method: parseHTMLUnsafe()
-    {
-        let name = v8::String::new(scope, "parseHTMLUnsafe").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_25).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        let func_fn = func_tmpl.get_function(scope).unwrap();
-        ctor.set(scope, name.into(), func_fn.into());
-    }
-    // static method: parseHTML()
-    {
-        let name = v8::String::new(scope, "parseHTML").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_26).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        let func_fn = func_tmpl.get_function(scope).unwrap();
-        ctor.set(scope, name.into(), func_fn.into());
-    }
-    }
 
     tmpl
 }
@@ -39449,44 +38549,44 @@ fn install_document_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     // method: unknown()
     {
         let name = v8::String::new(scope, "unknown").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_27).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_25).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: dir
     {
         let name = v8::String::new(scope, "dir").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_28).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_26).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get dir").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_28).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_26).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set dir").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: images
     {
         let name = v8::String::new(scope, "images").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_29).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_27).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get images").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: embeds
     {
         let name = v8::String::new(scope, "embeds").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_30).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_28).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get embeds").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: plugins
     {
         let name = v8::String::new(scope, "plugins").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_31).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_29).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get plugins").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: links
     {
         let name = v8::String::new(scope, "links").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_32).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_30).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get links").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
@@ -39496,72 +38596,72 @@ fn install_document_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     // attribute: forms
     {
         let name = v8::String::new(scope, "forms").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_33).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_31).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get forms").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: scripts
     {
         let name = v8::String::new(scope, "scripts").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_34).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_32).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get scripts").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getElementsByName()
     {
         let name = v8::String::new(scope, "getElementsByName").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_35).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_33).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: open()
     {
         let name = v8::String::new(scope, "open").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_36).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_34).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: open()
     {
         let name = v8::String::new(scope, "open").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_37).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_35).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: close()
     {
         let name = v8::String::new(scope, "close").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_38).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_36).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: write()
     {
         let name = v8::String::new(scope, "write").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_39).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_37).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: writeln()
     {
         let name = v8::String::new(scope, "writeln").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_40).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_38).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: hasFocus()
     {
         let name = v8::String::new(scope, "hasFocus").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_41).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_39).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: designMode
     {
         let name = v8::String::new(scope, "designMode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_42).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_40).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get designMode").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_42).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_40).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set designMode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
@@ -39571,78 +38671,78 @@ fn install_document_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     // method: execCommand()
     {
         let name = v8::String::new(scope, "execCommand").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_43).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_41).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: queryCommandEnabled()
     {
         let name = v8::String::new(scope, "queryCommandEnabled").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_44).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_42).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: queryCommandIndeterm()
     {
         let name = v8::String::new(scope, "queryCommandIndeterm").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_45).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_43).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: queryCommandState()
     {
         let name = v8::String::new(scope, "queryCommandState").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_46).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_44).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: queryCommandSupported()
     {
         let name = v8::String::new(scope, "queryCommandSupported").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_47).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_45).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: queryCommandValue()
     {
         let name = v8::String::new(scope, "queryCommandValue").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_48).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_46).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: onreadystatechange
     {
         let name = v8::String::new(scope, "onreadystatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_49).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_47).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onreadystatechange").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_49).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_47).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onreadystatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onvisibilitychange
     {
         let name = v8::String::new(scope, "onvisibilitychange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_50).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_48).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onvisibilitychange").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_50).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_48).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onvisibilitychange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: fgColor
     {
         let name = v8::String::new(scope, "fgColor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_51).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_49).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get fgColor").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_51).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_49).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set fgColor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: linkColor
     {
         let name = v8::String::new(scope, "linkColor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_52).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_50).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get linkColor").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_52).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_50).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set linkColor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
@@ -39652,80 +38752,80 @@ fn install_document_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     // attribute: vlinkColor
     {
         let name = v8::String::new(scope, "vlinkColor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_53).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_51).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get vlinkColor").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_53).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_51).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set vlinkColor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: alinkColor
     {
         let name = v8::String::new(scope, "alinkColor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_54).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_52).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get alinkColor").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_54).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_52).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set alinkColor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: bgColor
     {
         let name = v8::String::new(scope, "bgColor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_55).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_53).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get bgColor").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_55).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_53).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set bgColor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: anchors
     {
         let name = v8::String::new(scope, "anchors").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_56).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_54).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get anchors").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: applets
     {
         let name = v8::String::new(scope, "applets").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_57).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_55).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get applets").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: clear()
     {
         let name = v8::String::new(scope, "clear").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_58).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_56).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: captureEvents()
     {
         let name = v8::String::new(scope, "captureEvents").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_59).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_57).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: releaseEvents()
     {
         let name = v8::String::new(scope, "releaseEvents").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_60).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_58).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: onfreeze
     {
         let name = v8::String::new(scope, "onfreeze").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_61).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_59).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onfreeze").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_61).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_59).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onfreeze").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onresume
     {
         let name = v8::String::new(scope, "onresume").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_62).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_60).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onresume").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_62).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_60).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onresume").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
@@ -39735,76 +38835,76 @@ fn install_document_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     // attribute: wasDiscarded
     {
         let name = v8::String::new(scope, "wasDiscarded").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_63).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_61).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get wasDiscarded").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: permissionsPolicy
     {
         let name = v8::String::new(scope, "permissionsPolicy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_64).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_62).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get permissionsPolicy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: exitPictureInPicture()
     {
         let name = v8::String::new(scope, "exitPictureInPicture").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_65).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_63).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: onpointerlockchange
     {
         let name = v8::String::new(scope, "onpointerlockchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_66).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_64).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onpointerlockchange").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_66).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_64).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onpointerlockchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpointerlockerror
     {
         let name = v8::String::new(scope, "onpointerlockerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_67).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_65).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onpointerlockerror").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_67).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_65).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onpointerlockerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: exitPointerLock()
     {
         let name = v8::String::new(scope, "exitPointerLock").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_68).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_66).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: prerendering
     {
         let name = v8::String::new(scope, "prerendering").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_69).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_67).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get prerendering").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onprerenderingchange
     {
         let name = v8::String::new(scope, "onprerenderingchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_70).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_68).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onprerenderingchange").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_70).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_68).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onprerenderingchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: hasUnpartitionedCookieAccess()
     {
         let name = v8::String::new(scope, "hasUnpartitionedCookieAccess").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_71).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_69).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: fragmentDirective
     {
         let name = v8::String::new(scope, "fragmentDirective").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_72).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_70).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get fragmentDirective").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
@@ -39814,70 +38914,70 @@ fn install_document_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     // method: getSelection()
     {
         let name = v8::String::new(scope, "getSelection").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_73).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_71).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: hasStorageAccess()
     {
         let name = v8::String::new(scope, "hasStorageAccess").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_74).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_72).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: requestStorageAccess()
     {
         let name = v8::String::new(scope, "requestStorageAccess").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_75).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_73).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: rootElement
     {
         let name = v8::String::new(scope, "rootElement").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_76).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_74).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get rootElement").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: hasPrivateToken()
     {
         let name = v8::String::new(scope, "hasPrivateToken").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_77).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_75).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: hasRedemptionRecord()
     {
         let name = v8::String::new(scope, "hasRedemptionRecord").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_78).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_76).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: timeline
     {
         let name = v8::String::new(scope, "timeline").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_79).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_77).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get timeline").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: modelContext
     {
         let name = v8::String::new(scope, "modelContext").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_80).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_78).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get modelContext").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: fonts
     {
         let name = v8::String::new(scope, "fonts").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_81).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_79).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get fonts").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getBoxQuads()
     {
         let name = v8::String::new(scope, "getBoxQuads").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_82).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_80).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -39887,70 +38987,70 @@ fn install_document_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     // method: convertQuadFromNode()
     {
         let name = v8::String::new(scope, "convertQuadFromNode").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_83).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_81).length(2).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: convertRectFromNode()
     {
         let name = v8::String::new(scope, "convertRectFromNode").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_84).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_82).length(2).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: convertPointFromNode()
     {
         let name = v8::String::new(scope, "convertPointFromNode").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_85).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_83).length(2).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: customElementRegistry
     {
         let name = v8::String::new(scope, "customElementRegistry").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_86).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_84).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get customElementRegistry").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: children
     {
         let name = v8::String::new(scope, "children").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_87).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_85).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get children").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: firstElementChild
     {
         let name = v8::String::new(scope, "firstElementChild").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_88).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_86).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get firstElementChild").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: lastElementChild
     {
         let name = v8::String::new(scope, "lastElementChild").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_89).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_87).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get lastElementChild").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: childElementCount
     {
         let name = v8::String::new(scope, "childElementCount").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_90).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_88).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get childElementCount").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: prepend()
     {
         let name = v8::String::new(scope, "prepend").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_91).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_89).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: append()
     {
         let name = v8::String::new(scope, "append").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_92).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_90).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -39960,84 +39060,84 @@ fn install_document_members_10<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // method: replaceChildren()
     {
         let name = v8::String::new(scope, "replaceChildren").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_93).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_91).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: moveBefore()
     {
         let name = v8::String::new(scope, "moveBefore").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_94).length(2).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_92).length(2).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // method: createNSResolver()
     {
         let name = v8::String::new(scope, "createNSResolver").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_95).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_93).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
     // attribute: onabort
     {
         let name = v8::String::new(scope, "onabort").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_96).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_94).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onabort").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_96).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_94).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onabort").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onauxclick
     {
         let name = v8::String::new(scope, "onauxclick").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_97).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_95).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onauxclick").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_97).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_95).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onauxclick").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforeinput
     {
         let name = v8::String::new(scope, "onbeforeinput").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_98).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_96).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onbeforeinput").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_98).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_96).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onbeforeinput").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforematch
     {
         let name = v8::String::new(scope, "onbeforematch").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_99).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_97).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onbeforematch").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_99).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_97).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onbeforematch").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforetoggle
     {
         let name = v8::String::new(scope, "onbeforetoggle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_100).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_98).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onbeforetoggle").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_100).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_98).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onbeforetoggle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onblur
     {
         let name = v8::String::new(scope, "onblur").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_101).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_99).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onblur").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_101).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_99).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onblur").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncancel
     {
         let name = v8::String::new(scope, "oncancel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_102).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_100).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oncancel").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_102).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_100).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncancel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
@@ -40047,90 +39147,90 @@ fn install_document_members_11<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: oncanplay
     {
         let name = v8::String::new(scope, "oncanplay").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_103).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_101).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oncanplay").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_103).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_101).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncanplay").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncanplaythrough
     {
         let name = v8::String::new(scope, "oncanplaythrough").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_104).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_102).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oncanplaythrough").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_104).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_102).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncanplaythrough").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onchange
     {
         let name = v8::String::new(scope, "onchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_105).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_103).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onchange").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_105).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_103).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onclick
     {
         let name = v8::String::new(scope, "onclick").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_106).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_104).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onclick").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_106).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_104).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onclick").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onclose
     {
         let name = v8::String::new(scope, "onclose").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_107).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_105).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onclose").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_107).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_105).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onclose").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncommand
     {
         let name = v8::String::new(scope, "oncommand").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_108).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_106).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oncommand").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_108).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_106).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncommand").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncontextlost
     {
         let name = v8::String::new(scope, "oncontextlost").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_109).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_107).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oncontextlost").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_109).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_107).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncontextlost").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncontextmenu
     {
         let name = v8::String::new(scope, "oncontextmenu").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_110).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_108).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oncontextmenu").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_110).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_108).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncontextmenu").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncontextrestored
     {
         let name = v8::String::new(scope, "oncontextrestored").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_111).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_109).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oncontextrestored").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_111).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_109).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncontextrestored").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncopy
     {
         let name = v8::String::new(scope, "oncopy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_112).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_110).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oncopy").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_112).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_110).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncopy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
@@ -40140,90 +39240,90 @@ fn install_document_members_12<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: oncuechange
     {
         let name = v8::String::new(scope, "oncuechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_113).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_111).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oncuechange").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_113).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_111).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncuechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncut
     {
         let name = v8::String::new(scope, "oncut").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_114).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_112).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oncut").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_114).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_112).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oncut").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondblclick
     {
         let name = v8::String::new(scope, "ondblclick").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_115).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_113).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get ondblclick").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_115).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_113).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ondblclick").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondrag
     {
         let name = v8::String::new(scope, "ondrag").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_116).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_114).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get ondrag").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_116).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_114).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ondrag").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragend
     {
         let name = v8::String::new(scope, "ondragend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_117).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_115).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get ondragend").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_117).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_115).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ondragend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragenter
     {
         let name = v8::String::new(scope, "ondragenter").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_118).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_116).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get ondragenter").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_118).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_116).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ondragenter").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragleave
     {
         let name = v8::String::new(scope, "ondragleave").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_119).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_117).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get ondragleave").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_119).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_117).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ondragleave").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragover
     {
         let name = v8::String::new(scope, "ondragover").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_120).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_118).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get ondragover").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_120).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_118).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ondragover").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragstart
     {
         let name = v8::String::new(scope, "ondragstart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_121).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_119).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get ondragstart").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_121).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_119).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ondragstart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondrop
     {
         let name = v8::String::new(scope, "ondrop").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_122).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_120).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get ondrop").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_122).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_120).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ondrop").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
@@ -40233,90 +39333,90 @@ fn install_document_members_13<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: ondurationchange
     {
         let name = v8::String::new(scope, "ondurationchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_123).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_121).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get ondurationchange").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_123).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_121).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ondurationchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onemptied
     {
         let name = v8::String::new(scope, "onemptied").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_124).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_122).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onemptied").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_124).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_122).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onemptied").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onended
     {
         let name = v8::String::new(scope, "onended").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_125).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_123).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onended").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_125).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_123).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onended").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_126).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_124).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_126).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_124).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onfocus
     {
         let name = v8::String::new(scope, "onfocus").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_127).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_125).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onfocus").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_127).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_125).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onfocus").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onformdata
     {
         let name = v8::String::new(scope, "onformdata").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_128).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_126).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onformdata").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_128).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_126).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onformdata").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oninput
     {
         let name = v8::String::new(scope, "oninput").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_129).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_127).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oninput").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_129).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_127).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oninput").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oninvalid
     {
         let name = v8::String::new(scope, "oninvalid").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_130).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_128).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get oninvalid").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_130).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_128).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set oninvalid").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onkeydown
     {
         let name = v8::String::new(scope, "onkeydown").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_131).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_129).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onkeydown").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_131).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_129).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onkeydown").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onkeypress
     {
         let name = v8::String::new(scope, "onkeypress").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_132).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_130).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onkeypress").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_132).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_130).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onkeypress").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
@@ -40326,90 +39426,90 @@ fn install_document_members_14<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: onkeyup
     {
         let name = v8::String::new(scope, "onkeyup").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_133).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_131).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onkeyup").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_133).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_131).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onkeyup").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onload
     {
         let name = v8::String::new(scope, "onload").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_134).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_132).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onload").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_134).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_132).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onload").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onloadeddata
     {
         let name = v8::String::new(scope, "onloadeddata").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_135).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_133).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onloadeddata").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_135).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_133).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onloadeddata").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onloadedmetadata
     {
         let name = v8::String::new(scope, "onloadedmetadata").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_136).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_134).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onloadedmetadata").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_136).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_134).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onloadedmetadata").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onloadstart
     {
         let name = v8::String::new(scope, "onloadstart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_137).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_135).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onloadstart").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_137).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_135).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onloadstart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmousedown
     {
         let name = v8::String::new(scope, "onmousedown").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_138).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_136).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onmousedown").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_138).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_136).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onmousedown").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseenter
     {
         let name = v8::String::new(scope, "onmouseenter").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_139).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_137).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onmouseenter").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_139).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_137).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onmouseenter").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseleave
     {
         let name = v8::String::new(scope, "onmouseleave").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_140).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_138).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onmouseleave").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_140).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_138).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onmouseleave").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmousemove
     {
         let name = v8::String::new(scope, "onmousemove").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_141).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_139).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onmousemove").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_141).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_139).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onmousemove").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseout
     {
         let name = v8::String::new(scope, "onmouseout").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_142).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_140).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onmouseout").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_142).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_140).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onmouseout").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
@@ -40419,90 +39519,90 @@ fn install_document_members_15<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: onmouseover
     {
         let name = v8::String::new(scope, "onmouseover").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_143).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_141).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onmouseover").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_143).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_141).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onmouseover").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseup
     {
         let name = v8::String::new(scope, "onmouseup").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_144).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_142).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onmouseup").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_144).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_142).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onmouseup").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpaste
     {
         let name = v8::String::new(scope, "onpaste").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_145).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_143).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onpaste").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_145).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_143).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onpaste").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpause
     {
         let name = v8::String::new(scope, "onpause").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_146).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_144).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onpause").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_146).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_144).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onpause").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onplay
     {
         let name = v8::String::new(scope, "onplay").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_147).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_145).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onplay").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_147).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_145).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onplay").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onplaying
     {
         let name = v8::String::new(scope, "onplaying").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_148).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_146).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onplaying").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_148).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_146).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onplaying").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onprogress
     {
         let name = v8::String::new(scope, "onprogress").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_149).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_147).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onprogress").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_149).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_147).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onprogress").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onratechange
     {
         let name = v8::String::new(scope, "onratechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_150).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_148).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onratechange").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_150).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_148).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onratechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onreset
     {
         let name = v8::String::new(scope, "onreset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_151).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_149).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onreset").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_151).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_149).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onreset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onresize
     {
         let name = v8::String::new(scope, "onresize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_152).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_150).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onresize").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_152).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_150).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onresize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
@@ -40512,90 +39612,90 @@ fn install_document_members_16<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: onscroll
     {
         let name = v8::String::new(scope, "onscroll").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_153).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_151).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onscroll").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_153).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_151).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onscroll").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onscrollend
     {
         let name = v8::String::new(scope, "onscrollend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_154).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_152).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onscrollend").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_154).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_152).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onscrollend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsecuritypolicyviolation
     {
         let name = v8::String::new(scope, "onsecuritypolicyviolation").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_155).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_153).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onsecuritypolicyviolation").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_155).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_153).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onsecuritypolicyviolation").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onseeked
     {
         let name = v8::String::new(scope, "onseeked").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_156).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_154).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onseeked").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_156).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_154).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onseeked").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onseeking
     {
         let name = v8::String::new(scope, "onseeking").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_157).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_155).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onseeking").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_157).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_155).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onseeking").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onselect
     {
         let name = v8::String::new(scope, "onselect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_158).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_156).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onselect").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_158).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_156).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onselect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onslotchange
     {
         let name = v8::String::new(scope, "onslotchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_159).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_157).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onslotchange").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_159).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_157).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onslotchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onstalled
     {
         let name = v8::String::new(scope, "onstalled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_160).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_158).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onstalled").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_160).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_158).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onstalled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsubmit
     {
         let name = v8::String::new(scope, "onsubmit").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_161).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_159).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onsubmit").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_161).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_159).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onsubmit").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsuspend
     {
         let name = v8::String::new(scope, "onsuspend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_162).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_160).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onsuspend").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_162).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_160).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onsuspend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
@@ -40605,88 +39705,88 @@ fn install_document_members_17<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: ontimeupdate
     {
         let name = v8::String::new(scope, "ontimeupdate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_163).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_161).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get ontimeupdate").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_163).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_161).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ontimeupdate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ontoggle
     {
         let name = v8::String::new(scope, "ontoggle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_164).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_162).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get ontoggle").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_164).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_162).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set ontoggle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onvolumechange
     {
         let name = v8::String::new(scope, "onvolumechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_165).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_163).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onvolumechange").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_165).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_163).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onvolumechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwaiting
     {
         let name = v8::String::new(scope, "onwaiting").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_166).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_164).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onwaiting").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_166).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_164).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onwaiting").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkitanimationend
     {
         let name = v8::String::new(scope, "onwebkitanimationend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_167).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_165).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onwebkitanimationend").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_167).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_165).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onwebkitanimationend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkitanimationiteration
     {
         let name = v8::String::new(scope, "onwebkitanimationiteration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_168).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_166).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onwebkitanimationiteration").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_168).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_166).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onwebkitanimationiteration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkitanimationstart
     {
         let name = v8::String::new(scope, "onwebkitanimationstart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_169).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_167).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onwebkitanimationstart").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_169).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_167).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onwebkitanimationstart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkittransitionend
     {
         let name = v8::String::new(scope, "onwebkittransitionend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_170).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_168).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onwebkittransitionend").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_170).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_168).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onwebkittransitionend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwheel
     {
         let name = v8::String::new(scope, "onwheel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(document_get_171).length(0).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(document_get_169).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get onwheel").unwrap());
-        let setter = v8::FunctionTemplate::builder_raw(document_set_171).length(1).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(document_set_169).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onwheel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: ariaNotify()
     {
         let name = v8::String::new(scope, "ariaNotify").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_172).length(1).build(scope);
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_170).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -56905,10 +56005,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "dir").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_28).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_26).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get dir").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_28).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_26).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set dir").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -56932,10 +56032,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "designMode").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_42).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_40).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get designMode").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_42).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_40).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set designMode").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -56959,10 +56059,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onreadystatechange").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_49).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_47).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onreadystatechange").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_49).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_47).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onreadystatechange").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -56986,10 +56086,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onvisibilitychange").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_50).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_48).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onvisibilitychange").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_50).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_48).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onvisibilitychange").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57013,10 +56113,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "fgColor").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_51).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_49).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get fgColor").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_51).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_49).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set fgColor").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57040,10 +56140,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "linkColor").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_52).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_50).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get linkColor").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_52).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_50).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set linkColor").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57067,10 +56167,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "vlinkColor").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_53).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_51).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get vlinkColor").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_53).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_51).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set vlinkColor").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57094,10 +56194,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "alinkColor").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_54).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_52).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get alinkColor").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_54).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_52).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set alinkColor").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57121,10 +56221,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "bgColor").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_55).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_53).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get bgColor").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_55).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_53).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set bgColor").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57148,10 +56248,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onfreeze").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_61).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_59).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onfreeze").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_61).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_59).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onfreeze").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57175,10 +56275,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onresume").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_62).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_60).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onresume").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_62).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_60).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onresume").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57202,10 +56302,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onpointerlockchange").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_66).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_64).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onpointerlockchange").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_66).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_64).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onpointerlockchange").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57229,10 +56329,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onpointerlockerror").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_67).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_65).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onpointerlockerror").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_67).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_65).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onpointerlockerror").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57256,10 +56356,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onprerenderingchange").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_70).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_68).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onprerenderingchange").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_70).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_68).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onprerenderingchange").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57283,10 +56383,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onabort").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_96).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_94).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onabort").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_96).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_94).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onabort").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57310,10 +56410,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onauxclick").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_97).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_95).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onauxclick").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_97).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_95).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onauxclick").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57337,10 +56437,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onbeforeinput").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_98).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_96).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onbeforeinput").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_98).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_96).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onbeforeinput").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57364,10 +56464,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onbeforematch").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_99).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_97).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onbeforematch").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_99).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_97).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onbeforematch").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57391,10 +56491,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onbeforetoggle").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_100).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_98).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onbeforetoggle").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_100).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_98).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onbeforetoggle").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57418,10 +56518,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onblur").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_101).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_99).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onblur").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_101).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_99).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onblur").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57445,10 +56545,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oncancel").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_102).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_100).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oncancel").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_102).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_100).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oncancel").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57472,10 +56572,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oncanplay").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_103).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_101).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oncanplay").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_103).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_101).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oncanplay").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57499,10 +56599,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oncanplaythrough").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_104).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_102).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oncanplaythrough").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_104).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_102).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oncanplaythrough").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57526,10 +56626,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onchange").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_105).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_103).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onchange").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_105).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_103).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onchange").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57553,10 +56653,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onclick").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_106).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_104).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onclick").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_106).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_104).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onclick").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57580,10 +56680,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onclose").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_107).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_105).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onclose").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_107).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_105).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onclose").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57607,10 +56707,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oncommand").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_108).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_106).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oncommand").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_108).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_106).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oncommand").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57634,10 +56734,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oncontextlost").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_109).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_107).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oncontextlost").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_109).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_107).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oncontextlost").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57661,10 +56761,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oncontextmenu").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_110).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_108).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oncontextmenu").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_110).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_108).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oncontextmenu").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57688,10 +56788,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oncontextrestored").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_111).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_109).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oncontextrestored").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_111).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_109).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oncontextrestored").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57715,10 +56815,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oncopy").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_112).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_110).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oncopy").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_112).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_110).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oncopy").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57742,10 +56842,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oncuechange").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_113).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_111).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oncuechange").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_113).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_111).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oncuechange").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57769,10 +56869,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oncut").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_114).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_112).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oncut").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_114).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_112).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oncut").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57796,10 +56896,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "ondblclick").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_115).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_113).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ondblclick").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_115).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_113).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ondblclick").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57823,10 +56923,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "ondrag").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_116).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_114).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ondrag").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_116).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_114).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ondrag").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57850,10 +56950,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "ondragend").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_117).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_115).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ondragend").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_117).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_115).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ondragend").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57877,10 +56977,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "ondragenter").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_118).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_116).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ondragenter").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_118).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_116).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ondragenter").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57904,10 +57004,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "ondragleave").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_119).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_117).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ondragleave").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_119).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_117).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ondragleave").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57931,10 +57031,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "ondragover").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_120).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_118).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ondragover").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_120).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_118).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ondragover").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57958,10 +57058,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "ondragstart").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_121).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_119).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ondragstart").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_121).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_119).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ondragstart").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -57985,10 +57085,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "ondrop").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_122).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_120).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ondrop").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_122).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_120).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ondrop").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58012,10 +57112,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "ondurationchange").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_123).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_121).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ondurationchange").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_123).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_121).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ondurationchange").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58039,10 +57139,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onemptied").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_124).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_122).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onemptied").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_124).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_122).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onemptied").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58066,10 +57166,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onended").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_125).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_123).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onended").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_125).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_123).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onended").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58093,10 +57193,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onerror").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_126).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_124).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onerror").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_126).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_124).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onerror").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58120,10 +57220,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onfocus").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_127).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_125).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onfocus").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_127).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_125).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onfocus").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58147,10 +57247,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onformdata").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_128).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_126).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onformdata").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_128).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_126).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onformdata").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58174,10 +57274,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oninput").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_129).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_127).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oninput").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_129).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_127).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oninput").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58201,10 +57301,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "oninvalid").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_130).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_128).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get oninvalid").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_130).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_128).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set oninvalid").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58228,10 +57328,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onkeydown").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_131).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_129).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onkeydown").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_131).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_129).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onkeydown").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58255,10 +57355,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onkeypress").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_132).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_130).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onkeypress").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_132).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_130).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onkeypress").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58282,10 +57382,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onkeyup").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_133).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_131).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onkeyup").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_133).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_131).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onkeyup").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58309,10 +57409,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onload").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_134).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_132).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onload").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_134).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_132).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onload").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58336,10 +57436,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onloadeddata").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_135).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_133).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onloadeddata").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_135).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_133).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onloadeddata").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58363,10 +57463,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onloadedmetadata").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_136).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_134).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onloadedmetadata").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_136).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_134).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onloadedmetadata").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58390,10 +57490,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onloadstart").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_137).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_135).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onloadstart").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_137).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_135).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onloadstart").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58417,10 +57517,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onmousedown").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_138).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_136).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onmousedown").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_138).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_136).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onmousedown").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58444,10 +57544,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onmouseenter").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_139).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_137).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onmouseenter").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_139).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_137).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onmouseenter").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58471,10 +57571,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onmouseleave").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_140).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_138).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onmouseleave").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_140).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_138).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onmouseleave").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58498,10 +57598,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onmousemove").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_141).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_139).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onmousemove").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_141).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_139).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onmousemove").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58525,10 +57625,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onmouseout").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_142).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_140).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onmouseout").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_142).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_140).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onmouseout").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58552,10 +57652,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onmouseover").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_143).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_141).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onmouseover").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_143).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_141).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onmouseover").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58579,10 +57679,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onmouseup").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_144).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_142).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onmouseup").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_144).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_142).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onmouseup").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58606,10 +57706,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onpaste").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_145).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_143).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onpaste").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_145).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_143).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onpaste").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58633,10 +57733,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onpause").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_146).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_144).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onpause").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_146).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_144).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onpause").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58660,10 +57760,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onplay").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_147).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_145).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onplay").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_147).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_145).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onplay").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58687,10 +57787,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onplaying").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_148).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_146).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onplaying").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_148).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_146).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onplaying").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58714,10 +57814,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onprogress").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_149).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_147).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onprogress").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_149).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_147).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onprogress").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58741,10 +57841,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onratechange").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_150).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_148).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onratechange").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_150).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_148).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onratechange").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58768,10 +57868,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onreset").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_151).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_149).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onreset").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_151).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_149).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onreset").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58795,10 +57895,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onresize").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_152).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_150).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onresize").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_152).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_150).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onresize").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58822,10 +57922,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onscroll").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_153).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_151).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onscroll").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_153).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_151).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onscroll").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58849,10 +57949,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onscrollend").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_154).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_152).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onscrollend").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_154).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_152).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onscrollend").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58876,10 +57976,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onsecuritypolicyviolation").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_155).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_153).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onsecuritypolicyviolation").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_155).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_153).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onsecuritypolicyviolation").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58903,10 +58003,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onseeked").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_156).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_154).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onseeked").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_156).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_154).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onseeked").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58930,10 +58030,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onseeking").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_157).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_155).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onseeking").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_157).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_155).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onseeking").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58957,10 +58057,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onselect").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_158).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_156).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onselect").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_158).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_156).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onselect").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -58984,10 +58084,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onslotchange").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_159).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_157).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onslotchange").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_159).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_157).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onslotchange").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59011,10 +58111,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onstalled").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_160).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_158).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onstalled").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_160).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_158).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onstalled").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59038,10 +58138,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onsubmit").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_161).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_159).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onsubmit").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_161).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_159).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onsubmit").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59065,10 +58165,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onsuspend").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_162).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_160).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onsuspend").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_162).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_160).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onsuspend").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59092,10 +58192,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "ontimeupdate").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_163).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_161).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ontimeupdate").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_163).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_161).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ontimeupdate").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59119,10 +58219,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "ontoggle").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_164).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_162).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get ontoggle").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_164).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_162).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set ontoggle").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59146,10 +58246,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onvolumechange").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_165).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_163).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onvolumechange").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_165).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_163).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onvolumechange").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59173,10 +58273,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onwaiting").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_166).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_164).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onwaiting").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_166).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_164).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onwaiting").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59200,10 +58300,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onwebkitanimationend").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_167).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_165).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onwebkitanimationend").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_167).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_165).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onwebkitanimationend").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59227,10 +58327,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onwebkitanimationiteration").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_168).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_166).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onwebkitanimationiteration").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_168).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_166).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onwebkitanimationiteration").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59254,10 +58354,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onwebkitanimationstart").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_169).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_167).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onwebkitanimationstart").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_169).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_167).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onwebkitanimationstart").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59281,10 +58381,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onwebkittransitionend").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_170).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_168).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onwebkittransitionend").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_170).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_168).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onwebkittransitionend").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());
@@ -59308,10 +58408,10 @@ pub fn fix_accessors_dom_core(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8
                 if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
                     if let Some(proto_obj) = proto_val.to_object(scope) {
                         let attr_key = v8::String::new(scope, "onwheel").unwrap();
-                        let g = v8::FunctionTemplate::builder_raw(document_get_171).length(0).build(scope);
+                        let g = v8::FunctionTemplate::builder_raw(document_get_169).length(0).build(scope);
                         g.set_class_name(v8::String::new(scope, "get onwheel").unwrap());
                         let gf = g.get_function(scope).unwrap();
-                        let s = v8::FunctionTemplate::builder_raw(document_set_171).length(1).build(scope);
+                        let s = v8::FunctionTemplate::builder_raw(document_set_169).length(1).build(scope);
                         s.set_class_name(v8::String::new(scope, "set onwheel").unwrap());
                         let sf = s.get_function(scope).unwrap();
                         let mut d = v8::PropertyDescriptor::new_from_get_set(gf.into(), sf.into());

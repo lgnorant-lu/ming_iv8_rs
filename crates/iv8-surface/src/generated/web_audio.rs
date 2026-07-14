@@ -5221,7 +5221,6 @@ pub(crate) unsafe extern "C" fn audio_decoder_op_9(_info: *const v8::FunctionCal
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "AudioDecoder") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);
@@ -5828,7 +5827,6 @@ pub(crate) unsafe extern "C" fn audio_encoder_op_9(_info: *const v8::FunctionCal
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
         let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "AudioEncoder") { return; }
         if __args.length() < 1 {
             let msg = v8::String::new(scope, &format!("{} argument(s) required, but only {} present", 1, __args.length())).unwrap();
             let exc = v8::Exception::type_error(scope, msg);

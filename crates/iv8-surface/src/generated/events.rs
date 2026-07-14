@@ -6205,7 +6205,6 @@ pub(crate) unsafe extern "C" fn device_motion_event_get_4(_info: *const v8::Func
 pub(crate) unsafe extern "C" fn device_motion_event_op_5(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "DeviceMotionEvent") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
@@ -6537,7 +6536,6 @@ pub(crate) unsafe extern "C" fn device_orientation_event_get_4(_info: *const v8:
 pub(crate) unsafe extern "C" fn device_orientation_event_op_5(_info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*_info };
     v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::promise_check::check_receiver_promise(scope, _info, "DeviceOrientationEvent") { return; }
     let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
     rv.set({ let __r = v8::PromiseResolver::new(scope).unwrap(); let _ = __r.resolve(scope, v8::undefined(scope).into()); __r.get_promise(scope).into() });
 }
