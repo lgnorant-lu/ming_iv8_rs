@@ -6,38 +6,53 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
-## [v0.8.92] - 2026-07-13
+## [v0.8.92] - 2026-07-14
 
-> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-090).
+> Mode: Lightweight Increment. Premature tag `045fdc1` superseded by this closeout.
 
-### Fixed (kernel)
-- document via DOM template instance — `instance_template.new_instance()` with internal field, eliminates nodeType/nodeName own-property workaround
-- fix_accessor_properties skip check — 199 `define_property` calls in dom_core.rs guarded with `get_own_property_descriptor` check, protects DOM template accessors
-- Element.id setter syncs DOM tree — `restore_dom_accessors` restores DOM template `id_setter` which updates `NodeData::Element.id` + `register_id`, `getElementById` via `id_index` directly
-- tag_to_interface_name — 40+ HTML element tag→interface mapping, `createElement("dl")` now has `HTMLDListElement.prototype` as `__proto__`
-- H05a-200 TYPE_FAIL: 5→0 (AnimationEvent/TransitionEvent/HTMLDListElement/BeforeUnloadEvent fixed)
+### Fixed (architecture / dual-path)
+- DOM template FunctionTemplate path for document/elements; `restore_dom_accessors` removed; `DOM_GETTER_FIX_JS` no longer dual-path
+- Codegen `EXCLUDED_OPERATIONS` / `EXCLUDED_ATTRIBUTES` / `EXCLUDED_GLOBAL_INTERFACES` (URL/URLSearchParams, Document/Element tree ops, Element.id, table/dialog attrs)
+- Element.id single path (DOM FT + id_index); no getElementById `__iv8Id` fallback
+- document instance duals stripped (importNode/adoptNode/execCommand* own wraps); createEvent/createRange on Document.prototype
+- HTMLElement.innerText on correct prototype; CSSOM-View geometry boxes on HTMLElement (not Element)
+- HTMLOptionsCollection real instance (not Array) + prototype length/selectedIndex/add/remove
+- HTMLAllCollection: MarkAsUndetectable, item/namedItem on prototype, length brand-check
+- Screen/BaseAudioContext → EventTarget; drop own EventTarget method copies
+- navigator.plugins/mimeTypes SameObject cache (PluginArray/MimeTypeArray); PLUGINS_FIX no longer eval'd
+- INIT-2: REQUEST_FIX / CHROME_FIX / PLUGINS_FIX no longer eval'd (fetch/chrome/plugins owned at source)
+- Event.type readonly at event_constructors; Document accessor getter names (`get body`, `get URL`)
+- idlharness runner: non-configurable location pre-shim (mutate search, do not redefine)
 
 ### Added
-- Response/Request constructors — parse options (status, statusText, method, mode, credentials, cache, redirect, referrer), set codegen hidden keys
-- TextEncoder/TextDecoder complete implementation — UTF-8 multibyte (1-4 byte), surrogate pairs, fatal/ignoreBOM/stream options, encoding property, CJK roundtrip
-- WPT fetch/api functional tests (27 tests, 26 PASS)
-- WPT encoding functional tests (18 tests, 18 PASS)
-- CDP diff infrastructure — Chrome retry (10x2s), golden data collection, descriptor_diff baseline
-- DOM_GETTER_FIX_JS extended — 5 new attrs (AnimationEvent.animationName/pseudoElement, TransitionEvent.propertyName/pseudoElement, HTMLDListElement.compact, BeforeUnloadEvent.returnValue)
+- H06b window vs worker navigator consistency harness (`evaluate_h06b_window_worker.py`, 5/5)
+- H05 builders expansion; H05d NON_CONSTRUCTABLE from IR; H05e NoThrow honesty
+- Track C before/after CDP metrics + EXTRA classification policy (MISSING→0)
+- codegen CLI `--check`/`--diff`; deterministic install_all emit
+- NAMING-DEBT: rename `test_acceptance_v06/v07*` → capability-based test file names
+- Inspector unit tests (channel/session/server/cdp_client); watch_apis_js coverage
+- Document.parseHTML / parseHTMLUnsafe static helpers (createHTMLDocument + innerHTML)
 
 ### Changed
-- Request/Response accessor mechanism unified — codegen accessor + codegen hidden key only, DOM template only installs methods + toStringTag, REQUEST_FIX_JS only retains fetch() polyfill
-- functional-status.json updated with fetch/encoding expected fails
+- Post-hoc surface reduced: dead no-ops deleted; NAME_LENGTH canPlayType/getContext re-wrap removed
+- CDP surface sampler stops at EventTarget (no false Screen EXTRA for inherited listeners)
+- Package metadata **unchanged** at 0.8.11
 
-### WPT Results
-- idlharness: ~9334/9640 (non-deterministic, range 9325-9346)
-- functional: 175/176 (99.43%, dom 49 + html/dom 40 + css 24 + crypto 18 + fetch 26 + encoding 18)
+### Quality Gates (closeout)
+- cargo test -p iv8-core --lib: **498 PASS**
+- WPT functional (6 suites): **176/176 (100%)**
+- H05a top200 iv8-only: **OVERALL PASS** (0 TYPE_FAIL / 0 THROW)
+- H05b/c/d/e/f + H06a/b: **OVERALL PASS**
+- Track C: before EXTRA/MISSING/DESCRIPTOR **317/14/30** → after **552/0/44** (MISSING=0; EXTRA classified, not EXTRA→0)
+- idlharness (dom+html multi-variant aggregate): **~23053/24531 (~93.97%)** — not comparable to historical ~9640 baseline
 
-### Known Limitations (Phase 4 targets)
-- restore_dom_accessors still needed for Element.id (needs chain_dom_prototypes rewrite)
-- DOM_GETTER_FIX_JS extended not removed (needs codegen generator fix)
-- AbortController abort not working (read_only_prototype blocks override)
-- CDP diff EXTRA/MISSING reduction not achieved (needs property-level comparison)
+### Known Limitations (non-blocking / Phase 4)
+- FIX_PROTO / FREEZE_* / FUNCTION_TO_STRING / DESCRIPTOR residual camouflage (INIT-2 partial)
+- CDP DESCRIPTOR_MISMATCH mass (~44) honest residual
+- K-009 global line coverage ~43% (block targets partial; 80% global not tag-required)
+- idlharness E-class fragment / full HTMLOptionsCollection exotic not pursued
+- Mega-file splits (template/embedded_v8/binding) deferred
 
 ## [v0.8.91] - 2026-07-13
 
