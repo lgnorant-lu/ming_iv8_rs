@@ -6,6 +6,29 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.97] - 2026-07-14
+
+> Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
+> Mode: Lightweight Increment. Series **S5** of post-0.92 module-bulk roadmap.
+
+### Fixed
+- localStorage/sessionStorage: Window codegen accessor shadow fixed via **singleton getters**; Storage methods installed as **own properties** (empty native `setItem` no longer wins)
+- Soft Storage quota (~5 MiB) raises `QuotaExceededError`
+- WebGL `UNMASKED_*` / VENDOR / RENDERER prefer `get_user_str` (D-111)
+- OfflineAudioContext `startRendering` fires `oncomplete` with `renderedBuffer`
+
+### Added
+- CanvasGradient / CanvasPattern instances link codegen prototypes when available
+- S5 audit residual note; TODO-native research ledger for GPU/DSP/deep fingerprint (v0.8.z, not Branch B)
+- Tests: gradient proto, WebGL vendor override, offline oncomplete, storage quota
+
+### Quality Gates
+- cargo test -p iv8-core --lib: **498 PASS**
+- test_surface_storage **12/12**; canvas2d / webgl / audio context suites PASS
+- WPT functional: **176/176**
+- H05a-f + H06a/b: **OVERALL PASS**
+- Package metadata: **0.8.11** unchanged
+
 ## [v0.8.96] - 2026-07-14
 
 > Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
