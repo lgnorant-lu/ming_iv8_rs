@@ -136,6 +136,11 @@ pub struct RuntimeState {
     pub node_media: RefCell<std::collections::HashMap<crate::dom::NodeId, MediaNodeState>>,
     /// Element.attachShadow mode per node ("open"/"closed"); absence ⇒ shadowRoot null.
     pub node_shadow: RefCell<std::collections::HashMap<crate::dom::NodeId, String>>,
+
+    /// Cached navigator.plugins / mimeTypes objects (SameObject).
+    /// Without this, each getter access rebuilds a bare Array and drops length.
+    pub plugins_array: RefCell<Option<v8::Global<v8::Object>>>,
+    pub mime_types_array: RefCell<Option<v8::Global<v8::Object>>>,
 }
 
 /// Mutable media element state for HTMLMediaElement-backed FTs.
@@ -256,6 +261,8 @@ impl RuntimeState {
             node_scroll: RefCell::new(std::collections::HashMap::new()),
             node_media: RefCell::new(std::collections::HashMap::new()),
             node_shadow: RefCell::new(std::collections::HashMap::new()),
+            plugins_array: RefCell::new(None),
+            mime_types_array: RefCell::new(None),
         }
     }
 

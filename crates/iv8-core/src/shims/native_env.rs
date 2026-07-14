@@ -1427,10 +1427,31 @@ unsafe extern "C" fn nav_mime_types(info: *const v8::FunctionCallbackInfo) {
             return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        let arr = v8::Array::new(scope, 2);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        if let Some(g) = state.mime_types_array.borrow().as_ref() {
+            rv.set(v8::Local::new(scope, g).into());
+            return;
+        }
+
+        let arr = v8::Object::new(scope);
+        if let Some(ctor_key) = v8::String::new(scope, "MimeTypeArray") {
+            let global = scope.get_current_context().global(scope);
+            if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+                if ctor_val.is_function() {
+                    let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+                    if let Some(pk) = v8::String::new(scope, "prototype") {
+                        if let Some(proto) = ctor.get(scope, pk.into()) {
+                            if proto.is_object() {
+                                let _ = arr.set_prototype(scope, proto);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         let ts = v8::Symbol::get_to_string_tag(scope);
         let st = |k: &str| crate::v8_utils::v8_string(scope, k);
-
         let make_mt = |typ: &str, suffixes: &str, desc: &str| {
             let obj = v8::Object::new(scope);
             obj.set(scope, st("type").into(), st(typ).into());
@@ -1440,12 +1461,19 @@ unsafe extern "C" fn nav_mime_types(info: *const v8::FunctionCallbackInfo) {
             obj.set(scope, ts.into(), st("MimeType").into());
             obj
         };
-
         let m1 = make_mt("application/pdf", "pdf", "Portable Document Format");
         let m2 = make_mt("text/pdf", "pdf", "Portable Document Format");
         arr.set_index(scope, 0, m1.into());
         arr.set_index(scope, 1, m2.into());
+        let len_key = st("length");
+        let _ = arr.define_own_property(
+            scope,
+            len_key.into(),
+            v8::Number::new(scope, 2.0).into(),
+            v8::PropertyAttribute::NONE,
+        );
         arr.set(scope, ts.into(), st("MimeTypeArray").into());
+        *state.mime_types_array.borrow_mut() = Some(v8::Global::new(scope, arr));
         rv.set(arr.into());
     }));
 }
@@ -1458,12 +1486,38 @@ unsafe extern "C" fn nav_plugins(info: *const v8::FunctionCallbackInfo) {
             return;
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        let arr = v8::Array::new(scope, 5);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+
+        // SameObject: return cached PluginArray if present.
+        if let Some(g) = state.plugins_array.borrow().as_ref() {
+            rv.set(v8::Local::new(scope, g).into());
+            return;
+        }
+
+        let arr = v8::Object::new(scope);
+        // Prototype: PluginArray if available
+        if let Some(ctor_key) = v8::String::new(scope, "PluginArray") {
+            let global = scope.get_current_context().global(scope);
+            if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+                if ctor_val.is_function() {
+                    let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+                    if let Some(pk) = v8::String::new(scope, "prototype") {
+                        if let Some(proto) = ctor.get(scope, pk.into()) {
+                            if proto.is_object() {
+                                let _ = arr.set_prototype(scope, proto);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         let ts = v8::Symbol::get_to_string_tag(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
 
         let make_mt = |typ: &str, suffixes: &str, desc: &str| {
             let obj = v8::Object::new(scope);
-            let s = |k: &str| crate::v8_utils::v8_string(scope, k);
             obj.set(scope, s("type").into(), s(typ).into());
             obj.set(scope, s("suffixes").into(), s(suffixes).into());
             obj.set(scope, s("description").into(), s(desc).into());
@@ -1471,9 +1525,6 @@ unsafe extern "C" fn nav_plugins(info: *const v8::FunctionCallbackInfo) {
             obj.set(scope, ts.into(), s("MimeType").into());
             obj
         };
-
-        let m1 = make_mt("application/pdf", "pdf", "Portable Document Format");
-        let m2 = make_mt("text/pdf", "pdf", "Portable Document Format");
 
         let plugin_names = [
             "PDF Viewer",
@@ -1483,8 +1534,9 @@ unsafe extern "C" fn nav_plugins(info: *const v8::FunctionCallbackInfo) {
             "WebKit built-in PDF",
         ];
 
-        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
         for (i, name) in plugin_names.iter().enumerate() {
+            let m1 = make_mt("application/pdf", "pdf", "Portable Document Format");
+            let m2 = make_mt("text/pdf", "pdf", "Portable Document Format");
             let p = v8::Object::new(scope);
             p.set(scope, s("name").into(), s(name).into());
             p.set(scope, s("filename").into(), s("internal-pdf-viewer").into());
@@ -1493,17 +1545,31 @@ unsafe extern "C" fn nav_plugins(info: *const v8::FunctionCallbackInfo) {
                 s("description").into(),
                 s("Portable Document Format").into(),
             );
-            p.set(
+            let len_key = s("length");
+            let _ = p.define_own_property(
                 scope,
-                s("length").into(),
+                len_key.into(),
                 v8::Number::new(scope, 2.0).into(),
+                v8::PropertyAttribute::NONE,
             );
-            p.set(scope, v8::Integer::new(scope, 0).into(), m1.into());
-            p.set(scope, v8::Integer::new(scope, 1).into(), m2.into());
+            p.set_index(scope, 0, m1.into());
+            p.set_index(scope, 1, m2.into());
+            // bidirectional enabledPlugin
+            m1.set(scope, s("enabledPlugin").into(), p.into());
+            m2.set(scope, s("enabledPlugin").into(), p.into());
             p.set(scope, ts.into(), s("Plugin").into());
             arr.set_index(scope, i as u32, p.into());
         }
+        let len_key = s("length");
+        let _ = arr.define_own_property(
+            scope,
+            len_key.into(),
+            v8::Number::new(scope, 5.0).into(),
+            v8::PropertyAttribute::NONE,
+        );
         arr.set(scope, ts.into(), s("PluginArray").into());
+
+        *state.plugins_array.borrow_mut() = Some(v8::Global::new(scope, arr));
         rv.set(arr.into());
     }));
 }
