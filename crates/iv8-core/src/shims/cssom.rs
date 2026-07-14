@@ -16,29 +16,50 @@ pub const CSSOM_PROTO_SETUP_JS: &str = r#"
     'use strict';
 
     // ---- helpers ----
+    function _recvOk(proto, self) {
+        return self != null && typeof self === 'object' &&
+            Object.prototype.isPrototypeOf.call(proto, self);
+    }
     function defMethod(proto, name, fn, len) {
+        var wrapped = function() {
+            if (!_recvOk(proto, this)) throw new TypeError('Illegal invocation');
+            return fn.apply(this, arguments);
+        };
+        try {
+            Object.defineProperty(wrapped, 'name', { value: fn.name || name, configurable: true });
+        } catch (e) {}
         Object.defineProperty(proto, name, {
-            value: fn, writable: true, configurable: true, enumerable: true
+            value: wrapped, writable: true, configurable: true, enumerable: true
         });
         if (len !== undefined) {
-            Object.defineProperty(fn, 'length', { value: len, writable: false, enumerable: false, configurable: true });
+            Object.defineProperty(wrapped, 'length', { value: len, writable: false, enumerable: false, configurable: true });
         }
     }
     function defGetter(proto, name, fn) {
+        var wrapped = function() {
+            if (!_recvOk(proto, this)) throw new TypeError('Illegal invocation');
+            return fn.call(this);
+        };
         Object.defineProperty(proto, name, {
-            get: fn, set: undefined, enumerable: true, configurable: true
+            get: wrapped, set: undefined, enumerable: true, configurable: true
         });
-        Object.defineProperty(fn, 'length', { value: 0, writable: false, enumerable: false, configurable: true });
+        Object.defineProperty(wrapped, 'length', { value: 0, writable: false, enumerable: false, configurable: true });
     }
     function defAccessor(proto, name, getter, setter) {
         var desc = { enumerable: true, configurable: true };
         if (getter) {
-            desc.get = getter;
-            Object.defineProperty(getter, 'length', { value: 0, writable: false, enumerable: false, configurable: true });
+            desc.get = function() {
+                if (!_recvOk(proto, this)) throw new TypeError('Illegal invocation');
+                return getter.call(this);
+            };
+            Object.defineProperty(desc.get, 'length', { value: 0, writable: false, enumerable: false, configurable: true });
         }
         if (setter) {
-            desc.set = setter;
-            Object.defineProperty(setter, 'length', { value: 1, writable: false, enumerable: false, configurable: true });
+            desc.set = function(v) {
+                if (!_recvOk(proto, this)) throw new TypeError('Illegal invocation');
+                return setter.call(this, v);
+            };
+            Object.defineProperty(desc.set, 'length', { value: 1, writable: false, enumerable: false, configurable: true });
         }
         Object.defineProperty(proto, name, desc);
     }
@@ -324,7 +345,10 @@ pub const CSSOM_PROTO_SETUP_JS: &str = r#"
             if (idx >= 0) { parts.splice(idx, 1); this.__iv8MediaText = parts.join(', '); }
         }, 1);
         // stringifier
-        MediaList.prototype.toString = function() { return this.__iv8MediaText || ''; };
+        MediaList.prototype.toString = function() {
+            if (!_recvOk(MediaList.prototype, this)) throw new TypeError('Illegal invocation');
+            return this.__iv8MediaText || '';
+        };
     }
 
     // NamedNodeMap is installed separately via NAMED_NODE_MAP_JS to avoid
