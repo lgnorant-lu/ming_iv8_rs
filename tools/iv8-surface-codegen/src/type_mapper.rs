@@ -22,10 +22,18 @@ pub fn map_idl_type(idl_type: &str) -> TypeMap {
             default_value: "v8::Boolean::new(scope, false).into()".into(),
             needs_scope: true,
         },
-        "byte" | "octet" | "short" | "unsigned short" | "long" | "unsigned long" | "long long"
-        | "unsigned long long" => TypeMap {
-            rust_type: "i64".into(),
-            default_value: "v8::Integer::new(scope, 0).into()".into(),
+        "byte" | "octet" | "short" | "unsigned short" | "long" | "unsigned long" | "long long" => {
+            TypeMap {
+                rust_type: "i64".into(),
+                default_value: "v8::Integer::new(scope, 0).into()".into(),
+                needs_scope: true,
+            }
+        }
+        // WebIDL range up to 2^64-1 — do not map to i64 (CG-13 overflow).
+        // Default 0 as BigInt (same path as IDL bigint); runtime values use u64.
+        "unsigned long long" => TypeMap {
+            rust_type: "u64".into(),
+            default_value: "v8::BigInt::new_from_i64(scope, 0).into()".into(),
             needs_scope: true,
         },
         "float" | "double" | "unrestricted float" | "unrestricted double" => TypeMap {
@@ -265,6 +273,16 @@ mod tests {
     fn test_long_mapping() {
         let m = map_idl_type("long");
         assert_eq!(m.default_value, "v8::Integer::new(scope, 0).into()");
+    }
+
+    #[test]
+    fn test_unsigned_long_long_maps_to_u64_bigint_default() {
+        let m = map_idl_type("unsigned long long");
+        assert_eq!(m.rust_type, "u64");
+        assert_eq!(
+            m.default_value,
+            "v8::BigInt::new_from_i64(scope, 0).into()"
+        );
     }
 
     #[test]

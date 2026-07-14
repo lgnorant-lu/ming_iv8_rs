@@ -2121,7 +2121,8 @@ mod tests {
                 special: None,
             }],
         };
-        let cb = generate_callbacks(&def, "bar");
+        let enums = std::collections::HashSet::new();
+        let cb = generate_callbacks(&def, "bar", &enums);
         assert!(cb.contains("bar_op_1"), "operation callback missing");
         assert!(
             cb.contains("doThing") == false,
@@ -2271,7 +2272,8 @@ mod tests {
             .iter()
             .map(|d| (d.name.clone().unwrap(), d))
             .collect();
-        let content = generate_domain_file("dom_core", &def_refs, &by_name);
+        let enums = std::collections::HashSet::new();
+        let content = generate_domain_file("dom_core", &def_refs, &by_name, &enums);
         assert!(
             content.contains("use super::{construct_only, illegal_constructor};"),
             "domain with non-constructable interface must import illegal_constructor"
@@ -2286,7 +2288,8 @@ mod tests {
             .iter()
             .map(|d| (d.name.clone().unwrap(), d))
             .collect();
-        let content = generate_domain_file("dom_core", &def_refs, &by_name);
+        let enums = std::collections::HashSet::new();
+        let content = generate_domain_file("dom_core", &def_refs, &by_name, &enums);
         assert!(
             content.contains("use super::construct_only;")
                 && !content.contains("illegal_constructor"),

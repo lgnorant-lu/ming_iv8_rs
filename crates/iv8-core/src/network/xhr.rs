@@ -83,53 +83,64 @@ pub const XHR_SHIM_JS: &str = r#"
     XMLHttpRequest.LOADING = 3;
     XMLHttpRequest.DONE = 4;
 
+    function _xhrThis(self) {
+        if (self == null || typeof self !== 'object' || !('_headers' in self)) {
+            throw new TypeError('Illegal invocation');
+        }
+        return self;
+    }
+
     XMLHttpRequest.prototype.open = function(method, url, async) {
-        this._method = method || 'GET';
-        this._url = url || '';
-        this._async = async !== false; // default true
-        this._aborted = false;
-        this._timedOut = false;
-        this._timeoutTimer = undefined;
-        this.status = 0;
-        this.statusText = '';
-        this.responseText = '';
-        this.response = '';
-        this.responseURL = '';
-        this._responseHeaders = null;
-        this.readyState = 1; // OPENED
-        if (this.onreadystatechange) this.onreadystatechange();
+        var self = _xhrThis(this);
+        self._method = method || 'GET';
+        self._url = url || '';
+        self._async = async !== false; // default true
+        self._aborted = false;
+        self._timedOut = false;
+        self._timeoutTimer = undefined;
+        self.status = 0;
+        self.statusText = '';
+        self.responseText = '';
+        self.response = '';
+        self.responseURL = '';
+        self._responseHeaders = null;
+        self.readyState = 1; // OPENED
+        if (self.onreadystatechange) self.onreadystatechange();
     };
 
     XMLHttpRequest.prototype.setRequestHeader = function(name, value) {
-        this._headers[name] = value;
+        var self = _xhrThis(this);
+        self._headers[name] = value;
     };
 
     XMLHttpRequest.prototype.getResponseHeader = function(name) {
-        return this._responseHeaders ? (this._responseHeaders[name.toLowerCase()] || null) : null;
+        var self = _xhrThis(this);
+        return self._responseHeaders ? (self._responseHeaders[name.toLowerCase()] || null) : null;
     };
 
     XMLHttpRequest.prototype.getAllResponseHeaders = function() {
-        if (!this._responseHeaders) return '';
+        var self = _xhrThis(this);
+        if (!self._responseHeaders) return '';
         var result = '';
-        for (var k in this._responseHeaders) {
-            result += k + ': ' + this._responseHeaders[k] + '\r\n';
+        for (var k in self._responseHeaders) {
+            result += k + ': ' + self._responseHeaders[k] + '\r\n';
         }
         return result;
     };
 
     XMLHttpRequest.prototype.send = function(body) {
-        var self = this;
+        var self = _xhrThis(this);
         self._body = body || '';
 
         // Record in netLog (use 'in' check — __iv8__ is undetectable/falsy)
         if ('__iv8__' in globalThis && globalThis.__iv8__.netLog) {
             var headerPairs = [];
-            for (var h in this._headers) {
-                headerPairs.push([h.toLowerCase(), this._headers[h]]);
+            for (var h in self._headers) {
+                headerPairs.push([h.toLowerCase(), self._headers[h]]);
             }
             globalThis.__iv8__.netLog.entries.push({
-                method: this._method,
-                url: this._url,
+                method: self._method,
+                url: self._url,
                 headers: headerPairs,
                 body: body || '',
             });
@@ -237,18 +248,20 @@ pub const XHR_SHIM_JS: &str = r#"
     };
 
     XMLHttpRequest.prototype.abort = function() {
-        this._aborted = true;
-        this.readyState = 0;
-        if (this._timeoutTimer !== undefined) {
-            clearTimeout(this._timeoutTimer);
-            this._timeoutTimer = undefined;
+        var self = _xhrThis(this);
+        self._aborted = true;
+        self.readyState = 0;
+        if (self._timeoutTimer !== undefined) {
+            clearTimeout(self._timeoutTimer);
+            self._timeoutTimer = undefined;
         }
-        if (this.onabort) this.onabort();
-        if (this.onloadend) this.onloadend();
+        if (self.onabort) self.onabort();
+        if (self.onloadend) self.onloadend();
     };
 
     XMLHttpRequest.prototype.overrideMimeType = function(mime) {
-        this._overrideMimeType = mime;
+        var self = _xhrThis(this);
+        self._overrideMimeType = mime;
     };
 
     // Link prototype chain to codegen XMLHttpRequestEventTarget.prototype
