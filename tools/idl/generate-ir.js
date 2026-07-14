@@ -67,6 +67,20 @@ function main() {
     }
     console.error(`  Found ${irFiles.length} chrome-manual IR files`);
   }
+  // Optional: merge pre-parsed Chromium IDL IR (TL-3).
+  // Produce with: node parse-chromium-idl.js --dir <blink> --recursive --ir --output tmp/chromium.ir.json
+  // Or pass --chromium-ir <path> to generate-ir.js.
+  const chromiumIrFlag = args.includes("--chromium-ir")
+    ? args[args.indexOf("--chromium-ir") + 1]
+    : null;
+  const chromiumIrDefault = path.join(__dirname, "tmp", "chromium.ir.json");
+  const chromiumIrPath = chromiumIrFlag || (
+    fs.existsSync(chromiumIrDefault) ? chromiumIrDefault : null
+  );
+  if (chromiumIrPath && fs.existsSync(chromiumIrPath)) {
+    mergeFiles.push(chromiumIrPath);
+    console.error(`  Including Chromium IR: ${chromiumIrPath}`);
+  }
   const mergeResult = run(
     `node merge-tool.js --input ${mergeFiles.map(f => `"${f}"`).join(" ")}`,
     "Step 3: Merge W3C + Chrome manual"
