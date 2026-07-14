@@ -123,11 +123,29 @@ COLLECTOR_JS = r"""
     }
 
     function getPropNames(obj) {
+        // Walk instance + interface prototype only. Stop before EventTarget /
+        // Object so inherited addEventListener is not attributed as Screen EXTRA
+        // (Chrome Screen extends EventTarget; methods live on EventTarget.prototype).
         var seen = {};
         var names = [];
         var cur = obj;
         var depth = 0;
-        while (cur !== null && cur !== undefined && depth < 3) {
+        var stopAt = [];
+        try {
+            if (typeof EventTarget !== 'undefined' && EventTarget.prototype) {
+                stopAt.push(EventTarget.prototype);
+            }
+            stopAt.push(Object.prototype);
+            if (typeof Function !== 'undefined' && Function.prototype) {
+                stopAt.push(Function.prototype);
+            }
+        } catch (eStop) {}
+        while (cur !== null && cur !== undefined && depth < 4) {
+            var hitStop = false;
+            for (var si = 0; si < stopAt.length; si++) {
+                if (cur === stopAt[si]) { hitStop = true; break; }
+            }
+            if (hitStop) break;
             try {
                 var own = Object.getOwnPropertyNames(cur);
                 for (var i = 0; i < own.length; i++) {

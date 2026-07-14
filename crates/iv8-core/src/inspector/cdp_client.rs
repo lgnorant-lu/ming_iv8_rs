@@ -303,4 +303,19 @@ mod tests {
         let id = client.next_id.fetch_add(1, Ordering::SeqCst);
         assert_eq!(id, 1000);
     }
+
+    #[test]
+    fn test_cdp_client_next_id_monotonic() {
+        let client = make_client();
+        let a = client.next_id.fetch_add(1, Ordering::SeqCst);
+        let b = client.next_id.fetch_add(1, Ordering::SeqCst);
+        assert_eq!(b, a + 1);
+    }
+
+    #[test]
+    fn test_cdp_client_debugger_flags_default_false() {
+        let client = make_client();
+        assert!(!client.debugger_enabled);
+        assert!(!client.is_paused);
+    }
 }

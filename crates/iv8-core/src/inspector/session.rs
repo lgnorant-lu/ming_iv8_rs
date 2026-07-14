@@ -276,4 +276,11 @@ mod tests {
         let channel = InspectorChannelImpl::new(state);
         let _ = &channel;
     }
+
+    #[test]
+    fn test_vdebugger_js_non_trivial_length() {
+        let js = InspectorSession::vdebugger_js();
+        assert!(js.len() > 50);
+        assert!(js.contains("vdebugger") || js.contains("debugger"));
+    }
 }
