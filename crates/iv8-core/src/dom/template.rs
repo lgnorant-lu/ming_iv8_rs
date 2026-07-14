@@ -674,16 +674,9 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method_sig_with_length(scope, element, proto, "getElementsByClassName", get_elements_by_class_name_cb, 1);
         install_proto_method_sig_with_length(scope, element, proto, "matches", matches_cb, 1);
         install_proto_method_sig_with_length(scope, element, proto, "closest", closest_cb, 1);
-        // Geometry
+        // Geometry methods on Element; CSSOM-view offset/client/scroll boxes are
+        // on HTMLElement (WebIDL) — installed there, not on Element.prototype.
         install_proto_method_sig_with_length(scope, element, proto, "getBoundingClientRect", get_bounding_client_rect_cb, 0);
-        install_proto_accessor(scope, proto, "offsetWidth", offset_width_getter, None);
-        install_proto_accessor(scope, proto, "offsetHeight", offset_height_getter, None);
-        install_proto_accessor(scope, proto, "offsetTop", offset_top_getter, None);
-        install_proto_accessor(scope, proto, "offsetLeft", offset_left_getter, None);
-        install_proto_accessor(scope, proto, "clientWidth", client_width_getter, None);
-        install_proto_accessor(scope, proto, "clientHeight", client_height_getter, None);
-        install_proto_accessor(scope, proto, "scrollWidth", scroll_width_getter, None);
-        install_proto_accessor(scope, proto, "scrollHeight", scroll_height_getter, None);
         // Shadow DOM L3: null until attachShadow; no nested shadow tree (COMP-4).
         install_proto_accessor(scope, proto, "shadowRoot", shadow_root_getter, None);
         install_proto_method_sig_with_length(scope, element, proto, "attachShadow", attach_shadow_cb, 1);
@@ -781,6 +774,15 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             None,
         );
         install_proto_accessor(scope, proto, "offsetParent", offset_parent_getter, None);
+        // CSSOM-View geometry boxes (HTMLElement, not Element)
+        install_proto_accessor(scope, proto, "offsetWidth", offset_width_getter, None);
+        install_proto_accessor(scope, proto, "offsetHeight", offset_height_getter, None);
+        install_proto_accessor(scope, proto, "offsetTop", offset_top_getter, None);
+        install_proto_accessor(scope, proto, "offsetLeft", offset_left_getter, None);
+        install_proto_accessor(scope, proto, "clientWidth", client_width_getter, None);
+        install_proto_accessor(scope, proto, "clientHeight", client_height_getter, None);
+        install_proto_accessor(scope, proto, "scrollWidth", scroll_width_getter, None);
+        install_proto_accessor(scope, proto, "scrollHeight", scroll_height_getter, None);
         install_proto_method_sig(scope, html_element, proto, "focus", focus_cb);
         install_proto_method_sig(scope, html_element, proto, "blur", blur_cb);
         install_proto_method_sig(scope, html_element, proto, "click", click_cb);

@@ -186,6 +186,10 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     // HTMLOptionsCollection.prototype accessors/methods before freeze (idlharness).
     crate::dom::template::install_html_options_collection_methods_public(scope, global);
 
+    // CSSOM-View boxes live on HTMLElement only — strip accidental Element.prototype
+    // copies (codegen/mixin residue) so idlharness primary interface is HTMLElement.
+    strip_element_geometry_owned_by_html_element(scope, global);
+
     // TreeWalker.prototype traversal (overrides codegen null stubs).
     install_tree_walker_prototype_ops(scope, global);
     // XPathExpression.evaluate + Document.evaluate (subset over real tree).
@@ -229,6 +233,28 @@ fn install_document_static_parse(scope: &v8::PinScope<'_, '_>, global: v8::Local
     })();"#;
     let code = crate::v8_utils::v8_string(scope, js);
     let _ = v8::Script::compile(scope, code, None).and_then(|s| s.run(scope));
+}
+
+fn strip_element_geometry_owned_by_html_element(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+) {
+    let Some(proto) = document_prototype_named(scope, global, "Element") else {
+        return;
+    };
+    for name in [
+        "offsetWidth",
+        "offsetHeight",
+        "offsetTop",
+        "offsetLeft",
+        "clientWidth",
+        "clientHeight",
+        "scrollWidth",
+        "scrollHeight",
+    ] {
+        let key = crate::v8_utils::v8_string(scope, name);
+        let _ = proto.delete(scope, key.into());
+    }
 }
 
 /// Call-as-function for document.all(id) → getElementById / named lookup.
@@ -721,6 +747,10 @@ fn install_doc_accessor_rw(
     setter: Option<unsafe extern "C" fn(*const v8::FunctionCallbackInfo)>,
 ) {
     let getter_tmpl = v8::FunctionTemplate::builder_raw(getter).build(scope);
+    getter_tmpl.set_class_name(crate::v8_utils::v8_string(
+        scope,
+        &format!("get {}", name),
+    ));
     let getter_fn = crate::v8_utils::v8_fn(scope, &getter_tmpl);
     let name_str = crate::v8_utils::v8_string(scope, name);
     let desc = v8::Object::new(scope);
@@ -730,6 +760,10 @@ fn install_doc_accessor_rw(
     desc.set(scope, get_key.into(), getter_fn.into());
     if let Some(s) = setter {
         let setter_tmpl = v8::FunctionTemplate::builder_raw(s).build(scope);
+        setter_tmpl.set_class_name(crate::v8_utils::v8_string(
+            scope,
+            &format!("set {}", name),
+        ));
         let setter_fn = crate::v8_utils::v8_fn(scope, &setter_tmpl);
         let set_key = crate::v8_utils::v8_string(scope, "set");
         desc.set(scope, set_key.into(), setter_fn.into());
