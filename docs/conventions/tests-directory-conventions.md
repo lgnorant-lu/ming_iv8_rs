@@ -75,9 +75,9 @@ tests/
   test_m5_examples.py
 
   # --- Version Acceptance Tests ---
-  test_acceptance_v06.py
-  test_acceptance_v07.py
-  test_acceptance_v07_real_samples.py
+  test_entry_plan_sample_kinds.py
+  test_corpus_manifest_fixture_gates.py
+  test_real_sample_corpus_integration.py
 
   # --- IDL Probe Tests ---
   test_idl_probe_compatibility.py
@@ -149,7 +149,7 @@ test_<capability>_runtime.py      ← Runtime skeleton/end-to-end report tests
 **Rules:**
 - Use **capability names**, not version labels (`test_deobf_reports_runtime.py`, not `test_v08_deobf.py`)
 - Use **capability names**, not milestone labels (`test_debugger.py`, not `test_m4_debugger.py`)
-- Use **capability names**, not acceptance-version labels (`test_acceptance_v07.py` → should be `test_compat_v07.py` or merged into behavioral tests)
+- Use **capability names**, not acceptance-version labels (`test_corpus_manifest_fixture_gates.py` → should be `test_compat_v07.py` or merged into behavioral tests)
 - Exception: `test_acceptance_v*` for historical cross-comparison with specific iv8 releases — these MUST be documented as frozen snapshots
 
 ### 2.2 Non-Test Scripts (`_*.py`)
@@ -450,3 +450,4 @@ fixtures/
 - [x] No active test file imports from `_archive/`
 - [ ] `test_m*` milestone files are documented with a plan to rename to capability names
 - [x] Data files (`probe_results.json`) have a documented purpose and owner
+

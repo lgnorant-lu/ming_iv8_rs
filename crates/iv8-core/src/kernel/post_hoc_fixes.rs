@@ -134,11 +134,7 @@ pub const REQUEST_FIX_JS: &str = r#"(function(){ /* no-op: fetch owned by instal
 pub const READONLY_FIX_JS: &str = r#"
     (function() {
         var readonlyAttrs = {
-            'Event': ['type','target','currentTarget','srcElement','eventPhase',
-                      'bubbles','cancelable','timeStamp','defaultPrevented','composed'],
-            'MouseEvent': ['screenX','screenY','clientX','clientY','ctrlKey','shiftKey',
-                           'altKey','metaKey','button','buttons','relatedTarget','region'],
-            'CustomEvent': ['detail'],
+            // Event/MouseEvent/CustomEvent readonly owned by event_constructors (INIT-2).
             'HTMLIFrameElement': ['sandbox','contentDocument','contentWindow','permissionsPolicy'],
             'Document': ['implementation','timeline','fonts','URL','documentURI','documentElement','head','characterSet','charset','compatMode','contentType','doctype','embeds','forms','images','links','scripts','styleSheets','currentScript','defaultView','scrollingElement','rootElement','xmlEncoding','xmlVersion','xmlStandalone','origin','fullscreenEnabled','pictureInPictureEnabled','hidden','visibilityState','wasDiscarded','prerendering','featurePolicy','children','firstElementChild','lastElementChild','childElementCount'],
             'HTMLElement': ['style','offsetWidth','offsetHeight','offsetTop','offsetLeft','offsetParent','clientWidth','clientHeight','clientTop','clientLeft','scrollWidth','scrollHeight'],
@@ -1237,3 +1233,4 @@ pub const FUNCTION_TO_STRING_FIX_JS: &str = r#"
         try { Function.prototype.toString.__iv8_native = true; } catch(e) {}
     })();
 "#;
+
