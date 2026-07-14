@@ -1062,6 +1062,13 @@ impl EmbeddedV8Kernel {
                 crate::kernel::post_hoc_fixes::FUNCTION_TO_STRING_FIX_JS);
             let ok = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope)).is_some();
             crate::telemetry::post_hoc_fix_complete("FUNCTION_TO_STRING_FIX_JS", ok);
+
+            // After all post-hoc installs: hide internal bridge keys from enumeration.
+            crate::telemetry::post_hoc_fix_start("HIDE_IV8_INTERNAL_ENUM_JS");
+            let js = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::HIDE_IV8_INTERNAL_ENUM_JS);
+            let ok = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("HIDE_IV8_INTERNAL_ENUM_JS", ok);
         });
     }
 

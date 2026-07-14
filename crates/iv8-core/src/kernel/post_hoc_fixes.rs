@@ -25,6 +25,7 @@
 //! - `FIX_PROTO_JS` — prototype chain / inheritance repair
 //! - `FREEZE_ALL_JS` / `FREEZE_SHIM_PROTOTYPES_JS` — freeze surface
 //! - `FUNCTION_TO_STRING_FIX_JS` — `[native code]` toString
+//! - `HIDE_IV8_INTERNAL_ENUM_JS` — hide `__iv8*` / bridge keys from Object.keys
 //! - `TO_STRING_TAG_FIX_JS` — Symbol.toStringTag residual
 //! - `NAME_LENGTH_FIX_JS` / `DESCRIPTOR_FIX_JS` / `GETTER_NAME_FIX_JS` — shape camouflage
 //! - `WORKER_ONLY_DELETE_JS` — worker global pruning
@@ -1196,6 +1197,47 @@ pub const FUNCTION_TO_STRING_FIX_JS: &str = r#"
         };
         try { Object.defineProperty(Function.prototype.toString, 'name', { value: 'toString' }); } catch(e) {}
         try { Function.prototype.toString.__iv8_native = true; } catch(e) {}
+    })();
+"#;
+
+/// Hide IV8-internal globals from `Object.keys` / for-in (Q036).
+///
+/// Prefs/bridge keys (`__iv8*`, some `__webgl*` / `__canvas*` / `__xhr*`) must
+/// remain readable by shims but must not appear as enumerable own properties on
+/// `window`/`globalThis` (Chrome does not expose them).
+///
+/// Runs after all shims and other post-hoc blobs so late installs are covered.
+pub const HIDE_IV8_INTERNAL_ENUM_JS: &str = r#"
+    (function() {
+        function hideInternalKeys(obj) {
+            if (!obj || (typeof obj !== 'object' && typeof obj !== 'function')) return;
+            var names;
+            try { names = Object.getOwnPropertyNames(obj); } catch(e) { return; }
+            for (var i = 0; i < names.length; i++) {
+                var k = names[i];
+                if (k.indexOf('__iv8') !== 0
+                    && k.indexOf('__webgl') !== 0
+                    && k.indexOf('__canvas') !== 0
+                    && k.indexOf('__xhr') !== 0) {
+                    continue;
+                }
+                try {
+                    var d = Object.getOwnPropertyDescriptor(obj, k);
+                    if (!d || d.enumerable === false) continue;
+                    var nd = { configurable: d.configurable !== false, enumerable: false };
+                    if (d.get || d.set) {
+                        if (d.get) nd.get = d.get;
+                        if (d.set) nd.set = d.set;
+                    } else {
+                        nd.value = d.value;
+                        nd.writable = d.writable !== false;
+                    }
+                    Object.defineProperty(obj, k, nd);
+                } catch(e) {}
+            }
+        }
+        try { hideInternalKeys(globalThis); } catch(e) {}
+        try { if (typeof window !== 'undefined') hideInternalKeys(window); } catch(e) {}
     })();
 "#;
 

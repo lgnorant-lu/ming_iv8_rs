@@ -471,7 +471,13 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
         // Store navigator instance on globalThis.__iv8NavInst__, then install
         // as accessor property so descriptor returns {get: function, set: undefined}
         let store_key = crate::v8_utils::v8_string(scope, "__iv8NavInst__");
-        let _ = global.set(scope, store_key.into(), nav_obj.into());
+        {
+            let mut store_desc =
+                v8::PropertyDescriptor::new_from_value_writable(nav_obj.into(), true);
+            store_desc.set_enumerable(false);
+            store_desc.set_configurable(true);
+            let _ = global.define_property(scope, store_key.into(), &store_desc);
+        }
         let getter_tmpl = v8::FunctionTemplate::builder_raw(navigator_global_getter).build(scope);
         getter_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "get navigator"));
         getter_tmpl.remove_prototype();
@@ -1666,7 +1672,13 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
         // Store screen instance on globalThis.__iv8ScreenInst__, then install
         // as accessor property
         let store_key = crate::v8_utils::v8_string(scope, "__iv8ScreenInst__");
-        let _ = global.set(scope, store_key.into(), screen_obj.into());
+        {
+            let mut store_desc =
+                v8::PropertyDescriptor::new_from_value_writable(screen_obj.into(), true);
+            store_desc.set_enumerable(false);
+            store_desc.set_configurable(true);
+            let _ = global.define_property(scope, store_key.into(), &store_desc);
+        }
         let getter_tmpl = v8::FunctionTemplate::builder_raw(screen_global_getter).build(scope);
         getter_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "get screen"));
         getter_tmpl.remove_prototype();
