@@ -951,7 +951,11 @@ pub const FIX_PROTO_JS: &str = r#"
                         ['Node','EventTarget'],
                         ['Element','Node'],
                         ['HTMLElement','Element'],
-                        ['Screen','Object'],
+                        // Chrome: Screen extends EventTarget (not bare Object).
+                        ['Screen','EventTarget'],
+                        ['BaseAudioContext','EventTarget'],
+                        ['AudioContext','BaseAudioContext'],
+                        ['OfflineAudioContext','BaseAudioContext'],
                         ['VisualViewport','EventTarget'],
                         ['Location','Object'],
                         ['IDBRequest','EventTarget'], ['IDBDatabase','EventTarget'],
@@ -985,6 +989,30 @@ pub const FIX_PROTO_JS: &str = r#"
                             }
                         } catch(e) {}
                     }
+                    // C1b: drop own EventTarget method copies once inheritance is correct
+                    // (surface sample EXTRA: Screen/BaseAudioContext own addEventListener…).
+                    (function() {
+                        var etMethods = ['addEventListener', 'removeEventListener', 'dispatchEvent'];
+                        var protos = [];
+                        if (typeof Screen !== 'undefined' && Screen.prototype) protos.push(Screen.prototype);
+                        if (typeof BaseAudioContext !== 'undefined' && BaseAudioContext.prototype) {
+                            protos.push(BaseAudioContext.prototype);
+                        }
+                        if (typeof AudioContext !== 'undefined' && AudioContext.prototype) {
+                            protos.push(AudioContext.prototype);
+                        }
+                        for (var pi = 0; pi < protos.length; pi++) {
+                            var p = protos[pi];
+                            for (var mi = 0; mi < etMethods.length; mi++) {
+                                var m = etMethods[mi];
+                                try {
+                                    if (Object.prototype.hasOwnProperty.call(p, m)) {
+                                        delete p[m];
+                                    }
+                                } catch (eDel) {}
+                            }
+                        }
+                    })();
                     var ctorFixes = [
                         'Location', 'Navigator', 'BroadcastChannel', 'MessagePort',
                         'Worker', 'SharedWorker', 'Storage', 'Screen',
