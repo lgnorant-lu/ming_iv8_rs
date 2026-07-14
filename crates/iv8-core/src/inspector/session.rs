@@ -283,4 +283,30 @@ mod tests {
         assert!(js.len() > 50);
         assert!(js.contains("vdebugger") || js.contains("debugger"));
     }
+
+    #[test]
+    fn test_watch_apis_js_none_when_empty() {
+        let session = InspectorSession::new(InspectorConfig {
+            port: 0,
+            watch_apis: Vec::new(),
+            enable_console: true,
+        })
+        .expect("inspector session");
+        assert!(session.watch_apis_js().is_none());
+    }
+
+    #[test]
+    fn test_watch_apis_js_emits_paths_and_vdebugger() {
+        let session = InspectorSession::new(InspectorConfig {
+            port: 0,
+            watch_apis: vec!["console.log".to_string(), "navigator.userAgent".to_string()],
+            enable_console: true,
+        })
+        .expect("inspector session");
+        let js = session.watch_apis_js().expect("watch_apis js");
+        assert!(js.contains("console.log") || js.contains("console"));
+        assert!(js.contains("userAgent") || js.contains("navigator"));
+        assert!(js.contains("vdebugger") || js.contains("defineProperty"));
+        assert!(js.contains("watchApis") || js.contains("forEach"));
+    }
 }
