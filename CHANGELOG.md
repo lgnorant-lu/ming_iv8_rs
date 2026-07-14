@@ -6,6 +6,35 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.93] - 2026-07-14
+
+> Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track; supersedes D-090 freeze wording).
+> Mode: Lightweight Increment. Series **S1** of post-0.92 module-bulk roadmap.
+
+### Added
+- Dual-track package metadata policy **D-151** (tag track vs package track)
+- Environment Runtime Debt Matrix + post-v0.8.92 module capability map (RM/EP/BD/TQ/B/G)
+- Multi-version roadmap `v0.8.93-plus-module-execution-roadmap.md` (S1–S8)
+- `test_profile_override_order` (6 cases: env override > BrowserProfile > DEFAULT)
+- S1 audit residual note; GUIDE Kaspersky / cargo build-script exclusion + pyd bypass
+
+### Fixed
+- D-111 coherence: `window_f64_getter` uses `get_user_f64` → profile → DEFAULT
+- `navigator.languages` user override path (no baseline-first)
+- `userAgentData.getHighEntropyValues().platform` profile-first (align low-entropy getter)
+- `env_inject` NATIVE_NAVIGATOR/SCREEN/WINDOW skip lists expanded to native inventory
+- Removed `navigator.storageBuckets` dual own-data install from WINDOW_EXTRAS
+
+### Changed
+- Deleted dead empty post-hoc markers `PLUGINS_FIX_JS` / `REQUEST_FIX_JS` / `CHROME_FIX_JS`
+- Patch-policy levels mapped to live owners (EP-2 / ERD-14)
+
+### Quality Gates
+- `cargo test -p iv8-core --lib`: **498 PASS**
+- WPT functional (6 suites): **176/176**
+- H05a (`--top 50 --iv8-only`), H05b–f, H06a 43/43, H06b 5/5: **OVERALL PASS**
+- Package metadata: **0.8.11** unchanged
+
 ## [v0.8.92] - 2026-07-14
 
 > Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-090).
