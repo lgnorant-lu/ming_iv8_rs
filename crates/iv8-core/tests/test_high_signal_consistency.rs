@@ -137,6 +137,23 @@ fn high_signal_value_consistency_nav_screen_plugins() {
 }
 
 #[test]
+fn html_all_collection_named_item_name_and_receiver() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(
+        &mut k,
+        r#"(function(){
+            var p = HTMLAllCollection && HTMLAllCollection.prototype;
+            if (!p || typeof p.namedItem !== 'function') return 'no-fn';
+            if (p.namedItem.name !== 'namedItem') return 'name:' + p.namedItem.name;
+            try { p.namedItem.call(p, 'x'); return 'no-throw-proto'; } catch (e) {
+                return (e && e.name === 'TypeError') ? 'ok' : ('throw:' + (e && e.name));
+            }
+        })()"#,
+        "ok",
+    );
+}
+
+#[test]
 fn permissions_query_returns_promise_like() {
     let mut k = common::make_kernel();
     k.eval_to_rust_value(

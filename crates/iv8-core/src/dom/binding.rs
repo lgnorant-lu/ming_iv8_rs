@@ -347,6 +347,7 @@ fn install_document_all(
                                 let ft = v8::FunctionTemplate::builder_raw(document_all_item_cb)
                                     .length(1)
                                     .build(scope);
+                                ft.set_class_name(crate::v8_utils::v8_string(scope, "item"));
                                 crate::v8_utils::v8_fn(scope, &ft)
                             };
                             let named_fn = {
@@ -354,6 +355,8 @@ fn install_document_all(
                                     v8::FunctionTemplate::builder_raw(document_all_named_item_cb)
                                         .length(1)
                                         .build(scope);
+                                // idlharness: operation .name must be "namedItem"
+                                ft.set_class_name(crate::v8_utils::v8_string(scope, "namedItem"));
                                 crate::v8_utils::v8_fn(scope, &ft)
                             };
                             let item_key = crate::v8_utils::v8_string(scope, "item");
@@ -375,6 +378,10 @@ fn install_document_all(
                             let len_get = {
                                 let ft = v8::FunctionTemplate::builder_raw(document_all_length_get_cb)
                                     .build(scope);
+                                ft.set_class_name(crate::v8_utils::v8_string(
+                                    scope,
+                                    "get length",
+                                ));
                                 crate::v8_utils::v8_fn(scope, &ft)
                             };
                             let getter_key = crate::v8_utils::v8_string(scope, "get");
@@ -543,6 +550,24 @@ unsafe extern "C" fn document_all_item_cb(info: *const v8::FunctionCallbackInfo)
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
+        if this.is_null_or_undefined() {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let Some(this_obj) = this.to_object(scope) else {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        };
+        if !html_all_brand_check(scope, this_obj) {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
         if args.length() < 1 {
             rv.set(v8::null(scope).into());
             return;
@@ -562,12 +587,64 @@ unsafe extern "C" fn document_all_item_cb(info: *const v8::FunctionCallbackInfo)
     }));
 }
 
+fn html_all_brand_check<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    this: v8::Local<'s, v8::Object>,
+) -> bool {
+    let global = scope.get_current_context().global(scope);
+    let Some(ctor_key) = v8::String::new(scope, "HTMLAllCollection") else {
+        return true;
+    };
+    let Some(ctor_val) = global.get(scope, ctor_key.into()) else {
+        return true;
+    };
+    if !ctor_val.is_function() {
+        return true;
+    }
+    let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+    let Some(pk) = v8::String::new(scope, "prototype") else {
+        return true;
+    };
+    let Some(proto_val) = ctor.get(scope, pk.into()) else {
+        return true;
+    };
+    // Prototype object itself is wrong-this
+    if this.strict_equals(proto_val) {
+        return false;
+    }
+    // Must be instance of HTMLAllCollection when instanceof works
+    let ctor_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(ctor) };
+    if let Some(ok) = this.instance_of(scope, ctor_obj) {
+        return ok;
+    }
+    true
+}
+
 unsafe extern "C" fn document_all_named_item_cb(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        if this.is_null_or_undefined() {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let Some(this_obj) = this.to_object(scope) else {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        };
+        if !html_all_brand_check(scope, this_obj) {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
         if args.length() < 1 {
             let msg = crate::v8_utils::v8_string(
                 scope,
