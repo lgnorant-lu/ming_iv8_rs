@@ -108,6 +108,22 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
             whiteSpace: 'normal',
             float: 'none',
             clear: 'none',
+            // CSS Color Module system colors (Chromium light-scheme-ish defaults).
+            // Required for P2-BT-EXT getComputedStyle ActiveText probes.
+            ActiveText: 'rgb(255, 0, 0)',
+            ButtonFace: 'rgb(240, 240, 240)',
+            ButtonText: 'rgb(0, 0, 0)',
+            Canvas: 'rgb(255, 255, 255)',
+            CanvasText: 'rgb(0, 0, 0)',
+            Field: 'rgb(255, 255, 255)',
+            FieldText: 'rgb(0, 0, 0)',
+            GrayText: 'rgb(109, 109, 109)',
+            Highlight: 'rgb(0, 120, 215)',
+            HighlightText: 'rgb(255, 255, 255)',
+            LinkText: 'rgb(0, 0, 238)',
+            Mark: 'rgb(255, 255, 0)',
+            MarkText: 'rgb(0, 0, 0)',
+            VisitedText: 'rgb(85, 26, 139)',
         };
         // Merge element.style overrides if available
         var styles = {};

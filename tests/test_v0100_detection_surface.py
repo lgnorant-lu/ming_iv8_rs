@@ -23,6 +23,32 @@ def _run(fn):
     return box["out"]
 
 
+def test_get_computed_style_active_text_system_color():
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var el = document.createElement('div');
+                  document.body.appendChild(el);
+                  var cs = getComputedStyle(el);
+                  var v = cs.getPropertyValue('ActiveText') || cs.ActiveText || '';
+                  return JSON.stringify({
+                    activeText: v,
+                    nonEmpty: String(v).length > 0,
+                    linkText: cs.getPropertyValue('LinkText') || cs.LinkText || ''
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["nonEmpty"] is True, rep
+    assert "rgb" in rep["activeText"].lower() or rep["activeText"].startswith("#"), rep
+
+
 def test_document_create_element_tostring_is_native_code():
     def body():
         ctx = iv8_rs.JSContext()
