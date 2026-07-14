@@ -167,3 +167,24 @@ fn test_local_storage_persists_on_drop() {
         k2.dispose();
     }
 }
+
+// v0.8.97 S5: soft quota
+#[test]
+fn test_local_storage_quota_exceeded() {
+    let mut k = common::make_kernel();
+    let name = common::to_str(&k.eval_to_rust_value(
+        r#"(function(){
+            try {
+                var chunk = '';
+                for (var i = 0; i < 1024; i++) chunk += 'xxxxxxxxxx';
+                for (var j = 0; j < 800; j++) {
+                    localStorage.setItem('k' + j, chunk);
+                }
+                return 'ok';
+            } catch (e) {
+                return (e && e.name) ? e.name : String(e);
+            }
+        })()"#,
+    ));
+    assert_eq!(name, "QuotaExceededError", "got: {}", name);
+}
