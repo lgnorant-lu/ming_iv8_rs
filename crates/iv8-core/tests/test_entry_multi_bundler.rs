@@ -189,6 +189,32 @@ fn test_webpack_still_detected_after_multi_bundler_regression() {
     assert_eq!(kind, SampleKind::WebpackRuntime);
 }
 
+// v0.8.99 S7 BD-1: minified webpack-like (numeric module table + factory shape)
+#[test]
+fn test_webpack_minified_bdms_detection() {
+    let src = r#"
+!function(e){var t={};function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=e,n.c=t,n(n.s=0)}({
+0:function(e,t,n){t.a=1},
+1:function(e,t,n){t.b=2},
+2:function(e,t,n){t.c=3},
+3:function(e,t,n){t.d=4}
+});
+"#;
+    let kind = classification::classify(src, &[]);
+    assert_eq!(
+        kind,
+        SampleKind::WebpackRuntime,
+        "minified webpack-like should classify as WebpackRuntime"
+    );
+}
+
+#[test]
+fn test_webpack_chunk_global_detected_without_require_name() {
+    let src = "self.webpackChunk=self.webpackChunk||[];self.webpackChunk.push([['app'],{1:function(e,t,n){}}]);";
+    let kind = classification::classify(src, &[]);
+    assert_eq!(kind, SampleKind::WebpackRuntime);
+}
+
 #[test]
 fn test_plan_entry_state_is_planned() {
     let src = load_fixture("browserify_minimal.js");

@@ -277,33 +277,35 @@ fn detect_chunks(kernel: &mut EmbeddedV8Kernel) -> Vec<serde_json::Value> {
         "(function(){",
         "var result = [];",
         "var seen = {};",
-        // Check webpackJsonp (webpack 4)
-        "if (typeof window !== 'undefined' && Array.isArray(window.webpackJsonp)) {",
-        "  for (var ci = 0; ci < window.webpackJsonp.length; ci++) {",
-        "    var entry = window.webpackJsonp[ci];",
-        "    if (entry && entry[0]) {",
-        "      var cid = typeof entry[0] === 'string' ? entry[0] : String(entry[0]);",
-        "      if (!seen[cid]) {",
-        "        seen[cid] = true;",
-        "        var mcount = entry[1] ? Object.keys(entry[1]).length : 0;",
-        "        result.push({chunk_id: cid, state: 'requested', modules_added: mcount});",
-        "      }",
+        // Helper: normalize chunk id list (string | number | array)
+        "function pushChunk(rawId, modules, state) {",
+        "  var ids = Array.isArray(rawId) ? rawId : [rawId];",
+        "  var mcount = modules && typeof modules === 'object' ? Object.keys(modules).length : 0;",
+        "  for (var ii = 0; ii < ids.length; ii++) {",
+        "    var cid = ids[ii] != null ? String(ids[ii]) : 'main';",
+        "    if (!seen[cid]) {",
+        "      seen[cid] = true;",
+        "      result.push({chunk_id: cid, state: state, modules_added: mcount});",
         "    }",
         "  }",
         "}",
-        // Check webpackChunk (webpack 5)
+        // webpackJsonp (webpack 4): [chunkIds, moreModules, runtime]
+        "if (typeof window !== 'undefined' && Array.isArray(window.webpackJsonp)) {",
+        "  for (var ci = 0; ci < window.webpackJsonp.length; ci++) {",
+        "    var entry = window.webpackJsonp[ci];",
+        "    if (entry && entry[0] != null) {",
+        "      pushChunk(entry[0], entry[1], 'requested');",
+        "    }",
+        "  }",
+        "}",
+        // webpackChunk (webpack 5)
         "var wpc = typeof self !== 'undefined' && self.webpackChunk;",
         "if (!wpc && typeof window !== 'undefined') wpc = window.webpackChunk;",
         "if (wpc && Array.isArray(wpc)) {",
-        "  for (var ci = 0; ci < wpc.length; ci++) {",
-        "    var entry = wpc[ci];",
-        "    if (entry && Array.isArray(entry)) {",
-        "      var cid = typeof entry[0] === 'string' ? entry[0] : (entry[0] != null ? String(entry[0]) : 'main');",
-        "      if (!seen[cid]) {",
-        "        seen[cid] = true;",
-        "        var mcount = entry[1] ? Object.keys(entry[1]).length : 0;",
-        "        result.push({chunk_id: cid, state: 'loaded', modules_added: mcount});",
-        "      }",
+        "  for (var cj = 0; cj < wpc.length; cj++) {",
+        "    var ent = wpc[cj];",
+        "    if (ent && Array.isArray(ent) && ent[0] != null) {",
+        "      pushChunk(ent[0], ent[1], 'loaded');",
         "    }",
         "  }",
         "}",
@@ -438,16 +440,26 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
     // Collect module IDs from require.m
     collect_require_module_ids(kernel, &mut module_ids);
 
-    // Fallback: extract from webpackJsonp chunks
-    if module_ids.is_empty() {
+    // Merge module IDs from webpackJsonp / webpackChunk tables (multi-chunk).
+    // Always merge (not only when empty) so runtime+chunk modules appear together.
+    {
         let js = concat!(
-            "(typeof window!=='undefined' && window.webpackJsonp)",
-            "?(function(){var ids=[];",
-            "for(var i=0;i<window.webpackJsonp.length;i++){",
-            "var e=window.webpackJsonp[i];",
-            "if(e&&e[1]){Object.keys(e[1]).forEach(function(k){ids.push(k);});}",
+            "(function(){var ids=[];var seen={};",
+            "function add(k){k=String(k);if(!seen[k]){seen[k]=1;ids.push(k);}}",
+            "function scan(arr){",
+            "  if(!arr||!Array.isArray(arr))return;",
+            "  for(var i=0;i<arr.length;i++){",
+            "    var e=arr[i];",
+            "    if(e&&e[1]&&typeof e[1]==='object'){",
+            "      Object.keys(e[1]).forEach(add);",
+            "    }",
+            "  }",
             "}",
-            "return ids;})():[]"
+            "if(typeof window!=='undefined')scan(window.webpackJsonp);",
+            "var wpc=(typeof self!=='undefined'&&self.webpackChunk)||",
+            "  (typeof window!=='undefined'&&window.webpackChunk);",
+            "scan(wpc);",
+            "return ids;})()"
         );
         if let RustValue::Array(items2) = kernel.eval_to_rust_value(js) {
             for item in items2 {
@@ -1046,7 +1058,12 @@ window.webpackChunk = [
         let chunks = graph["chunks"].as_array().unwrap();
 
         assert_eq!(graph["runtime_flavor"], "webpack5");
-        assert_eq!(graph["module_count"], 1);
+        // S7: module_count includes require.m + chunk table modules (0,1,2,3)
+        assert!(
+            graph["module_count"].as_u64().unwrap_or(0) >= 1,
+            "module_count={:?}",
+            graph["module_count"]
+        );
         assert_eq!(graph["entry_module_id"], "0");
 
         // chunk_event_observed evidence
@@ -1055,5 +1072,44 @@ window.webpackChunk = [
         // Chunk entries
         assert!(chunks.iter().any(|c| c["chunk_id"] == "vendors"));
         assert!(chunks.iter().any(|c| c["chunk_id"] == "main"));
+    }
+
+    /// v0.8.99 S7 BD-2: multi-chunk module IDs merge into graph.nodes
+    #[test]
+    fn test_collect_module_graph_merges_chunk_module_ids() {
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel
+            .eval(bridge_prelude(), crate::kernel::EvalOpts::default())
+            .unwrap();
+        kernel
+            .eval(
+                r#"
+var __webpack_require__ = function(id) {};
+__webpack_require__.m = { 0: function(){} };
+__webpack_require__.c = { 0: { exports: {} } };
+__webpack_require__.e = function() {};
+window.webpackChunk = [
+  [["vendors"], { 10: function(){}, 11: function(){} }],
+  [["page"], { 20: function(){} }]
+];
+"#,
+                crate::kernel::EvalOpts::default(),
+            )
+            .unwrap();
+
+        let graph = collect_module_graph(&mut kernel).expect("module graph");
+        let nodes = graph["nodes"].as_array().unwrap();
+        let ids: Vec<&str> = nodes
+            .iter()
+            .filter_map(|n| n["module_id"].as_str())
+            .collect();
+        assert!(ids.contains(&"0"), "runtime module 0: {:?}", ids);
+        assert!(ids.contains(&"10"), "chunk module 10: {:?}", ids);
+        assert!(ids.contains(&"11"), "chunk module 11: {:?}", ids);
+        assert!(ids.contains(&"20"), "chunk module 20: {:?}", ids);
+        assert!(graph["module_count"].as_u64().unwrap_or(0) >= 4);
     }
 }

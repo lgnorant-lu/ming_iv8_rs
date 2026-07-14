@@ -166,9 +166,15 @@ struct SignalSet {
 
 impl SignalSet {
     fn from_source(source: &str) -> Self {
+        // v0.8.99 S7 BD-1: broader webpack markers (minified / webpack 5)
         let has_webpack_require = source.contains("__webpack_require__")
             || source.contains("webpackChunk")
-            || source.contains("window.webpackJsonp");
+            || source.contains("window.webpackJsonp")
+            || source.contains("__webpack_modules__")
+            || source.contains("__webpack_exports__")
+            || source.contains("webpackChunkload")
+            || source.contains("installedChunks")
+            || detect_webpack_minified_bdms(source);
         let has_chaosvm_dispatch = detect_chaosvm(source);
         let has_switch_vm = detect_switch_vm(source);
         let dispatch_extractable = has_chaosvm_dispatch || has_switch_vm;
@@ -200,6 +206,48 @@ impl SignalSet {
             has_esm,
         }
     }
+}
+
+/// Minified webpack-like (BDMS): numeric module table + CommonJS factory shape.
+/// Does not claim L4 deobf; only static markers common in minified webpack output.
+fn detect_webpack_minified_bdms(source: &str) -> bool {
+    // Need .exports (cjs) and at least one numeric object key pattern near factories.
+    if !source.contains(".exports") && !source.contains("[\"exports\"]") {
+        return false;
+    }
+    // webpack factory arity: function(e,t,n) / function(module,exports,require)
+    let has_factory = source.contains("function(e,t,n)")
+        || source.contains("function(t,e,n)")
+        || source.contains("function(module,exports,require)")
+        || source.contains("function(module, exports, require)");
+    if !has_factory {
+        return false;
+    }
+    // Numeric keys: "123:" or 123: as object properties (module table)
+    let bytes = source.as_bytes();
+    let mut numeric_keys = 0usize;
+    let mut i = 0usize;
+    while i + 2 < bytes.len() {
+        if bytes[i].is_ascii_digit() {
+            let start = i;
+            while i < bytes.len() && bytes[i].is_ascii_digit() {
+                i += 1;
+            }
+            if i > start && i < bytes.len() && bytes[i] == b':' {
+                // avoid match arms like case 1:
+                let prev = if start > 0 { bytes[start - 1] } else { b' ' };
+                if prev == b'{' || prev == b',' || prev == b' ' || prev == b'\n' || prev == b'\t' {
+                    numeric_keys += 1;
+                    if numeric_keys >= 3 {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            i += 1;
+        }
+    }
+    false
 }
 
 /// Detect ChaosVM pattern: X[Y[Z++]]()
