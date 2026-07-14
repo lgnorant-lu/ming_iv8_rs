@@ -595,9 +595,24 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     _overrideValue(OfflineAudioContextProto, 'length');
     _overrideValue(OfflineAudioContextProto, 'numberOfChannels');
     OfflineAudioContextProto.startRendering = function() {
+        // v0.8.97 S5: resolve AudioBuffer then fire complete (not full DSP graph)
         var self = this;
-        return Promise.resolve(_bag(self).buffer);
+        var buf = _bag(self).buffer;
+        return Promise.resolve(buf).then(function(rendered) {
+            if (typeof self.oncomplete === 'function') {
+                try {
+                    self.oncomplete({ renderedBuffer: rendered, type: 'complete' });
+                } catch (e) {}
+            }
+            return rendered;
+        });
     };
+    Object.defineProperty(OfflineAudioContextProto, 'oncomplete', {
+        get: function() { return _bag(this).oncomplete || null; },
+        set: function(v) { _bag(this).oncomplete = v; },
+        enumerable: true,
+        configurable: true
+    });
     OfflineAudioContextProto.suspend = function(suspendTime) { return Promise.resolve(); };
     OfflineAudioContextProto.resume = function() { return Promise.resolve(); };
 

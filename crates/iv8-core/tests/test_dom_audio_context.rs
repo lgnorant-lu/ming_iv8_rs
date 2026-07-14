@@ -53,3 +53,32 @@ fn test_audio_context_state() {
     let mut k = common::make_kernel();
     common::assert_js_str(&mut k, "typeof (new AudioContext()).state", "string");
 }
+
+// v0.8.97 S5
+#[test]
+fn test_offline_audio_context_oncomplete() {
+    let mut k = common::make_kernel();
+    k.eval_to_rust_value(
+        r#"
+        globalThis.ocDone = false;
+        var oac = new OfflineAudioContext(1, 128, 44100);
+        oac.oncomplete = function(ev) {
+            globalThis.ocDone = !!(ev && ev.renderedBuffer);
+        };
+        oac.startRendering().then(function(buf) {
+            globalThis.ocBuf = !!(buf && buf.getChannelData);
+        });
+        "#,
+    );
+    for _ in 0..6 {
+        k.drain_microtasks();
+    }
+    assert_eq!(
+        common::to_str(&k.eval_to_rust_value("globalThis.ocDone")),
+        "true"
+    );
+    assert_eq!(
+        common::to_str(&k.eval_to_rust_value("globalThis.ocBuf")),
+        "true"
+    );
+}

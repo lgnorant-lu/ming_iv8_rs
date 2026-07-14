@@ -314,15 +314,25 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
         let state = RuntimeState::get(isolate);
         let env = &state.environment;
 
-        // Read from environment if available, otherwise use defaults
-        let vendor = env.get_str("webgl.VENDOR").unwrap_or("WebKit");
-        let renderer = env.get_str("webgl.RENDERER").unwrap_or("WebKit WebGL");
+        // D-111: user_overrides > baseline env > defaults (v0.8.97 S5)
+        let vendor = env
+            .get_user_str("webgl.VENDOR")
+            .or_else(|| env.get_str("webgl.VENDOR"))
+            .unwrap_or("WebKit");
+        let renderer = env
+            .get_user_str("webgl.RENDERER")
+            .or_else(|| env.get_str("webgl.RENDERER"))
+            .unwrap_or("WebKit WebGL");
         let unmasked_vendor = env
-            .get_str("webgl.UNMASKED_VENDOR_WEBGL")
+            .get_user_str("webgl.UNMASKED_VENDOR_WEBGL")
+            .or_else(|| env.get_str("webgl.UNMASKED_VENDOR_WEBGL"))
             .unwrap_or("Google Inc. (NVIDIA)");
-        let unmasked_renderer = env.get_str("webgl.UNMASKED_RENDERER_WEBGL").unwrap_or(
-            "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 (0x00002882) Direct3D11 vs_5_0 ps_5_0, D3D11)",
-        );
+        let unmasked_renderer = env
+            .get_user_str("webgl.UNMASKED_RENDERER_WEBGL")
+            .or_else(|| env.get_str("webgl.UNMASKED_RENDERER_WEBGL"))
+            .unwrap_or(
+                "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 (0x00002882) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            );
 
         const FORBIDDEN_RENDERER_SUBSTRINGS: &[&str] = &["SwiftShader", "llvmpipe"];
         for forbidden in FORBIDDEN_RENDERER_SUBSTRINGS {

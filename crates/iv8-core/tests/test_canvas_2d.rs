@@ -87,3 +87,20 @@ fn test_canvas_2d_measure_text() {
     ));
     assert_eq!(val, "object");
 }
+
+// v0.8.97 S5
+#[test]
+fn test_canvas_gradient_uses_canvas_gradient_proto() {
+    let mut k = common::make_kernel();
+    let ok = common::to_str(&k.eval_to_rust_value(
+        r#"(function(){
+            var g = document.createElement('canvas').getContext('2d').createLinearGradient(0,0,1,0);
+            return (typeof CanvasGradient === 'function')
+                && (Object.getPrototypeOf(g) === CanvasGradient.prototype)
+                && (g instanceof CanvasGradient)
+                && (typeof g.addColorStop === 'function');
+        })()"#,
+    ));
+    assert_eq!(ok, "true");
+}
+

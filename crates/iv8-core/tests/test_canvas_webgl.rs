@@ -108,3 +108,20 @@ fn webgl_environment_override_renderer() {
     let result = kernel.eval_to_rust_value("__webglContext__.getParameter(0x9246)");
     assert_eq!(result, RustValue::String("Custom GPU".into()));
 }
+
+// v0.8.97 S5: user_overrides path for UNMASKED_VENDOR
+#[test]
+fn webgl_user_override_vendor() {
+    let mut overrides = std::collections::HashMap::new();
+    overrides.insert(
+        "webgl.UNMASKED_VENDOR_WEBGL".to_string(),
+        serde_json::Value::String("Custom Vendor Inc.".to_string()),
+    );
+    let config = iv8_core::KernelConfig {
+        environment_overrides: Some(overrides),
+        ..Default::default()
+    };
+    let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
+    let result = kernel.eval_to_rust_value("__webglContext__.getParameter(0x9245)");
+    assert_eq!(result, RustValue::String("Custom Vendor Inc.".into()));
+}

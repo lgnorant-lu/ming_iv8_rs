@@ -204,50 +204,69 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
 
             // Gradients/patterns
             createLinearGradient: function(x0, y0, x1, y1) {
+                // v0.8.97 S5: prefer CanvasGradient.prototype when codegen installed
                 var stops = [];
-                var grad = {
-                    __iv8Type: 'CanvasGradient',
-                    _stops: stops,
-                    _coords: {x0: x0, y0: y0, x1: x1, y1: y1},
-                    addColorStop: function(offset, color) {
-                        if (typeof offset !== 'number' || isNaN(offset) || offset < 0 || offset > 1) {
-                            throw new TypeError('The provided value (' + offset + ') is not of type \'number\'.');
-                        }
-                        if (typeof color !== 'string') {
-                            throw new TypeError('The provided value is not of type \'string\'.');
-                        }
-                        stops.push({offset: offset, color: color});
+                var proto = (typeof CanvasGradient === 'function' && CanvasGradient.prototype)
+                    ? CanvasGradient.prototype : null;
+                var grad = Object.create(proto);
+                grad.__iv8Type = 'CanvasGradient';
+                grad._stops = stops;
+                grad._coords = {x0: x0, y0: y0, x1: x1, y1: y1};
+                grad.addColorStop = function(offset, color) {
+                    if (typeof offset !== 'number' || isNaN(offset) || offset < 0 || offset > 1) {
+                        throw new TypeError('The provided value (' + offset + ') is not of type \'number\'.');
                     }
+                    if (typeof color !== 'string') {
+                        throw new TypeError('The provided value is not of type \'string\'.');
+                    }
+                    stops.push({offset: offset, color: color});
                 };
-                Object.defineProperty(grad, Symbol.toStringTag, {value: 'CanvasGradient', configurable: true, enumerable: false, writable: false});
+                if (!proto) {
+                    Object.defineProperty(grad, Symbol.toStringTag, {
+                        value: 'CanvasGradient', configurable: true, enumerable: false, writable: false
+                    });
+                }
                 return grad;
             },
             createRadialGradient: function(x0, y0, r0, x1, y1, r1) {
                 var stops = [];
-                var grad = {
-                    __iv8Type: 'CanvasGradient',
-                    _stops: stops,
-                    _coords: {x0: x0, y0: y0, r0: r0, x1: x1, y1: y1, r1: r1},
-                    addColorStop: function(offset, color) {
-                        if (typeof offset !== 'number' || isNaN(offset) || offset < 0 || offset > 1) {
-                            throw new TypeError('The provided value (' + offset + ') is not of type \'number\'.');
-                        }
-                        if (typeof color !== 'string') {
-                            throw new TypeError('The provided value is not of type \'string\'.');
-                        }
-                        stops.push({offset: offset, color: color});
+                var proto = (typeof CanvasGradient === 'function' && CanvasGradient.prototype)
+                    ? CanvasGradient.prototype : null;
+                var grad = Object.create(proto);
+                grad.__iv8Type = 'CanvasGradient';
+                grad._stops = stops;
+                grad._coords = {x0: x0, y0: y0, r0: r0, x1: x1, y1: y1, r1: r1};
+                grad.addColorStop = function(offset, color) {
+                    if (typeof offset !== 'number' || isNaN(offset) || offset < 0 || offset > 1) {
+                        throw new TypeError('The provided value (' + offset + ') is not of type \'number\'.');
                     }
+                    if (typeof color !== 'string') {
+                        throw new TypeError('The provided value is not of type \'string\'.');
+                    }
+                    stops.push({offset: offset, color: color});
                 };
-                Object.defineProperty(grad, Symbol.toStringTag, {value: 'CanvasGradient', configurable: true, enumerable: false, writable: false});
+                if (!proto) {
+                    Object.defineProperty(grad, Symbol.toStringTag, {
+                        value: 'CanvasGradient', configurable: true, enumerable: false, writable: false
+                    });
+                }
                 return grad;
             },
             createPattern: function(image, repetition) {
-                var pat = {
-                    __iv8Type: 'CanvasPattern',
-                    _image: image,
-                    _repetition: repetition || 'repeat'
-                };
-                Object.defineProperty(pat, Symbol.toStringTag, {value: 'CanvasPattern', configurable: true, enumerable: false, writable: false});
+                var proto = (typeof CanvasPattern === 'function' && CanvasPattern.prototype)
+                    ? CanvasPattern.prototype : null;
+                var pat = Object.create(proto);
+                pat.__iv8Type = 'CanvasPattern';
+                pat._image = image;
+                pat._repetition = repetition || 'repeat';
+                if (typeof pat.setTransform !== 'function') {
+                    pat.setTransform = function() {};
+                }
+                if (!proto) {
+                    Object.defineProperty(pat, Symbol.toStringTag, {
+                        value: 'CanvasPattern', configurable: true, enumerable: false, writable: false
+                    });
+                }
                 return pat;
             },
 
