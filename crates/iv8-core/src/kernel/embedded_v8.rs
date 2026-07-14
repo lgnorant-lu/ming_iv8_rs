@@ -394,13 +394,71 @@ macro_rules! window_f64_env_cb {
 }
 window_f64_env_cb!(window_screen_x_cb, "window.screenX", 0.0);
 window_f64_env_cb!(window_screen_y_cb, "window.screenY", 0.0);
-window_f64_env_cb!(window_screen_left_cb, "window.screenLeft", 0.0);
-window_f64_env_cb!(window_screen_top_cb, "window.screenTop", 0.0);
+// Chrome: screenLeft/Top alias screenX/Y
+unsafe extern "C" fn window_screen_left_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = crate::state::RuntimeState::get(isolate);
+        let val = state
+            .environment
+            .get_user_f64("window.screenLeft")
+            .or_else(|| state.environment.get_user_f64("window.screenX"))
+            .unwrap_or(0.0);
+        rv.set(v8::Number::new(scope, val).into());
+    }));
+}
+unsafe extern "C" fn window_screen_top_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = crate::state::RuntimeState::get(isolate);
+        let val = state
+            .environment
+            .get_user_f64("window.screenTop")
+            .or_else(|| state.environment.get_user_f64("window.screenY"))
+            .unwrap_or(0.0);
+        rv.set(v8::Number::new(scope, val).into());
+    }));
+}
 window_f64_env_cb!(window_scroll_x_cb, "window.scrollX", 0.0);
 window_f64_env_cb!(window_scroll_y_cb, "window.scrollY", 0.0);
-// Chrome aliases: pageXOffset/pageYOffset === scrollX/scrollY
-window_f64_env_cb!(window_page_x_offset_cb, "window.pageXOffset", 0.0);
-window_f64_env_cb!(window_page_y_offset_cb, "window.pageYOffset", 0.0);
+// Chrome: pageXOffset/pageYOffset are aliases of scrollX/scrollY (same values).
+// Prefer window.pageXOffset user key, else window.scrollX (and same for Y).
+unsafe extern "C" fn window_page_x_offset_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = crate::state::RuntimeState::get(isolate);
+        let val = state
+            .environment
+            .get_user_f64("window.pageXOffset")
+            .or_else(|| state.environment.get_user_f64("window.scrollX"))
+            .unwrap_or(0.0);
+        rv.set(v8::Number::new(scope, val).into());
+    }));
+}
+unsafe extern "C" fn window_page_y_offset_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = crate::state::RuntimeState::get(isolate);
+        let val = state
+            .environment
+            .get_user_f64("window.pageYOffset")
+            .or_else(|| state.environment.get_user_f64("window.scrollY"))
+            .unwrap_or(0.0);
+        rv.set(v8::Number::new(scope, val).into());
+    }));
+}
 
 unsafe extern "C" fn worker_constructor_cb(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

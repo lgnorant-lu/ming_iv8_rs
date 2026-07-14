@@ -331,23 +331,17 @@ fn worker_thread_main(
         let context = v8::Local::new(scope, &context);
         v8::scope_with_context!(scope, scope, context);
         let global = context.global(scope);
-        install_worker_globals(scope, global, &profile_json);
-        install_worker_callbacks(scope, global);
-
-        // Install Worker interface stubs via pure JS eval.
-        // This avoids V8 FunctionTemplate creation that triggers
-        // IsOnCentralStack GC crash on Worker thread (client isolate).
-        // JS stub creates constructors, prototype chains, and property
-        // descriptors using Object.defineProperty — no FunctionTemplate.
+        // Install Worker interface stubs via pure JS eval first so
+        // WorkerNavigator exists before bootstrap wires navigator proto.
+        // (FunctionTemplate path crashes Worker thread GC — D-116.)
         let stub_str = crate::v8_utils::v8_string(scope, WORKER_JS_STUB);
         let stub_result = v8::Script::compile(scope, stub_str, None).and_then(|s| s.run(scope));
         if stub_result.is_none() {
             crate::telemetry::worker_script_error("JS stub eval failed");
         }
 
-        // Run worker bootstrap JS (WorkerGlobalScope, navigator, etc.)
-        let bootstrap_str = crate::v8_utils::v8_string(scope, WORKER_BOOTSTRAP_JS);
-        let _ = v8::Script::compile(scope, bootstrap_str, None).and_then(|s| s.run(scope));
+        install_worker_globals(scope, global, &profile_json);
+        install_worker_callbacks(scope, global);
     }
 
     {

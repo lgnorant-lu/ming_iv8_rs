@@ -99,7 +99,7 @@ fn test_env_override_beats_default_for_window_scroll_and_screen_pos() {
     overrides.insert("window.scrollX".to_string(), serde_json::json!(42.0));
     overrides.insert("window.scrollY".to_string(), serde_json::json!(7.0));
     overrides.insert("window.screenX".to_string(), serde_json::json!(10.0));
-    overrides.insert("window.pageXOffset".to_string(), serde_json::json!(42.0));
+    // intentionally no pageXOffset / screenLeft keys — alias paths
 
     let config = KernelConfig {
         environment_overrides: Some(overrides),
@@ -112,6 +112,7 @@ fn test_env_override_beats_default_for_window_scroll_and_screen_pos() {
     common::assert_js_str(&mut k, "window.scrollY", "7");
     common::assert_js_str(&mut k, "window.screenX", "10");
     common::assert_js_str(&mut k, "window.pageXOffset", "42");
+    common::assert_js_str(&mut k, "window.screenLeft", "10");
 }
 
 #[test]

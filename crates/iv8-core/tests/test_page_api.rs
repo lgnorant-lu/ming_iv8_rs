@@ -292,6 +292,41 @@ fn page_api_document_write_available() {
     assert_eq!(result, "yes");
 }
 
+// v0.8.95 S3: sequential document.write appends (not overwrite)
+#[test]
+fn page_api_document_write_sequential_append() {
+    let mut k = common::make_kernel();
+    page_load(
+        &mut k,
+        "<html><body><div id='a'>start</div></body></html>",
+        "http://test.com/",
+        &[],
+    );
+    let _ = k.eval_to_rust_value(
+        "document.write('<span id=\"w1\">one</span>'); document.write('<span id=\"w2\">two</span>');",
+    );
+    let has1 = to_str(&k.eval_to_rust_value("!!document.getElementById('w1')"));
+    let has2 = to_str(&k.eval_to_rust_value("!!document.getElementById('w2')"));
+    let body = to_str(&k.eval_to_rust_value("document.body.innerHTML"));
+    assert_eq!(has1, "true", "first write missing; body={}", body);
+    assert_eq!(has2, "true", "second write missing; body={}", body);
+    assert!(
+        body.contains("one") && body.contains("two"),
+        "sequential write content missing: {}",
+        body
+    );
+}
+
+#[test]
+fn page_api_document_open_resets_write_anchor() {
+    let mut k = common::make_kernel();
+    page_load(&mut k, "<html><body></body></html>", "http://test.com/", &[]);
+    let ok = to_str(&k.eval_to_rust_value(
+        "(function(){ document.write('<p id=\"x\">x</p>'); document.open(); document.write('<p id=\"y\">y</p>'); return typeof document.open === 'function' && !!document.getElementById('y'); })()"
+    ));
+    assert_eq!(ok, "true");
+}
+
 // ============================================================
 // T9: Document properties (EXCLUDED_ATTRIBUTES shim is source of truth)
 // ============================================================

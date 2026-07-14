@@ -17,7 +17,15 @@
         writable: true
     });
 
-    var _navigator = Object.create(null);
+    // Prefer WorkerNavigator.prototype when available (v0.8.95 S3);
+    // fall back to null-proto if constructor not installed yet.
+    var _navProto = null;
+    try {
+        if (typeof WorkerNavigator === 'function' && WorkerNavigator.prototype) {
+            _navProto = WorkerNavigator.prototype;
+        }
+    } catch (e) {}
+    var _navigator = Object.create(_navProto);
     Object.defineProperty(_navigator, 'userAgent', {
         get: function() { return _profile.userAgent; },
         enumerable: true,
