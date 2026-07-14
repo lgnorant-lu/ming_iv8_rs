@@ -6,6 +6,23 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.99] - 2026-07-14
+
+> Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
+> Mode: Lightweight Increment. Series **S7** (Bundler BD-1..3).
+
+### Fixed / Added
+- Webpack minified BDMS detection (`detect_webpack_minified_bdms`) + broader webpack markers
+- Multi-chunk module graph: always merge webpackJsonp/webpackChunk module IDs; array chunk-id normalize
+- Tests: multi_bundler webpack BDMS/chunk; webpack graph merge unit test
+
+### Quality Gates
+- cargo test -p iv8-core --lib: **499 PASS**
+- test_entry_multi_bundler: **36/36 PASS**
+- WPT functional: **176/176**
+- H05a-f + H06a/b: **OVERALL PASS**
+- Package metadata: **0.8.11** unchanged
+
 ## [v0.8.98] - 2026-07-14
 
 > Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
