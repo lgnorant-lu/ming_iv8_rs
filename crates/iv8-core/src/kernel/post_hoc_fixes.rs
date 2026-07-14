@@ -43,6 +43,7 @@ pub const RECEIVER_SHIM_FIX_JS: &str = r#"
         methods.forEach(function(name) {
             var orig = Ctor.prototype[name];
             if (typeof orig !== 'function' || orig.__iv8Recv) return;
+            // Re-wrap even if a prior wrap was clobbered (no __iv8Recv).
             var wrapped = function() {
                 if (this == null || typeof this !== 'object' || !(this instanceof Ctor)) {
                     throw new TypeError('Illegal invocation');
@@ -51,7 +52,10 @@ pub const RECEIVER_SHIM_FIX_JS: &str = r#"
             };
             try {
                 Object.defineProperty(wrapped, 'name', { value: orig.name || name, configurable: true });
-                Object.defineProperty(wrapped, 'length', { value: orig.length, configurable: true });
+                Object.defineProperty(wrapped, 'length', {
+                    value: typeof orig.length === 'number' ? orig.length : 0,
+                    configurable: true
+                });
             } catch (e) {}
             wrapped.__iv8Recv = true;
             try {

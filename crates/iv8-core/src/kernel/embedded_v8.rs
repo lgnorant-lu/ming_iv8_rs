@@ -764,6 +764,8 @@ impl EmbeddedV8Kernel {
         // FIX_PROTO / op-callback freeze still clobbers URL.prototype methods
         // (toString → native shell → "[object code]"). Re-apply URL_SHIM after freeze.
         // CANVAS2D likewise needs post-freeze factory wiring.
+        // RECEIVER_SHIM re-applied last: freeze-time wrap is overwritten by
+        // fix_op_callbacks / stringifier natives for MediaList.toString etc.
         if !kernel.worker_mode {
             kernel.eval(
                 crate::canvas::binding::CANVAS2D_SHIM_JS,
@@ -772,6 +774,11 @@ impl EmbeddedV8Kernel {
             .ok();
             kernel.eval(
                 crate::shims::url::URL_SHIM_JS,
+                crate::kernel::EvalOpts::default(),
+            )
+            .ok();
+            kernel.eval(
+                crate::kernel::post_hoc_fixes::RECEIVER_SHIM_FIX_JS,
                 crate::kernel::EvalOpts::default(),
             )
             .ok();
