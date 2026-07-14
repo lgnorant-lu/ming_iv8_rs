@@ -23,6 +23,35 @@ def _run(fn):
     return box["out"]
 
 
+def test_high_signal_method_name_length_shapes():
+    """Q051: high-signal method name/length after NAME_LENGTH residual fix."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                JSON.stringify({
+                  postMessage: [postMessage.name, postMessage.length],
+                  getContext: [HTMLCanvasElement.prototype.getContext.name, HTMLCanvasElement.prototype.getContext.length],
+                  toDataURL: [HTMLCanvasElement.prototype.toDataURL.name, HTMLCanvasElement.prototype.toDataURL.length],
+                  setTransform: [CanvasRenderingContext2D.prototype.setTransform.name, CanvasRenderingContext2D.prototype.setTransform.length],
+                  initEvent: [Event.prototype.initEvent.name, Event.prototype.initEvent.length],
+                  createElement: [document.createElement.name, document.createElement.length]
+                })
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["postMessage"] == ["postMessage", 1], rep
+    assert rep["getContext"] == ["getContext", 1], rep
+    assert rep["toDataURL"] == ["toDataURL", 0], rep
+    assert rep["setTransform"] == ["setTransform", 0], rep
+    assert rep["initEvent"] == ["initEvent", 1], rep
+    assert rep["createElement"] == ["createElement", 1], rep
+
+
 def test_navigator_connection_and_plugins_shape():
     """Q033/Q034: connection values + plugins/mimeTypes arrays."""
 
