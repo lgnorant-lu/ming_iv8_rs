@@ -305,43 +305,51 @@ fn build_response_object<'s>(
         None => return v8::Object::new(scope),
     };
 
-    // Set backing values under hidden keys. The Response prototype installs
-    // accessor properties (status/ok/statusText/url/headers) with no setter,
-    // so a plain `obj.set("status", …)` would silently fail and the getter
-    // would recurse into itself. Store under "__name__" keys that the getters
-    // read from instead.
-    let status_key = crate::v8_utils::v8_string(scope, "__status__");
-    obj.set(
-        scope,
-        status_key.into(),
-        v8::Integer::new(scope, resource.status as i32).into(),
-    );
-
-    let ok_key = crate::v8_utils::v8_string(scope, "__ok__");
-    obj.set(
-        scope,
-        ok_key.into(),
-        v8::Boolean::new(scope, resource.status >= 200 && resource.status < 300).into(),
-    );
-
-    let st_key = crate::v8_utils::v8_string(scope, "__statusText__");
+    // Backing values for Response.prototype accessors.
+    // Codegen install_all uses __iv8Status / __iv8Ok / __iv8StatusText / __iv8Url
+    // (see iv8-surface generated fetch.rs). DOM template helpers also understand
+    // __status__ / __ok__ / __statusText__ / __url__ — write both (v0.8.96 S4).
     let status_text = match resource.status {
         200 => "OK",
         404 => "Not Found",
         _ => "",
     };
-    obj.set(
-        scope,
-        st_key.into(),
-        crate::v8_utils::v8_string(scope, status_text).into(),
-    );
-
-    let url_key = crate::v8_utils::v8_string(scope, "__url__");
-    obj.set(
-        scope,
-        url_key.into(),
-        crate::v8_utils::v8_string(scope, "").into(),
-    );
+    for key in ["__status__", "__iv8Status"] {
+        let k = crate::v8_utils::v8_string(scope, key);
+        let _ = obj.define_own_property(
+            scope,
+            k.into(),
+            v8::Integer::new(scope, resource.status as i32).into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+    }
+    for key in ["__ok__", "__iv8Ok"] {
+        let k = crate::v8_utils::v8_string(scope, key);
+        let _ = obj.define_own_property(
+            scope,
+            k.into(),
+            v8::Boolean::new(scope, (200..300).contains(&resource.status)).into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+    }
+    for key in ["__statusText__", "__iv8StatusText"] {
+        let k = crate::v8_utils::v8_string(scope, key);
+        let _ = obj.define_own_property(
+            scope,
+            k.into(),
+            crate::v8_utils::v8_string(scope, status_text).into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+    }
+    for key in ["__url__", "__iv8Url"] {
+        let k = crate::v8_utils::v8_string(scope, key);
+        let _ = obj.define_own_property(
+            scope,
+            k.into(),
+            crate::v8_utils::v8_string(scope, "").into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+    }
 
     // Build Headers object using Headers FunctionTemplate
     let header_pairs: Vec<(String, String)> = resource
@@ -357,7 +365,12 @@ fn build_response_object<'s>(
         v8::Object::new(scope)
     };
     let headers_key = crate::v8_utils::v8_string(scope, "__headers__");
-    obj.set(scope, headers_key.into(), headers_obj.into());
+    let _ = obj.define_own_property(
+        scope,
+        headers_key.into(),
+        headers_obj.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 
     // Process Set-Cookie headers: inject into window._iv8CookieStore
     for (k, v) in &resource.headers {

@@ -6,6 +6,28 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.96] - 2026-07-14
+
+> Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
+> Mode: Lightweight Increment. Series **S4** of post-0.92 module-bulk roadmap.
+
+### Fixed
+- XHR async: HEADERS_RECEIVED then LOADING+DONE on next macrotask (readyState sequence 1,2,3,4)
+- WebSocket: force lifecycle stub over codegen empty ctor; CLOSING then CLOSED across ticks
+- fetch Response: set both `__iv8Status`/`__iv8Ok` and `__status__`/`__ok__` so status/ok match ResourceBundle
+- SubtleCrypto `deriveBits` supports **X25519** (generateKey already existed)
+
+### Added
+- Tests: XHR sequence, WebSocket open/closing, X25519 deriveBits, AES-KW wrap/unwrap, fetch missing→404
+- S4 audit residual note
+
+### Quality Gates
+- cargo test -p iv8-core --lib: **498 PASS**
+- test_network_fetch **10/10**; test_network_xhr **16/16**; test_crypto_subtle **37/37**
+- WPT functional: **176/176**
+- H05a-f + H06a/b: **OVERALL PASS**
+- Package metadata: **0.8.11** unchanged
+
 ## [v0.8.95] - 2026-07-14
 
 > Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).

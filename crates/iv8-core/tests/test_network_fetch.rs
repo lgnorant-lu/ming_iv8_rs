@@ -132,26 +132,41 @@ fn fetch_response_json() {
 }
 
 #[test]
-fn fetch_rejects_when_not_in_bundle() {
+fn fetch_missing_url_resolves_404_not_reject() {
+    // Browser fetch: network failure can reject; offline ResourceBundle path
+    // resolves with Response(status=404) when URL not registered (fetch.rs).
     let mut kernel = common::make_kernel();
 
     kernel
         .eval(
             r#"
-        globalThis.fetchError = null;
+        globalThis.missingStatus = -1;
+        globalThis.missingOk = null;
+        globalThis.missingRejected = false;
         fetch('https://unknown.com/missing')
-            .catch(function(e) { globalThis.fetchError = e.message; });
+            .then(function(r) {
+                globalThis.missingStatus = r.status;
+                globalThis.missingOk = r.ok;
+            })
+            .catch(function() { globalThis.missingRejected = true; });
     "#,
             EvalOpts::default(),
         )
         .unwrap();
     kernel.drain_microtasks();
 
-    let result = kernel.eval_to_rust_value("globalThis.fetchError");
-    match result {
-        RustValue::String(s) => assert!(s.contains("NetworkError"), "error: {}", s),
-        other => panic!("expected String error, got: {:?}", other),
-    }
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.missingRejected"),
+        RustValue::Bool(false)
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.missingStatus"),
+        RustValue::Int(404)
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.missingOk"),
+        RustValue::Bool(false)
+    );
 }
 
 #[test]
