@@ -166,8 +166,20 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         Event.AT_TARGET = 2;
         Event.BUBBLING_PHASE = 3;
     }
+    // idlharness F/E: constants on both interface object and prototype
+    // (writable false, enumerable true, configurable false on ctor; same values on proto).
     ['NONE', 'CAPTURING_PHASE', 'AT_TARGET', 'BUBBLING_PHASE'].forEach(function(k) {
-        Object.defineProperty(Event, k, {writable: false, enumerable: true, configurable: false});
+        var v = Event[k];
+        try {
+            Object.defineProperty(Event, k, {
+                value: v, writable: false, enumerable: true, configurable: false
+            });
+        } catch (e) {}
+        try {
+            Object.defineProperty(EventProto, k, {
+                value: v, writable: false, enumerable: true, configurable: false
+            });
+        } catch (e2) {}
     });
 
     globalThis.Event = Event;
