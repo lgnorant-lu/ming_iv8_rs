@@ -1,12 +1,16 @@
 """
-Task 62: 内存泄漏验证（100 轮长跑）
+Task 62: 内存泄漏验证（100 次创建）
 
-验证 iv8-rs 在 100 轮 JSContext 创建/使用/销毁循环中内存稳定。
+验证 iv8-rs 在 100 次 JSContext 创建/使用/销毁循环后内存稳定。
 目标：≤ +5MB 漂移（iv8 基准 +2MB）。
 """
 import gc
 
+import pytest
+
 import iv8_rs
+
+pytestmark = pytest.mark.e2e
 
 
 def get_memory_mb():

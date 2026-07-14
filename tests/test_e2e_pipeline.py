@@ -13,6 +13,8 @@ Requires the built Rust extension; skipped gracefully if unavailable.
 """
 import pytest
 
+pytestmark = pytest.mark.e2e
+
 iv8_rs = pytest.importorskip("iv8_rs", reason="Rust extension not built")
 
 from iv8_rs.patterns import detect_all
