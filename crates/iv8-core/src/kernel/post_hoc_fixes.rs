@@ -26,6 +26,7 @@
 //! - `FREEZE_ALL_JS` / `FREEZE_SHIM_PROTOTYPES_JS` — freeze surface
 //! - `FUNCTION_TO_STRING_FIX_JS` — `[native code]` toString
 //! - `HIDE_IV8_INTERNAL_ENUM_JS` — hide `__iv8*` / bridge keys from Object.keys
+//! - `ERROR_STACK_ANONYMOUS_TO_EVAL_JS` — stack `at <anonymous>:` → `at eval:`
 //! - `TO_STRING_TAG_FIX_JS` — Symbol.toStringTag residual
 //! - `NAME_LENGTH_FIX_JS` / `DESCRIPTOR_FIX_JS` / `GETTER_NAME_FIX_JS` — shape camouflage
 //! - `WORKER_ONLY_DELETE_JS` — worker global pruning
@@ -1197,6 +1198,65 @@ pub const FUNCTION_TO_STRING_FIX_JS: &str = r#"
         };
         try { Object.defineProperty(Function.prototype.toString, 'name', { value: 'toString' }); } catch(e) {}
         try { Function.prototype.toString.__iv8_native = true; } catch(e) {}
+    })();
+"#;
+
+/// Rewrite V8 stack frames `at <anonymous>:` → `at eval:` (Q003 / P1-BT).
+///
+/// Detectors (Kasada/Castle-class) compare Error.stack against Chrome's
+/// `at eval:LINE:COL` form for anonymous script frames. V8's default is
+/// `at <anonymous>:LINE:COL`. Named frames (`at foo (<anonymous>:…)`) keep
+/// the function name; only the bare `<anonymous>:` token is rewritten.
+pub const ERROR_STACK_ANONYMOUS_TO_EVAL_JS: &str = r#"
+    (function() {
+        function rewriteStack(s) {
+            if (typeof s !== 'string' || s.indexOf('<anonymous>') < 0) return s;
+            // bare: "at <anonymous>:1:2" -> "at eval:1:2"
+            s = s.replace(/at <anonymous>(:\d+:\d+)/g, 'at eval$1');
+            // parenthetical site: "(<anonymous>:1:2)" -> "(eval:1:2)" when not already eval(...)
+            s = s.replace(/\(<anonymous>(:\d+:\d+)\)/g, '(eval$1)');
+            return s;
+        }
+        try {
+            var origPST = Error.prepareStackTrace;
+            Error.prepareStackTrace = function(err, structured) {
+                var out;
+                try {
+                    if (typeof origPST === 'function') {
+                        out = origPST(err, structured);
+                    } else if (structured && structured.length) {
+                        // default-ish join
+                        var lines = [String(err)];
+                        for (var i = 0; i < structured.length; i++) {
+                            try { lines.push('    at ' + structured[i].toString()); } catch(e) {}
+                        }
+                        out = lines.join('\n');
+                    } else {
+                        out = String(err);
+                    }
+                } catch(e) {
+                    out = String(err);
+                }
+                return rewriteStack(String(out));
+            };
+        } catch(e) {}
+        // Also patch existing stack accessor path: wrap Error so .stack is rewritten
+        try {
+            var desc = Object.getOwnPropertyDescriptor(Error.prototype, 'stack');
+            // V8 often stores stack via prepareStackTrace only; if a getter exists, wrap it.
+            if (desc && typeof desc.get === 'function') {
+                var og = desc.get;
+                Object.defineProperty(Error.prototype, 'stack', {
+                    configurable: true,
+                    enumerable: desc.enumerable,
+                    get: function() {
+                        var s = og.call(this);
+                        return rewriteStack(s);
+                    },
+                    set: desc.set
+                });
+            }
+        } catch(e) {}
     })();
 "#;
 

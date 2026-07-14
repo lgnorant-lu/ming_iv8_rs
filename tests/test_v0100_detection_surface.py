@@ -48,6 +48,60 @@ def test_document_create_element_tostring_is_native_code():
     assert bad == [], bad
 
 
+def test_error_stack_rewrites_anonymous_to_eval():
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  try { throw new Error('probe'); } catch(e) {
+                    return String(e.stack);
+                  }
+                })()
+                """
+            )
+        )
+
+    stack = _run(body)
+    assert "at eval:" in stack or "at eval (" in stack, stack
+    assert "at <anonymous>:" not in stack, stack
+
+
+def test_chrome_runtime_methods_on_prototype_not_object_keys():
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var keys = Object.keys(chrome.runtime);
+                  var hasConnectOwn = Object.prototype.hasOwnProperty.call(chrome.runtime, 'connect');
+                  var hasSendOwn = Object.prototype.hasOwnProperty.call(chrome.runtime, 'sendMessage');
+                  var proto = Object.getPrototypeOf(chrome.runtime);
+                  return JSON.stringify({
+                    keys: keys,
+                    hasConnectOwn: hasConnectOwn,
+                    hasSendOwn: hasSendOwn,
+                    protoHasConnect: proto && typeof proto.connect === 'function',
+                    protoHasSend: proto && typeof proto.sendMessage === 'function',
+                    connectNative: /\[native code\]/.test(String(chrome.runtime.connect)),
+                    enumsOk: keys.indexOf('connect') < 0 && keys.indexOf('sendMessage') < 0
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["enumsOk"] is True, rep
+    assert rep["hasConnectOwn"] is False, rep
+    assert rep["hasSendOwn"] is False, rep
+    assert rep["protoHasConnect"] is True, rep
+    assert rep["protoHasSend"] is True, rep
+    assert rep["connectNative"] is True, rep
+
+
 def test_window_iv8_internal_keys_not_in_object_keys():
     def body():
         ctx = iv8_rs.JSContext()

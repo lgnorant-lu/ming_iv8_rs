@@ -1069,6 +1069,12 @@ impl EmbeddedV8Kernel {
                 crate::kernel::post_hoc_fixes::HIDE_IV8_INTERNAL_ENUM_JS);
             let ok = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope)).is_some();
             crate::telemetry::post_hoc_fix_complete("HIDE_IV8_INTERNAL_ENUM_JS", ok);
+
+            crate::telemetry::post_hoc_fix_start("ERROR_STACK_ANONYMOUS_TO_EVAL_JS");
+            let js = crate::v8_utils::v8_string(scope,
+                crate::kernel::post_hoc_fixes::ERROR_STACK_ANONYMOUS_TO_EVAL_JS);
+            let ok = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope)).is_some();
+            crate::telemetry::post_hoc_fix_complete("ERROR_STACK_ANONYMOUS_TO_EVAL_JS", ok);
         });
     }
 

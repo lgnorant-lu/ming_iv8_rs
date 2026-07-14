@@ -67,87 +67,89 @@ pub const WINDOW_CHROME_SHIM: &str = r#"
     }, 'loadTimes');
 
     // --- chrome.runtime ---
-    chrome.runtime = {
-        OnInstalledReason: {
-            CHROME_UPDATE: "chrome_update",
-            INSTALL: "install",
-            SHARED_MODULE_UPDATE: "shared_module_update",
-            UPDATE: "update"
-        },
-        OnRestartRequiredReason: {
-            APP_UPDATE: "app_update",
-            OS_UPDATE: "os_update",
-            PERIODIC: "periodic"
-        },
-        PlatformArch: {
-            ARM: "arm",
-            ARM64: "arm64",
-            MIPS: "mips",
-            MIPS64: "mips64",
-            X86_32: "x86-32",
-            X86_64: "x86-64"
-        },
-        PlatformNaclArch: {
-            ARM: "arm",
-            ARM64: "arm64",
-            MIPS: "mips",
-            MIPS64: "mips64",
-            X86_32: "x86-32",
-            X86_64: "x86-64"
-        },
-        PlatformOs: {
-            ANDROID: "android",
-            CROS: "cros",
-            LINUX: "linux",
-            MAC: "mac",
-            OPENBSD: "openbsd",
-            WIN: "win"
-        },
-        RequestUpdateCheckStatus: {
-            NO_UPDATE: "no_update",
-            THROTTLED: "throttled",
-            UPDATE_AVAILABLE: "update_available"
-        },
-        get id() { return undefined; }
-    };
-
-    // --- chrome.runtime.connect ---
+    // Methods live on the prototype (not Object.keys own) for P1-BT detectors.
     var _isValidExtensionID = function(str) {
         return typeof str === 'string' && str.length === 32 && /^[a-p]+$/.test(str.toLowerCase());
     };
 
-    chrome.runtime.connect = wrapNative(function connect() {
-        var args = Array.prototype.slice.call(arguments);
-        var extensionId = args[0];
-        var preamble = 'Error in invocation of runtime.connect(optional string extensionId, optional object connectInfo): ';
+    var runtimeProto = {
+        connect: wrapNative(function connect() {
+            var args = Array.prototype.slice.call(arguments);
+            var extensionId = args[0];
+            var preamble = 'Error in invocation of runtime.connect(optional string extensionId, optional object connectInfo): ';
 
-        if (args.length === 0 || typeof extensionId !== 'string') {
-            throw new TypeError(preamble + 'chrome.runtime.connect() called from a webpage must specify an Extension ID (string) for its first argument.');
-        }
-        if (!_isValidExtensionID(extensionId)) {
-            throw new TypeError(preamble + "Invalid extension id: '" + extensionId + "'");
-        }
-        // Valid extension ID — return a disconnected Port-like object
-        return { name: '', disconnect: function(){}, onDisconnect: { addListener: function(){} }, onMessage: { addListener: function(){} }, postMessage: function(){} };
-    }, 'connect');
+            if (args.length === 0 || typeof extensionId !== 'string') {
+                throw new TypeError(preamble + 'chrome.runtime.connect() called from a webpage must specify an Extension ID (string) for its first argument.');
+            }
+            if (!_isValidExtensionID(extensionId)) {
+                throw new TypeError(preamble + "Invalid extension id: '" + extensionId + "'");
+            }
+            return { name: '', disconnect: function(){}, onDisconnect: { addListener: function(){} }, onMessage: { addListener: function(){} }, postMessage: function(){} };
+        }, 'connect'),
+        sendMessage: wrapNative(function sendMessage() {
+            var args = Array.prototype.slice.call(arguments);
+            var preamble = 'Error in invocation of runtime.sendMessage(optional string extensionId, any message, optional object options, optional function responseCallback): ';
 
-    // --- chrome.runtime.sendMessage ---
-    chrome.runtime.sendMessage = wrapNative(function sendMessage() {
-        var args = Array.prototype.slice.call(arguments);
-        var preamble = 'Error in invocation of runtime.sendMessage(optional string extensionId, any message, optional object options, optional function responseCallback): ';
+            if (args.length === 0 || args.length > 4) {
+                throw new TypeError(preamble + 'No matching signature.');
+            }
+            var extensionId = args[0];
+            if (typeof extensionId !== 'string') {
+                throw new TypeError(preamble + 'chrome.runtime.sendMessage() called from a webpage must specify an Extension ID (string) for its first argument.');
+            }
+            if (!_isValidExtensionID(extensionId)) {
+                throw new TypeError(preamble + "Invalid extension id: '" + extensionId + "'");
+            }
+            return undefined;
+        }, 'sendMessage')
+    };
 
-        if (args.length === 0 || args.length > 4) {
-            throw new TypeError(preamble + 'No matching signature.');
-        }
-        var extensionId = args[0];
-        if (typeof extensionId !== 'string') {
-            throw new TypeError(preamble + 'chrome.runtime.sendMessage() called from a webpage must specify an Extension ID (string) for its first argument.');
-        }
-        if (!_isValidExtensionID(extensionId)) {
-            throw new TypeError(preamble + "Invalid extension id: '" + extensionId + "'");
-        }
-        return undefined;
-    }, 'sendMessage');
+    chrome.runtime = Object.create(runtimeProto);
+    chrome.runtime.OnInstalledReason = {
+        CHROME_UPDATE: "chrome_update",
+        INSTALL: "install",
+        SHARED_MODULE_UPDATE: "shared_module_update",
+        UPDATE: "update"
+    };
+    chrome.runtime.OnRestartRequiredReason = {
+        APP_UPDATE: "app_update",
+        OS_UPDATE: "os_update",
+        PERIODIC: "periodic"
+    };
+    chrome.runtime.PlatformArch = {
+        ARM: "arm",
+        ARM64: "arm64",
+        MIPS: "mips",
+        MIPS64: "mips64",
+        X86_32: "x86-32",
+        X86_64: "x86-64"
+    };
+    chrome.runtime.PlatformNaclArch = {
+        ARM: "arm",
+        ARM64: "arm64",
+        MIPS: "mips",
+        MIPS64: "mips64",
+        X86_32: "x86-32",
+        X86_64: "x86-64"
+    };
+    chrome.runtime.PlatformOs = {
+        ANDROID: "android",
+        CROS: "cros",
+        LINUX: "linux",
+        MAC: "mac",
+        OPENBSD: "openbsd",
+        WIN: "win"
+    };
+    chrome.runtime.RequestUpdateCheckStatus = {
+        NO_UPDATE: "no_update",
+        THROTTLED: "throttled",
+        UPDATE_AVAILABLE: "update_available"
+    };
+    Object.defineProperty(chrome.runtime, 'id', {
+        get: function() { return undefined; },
+        enumerable: true,
+        configurable: true
+    });
 })
 "#;
 

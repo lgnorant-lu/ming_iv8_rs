@@ -59,8 +59,8 @@
     }, 'loadTimes');
 
     // --- chrome.runtime ---
-    // Real Chrome webpage: chrome.runtime is non-enumerable; methods are own
-    // data properties on the runtime object (not on Object.prototype).
+    // chrome.runtime itself is non-enumerable on chrome. Methods connect/sendMessage
+    // live on the prototype so Object.keys(chrome.runtime) does not list them (P1-BT).
     var _isValidExtensionID = function(str) {
         return typeof str === 'string' && str.length === 32 && /^[a-p]+$/.test(str.toLowerCase());
     };
@@ -91,49 +91,50 @@
         }
         return undefined;
     }, 'sendMessage');
-    var _runtime = {
-        OnInstalledReason: {
-            CHROME_UPDATE: "chrome_update",
-            INSTALL: "install",
-            SHARED_MODULE_UPDATE: "shared_module_update",
-            UPDATE: "update"
-        },
-        OnRestartRequiredReason: {
-            APP_UPDATE: "app_update",
-            OS_UPDATE: "os_update",
-            PERIODIC: "periodic"
-        },
-        PlatformArch: {
-            ARM: "arm",
-            ARM64: "arm64",
-            MIPS: "mips",
-            MIPS64: "mips64",
-            X86_32: "x86-32",
-            X86_64: "x86-64"
-        },
-        PlatformNaclArch: {
-            ARM: "arm",
-            ARM64: "arm64",
-            MIPS: "mips",
-            MIPS64: "mips64",
-            X86_32: "x86-32",
-            X86_64: "x86-64"
-        },
-        PlatformOs: {
-            ANDROID: "android",
-            CROS: "cros",
-            LINUX: "linux",
-            MAC: "mac",
-            OPENBSD: "openbsd",
-            WIN: "win"
-        },
-        RequestUpdateCheckStatus: {
-            NO_UPDATE: "no_update",
-            THROTTLED: "throttled",
-            UPDATE_AVAILABLE: "update_available"
-        },
+    var _runtimeProto = {
         connect: _runtimeConnect,
         sendMessage: _runtimeSendMessage
+    };
+    var _runtime = Object.create(_runtimeProto);
+    _runtime.OnInstalledReason = {
+        CHROME_UPDATE: "chrome_update",
+        INSTALL: "install",
+        SHARED_MODULE_UPDATE: "shared_module_update",
+        UPDATE: "update"
+    };
+    _runtime.OnRestartRequiredReason = {
+        APP_UPDATE: "app_update",
+        OS_UPDATE: "os_update",
+        PERIODIC: "periodic"
+    };
+    _runtime.PlatformArch = {
+        ARM: "arm",
+        ARM64: "arm64",
+        MIPS: "mips",
+        MIPS64: "mips64",
+        X86_32: "x86-32",
+        X86_64: "x86-64"
+    };
+    _runtime.PlatformNaclArch = {
+        ARM: "arm",
+        ARM64: "arm64",
+        MIPS: "mips",
+        MIPS64: "mips64",
+        X86_32: "x86-32",
+        X86_64: "x86-64"
+    };
+    _runtime.PlatformOs = {
+        ANDROID: "android",
+        CROS: "cros",
+        LINUX: "linux",
+        MAC: "mac",
+        OPENBSD: "openbsd",
+        WIN: "win"
+    };
+    _runtime.RequestUpdateCheckStatus = {
+        NO_UPDATE: "no_update",
+        THROTTLED: "throttled",
+        UPDATE_AVAILABLE: "update_available"
     };
     Object.defineProperty(_runtime, 'id', {
         get: function() { return undefined; },
