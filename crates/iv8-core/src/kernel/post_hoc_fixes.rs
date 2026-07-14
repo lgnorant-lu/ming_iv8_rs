@@ -32,17 +32,14 @@
 //! ### Structural bridge until codegen/native owns it
 //! - `RECEIVER_SHIM_FIX_JS` — Illegal invocation wraps (INIT-4)
 //! - `READONLY_FIX_JS` — readonly setter=undefined after shims
-//! - `PLUGINS_FIX_JS` — PluginArray/MimeTypeArray instanceof
-//! - `REQUEST_FIX_JS` — fetch() polyfill only (Request ctor = DOM FT)
-//! - `CHROME_FIX_JS` — window.chrome.runtime shape (page_load)
 //! - `global_accessor_fix_js` — [Global] data→accessor upgrade (generated)
 //!
-//! ### Dead / no-op removed (v0.8.92)
-//! Not referenced from `embedded_v8` (or skipped as empty); deleted:
-//! `WEBDRIVER_FIX_JS`, `CREATE_ELEMENT_FIX_JS`, `IFRAME_FIX_JS`,
-//! `SHADOW_ROOT_FIX_JS`, `DOM_GETTER_FIX_JS`. Ownership moved to native FT
-//! / root-cause fixes (COMP-2/4, RD-17, P0-5). Re-add only if a call site
-//! is restored with non-empty body.
+//! ### Dead / no-op removed
+//! - v0.8.92: `WEBDRIVER_FIX_JS`, `CREATE_ELEMENT_FIX_JS`, `IFRAME_FIX_JS`,
+//!   `SHADOW_ROOT_FIX_JS`, `DOM_GETTER_FIX_JS` (native FT / root-cause).
+//! - v0.8.93: empty no-op markers `PLUGINS_FIX_JS`, `REQUEST_FIX_JS`,
+//!   `CHROME_FIX_JS` deleted (ownership already native_env / install_fetch /
+//!   window_chrome; never eval'd on main path after INIT-2).
 
 /// INIT-4: wrap codegen/shallow observer + FontFace methods with receiver checks.
 /// Must run after surface install (native FunctionTemplate methods overwrite JS wraps).
@@ -100,30 +97,6 @@ pub const RECEIVER_SHIM_FIX_JS: &str = r#"
     }
 })();
 "#;
-
-/// P0 boundary fix: navigator.plugins/mimeTypes instanceof check.
-///
-/// Shim replaces plugins/mimeTypes with plain objects. Real Chrome returns
-/// PluginArray/MimeTypeArray instances. This wraps the shim output with
-/// the correct prototype.
-///
-/// **Why not codegen?** navigator.plugins is installed by navigator_extras.rs
-/// shim (not codegen) because it needs runtime data (plugin list). The shim
-/// creates plain objects for simplicity. This fix wraps them post-hoc.
-/// Historical: plugins instanceof PluginArray rewrap.
-/// Owned by native_env::nav_plugins SameObject cache (INIT-2). Not evaluated.
-pub const PLUGINS_FIX_JS: &str = r#"(function(){ /* no-op: plugins owned by native_env */ })();"#;
-
-/// Request constructor shim.
-///
-/// Codegen creates empty object for Request. This shim stores url/method/headers.
-///
-/// **Why not codegen?** Request constructor needs to parse input (string or
-/// Request object) and init dict. Codegen constructors are empty templates.
-/// A proper fix would be a hand-implemented constructor in hand_implemented/.
-/// Historical: fetch polyfill when install_fetch missing.
-/// fetch owned by network::fetch::install_fetch (INIT-2). Not evaluated.
-pub const REQUEST_FIX_JS: &str = r#"(function(){ /* no-op: fetch owned by install_fetch */ })();"#;
 
 /// Fix readonly attribute setters: idlharness expects setter=undefined
 /// for readonly attributes. Some accessor wrappers install a JS setter.
@@ -308,14 +281,6 @@ pub const NAME_LENGTH_FIX_JS: &str = r#"
         // ownership — do not re-wrap here (INIT-2 post-hoc shrink).
     })();
 "#;
-
-/// CDP diff fix: window.chrome should have runtime:{}.
-///
-/// Note: document.all [[IsHTMLDDA]] cannot be fixed from JS
-/// (see document_props.rs:1403 comment).
-/// Historical: ensure chrome.runtime object.
-/// Owned by iv8-undetect window_chrome.js (INIT-2). Not evaluated on main path.
-pub const CHROME_FIX_JS: &str = r#"(function(){ /* no-op: chrome.runtime owned by window_chrome */ })();"#;
 
 /// Delete Worker-only globals in Window mode.
 ///
