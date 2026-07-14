@@ -6893,19 +6893,11 @@ unsafe extern "C" fn select_options_getter(info: *const v8::FunctionCallbackInfo
                 .map(|d| collect_select_options(d, node_id))
                 .unwrap_or_default()
         };
-        // Array-like options + selectedIndex (HTMLOptionsCollection minimum).
-        let arr = v8::Array::new(scope, opts.len() as i32);
-        for (i, oid) in opts.iter().enumerate() {
-            if let Some(obj) = create_node_object(scope, state, *oid) {
-                let _ = arr.set_index(scope, i as u32, obj);
-            }
-        }
-        let select_id = node_id;
         let selected_idx = {
             let doc = state.document.borrow();
             doc.as_ref()
                 .map(|d| {
-                    let opts = collect_select_options(d, select_id);
+                    let opts = collect_select_options(d, node_id);
                     if opts.is_empty() {
                         return -1i32;
                     }
@@ -6917,30 +6909,223 @@ unsafe extern "C" fn select_options_getter(info: *const v8::FunctionCallbackInfo
                             }
                         }
                     }
-                    if found < 0 { 0 } else { found }
+                    if found < 0 {
+                        0
+                    } else {
+                        found
+                    }
                 })
                 .unwrap_or(-1)
         };
-        let key = crate::v8_utils::v8_string(scope, "selectedIndex");
-        let val = v8::Integer::new(scope, selected_idx);
-        let _ = arr.define_own_property(
+
+        // Real HTMLOptionsCollection instance (not Array) for idlharness.
+        let global = scope.get_current_context().global(scope);
+        let coll = {
+            let mut obj = v8::Object::new(scope);
+            if let Some(ctor_key) = v8::String::new(scope, "HTMLOptionsCollection") {
+                if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+                    if ctor_val.is_function() {
+                        let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+                        if let Some(pk) = v8::String::new(scope, "prototype") {
+                            if let Some(proto) = ctor.get(scope, pk.into()) {
+                                if proto.is_object() {
+                                    let _ = obj.set_prototype(scope, proto);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            obj
+        };
+
+        // Bind select NodeId for collection methods (add/remove/selectedIndex).
+        let sid_key = crate::v8_utils::v8_string(scope, "__iv8SelectId");
+        let sid_num = crate::dom::binding::node_id_to_usize(node_id) as f64;
+        let sid_val = v8::Number::new(scope, sid_num);
+        let _ = coll.define_own_property(
             scope,
-            key.into(),
-            val.into(),
+            sid_key.into(),
+            sid_val.into(),
+            v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
+        );
+
+        for (i, oid) in opts.iter().enumerate() {
+            if let Some(obj) = create_node_object(scope, state, *oid) {
+                let _ = coll.set_index(scope, i as u32, obj);
+            }
+        }
+        let len_key = crate::v8_utils::v8_string(scope, "length");
+        let len_val = v8::Integer::new(scope, opts.len() as i32);
+        let _ = coll.define_own_property(
+            scope,
+            len_key.into(),
+            len_val.into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+        let si_key = crate::v8_utils::v8_string(scope, "selectedIndex");
+        let si_val = v8::Integer::new(scope, selected_idx);
+        let _ = coll.define_own_property(
+            scope,
+            si_key.into(),
+            si_val.into(),
             v8::PropertyAttribute::NONE,
         );
-        // Brand for typeof/instanceof-ish harness checks
-        let tag = v8::Symbol::get_to_string_tag(scope);
-        if let Some(tag_val) = v8::String::new(scope, "HTMLOptionsCollection") {
-            let _ = arr.define_own_property(
-                scope,
-                tag.into(),
-                tag_val.into(),
-                v8::PropertyAttribute::DONT_ENUM,
+
+        // Ensure prototype has add/remove that operate on the bound select.
+        install_html_options_collection_methods(scope, global);
+
+        rv.set(coll.into());
+    });
+}
+
+/// Install HTMLOptionsCollection.prototype.add/remove if still codegen stubs.
+fn install_html_options_collection_methods(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+) {
+    let Some(ctor_key) = v8::String::new(scope, "HTMLOptionsCollection") else {
+        return;
+    };
+    let Some(ctor_val) = global.get(scope, ctor_key.into()) else {
+        return;
+    };
+    if !ctor_val.is_function() {
+        return;
+    }
+    let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+    let Some(pk) = v8::String::new(scope, "prototype") else {
+        return;
+    };
+    let Some(proto_val) = ctor.get(scope, pk.into()) else {
+        return;
+    };
+    if !proto_val.is_object() {
+        return;
+    }
+    let proto: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(proto_val) };
+
+    // Only install once.
+    let flag = crate::v8_utils::v8_string(scope, "__iv8OptionsMethods");
+    if proto
+        .get(scope, flag.into())
+        .map(|v| v.is_true())
+        .unwrap_or(false)
+    {
+        return;
+    }
+
+    let add_fn = {
+        let ft = v8::FunctionTemplate::builder_raw(html_options_add_cb)
+            .length(1)
+            .build(scope);
+        crate::v8_utils::v8_fn(scope, &ft)
+    };
+    let remove_fn = {
+        let ft = v8::FunctionTemplate::builder_raw(html_options_remove_cb)
+            .length(1)
+            .build(scope);
+        crate::v8_utils::v8_fn(scope, &ft)
+    };
+    let add_key = crate::v8_utils::v8_string(scope, "add");
+    let rem_key = crate::v8_utils::v8_string(scope, "remove");
+    let _ = proto.define_own_property(
+        scope,
+        add_key.into(),
+        add_fn.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
+    let _ = proto.define_own_property(
+        scope,
+        rem_key.into(),
+        remove_fn.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
+    let true_val = v8::Boolean::new(scope, true);
+    let _ = proto.define_own_property(
+        scope,
+        flag.into(),
+        true_val.into(),
+        v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
+    );
+}
+
+fn select_id_from_options_this(
+    scope: &v8::PinScope<'_, '_>,
+    this: v8::Local<v8::Object>,
+) -> Option<NodeId> {
+    let key = crate::v8_utils::v8_string(scope, "__iv8SelectId");
+    let v = this.get(scope, key.into())?;
+    let n = v.number_value(scope)?;
+    if n.is_nan() || n <= 0.0 {
+        return None;
+    }
+    crate::dom::binding::usize_to_node_id(n as usize)
+}
+
+unsafe extern "C" fn html_options_add_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let this = args.this();
+        let Some(this_obj) = this.to_object(scope) else {
+            return;
+        };
+        let Some(select_id) = select_id_from_options_this(scope, this_obj) else {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        };
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let mut doc = state.document.borrow_mut();
+        if let Some(ref mut d) = *doc {
+            let _ = d.append_child(
+                select_id,
+                NodeData::element("option", "http://www.w3.org/1999/xhtml", vec![]),
             );
         }
-        rv.set(arr.into());
-    });
+    }));
+}
+
+unsafe extern "C" fn html_options_remove_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let this = args.this();
+        let Some(this_obj) = this.to_object(scope) else {
+            return;
+        };
+        let Some(select_id) = select_id_from_options_this(scope, this_obj) else {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        };
+        let idx = if args.length() >= 1 {
+            args.get(0)
+                .number_value(scope)
+                .map(|n| n.trunc() as i32)
+                .unwrap_or(-1)
+        } else {
+            -1
+        };
+        if idx < 0 {
+            return;
+        }
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let mut doc = state.document.borrow_mut();
+        if let Some(ref mut d) = *doc {
+            let opts = collect_select_options(d, select_id);
+            if let Some(&oid) = opts.get(idx as usize) {
+                d.detach(oid);
+            }
+        }
+    }));
 }
 
 unsafe extern "C" fn select_length_getter(info: *const v8::FunctionCallbackInfo) {
