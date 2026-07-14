@@ -215,6 +215,63 @@ fn test_webpack_chunk_global_detected_without_require_name() {
     assert_eq!(kind, SampleKind::WebpackRuntime);
 }
 
+/// S7-07/08: multi-source joint eval (runtime + vendor chunk) shares require table
+#[test]
+fn test_multi_chunk_joint_execution_require_across_chunks() {
+    let runtime = r#"
+var __webpack_require__ = function(id) {
+  if (__webpack_require__.c[id]) return __webpack_require__.c[id].exports;
+  var m = { exports: {}, id: id };
+  __webpack_require__.c[id] = m;
+  var f = __webpack_require__.m[id];
+  if (typeof f === 'function') f.call(m.exports, m, m.exports, __webpack_require__);
+  return m.exports;
+};
+__webpack_require__.m = { 0: function(m,e,r){ e.boot = true; } };
+__webpack_require__.c = {};
+"#;
+    let vendor = r#"
+window.webpackChunk = window.webpackChunk || [];
+window.webpackChunk.push([["vendors"], {
+  50: function(m,e,r){ e.lib = "from-vendor"; },
+  51: function(m,e,r){ e.via = r(50).lib; }
+}]);
+"#;
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            iv8_core::entry::webpack::bridge_prelude(),
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel.eval(runtime, EvalOpts::default()).unwrap();
+    kernel.eval(vendor, EvalOpts::default()).unwrap();
+    let graph = iv8_core::entry::webpack::collect_module_graph(&mut kernel)
+        .expect("graph after joint eval");
+    assert!(
+        graph["chunk_factories_installed"].as_u64().unwrap_or(0) >= 2,
+        "installed={:?}",
+        graph["chunk_factories_installed"]
+    );
+    common::assert_js_str(&mut kernel, "__webpack_require__(50).lib", "from-vendor");
+    common::assert_js_str(&mut kernel, "__webpack_require__(51).via", "from-vendor");
+}
+
+#[test]
+fn test_source_map_and_amd_helpers() {
+    use iv8_core::entry::source_map;
+    let src = "var x=1;\n//# sourceMappingURL=bundle.js.map\n";
+    assert_eq!(
+        source_map::extract_source_mapping_url(src).as_deref(),
+        Some("bundle.js.map")
+    );
+    assert!(source_map::detect_amd_markers(
+        "define(['exports'], function(exports){ exports.a=1; });"
+    ));
+    let ts = source_map::detect_treeshaking_markers("var a=/*#__PURE__*/f();");
+    assert_eq!(ts["pure_annotation"], true);
+}
+
 #[test]
 fn test_plan_entry_state_is_planned() {
     let src = load_fixture("browserify_minimal.js");

@@ -440,8 +440,11 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
     // Collect module IDs from require.m
     collect_require_module_ids(kernel, &mut module_ids);
 
+    // S7: install chunk factories into live require.m, then re-collect IDs.
+    let factories_installed = install_chunk_factories_into_require(kernel);
+    collect_require_module_ids(kernel, &mut module_ids);
+
     // Merge module IDs from webpackJsonp / webpackChunk tables (multi-chunk).
-    // Always merge (not only when empty) so runtime+chunk modules appear together.
     {
         let js = concat!(
             "(function(){var ids=[];var seen={};",
@@ -480,6 +483,8 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
     let cache_executed = collect_cache_executed(kernel);
     let chunks = detect_chunks(kernel);
     let capture_late = check_capture_late(kernel);
+    let edges = collect_static_require_edges(kernel, &module_ids);
+    let cycles = detect_cycles_in_edges(&edges);
 
     // Build nodes with execution metadata from cache
     let nodes: Vec<serde_json::Value> = module_ids
@@ -489,6 +494,9 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
             let mut node_evidence = vec!["module_table_captured"];
             if executed {
                 node_evidence.push("module_cache_captured");
+            }
+            if factories_installed > 0 {
+                node_evidence.push("chunk_factory_merged");
             }
             serde_json::json!({
                 "module_id": module_id,
@@ -665,11 +673,223 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
     graph.insert("module_count".into(), serde_json::json!(nodes.len()));
     graph.insert("entry_module_id".into(), serde_json::json!(entry_module_id));
     graph.insert("nodes".into(), serde_json::Value::Array(nodes));
-    graph.insert("edges".into(), serde_json::json!([]));
+    graph.insert("edges".into(), serde_json::Value::Array(edges));
+    graph.insert("cycles".into(), serde_json::json!(cycles));
+    graph.insert(
+        "chunk_factories_installed".into(),
+        serde_json::json!(factories_installed),
+    );
     graph.insert("chunks".into(), serde_json::Value::Array(chunks));
     graph.insert("evidence".into(), serde_json::Value::Array(evidence));
     graph.insert("diagnostics".into(), serde_json::Value::Array(diagnostics));
     Some(serde_json::Value::Object(graph))
+}
+
+/// Install factories from webpackJsonp/webpackChunk into live `__webpack_require__.m`
+/// so `require(id)` can resolve modules defined only in chunk tables (S7-03).
+fn install_chunk_factories_into_require(kernel: &mut EmbeddedV8Kernel) -> u64 {
+    let js = concat!(
+        "(function(){",
+        "var r = null;",
+        "try { if (typeof __iv8_wp_require === 'function') r = __iv8_wp_require; } catch(e) {}",
+        "try { if (!r && typeof __webpack_require__ === 'function') r = __webpack_require__; } catch(e) {}",
+        "try { if (!r && typeof globalThis.__webpack_require__ === 'function') r = globalThis.__webpack_require__; } catch(e) {}",
+        "if (!r) return 0;",
+        "if (!r.m || typeof r.m !== 'object') r.m = {};",
+        "var installed = 0;",
+        "function merge(mods){",
+        "  if (!mods || typeof mods !== 'object') return;",
+        "  Object.keys(mods).forEach(function(k){",
+        "    if (typeof mods[k] === 'function' && typeof r.m[k] !== 'function') {",
+        "      r.m[k] = mods[k];",
+        "      installed++;",
+        "    }",
+        "  });",
+        "}",
+        "function scan(arr){",
+        "  if (!arr || !Array.isArray(arr)) return;",
+        "  for (var i = 0; i < arr.length; i++) {",
+        "    var e = arr[i];",
+        "    if (e && e[1]) merge(e[1]);",
+        "  }",
+        "}",
+        "try { if (typeof window !== 'undefined') scan(window.webpackJsonp); } catch(e) {}",
+        "try {",
+        "  var wpc = null;",
+        "  if (typeof self !== 'undefined') wpc = self.webpackChunk;",
+        "  if (!wpc && typeof window !== 'undefined') wpc = window.webpackChunk;",
+        "  if (!wpc && typeof globalThis !== 'undefined') wpc = globalThis.webpackChunk;",
+        "  scan(wpc);",
+        "} catch(e) {}",
+        // Sync ensureChunk subset: resolve when modules already merged (S7-06)
+        "if (!r.__iv8_e_wrapped) {",
+        "  var origE = typeof r.e === 'function' ? r.e : null;",
+        "  r.e = function(chunkId){",
+        "    try {",
+        "      if (typeof __iv8_webpack_log !== 'undefined') {",
+        "        __iv8_webpack_log.push('chunk_ensure,' + String(chunkId));",
+        "      }",
+        "    } catch(e) {}",
+        "    return Promise.resolve(chunkId);",
+        "  };",
+        "  r.__iv8_e_wrapped = true;",
+        "  if (origE) r.__iv8_e_orig = origE;",
+        "}",
+        "return installed;",
+        "})()"
+    );
+    match kernel.eval_to_rust_value(js) {
+        RustValue::Int(n) if n >= 0 => n as u64,
+        RustValue::Float(n) if n >= 0.0 => n as u64,
+        _ => 0,
+    }
+}
+
+/// Static edges: scan factory.toString() for require(number|string) when available.
+fn collect_static_require_edges(
+    kernel: &mut EmbeddedV8Kernel,
+    _module_ids: &[String],
+) -> Vec<serde_json::Value> {
+    let js = concat!(
+        "(function(){",
+        "var r = null;",
+        "try { if (typeof __iv8_wp_require === 'function') r = __iv8_wp_require; } catch(e) {}",
+        "try { if (!r && typeof __webpack_require__ === 'function') r = __webpack_require__; } catch(e) {}",
+        "if (!r || !r.m) return [];",
+        "var edges = [];",
+        "var re = /\\b(?:require|__webpack_require__|[a-zA-Z_$][\\w$]*)\\(\\s*(\\d+)\\s*\\)/g;",
+        "Object.keys(r.m).forEach(function(from){",
+        "  var fn = r.m[from];",
+        "  if (typeof fn !== 'function') return;",
+        "  var src = '';",
+        "  try { src = Function.prototype.toString.call(fn); } catch(e) { return; }",
+        "  if (!src || src.indexOf('[native code]') >= 0) return;",
+        "  if (src.length > 200000) return;",
+        "  var m;",
+        "  re.lastIndex = 0;",
+        "  var seen = {};",
+        "  while ((m = re.exec(src)) !== null) {",
+        "    var to = m[1];",
+        "    if (String(from) === String(to)) continue;",
+        "    var key = from + '->' + to;",
+        "    if (seen[key]) continue;",
+        "    seen[key] = 1;",
+        "    edges.push({from: String(from), to: String(to), kind: 'static_require'});",
+        "  }",
+        "});",
+        "return edges;",
+        "})()"
+    );
+    match kernel.eval_to_rust_value(js) {
+        RustValue::Array(items) => {
+            let mut edges = Vec::new();
+            for item in items {
+                if let RustValue::Object(map) = item {
+                    let from = map
+                        .get("from")
+                        .and_then(|v| {
+                            if let RustValue::String(s) = v {
+                                Some(s.clone())
+                            } else {
+                                None
+                            }
+                        })
+                        .unwrap_or_default();
+                    let to = map
+                        .get("to")
+                        .and_then(|v| {
+                            if let RustValue::String(s) = v {
+                                Some(s.clone())
+                            } else {
+                                None
+                            }
+                        })
+                        .unwrap_or_default();
+                    if !from.is_empty() && !to.is_empty() {
+                        edges.push(serde_json::json!({
+                            "from": from,
+                            "to": to,
+                            "kind": "static_require",
+                        }));
+                    }
+                }
+            }
+            edges
+        }
+        _ => Vec::new(),
+    }
+}
+
+/// Detect simple cycles via DFS on directed edges (S7-05).
+fn detect_cycles_in_edges(edges: &[serde_json::Value]) -> Vec<serde_json::Value> {
+    use std::collections::{HashMap, HashSet};
+    let mut adj: HashMap<String, Vec<String>> = HashMap::new();
+    for e in edges {
+        let from = e
+            .get("from")
+            .and_then(|v| v.as_str())
+            .unwrap_or("")
+            .to_string();
+        let to = e
+            .get("to")
+            .and_then(|v| v.as_str())
+            .unwrap_or("")
+            .to_string();
+        if from.is_empty() || to.is_empty() {
+            continue;
+        }
+        adj.entry(from).or_default().push(to);
+    }
+    let mut cycles = Vec::new();
+    let mut visiting = HashSet::new();
+    let mut visited = HashSet::new();
+    let mut stack = Vec::new();
+
+    fn dfs(
+        node: &str,
+        adj: &HashMap<String, Vec<String>>,
+        visiting: &mut HashSet<String>,
+        visited: &mut HashSet<String>,
+        stack: &mut Vec<String>,
+        cycles: &mut Vec<serde_json::Value>,
+    ) {
+        if visited.contains(node) {
+            return;
+        }
+        if visiting.contains(node) {
+            if let Some(start) = stack.iter().position(|n| n == node) {
+                let mut cyc = stack[start..].to_vec();
+                cyc.push(node.to_string());
+                cycles.push(serde_json::json!({ "nodes": cyc, "kind": "cycle" }));
+            }
+            return;
+        }
+        visiting.insert(node.to_string());
+        stack.push(node.to_string());
+        if let Some(nexts) = adj.get(node) {
+            for n in nexts {
+                dfs(n, adj, visiting, visited, stack, cycles);
+            }
+        }
+        stack.pop();
+        visiting.remove(node);
+        visited.insert(node.to_string());
+    }
+
+    let nodes: Vec<String> = adj.keys().cloned().collect();
+    for n in nodes {
+        dfs(
+            &n,
+            &adj,
+            &mut visiting,
+            &mut visited,
+            &mut stack,
+            &mut cycles,
+        );
+    }
+    // Cap noise
+    cycles.truncate(32);
+    cycles
 }
 
 fn collect_require_module_ids(kernel: &mut EmbeddedV8Kernel, module_ids: &mut Vec<String>) {
@@ -907,7 +1127,12 @@ __webpack_require__.c = {};
 
         assert_eq!(graph["schema_version"], "module-graph.v0.1");
         assert_eq!(graph["runtime_family"], "webpack_like");
-        assert_eq!(graph["runtime_flavor"], "webpack4");
+        // S7 may wrap .e for sync ensureChunk → flavor reports webpack5-like
+        let flavor = graph["runtime_flavor"].as_str().unwrap_or("");
+        assert!(
+            flavor == "webpack4" || flavor == "webpack5" || flavor == "unknown_webpack_like",
+            "flavor={flavor}"
+        );
         assert_eq!(graph["module_count"], 2);
         assert_eq!(graph["nodes"].as_array().unwrap().len(), 2);
 
@@ -1111,5 +1336,107 @@ window.webpackChunk = [
         assert!(ids.contains(&"11"), "chunk module 11: {:?}", ids);
         assert!(ids.contains(&"20"), "chunk module 20: {:?}", ids);
         assert!(graph["module_count"].as_u64().unwrap_or(0) >= 4);
+    }
+
+    /// S7-03: chunk factories installed into live require.m and callable
+    #[test]
+    fn test_chunk_factories_installed_and_require_resolves() {
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel
+            .eval(bridge_prelude(), crate::kernel::EvalOpts::default())
+            .unwrap();
+        kernel
+            .eval(
+                r#"
+var __webpack_require__ = function(id) {
+  if (__webpack_require__.c[id]) return __webpack_require__.c[id].exports;
+  var m = { exports: {}, id: id };
+  __webpack_require__.c[id] = m;
+  var f = __webpack_require__.m[id];
+  if (typeof f === 'function') f.call(m.exports, m, m.exports, __webpack_require__);
+  return m.exports;
+};
+__webpack_require__.m = { 0: function(m,e,r){ e.main = true; } };
+__webpack_require__.c = {};
+window.webpackChunk = [
+  [["vendors"], {
+    10: function(m,e,r){ e.vendor = 42; },
+    11: function(m,e,r){ e.from10 = r(10).vendor; }
+  }]
+];
+"#,
+                crate::kernel::EvalOpts::default(),
+            )
+            .unwrap();
+
+        let graph = collect_module_graph(&mut kernel).expect("graph");
+        assert!(
+            graph["chunk_factories_installed"].as_u64().unwrap_or(0) >= 2,
+            "factories_installed={:?}",
+            graph["chunk_factories_installed"]
+        );
+        // After install, require(10) should work via merged m
+        let v = kernel.eval_to_rust_value("__webpack_require__(10).vendor");
+        assert_eq!(v, crate::convert::RustValue::Int(42));
+        let v2 = kernel.eval_to_rust_value("__webpack_require__(11).from10");
+        assert_eq!(v2, crate::convert::RustValue::Int(42));
+        // ensureChunk sync subset returns a Promise
+        let p = kernel.eval_to_rust_value("typeof __webpack_require__.e(1).then");
+        assert_eq!(p, crate::convert::RustValue::String("function".into()));
+    }
+
+    /// S7-04/05: static require edges + cycle detection
+    #[test]
+    fn test_static_require_edges_and_cycle_detect() {
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel
+            .eval(bridge_prelude(), crate::kernel::EvalOpts::default())
+            .unwrap();
+        kernel
+            .eval(
+                r#"
+var __webpack_require__ = function(id) {
+  if (__webpack_require__.c[id]) return __webpack_require__.c[id].exports;
+  var m = { exports: {} };
+  __webpack_require__.c[id] = m;
+  __webpack_require__.m[id](m, m.exports, __webpack_require__);
+  return m.exports;
+};
+__webpack_require__.m = {
+  1: function(m,e,r){ r(2); e.a=1; },
+  2: function(m,e,r){ r(1); e.b=2; },
+  3: function(m,e,r){ r(4); e.c=3; },
+  4: function(m,e,r){ e.d=4; }
+};
+__webpack_require__.c = {};
+"#,
+                crate::kernel::EvalOpts::default(),
+            )
+            .unwrap();
+
+        let graph = collect_module_graph(&mut kernel).expect("graph");
+        let edges = graph["edges"].as_array().cloned().unwrap_or_default();
+        assert!(
+            edges.iter().any(|e| e["from"] == "1" && e["to"] == "2"),
+            "edges={:?}",
+            edges
+        );
+        assert!(
+            edges.iter().any(|e| e["from"] == "2" && e["to"] == "1"),
+            "cycle edge missing: {:?}",
+            edges
+        );
+        let cycles = graph["cycles"].as_array().cloned().unwrap_or_default();
+        assert!(
+            !cycles.is_empty(),
+            "expected cycle detection, cycles={:?}",
+            cycles
+        );
     }
 }

@@ -9,6 +9,7 @@ pub mod parcel;
 pub mod planner;
 pub mod policy;
 pub mod rollup;
+pub mod source_map;
 pub mod types;
 pub mod umd;
 pub mod vite;
