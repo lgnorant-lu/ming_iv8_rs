@@ -1746,17 +1746,24 @@ pub fn generate_install_all(
     // This function uses Object.defineProperty to set correct .length.
     out.push_str("\npub fn fix_global_operation_lengths(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {\n");
     {
-        let mut seen = std::collections::BTreeSet::new();
+        // BTreeMap: deterministic emit order (IR definition order is not stable).
+        let mut ops: std::collections::BTreeMap<String, u32> = std::collections::BTreeMap::new();
         for def in definitions {
-            if def.kind != "interface" { continue; }
+            if def.kind != "interface" {
+                continue;
+            }
             let ea = process_interface_ea(def);
-            if !ea.is_global { continue; }
+            if !ea.is_global {
+                continue;
+            }
             for m in &def.members {
-                if m.kind != "operation" { continue; }
+                if m.kind != "operation" {
+                    continue;
+                }
                 let name = m.name.as_deref().unwrap_or("");
-                if name.is_empty() || seen.contains(name) { continue; }
-                seen.insert(name.to_string());
-                // Calculate minOverloadLength across all overloads with same name
+                if name.is_empty() {
+                    continue;
+                }
                 let min_args = def
                     .members
                     .iter()
@@ -1764,18 +1771,30 @@ pub fn generate_install_all(
                     .map(|m2| m2.required_arg_count)
                     .min()
                     .unwrap_or(0);
-                out.push_str(&format!("    {{\n"));
-                out.push_str(&format!("        let key = v8::String::new(scope, \"{}\").unwrap();\n", name));
-                out.push_str(&format!("        if let Some(fn_val) = global.get(scope, key.into()) {{\n"));
-                out.push_str(&format!("            if fn_val.is_function() {{\n"));
-                out.push_str(&format!("                let len_key = v8::String::new(scope, \"length\").unwrap();\n"));
-                out.push_str(&format!("                let len_val = v8::Number::new(scope, {} as f64);\n", min_args));
-                out.push_str(&format!("                let fn_obj: v8::Local<v8::Object> = unsafe {{ v8::Local::cast_unchecked(fn_val) }};\n"));
-                out.push_str(&format!("                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());\n"));
-                out.push_str(&format!("            }}\n"));
-                out.push_str(&format!("        }}\n"));
-                out.push_str(&format!("    }}\n"));
+                // First global interface that defines the op wins (Chrome: Window).
+                ops.entry(name.to_string()).or_insert(min_args as u32);
             }
+        }
+        for (name, min_args) in &ops {
+            out.push_str("    {\n");
+            out.push_str(&format!(
+                "        let key = v8::String::new(scope, \"{}\").unwrap();\n",
+                name
+            ));
+            out.push_str("        if let Some(fn_val) = global.get(scope, key.into()) {\n");
+            out.push_str("            if fn_val.is_function() {\n");
+            out.push_str(
+                "                let len_key = v8::String::new(scope, \"length\").unwrap();\n",
+            );
+            out.push_str(&format!(
+                "                let len_val = v8::Number::new(scope, {} as f64);\n",
+                min_args
+            ));
+            out.push_str("                let fn_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(fn_val) };\n");
+            out.push_str("                let _ = fn_obj.create_data_property(scope, len_key.into(), len_val.into());\n");
+            out.push_str("            }\n");
+            out.push_str("        }\n");
+            out.push_str("    }\n");
         }
     }
     out.push_str("}\n");
@@ -1790,37 +1809,52 @@ pub fn generate_install_all(
     out.push_str("    let cb_key = v8::String::new(scope, \"__iv8OpCallbacks\").unwrap();\n");
     out.push_str("    let cb_obj = v8::Object::new(scope);\n");
     {
-        let mut seen_iface = std::collections::BTreeSet::new();
+        // Collect by interface name for deterministic emit (IR order unstable).
+        let mut by_iface: std::collections::BTreeMap<String, &Definition> =
+            std::collections::BTreeMap::new();
         for def in definitions {
-            if def.kind != "interface" { continue; }
-            let name = match &def.name { Some(n) => n, None => continue };
-            let fn_name = type_mapper::idl_name_to_rust(name);
+            if def.kind != "interface" {
+                continue;
+            }
+            let name = match &def.name {
+                Some(n) => n,
+                None => continue,
+            };
             let ea = process_interface_ea(def);
-            if ea.no_interface_object { continue; }
-            if !seen_iface.insert(name.clone()) { continue; }
-            const DOM_TEMPLATE_INTERFACES: &[&str] = &[
-                "EventTarget", "Node", "Element", "HTMLElement",
-                "HTMLDivElement", "HTMLSpanElement", "HTMLAnchorElement",
-                "HTMLInputElement", "HTMLButtonElement", "HTMLFormElement",
-                "HTMLCanvasElement", "HTMLScriptElement", "HTMLImageElement",
-                "HTMLVideoElement", "HTMLAudioElement", "HTMLSelectElement",
-                "HTMLTextAreaElement", "HTMLHeadElement", "HTMLBodyElement",
-                "HTMLHtmlElement", "HTMLParagraphElement", "HTMLHeadingElement",
-                "HTMLUListElement", "HTMLOListElement", "HTMLLIElement",
-                "HTMLTableElement", "HTMLStyleElement", "HTMLLinkElement",
-                "HTMLMetaElement", "HTMLUnknownElement",
-                "Document", "XMLDocument", "DOMImplementation",
-                "DocumentFragment", "DocumentType", "ShadowRoot",
-                "Text", "Comment", "CDATASection", "ProcessingInstruction",
-                "Attr", "NodeList", "HTMLCollection",
-                "Range", "Selection", "TreeWalker", "NodeIterator",
-            ];
-            if DOM_TEMPLATE_INTERFACES.contains(&name.as_str()) { continue; }
+            if ea.no_interface_object {
+                continue;
+            }
+            by_iface.entry(name.clone()).or_insert(def);
+        }
+        const DOM_TEMPLATE_INTERFACES: &[&str] = &[
+            "EventTarget", "Node", "Element", "HTMLElement",
+            "HTMLDivElement", "HTMLSpanElement", "HTMLAnchorElement",
+            "HTMLInputElement", "HTMLButtonElement", "HTMLFormElement",
+            "HTMLCanvasElement", "HTMLScriptElement", "HTMLImageElement",
+            "HTMLVideoElement", "HTMLAudioElement", "HTMLSelectElement",
+            "HTMLTextAreaElement", "HTMLHeadElement", "HTMLBodyElement",
+            "HTMLHtmlElement", "HTMLParagraphElement", "HTMLHeadingElement",
+            "HTMLUListElement", "HTMLOListElement", "HTMLLIElement",
+            "HTMLTableElement", "HTMLStyleElement", "HTMLLinkElement",
+            "HTMLMetaElement", "HTMLUnknownElement",
+            "Document", "XMLDocument", "DOMImplementation",
+            "DocumentFragment", "DocumentType", "ShadowRoot",
+            "Text", "Comment", "CDATASection", "ProcessingInstruction",
+            "Attr", "NodeList", "HTMLCollection",
+            "Range", "Selection", "TreeWalker", "NodeIterator",
+        ];
+        for (name, def) in &by_iface {
+            if DOM_TEMPLATE_INTERFACES.contains(&name.as_str()) {
+                continue;
+            }
+            let fn_name = type_mapper::idl_name_to_rust(name);
             let mut idx = 0;
             for m in &def.members {
                 if m.kind == "attribute" {
                     let attr_name = m.name.as_deref().unwrap_or("");
-                    if should_skip_attribute(name, attr_name) { continue; }
+                    if should_skip_attribute(name, attr_name) {
+                        continue;
+                    }
                     idx += 1;
                 } else if m.kind == "operation" {
                     let op_name = if m.special.as_deref() == Some("stringifier") {
@@ -1830,12 +1864,20 @@ pub fn generate_install_all(
                     };
                     // Lockstep with generate_callbacks: excluded ops do not advance idx;
                     // empty-name / static ops still advance idx but are not exported.
-                    if should_skip_operation(name, &op_name) { continue; }
+                    if should_skip_operation(name, &op_name) {
+                        continue;
+                    }
                     idx += 1;
                     let is_static = m.special.as_deref() == Some("static");
-                    if is_static || op_name.is_empty() { continue; }
-                    let min_args = def.members.iter()
-                        .filter(|m2| m2.kind == "operation" && m2.name.as_deref() == m.name.as_deref())
+                    if is_static || op_name.is_empty() {
+                        continue;
+                    }
+                    let min_args = def
+                        .members
+                        .iter()
+                        .filter(|m2| {
+                            m2.kind == "operation" && m2.name.as_deref() == m.name.as_deref()
+                        })
                         .map(|m2| m2.required_arg_count)
                         .min()
                         .unwrap_or(m.required_arg_count);
@@ -1843,13 +1885,25 @@ pub fn generate_install_all(
                     let module_rust = module.replace('-', "_");
                     let full_key = format!("{}.{}", name, op_name);
                     out.push_str("    {\n");
-                    out.push_str(&format!("        let k = v8::String::new(scope, \"{}\").unwrap();\n", full_key));
+                    out.push_str(&format!(
+                        "        let k = v8::String::new(scope, \"{}\").unwrap();\n",
+                        full_key
+                    ));
                     if min_args > 0 {
-                        out.push_str(&format!("        let ft = v8::FunctionTemplate::builder_raw(super::{}::{}_op_{}).length({}).build(scope);\n", module_rust, fn_name, idx, min_args));
+                        out.push_str(&format!(
+                            "        let ft = v8::FunctionTemplate::builder_raw(super::{}::{}_op_{}).length({}).build(scope);\n",
+                            module_rust, fn_name, idx, min_args
+                        ));
                     } else {
-                        out.push_str(&format!("        let ft = v8::FunctionTemplate::builder_raw(super::{}::{}_op_{}).build(scope);\n", module_rust, fn_name, idx));
+                        out.push_str(&format!(
+                            "        let ft = v8::FunctionTemplate::builder_raw(super::{}::{}_op_{}).build(scope);\n",
+                            module_rust, fn_name, idx
+                        ));
                     }
-                    out.push_str(&format!("        ft.set_class_name(v8::String::new(scope, \"{}\").unwrap());\n", op_name));
+                    out.push_str(&format!(
+                        "        ft.set_class_name(v8::String::new(scope, \"{}\").unwrap());\n",
+                        op_name
+                    ));
                     out.push_str("        let fn_val = ft.get_function(scope).unwrap();\n");
                     out.push_str("        let _ = cb_obj.set(scope, k.into(), fn_val.into());\n");
                     out.push_str("    }\n");
@@ -1865,19 +1919,28 @@ pub fn generate_install_all(
     // to accessor properties (preserving values) for idlharness compliance.
     out.push_str("\npub const GLOBAL_ATTR_NAMES: &[&str] = &[\n");
     {
+        // Collect then emit sorted — IR definition order is not stable across loads.
         let mut seen = std::collections::BTreeSet::new();
         for def in definitions {
-            if def.kind != "interface" { continue; }
+            if def.kind != "interface" {
+                continue;
+            }
             let ea = process_interface_ea(def);
-            if !ea.is_global { continue; }
+            if !ea.is_global {
+                continue;
+            }
             for m in &def.members {
                 if m.kind == "attribute" {
                     let name = m.name.as_deref().unwrap_or("");
-                    if name.is_empty() || seen.contains(name) { continue; }
+                    if name.is_empty() {
+                        continue;
+                    }
                     seen.insert(name.to_string());
-                    out.push_str(&format!("    \"{}\",\n", name));
                 }
             }
+        }
+        for name in &seen {
+            out.push_str(&format!("    \"{}\",\n", name));
         }
     }
     out.push_str("];\n");
@@ -1886,22 +1949,38 @@ pub fn generate_install_all(
     // Used by freeze_all_prototypes to install correct accessors with proper setter logic.
     out.push_str("\npub const GLOBAL_ATTR_METADATA: &[(&str, bool, bool)] = &[\n");
     {
-        let mut seen = std::collections::BTreeSet::new();
-        for def in definitions {
-            if def.kind != "interface" { continue; }
-            let ea = process_interface_ea(def);
-            if !ea.is_global { continue; }
+        // name -> (readonly, replaceable); BTreeMap for deterministic order.
+        // Prefer Window when multiple [Global] interfaces share an attr name
+        // (e.g. `name` on Window vs WorkerGlobalScope).
+        let mut meta: std::collections::BTreeMap<String, (bool, bool)> =
+            std::collections::BTreeMap::new();
+        let mut globals: Vec<&Definition> = definitions
+            .iter()
+            .filter(|d| d.kind == "interface")
+            .filter(|d| process_interface_ea(d).is_global)
+            .collect();
+        globals.sort_by_key(|d| {
+            let n = d.name.as_deref().unwrap_or("");
+            // Window first, then alphabetical for stability.
+            (if n == "Window" { 0 } else { 1 }, n)
+        });
+        for def in globals {
             for m in &def.members {
                 if m.kind == "attribute" {
                     let name = m.name.as_deref().unwrap_or("");
-                    if name.is_empty() || seen.contains(name) { continue; }
-                    seen.insert(name.to_string());
-                    out.push_str(&format!(
-                        "    (\"{}\", {}, {}),\n",
-                        name, m.readonly, m.has_replaceable
-                    ));
+                    if name.is_empty() {
+                        continue;
+                    }
+                    meta.entry(name.to_string())
+                        .or_insert((m.readonly, m.has_replaceable));
                 }
             }
+        }
+        for (name, (readonly, replaceable)) in &meta {
+            out.push_str(&format!(
+                "    (\"{}\", {}, {}),\n",
+                name, readonly, replaceable
+            ));
         }
     }
     out.push_str("];\n");

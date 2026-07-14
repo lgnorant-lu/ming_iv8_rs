@@ -21,8 +21,13 @@ fn main() {
         eprintln!("  --input <path>   unified_ir.json path");
         eprintln!("  --output <dir>   output directory for generated Rust files");
         eprintln!("  --stats          print IR statistics");
+        eprintln!("  --check          generate in-memory and exit 1 if differs from --output");
+        eprintln!("  --diff           like --check but print first differing file paths");
         return;
     }
+
+    let check_mode = args.contains(&"--check".to_string()) || args.contains(&"--diff".to_string());
+    let show_diff = args.contains(&"--diff".to_string());
 
     // Load IR
     eprintln!("Loading {} ...", input_path);
@@ -51,38 +56,88 @@ fn main() {
     }
 
     // Generate code
-    eprintln!("Generating code to {} ...", output_dir);
+    eprintln!(
+        "{} code {} ...",
+        if check_mode {
+            "Checking generated"
+        } else {
+            "Generating"
+        },
+        output_dir
+    );
     let (files, install_info) = codegen::generate_all(&merged, &topo_result.sorted);
+
+    let mut total_ifaces = 0;
+    let mut domain_names: Vec<String> = Vec::new();
+    let mut planned: Vec<(String, String)> = Vec::new();
+
+    for file in &files {
+        total_ifaces += file.interface_count;
+        let mod_name = file.domain.replace('-', "_");
+        domain_names.push(mod_name.clone());
+        planned.push((format!("{}.rs", mod_name), file.content.clone()));
+        if !check_mode {
+            eprintln!(
+                "  {}: {} interfaces -> {}.rs",
+                file.domain, file.interface_count, mod_name
+            );
+        }
+    }
+
+    let mod_content = codegen::generate_mod_rs(&domain_names);
+    planned.push(("mod.rs".into(), mod_content));
+
+    let install_content =
+        codegen::generate_install_all(&merged, &topo_result.sorted, &install_info.domain_of);
+    planned.push(("install_all.rs".into(), install_content));
+
+    if check_mode {
+        let mut mismatches = 0usize;
+        for (name, content) in &planned {
+            let path = format!("{}/{}", output_dir, name);
+            match std::fs::read_to_string(&path) {
+                Ok(existing) => {
+                    if existing != *content {
+                        mismatches += 1;
+                        if show_diff {
+                            eprintln!("DIFF {}", path);
+                        } else {
+                            eprintln!("OUT_OF_DATE {}", path);
+                        }
+                    }
+                }
+                Err(_) => {
+                    mismatches += 1;
+                    eprintln!("MISSING {}", path);
+                }
+            }
+        }
+        if mismatches == 0 {
+            eprintln!(
+                "CHECK PASS: {} files match ({} interfaces)",
+                planned.len(),
+                total_ifaces
+            );
+            std::process::exit(0);
+        } else {
+            eprintln!(
+                "CHECK FAIL: {} of {} generated files out of date",
+                mismatches,
+                planned.len()
+            );
+            std::process::exit(1);
+        }
+    }
 
     std::fs::create_dir_all(&output_dir).unwrap_or_else(|e| {
         eprintln!("Failed to create output dir: {}", e);
         std::process::exit(1);
     });
 
-    let mut total_ifaces = 0;
-    let mut domain_names: Vec<String> = Vec::new();
-
-    for file in &files {
-        total_ifaces += file.interface_count;
-        let mod_name = file.domain.replace('-', "_");
-        domain_names.push(mod_name.clone());
-
-        let file_path = format!("{}/{}.rs", output_dir, mod_name);
-        std::fs::write(&file_path, &file.content).unwrap();
-        eprintln!(
-            "  {}: {} interfaces -> {}.rs",
-            file.domain, file.interface_count, mod_name
-        );
+    for (name, content) in &planned {
+        let file_path = format!("{}/{}", output_dir, name);
+        std::fs::write(&file_path, content).unwrap();
     }
-
-    // Generate mod.rs
-    let mod_content = codegen::generate_mod_rs(&domain_names);
-    std::fs::write(format!("{}/mod.rs", output_dir), &mod_content).unwrap();
-
-    // Generate install_all.rs
-    let install_content =
-        codegen::generate_install_all(&merged, &topo_result.sorted, &install_info.domain_of);
-    std::fs::write(format!("{}/install_all.rs", output_dir), &install_content).unwrap();
     eprintln!(
         "  install_all.rs: {} interfaces in topological order",
         install_info.sorted.len()

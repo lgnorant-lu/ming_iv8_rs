@@ -775,22 +775,8 @@ impl EmbeddedV8Kernel {
             let move_js = crate::v8_utils::v8_string(scope, iv8_surface::generated::install_all::GLOBAL_MOVE_JS);
             let _ = v8::Script::compile(scope, move_js, None).and_then(|s| s.run(scope));
 
-            // P0 boundary fix: delete navigator.webdriver from Navigator.prototype.
-            // Real Chrome: Object.getOwnPropertyDescriptor(Navigator.prototype, 'webdriver') === undefined.
-            // IV8 installs it as a getter returning false, which is detectable.
-            crate::telemetry::post_hoc_fix_start("WEBDRIVER_FIX_JS");
-            let webdriver_fix = crate::v8_utils::v8_string(scope,
-                crate::kernel::post_hoc_fixes::WEBDRIVER_FIX_JS);
-            let ok = v8::Script::compile(scope, webdriver_fix, None).and_then(|s| s.run(scope)).is_some();
-            crate::telemetry::post_hoc_fix_complete("WEBDRIVER_FIX_JS", ok);
-
-            // P0 boundary fix: patch document.createElement toString to return native code.
-            crate::telemetry::post_hoc_fix_start("CREATE_ELEMENT_FIX_JS");
-            let create_element_fix = crate::v8_utils::v8_string(scope,
-                crate::kernel::post_hoc_fixes::CREATE_ELEMENT_FIX_JS);
-            let ok = v8::Script::compile(scope, create_element_fix, None).and_then(|s| s.run(scope)).is_some();
-            crate::telemetry::post_hoc_fix_complete("CREATE_ELEMENT_FIX_JS", ok);
-
+            // INIT-2: skip pure no-op post-hoc blobs (CREATE_ELEMENT/IFRAME/SHADOW/DOM_GETTER).
+            // WEBDRIVER_FIX kept only if still non-empty; currently no-op inventory — skip.
             // P0 boundary fix: navigator.plugins instanceof PluginArray must be true.
             crate::telemetry::post_hoc_fix_start("PLUGINS_FIX_JS");
             let plugins_fix = crate::v8_utils::v8_string(scope,
@@ -798,22 +784,7 @@ impl EmbeddedV8Kernel {
             let ok = v8::Script::compile(scope, plugins_fix, None).and_then(|s| s.run(scope)).is_some();
             crate::telemetry::post_hoc_fix_complete("PLUGINS_FIX_JS", ok);
 
-            // P0-BT-5 fix: iframe contentWindow.navigator missing.
-            crate::telemetry::post_hoc_fix_start("IFRAME_FIX_JS");
-            let iframe_fix = crate::v8_utils::v8_string(scope,
-                crate::kernel::post_hoc_fixes::IFRAME_FIX_JS);
-            let ok = v8::Script::compile(scope, iframe_fix, None).and_then(|s| s.run(scope)).is_some();
-            crate::telemetry::post_hoc_fix_complete("IFRAME_FIX_JS", ok);
-
-            // ROOT CAUSE: Element.prototype.shadowRoot returns {} by default but
-            // should return null. VMP checks this API and takes wrong branch.
-            crate::telemetry::post_hoc_fix_start("SHADOW_ROOT_FIX_JS");
-            let shadow_root_fix = crate::v8_utils::v8_string(scope,
-                crate::kernel::post_hoc_fixes::SHADOW_ROOT_FIX_JS);
-            let ok = v8::Script::compile(scope, shadow_root_fix, None).and_then(|s| s.run(scope)).is_some();
-            crate::telemetry::post_hoc_fix_complete("SHADOW_ROOT_FIX_JS", ok);
-
-            // P1: Request constructor — codegen creates empty object, store url/method
+            // COMP-5: Request ctor = DOM FT; REQUEST_FIX is fetch() polyfill only.
             crate::telemetry::post_hoc_fix_start("REQUEST_FIX_JS");
             let request_fix = crate::v8_utils::v8_string(scope,
                 crate::kernel::post_hoc_fixes::REQUEST_FIX_JS);
@@ -917,11 +888,7 @@ impl EmbeddedV8Kernel {
             let ok = v8::Script::compile(scope, descriptor_fix, None).and_then(|s| s.run(scope)).is_some();
             crate::telemetry::post_hoc_fix_complete("DESCRIPTOR_FIX_JS", ok);
 
-            crate::telemetry::post_hoc_fix_start("DOM_GETTER_FIX_JS");
-            let dom_getter_fix = crate::v8_utils::v8_string(scope,
-                crate::kernel::post_hoc_fixes::DOM_GETTER_FIX_JS);
-            let ok = v8::Script::compile(scope, dom_getter_fix, None).and_then(|s| s.run(scope)).is_some();
-            crate::telemetry::post_hoc_fix_complete("DOM_GETTER_FIX_JS", ok);
+            // DOM_GETTER_FIX_JS is empty no-op — skipped (INIT-2).
 
             crate::telemetry::post_hoc_fix_start("TO_STRING_TAG_FIX_JS");
             let tostring_tag_fix = crate::v8_utils::v8_string(scope,
