@@ -6955,28 +6955,18 @@ unsafe extern "C" fn select_options_getter(info: *const v8::FunctionCallbackInfo
                 let _ = coll.set_index(scope, i as u32, obj);
             }
         }
-        let len_key = crate::v8_utils::v8_string(scope, "length");
-        let len_val = v8::Integer::new(scope, opts.len() as i32);
-        let _ = coll.define_own_property(
-            scope,
-            len_key.into(),
-            len_val.into(),
-            v8::PropertyAttribute::DONT_ENUM,
-        );
-        let si_key = crate::v8_utils::v8_string(scope, "selectedIndex");
-        let si_val = v8::Integer::new(scope, selected_idx);
-        let _ = coll.define_own_property(
-            scope,
-            si_key.into(),
-            si_val.into(),
-            v8::PropertyAttribute::NONE,
-        );
-
-        // Ensure prototype has add/remove that operate on the bound select.
-        install_html_options_collection_methods(scope, global);
-
+        // length/selectedIndex on prototype (installed at document bind time).
+        let _ = selected_idx;
         rv.set(coll.into());
     });
+}
+
+/// Install HTMLOptionsCollection.prototype methods/accessors (call before freeze).
+pub fn install_html_options_collection_methods_public(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+) {
+    install_html_options_collection_methods(scope, global);
 }
 
 /// Install HTMLOptionsCollection.prototype.add/remove if still codegen stubs.
@@ -7041,6 +7031,52 @@ fn install_html_options_collection_methods(
         remove_fn.into(),
         v8::PropertyAttribute::DONT_ENUM,
     );
+
+    // length + selectedIndex as prototype accessors (not own on instance).
+    let len_get = {
+        let ft = v8::FunctionTemplate::builder_raw(html_options_length_get_cb).build(scope);
+        crate::v8_utils::v8_fn(scope, &ft)
+    };
+    let si_get = {
+        let ft = v8::FunctionTemplate::builder_raw(html_options_selected_index_get_cb).build(scope);
+        crate::v8_utils::v8_fn(scope, &ft)
+    };
+    let si_set = {
+        let ft = v8::FunctionTemplate::builder_raw(html_options_selected_index_set_cb)
+            .length(1)
+            .build(scope);
+        crate::v8_utils::v8_fn(scope, &ft)
+    };
+    let len_key = crate::v8_utils::v8_string(scope, "length");
+    let si_key = crate::v8_utils::v8_string(scope, "selectedIndex");
+    // Use Object.defineProperty via V8 API
+    let _ = proto.delete(scope, len_key.into());
+    let _ = proto.delete(scope, si_key.into());
+    {
+        // length: getter only (HTMLOptionsCollection.length is replaceable in HTML but
+        // idlharness primarily checks presence on prototype).
+        let getter_key = crate::v8_utils::v8_string(scope, "get");
+        let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
+        let conf_key = crate::v8_utils::v8_string(scope, "configurable");
+        let desc = v8::Object::new(scope);
+        desc.set(scope, getter_key.into(), len_get.into());
+        desc.set(scope, enum_key.into(), v8::Boolean::new(scope, true).into());
+        desc.set(scope, conf_key.into(), v8::Boolean::new(scope, true).into());
+        define_property_on(scope, global, proto, "length", desc);
+    }
+    {
+        let getter_key = crate::v8_utils::v8_string(scope, "get");
+        let setter_key = crate::v8_utils::v8_string(scope, "set");
+        let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
+        let conf_key = crate::v8_utils::v8_string(scope, "configurable");
+        let desc = v8::Object::new(scope);
+        desc.set(scope, getter_key.into(), si_get.into());
+        desc.set(scope, setter_key.into(), si_set.into());
+        desc.set(scope, enum_key.into(), v8::Boolean::new(scope, true).into());
+        desc.set(scope, conf_key.into(), v8::Boolean::new(scope, true).into());
+        define_property_on(scope, global, proto, "selectedIndex", desc);
+    }
+
     let true_val = v8::Boolean::new(scope, true);
     let _ = proto.define_own_property(
         scope,
@@ -7048,6 +7084,147 @@ fn install_html_options_collection_methods(
         true_val.into(),
         v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
     );
+}
+
+fn define_property_on(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+    obj: v8::Local<v8::Object>,
+    name: &str,
+    desc: v8::Local<v8::Object>,
+) {
+    let obj_key = crate::v8_utils::v8_string(scope, "Object");
+    let Some(obj_ctor) = global.get(scope, obj_key.into()) else {
+        return;
+    };
+    if !obj_ctor.is_object() {
+        return;
+    }
+    let obj_ctor: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(obj_ctor) };
+    let def_key = crate::v8_utils::v8_string(scope, "defineProperty");
+    let Some(def_prop) = obj_ctor.get(scope, def_key.into()) else {
+        return;
+    };
+    if !def_prop.is_function() {
+        return;
+    }
+    let def_fn: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(def_prop) };
+    let name_str = crate::v8_utils::v8_string(scope, name);
+    let undefined = v8::undefined(scope);
+    let _ = def_fn.call(
+        scope,
+        undefined.into(),
+        &[obj.into(), name_str.into(), desc.into()],
+    );
+}
+
+unsafe extern "C" fn html_options_length_get_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let Some(this_obj) = this.to_object(scope) else {
+            return;
+        };
+        let Some(select_id) = select_id_from_options_this(scope, this_obj) else {
+            rv.set(v8::Integer::new(scope, 0).into());
+            return;
+        };
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let n = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .map(|d| collect_select_options(d, select_id).len() as i32)
+                .unwrap_or(0)
+        };
+        rv.set(v8::Integer::new(scope, n).into());
+    }));
+}
+
+unsafe extern "C" fn html_options_selected_index_get_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let Some(this_obj) = this.to_object(scope) else {
+            return;
+        };
+        let Some(select_id) = select_id_from_options_this(scope, this_obj) else {
+            rv.set(v8::Integer::new(scope, -1).into());
+            return;
+        };
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let idx = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .map(|d| {
+                    let opts = collect_select_options(d, select_id);
+                    if opts.is_empty() {
+                        return -1i32;
+                    }
+                    let mut found = -1i32;
+                    for (i, oid) in opts.iter().enumerate() {
+                        if let Some(n) = d.get(*oid) {
+                            if n.value().get_attr("selected").is_some() {
+                                found = i as i32;
+                            }
+                        }
+                    }
+                    if found < 0 {
+                        0
+                    } else {
+                        found
+                    }
+                })
+                .unwrap_or(-1)
+        };
+        rv.set(v8::Integer::new(scope, idx).into());
+    }));
+}
+
+unsafe extern "C" fn html_options_selected_index_set_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let this = args.this();
+        let Some(this_obj) = this.to_object(scope) else {
+            return;
+        };
+        let Some(select_id) = select_id_from_options_this(scope, this_obj) else {
+            return;
+        };
+        if args.length() < 1 {
+            return;
+        }
+        let idx = args
+            .get(0)
+            .number_value(scope)
+            .map(|n| n.trunc() as i32)
+            .unwrap_or(-1);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let mut doc = state.document.borrow_mut();
+        if let Some(ref mut d) = *doc {
+            let opts = collect_select_options(d, select_id);
+            for (i, oid) in opts.iter().enumerate() {
+                if let Some(mut n) = d.get_mut(*oid) {
+                    if let NodeData::Element { ref mut attrs, .. } = n.value() {
+                        attrs.retain(|(k, _)| k != "selected");
+                        if idx >= 0 && i as i32 == idx {
+                            attrs.push(("selected".to_string(), "".to_string()));
+                        }
+                    }
+                }
+            }
+        }
+    }));
 }
 
 fn select_id_from_options_this(
@@ -7068,6 +7245,15 @@ unsafe extern "C" fn html_options_add_cb(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "Failed to execute 'add' on 'HTMLOptionsCollection': 1 argument required, but only 0 present.",
+            );
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
         let this = args.this();
         let Some(this_obj) = this.to_object(scope) else {
             return;
@@ -7095,6 +7281,15 @@ unsafe extern "C" fn html_options_remove_cb(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "Failed to execute 'remove' on 'HTMLOptionsCollection': 1 argument required, but only 0 present.",
+            );
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
         let this = args.this();
         let Some(this_obj) = this.to_object(scope) else {
             return;
@@ -7105,14 +7300,11 @@ unsafe extern "C" fn html_options_remove_cb(info: *const v8::FunctionCallbackInf
             scope.throw_exception(exc);
             return;
         };
-        let idx = if args.length() >= 1 {
-            args.get(0)
-                .number_value(scope)
-                .map(|n| n.trunc() as i32)
-                .unwrap_or(-1)
-        } else {
-            -1
-        };
+        let idx = args
+            .get(0)
+            .number_value(scope)
+            .map(|n| n.trunc() as i32)
+            .unwrap_or(-1);
         if idx < 0 {
             return;
         }

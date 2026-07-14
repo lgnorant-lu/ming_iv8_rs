@@ -183,6 +183,9 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     // document.all — HTMLAllCollection with [[IsHTMLDDA]] (C8).
     install_document_all(scope, global, doc_obj);
 
+    // HTMLOptionsCollection.prototype accessors/methods before freeze (idlharness).
+    crate::dom::template::install_html_options_collection_methods_public(scope, global);
+
     // TreeWalker.prototype traversal (overrides codegen null stubs).
     install_tree_walker_prototype_ops(scope, global);
     // XPathExpression.evaluate + Document.evaluate (subset over real tree).
