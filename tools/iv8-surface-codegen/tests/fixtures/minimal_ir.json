@@ -1,0 +1,25 @@
+{
+  "schema_version": "unified-ir.v0.1",
+  "metadata": {
+    "generated_at": "fixture",
+    "total_interfaces": 1
+  },
+  "definitions": [
+    {
+      "kind": "interface",
+      "name": "FixtureNode",
+      "source": "fixture",
+      "inheritance": null,
+      "partial": false,
+      "ext_attrs": [],
+      "members": [
+        {
+          "kind": "attribute",
+          "name": "nodeName",
+          "type": { "kind": "name", "name": "DOMString", "nullable": false },
+          "readonly": true
+        }
+      ]
+    }
+  ]
+}

@@ -108,7 +108,7 @@ tools/idl/
 - `tmp/` is gitignored intermediate output (`tools/idl/.gitignore`). Safe to delete entirely; next `node generate-ir.js` recreates it.
 - `tmp/first_run.json` can duplicate large IR blobs relative to `output/unified_ir.json`; not required after a successful run.
 - `parse-chromium-idl.js` is not wired into `generate-ir.js`; Chrome extras currently come from `chrome-manual/*.ir.json`.
-- Pipeline has no stage tests and no incremental rebuild cache.
+- Pipeline stage tests: codegen `load_ir` has a minimal fixture test (`tools/iv8-surface-codegen/tests/test_pipeline_stage_load_ir.rs`); tools/idl node stages still lack dedicated tests. No incremental rebuild cache.
 - Metadata versions are resolved at generate time from installed `node_modules` (`@webref/idl`, `webidl2`); pin via `package.json` + lockfile.
 
 ## 下游版本
