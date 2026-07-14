@@ -170,4 +170,30 @@ mod tests {
         bundle.add_raw("https://b.com", vec![], 404, None);
         assert_eq!(bundle.len(), 2);
     }
+
+    #[test]
+    fn bundle_text_resource_and_clear() {
+        let mut bundle = ResourceBundle::new();
+        bundle.add("https://example.com/plain", Resource::text("hi", 201));
+        let res = bundle.get("https://example.com/plain").unwrap();
+        assert_eq!(res.status, 201);
+        assert_eq!(res.body_text(), "hi");
+        assert_eq!(res.content_type.as_deref(), Some("text/plain"));
+        bundle.clear();
+        assert!(bundle.is_empty());
+        assert!(!bundle.contains("https://example.com/plain"));
+    }
+
+    #[test]
+    fn bundle_headers_preserved_on_add_raw() {
+        let mut headers = std::collections::HashMap::new();
+        headers.insert("content-type".to_string(), "application/octet-stream".to_string());
+        headers.insert("x-custom".to_string(), "1".to_string());
+        let mut bundle = ResourceBundle::new();
+        bundle.add_raw("https://example.com/bin", vec![0, 1, 2], 200, Some(headers));
+        let res = bundle.get("https://example.com/bin").unwrap();
+        assert_eq!(res.body, vec![0, 1, 2]);
+        assert_eq!(res.content_type.as_deref(), Some("application/octet-stream"));
+        assert_eq!(res.headers.get("x-custom").map(String::as_str), Some("1"));
+    }
 }
