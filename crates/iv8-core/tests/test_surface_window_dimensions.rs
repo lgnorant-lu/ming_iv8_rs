@@ -59,6 +59,30 @@ fn test_window_descriptor_getter_is_function() {
     );
 }
 
+// v0.8.94 S2: position/scroll native global accessors (not WINDOW_EXTRAS data)
+#[test]
+fn test_window_position_scroll_native_getters() {
+    let mut k = common::make_kernel();
+    for key in [
+        "screenX",
+        "screenY",
+        "screenLeft",
+        "screenTop",
+        "scrollX",
+        "scrollY",
+        "pageXOffset",
+        "pageYOffset",
+    ] {
+        let js = format!(
+            "typeof Object.getOwnPropertyDescriptor(window, '{key}').get"
+        );
+        common::assert_js_str(&mut k, &js, "function");
+    }
+    common::assert_js_str(&mut k, "window.scrollX", "0");
+    common::assert_js_str(&mut k, "window.pageXOffset", "0");
+    common::assert_js_str(&mut k, "window.screenX", "0");
+}
+
 #[test]
 fn test_window_descriptor_setter_is_undefined() {
     let mut k = common::make_kernel();

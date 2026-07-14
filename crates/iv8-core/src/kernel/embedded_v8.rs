@@ -373,6 +373,35 @@ window_f64_getter_cb!(
     DEFAULT_PROFILE.device_pixel_ratio
 );
 
+// Window position/scroll: env user override only; default 0 (no BrowserProfile fields yet).
+macro_rules! window_f64_env_cb {
+    ($name:ident, $path:literal, $default:expr) => {
+        unsafe extern "C" fn $name(info: *const v8::FunctionCallbackInfo) {
+            let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let info_ref = unsafe { &*info };
+                v8::callback_scope!(unsafe scope, info_ref);
+                let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+                let isolate: &v8::Isolate = &*scope;
+                let state = crate::state::RuntimeState::get(isolate);
+                let val = state
+                    .environment
+                    .get_user_f64($path)
+                    .unwrap_or($default);
+                rv.set(v8::Number::new(scope, val).into());
+            }));
+        }
+    };
+}
+window_f64_env_cb!(window_screen_x_cb, "window.screenX", 0.0);
+window_f64_env_cb!(window_screen_y_cb, "window.screenY", 0.0);
+window_f64_env_cb!(window_screen_left_cb, "window.screenLeft", 0.0);
+window_f64_env_cb!(window_screen_top_cb, "window.screenTop", 0.0);
+window_f64_env_cb!(window_scroll_x_cb, "window.scrollX", 0.0);
+window_f64_env_cb!(window_scroll_y_cb, "window.scrollY", 0.0);
+// Chrome aliases: pageXOffset/pageYOffset === scrollX/scrollY
+window_f64_env_cb!(window_page_x_offset_cb, "window.pageXOffset", 0.0);
+window_f64_env_cb!(window_page_y_offset_cb, "window.pageYOffset", 0.0);
+
 unsafe extern "C" fn worker_constructor_cb(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -687,6 +716,15 @@ impl EmbeddedV8Kernel {
             window_f64_getter!("outerWidth", window_outer_width_cb);
             window_f64_getter!("outerHeight", window_outer_height_cb);
             window_f64_getter!("devicePixelRatio", window_device_pixel_ratio_cb);
+            // v0.8.94 S2 A2: position/scroll as native global accessors (not WINDOW_EXTRAS data)
+            window_f64_getter!("screenX", window_screen_x_cb);
+            window_f64_getter!("screenY", window_screen_y_cb);
+            window_f64_getter!("screenLeft", window_screen_left_cb);
+            window_f64_getter!("screenTop", window_screen_top_cb);
+            window_f64_getter!("scrollX", window_scroll_x_cb);
+            window_f64_getter!("scrollY", window_scroll_y_cb);
+            window_f64_getter!("pageXOffset", window_page_x_offset_cb);
+            window_f64_getter!("pageYOffset", window_page_y_offset_cb);
 
             let context = v8::Context::new(
                 handle_scope,

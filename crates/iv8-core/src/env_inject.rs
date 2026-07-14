@@ -104,6 +104,8 @@ const NATIVE_WINDOW_KEYS: &[&str] = &[
     "screenTop",
     "scrollX",
     "scrollY",
+    "pageXOffset",
+    "pageYOffset",
     "isSecureContext",
     "closed",
     "name",

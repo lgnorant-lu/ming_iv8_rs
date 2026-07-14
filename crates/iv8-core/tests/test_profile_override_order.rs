@@ -94,6 +94,27 @@ fn test_env_override_beats_browser_profile_for_window_dims() {
 }
 
 #[test]
+fn test_env_override_beats_default_for_window_scroll_and_screen_pos() {
+    let mut overrides = HashMap::new();
+    overrides.insert("window.scrollX".to_string(), serde_json::json!(42.0));
+    overrides.insert("window.scrollY".to_string(), serde_json::json!(7.0));
+    overrides.insert("window.screenX".to_string(), serde_json::json!(10.0));
+    overrides.insert("window.pageXOffset".to_string(), serde_json::json!(42.0));
+
+    let config = KernelConfig {
+        environment_overrides: Some(overrides),
+        browser_profile: Some(Box::new(profile_with_markers())),
+        ..Default::default()
+    };
+    let mut k = EmbeddedV8Kernel::new(config).unwrap();
+
+    common::assert_js_str(&mut k, "window.scrollX", "42");
+    common::assert_js_str(&mut k, "window.scrollY", "7");
+    common::assert_js_str(&mut k, "window.screenX", "10");
+    common::assert_js_str(&mut k, "window.pageXOffset", "42");
+}
+
+#[test]
 fn test_browser_profile_beats_default_when_no_user_override() {
     let config = KernelConfig {
         browser_profile: Some(Box::new(profile_with_markers())),

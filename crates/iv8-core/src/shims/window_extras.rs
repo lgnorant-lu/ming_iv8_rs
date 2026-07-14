@@ -67,9 +67,6 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     if (typeof globalThis.clientInformation === 'undefined') {
         globalThis.clientInformation = typeof navigator !== 'undefined' ? navigator : {};
     }
-    if (typeof globalThis.devicePixelRatio === 'undefined') {
-        globalThis.devicePixelRatio = 1;
-    }
     // Web SQL openDatabase still present on Chrome desktop for compat (DET-4).
     // Pages probe typeof; calling throws SECURITY_ERR (not available in IV8).
     if (typeof globalThis.openDatabase === 'undefined') {
@@ -80,20 +77,10 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             );
         };
     }
-    // navigator.storageBuckets: owned by native_env nav_getter (v0.8.93 A1).
-    // Do not install own-data dual path here.
-    if (typeof globalThis.innerWidth === 'undefined') { globalThis.innerWidth = 1920; }
-    if (typeof globalThis.innerHeight === 'undefined') { globalThis.innerHeight = 1080; }
-    if (typeof globalThis.outerWidth === 'undefined') { globalThis.outerWidth = 1920; }
-    if (typeof globalThis.outerHeight === 'undefined') { globalThis.outerHeight = 1080; }
-    if (typeof globalThis.screenX === 'undefined') { globalThis.screenX = 0; }
-    if (typeof globalThis.screenY === 'undefined') { globalThis.screenY = 0; }
-    if (typeof globalThis.screenLeft === 'undefined') { globalThis.screenLeft = 0; }
-    if (typeof globalThis.screenTop === 'undefined') { globalThis.screenTop = 0; }
-    if (typeof globalThis.scrollX === 'undefined') { globalThis.scrollX = 0; }
-    if (typeof globalThis.scrollY === 'undefined') { globalThis.scrollY = 0; }
-    if (typeof globalThis.pageXOffset === 'undefined') { globalThis.pageXOffset = 0; }
-    if (typeof globalThis.pageYOffset === 'undefined') { globalThis.pageYOffset = 0; }
+    // Window metrics (inner/outer/dpr/screen*/scroll*/page*Offset): owned by
+    // global_template native accessors (v0.8.65 + v0.8.94 S2). Do not install
+    // own-data dual path here.
+    // navigator.storageBuckets: owned by native_env (v0.8.93 A1).
     if (typeof globalThis.orientation === 'undefined') { globalThis.orientation = 0; }
 
     // window.addEventListener/removeEventListener/dispatchEvent
