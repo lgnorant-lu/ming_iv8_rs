@@ -218,25 +218,9 @@ fn test_webpack_chunk_global_detected_without_require_name() {
 /// S7-07/08: multi-source joint eval (runtime + vendor chunk) shares require table
 #[test]
 fn test_multi_chunk_joint_execution_require_across_chunks() {
-    let runtime = r#"
-var __webpack_require__ = function(id) {
-  if (__webpack_require__.c[id]) return __webpack_require__.c[id].exports;
-  var m = { exports: {}, id: id };
-  __webpack_require__.c[id] = m;
-  var f = __webpack_require__.m[id];
-  if (typeof f === 'function') f.call(m.exports, m, m.exports, __webpack_require__);
-  return m.exports;
-};
-__webpack_require__.m = { 0: function(m,e,r){ e.boot = true; } };
-__webpack_require__.c = {};
-"#;
-    let vendor = r#"
-window.webpackChunk = window.webpackChunk || [];
-window.webpackChunk.push([["vendors"], {
-  50: function(m,e,r){ e.lib = "from-vendor"; },
-  51: function(m,e,r){ e.via = r(50).lib; }
-}]);
-"#;
+    let runtime = load_fixture("webpack_multichunk_runtime.js");
+    let vendor = load_fixture("webpack_multichunk_vendor.js");
+    let page = load_fixture("webpack_multichunk_page.js");
     let mut kernel = common::make_kernel();
     kernel
         .eval(
@@ -244,8 +228,8 @@ window.webpackChunk.push([["vendors"], {
             EvalOpts::default(),
         )
         .unwrap();
-    kernel.eval(runtime, EvalOpts::default()).unwrap();
-    kernel.eval(vendor, EvalOpts::default()).unwrap();
+    kernel.eval(&runtime, EvalOpts::default()).unwrap();
+    kernel.eval(&vendor, EvalOpts::default()).unwrap();
     let graph = iv8_core::entry::webpack::collect_module_graph(&mut kernel)
         .expect("graph after joint eval");
     assert!(
@@ -253,8 +237,53 @@ window.webpackChunk.push([["vendors"], {
         "installed={:?}",
         graph["chunk_factories_installed"]
     );
-    common::assert_js_str(&mut kernel, "__webpack_require__(50).lib", "from-vendor");
-    common::assert_js_str(&mut kernel, "__webpack_require__(51).via", "from-vendor");
+    // chunk_id backfill on vendor modules
+    let nodes = graph["nodes"].as_array().cloned().unwrap_or_default();
+    let n50 = nodes.iter().find(|n| n["module_id"] == "50");
+    assert!(n50.is_some(), "nodes={:?}", nodes);
+    assert_eq!(n50.unwrap()["chunk_id"], "vendors");
+    kernel.eval(&page, EvalOpts::default()).unwrap();
+    common::assert_js_str(&mut kernel, "globalThis.__iv8_page.via", "vendor-lib");
+    common::assert_js_str(&mut kernel, "String(globalThis.__iv8_page.sum)", "8");
+    common::assert_js_str(&mut kernel, "String(globalThis.__iv8_page.boot)", "true");
+}
+
+#[test]
+fn test_fixture_bdms_positive_and_negative_files() {
+    let pos = load_fixture("bdms_positive_minified_like.js");
+    let neg = load_fixture("bdms_negative_plain_cjs.js");
+    assert_eq!(
+        classification::classify(&pos, &[]),
+        SampleKind::WebpackRuntime
+    );
+    assert_ne!(
+        classification::classify(&neg, &[]),
+        SampleKind::WebpackRuntime
+    );
+}
+
+#[test]
+fn test_run_entry_chunks_product_path_with_fixtures() {
+    let runtime = load_fixture("webpack_multichunk_runtime.js");
+    let vendor = load_fixture("webpack_multichunk_vendor.js");
+    let page = load_fixture("webpack_multichunk_page.js");
+    let plan = planner::plan_entry(&runtime, Persona::Analysis, None, vec![]);
+    assert_eq!(plan.sample_kind, SampleKind::WebpackRuntime);
+    let result = iv8_core::entry::executor::run_entry(
+        &plan,
+        &page,
+        &[runtime.clone(), vendor.clone()],
+        Some("globalThis.__iv8_page && globalThis.__iv8_page.via"),
+    )
+    .expect("run_entry");
+    assert!(result.module_graph.is_some(), "expected module_graph");
+    let g = result.module_graph.as_ref().unwrap();
+    assert!(
+        g["chunk_factories_installed"].as_u64().unwrap_or(0) >= 1
+            || g["module_count"].as_u64().unwrap_or(0) >= 2,
+        "graph={:?}",
+        g
+    );
 }
 
 #[test]
@@ -396,6 +425,7 @@ window.webpackChunk = [[["vendors"], { 9: function(){}, 10: function(){} }]];
     assert_eq!(n9.unwrap()["chunk_id"], "vendors");
 }
 
+#[test]
 fn test_webpack_circular_require_uses_cache() {
     let src = r#"
 var __webpack_require__ = function(id) {
