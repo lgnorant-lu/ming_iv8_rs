@@ -826,12 +826,7 @@ impl EmbeddedV8Kernel {
             // PLUGINS_FIX removed: native_env caches PluginArray/MimeTypeArray
             // with correct prototypes (INIT-2).
 
-            // COMP-5: Request ctor = DOM FT; REQUEST_FIX is fetch() polyfill only.
-            crate::telemetry::post_hoc_fix_start("REQUEST_FIX_JS");
-            let request_fix = crate::v8_utils::v8_string(scope,
-                crate::kernel::post_hoc_fixes::REQUEST_FIX_JS);
-            let ok = v8::Script::compile(scope, request_fix, None).and_then(|s| s.run(scope)).is_some();
-            crate::telemetry::post_hoc_fix_complete("REQUEST_FIX_JS", ok);
+            // REQUEST_FIX removed: fetch owned by network::install_fetch (INIT-2).
 
             // INIT-4: receiver wraps after native methods land on prototypes.
             crate::telemetry::post_hoc_fix_start("RECEIVER_SHIM_FIX_JS");
@@ -2480,12 +2475,7 @@ impl EmbeddedV8Kernel {
                     let ok = v8::Script::compile(scope, getter_name_fix, None).and_then(|s| s.run(scope)).is_some();
                     crate::telemetry::post_hoc_fix_complete("GETTER_NAME_FIX_JS (page_load)", ok);
 
-                    // CDP diff fix: window.chrome should have runtime:{}.
-                    crate::telemetry::post_hoc_fix_start("CHROME_FIX_JS (page_load)");
-                    let chrome_fix = crate::v8_utils::v8_string(scope,
-                        crate::kernel::post_hoc_fixes::CHROME_FIX_JS);
-                    let ok = v8::Script::compile(scope, chrome_fix, None).and_then(|s| s.run(scope)).is_some();
-                    crate::telemetry::post_hoc_fix_complete("CHROME_FIX_JS (page_load)", ok);
+                    // CHROME_FIX removed: chrome.runtime owned by window_chrome.js.
 
                     // R10-4: Fix instanceof for returned objects.
                     // customElements/navigation need correct prototype;

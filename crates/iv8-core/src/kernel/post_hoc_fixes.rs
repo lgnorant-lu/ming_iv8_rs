@@ -121,32 +121,9 @@ pub const PLUGINS_FIX_JS: &str = r#"(function(){ /* no-op: plugins owned by nati
 /// **Why not codegen?** Request constructor needs to parse input (string or
 /// Request object) and init dict. Codegen constructors are empty templates.
 /// A proper fix would be a hand-implemented constructor in hand_implemented/.
-/// COMP-5: Request ctor is DOM FT; this blob is fetch() polyfill only (intentional).
-pub const REQUEST_FIX_JS: &str = r#"
-    (function() {
-        if (typeof Request === 'undefined') return;
-        // Request constructor is DOM template (request_constructor).
-        // Only install fetch() polyfill when absent.
-        if (typeof fetch === 'undefined') {
-            globalThis.fetch = function fetch(input, init) {
-                var url = typeof input === 'string' ? input : (input && input.url) || '';
-                var method = (init && init.method) || 'GET';
-                return Promise.resolve({
-                    ok: true,
-                    status: 200,
-                    statusText: 'OK',
-                    url: url,
-                    headers: new Headers(),
-                    text: function() { return Promise.resolve(''); },
-                    json: function() { return Promise.resolve({}); },
-                    arrayBuffer: function() { return Promise.resolve(new ArrayBuffer(0)); },
-                    clone: function() { return this; }
-                });
-            };
-            try { Object.defineProperty(globalThis.fetch, 'name', { value: 'fetch' }); } catch(e) {}
-        }
-    })();
-"#;
+/// Historical: fetch polyfill when install_fetch missing.
+/// fetch owned by network::fetch::install_fetch (INIT-2). Not evaluated.
+pub const REQUEST_FIX_JS: &str = r#"(function(){ /* no-op: fetch owned by install_fetch */ })();"#;
 
 /// Fix readonly attribute setters: idlharness expects setter=undefined
 /// for readonly attributes. Some accessor wrappers install a JS setter.
@@ -340,19 +317,9 @@ pub const NAME_LENGTH_FIX_JS: &str = r#"
 ///
 /// Note: document.all [[IsHTMLDDA]] cannot be fixed from JS
 /// (see document_props.rs:1403 comment).
-pub const CHROME_FIX_JS: &str = r#"
-    (function() {
-        try {
-            if (typeof window.chrome === 'object' && window.chrome) {
-                if (!window.chrome.runtime) {
-                    try { Object.defineProperty(window.chrome, 'runtime', {
-                        value: {}, writable: true, enumerable: true, configurable: true
-                    }); } catch(e) {}
-                }
-            }
-        } catch(e) {}
-    })();
-"#;
+/// Historical: ensure chrome.runtime object.
+/// Owned by iv8-undetect window_chrome.js (INIT-2). Not evaluated on main path.
+pub const CHROME_FIX_JS: &str = r#"(function(){ /* no-op: chrome.runtime owned by window_chrome */ })();"#;
 
 /// Delete Worker-only globals in Window mode.
 ///
