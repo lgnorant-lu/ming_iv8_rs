@@ -117,7 +117,7 @@ Definition of Done。本宪法是这些成熟实践在 iv8-rs 的本地化落地
 | H03 | Surface Accuracy | `H03-surface-accuracy.md` | `scripts/evaluate_surface_accuracy.py` | `surface-accuracy-quality-gate.md` | candidate (Phase 4 合并入 H04) |
 | H04 | Surface Integrity Matrix | `H04-surface-integrity-matrix.md` | `scripts/evaluate_surface_integrity.py` | `surface-integrity-quality-gate.md` | candidate (Phase 1 待实施) |
 | H05 | Getter Return Value Audit | `H05-getter-return-value-audit.md` | `scripts/evaluate_h05_getter.py` (H05a), `scripts/evaluate_h05b_setter.py` (H05b), `scripts/evaluate_h05c_method.py` (H05c), `scripts/evaluate_h05d_constructor.py` (H05d), `scripts/evaluate_h05e_exception.py` (H05e), `scripts/evaluate_h05f_tostring.py` (H05f) | (pending: gate migration to opencode) | candidate (H05a 1012/1063, H05b 553/569, H05c 189/216, H05d 63/63, H05e 17/37+20, H05f 1270/1284) |
-| H06 | Cross-Context Consistency | `H06-cross-context-consistency.md` | `scripts/evaluate_h06_window_iframe.py` | (pending: gate migration to opencode) | candidate (H06a 43/43 PASS, H06b deferred) |
+| H06 | Cross-Context Consistency | H06-cross-context-consistency.md | scripts/evaluate_h06_window_iframe.py + scripts/evaluate_h06b_window_worker.py | (pending: gate migration to opencode) | candidate (H06a 43/43 PASS; H06b 5/5 navigator props delivered) |
 
 > H04 是 H02/H03 的超集（D-102），Phase 4 完成后 H02/H03 标记 DEPRECATED。
 
@@ -136,3 +136,4 @@ Definition of Done。本宪法是这些成熟实践在 iv8-rs 的本地化落地
 - 有**权威金标准来源**可对照（P10）
 
 否则用普通单元测试即可，不必动用 harness 这套重型机制。
+
