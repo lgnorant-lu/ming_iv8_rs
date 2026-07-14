@@ -23,6 +23,42 @@ def _run(fn):
     return box["out"]
 
 
+def test_default_profile_high_signal_value_coherence():
+    """Q032: default profile Window/Nav/Screen high-signal keys are populated and sane."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  return JSON.stringify({
+                    platform: navigator.platform,
+                    language: navigator.language,
+                    hw: navigator.hardwareConcurrency,
+                    mem: navigator.deviceMemory,
+                    sw: screen.width,
+                    sh: screen.height,
+                    iw: innerWidth,
+                    ih: innerHeight,
+                    dpr: devicePixelRatio,
+                    uaWin: navigator.userAgent.indexOf('Windows') >= 0
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["platform"] in ("Win32", "Win64", "MacIntel", "Linux x86_64"), rep
+    assert isinstance(rep["language"], str) and len(rep["language"]) >= 2, rep
+    assert rep["hw"] >= 1, rep
+    assert rep["sw"] >= 800 and rep["sh"] >= 600, rep
+    assert rep["iw"] >= 1 and rep["ih"] >= 1, rep
+    assert rep["dpr"] > 0, rep
+    assert rep["uaWin"] is True or "Mac" in rep["platform"] or "Linux" in rep["platform"], rep
+
+
 def test_get_computed_style_active_text_system_color():
     def body():
         ctx = iv8_rs.JSContext()
