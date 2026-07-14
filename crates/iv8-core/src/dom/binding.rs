@@ -239,6 +239,7 @@ unsafe extern "C" fn document_all_call_handler(info: *const v8::FunctionCallback
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         if args.length() < 1 {
+            // namedItem requires 1 arg (idlharness TypeError); item is optional.
             rv.set(v8::null(scope).into());
             return;
         }
@@ -299,21 +300,13 @@ fn install_document_all(
             Vec::new()
         }
     };
-    let len_key = crate::v8_utils::v8_string(scope, "length");
-    let len_val = v8::Integer::new(scope, elements.len() as i32);
-    let _ = all_obj.define_own_property(
-        scope,
-        len_key.into(),
-        len_val.into(),
-        v8::PropertyAttribute::DONT_ENUM,
-    );
     for (i, nid) in elements.iter().enumerate() {
         if let Some(obj) = crate::dom::template::create_node_object(scope, state, *nid) {
             let _ = all_obj.set_index(scope, i as u32, obj);
         }
     }
     // Brand + methods on HTMLAllCollection.prototype (idlharness assert_inherits).
-    // Do not put item/namedItem/length as own data on the collection instance.
+    // length/item/namedItem must not be own data on the collection instance.
     if let Some(ctor_key) = v8::String::new(scope, "HTMLAllCollection") {
         if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
             if ctor_val.is_function() {
@@ -324,7 +317,6 @@ fn install_document_all(
                             let proto_obj: v8::Local<v8::Object> =
                                 unsafe { v8::Local::cast_unchecked(proto_val) };
                             let _ = all_obj.set_prototype(scope, proto_val);
-                            // Install methods on prototype if missing (codegen may be empty).
                             let item_fn = {
                                 let ft = v8::FunctionTemplate::builder_raw(document_all_item_cb)
                                     .length(1)
@@ -340,18 +332,59 @@ fn install_document_all(
                             };
                             let item_key = crate::v8_utils::v8_string(scope, "item");
                             let named_key = crate::v8_utils::v8_string(scope, "namedItem");
+                            // WebIDL operations are enumerable on the prototype.
                             let _ = proto_obj.define_own_property(
                                 scope,
                                 item_key.into(),
                                 item_fn.into(),
-                                v8::PropertyAttribute::DONT_ENUM,
+                                v8::PropertyAttribute::NONE,
                             );
                             let _ = proto_obj.define_own_property(
                                 scope,
                                 named_key.into(),
                                 named_fn.into(),
-                                v8::PropertyAttribute::DONT_ENUM,
+                                v8::PropertyAttribute::NONE,
                             );
+                            // length getter on prototype: count own array indices.
+                            let len_get = {
+                                let ft = v8::FunctionTemplate::builder_raw(document_all_length_get_cb)
+                                    .build(scope);
+                                crate::v8_utils::v8_fn(scope, &ft)
+                            };
+                            let getter_key = crate::v8_utils::v8_string(scope, "get");
+                            let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
+                            let conf_key = crate::v8_utils::v8_string(scope, "configurable");
+                            let desc = v8::Object::new(scope);
+                            desc.set(scope, getter_key.into(), len_get.into());
+                            desc.set(scope, enum_key.into(), v8::Boolean::new(scope, true).into());
+                            desc.set(scope, conf_key.into(), v8::Boolean::new(scope, true).into());
+                            let obj_key = crate::v8_utils::v8_string(scope, "Object");
+                            if let Some(obj_ctor) = global.get(scope, obj_key.into()) {
+                                if obj_ctor.is_object() {
+                                    let obj_ctor: v8::Local<v8::Object> =
+                                        unsafe { v8::Local::cast_unchecked(obj_ctor) };
+                                    let def_key =
+                                        crate::v8_utils::v8_string(scope, "defineProperty");
+                                    if let Some(def_prop) = obj_ctor.get(scope, def_key.into()) {
+                                        if def_prop.is_function() {
+                                            let def_fn: v8::Local<v8::Function> =
+                                                unsafe { v8::Local::cast_unchecked(def_prop) };
+                                            let name_str =
+                                                crate::v8_utils::v8_string(scope, "length");
+                                            let undefined = v8::undefined(scope);
+                                            let _ = def_fn.call(
+                                                scope,
+                                                undefined.into(),
+                                                &[
+                                                    proto_obj.into(),
+                                                    name_str.into(),
+                                                    desc.into(),
+                                                ],
+                                            );
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -426,6 +459,57 @@ unsafe extern "C" fn document_all_proto_getter(info: *const v8::FunctionCallback
     }));
 }
 
+unsafe extern "C" fn document_all_length_get_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        // WebIDL: brand check — prototype object itself must throw.
+        if this.is_null_or_undefined() {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let Some(obj) = this.to_object(scope) else {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        };
+        // If `this` is the prototype object (no indexed children), throw.
+        let global = scope.get_current_context().global(scope);
+        if let Some(ctor_key) = v8::String::new(scope, "HTMLAllCollection") {
+            if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
+                if ctor_val.is_function() {
+                    let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+                    if let Some(pk) = v8::String::new(scope, "prototype") {
+                        if let Some(proto_val) = ctor.get(scope, pk.into()) {
+                            if this.strict_equals(proto_val) {
+                                let msg =
+                                    crate::v8_utils::v8_string(scope, "Illegal invocation");
+                                let exc = v8::Exception::type_error(scope, msg);
+                                scope.throw_exception(exc);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        let mut n = 0u32;
+        while n < 100_000 {
+            match obj.get_index(scope, n) {
+                Some(v) if !v.is_undefined() => n += 1,
+                _ => break,
+            }
+        }
+        rv.set(v8::Integer::new_from_unsigned(scope, n).into());
+    }));
+}
+
 unsafe extern "C" fn document_all_item_cb(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -453,7 +537,35 @@ unsafe extern "C" fn document_all_item_cb(info: *const v8::FunctionCallbackInfo)
 }
 
 unsafe extern "C" fn document_all_named_item_cb(info: *const v8::FunctionCallbackInfo) {
-    document_all_call_handler(info);
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "Failed to execute 'namedItem' on 'HTMLAllCollection': 1 argument required, but only 0 present.",
+            );
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let name = args.get(0).to_rust_string_lossy(scope);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let nid = {
+            let doc = state.document.borrow();
+            doc.as_ref().and_then(|d| d.get_element_by_id(&name))
+        };
+        if let Some(id) = nid {
+            if let Some(obj) = crate::dom::template::create_node_object(scope, state, id) {
+                rv.set(obj);
+                return;
+            }
+        }
+        rv.set(v8::null(scope).into());
+    }));
 }
 
 /// Ensure HTMLIFrameElement.prototype readonly attrs have no-op setters so
