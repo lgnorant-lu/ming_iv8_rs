@@ -92,7 +92,35 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         _setSlot(inst, '_cancelBubble', false);
         _setSlot(inst, '_stopPropagation', false);
         _setSlot(inst, '_stopImmediatePropagation', false);
-        Object.defineProperty(inst, 'isTrusted', { value: false, writable: false, enumerable: true, configurable: true });
+        // idlharness: own accessor named "get isTrusted"; wrong-this throws
+        var getIsTrusted = function() {
+            if (this === null || this === undefined) {
+                throw new TypeError("Illegal invocation");
+            }
+            if (!(this instanceof Event) && typeof this._isTrusted === 'undefined') {
+                throw new TypeError("Illegal invocation");
+            }
+            return !!this._isTrusted;
+        };
+        try {
+            Object.defineProperty(getIsTrusted, 'name', {
+                value: 'get isTrusted', writable: false, enumerable: false, configurable: true
+            });
+        } catch (eName) {}
+        try {
+            Object.defineProperty(inst, 'isTrusted', {
+                get: getIsTrusted,
+                set: undefined,
+                enumerable: true,
+                configurable: false
+            });
+        } catch (e) {
+            Object.defineProperty(inst, 'isTrusted', {
+                get: getIsTrusted,
+                enumerable: true,
+                configurable: true
+            });
+        }
     }
 
     // WebIDL: Event.type is readonly after construction (CG-2).

@@ -1333,7 +1333,10 @@ impl EmbeddedV8Kernel {
             v8::scope_with_context!(scope, handle_scope, context);
             let global = context.global(scope);
 
-            let tmpl = v8::FunctionTemplate::builder_raw(worker_constructor_cb).build(scope);
+            // WebIDL: Worker(scriptURL, options?) — .length === 1
+            let tmpl = v8::FunctionTemplate::builder_raw(worker_constructor_cb)
+                .length(1)
+                .build(scope);
             tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Worker"));
 
             let proto = tmpl.prototype_template(scope);

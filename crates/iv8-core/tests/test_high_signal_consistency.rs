@@ -114,6 +114,54 @@ fn storage_and_crypto_subtle_shape() {
 }
 
 #[test]
+fn high_signal_value_consistency_nav_screen_plugins() {
+    let mut k = common::make_kernel();
+    // Soft identity consistency: non-empty strings, plugins length number, uaData brands array-ish
+    common::assert_js_str(
+        &mut k,
+        r#"(function(){
+            if (typeof navigator.userAgent !== 'string' || !navigator.userAgent) return 'ua';
+            if (typeof navigator.platform !== 'string' || !navigator.platform) return 'plat';
+            if (typeof screen.width !== 'number' || screen.width <= 0) return 'sw';
+            if (typeof screen.height !== 'number' || screen.height <= 0) return 'sh';
+            if (typeof navigator.plugins === 'undefined') return 'plugins-missing';
+            if (typeof navigator.plugins.length !== 'number') return 'plugins-len';
+            if (navigator.userAgentData) {
+                var b = navigator.userAgentData.brands;
+                if (b && typeof b.length !== 'number') return 'brands';
+            }
+            return 'ok';
+        })()"#,
+        "ok",
+    );
+}
+
+#[test]
+fn permissions_query_returns_promise_like() {
+    let mut k = common::make_kernel();
+    k.eval_to_rust_value(
+        r#"
+        globalThis._pq = null;
+        globalThis._pqErr = null;
+        try {
+            var p = navigator.permissions.query({name:'notifications'});
+            globalThis._pq = p && typeof p.then === 'function';
+            if (p && p.then) {
+                p.then(function(r){ globalThis._pqState = r && r.state; })
+                 .catch(function(e){ globalThis._pqErr = String(e); });
+            }
+        } catch (e) {
+            globalThis._pqErr = String(e);
+        }
+        "#,
+    );
+    for _ in 0..8 {
+        k.drain_microtasks();
+    }
+    common::assert_js_str(&mut k, "String(globalThis._pq)", "true");
+}
+
+#[test]
 fn node_constants_on_ctor_and_prototype() {
     let mut k = common::make_kernel();
     common::assert_js_str(&mut k, "String(Node.ELEMENT_NODE)", "1");
@@ -127,6 +175,33 @@ fn node_constants_on_ctor_and_prototype() {
         "String(Node.prototype.TEXT_NODE === Node.TEXT_NODE && Node.TEXT_NODE === 3)",
         "true",
     );
+}
+
+#[test]
+fn event_istrusted_is_own_accessor_not_data() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(
+        &mut k,
+        r#"(function(){
+            var e = new Event('x');
+            var d = Object.getOwnPropertyDescriptor(e, 'isTrusted');
+            if (!d) return 'no-own';
+            if (typeof d.get !== 'function') return 'not-getter:' + JSON.stringify(d);
+            if ('value' in d) return 'has-value';
+            if (d.get.name !== 'get isTrusted') return 'name:' + d.get.name;
+            try { d.get.call({}); return 'no-throw'; } catch (err) {
+                if (err && err.name === 'TypeError') return 'ok';
+                return 'throw:' + (err && err.name);
+            }
+        })()"#,
+        "ok",
+    );
+}
+
+#[test]
+fn worker_constructor_length_is_one() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "String(Worker.length)", "1");
 }
 
 #[test]
