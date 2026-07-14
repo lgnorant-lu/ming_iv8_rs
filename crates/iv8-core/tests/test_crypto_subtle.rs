@@ -81,6 +81,135 @@ fn subtle_digest_sha1() {
     );
 }
 
+// v0.8.96 S4: X25519 generateKey + deriveBits roundtrip (matrix residual close)
+#[test]
+fn subtle_x25519_generate_and_derive_bits() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            r#"
+        globalThis.x25519Ok = false;
+        globalThis.x25519Err = null;
+        crypto.subtle.generateKey({ name: 'X25519' }, true, ['deriveBits'])
+            .then(function(alice) {
+                return crypto.subtle.generateKey({ name: 'X25519' }, true, ['deriveBits'])
+                    .then(function(bob) {
+                        return Promise.all([
+                            crypto.subtle.deriveBits(
+                                { name: 'X25519', public: bob.publicKey },
+                                alice.privateKey,
+                                256
+                            ),
+                            crypto.subtle.deriveBits(
+                                { name: 'X25519', public: alice.publicKey },
+                                bob.privateKey,
+                                256
+                            )
+                        ]);
+                    });
+            })
+            .then(function(pair) {
+                var a = new Uint8Array(pair[0]);
+                var b = new Uint8Array(pair[1]);
+                if (a.length !== b.length || a.length === 0) {
+                    globalThis.x25519Err = 'len';
+                    return;
+                }
+                for (var i = 0; i < a.length; i++) {
+                    if (a[i] !== b[i]) {
+                        globalThis.x25519Err = 'mismatch';
+                        return;
+                    }
+                }
+                globalThis.x25519Ok = true;
+            })
+            .catch(function(e) {
+                globalThis.x25519Err = String(e && e.message ? e.message : e);
+            });
+    "#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel.drain_microtasks();
+    // Multiple promise turns
+    for _ in 0..8 {
+        kernel.drain_microtasks();
+    }
+    let err = kernel.eval_to_rust_value("globalThis.x25519Err");
+    assert_eq!(
+        err,
+        RustValue::Null,
+        "X25519 derive failed: {:?}",
+        err
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.x25519Ok"),
+        RustValue::Bool(true)
+    );
+}
+
+#[test]
+fn subtle_aes_kw_wrap_unwrap_roundtrip() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            r#"
+        globalThis.aesKwOk = false;
+        globalThis.aesKwErr = null;
+        // 16-byte KEK + 16-byte key material (AES-KW requires multiple of 8)
+        var kek = new Uint8Array(16);
+        for (var i = 0; i < 16; i++) kek[i] = i + 1;
+        var rawKey = new Uint8Array(16);
+        for (var j = 0; j < 16; j++) rawKey[j] = j + 0x10;
+        crypto.subtle.importKey('raw', kek, { name: 'AES-KW' }, false, ['wrapKey', 'unwrapKey'])
+            .then(function(wrappingKey) {
+                return crypto.subtle.importKey(
+                    'raw', rawKey, { name: 'AES-GCM' }, true, ['encrypt', 'decrypt']
+                ).then(function(key) {
+                    return crypto.subtle.wrapKey('raw', key, wrappingKey, { name: 'AES-KW' })
+                        .then(function(wrapped) {
+                            return crypto.subtle.unwrapKey(
+                                'raw', wrapped, wrappingKey, { name: 'AES-KW' },
+                                { name: 'AES-GCM' }, true, ['encrypt', 'decrypt']
+                            );
+                        });
+                });
+            })
+            .then(function(unwrapped) {
+                return crypto.subtle.exportKey('raw', unwrapped);
+            })
+            .then(function(buf) {
+                var out = new Uint8Array(buf);
+                if (out.length !== 16) {
+                    globalThis.aesKwErr = 'len=' + out.length;
+                    return;
+                }
+                for (var k = 0; k < 16; k++) {
+                    if (out[k] !== k + 0x10) {
+                        globalThis.aesKwErr = 'byte@' + k;
+                        return;
+                    }
+                }
+                globalThis.aesKwOk = true;
+            })
+            .catch(function(e) {
+                globalThis.aesKwErr = String(e && e.message ? e.message : e);
+            });
+    "#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    for _ in 0..12 {
+        kernel.drain_microtasks();
+    }
+    let err = kernel.eval_to_rust_value("globalThis.aesKwErr");
+    assert_eq!(err, RustValue::Null, "AES-KW failed: {:?}", err);
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.aesKwOk"),
+        RustValue::Bool(true)
+    );
+}
+
 #[test]
 fn subtle_hmac_sign() {
     let mut kernel = common::make_kernel();

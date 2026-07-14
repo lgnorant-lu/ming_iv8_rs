@@ -224,10 +224,20 @@ pub const XHR_SHIM_JS: &str = r#"
                 self.responseText = result.responseText;
                 self.response = result.responseText;
 
-                fireProgress(result.responseText.length, 0);
-                fireReadyState(3); // LOADING
-
-                done(true);
+                // v0.8.96 S4: async path splits LOADING+DONE onto next macrotask so
+                // onreadystatechange observes 2 then 3 then 4 across event-loop turns
+                // (still ResourceBundle-instant; not real network RTT).
+                function finishBody() {
+                    if (self._aborted || self._timedOut) return;
+                    fireProgress(result.responseText.length, 0);
+                    fireReadyState(3); // LOADING
+                    done(true);
+                }
+                if (self._async) {
+                    setTimeout(finishBody, 0);
+                } else {
+                    finishBody();
+                }
             } else {
                 // Neither ResourceBundle nor network_handler produced content
                 self.status = 0;

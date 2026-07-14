@@ -249,8 +249,9 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         });
     }
 
-    // WebSocket stub with state-machine lifecycle
-    if (!window.WebSocket) {
+    // WebSocket lifecycle stub (v0.8.96 S4): always install — codegen skeleton
+    // has no readyState machine; replace for CONNECTING→OPEN and CLOSING→CLOSED.
+    {
         window.WebSocket = function WebSocket(url, protocols) {
             this.url = url;
             this.readyState = 0;
@@ -267,13 +268,18 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                     throw new DOMException("WebSocket is not in OPEN state", "InvalidStateError");
                 }
             };
+            // v0.8.96 S4: CLOSING (2) then CLOSED (3) on separate macrotasks so
+            // observers can see readyState === CLOSING before CLOSED.
             this.close = function() {
-                if (self.readyState === 3) return;
-                self.readyState = 2;
-                self.readyState = 3;
-                if (typeof self.onclose === "function") {
-                    self.onclose({ code: 1005, reason: "", wasClean: true });
-                }
+                if (self.readyState === 2 || self.readyState === 3) return;
+                self.readyState = 2; // CLOSING
+                setTimeout(function() {
+                    if (self.readyState !== 2) return;
+                    self.readyState = 3; // CLOSED
+                    if (typeof self.onclose === "function") {
+                        self.onclose({ code: 1005, reason: "", wasClean: true });
+                    }
+                }, 0);
             };
             setTimeout(function() {
                 if (self.readyState === 0) {
@@ -290,6 +296,11 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         window.WebSocket.prototype.OPEN = 1;
         window.WebSocket.prototype.CLOSING = 2;
         window.WebSocket.prototype.CLOSED = 3;
+        try {
+            Object.defineProperty(window.WebSocket.prototype, Symbol.toStringTag, {
+                value: 'WebSocket', configurable: true
+            });
+        } catch (e) {}
     }
 
     // indexedDB stub - fires onsuccess with a fake database so detection

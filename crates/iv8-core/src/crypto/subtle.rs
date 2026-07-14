@@ -1672,7 +1672,7 @@ fn aes_gcm_decrypt(key: &[u8], iv: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, 
 }
 
 /// crypto.subtle.deriveBits(algorithm, baseKey, length) → Promise<ArrayBuffer>
-/// Supports PBKDF2, HKDF, ECDH.
+/// Supports PBKDF2, HKDF, ECDH, X25519.
 unsafe extern "C" fn subtle_derive_bits(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -1811,6 +1811,45 @@ unsafe extern "C" fn subtle_derive_bits(info: *const v8::FunctionCallbackInfo) {
                         }
                     }
                     _ => Err("ECDH deriveBits: missing keys".to_string()),
+                }
+            }
+            // v0.8.96 S4: X25519 deriveBits (public in algorithm.public)
+            "X25519" => {
+                let priv_meta = extract_key_meta(scope, args.get(1));
+                let pub_key_arg = if algo_arg.is_object() {
+                    let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
+                    let pub_key_key = crate::v8_utils::v8_string(scope, "public");
+                    obj.get(scope, pub_key_key.into())
+                } else {
+                    None
+                };
+                match (priv_meta, pub_key_arg) {
+                    (Some(priv_m), Some(pub_arg)) => {
+                        let pub_meta = extract_key_meta(scope, pub_arg);
+                        let priv_bytes = b64_decode(&priv_m.key_bytes_b64).unwrap_or_default();
+                        let pub_bytes = pub_meta
+                            .as_ref()
+                            .and_then(|m| b64_decode(&m.key_bytes_b64).ok())
+                            .unwrap_or_default();
+                        if priv_bytes.len() != 32 || pub_bytes.len() != 32 {
+                            Err("X25519 deriveBits: keys must be 32 bytes".to_string())
+                        } else {
+                            let mut priv_arr = [0u8; 32];
+                            let mut pub_arr = [0u8; 32];
+                            priv_arr.copy_from_slice(&priv_bytes);
+                            pub_arr.copy_from_slice(&pub_bytes);
+                            match ed_impl::x25519_derive_bits(&priv_arr, &pub_arr) {
+                                Ok(mut shared) => {
+                                    if length_bytes < shared.len() {
+                                        shared.truncate(length_bytes);
+                                    }
+                                    Ok(shared)
+                                }
+                                Err(e) => Err(e),
+                            }
+                        }
+                    }
+                    _ => Err("X25519 deriveBits: missing keys".to_string()),
                 }
             }
             _ => {
