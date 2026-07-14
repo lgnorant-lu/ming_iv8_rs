@@ -425,6 +425,90 @@ window.webpackChunk = [[["vendors"], { 9: function(){}, 10: function(){} }]];
     assert_eq!(n9.unwrap()["chunk_id"], "vendors");
 }
 
+/// Official webpack common-chunk-and-vendor-chunk dist (L2): named webpackChunk* global.
+#[test]
+fn test_l2_official_webpack_named_chunk_global_and_graph() {
+    let vendor = load_fixture("generated/vendor.js");
+    let commons2 = load_fixture("generated/commons-utility2_js.js");
+    let page_a = load_fixture("generated/pageA.js");
+    assert!(
+        vendor.contains("webpackChunk") || page_a.contains("webpackChunk"),
+        "expected webpackChunk* marker in official dist"
+    );
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            iv8_core::entry::webpack::bridge_prelude(),
+            EvalOpts::default(),
+        )
+        .unwrap();
+    // order: shared chunks then entry (matches browser script order)
+    for src in [&vendor, &commons2, &page_a] {
+        kernel.eval(src, EvalOpts::default()).unwrap();
+    }
+    let graph = iv8_core::entry::webpack::collect_module_graph(&mut kernel).expect("graph");
+    let count = graph["module_count"].as_u64().unwrap_or(0);
+    assert!(
+        count >= 3,
+        "expected modules from vendor+commons+page, module_count={} graph={:?}",
+        count,
+        graph
+    );
+    assert!(
+        graph["chunk_factories_installed"].as_u64().unwrap_or(0) >= 1
+            || graph["module_count"].as_u64().unwrap_or(0) >= 3,
+        "factories or modules missing: {:?}",
+        graph
+    );
+    let chunks = graph["chunks"].as_array().cloned().unwrap_or_default();
+    assert!(
+        !chunks.is_empty()
+            || graph["nodes"]
+                .as_array()
+                .map(|n| !n.is_empty())
+                .unwrap_or(false),
+        "expected chunks or nodes from named webpackChunk*: {:?}",
+        graph
+    );
+}
+
+#[test]
+fn test_named_webpack_chunk_global_scan() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            iv8_core::entry::webpack::bridge_prelude(),
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel
+        .eval(
+            r#"
+var __webpack_require__ = function(id){
+  if(__webpack_require__.c[id]) return __webpack_require__.c[id].exports;
+  var m={exports:{}}; __webpack_require__.c[id]=m;
+  var f=__webpack_require__.m[id]; if(typeof f==='function') f(m,m.exports,__webpack_require__);
+  return m.exports;
+};
+__webpack_require__.m={}; __webpack_require__.c={};
+self.webpackChunkiv8_l2_webpack_example = self.webpackChunkiv8_l2_webpack_example || [];
+self.webpackChunkiv8_l2_webpack_example.push([["vendor"],{
+  353: function(e){ e.exports = "vendor1"; },
+  992: function(e){ e.exports = "vendor2"; }
+}]);
+"#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    let graph = iv8_core::entry::webpack::collect_module_graph(&mut kernel).expect("graph");
+    assert!(
+        graph["chunk_factories_installed"].as_u64().unwrap_or(0) >= 2,
+        "named webpackChunk* must install factories: {:?}",
+        graph
+    );
+    common::assert_js_str(&mut kernel, "String(__webpack_require__(353))", "vendor1");
+}
+
 #[test]
 fn test_webpack_circular_require_uses_cache() {
     let src = r#"

@@ -1,0 +1,16 @@
+# Vendored webpack official-shape dist (L2)
+
+Source example: webpack/webpack `examples/common-chunk-and-vendor-chunk`
+(webpack 5.x, development mode, named chunkIds, splitChunks vendor+commons).
+
+Built offline from example sources + stub node_modules/vendor{1,2}.js.
+Not scraped from live sites.
+
+License: follows webpack repository license (MIT). See webpack/webpack LICENSE.
+These files are test fixtures only.
+
+Files:
+- vendor.js
+- commons-utility2_js.js
+- commons-utility3_js.js
+- pageA.js / pageB.js / pageC.js

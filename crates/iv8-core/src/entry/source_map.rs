@@ -110,7 +110,8 @@ pub fn detect_treeshaking_markers(source: &str) -> serde_json::Value {
 }
 
 /// Minimal VLQ segment decoder for source-map `mappings` (A-P2-1).
-/// Returns list of {generated_line, generated_column, source_index, original_line, original_column}.
+/// Returns list of {generated_line, generated_column, source_index, original_line,
+/// original_column, name_index?}.
 pub fn decode_vlq_mappings_preview(mappings: &str, max_entries: usize) -> Vec<serde_json::Value> {
     let mut out = Vec::new();
     let mut gen_line = 0i64;
@@ -118,6 +119,7 @@ pub fn decode_vlq_mappings_preview(mappings: &str, max_entries: usize) -> Vec<se
     let mut src_idx = 0i64;
     let mut orig_line = 0i64;
     let mut orig_col = 0i64;
+    let mut name_idx = 0i64;
     for line in mappings.split(';') {
         gen_col = 0;
         if line.is_empty() {
@@ -137,13 +139,17 @@ pub fn decode_vlq_mappings_preview(mappings: &str, max_entries: usize) -> Vec<se
                 src_idx += vals[1];
                 orig_line += vals[2];
                 orig_col += vals[3];
-                out.push(serde_json::json!({
-                    "generated_line": gen_line,
-                    "generated_column": gen_col,
-                    "source_index": src_idx,
-                    "original_line": orig_line,
-                    "original_column": orig_col,
-                }));
+                let mut map = serde_json::Map::new();
+                map.insert("generated_line".into(), serde_json::json!(gen_line));
+                map.insert("generated_column".into(), serde_json::json!(gen_col));
+                map.insert("source_index".into(), serde_json::json!(src_idx));
+                map.insert("original_line".into(), serde_json::json!(orig_line));
+                map.insert("original_column".into(), serde_json::json!(orig_col));
+                if vals.len() >= 5 {
+                    name_idx += vals[4];
+                    map.insert("name_index".into(), serde_json::json!(name_idx));
+                }
+                out.push(serde_json::Value::Object(map));
             } else {
                 out.push(serde_json::json!({
                     "generated_line": gen_line,
@@ -198,13 +204,25 @@ fn vlq_char(c: char) -> i32 {
 }
 
 /// originalPositionFor-style lookup: first mapping at or before (line, column).
+/// When `sources` / `names` are provided, resolve indices to path / identifier.
 pub fn original_position_for(
     mappings: &str,
     generated_line: i64,
     generated_column: i64,
 ) -> Option<serde_json::Value> {
+    original_position_for_resolved(mappings, generated_line, generated_column, None, None)
+}
+
+/// Like [`original_position_for`], optionally resolving `source` / `name` strings.
+pub fn original_position_for_resolved(
+    mappings: &str,
+    generated_line: i64,
+    generated_column: i64,
+    sources: Option<&[String]>,
+    names: Option<&[String]>,
+) -> Option<serde_json::Value> {
     let entries = decode_vlq_mappings_preview(mappings, 10_000);
-    let mut best: Option<&serde_json::Value> = None;
+    let mut best: Option<serde_json::Value> = None;
     for e in &entries {
         let gl = e.get("generated_line").and_then(|v| v.as_i64()).unwrap_or(-1);
         let gc = e
@@ -213,14 +231,39 @@ pub fn original_position_for(
             .unwrap_or(-1);
         if gl < generated_line || (gl == generated_line && gc <= generated_column) {
             if e.get("source_index").is_some() {
-                best = Some(e);
+                best = Some(e.clone());
             }
         }
         if gl > generated_line {
             break;
         }
     }
-    best.cloned()
+    let mut pos = best?;
+    if let Some(srcs) = sources {
+        if let Some(idx) = pos.get("source_index").and_then(|v| v.as_i64()) {
+            if idx >= 0 {
+                let i = idx as usize;
+                if i < srcs.len() {
+                    pos.as_object_mut()
+                        .unwrap()
+                        .insert("source".into(), serde_json::json!(srcs[i]));
+                }
+            }
+        }
+    }
+    if let Some(nms) = names {
+        if let Some(idx) = pos.get("name_index").and_then(|v| v.as_i64()) {
+            if idx >= 0 {
+                let i = idx as usize;
+                if i < nms.len() {
+                    pos.as_object_mut()
+                        .unwrap()
+                        .insert("name".into(), serde_json::json!(nms[i]));
+                }
+            }
+        }
+    }
+    Some(pos)
 }
 
 #[cfg(test)]
@@ -288,6 +331,18 @@ mod tests {
     fn test_treeshaking_markers() {
         let m = detect_treeshaking_markers("var a=/*#__PURE__*/fn();");
         assert_eq!(m["pure_annotation"], true);
+    }
+
+    #[test]
+    fn test_vlq_original_position_resolves_source_and_name() {
+        // [0,0,0,0,0] -> AAAAA (col, src, ol, oc, name)
+        let mappings = "AAAAA";
+        let sources = vec!["app.ts".to_string()];
+        let names = vec!["foo".to_string()];
+        let pos = original_position_for_resolved(mappings, 0, 0, Some(&sources), Some(&names))
+            .expect("pos");
+        assert_eq!(pos["source"], "app.ts");
+        assert_eq!(pos["name"], "foo");
     }
 
     #[test]

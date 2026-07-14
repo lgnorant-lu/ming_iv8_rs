@@ -32,15 +32,29 @@ pub fn amd_prelude() -> &'static str {
   var defined = {};
   var anon = 0;
   function normalize(id){ return String(id); }
-  function getExports(id){
+  // Relative deps: './x' or '../x' relative to parent module id (path-like).
+  function resolveId(id, parent){
     id = normalize(id);
+    if (id.charAt(0) !== '.' || !parent) return id;
+    var base = String(parent).split('/');
+    base.pop();
+    var parts = id.split('/');
+    for (var i = 0; i < parts.length; i++) {
+      if (parts[i] === '.' || parts[i] === '') continue;
+      if (parts[i] === '..') { if (base.length) base.pop(); }
+      else base.push(parts[i]);
+    }
+    return base.join('/') || id;
+  }
+  function getExports(id, parent){
+    id = resolveId(id, parent);
     if (defined[id]) return defined[id].exports;
     var def = modules[id];
     if (!def) throw new Error('AMD module not found: ' + id);
     if (def.loading) return def.exports;
     def.loading = true;
     var exports = {};
-    var module = { exports: exports };
+    var module = { exports: exports, id: id };
     def.exports = exports;
     var deps = def.deps || [];
     var args = [];
@@ -48,8 +62,8 @@ pub fn amd_prelude() -> &'static str {
       var d = deps[i];
       if (d === 'exports') args.push(exports);
       else if (d === 'module') args.push(module);
-      else if (d === 'require') args.push(req);
-      else args.push(getExports(d));
+      else if (d === 'require') args.push(function(x, cb){ return req(x, cb, id); });
+      else args.push(getExports(d, id));
     }
     var ret = typeof def.factory === 'function'
       ? def.factory.apply(null, args)
@@ -72,16 +86,19 @@ pub fn amd_prelude() -> &'static str {
     modules[normalize(id)] = { deps: deps || [], factory: factory, exports: {} };
   }
   define.amd = { jQuery: true };
-  function req(deps, cb){
-    if (typeof deps === 'string') return getExports(deps);
+  function req(deps, cb, parent){
+    if (typeof deps === 'string') return getExports(deps, parent);
     var args = [];
-    for (var i = 0; i < deps.length; i++) args.push(getExports(deps[i]));
+    for (var i = 0; i < deps.length; i++) args.push(getExports(deps[i], parent));
     if (typeof cb === 'function') return cb.apply(null, args);
     return args;
   }
   globalThis.define = define;
   globalThis.require = req;
-  globalThis.__iv8_amd = { ready: true, modules: modules, defined: defined, require: req, define: define };
+  globalThis.__iv8_amd = {
+    ready: true, modules: modules, defined: defined, require: req, define: define,
+    note: 'sync almond-style; no async plugins/path config'
+  };
 })();
 "#
 }
@@ -116,6 +133,25 @@ globalThis.__amd_v = require('app').v;
         assert_eq!(
             k.eval_to_rust_value("globalThis.__amd_v"),
             RustValue::Int(5)
+        );
+    }
+
+    #[test]
+    fn test_amd_relative_dep_resolution() {
+        let mut k = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        k.eval(amd_prelude(), EvalOpts::default()).unwrap();
+        k.eval(
+            r#"
+define('pkg/util', ['exports'], function(exports){ exports.n = 7; });
+define('pkg/main', ['./util', 'exports'], function(util, exports){ exports.n = util.n; });
+globalThis.__amd_rel = require('pkg/main').n;
+"#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+        assert_eq!(
+            k.eval_to_rust_value("globalThis.__amd_rel"),
+            RustValue::Int(7)
         );
     }
 }

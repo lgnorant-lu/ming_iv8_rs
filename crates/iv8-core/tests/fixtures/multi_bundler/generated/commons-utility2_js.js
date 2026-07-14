@@ -1,0 +1,1 @@
+(self.webpackChunkiv8_l2_webpack_example=self.webpackChunkiv8_l2_webpack_example||[]).push([["commons-utility2_js"],{671(e){e.exports="utility2"}}]);

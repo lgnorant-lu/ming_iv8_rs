@@ -1,0 +1,1 @@
+(self.webpackChunkiv8_l2_webpack_example=self.webpackChunkiv8_l2_webpack_example||[]).push([["vendor"],{353(e){e.exports="vendor1"},992(e){e.exports="vendor2"}}]);
