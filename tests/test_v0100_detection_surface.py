@@ -23,6 +23,43 @@ def _run(fn):
     return box["out"]
 
 
+def test_high_signal_methods_throw_illegal_invocation_on_wrong_this():
+    """Q050: high-signal DOM/XHR methods reject wrong this with Illegal invocation."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  function check(label, fn) {
+                    try { fn.call({}); return {label: label, ok: false, msg: 'no-throw'}; }
+                    catch(e) {
+                      return {
+                        label: label,
+                        ok: e.name === 'TypeError' && /Illegal invocation/i.test(String(e.message)),
+                        msg: String(e.message).slice(0, 80)
+                      };
+                    }
+                  }
+                  return JSON.stringify([
+                    check('appendChild', Node.prototype.appendChild),
+                    check('getAttribute', Element.prototype.getAttribute),
+                    check('createElement', document.createElement),
+                    check('click', HTMLElement.prototype.click),
+                    check('xhr.open', XMLHttpRequest.prototype.open),
+                    check('ael', function(){ return EventTarget.prototype.addEventListener.call({}, 'x', function(){}); })
+                  ]);
+                })()
+                """
+            )
+        )
+
+    rows = json.loads(_run(body))
+    bad = [r for r in rows if not r.get("ok")]
+    assert bad == [], bad
+
+
 def test_user_agent_data_proto_shape_and_grease_brands():
     """Q030/Q031: brands GREASE + NavigatorUAData prototype accessors."""
 
