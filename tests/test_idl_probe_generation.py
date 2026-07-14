@@ -86,8 +86,40 @@ def test_s6_tier4_interfaces_in_default_pack():
 def test_default_pack_probe_count_includes_tier4_breadth():
     """Default pack should be broader after S6 Tier-4 interface intake."""
     data = generate_probe_pack()
-    # Pre-S6 baseline was ~tier0-3 only; Tier-4 adds multi-interface exists + attrs.
+    # Pre-S6 baseline was ~tier0-3 only; hybrid pack adds exists for full IR.
     assert len(data["probes"]) >= 200, f"probe count too low: {len(data['probes'])}"
+
+
+def test_hybrid_pack_exists_covers_full_ir_interface_count():
+    """v0.8.98: exists probes cover all IR interfaces; deep attr remains subset."""
+    import json
+    from pathlib import Path
+
+    ir = json.loads(
+        Path("tools/idl/output/unified_ir.json").read_text(encoding="utf-8")
+    )
+    ir_n = {
+        d["name"]
+        for d in ir["definitions"]
+        if d.get("kind") == "interface" and d.get("name")
+    }
+    data = generate_probe_pack()
+    exists = {
+        p["probe_id"].split(".")[-1]
+        for p in data["probes"]
+        if p["probe_id"].startswith("idl.exists.")
+    }
+    assert ir_n <= exists, f"missing exists for {sorted(ir_n - exists)[:20]}"
+    deep = set(data.get("deep_interfaces") or [])
+    assert len(deep) >= 50
+    assert len(deep) < len(ir_n)
+    # Long-tail exists-only probes marked
+    tail = [
+        p
+        for p in data["probes"]
+        if p.get("source_ir", {}).get("probe_depth") == "exists_only"
+    ]
+    assert len(tail) >= 100
 
 
 def test_generated_probes_have_diagnostic_only_ceiling():

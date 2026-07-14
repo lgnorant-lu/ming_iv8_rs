@@ -115,6 +115,7 @@ def generate_probe_pack(
     Returns:
         A dict matching the ProbePack schema recognized by ProbePack.from_dict.
     """
+    use_hybrid_exists_all = interfaces is None
     if interfaces is None:
         interfaces = [
             # Tier 0: baseline v0.8.33
@@ -484,6 +485,9 @@ def generate_probe_pack(
     # Preserve order; drop accidental duplicates from overlapping tiers.
     _seen_ifaces: set[str] = set()
     interfaces = [n for n in interfaces if not (n in _seen_ifaces or _seen_ifaces.add(n))]
+    # Deep set: full attr/descr probes. Long tail: exists-only (v0.8.98 hybrid pack).
+    deep_interfaces = list(interfaces)
+    deep_set = set(deep_interfaces)
     profile_values = dict(profile_values or {})
 
     source_path = Path(ir_path) if ir_path else _UNIFIED_IR_PATH
@@ -491,10 +495,23 @@ def generate_probe_pack(
     definitions = ir_data.get("definitions", [])
     ir_meta = ir_data.get("metadata", {})
 
+    all_ir_interfaces = sorted(
+        {
+            str(d.get("name"))
+            for d in definitions
+            if d.get("kind") == "interface" and d.get("name")
+        }
+    )
+    # Hybrid default: deep list first, then remaining IR names for exists-only.
+    if interfaces is not None:
+        # Caller-supplied list: keep exact semantics (deep for all named).
+        pass
+    hybrid_exists_all = use_hybrid_exists_all
+
     interface_map: dict[str, dict[str, Any]] = {}
     for defn in definitions:
         name = defn.get("name")
-        if name and defn.get("kind") == "interface" and name in set(interfaces):
+        if name and defn.get("kind") == "interface" and name in deep_set:
             interface_map[name] = _with_supplementary_attributes(defn)
 
     probes: list[dict[str, Any]] = []
@@ -514,10 +531,12 @@ def generate_probe_pack(
         "source_ir": {
             "schema_version": ir_schema,
             "total_interfaces": ir_meta.get("total_interfaces"),
+            "pack_mode": "hybrid_deep_plus_exists_all",
+            "deep_interface_count": len(deep_interfaces),
         },
     })
 
-    for iface_name in interfaces:
+    for iface_name in deep_interfaces:
         iface = interface_map.get(iface_name)
         if iface is None:
             probes.append({
@@ -591,6 +610,30 @@ def generate_probe_pack(
             if descr_probe:
                 probes.append(descr_probe)
 
+    # Exists-only long tail: all IR interfaces not in deep set (hybrid pack).
+    # Full attr/descr remains deep-only — not a 1284 deep-pack claim.
+    if hybrid_exists_all:
+        for iface_name in all_ir_interfaces:
+            if iface_name in deep_set:
+                continue
+            probes.append({
+                "probe_id": f"idl.exists.{iface_name}",
+                "target": iface_name,
+                "category": "presence",
+                "js": f"return typeof {iface_name} !== 'undefined';",
+                "expected": True,
+                "gap_class": "missing_api",
+                "side_effects": [],
+                "cleanup": "none",
+                "evidence_ceiling": "diagnostic_only",
+                "source_ir": {
+                    "schema_version": ir_schema,
+                    "definition": iface_name,
+                    "probe_depth": "exists_only",
+                },
+            })
+            interfaces.append(iface_name)
+
     pack_name = "idl-core-window.m1"
     return {
         "schema_version": "iv8-generated-probepack.v0.1",
@@ -599,11 +642,11 @@ def generate_probe_pack(
         "source": str(source_path),
         "generator": "iv8-idl-probe",
         "interfaces": list(interfaces),
+        "deep_interfaces": list(deep_interfaces),
         "description": (
-            f"v{version} IDL-generated presence probes for "
-            f"{', '.join(interfaces)} — "
-            f"source: unified_ir.json "
-            f"({ir_meta.get('total_interfaces', '?')} interfaces)"
+            f"v{version} hybrid IDL pack: deep attr/descr for "
+            f"{len(deep_interfaces)} interfaces + exists-only for remaining IR "
+            f"({ir_meta.get('total_interfaces', '?')} total) — not full deep-1284"
         ),
         "evidence_ceiling": "diagnostic_only",
         "probes": probes,

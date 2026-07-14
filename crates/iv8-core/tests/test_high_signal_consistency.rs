@@ -112,3 +112,39 @@ fn storage_and_crypto_subtle_shape() {
     common::assert_js_str(&mut k, "typeof crypto.subtle.digest", "function");
     common::assert_js_str(&mut k, "typeof crypto.getRandomValues", "function");
 }
+
+#[test]
+fn node_constants_on_ctor_and_prototype() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "String(Node.ELEMENT_NODE)", "1");
+    common::assert_js_str(
+        &mut k,
+        "String(Object.prototype.hasOwnProperty.call(Node.prototype,'ELEMENT_NODE'))",
+        "true",
+    );
+    common::assert_js_str(
+        &mut k,
+        "String(Node.prototype.TEXT_NODE === Node.TEXT_NODE && Node.TEXT_NODE === 3)",
+        "true",
+    );
+}
+
+#[test]
+fn event_type_accessor_and_customevent_inheritance() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(
+        &mut k,
+        "String(typeof Object.getOwnPropertyDescriptor(Event.prototype,'type').get)",
+        "function",
+    );
+    common::assert_js_str(
+        &mut k,
+        "String(Object.getPrototypeOf(CustomEvent.prototype) === Event.prototype)",
+        "true",
+    );
+    common::assert_js_str(
+        &mut k,
+        "String(Object.getPrototypeOf(Node.prototype) === EventTarget.prototype)",
+        "true",
+    );
+}
