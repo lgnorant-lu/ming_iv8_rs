@@ -254,9 +254,15 @@ unsafe extern "C" fn uad_get_high_entropy_values(info: *const v8::FunctionCallba
             v8::Boolean::new(scope, mobile).into(),
         );
 
+        // Align with uad_platform_getter: profile > env > DEFAULT (v0.8.93 B)
         let platform = state
-            .environment
-            .get_str("navigator.userAgentData.platform")
+            .profile
+            .map(|p| p.ua_platform)
+            .or_else(|| {
+                state
+                    .environment
+                    .get_str("navigator.userAgentData.platform")
+            })
             .unwrap_or(DEFAULT_PROFILE.ua_platform);
         let platform_key = crate::v8_utils::v8_string(scope, "platform");
         if let Some(s) = v8::String::new(scope, platform) {

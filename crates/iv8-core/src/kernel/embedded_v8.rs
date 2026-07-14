@@ -331,10 +331,12 @@ macro_rules! window_f64_getter_cb {
                 let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
                 let isolate: &v8::Isolate = &*scope;
                 let state = crate::state::RuntimeState::get(isolate);
-                let val = match state.profile {
-                    Some(p) => p.$field,
-                    None => state.environment.get_f64($path).unwrap_or($default),
-                };
+                // D-111: user_overrides > BrowserProfile > DEFAULT_PROFILE
+                // (do not let baseline env win over profile; do not ignore user_keys)
+                let val = state
+                    .environment
+                    .get_user_f64($path)
+                    .unwrap_or_else(|| state.profile.map(|p| p.$field).unwrap_or($default));
                 rv.set(v8::Number::new(scope, val).into());
             }));
         }

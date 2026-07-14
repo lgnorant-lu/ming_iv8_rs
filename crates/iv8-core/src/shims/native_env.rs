@@ -823,8 +823,9 @@ unsafe extern "C" fn nav_languages(info: *const v8::FunctionCallbackInfo) {
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
 
-        // Try to get languages array from environment
-        let langs: Vec<String> = if let Some(val) = state.environment.get("navigator.languages") {
+        // D-111: user_overrides > profile > DEFAULT (not baseline-first)
+        let langs: Vec<String> = if let Some(val) = state.environment.get_user("navigator.languages")
+        {
             if let Some(arr) = val.as_array() {
                 arr.iter()
                     .filter_map(|v| v.as_str().map(|s| s.to_string()))

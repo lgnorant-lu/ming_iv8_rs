@@ -42,6 +42,29 @@ const NATIVE_NAVIGATOR_KEYS: &[&str] = &[
     "geolocation",
     "clipboard",
     "credentials",
+    // native_env nav_getter inventory beyond the original 28 (v0.8.93 A1)
+    "globalPrivacyControl",
+    "storageBuckets",
+    "storage",
+    "locks",
+    "gpu",
+    "mediaCapabilities",
+    "mediaSession",
+    "presentation",
+    "bluetooth",
+    "usb",
+    "wakeLock",
+    "hid",
+    "serial",
+    "ink",
+    "xr",
+    "keyboard",
+    "managed",
+    "taintEnabled",
+    "buildID",
+    "protectedAudience",
+    "webkitPersistentStorage",
+    "webkitTemporaryStorage",
 ];
 
 /// Keys owned by native screen getters (installed via native_env.rs
@@ -56,17 +79,41 @@ const NATIVE_SCREEN_KEYS: &[&str] = &[
     "pixelDepth",
     "availLeft",
     "availTop",
+    "isExtended",
+    "orientation",
+    "onchange",
 ];
 
 /// Keys owned by native window getters (installed via global_template).
 /// env_inject must skip these to avoid READ_ONLY own data property
 /// shadowing the native accessor installed in embedded_v8.rs.
+///
+/// High-signal window metrics that still rely on post-hoc data→accessor
+/// upgrade are also skipped so env_inject does not install RO own data
+/// (v0.8.93 A1). Values for non-template keys remain available via
+/// WINDOW_EXTRAS / post-hoc when needed.
 const NATIVE_WINDOW_KEYS: &[&str] = &[
     "innerWidth",
     "innerHeight",
     "outerWidth",
     "outerHeight",
     "devicePixelRatio",
+    "screenX",
+    "screenY",
+    "screenLeft",
+    "screenTop",
+    "scrollX",
+    "scrollY",
+    "isSecureContext",
+    "closed",
+    "name",
+    "origin",
+    "length",
+    "status",
+    "credentialless",
+    "crossOriginIsolated",
+    "originAgentCluster",
+    "hasOpener",
 ];
 
 /// Install all environment fields into the V8 global object.
