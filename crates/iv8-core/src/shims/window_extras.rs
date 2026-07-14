@@ -401,11 +401,17 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             this._callback = callback;
             this._targets = [];
         };
+        function _moThis(self) {
+            if (self == null || typeof self !== 'object' || !('_targets' in self)) {
+                throw new TypeError('Illegal invocation');
+            }
+            return self;
+        }
         MutationObserver.prototype.observe = function(target, options) {
-            this._targets.push({ target: target, options: options });
+            _moThis(this)._targets.push({ target: target, options: options });
         };
-        MutationObserver.prototype.disconnect = function() { this._targets = []; };
-        MutationObserver.prototype.takeRecords = function takeRecords() { return []; };
+        MutationObserver.prototype.disconnect = function() { _moThis(this)._targets = []; };
+        MutationObserver.prototype.takeRecords = function takeRecords() { _moThis(this); return []; };
     }
 
     // IntersectionObserver stub
@@ -416,22 +422,52 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             this.root = null;
             this.rootMargin = '0px';
             this.thresholds = [0];
+            this._iv8IO = true;
         };
-        IntersectionObserver.prototype.observe = function(target) {};
-        IntersectionObserver.prototype.unobserve = function(target) {};
-        IntersectionObserver.prototype.disconnect = function() {};
-        IntersectionObserver.prototype.takeRecords = function takeRecords() { return []; };
+        function _ioThis(self) {
+            if (self == null || typeof self !== 'object' || !self._iv8IO) {
+                throw new TypeError('Illegal invocation');
+            }
+            return self;
+        }
+        IntersectionObserver.prototype.observe = function(target) { _ioThis(this); };
+        IntersectionObserver.prototype.unobserve = function(target) { _ioThis(this); };
+        IntersectionObserver.prototype.disconnect = function() { _ioThis(this); };
+        IntersectionObserver.prototype.takeRecords = function takeRecords() { _ioThis(this); return []; };
+    } else {
+        // Codegen/shallow IntersectionObserver may lack brand check — wrap methods.
+        try {
+            ['observe', 'unobserve', 'disconnect', 'takeRecords'].forEach(function(method) {
+                var orig = IntersectionObserver.prototype[method];
+                if (typeof orig !== 'function' || orig.__iv8Recv) return;
+                IntersectionObserver.prototype[method] = function() {
+                    if (this == null || typeof this !== 'object' ||
+                        !(this instanceof IntersectionObserver)) {
+                        throw new TypeError('Illegal invocation');
+                    }
+                    return orig.apply(this, arguments);
+                };
+                IntersectionObserver.prototype[method].__iv8Recv = true;
+            });
+        } catch (e) {}
     }
 
     // ResizeObserver stub
     if (typeof ResizeObserver === 'undefined') {
         globalThis.ResizeObserver = function ResizeObserver(callback) {
             this._callback = callback;
+            this._iv8RO = true;
         };
-        ResizeObserver.prototype.observe = function(target, options) {};
-        ResizeObserver.prototype.unobserve = function(target) {};
-        ResizeObserver.prototype.disconnect = function() {};
-        ResizeObserver.prototype.takeRecords = function takeRecords() { return []; };
+        function _roThis(self) {
+            if (self == null || typeof self !== 'object' || !self._iv8RO) {
+                throw new TypeError('Illegal invocation');
+            }
+            return self;
+        }
+        ResizeObserver.prototype.observe = function(target, options) { _roThis(this); };
+        ResizeObserver.prototype.unobserve = function(target) { _roThis(this); };
+        ResizeObserver.prototype.disconnect = function() { _roThis(this); };
+        ResizeObserver.prototype.takeRecords = function takeRecords() { _roThis(this); return []; };
     }
 
     // ReportingObserver stub

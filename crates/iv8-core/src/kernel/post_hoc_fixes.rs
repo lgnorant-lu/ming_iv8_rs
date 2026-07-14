@@ -34,6 +34,53 @@ pub const WEBDRIVER_FIX_JS: &str = r#"
     })();
 "#;
 
+/// INIT-4: wrap codegen/shallow observer + FontFace methods with receiver checks.
+/// Must run after surface install (native FunctionTemplate methods overwrite JS wraps).
+pub const RECEIVER_SHIM_FIX_JS: &str = r#"
+(function() {
+    function wrapProtoMethods(Ctor, methods) {
+        if (typeof Ctor === 'undefined' || !Ctor.prototype) return;
+        methods.forEach(function(name) {
+            var orig = Ctor.prototype[name];
+            if (typeof orig !== 'function' || orig.__iv8Recv) return;
+            var wrapped = function() {
+                if (this == null || typeof this !== 'object' || !(this instanceof Ctor)) {
+                    throw new TypeError('Illegal invocation');
+                }
+                return orig.apply(this, arguments);
+            };
+            try {
+                Object.defineProperty(wrapped, 'name', { value: orig.name || name, configurable: true });
+                Object.defineProperty(wrapped, 'length', { value: orig.length, configurable: true });
+            } catch (e) {}
+            wrapped.__iv8Recv = true;
+            try {
+                Ctor.prototype[name] = wrapped;
+            } catch (e) {}
+        });
+    }
+    wrapProtoMethods(IntersectionObserver, ['observe', 'unobserve', 'disconnect', 'takeRecords']);
+    wrapProtoMethods(ResizeObserver, ['observe', 'unobserve', 'disconnect', 'takeRecords']);
+    wrapProtoMethods(MutationObserver, ['observe', 'disconnect', 'takeRecords']);
+    if (typeof FontFace !== 'undefined' && FontFace.prototype) {
+        var _ffLoad = FontFace.prototype.load;
+        if (typeof _ffLoad === 'function' && !_ffLoad.__iv8Recv) {
+            FontFace.prototype.load = function() {
+                if (this == null || typeof this !== 'object' || !(this instanceof FontFace)) {
+                    return Promise.reject(new TypeError('Illegal invocation'));
+                }
+                return _ffLoad.apply(this, arguments);
+            };
+            try {
+                Object.defineProperty(FontFace.prototype.load, 'name', { value: 'load', configurable: true });
+                Object.defineProperty(FontFace.prototype.load, 'length', { value: 0, configurable: true });
+            } catch (e) {}
+            FontFace.prototype.load.__iv8Recv = true;
+        }
+    }
+})();
+"#;
+
 /// CREATE_ELEMENT_FIX removed (v0.8.92 RD-17): wrapping createElement as an
 /// own property broke NodeId/internal-field identity and dual-owned Document
 /// ops. toString is covered by FUNCTION_TO_STRING_FIX_JS; behavior is owned

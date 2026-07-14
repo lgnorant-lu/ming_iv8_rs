@@ -830,6 +830,17 @@ impl EmbeddedV8Kernel {
             let ok = v8::Script::compile(scope, request_fix, None).and_then(|s| s.run(scope)).is_some();
             crate::telemetry::post_hoc_fix_complete("REQUEST_FIX_JS", ok);
 
+            // INIT-4: receiver wraps after native methods land on prototypes.
+            crate::telemetry::post_hoc_fix_start("RECEIVER_SHIM_FIX_JS");
+            let recv_fix = crate::v8_utils::v8_string(
+                scope,
+                crate::kernel::post_hoc_fixes::RECEIVER_SHIM_FIX_JS,
+            );
+            let ok = v8::Script::compile(scope, recv_fix, None)
+                .and_then(|s| s.run(scope))
+                .is_some();
+            crate::telemetry::post_hoc_fix_complete("RECEIVER_SHIM_FIX_JS", ok);
+
             // fix_accessor_properties installs codegen accessors only when the
             // prototype does not already own the property (generator skip-if-own).
             // chain_dom_prototypes no longer copies accessors onto DOM protos.

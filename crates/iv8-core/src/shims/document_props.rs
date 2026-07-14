@@ -330,6 +330,9 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             this.lineGapOverride = this._descriptors.lineGapOverride || 'normal';
         }
         FontFace.prototype.load = function() {
+            if (this == null || typeof this !== 'object') {
+                return Promise.reject(new TypeError('Illegal invocation'));
+            }
             var self = this;
             return new Promise(function(resolve, reject) {
                 self.status = 'loading';
@@ -348,19 +351,22 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         globalThis.FontFace = FontFace;
     } else {
         // Codegen FontFace exists — ensure load() and status are present.
-        if (typeof FontFace.prototype.load !== 'function') {
-            FontFace.prototype.load = function() {
-                var self = this;
-                return new Promise(function(resolve, reject) {
-                    if (self.status === undefined) self.status = 'unloaded';
-                    self.status = 'loading';
-                    setTimeout(function() {
-                        self.status = 'loaded';
-                        resolve(self);
-                    }, 0);
-                });
-            };
-        }
+        // Always install load with receiver check (overrides codegen skeleton).
+        FontFace.prototype.load = function() {
+            if (this == null || typeof this !== 'object' ||
+                (typeof FontFace !== 'undefined' && !(this instanceof FontFace))) {
+                return Promise.reject(new TypeError('Illegal invocation'));
+            }
+            var self = this;
+            return new Promise(function(resolve) {
+                if (self.status === undefined) self.status = 'unloaded';
+                self.status = 'loading';
+                setTimeout(function() {
+                    self.status = 'loaded';
+                    resolve(self);
+                }, 0);
+            });
+        };
     }
     // Properties below are in EXCLUDED_ATTRIBUTES — codegen no longer
     // installs them, so guards are dead code. Always install to ensure
