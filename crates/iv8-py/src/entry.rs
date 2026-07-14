@@ -52,16 +52,61 @@ pub fn prepare_entry(
     json_to_py(py, &json)
 }
 
+/// Plan multiple named sources as a multi-bundle project (S7).
+///
+/// Args:
+///     sources: list of (name, source) pairs, e.g. [("runtime.js", "..."), ("vendor.js", "...")].
+///     persona: "runtime" or "analysis" (default "analysis").
+///
+/// Returns:
+///     dict with schema iv8-multi-entry-plan.v0.1 (entries + primary plan).
+///
+/// Note: for joint webpack multi-chunk execution, pass chunk sources to
+/// ``run_with_entry(..., chunks=[...])`` — no remote URL fetch.
+#[pyfunction]
+#[pyo3(signature = (sources, persona="analysis"))]
+pub fn plan_multi_entry(
+    sources: Vec<(String, String)>,
+    persona: &str,
+    py: Python<'_>,
+) -> PyResult<PyObject> {
+    let p = match persona {
+        "runtime" => Persona::Runtime,
+        "analysis" => Persona::Analysis,
+        _ => {
+            return Err(pyo3::exceptions::PyValueError::new_err(format!(
+                "persona must be 'runtime' or 'analysis', got '{}'",
+                persona
+            )))
+        }
+    };
+    let refs: Vec<(&str, &str)> = sources
+        .iter()
+        .map(|(n, s)| (n.as_str(), s.as_str()))
+        .collect();
+    let multi = planner::plan_multi_entry(&refs, p, None);
+    let json = serde_json::to_value(&multi)
+        .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(format!("serialization: {}", e)))?;
+    json_to_py(py, &json)
+}
+
 /// Execute a prepared entry plan.
 ///
 /// Args:
 ///     plan: EntryPlan dict (from prepare_entry).
 ///     source: Original JS source (or transformed source).
-///     chunks: Optional list of JS chunks to evaluate before source.
+///     chunks: Optional list of JS **source strings** to evaluate before
+///         ``source`` (e.g. vendor/runtime chunks). Order matters.
+///         Caller-supplied text only — does **not** fetch URLs.
 ///     entry_expr: Optional expression to evaluate after main source.
 ///
 /// Returns:
-///     dict representing the EntryResult.
+///     dict representing the EntryResult (includes module_graph when webpack).
+///
+/// Product path for multi-chunk webpack::
+///
+///     plan = prepare_entry(runtime_src)
+///     result = run_with_entry(plan, page_src, chunks=[vendor_src, runtime_src])
 #[pyfunction]
 #[pyo3(signature = (plan, source, chunks=None, entry_expr=None))]
 pub fn run_with_entry(

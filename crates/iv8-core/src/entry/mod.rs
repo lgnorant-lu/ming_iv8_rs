@@ -1,3 +1,4 @@
+pub mod amd;
 pub mod ast;
 pub mod browserify;
 pub mod classification;

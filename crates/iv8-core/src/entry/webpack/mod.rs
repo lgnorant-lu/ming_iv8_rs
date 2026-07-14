@@ -486,6 +486,41 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
     let edges = collect_static_require_edges(kernel, &module_ids);
     let cycles = detect_cycles_in_edges(&edges);
 
+    // Map module_id -> chunk_id(s) from observed chunk tables
+    let mut module_to_chunk: std::collections::HashMap<String, String> =
+        std::collections::HashMap::new();
+    {
+        let js = concat!(
+            "(function(){",
+            "var map={};",
+            "function scan(arr){",
+            "  if(!arr||!Array.isArray(arr))return;",
+            "  for(var i=0;i<arr.length;i++){",
+            "    var e=arr[i];",
+            "    if(!e||!e[1]||typeof e[1]!=='object')continue;",
+            "    var raw=e[0];",
+            "    var cid=Array.isArray(raw)?raw.map(String).join('+'):String(raw);",
+            "    Object.keys(e[1]).forEach(function(mid){ map[String(mid)]=cid; });",
+            "  }",
+            "}",
+            "try{if(typeof window!=='undefined')scan(window.webpackJsonp);}catch(e){}",
+            "try{",
+            "  var wpc=(typeof self!=='undefined'&&self.webpackChunk)||",
+            "    (typeof window!=='undefined'&&window.webpackChunk);",
+            "  scan(wpc);",
+            "}catch(e){}",
+            "return map;",
+            "})()"
+        );
+        if let RustValue::Object(map) = kernel.eval_to_rust_value(js) {
+            for (k, v) in map {
+                if let RustValue::String(cid) = v {
+                    module_to_chunk.insert(k, cid);
+                }
+            }
+        }
+    }
+
     // Build nodes with execution metadata from cache
     let nodes: Vec<serde_json::Value> = module_ids
         .iter()
@@ -498,13 +533,18 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
             if factories_installed > 0 {
                 node_evidence.push("chunk_factory_merged");
             }
+            let chunk_id = module_to_chunk
+                .get(module_id)
+                .cloned()
+                .map(serde_json::Value::String)
+                .unwrap_or(serde_json::Value::Null);
             serde_json::json!({
                 "module_id": module_id,
                 "kind": "factory",
                 "executed": executed,
                 "exports_seen": false,
                 "source_available": false,
-                "chunk_id": null,
+                "chunk_id": chunk_id,
                 "evidence": node_evidence,
             })
         })
@@ -688,6 +728,32 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
 /// Public wrapper for executor product path (A-P0-1).
 pub fn install_chunk_factories_public(kernel: &mut EmbeddedV8Kernel) -> u64 {
     install_chunk_factories_into_require(kernel)
+}
+
+/// Register preloaded chunk sources: eval text then merge factories (A-P1-1 product API).
+/// `chunks` is ordered list of JS source strings (runtime-like or webpackChunk push files).
+/// Does **not** fetch remote URLs.
+pub fn preload_chunk_sources(kernel: &mut EmbeddedV8Kernel, chunks: &[String]) -> serde_json::Value {
+    let mut eval_ok = 0u64;
+    let mut eval_fail = 0u64;
+    for (i, src) in chunks.iter().enumerate() {
+        match kernel.eval(src, crate::kernel::EvalOpts::default()) {
+            Ok(_) => eval_ok += 1,
+            Err(e) => {
+                eval_fail += 1;
+                let _ = e;
+                let _ = i;
+            }
+        }
+    }
+    let installed = install_chunk_factories_into_require(kernel);
+    serde_json::json!({
+        "schema": "iv8-webpack-preload-chunks.v0.1",
+        "chunks_eval_ok": eval_ok,
+        "chunks_eval_fail": eval_fail,
+        "factories_installed": installed,
+        "note": "caller-supplied chunk text only; no network ensureChunk",
+    })
 }
 
 /// Install factories from webpackJsonp/webpackChunk into live `__webpack_require__.m`
@@ -1352,6 +1418,10 @@ window.webpackChunk = [
         assert!(ids.contains(&"11"), "chunk module 11: {:?}", ids);
         assert!(ids.contains(&"20"), "chunk module 20: {:?}", ids);
         assert!(graph["module_count"].as_u64().unwrap_or(0) >= 4);
+        // chunk_id backfill
+        let n10 = nodes.iter().find(|n| n["module_id"] == "10");
+        assert!(n10.is_some());
+        assert_eq!(n10.unwrap()["chunk_id"], "vendors");
     }
 
     /// S7-03: chunk factories installed into live require.m and callable

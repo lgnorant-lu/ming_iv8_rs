@@ -265,11 +265,61 @@ fn test_source_map_and_amd_helpers() {
         source_map::extract_source_mapping_url(src).as_deref(),
         Some("bundle.js.map")
     );
-    assert!(source_map::detect_amd_markers(
+    assert!(iv8_core::entry::amd::detect_amd_markers(
         "define(['exports'], function(exports){ exports.a=1; });"
     ));
     let ts = source_map::detect_treeshaking_markers("var a=/*#__PURE__*/f();");
     assert_eq!(ts["pure_annotation"], true);
+}
+
+#[test]
+fn test_amd_subset_loader_define_require() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(iv8_core::entry::amd::amd_prelude(), EvalOpts::default())
+        .unwrap();
+    kernel
+        .eval(
+            r#"
+define('util', ['exports'], function(exports){ exports.double = function(x){ return x*2; }; });
+define('main', ['util','exports'], function(util, exports){ exports.out = util.double(21); });
+globalThis.__amd_out = require('main').out;
+"#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    common::assert_js_str(&mut kernel, "String(globalThis.__amd_out)", "42");
+}
+
+#[test]
+fn test_preload_chunk_sources_api() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            iv8_core::entry::webpack::bridge_prelude(),
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel
+        .eval(
+            r#"
+var __webpack_require__ = function(id){
+  if(__webpack_require__.c[id]) return __webpack_require__.c[id].exports;
+  var m={exports:{}}; __webpack_require__.c[id]=m;
+  var f=__webpack_require__.m[id]; if(typeof f==='function') f(m,m.exports,__webpack_require__);
+  return m.exports;
+};
+__webpack_require__.m={}; __webpack_require__.c={};
+"#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    let chunk = r#"window.webpackChunk=window.webpackChunk||[];window.webpackChunk.push([["v"],{7:function(m,e,r){e.ok=true;}}]);"#;
+    let rep =
+        iv8_core::entry::webpack::preload_chunk_sources(&mut kernel, &[chunk.to_string()]);
+    assert_eq!(rep["chunks_eval_ok"], 1);
+    assert!(rep["factories_installed"].as_u64().unwrap_or(0) >= 1);
+    common::assert_js_str(&mut kernel, "String(__webpack_require__(7).ok)", "true");
 }
 
 #[test]
@@ -320,6 +370,32 @@ fn test_browserify_edges_and_cycles_from_ast() {
 
 /// A-P0-3: circular modules share cache (half-init style) without hanging
 #[test]
+fn test_node_chunk_id_backfill_from_webpack_chunk() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            iv8_core::entry::webpack::bridge_prelude(),
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel
+        .eval(
+            r#"
+var __webpack_require__ = function(id){};
+__webpack_require__.m = { 0: function(){} };
+__webpack_require__.c = {};
+window.webpackChunk = [[["vendors"], { 9: function(){}, 10: function(){} }]];
+"#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    let graph = iv8_core::entry::webpack::collect_module_graph(&mut kernel).expect("graph");
+    let nodes = graph["nodes"].as_array().unwrap();
+    let n9 = nodes.iter().find(|n| n["module_id"] == "9");
+    assert!(n9.is_some(), "nodes={:?}", nodes);
+    assert_eq!(n9.unwrap()["chunk_id"], "vendors");
+}
+
 fn test_webpack_circular_require_uses_cache() {
     let src = r#"
 var __webpack_require__ = function(id) {

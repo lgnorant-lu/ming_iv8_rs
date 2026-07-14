@@ -100,12 +100,6 @@ pub fn summarize_source_map(source: &str) -> serde_json::Value {
     }
 }
 
-/// Detect AMD define() plugin-style markers (S7-13 minimal).
-pub fn detect_amd_markers(source: &str) -> bool {
-    source.contains("define(")
-        && (source.contains("require") || source.contains("exports") || source.contains("module"))
-}
-
 /// Tree-shaking / sideEffects markers (S7-11 diagnostics only).
 pub fn detect_treeshaking_markers(source: &str) -> serde_json::Value {
     serde_json::json!({
@@ -288,14 +282,6 @@ mod tests {
         assert_eq!(sum["url_kind"], "data");
         assert_eq!(sum["summary"]["source_count"], 1);
         assert_eq!(sum["summary"]["mappings_present"], true);
-    }
-
-    #[test]
-    fn test_detect_amd_markers() {
-        assert!(detect_amd_markers(
-            "define(['require','exports'], function(require, exports){ exports.x=1; });"
-        ));
-        assert!(!detect_amd_markers("var x = 1;"));
     }
 
     #[test]
