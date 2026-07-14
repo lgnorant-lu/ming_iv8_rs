@@ -339,4 +339,24 @@ mod tests {
         let u2 = generate_uuid_v4();
         assert_ne!(u1, u2);
     }
+
+    #[test]
+    fn test_fill_random_bytes_empty_slice_is_noop() {
+        let mut empty: [u8; 0] = [];
+        fill_random_bytes(&mut empty);
+        assert!(empty.is_empty());
+    }
+
+    #[test]
+    fn test_fill_random_bytes_single_byte_range() {
+        let mut hits = [false; 256];
+        for _ in 0..512 {
+            let mut b = [0u8; 1];
+            fill_random_bytes(&mut b);
+            hits[b[0] as usize] = true;
+        }
+        // Not a statistical proof; just ensure we are not stuck on one value.
+        let distinct = hits.iter().filter(|&&h| h).count();
+        assert!(distinct >= 2, "expected multiple distinct byte values, got {distinct}");
+    }
 }
