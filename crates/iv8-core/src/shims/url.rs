@@ -34,78 +34,92 @@ pub const URL_SHIM_JS: &str = r#"
         }
     }
 
+    function _uspThis(self) {
+        if (self == null || typeof self !== 'object' || !Array.isArray(self._params)) {
+            throw new TypeError('Illegal invocation');
+        }
+        return self;
+    }
+
     URLSearchParams.prototype.get = function get(name) {
-        for (var i = 0; i < this._params.length; i++) {
-            if (this._params[i][0] === name) return this._params[i][1];
+        var self = _uspThis(this);
+        for (var i = 0; i < self._params.length; i++) {
+            if (self._params[i][0] === name) return self._params[i][1];
         }
         return null;
     };
 
     URLSearchParams.prototype.getAll = function getAll(name) {
+        var self = _uspThis(this);
         var result = [];
-        for (var i = 0; i < this._params.length; i++) {
-            if (this._params[i][0] === name) result.push(this._params[i][1]);
+        for (var i = 0; i < self._params.length; i++) {
+            if (self._params[i][0] === name) result.push(self._params[i][1]);
         }
         return result;
     };
 
     URLSearchParams.prototype.has = function has(name) {
-        for (var i = 0; i < this._params.length; i++) {
-            if (this._params[i][0] === name) return true;
+        var self = _uspThis(this);
+        for (var i = 0; i < self._params.length; i++) {
+            if (self._params[i][0] === name) return true;
         }
         return false;
     };
 
     URLSearchParams.prototype.set = function set(name, value) {
+        var self = _uspThis(this);
         var found = false;
-        for (var i = this._params.length - 1; i >= 0; i--) {
-            if (this._params[i][0] === name) {
-                if (!found) { this._params[i][1] = String(value); found = true; }
-                else { this._params.splice(i, 1); }
+        for (var i = self._params.length - 1; i >= 0; i--) {
+            if (self._params[i][0] === name) {
+                if (!found) { self._params[i][1] = String(value); found = true; }
+                else { self._params.splice(i, 1); }
             }
         }
-        if (!found) this._params.push([name, String(value)]);
+        if (!found) self._params.push([name, String(value)]);
     };
 
     URLSearchParams.prototype.append = function append(name, value) {
-        this._params.push([name, String(value)]);
+        _uspThis(this)._params.push([name, String(value)]);
     };
 
     URLSearchParams.prototype['delete'] = function(name) {
-        this._params = this._params.filter(function(p) { return p[0] !== name; });
+        var self = _uspThis(this);
+        self._params = self._params.filter(function(p) { return p[0] !== name; });
     };
 
     URLSearchParams.prototype.toString = function toString() {
-        return this._params.map(function(p) {
+        return _uspThis(this)._params.map(function(p) {
             return encodeURIComponent(p[0]) + '=' + encodeURIComponent(p[1]);
         }).join('&');
     };
 
     URLSearchParams.prototype.sort = function sort() {
-        this._params.sort(function(a, b) { return a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0; });
+        _uspThis(this)._params.sort(function(a, b) { return a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0; });
     };
 
     Object.defineProperty(URLSearchParams.prototype, 'size', {
-        get: function() { return this._params.length; },
+        get: function() { return _uspThis(this)._params.length; },
         enumerable: true, configurable: true
     });
 
     URLSearchParams.prototype.forEach = function forEach(callback, thisArg) {
-        for (var i = 0; i < this._params.length; i++) {
-            callback.call(thisArg, this._params[i][1], this._params[i][0], this);
+        var self = _uspThis(this);
+        for (var i = 0; i < self._params.length; i++) {
+            callback.call(thisArg, self._params[i][1], self._params[i][0], self);
         }
     };
 
     URLSearchParams.prototype.entries = function entries() {
-        return this._params[Symbol.iterator] ? this._params[Symbol.iterator]() : this._params;
+        var p = _uspThis(this)._params;
+        return p[Symbol.iterator] ? p[Symbol.iterator]() : p;
     };
 
     URLSearchParams.prototype.keys = function keys() {
-        return this._params.map(function(p) { return p[0]; });
+        return _uspThis(this)._params.map(function(p) { return p[0]; });
     };
 
     URLSearchParams.prototype.values = function values() {
-        return this._params.map(function(p) { return p[1]; });
+        return _uspThis(this)._params.map(function(p) { return p[1]; });
     };
 
     Object.defineProperty(URLSearchParams.prototype, Symbol.toStringTag, {

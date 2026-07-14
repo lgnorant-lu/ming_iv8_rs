@@ -203,7 +203,23 @@ const TEXT_ENCODER_SHIM: &str = r#"
         }
         return str;
     }
+    function _textDecoderThis(self) {
+        if (self == null || typeof self !== 'object') {
+            throw new TypeError('Illegal invocation');
+        }
+        if (typeof TextDecoder !== 'undefined' && self instanceof TextDecoder) {
+            return self;
+        }
+        var cur = Object.getPrototypeOf(self);
+        for (var k = 0; k < 20; k++) {
+            if (cur === TextDecoder.prototype) return self;
+            if (!cur) break;
+            cur = Object.getPrototypeOf(cur);
+        }
+        throw new TypeError('Illegal invocation');
+    }
     TextDecoder.prototype.decode = function(buf, options) {
+        _textDecoderThis(this);
         var state = _getDecoderState(this);
         if (buf === undefined || buf === null) { return ''; }
         var arr;
@@ -244,15 +260,15 @@ const TEXT_ENCODER_SHIM: &str = r#"
         return _decodeUTF8(slice, state.fatal);
     };
     Object.defineProperty(TextDecoder.prototype, 'encoding', {
-        get: function() { return _getDecoderState(this).encoding; },
+        get: function() { return _getDecoderState(_textDecoderThis(this)).encoding; },
         enumerable: true, configurable: true
     });
     Object.defineProperty(TextDecoder.prototype, 'fatal', {
-        get: function() { return _getDecoderState(this).fatal; },
+        get: function() { return _getDecoderState(_textDecoderThis(this)).fatal; },
         enumerable: true, configurable: true
     });
     Object.defineProperty(TextDecoder.prototype, 'ignoreBOM', {
-        get: function() { return _getDecoderState(this).ignoreBOM; },
+        get: function() { return _getDecoderState(_textDecoderThis(this)).ignoreBOM; },
         enumerable: true, configurable: true
     });
     var origTDC = TextDecoder;

@@ -641,7 +641,7 @@ pub const DESCRIPTOR_FIX_JS: &str = r#"
             }
         } catch(e) {}
 
-        try { delete globalThis.external; } catch(e) {}
+        // Do NOT delete globalThis.external — document_props installs External instance (IDL-8).
     })();
 "#;
 

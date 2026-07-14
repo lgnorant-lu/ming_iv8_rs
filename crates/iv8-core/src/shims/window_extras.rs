@@ -1058,5 +1058,37 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             }
         } catch(e) {}
     }
+
+    // IDL-8 high-signal Window globals still missing from surface sample.
+    if (typeof globalThis.scheduler === 'undefined') {
+        globalThis.scheduler = {
+            postTask: function postTask(cb, options) {
+                var delay = (options && options.delay) || 0;
+                return new Promise(function(resolve, reject) {
+                    setTimeout(function() {
+                        try { resolve(typeof cb === 'function' ? cb() : undefined); }
+                        catch (e) { reject(e); }
+                    }, delay);
+                });
+            },
+            yield: function() { return Promise.resolve(); }
+        };
+    }
+    if (typeof globalThis.styleMedia === 'undefined') {
+        globalThis.styleMedia = {
+            type: 'screen',
+            matchMedium: function matchMedium() { return true; }
+        };
+    }
+    // window.external owned by document_props (External instance + prototype ops).
+    // Chrome: window.clientInformation === window.navigator
+    try {
+        Object.defineProperty(globalThis, 'clientInformation', {
+            get: function() { return navigator; },
+            enumerable: true, configurable: true
+        });
+    } catch (e) {
+        globalThis.clientInformation = navigator;
+    }
 })();
 "#;

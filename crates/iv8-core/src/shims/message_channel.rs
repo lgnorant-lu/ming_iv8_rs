@@ -13,8 +13,16 @@ pub const MESSAGE_CHANNEL_JS: &str = r#"
         this._started = false;
     }
 
+    function _portThis(self) {
+        if (self == null || typeof self !== 'object' || !('_otherPort' in self)) {
+            throw new TypeError('Illegal invocation');
+        }
+        return self;
+    }
+
     MessagePort.prototype.postMessage = function postMessage(data) {
-        var other = this._otherPort;
+        var self = _portThis(this);
+        var other = self._otherPort;
         if (other && other.onmessage) {
             var event = {data: data, origin: '', lastEventId: '', source: null, ports: []};
             // Use setTimeout to make it async (like real MessageChannel)
@@ -24,22 +32,26 @@ pub const MESSAGE_CHANNEL_JS: &str = r#"
     };
 
     MessagePort.prototype.start = function start() {
-        this._started = true;
+        _portThis(this)._started = true;
     };
 
     MessagePort.prototype.close = function close() {
-        this.onmessage = null;
-        this._otherPort = null;
+        var self = _portThis(this);
+        self.onmessage = null;
+        self._otherPort = null;
     };
 
     MessagePort.prototype.addEventListener = function addEventListener(type, listener) {
+        var self = _portThis(this);
         if (type === 'message') {
-            this.onmessage = listener;
-            this.start();
+            self.onmessage = listener;
+            self.start();
         }
     };
 
-    MessagePort.prototype.removeEventListener = function removeEventListener() {};
+    MessagePort.prototype.removeEventListener = function removeEventListener() {
+        _portThis(this);
+    };
 
     function MessageChannel() {
         if (!(this instanceof MessageChannel)) {

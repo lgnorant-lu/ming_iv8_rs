@@ -107,7 +107,7 @@ pub fn process_interface_ea(def: &Definition) -> EaResult {
 
     // Check members for per-member EAs — not supported in simplified MemberData
     // MemberData currently only stores name/kind/type info, not per-member ext_attrs.
-    // Per-member Replaceable detection deferred to v0.8.20.
+    // Per-member Replaceable is parsed in ir.rs (MemberData.has_replaceable).
 
     result
 }
