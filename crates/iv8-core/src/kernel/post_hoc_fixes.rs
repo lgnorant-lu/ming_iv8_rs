@@ -62,6 +62,8 @@ pub const RECEIVER_SHIM_FIX_JS: &str = r#"
     wrapProtoMethods(IntersectionObserver, ['observe', 'unobserve', 'disconnect', 'takeRecords']);
     wrapProtoMethods(ResizeObserver, ['observe', 'unobserve', 'disconnect', 'takeRecords']);
     wrapProtoMethods(MutationObserver, ['observe', 'disconnect', 'takeRecords']);
+    wrapProtoMethods(MediaList, ['item', 'appendMedium', 'deleteMedium', 'toString']);
+    wrapProtoMethods(DOMRect, ['toJSON']);
     if (typeof FontFace !== 'undefined' && FontFace.prototype) {
         var _ffLoad = FontFace.prototype.load;
         if (typeof _ffLoad === 'function' && !_ffLoad.__iv8Recv) {
