@@ -95,7 +95,8 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         Object.defineProperty(inst, 'isTrusted', { value: false, writable: false, enumerable: true, configurable: true });
     }
 
-    _defAccessor(EventProto, 'type', '');
+    // WebIDL: Event.type is readonly after construction (CG-2).
+    _defReadOnly(EventProto, 'type', '');
     _defReadOnly(EventProto, 'bubbles', false);
     _defReadOnly(EventProto, 'cancelable', false);
     _defReadOnly(EventProto, 'composed', false);
