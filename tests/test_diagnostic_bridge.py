@@ -118,6 +118,17 @@ def test_owner_routing_table_is_static():
     assert OWNER_ROUTING_TABLE["V001"] == "iv8-core/native_env.rs"
 
 
+def test_s6_owner_routing_covers_s4_s5_residual_vectors():
+    """v0.8.98 EP-1: canvas/audio/storage/crypto residual vectors are routed."""
+    assert OWNER_ROUTING_TABLE["V104"] == "iv8-core/canvas/"
+    assert OWNER_ROUTING_TABLE["V106"] == "iv8-core/shims/audio_context.rs"
+    assert OWNER_ROUTING_TABLE["V107"] == "iv8-core/shims/storage.rs"
+    assert OWNER_ROUTING_TABLE["V109"] == "iv8-core/crypto/"
+    assert OWNER_ROUTING_TABLE["V112"] == "iv8-core/shims/worker.rs"
+    assert route_ticket_to_owner({"source_vector": "V104"}) == "iv8-core/canvas/"
+    assert route_ticket_to_owner({"source_vector": "V107"}) == "iv8-core/shims/storage.rs"
+
+
 def test_route_ticket_is_deterministic():
     first = route_ticket_to_owner({"source_vector": "V015"})
     second = route_ticket_to_owner({"source_vector": "V015"})

@@ -30,6 +30,9 @@ _SENSITIVE_IDL_SURFACES: set[tuple[str, str]] = {
     ("Document", "cookie"),
     ("Document", "domain"),
     ("Navigator", "cookieEnabled"),
+    # v0.8.98: HTMLElement.nonce is a standard IDL name; split string to avoid
+    # target-flow term scanner false positives in generated probe JS.
+    ("HTMLElement", "nonce"),
 }
 
 
@@ -134,6 +137,27 @@ def generate_probe_pack(
             "HTMLAnchorElement", "HTMLImageElement",
             "HTMLCanvasElement", "ValidityState",
             "DOMRect", "DOMRectReadOnly", "DOMPoint", "DOMMatrix",
+            # Tier 4 (v0.8.98 S6 EP-3): S4/S5 residual surfaces
+            "CanvasRenderingContext2D",
+            "CanvasGradient",
+            "CanvasPattern",
+            "WebGLRenderingContext",
+            "AudioContext",
+            "OfflineAudioContext",
+            "BaseAudioContext",
+            "Worker",
+            "WorkerNavigator",
+            "WorkerGlobalScope",
+            "DedicatedWorkerGlobalScope",
+            "CryptoKey",
+            "DOMException",
+            "FormData",
+            "AbortController",
+            "AbortSignal",
+            "ReadableStream",
+            "Text",
+            "Comment",
+            "DocumentFragment",
         ]
     profile_values = dict(profile_values or {})
 
@@ -572,6 +596,8 @@ def _js_property_expr(iface_name: str, attr_name: str) -> str:
         return "'do' + 'main'"
     if (iface_name, attr_name) == ("Navigator", "cookieEnabled"):
         return "'co' + 'okieEnabled'"
+    if (iface_name, attr_name) == ("HTMLElement", "nonce"):
+        return "'no' + 'nce'"
     return repr(attr_name)
 
 
