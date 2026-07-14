@@ -13,6 +13,43 @@ use crate::entry::webpack;
 // Public API
 // ───
 
+/// Plan multiple sources as a multi-bundle project (A-P1-2).
+///
+/// Each source is classified independently; primary is the first non-plain
+/// strategy or the first source. Diagnostics list per-source kinds.
+pub fn plan_multi_entry(
+    sources: &[(&str, &str)],
+    persona: Persona,
+    explicit_policy: Option<Policy>,
+) -> serde_json::Value {
+    let mut entries = Vec::new();
+    let mut primary: Option<EntryPlan> = None;
+    for (name, src) in sources {
+        let plan = plan_entry(src, persona, explicit_policy.clone(), vec![]);
+        if primary.is_none() && !matches!(plan.sample_kind, SampleKind::PlainScript) {
+            primary = Some(plan.clone());
+        }
+        entries.push(serde_json::json!({
+            "name": name,
+            "sample_kind": plan.sample_kind,
+            "selected_strategy": plan.selected_strategy.strategy_kind,
+            "plan_id": plan.plan_id,
+        }));
+    }
+    if primary.is_none() {
+        if let Some((_, src)) = sources.first() {
+            primary = Some(plan_entry(src, persona, explicit_policy, vec![]));
+        }
+    }
+    serde_json::json!({
+        "schema": "iv8-multi-entry-plan.v0.1",
+        "entry_count": entries.len(),
+        "entries": entries,
+        "primary": primary,
+        "note": "chunks must be supplied to run_with_entry for joint webpack multi-chunk; no remote fetch",
+    })
+}
+
 /// Plan an entry strategy for the given JS source.
 ///
 /// This is the main entry point for entry planning.

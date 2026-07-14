@@ -208,9 +208,17 @@ impl SignalSet {
     }
 }
 
-/// Minified webpack-like (BDMS): numeric module table + CommonJS factory shape.
+    /// Minified webpack-like (BDMS): numeric module table + CommonJS factory shape.
 /// Does not claim L4 deobf; only static markers common in minified webpack output.
 fn detect_webpack_minified_bdms(source: &str) -> bool {
+    // Negative: plain CJS / node-style without module table
+    if source.contains("module.exports")
+        && !source.contains("__webpack")
+        && !source.contains("webpackChunk")
+        && source.matches("function(").count() < 3
+    {
+        return false;
+    }
     // Need .exports (cjs) and at least one numeric object key pattern near factories.
     if !source.contains(".exports") && !source.contains("[\"exports\"]") {
         return false;

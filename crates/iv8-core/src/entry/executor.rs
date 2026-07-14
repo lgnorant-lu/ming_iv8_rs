@@ -125,7 +125,13 @@ pub fn run_entry(
                     "armed",
                     &format!("chunk[{}] eval failed: {}", i, e),
                 ));
+            } else if strategy_kind == StrategyKind::WebpackBridge {
+                // A-P0-1: after each chunk, merge factories into live require.m
+                let _ = crate::entry::webpack::install_chunk_factories_public(&mut kernel);
             }
+        }
+        if strategy_kind == StrategyKind::WebpackBridge && !chunks.is_empty() {
+            let _ = crate::entry::webpack::install_chunk_factories_public(&mut kernel);
         }
 
         // Transform source if strategy requires it

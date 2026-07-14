@@ -685,6 +685,11 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
     Some(serde_json::Value::Object(graph))
 }
 
+/// Public wrapper for executor product path (A-P0-1).
+pub fn install_chunk_factories_public(kernel: &mut EmbeddedV8Kernel) -> u64 {
+    install_chunk_factories_into_require(kernel)
+}
+
 /// Install factories from webpackJsonp/webpackChunk into live `__webpack_require__.m`
 /// so `require(id)` can resolve modules defined only in chunk tables (S7-03).
 fn install_chunk_factories_into_require(kernel: &mut EmbeddedV8Kernel) -> u64 {
@@ -721,11 +726,16 @@ fn install_chunk_factories_into_require(kernel: &mut EmbeddedV8Kernel) -> u64 {
         "  if (!wpc && typeof globalThis !== 'undefined') wpc = globalThis.webpackChunk;",
         "  scan(wpc);",
         "} catch(e) {}",
-        // Sync ensureChunk subset: resolve when modules already merged (S7-06)
+        // Sync ensureChunk subset: re-merge tables then resolve (A-P1-1)
         "if (!r.__iv8_e_wrapped) {",
         "  var origE = typeof r.e === 'function' ? r.e : null;",
         "  r.e = function(chunkId){",
         "    try {",
+        "      if (typeof window !== 'undefined') scan(window.webpackJsonp);",
+        "      var w2 = null;",
+        "      if (typeof self !== 'undefined') w2 = self.webpackChunk;",
+        "      if (!w2 && typeof window !== 'undefined') w2 = window.webpackChunk;",
+        "      scan(w2);",
         "      if (typeof __iv8_webpack_log !== 'undefined') {",
         "        __iv8_webpack_log.push('chunk_ensure,' + String(chunkId));",
         "      }",
@@ -757,7 +767,8 @@ fn collect_static_require_edges(
         "try { if (!r && typeof __webpack_require__ === 'function') r = __webpack_require__; } catch(e) {}",
         "if (!r || !r.m) return [];",
         "var edges = [];",
-        "var re = /\\b(?:require|__webpack_require__|[a-zA-Z_$][\\w$]*)\\(\\s*(\\d+)\\s*\\)/g;",
+        // require / __webpack_require__ / single-letter minified param (r|n|e|t) + numeric id
+        "var re = /\\b(?:require|__webpack_require__|[rent])\\(\\s*[\\\"']?(\\d+)[\\\"']?\\s*\\)/g;",
         "Object.keys(r.m).forEach(function(from){",
         "  var fn = r.m[from];",
         "  if (typeof fn !== 'function') return;",
@@ -818,6 +829,11 @@ fn collect_static_require_edges(
         }
         _ => Vec::new(),
     }
+}
+
+/// Public cycle detect for browserify / other graphs.
+pub fn detect_cycles_public(edges: &[serde_json::Value]) -> Vec<serde_json::Value> {
+    detect_cycles_in_edges(edges)
 }
 
 /// Detect simple cycles via DFS on directed edges (S7-05).

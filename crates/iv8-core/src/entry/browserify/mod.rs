@@ -199,6 +199,22 @@ pub fn extract_modules(source: &str) -> Option<BrowserifyModuleGraph> {
     })
 }
 
+/// Build static edges + cycle list from Browserify AST deps (A-P0-4).
+pub fn graph_edges_and_cycles(graph: &BrowserifyModuleGraph) -> (Vec<serde_json::Value>, Vec<serde_json::Value>) {
+    let mut edges = Vec::new();
+    for m in &graph.modules {
+        for (_name, to_id) in &m.dependencies {
+            edges.push(serde_json::json!({
+                "from": m.module_id.to_string(),
+                "to": to_id.to_string(),
+                "kind": "browserify_dep",
+            }));
+        }
+    }
+    let cycles = crate::entry::webpack::detect_cycles_public(&edges);
+    (edges, cycles)
+}
+
 fn parse_source(source: &str) -> Option<Module> {
     let cm: Lrc<swc_common::SourceMap> = Default::default();
     let fm = cm.new_source_file(

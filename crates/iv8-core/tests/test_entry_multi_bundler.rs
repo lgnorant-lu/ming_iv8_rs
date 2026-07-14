@@ -273,6 +273,85 @@ fn test_source_map_and_amd_helpers() {
 }
 
 #[test]
+fn test_bdms_negative_plain_cjs_not_webpack() {
+    let src = "function add(a,b){return a+b;} module.exports = {add:add};";
+    let kind = classification::classify(src, &[]);
+    assert_ne!(
+        kind,
+        SampleKind::WebpackRuntime,
+        "plain CJS must not be BDMS webpack"
+    );
+}
+
+#[test]
+fn test_plan_multi_entry_lists_kinds() {
+    let sources = [
+        (
+            "runtime.js",
+            "var __webpack_require__=function(){}; __webpack_require__.m={};",
+        ),
+        (
+            "app.js",
+            "var $parcel$global={};function parcelRequire(id){return{};}",
+        ),
+    ];
+    let multi = iv8_core::entry::planner::plan_multi_entry(&sources, Persona::Analysis, None);
+    assert_eq!(multi["entry_count"], 2);
+    assert!(multi["entries"].as_array().unwrap().len() == 2);
+}
+
+#[test]
+fn test_browserify_edges_and_cycles_from_ast() {
+    let src = r#"(function(modules,cache,entries){function r(id){return id;}return r})({1:[function(require,module,exports){require(2);module.exports=1},{"./x":2}],2:[function(require,module,exports){require(1);module.exports=2},{"./y":1}]},{},[1]);"#;
+    let graph = iv8_core::entry::browserify::extract_modules(src).expect("extract");
+    let (edges, cycles) = iv8_core::entry::browserify::graph_edges_and_cycles(&graph);
+    assert!(
+        edges.iter().any(|e| e["from"] == "1" && e["to"] == "2"),
+        "edges={:?}",
+        edges
+    );
+    assert!(
+        !cycles.is_empty() || edges.iter().any(|e| e["from"] == "2" && e["to"] == "1"),
+        "expected cycle or mutual edges: edges={:?} cycles={:?}",
+        edges,
+        cycles
+    );
+}
+
+/// A-P0-3: circular modules share cache (half-init style) without hanging
+#[test]
+fn test_webpack_circular_require_uses_cache() {
+    let src = r#"
+var __webpack_require__ = function(id) {
+  if (__webpack_require__.c[id]) return __webpack_require__.c[id].exports;
+  var m = { exports: {} };
+  __webpack_require__.c[id] = m;
+  __webpack_require__.m[id](m, m.exports, __webpack_require__);
+  return m.exports;
+};
+__webpack_require__.m = {
+  1: function(m,e,r){ e.a = 1; e.other = r(2).b; },
+  2: function(m,e,r){ e.b = 2; e.other = r(1).a; }
+};
+__webpack_require__.c = {};
+globalThis.__circ = { one: __webpack_require__(1), two: __webpack_require__(2) };
+"#;
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            iv8_core::entry::webpack::bridge_prelude(),
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel.eval(src, EvalOpts::default()).unwrap();
+    let graph = iv8_core::entry::webpack::collect_module_graph(&mut kernel).expect("graph");
+    let cycles = graph["cycles"].as_array().cloned().unwrap_or_default();
+    assert!(!cycles.is_empty(), "cycles={:?}", cycles);
+    common::assert_js_str(&mut kernel, "String(globalThis.__circ.one.a)", "1");
+    common::assert_js_str(&mut kernel, "String(globalThis.__circ.two.b)", "2");
+}
+
+#[test]
 fn test_plan_entry_state_is_planned() {
     let src = load_fixture("browserify_minimal.js");
     let plan = planner::plan_entry(&src, Persona::Analysis, None, vec![]);

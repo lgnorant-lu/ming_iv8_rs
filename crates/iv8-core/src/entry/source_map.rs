@@ -115,6 +115,120 @@ pub fn detect_treeshaking_markers(source: &str) -> serde_json::Value {
     })
 }
 
+/// Minimal VLQ segment decoder for source-map `mappings` (A-P2-1).
+/// Returns list of {generated_line, generated_column, source_index, original_line, original_column}.
+pub fn decode_vlq_mappings_preview(mappings: &str, max_entries: usize) -> Vec<serde_json::Value> {
+    let mut out = Vec::new();
+    let mut gen_line = 0i64;
+    let mut gen_col = 0i64;
+    let mut src_idx = 0i64;
+    let mut orig_line = 0i64;
+    let mut orig_col = 0i64;
+    for line in mappings.split(';') {
+        gen_col = 0;
+        if line.is_empty() {
+            gen_line += 1;
+            continue;
+        }
+        for seg in line.split(',') {
+            if seg.is_empty() {
+                continue;
+            }
+            let vals = decode_vlq_segment(seg);
+            if vals.is_empty() {
+                continue;
+            }
+            gen_col += vals[0];
+            if vals.len() >= 4 {
+                src_idx += vals[1];
+                orig_line += vals[2];
+                orig_col += vals[3];
+                out.push(serde_json::json!({
+                    "generated_line": gen_line,
+                    "generated_column": gen_col,
+                    "source_index": src_idx,
+                    "original_line": orig_line,
+                    "original_column": orig_col,
+                }));
+            } else {
+                out.push(serde_json::json!({
+                    "generated_line": gen_line,
+                    "generated_column": gen_col,
+                }));
+            }
+            if out.len() >= max_entries {
+                return out;
+            }
+        }
+        gen_line += 1;
+    }
+    out
+}
+
+fn decode_vlq_segment(seg: &str) -> Vec<i64> {
+    let mut values = Vec::new();
+    let mut value = 0i64;
+    let mut shift = 0;
+    for c in seg.chars() {
+        let digit = vlq_char(c);
+        if digit < 0 {
+            break;
+        }
+        let d = digit as i64;
+        value |= (d & 31) << shift;
+        if (d & 32) == 0 {
+            let neg = (value & 1) == 1;
+            let mut v = value >> 1;
+            if neg {
+                v = -v;
+            }
+            values.push(v);
+            value = 0;
+            shift = 0;
+        } else {
+            shift += 5;
+        }
+    }
+    values
+}
+
+fn vlq_char(c: char) -> i32 {
+    match c {
+        'A'..='Z' => (c as i32) - ('A' as i32),
+        'a'..='z' => (c as i32) - ('a' as i32) + 26,
+        '0'..='9' => (c as i32) - ('0' as i32) + 52,
+        '+' => 62,
+        '/' => 63,
+        _ => -1,
+    }
+}
+
+/// originalPositionFor-style lookup: first mapping at or before (line, column).
+pub fn original_position_for(
+    mappings: &str,
+    generated_line: i64,
+    generated_column: i64,
+) -> Option<serde_json::Value> {
+    let entries = decode_vlq_mappings_preview(mappings, 10_000);
+    let mut best: Option<&serde_json::Value> = None;
+    for e in &entries {
+        let gl = e.get("generated_line").and_then(|v| v.as_i64()).unwrap_or(-1);
+        let gc = e
+            .get("generated_column")
+            .and_then(|v| v.as_i64())
+            .unwrap_or(-1);
+        if gl < generated_line || (gl == generated_line && gc <= generated_column) {
+            if e.get("source_index").is_some() {
+                best = Some(e);
+            }
+        }
+        if gl > generated_line {
+            break;
+        }
+    }
+    best.cloned()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -188,5 +302,16 @@ mod tests {
     fn test_treeshaking_markers() {
         let m = detect_treeshaking_markers("var a=/*#__PURE__*/fn();");
         assert_eq!(m["pure_annotation"], true);
+    }
+
+    #[test]
+    fn test_vlq_original_position_for() {
+        // Minimal mappings: one segment at 0,0 -> source 0, line 0, col 0
+        // VLQ for [0,0,0,0] is "AAAA"
+        let mappings = "AAAA";
+        let pos = original_position_for(mappings, 0, 0).expect("pos");
+        assert_eq!(pos["source_index"], 0);
+        assert_eq!(pos["original_line"], 0);
+        assert_eq!(pos["original_column"], 0);
     }
 }
