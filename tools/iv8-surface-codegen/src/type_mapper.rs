@@ -29,11 +29,12 @@ pub fn map_idl_type(idl_type: &str) -> TypeMap {
                 needs_scope: true,
             }
         }
-        // WebIDL range up to 2^64-1 — do not map to i64 (CG-13 overflow).
-        // Default 0 as BigInt (same path as IDL bigint); runtime values use u64.
+        // WebIDL range up to 2^64-1 — store as u64 (CG-13: not i64).
+        // JS conversion: values ≤ MAX_SAFE_INTEGER are Number (Chrome Blob.size etc.).
+        // Only values above 2^53-1 become BigInt at conversion time (not default 0).
         "unsigned long long" => TypeMap {
             rust_type: "u64".into(),
-            default_value: "v8::BigInt::new_from_i64(scope, 0).into()".into(),
+            default_value: "v8::Number::new(scope, 0.0).into()".into(),
             needs_scope: true,
         },
         "float" | "double" | "unrestricted float" | "unrestricted double" => TypeMap {
@@ -276,13 +277,10 @@ mod tests {
     }
 
     #[test]
-    fn test_unsigned_long_long_maps_to_u64_bigint_default() {
+    fn test_unsigned_long_long_maps_to_u64_number_default() {
         let m = map_idl_type("unsigned long long");
         assert_eq!(m.rust_type, "u64");
-        assert_eq!(
-            m.default_value,
-            "v8::BigInt::new_from_i64(scope, 0).into()"
-        );
+        assert_eq!(m.default_value, "v8::Number::new(scope, 0.0).into()");
     }
 
     #[test]

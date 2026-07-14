@@ -3892,7 +3892,7 @@ pub(crate) unsafe extern "C" fn gpu_compilation_message_get_3(_info: *const v8::
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
@@ -3958,7 +3958,7 @@ pub(crate) unsafe extern "C" fn gpu_compilation_message_get_4(_info: *const v8::
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
@@ -4024,7 +4024,7 @@ pub(crate) unsafe extern "C" fn gpu_compilation_message_get_5(_info: *const v8::
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
@@ -4090,7 +4090,7 @@ pub(crate) unsafe extern "C" fn gpu_compilation_message_get_6(_info: *const v8::
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
@@ -11202,7 +11202,7 @@ pub(crate) unsafe extern "C" fn gpu_supported_limits_get_20(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
@@ -11268,7 +11268,7 @@ pub(crate) unsafe extern "C" fn gpu_supported_limits_get_21(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
@@ -11532,7 +11532,7 @@ pub(crate) unsafe extern "C" fn gpu_supported_limits_get_25(_info: *const v8::Fu
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 

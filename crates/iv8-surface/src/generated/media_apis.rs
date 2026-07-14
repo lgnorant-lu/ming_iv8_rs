@@ -2499,7 +2499,7 @@ pub(crate) unsafe extern "C" fn media_stream_track_processor_get_2(_info: *const
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
@@ -2565,7 +2565,7 @@ pub(crate) unsafe extern "C" fn media_stream_track_processor_get_3(_info: *const
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 

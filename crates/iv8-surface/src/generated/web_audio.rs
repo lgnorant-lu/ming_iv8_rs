@@ -850,7 +850,7 @@ pub(crate) unsafe extern "C" fn audio_data_get_5(_info: *const v8::FunctionCallb
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
@@ -10751,7 +10751,7 @@ pub(crate) unsafe extern "C" fn audio_worklet_global_scope_get_2(_info: *const v
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 

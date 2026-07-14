@@ -2397,7 +2397,7 @@ pub(crate) unsafe extern "C" fn worker_navigator_get_23(_info: *const v8::Functi
                 return;
             }
         }
-        rv.set(v8::Integer::new(scope, 0).into());
+        rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
