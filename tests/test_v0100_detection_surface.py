@@ -23,6 +23,41 @@ def _run(fn):
     return box["out"]
 
 
+def test_postmessage_and_scroll_receiver_and_argc():
+    """Q059: postMessage argc + scrollTo/scrollBy wrong-this Illegal invocation."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  function t(label, fn, wantIllegal) {
+                    try { fn(); return {label:label, ok:false, msg:'no-throw'}; }
+                    catch(e) {
+                      var msg = String(e.message);
+                      var ok = wantIllegal
+                        ? (e.name === 'TypeError' && /Illegal invocation/i.test(msg))
+                        : (e.name === 'TypeError' && /argument/i.test(msg));
+                      return {label:label, ok:ok, msg:msg.slice(0,90)};
+                    }
+                  }
+                  return JSON.stringify([
+                    t('pm-argc', function(){ postMessage(); }, false),
+                    t('pm-this', function(){ Window.prototype.postMessage.call({}, 'x'); }, true),
+                    t('scrollTo-this', function(){ window.scrollTo.call({}, 0, 0); }, true),
+                    t('scrollBy-this', function(){ window.scrollBy.call({}, 0, 0); }, true)
+                  ]);
+                })()
+                """
+            )
+        )
+
+    rows = json.loads(_run(body))
+    bad = [r for r in rows if not r.get("ok")]
+    assert bad == [], bad
+
+
 def test_high_signal_method_name_length_shapes():
     """Q051: high-signal method name/length after NAME_LENGTH residual fix."""
 
