@@ -26,6 +26,22 @@ Avoid scattering extra `v0.8.99-*-samples.md` under roadmap.
 - **Never** default-load `_ref/yy/vendor.chunk.*` (~679KB).
 - Selection datasets: `_ref/yy` (runtime+Page), `_ref/iv8-examples/js/bdms_*` (classify webpack family).
 
+### Canonical docs (do not scatter new roadmap sample files)
+
+| Doc | Role |
+|---|---|
+| **This README** | Runtime fixture inventory (L0–L3) next to tests |
+| `docs/roadmap/v0.8/shared/v0.8-fixture-taxonomy.md` | Project-wide fixture maturity + Multi-Bundler inventory |
+| `docs/acceptance/v0.8-research-fixture-manifest.md` | Research/runtime fixture coordination row |
+| `docs/roadmap/v0.8/bundles/multi-bundler-spec.md` | Shape signals + anti-overfit principle table |
+| `docs/todo/TODO-bundler.md` | Domain ledger + selection dataset placement |
+| `v0.8.99-s7-audit-residual.md` | S7 residual honesty |
+
+### Anti-overfit (must read)
+
+Fixes are **shape/principle** driven. Samples are **evidence of missing shape**,
+not templates to hardcode. See multi-bundler-spec §Principle-Based Hardening.
+
 ## L0 (always CI)
 
 | File | Kind |
