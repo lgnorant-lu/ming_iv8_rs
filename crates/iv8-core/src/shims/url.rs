@@ -154,17 +154,23 @@ pub const URL_SHIM_JS: &str = r#"
         this.password = '';
     }
 
+    function _urlThis(self) {
+        if (self == null || typeof self !== 'object' || !('href' in self)) {
+            throw new TypeError('Illegal invocation');
+        }
+        return self;
+    }
     Object.defineProperty(URL.prototype, 'origin', {
-        get: function() { return this._origin; },
+        get: function() { return _urlThis(this)._origin; },
         enumerable: true, configurable: true
     });
     Object.defineProperty(URL.prototype, 'searchParams', {
-        get: function() { return this._searchParams; },
+        get: function() { return _urlThis(this)._searchParams; },
         enumerable: true, configurable: true
     });
 
-    URL.prototype.toString = function toString() { return this.href; };
-    URL.prototype.toJSON = function toJSON() { return this.href; };
+    URL.prototype.toString = function toString() { return _urlThis(this).href; };
+    URL.prototype.toJSON = function toJSON() { return _urlThis(this).href; };
 
     Object.defineProperty(URL.prototype, Symbol.toStringTag, {
         value: 'URL', writable: true, configurable: true, enumerable: false

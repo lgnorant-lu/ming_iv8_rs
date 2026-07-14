@@ -117,7 +117,25 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
 /// real Uint8Array / string results regardless of which constructor is in use.
 const TEXT_ENCODER_SHIM: &str = r#"
 (function() {
+    function _textEncoderThis(self) {
+        if (self == null || (typeof TextEncoder !== 'undefined' && !(self instanceof TextEncoder))) {
+            // Allow brand via prototype walk when ctor replaced
+            if (self == null || typeof self !== 'object') {
+                throw new TypeError('Illegal invocation');
+            }
+            var cur = Object.getPrototypeOf(self);
+            var found = false;
+            for (var k = 0; k < 20; k++) {
+                if (cur === TextEncoder.prototype) { found = true; break; }
+                if (!cur) break;
+                cur = Object.getPrototypeOf(cur);
+            }
+            if (!found) throw new TypeError('Illegal invocation');
+        }
+        return self;
+    }
     TextEncoder.prototype.encode = function(str) {
+        _textEncoderThis(this);
         str = str === undefined ? '' : String(str);
         var arr = [];
         for (var i = 0; i < str.length; i++) {
@@ -137,7 +155,7 @@ const TEXT_ENCODER_SHIM: &str = r#"
         return new Uint8Array(arr);
     };
     Object.defineProperty(TextEncoder.prototype, 'encoding', {
-        get: function() { return 'utf-8'; },
+        get: function() { _textEncoderThis(this); return 'utf-8'; },
         enumerable: true, configurable: true
     });
 
@@ -726,13 +744,18 @@ impl EmbeddedV8Kernel {
 
         kernel.freeze_all_prototypes();
 
-        // RD-24: after EXCLUDED_OPERATIONS + EXCLUDED_GLOBAL URL, freeze no longer
-        // overwrites Document tree ops or URL globals. URL_SHIM is installed once
-        // pre-freeze (install_undetect_shims). Only re-apply CANVAS2D if freeze
-        // clobbers canvas factory wiring.
+        // RD-24: Document tree ops stay; URL global ctor is EXCLUDED from codegen.
+        // FIX_PROTO / op-callback freeze still clobbers URL.prototype methods
+        // (toString → native shell → "[object code]"). Re-apply URL_SHIM after freeze.
+        // CANVAS2D likewise needs post-freeze factory wiring.
         if !kernel.worker_mode {
             kernel.eval(
                 crate::canvas::binding::CANVAS2D_SHIM_JS,
+                crate::kernel::EvalOpts::default(),
+            )
+            .ok();
+            kernel.eval(
+                crate::shims::url::URL_SHIM_JS,
                 crate::kernel::EvalOpts::default(),
             )
             .ok();
