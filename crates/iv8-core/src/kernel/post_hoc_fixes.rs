@@ -55,8 +55,12 @@ pub const RECEIVER_SHIM_FIX_JS: &str = r#"
             } catch (e) {}
             wrapped.__iv8Recv = true;
             try {
-                Ctor.prototype[name] = wrapped;
-            } catch (e) {}
+                Object.defineProperty(Ctor.prototype, name, {
+                    value: wrapped, writable: true, configurable: true, enumerable: true
+                });
+            } catch (e) {
+                try { Ctor.prototype[name] = wrapped; } catch (e2) {}
+            }
         });
     }
     wrapProtoMethods(IntersectionObserver, ['observe', 'unobserve', 'disconnect', 'takeRecords']);
