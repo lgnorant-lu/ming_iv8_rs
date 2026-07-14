@@ -101,7 +101,7 @@ fn install_methods_on_proto(
 
 /// Illegal constructor — Navigator and Screen are not constructable from JS.
 /// Throws TypeError: Illegal constructor, matching real browser behavior.
-unsafe extern "C" fn illegal_constructor(info: *const v8::FunctionCallbackInfo) {
+pub(crate) unsafe extern "C" fn illegal_constructor(info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*info };
     v8::callback_scope!(unsafe scope, info_ref);
     let msg = crate::v8_utils::v8_string(scope, "Illegal constructor");

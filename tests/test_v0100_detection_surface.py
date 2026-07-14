@@ -23,6 +23,40 @@ def _run(fn):
     return box["out"]
 
 
+def test_user_agent_data_proto_shape_and_grease_brands():
+    """Q030/Q031: brands GREASE + NavigatorUAData prototype accessors."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var uad = navigator.userAgentData;
+                  var brands = (uad.brands || []).map(function(b){ return b.brand; });
+                  return JSON.stringify({
+                    instOf: uad instanceof NavigatorUAData,
+                    ownKeys: Object.keys(uad),
+                    protoBrands: !!Object.getOwnPropertyDescriptor(Object.getPrototypeOf(uad), 'brands'),
+                    brands: brands,
+                    hasGrease: brands.some(function(b){ return String(b).indexOf('Not') >= 0 || String(b).indexOf('Brand') >= 0; }),
+                    hasChrome: brands.indexOf('Google Chrome') >= 0,
+                    hasChromium: brands.indexOf('Chromium') >= 0
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["instOf"] is True, rep
+    assert rep["ownKeys"] == [], rep
+    assert rep["protoBrands"] is True, rep
+    assert rep["hasChrome"] is True, rep
+    assert rep["hasChromium"] is True, rep
+    assert rep["hasGrease"] is True, rep
+
+
 def test_default_profile_high_signal_value_coherence():
     """Q032: default profile Window/Nav/Screen high-signal keys are populated and sane."""
 

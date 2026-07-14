@@ -104,7 +104,8 @@ pub const DEFAULT_PROFILE: BrowserProfile = BrowserProfile {
     screen_avail_left: 0.0,
     screen_avail_top: 0.0,
 
-    ua_brands_json: r#"[{"brand":"Chromium","version":"147"},{"brand":"Google Chrome","version":"147"}]"#,
+    // GREASE brand included (Chrome Client Hints style); order may vary by build.
+    ua_brands_json: r#"[{"brand":"Google Chrome","version":"147"},{"brand":"Chromium","version":"147"},{"brand":"Not/A)Brand","version":"99"}]"#,
     ua_mobile: false,
     ua_platform: "Windows",
     ua_architecture: "x86",
@@ -151,10 +152,10 @@ mod tests {
     }
 
     #[test]
-    fn test_default_profile_brands_has_two_entries() {
+    fn test_default_profile_brands_has_grease() {
         assert!(DEFAULT_PROFILE.ua_brands_json.contains("Google Chrome"));
         assert!(DEFAULT_PROFILE.ua_brands_json.contains("Chromium"));
-        assert!(!DEFAULT_PROFILE.ua_brands_json.contains("Not/A)Brand"));
+        assert!(DEFAULT_PROFILE.ua_brands_json.contains("Not/A)Brand"));
     }
 
     #[test]
