@@ -6,22 +6,33 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
-## [v0.8.99] - 2026-07-14
+## [v0.8.99] - 2026-07-15
 
 > Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
-> Mode: Lightweight Increment. Series **S7** (Bundler BD-1..3).
+> Mode: Lightweight Increment. Series **S7** (Bundler BD-1..3). Continuum close 2026-07-15
+> (first gate slice 2026-07-14).
 
 ### Fixed / Added
-- Webpack minified BDMS detection (`detect_webpack_minified_bdms`) + broader webpack markers
-- Multi-chunk module graph: always merge webpackJsonp/webpackChunk module IDs; array chunk-id normalize
-- Tests: multi_bundler webpack BDMS/chunk; webpack graph merge unit test
+- Webpack minified BDMS detection + factory arity perms (`function(t,r,e)` etc.)
+- Multi-chunk: factory install into live `__webpack_require__.m`; edges
+  (`static_require` / string / import / ensure_chunk); cycles; node.chunk_id;
+  named `webpackChunk{uniqueName}` scan; preload labeled + ensure bounds
+- Multi-entry `plan_multi_entry` (Rust + Python); AMD almond sync + relative deps
+- VLQ `original_position_for` (+ optional source/name resolve)
+- L0–L2 multi_bundler fixtures (incl. official webpack example dist under `generated/`)
+- Sample-track (not product API): `docs/samples/adapters/` ctrip global shim +
+  Akamai d1 param golden; `tests/test_sample_akamai_d1_param_parity.py`;
+  relative fetch netLog regression test
 
 ### Quality Gates
-- cargo test -p iv8-core --lib: **499 PASS**
-- test_entry_multi_bundler: **36/36 PASS**
-- WPT functional: **176/176**
-- H05a-f + H06a/b: **OVERALL PASS**
+- test_entry_multi_bundler: **51+ PASS** (continuum)
+- sample d1 param parity + relative netLog: **pytest PASS**
+- WPT functional / H05a-f / H06: hold policy (last continuum gate set)
 - Package metadata: **0.8.11** unchanged
+
+### Explicit non-goals (unchanged)
+- L4 identifier recovery / full deobf (Branch B)
+- Remote chunk URL fetch; general `require(expr)` solver
 
 ## [v0.8.98] - 2026-07-14
 
