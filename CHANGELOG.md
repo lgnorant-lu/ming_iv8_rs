@@ -6,6 +6,26 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.95] - 2026-07-14
+
+> Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
+> Mode: Lightweight Increment. Series **S3** of post-0.92 module-bulk roadmap.
+
+### Fixed
+- Worker bootstrap: `navigator` uses `Object.create(WorkerNavigator.prototype)` when available
+- Worker isolate init order: JS interface stub before bootstrap (so WorkerNavigator exists)
+- Window `pageXOffset`/`pageYOffset` alias `scrollX`/`scrollY` user overrides; `screenLeft`/`screenTop` alias `screenX`/`screenY`
+
+### Added
+- Tests: sequential `document.write` append; `document.open` resets write anchor
+- S3 audit residual note (write/parser bound, worker proto, timer hold)
+
+### Quality Gates
+- cargo test -p iv8-core --lib: **498 PASS**
+- WPT functional: **176/176**
+- H05a-f + H06a/b: **OVERALL PASS**
+- Package metadata: **0.8.11** unchanged
+
 ## [v0.8.94] - 2026-07-14
 
 > Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
