@@ -158,6 +158,28 @@ def generate_probe_pack(
             "Text",
             "Comment",
             "DocumentFragment",
+            # Tier 4b (v0.8.98 S6 P0 high-signal intake — coverage design)
+            "Permissions",
+            "Geolocation",
+            "BatteryManager",
+            "NetworkInformation",
+            "OffscreenCanvas",
+            "WebGL2RenderingContext",
+            "GPU",
+            "MediaDevices",
+            "Notification",
+            "AnalyserNode",
+            "OscillatorNode",
+            "GainNode",
+            "DynamicsCompressorNode",
+            "AudioBuffer",
+            "MediaStream",
+            "FontFace",
+            "MutationObserver",
+            "IntersectionObserver",
+            "ResizeObserver",
+            "PerformanceObserver",
+            "URLSearchParams",
         ]
     profile_values = dict(profile_values or {})
 

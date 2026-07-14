@@ -61,6 +61,7 @@ def test_s6_tier4_interfaces_in_default_pack():
         "CanvasRenderingContext2D",
         "CanvasGradient",
         "WebGLRenderingContext",
+        "WebGL2RenderingContext",
         "AudioContext",
         "OfflineAudioContext",
         "Worker",
@@ -68,6 +69,13 @@ def test_s6_tier4_interfaces_in_default_pack():
         "CryptoKey",
         "DOMException",
         "AbortController",
+        "Permissions",
+        "Geolocation",
+        "BatteryManager",
+        "NetworkInformation",
+        "OffscreenCanvas",
+        "GPU",
+        "MediaDevices",
     ):
         probe_id = f"idl.exists.{name}"
         found = [p for p in probes if p["probe_id"] == probe_id]
