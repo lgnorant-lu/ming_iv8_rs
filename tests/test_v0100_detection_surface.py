@@ -23,6 +23,67 @@ def _run(fn):
     return box["out"]
 
 
+def test_navigator_connection_and_plugins_shape():
+    """Q033/Q034: connection values + plugins/mimeTypes arrays."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var c = navigator.connection;
+                  var p = navigator.plugins;
+                  var m = navigator.mimeTypes;
+                  return JSON.stringify({
+                    tag: Object.prototype.toString.call(c),
+                    rtt: c.rtt,
+                    downlink: c.downlink,
+                    effectiveType: c.effectiveType,
+                    saveData: c.saveData,
+                    pluginsLen: p.length,
+                    pluginsInst: p instanceof PluginArray,
+                    mimeLen: m.length,
+                    mimeInst: m instanceof MimeTypeArray
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["tag"] == "[object NetworkInformation]", rep
+    assert rep["rtt"] >= 0 and rep["downlink"] > 0, rep
+    assert rep["effectiveType"] in ("4g", "3g", "2g", "slow-2g"), rep
+    assert rep["pluginsLen"] >= 1 and rep["pluginsInst"] is True, rep
+    assert rep["mimeLen"] >= 1 and rep["mimeInst"] is True, rep
+
+
+def test_document_node_methods_not_own_on_document():
+    """Q037: Node methods live on Node.prototype, not document own."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var methods=['appendChild','removeChild','insertBefore','cloneNode'];
+                  var bad=[];
+                  methods.forEach(function(m){
+                    if (Object.prototype.hasOwnProperty.call(document, m)) bad.push(m+':own');
+                    if (typeof Node.prototype[m] !== 'function') bad.push(m+':missing-proto');
+                  });
+                  return JSON.stringify(bad);
+                })()
+                """
+            )
+        )
+
+    bad = json.loads(_run(body))
+    assert bad == [], bad
+
+
 def test_high_signal_methods_throw_illegal_invocation_on_wrong_this():
     """Q050: high-signal DOM/XHR methods reject wrong this with Illegal invocation."""
 

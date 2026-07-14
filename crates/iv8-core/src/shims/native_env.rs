@@ -1134,20 +1134,55 @@ unsafe extern "C" fn nav_connection(info: *const v8::FunctionCallbackInfo) {
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let env = &state.environment;
+
+        // Plain object + toStringTag. Do NOT inherit codegen NetworkInformation.prototype:
+        // its skeleton accessors return empty objects and would shadow own data values.
         let obj = v8::Object::new(scope);
+
         let s = |k: &str| crate::v8_utils::v8_string(scope, k);
-        let eff_type = env.get_str("network.effectiveType").unwrap_or("4g");
+        // Prefer network.* keys; fall back to navigator.connection.* if present.
+        let eff_type = env
+            .get_str("network.effectiveType")
+            .or_else(|| env.get_str("navigator.connection.effectiveType"))
+            .unwrap_or("4g");
         obj.set(scope, s("effectiveType").into(), s(eff_type).into());
-        let downlink = env.get_f64("network.downlink").unwrap_or(10.0);
-        obj.set(scope, s("downlink").into(), v8::Number::new(scope, downlink).into());
-        let rtt = env.get_f64("network.rtt").unwrap_or(50.0);
+        let downlink = env
+            .get_f64("network.downlink")
+            .or_else(|| env.get_f64("navigator.connection.downlink"))
+            .unwrap_or(10.0);
+        obj.set(
+            scope,
+            s("downlink").into(),
+            v8::Number::new(scope, downlink).into(),
+        );
+        let rtt = env
+            .get_f64("network.rtt")
+            .or_else(|| env.get_f64("navigator.connection.rtt"))
+            .unwrap_or(50.0);
         obj.set(scope, s("rtt").into(), v8::Number::new(scope, rtt).into());
-        let save_data = env.get_str("network.saveData").map(|v| v == "true").unwrap_or(false);
-        obj.set(scope, s("saveData").into(), v8::Boolean::new(scope, save_data).into());
-        let net_type = env.get_str("network.type").unwrap_or("wifi");
+        let save_data = env
+            .get_str("network.saveData")
+            .or_else(|| env.get_str("navigator.connection.saveData"))
+            .map(|v| v == "true")
+            .unwrap_or(false);
+        obj.set(
+            scope,
+            s("saveData").into(),
+            v8::Boolean::new(scope, save_data).into(),
+        );
+        let net_type = env
+            .get_str("network.type")
+            .or_else(|| env.get_str("navigator.connection.type"))
+            .unwrap_or("wifi");
         obj.set(scope, s("type").into(), s(net_type).into());
         let ts = v8::Symbol::get_to_string_tag(scope);
-        obj.set(scope, ts.into(), s("NetworkInformation").into());
+        let tag = s("NetworkInformation");
+        obj.define_own_property(
+            scope,
+            ts.into(),
+            tag.into(),
+            v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::READ_ONLY,
+        );
         rv.set(obj.into());
     }));
 }
