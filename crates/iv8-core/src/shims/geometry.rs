@@ -25,6 +25,9 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
         this.right = this.x + this.width;
     }
     DOMRect.prototype.toJSON = function() {
+        if (this == null || typeof this !== 'object') {
+            throw new TypeError('Illegal invocation');
+        }
         return {x: this.x, y: this.y, width: this.width, height: this.height,
                 top: this.top, right: this.right, bottom: this.bottom, left: this.left};
     };
