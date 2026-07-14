@@ -197,48 +197,10 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // createTextNode / createComment / createDocumentFragment / createElement:
     // native Document.prototype only (RD-16/17).
     // EventTarget methods: native binding on Document.prototype (RD-11).
-    if (!document.createEvent) {
-        document.createEvent = function(type) {
-            var e = {};
-            e.type = '';
-            e.bubbles = false;
-            e.cancelable = false;
-            e.initEvent = function(t, b, c) { e.type = t; e.bubbles = b; e.cancelable = c; };
-            e.initMouseEvent = function(t) { e.type = t; };
-            e.initCustomEvent = function(t, b, c, d) { e.type = t; e.bubbles = b; e.cancelable = c; e.detail = d; };
-            return e;
-        };
-    }
-    if (!document.importNode) {
-        document.importNode = function(node, deep) { return node; };
-    }
-    if (!document.adoptNode) {
-        document.adoptNode = function(node) { return node; };
-    }
-    if (!document.createNodeIterator) {
-        document.createNodeIterator = function() { return { nextNode: function() { return null; }, detach: function() {} }; };
-    }
-    if (!document.execCommand) {
-        document.execCommand = function() { return false; };
-    }
-    if (!document.queryCommandEnabled) {
-        document.queryCommandEnabled = function() { return false; };
-    }
-    if (!document.queryCommandState) {
-        document.queryCommandState = function() { return false; };
-    }
-    if (!document.queryCommandValue) {
-        document.queryCommandValue = function() { return ''; };
-    }
-    if (!document.getSelection) {
-        document.getSelection = function() { return null; };
-    }
-    if (!document.exitFullscreen) {
-        document.exitFullscreen = function() { return Promise.resolve(); };
-    }
-    if (!document.exitPointerLock) {
-        document.exitPointerLock = function() {};
-    }
+    // MF-4: do NOT install own importNode/adoptNode/createEvent/execCommand*
+    // identity stubs on the document instance — they dual-own Document.prototype
+    // natives (createEvent was then overwritten again below). Policy-only surface
+    // remains cookie/referrer/visibility/fonts/plugins.
     if (!Object.getOwnPropertyDescriptor(document, 'fonts') || !document.fonts) {
         var _fontPrefs = (typeof globalThis.__iv8FontPrefs === 'object' && globalThis.__iv8FontPrefs) ? globalThis.__iv8FontPrefs : {};
         var _fontFamilies = _fontPrefs.families || [];
@@ -373,27 +335,27 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // the shim is the single source of truth.
     Object.defineProperty(document, 'scrollingElement', { get: function() { return document.body || null; }, configurable: true });
     Object.defineProperty(document, 'currentScript', { get: function() { return null; }, configurable: true });
-    // Override document.createRange to return object with correct prototype
-    // codegen callback returns Object::new() with Object.prototype, not Range.prototype
-    if (typeof Range !== 'undefined') {
-        document.createRange = function createRange() {
-            return Object.create(Range.prototype);
-        };
-    }
-    // Override document.createEvent to return objects with correct prototypes
-    if (typeof Event !== 'undefined') {
-        var origCreateEvent = document.createEvent;
-        document.createEvent = function createEvent(type) {
-            var ctorMap = { Event: Event, CustomEvent: CustomEvent, MouseEvent: MouseEvent, UIEvent: UIEvent, KeyboardEvent: KeyboardEvent, AnimationEvent: AnimationEvent, TransitionEvent: TransitionEvent, MessageEvent: MessageEvent, DragEvent: DragEvent, BeforeUnloadEvent: BeforeUnloadEvent, HashChangeEvent: HashChangeEvent, PageTransitionEvent: PageTransitionEvent, PopStateEvent: PopStateEvent, StorageEvent: StorageEvent, SubmitEvent: SubmitEvent, ToggleEvent: ToggleEvent, CloseWatcher: CloseWatcher, PromiseRejectionEvent: PromiseRejectionEvent, ErrorEvent: ErrorEvent, FormDataEvent: FormDataEvent, DragEvent: DragEvent };
-            var Ctor = ctorMap[type];
-            var ev;
-            if (Ctor) {
-                try { ev = new Ctor(type); } catch(e) {}
-            }
-            if (!ev) { ev = new Event(type); }
-            try { Object.defineProperty(ev, 'isTrusted', { value: false, writable: false, enumerable: true, configurable: true }); } catch(e) { ev.isTrusted = false; }
-            return ev;
-        };
+    // Override Document.prototype.createRange/createEvent (not document own)
+    // so instance and prototype share one Function (MF-4 dual-path cleanup).
+    if (typeof Document !== 'undefined' && Document.prototype) {
+        if (typeof Range !== 'undefined') {
+            Document.prototype.createRange = function createRange() {
+                return Object.create(Range.prototype);
+            };
+        }
+        if (typeof Event !== 'undefined') {
+            Document.prototype.createEvent = function createEvent(type) {
+                var ctorMap = { Event: Event, CustomEvent: CustomEvent, MouseEvent: MouseEvent, UIEvent: UIEvent, KeyboardEvent: KeyboardEvent, AnimationEvent: AnimationEvent, TransitionEvent: TransitionEvent, MessageEvent: MessageEvent, DragEvent: DragEvent, BeforeUnloadEvent: BeforeUnloadEvent, HashChangeEvent: HashChangeEvent, PageTransitionEvent: PageTransitionEvent, PopStateEvent: PopStateEvent, StorageEvent: StorageEvent, SubmitEvent: SubmitEvent, ToggleEvent: ToggleEvent, CloseWatcher: CloseWatcher, PromiseRejectionEvent: PromiseRejectionEvent, ErrorEvent: ErrorEvent, FormDataEvent: FormDataEvent };
+                var Ctor = ctorMap[type];
+                var ev;
+                if (Ctor) {
+                    try { ev = new Ctor(type); } catch(e) {}
+                }
+                if (!ev) { ev = new Event(type); }
+                try { Object.defineProperty(ev, 'isTrusted', { value: false, writable: false, enumerable: true, configurable: true }); } catch(e) { ev.isTrusted = false; }
+                return ev;
+            };
+        }
     }
     if (!document.implementation) {
         var implProto = (typeof DOMImplementation !== 'undefined') ? DOMImplementation.prototype : Object.prototype;
