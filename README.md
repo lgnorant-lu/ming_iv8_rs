@@ -3,10 +3,11 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.97 closed (S5 CanvasGradient proto + WebGL user overrides + OfflineAudio oncomplete + localStorage singleton fix; package 0.8.11 D-151) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.98 closed (S6 hybrid probe pack + idlharness Event/Worker/HTMLAll fixes; package 0.8.11 D-151) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
+- **v0.8.98 S6 plane+probes**: hybrid exists-all IDL pack; Event isTrusted/Worker.length/HTMLAll brand-check; high-signal consistency tests; coverage matrix
 - **v0.8.97 S5 canvas+storage residual**: CanvasGradient.prototype link; WebGL D-111 UNMASKED_*; OfflineAudio oncomplete; localStorage singleton getters + own setItem + soft quota
 - **v0.8.96 S4 network+crypto**: XHR readyState split; WebSocket lifecycle; fetch dual hidden status keys; X25519 deriveBits; AES-KW tests
 - **v0.8.95 S3 DOM/Worker residual**: sequential document.write tests; Worker navigator prototype chain; page/scroll alias paths; H05/H06/WPT hold

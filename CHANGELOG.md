@@ -6,6 +6,28 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.98] - 2026-07-14
+
+> Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
+> Mode: Lightweight Increment. Series **S6** (EP-1 plane + EP-3 probe breadth).
+
+### Fixed
+- Event isTrusted: own accessor, getter name `get isTrusted`, wrong-this TypeError
+- Event phase constants on prototype; Worker constructor `.length === 1`
+- HTMLAllCollection: namedItem/item class names; brand-check on wrong-this/proto
+
+### Added
+- Hybrid IDL probe pack: deep ~375 interfaces + exists-only long tail for full IR
+- `tools/idl_probe/coverage_report.py`; coverage design + matrix
+- High-signal consistency tests; OWNER_ROUTING V104–V113
+
+### Quality Gates
+- cargo test -p iv8-core --lib: **498 PASS**
+- WPT functional: **176/176**
+- WPT idlharness baseline aggregate: **23409/24946 PASS (93.84%)**
+- H05a-f + H06a/b: **OVERALL PASS**
+- Package metadata: **0.8.11** unchanged
+
 ## [v0.8.97] - 2026-07-14
 
 > Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
