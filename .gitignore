@@ -157,3 +157,6 @@ _ref/rs-reverse/
 # Archive/test artifacts
 tests/_archive/
 data/chromium-idl/
+
+# Local WPT iteration snapshots (do not commit; keep data/wpt-report.json only)
+data/wpt-report-v088*.json

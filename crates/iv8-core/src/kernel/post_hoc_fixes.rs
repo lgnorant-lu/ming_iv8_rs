@@ -14,25 +14,35 @@
 //!
 //! ## Organization
 //!
-//! Each blob is a `pub const &str` with a doc comment explaining:
+//! Each LIVE blob is a `pub const &str` with a doc comment explaining:
 //! - What it fixes
 //! - Why it can't be done in codegen/shim/native
 //! - Dependencies on other blobs (ordering)
-
-/// P0 boundary fix: delete navigator.webdriver from Navigator.prototype.
-///
-/// Real Chrome: `Object.getOwnPropertyDescriptor(Navigator.prototype, 'webdriver') === undefined`.
-/// IV8 codegen installs it as a getter returning false (it's in the WebIDL).
-/// JS fix matches Chrome by deleting the property post-install.
-///
-/// **Why not codegen?** The WebIDL includes `webdriver` as a readonly attribute.
-/// Codegen faithfully installs it. Chrome removes it at runtime. A codegen
-/// annotation like `[ChromeOmit]` would work but is a bigger architectural change.
-pub const WEBDRIVER_FIX_JS: &str = r#"
-    (function() {
-        try { delete Navigator.prototype.webdriver; } catch(e) {}
-    })();
-"#;
+//!
+//! ## LIVE blob classification (eval'd from `embedded_v8.rs`)
+//!
+//! ### Necessary camouflage (hard to move short-term)
+//! - `FIX_PROTO_JS` — prototype chain / inheritance repair
+//! - `FREEZE_ALL_JS` / `FREEZE_SHIM_PROTOTYPES_JS` — freeze surface
+//! - `FUNCTION_TO_STRING_FIX_JS` — `[native code]` toString
+//! - `TO_STRING_TAG_FIX_JS` — Symbol.toStringTag residual
+//! - `NAME_LENGTH_FIX_JS` / `DESCRIPTOR_FIX_JS` / `GETTER_NAME_FIX_JS` — shape camouflage
+//! - `WORKER_ONLY_DELETE_JS` — worker global pruning
+//!
+//! ### Structural bridge until codegen/native owns it
+//! - `RECEIVER_SHIM_FIX_JS` — Illegal invocation wraps (INIT-4)
+//! - `READONLY_FIX_JS` — readonly setter=undefined after shims
+//! - `PLUGINS_FIX_JS` — PluginArray/MimeTypeArray instanceof
+//! - `REQUEST_FIX_JS` — fetch() polyfill only (Request ctor = DOM FT)
+//! - `CHROME_FIX_JS` — window.chrome.runtime shape (page_load)
+//! - `global_accessor_fix_js` — [Global] data→accessor upgrade (generated)
+//!
+//! ### Dead / no-op removed (v0.8.92)
+//! Not referenced from `embedded_v8` (or skipped as empty); deleted:
+//! `WEBDRIVER_FIX_JS`, `CREATE_ELEMENT_FIX_JS`, `IFRAME_FIX_JS`,
+//! `SHADOW_ROOT_FIX_JS`, `DOM_GETTER_FIX_JS`. Ownership moved to native FT
+//! / root-cause fixes (COMP-2/4, RD-17, P0-5). Re-add only if a call site
+//! is restored with non-empty body.
 
 /// INIT-4: wrap codegen/shallow observer + FontFace methods with receiver checks.
 /// Must run after surface install (native FunctionTemplate methods overwrite JS wraps).
@@ -91,14 +101,6 @@ pub const RECEIVER_SHIM_FIX_JS: &str = r#"
 })();
 "#;
 
-/// CREATE_ELEMENT_FIX removed (v0.8.92 RD-17): wrapping createElement as an
-/// own property broke NodeId/internal-field identity and dual-owned Document
-/// ops. toString is covered by FUNCTION_TO_STRING_FIX_JS; behavior is owned
-/// solely by dom/binding create_element.
-pub const CREATE_ELEMENT_FIX_JS: &str = r#"
-    (function() { /* v0.8.92: CREATE_ELEMENT_FIX_JS eliminated (RD-17) */ })();
-"#;
-
 /// P0 boundary fix: navigator.plugins/mimeTypes instanceof check.
 ///
 /// Shim replaces plugins/mimeTypes with plain objects. Real Chrome returns
@@ -137,35 +139,6 @@ pub const PLUGINS_FIX_JS: &str = r#"
             try { Object.defineProperty(navigator, 'mimeTypes', { value: ma, writable: true, configurable: true, enumerable: true }); } catch(e) {}
         }
     })();
-"#;
-
-/// P0-BT-5 fix: iframe contentWindow.navigator missing.
-///
-/// Root cause: contentWindow getter returns bare Object or null (looks for
-/// nonexistent "WindowProxy" global). Fix: wrap contentWindow to create a
-/// Window-like proxy with navigator.
-///
-/// **Why not codegen?** contentWindow is a DOM template getter. The DOM
-/// template returns a stored value (may be null). This fix wraps the getter
-/// to install navigator/document/parent on the returned object.
-/// COMP-4: contentWindow shell owned by HTMLIFrameElement FT (template.rs).
-/// Keep as no-op so freeze order telemetry stays stable.
-pub const IFRAME_FIX_JS: &str = r#"
-    (function() { /* no-op: iframe contentWindow native FT */ })();
-"#;
-
-/// Element.prototype.shadowRoot returns null + attachShadow stub.
-///
-/// Root cause: DOM template installs shadowRoot as a getter returning {}
-/// (empty object). Real Chrome returns null when no shadow root is attached.
-/// VMP checks this API and takes wrong branch.
-///
-/// **Why not codegen?** shadowRoot is a DOM template getter. The DOM template
-/// callback returns a default value. This fix wraps the getter to return
-/// the stored __iv8_shadowRoot or null.
-/// COMP-4: shadowRoot/attachShadow owned by Element FT (template.rs).
-pub const SHADOW_ROOT_FIX_JS: &str = r#"
-    (function() { /* no-op: shadowRoot/attachShadow native FT */ })();
 "#;
 
 /// Request constructor shim.
@@ -700,26 +673,6 @@ pub const DESCRIPTOR_FIX_JS: &str = r#"
 
         // Do NOT delete globalThis.external — document_props installs External instance (IDL-8).
     })();
-"#;
-
-/// Fix codegen native getters that throw "Illegal invocation" on DOM template
-/// instances (K-013). Codegen FunctionTemplate callbacks require V8 internal
-/// slots that DOM template instances (created via Object.create) don't have.
-///
-/// **Affected**: CharacterData.length, Text.wholeText, Element.regionOverset
-///
-/// **Why not codegen?** The codegen getter has a receiver check that validates
-/// V8 internal slots. DOM template instances bypass this. A JS shim getter
-/// reads from a hidden property instead.
-///
-/// **Why not DOM template?** DOM template instances are created via
-/// `Object.create(Interface.prototype)` which doesn't have V8 slots.
-/// Making them use FunctionTemplate would require deep architecture change.
-/// DOM_GETTER_FIX_JS removed (v0.8.92 P0-5): CSSOMString → empty string default
-/// in type_mapper; AbortController.abort/signal native in codegen; CharacterData
-/// length/data via DOM template. Kept as empty no-op for stable init call sites.
-pub const DOM_GETTER_FIX_JS: &str = r#"
-    (function() { /* v0.8.92: DOM_GETTER_FIX_JS eliminated */ })();
 "#;
 
 /// Fix missing Symbol.toStringTag on codegen interfaces.

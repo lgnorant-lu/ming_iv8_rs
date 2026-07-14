@@ -89,7 +89,7 @@ function main() {
     metadata: {
       generated_at: new Date().toISOString(),
       webref_version: require("@webref/idl/package.json").version,
-      webidl2_version: "24.x",
+      webidl2_version: require("webidl2/package.json").version,
       total_interfaces: mergedData.definitions.filter(d => d.kind === "interface").length,
       total_dictionaries: mergedData.definitions.filter(d => d.kind === "dictionary").length,
       total_enums: mergedData.definitions.filter(d => d.kind === "enum").length,

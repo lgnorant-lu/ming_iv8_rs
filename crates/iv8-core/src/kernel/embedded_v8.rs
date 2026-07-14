@@ -945,7 +945,8 @@ impl EmbeddedV8Kernel {
             let ok = v8::Script::compile(scope, descriptor_fix, None).and_then(|s| s.run(scope)).is_some();
             crate::telemetry::post_hoc_fix_complete("DESCRIPTOR_FIX_JS", ok);
 
-            // DOM_GETTER_FIX_JS is empty no-op — skipped (INIT-2).
+            // Dead post-hoc blobs removed (INIT-2): WEBDRIVER/CREATE_ELEMENT/
+            // IFRAME/SHADOW_ROOT/DOM_GETTER — no longer defined or eval'd.
 
             crate::telemetry::post_hoc_fix_start("TO_STRING_TAG_FIX_JS");
             let tostring_tag_fix = crate::v8_utils::v8_string(scope,

@@ -11,6 +11,8 @@ OUTPUT_PATH = REPO_ROOT / "status" / "h05e-exception.json"
 # Do not lower without reclassifying those cases as expected NoThrow in the matrix.
 THRESHOLDS = {"max_wrong_type": 0, "max_no_throw": 20, "min_coverage_pct": 40.0}
 
+# Hand matrix of exception probes (not full IR required-args / TypeError matrix).
+# Residual full IR exception matrix: long-todo H05e-IR / RD-32.
 EXC_TESTS = [
     ("document.createElement('div').appendChild(null)", "TypeError"),
     ("document.createElement('div').appendChild()", "TypeError"),

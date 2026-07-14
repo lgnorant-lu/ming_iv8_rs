@@ -21,8 +21,10 @@ OUTPUT_PATH = REPO_ROOT / "status" / "h05d-constructor.json"
 IDL_PATH = REPO_ROOT / "tools" / "idl" / "output" / "unified_ir.json"
 THRESHOLDS = {"max_throw": 2, "max_wrong_type": 0, "min_coverage_pct": 80.0}
 
-# Hand-curated positive constructable probes (behavior, not just new X()).
-# NON_CONSTRUCTABLE list is IR-driven (see load_non_constructable).
+# Positive CTOR_TESTS remain hand-curated behavior probes (return type / property
+# shape), not a full IR constructor matrix. Category C NON_CONSTRUCTABLE is
+# IR-driven via load_non_constructable (priority DOM set). Full IR CTOR matrix
+# is residual (long-todo H05d-IR).
 CTOR_TESTS = [
     ("new Event('test')", "object", "Event"),
     ("new Event('test').type", "string", "Event"),

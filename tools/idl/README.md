@@ -78,8 +78,8 @@ tools/idl/
   "schema_version": "unified-ir.v0.1",
   "metadata": {
     "generated_at": "ISO 8601 timestamp",
-    "webref_version": "3.x.x",
-    "webidl2_version": "24.x",
+    "webref_version": "from @webref/idl/package.json",
+    "webidl2_version": "from webidl2/package.json",
     "total_interfaces": 1284,
     "...": "..."
   },
@@ -102,6 +102,14 @@ tools/idl/
   ]
 }
 ```
+
+## Known limitations / troubleshooting
+
+- `tmp/` is gitignored intermediate output (`tools/idl/.gitignore`). Safe to delete entirely; next `node generate-ir.js` recreates it.
+- `tmp/first_run.json` can duplicate large IR blobs relative to `output/unified_ir.json`; not required after a successful run.
+- `parse-chromium-idl.js` is not wired into `generate-ir.js`; Chrome extras currently come from `chrome-manual/*.ir.json`.
+- Pipeline has no stage tests and no incremental rebuild cache.
+- Metadata versions are resolved at generate time from installed `node_modules` (`@webref/idl`, `webidl2`); pin via `package.json` + lockfile.
 
 ## 下游版本
 
