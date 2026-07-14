@@ -2575,10 +2575,29 @@ globalThis.GLOBAL.isWindow = function() {{ return {is_window}; }};
 globalThis.GLOBAL.isWorker = function() {{ return {is_worker_js}; }};
 globalThis.GLOBAL.isShadowRealm = function() {{ return false; }};
 {worker_shim}
-Object.defineProperty(globalThis, 'location', {{
-    value: {{ search: {json.dumps(variant_query)}, href: 'about:blank' }},
-    writable: true, configurable: true, enumerable: true
-}});
+// location may be non-configurable (LegacyUnforgeable). Prefer mutating
+// existing Location object; fall back to defineProperty only when allowed.
+(function() {{
+    var q = {json.dumps(variant_query)};
+    var loc = globalThis.location;
+    if (loc && typeof loc === 'object') {{
+        try {{ loc.search = q; return; }} catch (e1) {{}}
+        try {{
+            Object.defineProperty(loc, 'search', {{
+                value: q, writable: true, configurable: true, enumerable: true
+            }});
+            return;
+        }} catch (e2) {{}}
+    }}
+    try {{
+        Object.defineProperty(globalThis, 'location', {{
+            value: {{ search: q, href: 'about:blank' }},
+            writable: true, configurable: true, enumerable: true
+        }});
+    }} catch (e3) {{
+        try {{ globalThis.location = {{ search: q, href: 'about:blank' }}; }} catch (e4) {{}}
+    }}
+}})();
 globalThis.fetch_spec = function(spec) {{
     return fetch("/interfaces/" + spec + ".idl").then(function(r) {{
         if (!r.ok) throw new Error("Error fetching " + spec);

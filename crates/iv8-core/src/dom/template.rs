@@ -615,13 +615,6 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             Some(inner_html_setter),
         );
         install_proto_accessor(scope, proto, "outerHTML", outer_html_getter, None);
-        install_proto_accessor(
-            scope,
-            proto,
-            "innerText",
-            inner_text_getter,
-            Some(inner_text_setter),
-        );
         install_proto_accessor(scope, proto, "children", children_getter, None);
         install_proto_accessor(
             scope,
@@ -745,6 +738,14 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     html_element.inherit(element);
     {
         let proto = html_element.prototype_template(scope);
+        // HTML: innerText is on HTMLElement (not Element) — idlharness checks this.
+        install_proto_accessor(
+            scope,
+            proto,
+            "innerText",
+            inner_text_getter,
+            Some(inner_text_setter),
+        );
         install_proto_accessor(scope, proto, "style", style_getter, None);
         install_proto_accessor(scope, proto, "dataset", dataset_getter, None);
         install_proto_accessor(scope, proto, "hidden", hidden_getter, Some(hidden_setter));
@@ -2058,7 +2059,7 @@ fn tag_to_interface_name(tag_name: &str) -> Option<String> {
     let tag = tag_name.to_ascii_lowercase();
     // Skip tags that already have dedicated DOM templates
     match tag.as_str() {
-        "div" | "span" | "a" | "input" | "button" | "form" | "canvas" | "script"
+        "div" | "span" | "a" | "input" | "button" | "form" | "canvas" | "script" | "noscript"
         | "img" | "video" | "audio" | "select" | "textarea" | "head" | "body"
         | "html" | "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
         | "ul" | "ol" | "li" | "table" | "thead" | "tbody" | "tfoot" | "tr"
@@ -2133,6 +2134,8 @@ pub fn template_for_tag<'s>(
         "form" => &templates.html_form_element,
         "canvas" => &templates.html_canvas_element,
         "script" => &templates.html_script_element,
+        // HTML: noscript uses HTMLElement interface (not HTMLUnknownElement).
+        "noscript" => &templates.html_element,
         "img" => &templates.html_image_element,
         "video" => &templates.html_video_element,
         "audio" => &templates.html_audio_element,

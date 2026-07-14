@@ -309,42 +309,46 @@ fn install_document_all(
             let _ = all_obj.set_index(scope, i as u32, obj);
         }
     }
-    // item / namedItem
-    let item_fn = {
-        let ft = v8::FunctionTemplate::builder_raw(document_all_item_cb)
-            .length(1)
-            .build(scope);
-        crate::v8_utils::v8_fn(scope, &ft)
-    };
-    let named_fn = {
-        let ft = v8::FunctionTemplate::builder_raw(document_all_named_item_cb)
-            .length(1)
-            .build(scope);
-        crate::v8_utils::v8_fn(scope, &ft)
-    };
-    let item_key = crate::v8_utils::v8_string(scope, "item");
-    let named_key = crate::v8_utils::v8_string(scope, "namedItem");
-    let _ = all_obj.define_own_property(
-        scope,
-        item_key.into(),
-        item_fn.into(),
-        v8::PropertyAttribute::DONT_ENUM,
-    );
-    let _ = all_obj.define_own_property(
-        scope,
-        named_key.into(),
-        named_fn.into(),
-        v8::PropertyAttribute::DONT_ENUM,
-    );
-    // Brand
+    // Brand + methods on HTMLAllCollection.prototype (idlharness assert_inherits).
+    // Do not put item/namedItem/length as own data on the collection instance.
     if let Some(ctor_key) = v8::String::new(scope, "HTMLAllCollection") {
         if let Some(ctor_val) = global.get(scope, ctor_key.into()) {
             if ctor_val.is_function() {
                 let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
                 if let Some(proto_key) = v8::String::new(scope, "prototype") {
-                    if let Some(proto) = ctor.get(scope, proto_key.into()) {
-                        if proto.is_object() {
-                            let _ = all_obj.set_prototype(scope, proto);
+                    if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                        if proto_val.is_object() {
+                            let proto_obj: v8::Local<v8::Object> =
+                                unsafe { v8::Local::cast_unchecked(proto_val) };
+                            let _ = all_obj.set_prototype(scope, proto_val);
+                            // Install methods on prototype if missing (codegen may be empty).
+                            let item_fn = {
+                                let ft = v8::FunctionTemplate::builder_raw(document_all_item_cb)
+                                    .length(1)
+                                    .build(scope);
+                                crate::v8_utils::v8_fn(scope, &ft)
+                            };
+                            let named_fn = {
+                                let ft =
+                                    v8::FunctionTemplate::builder_raw(document_all_named_item_cb)
+                                        .length(1)
+                                        .build(scope);
+                                crate::v8_utils::v8_fn(scope, &ft)
+                            };
+                            let item_key = crate::v8_utils::v8_string(scope, "item");
+                            let named_key = crate::v8_utils::v8_string(scope, "namedItem");
+                            let _ = proto_obj.define_own_property(
+                                scope,
+                                item_key.into(),
+                                item_fn.into(),
+                                v8::PropertyAttribute::DONT_ENUM,
+                            );
+                            let _ = proto_obj.define_own_property(
+                                scope,
+                                named_key.into(),
+                                named_fn.into(),
+                                v8::PropertyAttribute::DONT_ENUM,
+                            );
                         }
                     }
                 }
