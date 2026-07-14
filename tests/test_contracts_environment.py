@@ -1,4 +1,4 @@
-"""Contract tests — environment + bundler families (parametrized)."""
+"""Contract tests — environment + bundler families (parametrized + semantic checks)."""
 
 import pytest
 from experimental_contract_helpers import (
@@ -36,3 +36,29 @@ def test_env_contract_diagnostics(family, fields, code):
         return
     report = load_fixture(family)
     assert_diagnostic(report, code)
+
+
+def test_environment_notes_redacted_and_non_mutating():
+    note = load_fixture("environment-notes")
+    assert note["review_status"] == "redacted"
+    assert "secret_value" in note["redactions"]
+    assert "site_specific_url" in note["redactions"]
+    assert note["writes"] == []
+
+
+def test_environment_toolchain_records_probe_pack_delta():
+    report = load_fixture("environment-toolchain")
+    assert report["probe_pack"] == "fingerprint.m1"
+    assert report["after"]["present"] >= report["before"]["present"]
+
+
+def test_multi_bundler_blocks_webpack_overclaim():
+    report = load_fixture("multi-bundler")
+    table = report["module_table"]
+    assert report["bundle_family"] == "browserify"
+    assert table["family"] == "browserify"
+    assert table["runtime_validated"] is False
+    assert_fields(
+        table["modules"][0],
+        ["id", "wrapper", "static_deps", "dynamic_require_expressions"],
+    )

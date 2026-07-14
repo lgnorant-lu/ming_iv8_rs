@@ -1,4 +1,4 @@
-"""Contract tests — deobfuscation families (parametrized)."""
+"""Contract tests — deobfuscation families (parametrized + semantic checks)."""
 
 import pytest
 from experimental_contract_helpers import (
@@ -34,3 +34,30 @@ def test_deobf_contract_diagnostics(family, fields, code):
         return
     report = load_fixture(family)
     assert_diagnostic(report, code)
+
+
+def test_deobf_registry_rejects_unsafe_by_default():
+    report = load_fixture("deobf-registry")
+    selected = report["selection_report"]["selected"]
+    rejected = {item["pass_id"] for item in report["selection_report"]["rejected"]}
+    assert "string_array.locator.v0" in selected
+    assert "dead_code.cleanup.v0" in rejected
+
+
+def test_deobf_validation_is_shape_only_accepted():
+    report = load_fixture("deobf-validation")
+    assert report["level"] == "shape_validated"
+    assert report["policy_status"] == "accepted"
+
+
+def test_deobf_sandbox_does_not_mutate_source():
+    report = load_fixture("deobf-sandbox")
+    assert report["source_mutated"] is False
+    assert report["opt_in_level"] == "sandbox_plan"
+
+
+def test_deobf_string_array_located_only_no_rewrite():
+    report = load_fixture("deobf-string-array")
+    assert report["status"] == "located_only"
+    assert report["source_rewritten"] is False
+    assert report["arrays"][0]["kind"] == "string_array_candidate"
