@@ -126,6 +126,55 @@ def test_document_write_sequential_phase_a():
     assert rep["order"] == "b", rep
 
 
+def test_document_write_executes_inline_script():
+    """Q070 phase A+: write('<script>…') runs classic inline script."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load("<html><body></body></html>", "https://ex.test/")
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  document.write('<script>window.__fromWrite=7;<\/script>');
+                  return JSON.stringify({v: window.__fromWrite});
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["v"] == 7, rep
+
+
+def test_hidden_document_timer_floor():
+    """Q082 residual: document.hidden applies timers.hidden_min_interval_ms floor."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  document.hidden = true;
+                  var fired = -1;
+                  var t0 = performance.now();
+                  setTimeout(function(){ fired = performance.now() - t0; }, 0);
+                  // Without floor, advance(1) would fire; with 1000ms floor need advance(1000).
+                  __iv8__.eventLoop.advance(1);
+                  var early = fired;
+                  __iv8__.eventLoop.advance(1000);
+                  return JSON.stringify({early: early, late: fired});
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["early"] < 0, rep
+    assert rep["late"] >= 999, rep
+
+
 def test_blank_context_readystate_complete():
     """Blank JSContext stays complete until page_load."""
 

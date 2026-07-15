@@ -42,6 +42,30 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         return body;
     }
 
+    // Q070 phase A+: document.write executes classic inline scripts (WHATWG
+    // dynamic markup). insertAdjacentHTML alone does not run scripts.
+    function extractAndRunInlineScripts(html) {
+        if (!html) return;
+        var re = /<script(\s[^>]*)?>([\s\S]*?)<\/script>/gi;
+        var m;
+        while ((m = re.exec(html)) !== null) {
+            var attrs = m[1] || '';
+            if (/\ssrc\s*=/i.test(attrs)) continue; // external: ResourceBundle path residual
+            if (/\stype\s*=\s*["']?(module|importmap)/i.test(attrs)) continue;
+            var code = m[2];
+            if (!code) continue;
+            try {
+                (0, eval)(code);
+            } catch (e) {
+                try {
+                    if (typeof console !== 'undefined' && console.error) {
+                        console.error('document.write script error', e);
+                    }
+                } catch (e2) {}
+            }
+        }
+    }
+
     function doWrite(html) {
         // Case 1: We have a currentScript with a parent — insert after it
         // and track the position via a sentinel comment so subsequent
@@ -57,6 +81,7 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
                     script.parentNode.insertBefore(sentinel, script.nextSibling);
                     sentinel.insertAdjacentHTML('beforebegin', html);
                     __iv8_write_anchor = sentinel;
+                    extractAndRunInlineScripts(html);
                     return;
                 } catch(e) {
                     __iv8_write_anchor = null;
@@ -68,6 +93,7 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         if (__iv8_write_anchor && __iv8_write_anchor.parentNode) {
             try {
                 __iv8_write_anchor.insertAdjacentHTML('beforebegin', html);
+                extractAndRunInlineScripts(html);
                 return;
             } catch(e) {
                 // Sentinel was detached, fall through to body path
@@ -79,6 +105,7 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         var body = ensureBody();
         try {
             body.insertAdjacentHTML('beforeend', html);
+            extractAndRunInlineScripts(html);
             return;
         } catch(e) {}
 
@@ -86,6 +113,7 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         if (document.documentElement) {
             try {
                 document.documentElement.insertAdjacentHTML('beforeend', html);
+                extractAndRunInlineScripts(html);
             } catch(e) {}
         }
     }

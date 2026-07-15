@@ -158,18 +158,32 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         configurable: true,
     });
 
-    // document.hidden
+    // document.hidden / visibilityState — controllable for timer throttle (Q082 residual).
+    var _hidden = false;
+    var _visibilityState = 'visible';
+    function _setVisibility(hidden) {
+        var h = !!hidden;
+        var vs = h ? 'hidden' : 'visible';
+        if (h === _hidden && vs === _visibilityState) return;
+        _hidden = h;
+        _visibilityState = vs;
+        try {
+            var ev = new Event('visibilitychange');
+            document.dispatchEvent(ev);
+        } catch (e) {}
+    }
     Object.defineProperty(document, 'hidden', {
-        get: function() { return false; },
-        set: undefined,
+        get: function() { return _hidden; },
+        set: function(v) { _setVisibility(v); },
         enumerable: true,
         configurable: true,
     });
-
-    // document.visibilityState
     Object.defineProperty(document, 'visibilityState', {
-        get: function() { return 'visible'; },
-        set: undefined,
+        get: function() { return _visibilityState; },
+        set: function(v) {
+            var s = String(v);
+            if (s === 'hidden' || s === 'visible') _setVisibility(s === 'hidden');
+        },
         enumerable: true,
         configurable: true,
     });

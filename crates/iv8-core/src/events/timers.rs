@@ -50,7 +50,7 @@ unsafe extern "C" fn set_timeout(info: *const v8::FunctionCallbackInfo) {
         }
 
         let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(args.get(0)) };
-        let delay_ms = if args.length() >= 2 {
+        let mut delay_ms = if args.length() >= 2 {
             args.get(1).number_value(scope).unwrap_or(0.0).max(0.0)
         } else {
             0.0
@@ -64,6 +64,9 @@ unsafe extern "C" fn set_timeout(info: *const v8::FunctionCallbackInfo) {
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
+        // Q082 residual: when document.hidden, apply a simple background min delay
+        // (Chrome intensive model is more complex; we use env-tunable 1000ms default).
+        delay_ms = apply_hidden_timer_floor(scope, state, delay_ms);
         let id = state
             .event_loop
             .borrow_mut()
@@ -87,7 +90,7 @@ unsafe extern "C" fn set_interval(info: *const v8::FunctionCallbackInfo) {
         }
 
         let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(args.get(0)) };
-        let delay_ms = if args.length() >= 2 {
+        let mut delay_ms = if args.length() >= 2 {
             args.get(1).number_value(scope).unwrap_or(0.0).max(0.0)
         } else {
             0.0
@@ -101,6 +104,7 @@ unsafe extern "C" fn set_interval(info: *const v8::FunctionCallbackInfo) {
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
+        delay_ms = apply_hidden_timer_floor(scope, state, delay_ms);
         // min interval from environment, default 1ms
         let min_interval_us: i64 = state
             .environment
@@ -119,6 +123,40 @@ unsafe extern "C" fn set_interval(info: *const v8::FunctionCallbackInfo) {
 
         rv.set(v8::Integer::new(scope, id as i32).into());
     }));
+}
+
+/// If `document.hidden` is true, enforce a minimum delay for timers.
+fn apply_hidden_timer_floor(
+    scope: &v8::PinScope<'_, '_>,
+    state: &RuntimeState,
+    delay_ms: f64,
+) -> f64 {
+    let floor = state
+        .environment
+        .get_f64("timers.hidden_min_interval_ms")
+        .unwrap_or(1000.0);
+    if floor <= 0.0 {
+        return delay_ms;
+    }
+    let ctx = scope.get_current_context();
+    let global = ctx.global(scope);
+    let doc_key = crate::v8_utils::v8_string(scope, "document");
+    let Some(doc_val) = global.get(scope, doc_key.into()) else {
+        return delay_ms;
+    };
+    if !doc_val.is_object() {
+        return delay_ms;
+    }
+    let doc: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(doc_val) };
+    let hidden_key = crate::v8_utils::v8_string(scope, "hidden");
+    let Some(hidden_val) = doc.get(scope, hidden_key.into()) else {
+        return delay_ms;
+    };
+    if hidden_val.is_true() || hidden_val.boolean_value(scope) {
+        delay_ms.max(floor)
+    } else {
+        delay_ms
+    }
 }
 
 /// clearTimeout(id) / clearInterval(id)
