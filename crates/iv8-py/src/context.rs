@@ -919,19 +919,26 @@ impl JSContext {
         Ok(None)
     }
 
-    /// Instrument a ChaosVM/JSVMP handler array for high-performance tracing.
+    /// Instrument a ChaosVM/JSVMP **global** handler array for tracing.
     ///
-    /// Wraps the handler array with a Proxy that records every dispatch call.
-    /// Much faster than CDP breakpoints (~0.5s for 50000 instructions vs 30s+).
+    /// Wraps `globalThis[handler_array]` with a Proxy that records every
+    /// dispatch. Requires the handler table to be a **global** binding.
+    ///
+    /// For real TDC/ChaosVM samples the handler table is usually an **IIFE
+    /// local** (closure-scoped). In that case this API raises
+    /// `ReferenceError: <name> is not defined`. Use module-level
+    /// `iv8_rs.instrument_source(src)` instead: it rewrites the dispatch
+    /// expression in source text and works without a global handler name
+    /// (Q165 / K-CHAOSVM-CLOSURE). Then `eval(patched)` + `get_unified_trace()`.
     ///
     /// Args:
-    ///     handler_array: Variable name of the handler/function array (e.g. "A")
-    ///     pc_var: Variable name of the program counter (e.g. "U")
-    ///     stack_var: Variable name of the stack (e.g. "S")
-    ///     capture_stack_depth: How many stack top elements to capture (default 3)
+    ///     handler_array: Global variable name of the handler array (e.g. "A")
+    ///     pc_var: Global program counter name (e.g. "U")
+    ///     stack_var: Global stack name (e.g. "S")
+    ///     capture_stack_depth: Stack tops to capture (default 3)
     ///     limit: Maximum trace entries (default 100000)
     ///
-    /// After calling this, execute JS normally. Then call get_vm_trace() to retrieve.
+    /// After calling this, execute JS normally. Then call get_vm_trace().
     #[pyo3(signature = (handler_array, pc_var, stack_var, capture_stack_depth=3, limit=100000))]
     fn instrument_chaosvm(
         &self,
@@ -942,6 +949,34 @@ impl JSContext {
         limit: u32,
     ) -> PyResult<()> {
         self.assert_thread()?;
+        // Preflight: fail with actionable message when handler is not global.
+        let preflight = format!(
+            r#"(function(){{
+  if (typeof {handler} === 'undefined') {{
+    throw new ReferenceError(
+      "instrument_chaosvm: global handler '{handler}' is not defined " +
+      "(common for closure-scoped ChaosVM/TDC). Use iv8_rs.instrument_source(src) " +
+      "then eval(patched) + get_unified_trace() instead."
+    );
+  }}
+  if (typeof {pc} === 'undefined') {{
+    throw new ReferenceError(
+      "instrument_chaosvm: global pc '{pc}' is not defined; " +
+      "prefer iv8_rs.instrument_source for closure-scoped VMs."
+    );
+  }}
+  return true;
+}})()"#,
+            handler = handler_array,
+            pc = pc_var,
+        );
+        {
+            let mut kernel = self.inner.kernel.lock();
+            kernel
+                .eval(&preflight, iv8_core::EvalOpts::default())
+                .map_err(crate::error::iv8_error_to_pyerr)?;
+        }
+
         let js = format!(
             r#"
 (function() {{
