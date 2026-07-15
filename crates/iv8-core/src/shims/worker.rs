@@ -331,7 +331,14 @@ fn worker_thread_main(
         let context = v8::Local::new(scope, &context);
         v8::scope_with_context!(scope, scope, context);
         let global = context.global(scope);
-        // Install Worker interface stubs via pure JS eval first so
+        // self must exist before WORKER_JS_STUB (it does Object.defineProperty(self, ...)).
+        // install_worker_globals also sets self + profile + bootstrap; call the
+        // self binding first so stub eval cannot throw ReferenceError: self is not defined.
+        {
+            let self_key = crate::v8_utils::v8_string(scope, "self");
+            let _ = global.set(scope, self_key.into(), global.into());
+        }
+        // Install Worker interface stubs via pure JS eval so
         // WorkerNavigator exists before bootstrap wires navigator proto.
         // (FunctionTemplate path crashes Worker thread GC — D-116.)
         let stub_str = crate::v8_utils::v8_string(scope, WORKER_JS_STUB);

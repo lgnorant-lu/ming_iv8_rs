@@ -377,7 +377,7 @@ def test_navigator_user_agent_getter_call_illegal_invocation():
 
 
 def test_worker_constructor_and_postmessage_surface():
-    """Q100/Q102: Worker constructor + postMessage surface (navigator FT residual)."""
+    """Q100/Q102: Worker constructor + postMessage surface."""
 
     def body():
         ctx = iv8_rs.JSContext()
@@ -401,6 +401,100 @@ def test_worker_constructor_and_postmessage_surface():
     rep = json.loads(_run(body))
     assert rep.get("missing") is not True, rep
     assert rep["type"] == "object" and rep["post"] == "function", rep
+
+
+def test_worker_navigator_profile_and_message_roundtrip():
+    """Q100/Q101: WorkerNavigator profile fields + postMessage roundtrip (H06b core)."""
+
+    def body():
+        import time
+
+        ctx = iv8_rs.JSContext()
+        main_ua = str(ctx.eval("navigator.userAgent"))
+        main_plat = str(ctx.eval("navigator.platform"))
+        src = (
+            "postMessage(JSON.stringify({"
+            "ua:navigator.userAgent,"
+            "plat:navigator.platform,"
+            "ctor:navigator.constructor&&navigator.constructor.name"
+            "}))"
+        )
+        ctx.add_resource("/q100_worker.js", src.encode(), 200, {"Content-Type": "text/javascript"})
+        ctx.eval(
+            """
+            globalThis.__q100=[];
+            var w=new Worker('/q100_worker.js');
+            w.onmessage=function(e){
+              var d=e.data;
+              globalThis.__q100.push(typeof d==='string'?d:JSON.stringify(d));
+            };
+            """
+        )
+        for _ in range(40):
+            ctx.eval("void 0")
+            raw = str(ctx.eval("JSON.stringify(globalThis.__q100)"))
+            if raw != "[]":
+                return json.dumps(
+                    {
+                        "main_ua": main_ua,
+                        "main_plat": main_plat,
+                        "msgs": json.loads(raw),
+                    }
+                )
+            time.sleep(0.05)
+        return json.dumps({"main_ua": main_ua, "main_plat": main_plat, "msgs": []})
+
+    rep = json.loads(_run(body))
+    assert rep["msgs"], rep
+    worker = json.loads(rep["msgs"][0])
+    assert worker.get("ctor") == "WorkerNavigator", worker
+    assert worker.get("ua") == rep["main_ua"], (worker, rep["main_ua"])
+    assert worker.get("plat") == rep["main_plat"], (worker, rep["main_plat"])
+
+
+def test_document_all_htmlallcollection_exotic_basics():
+    """Q035: document.all typeof undefined + ToBoolean false (HTMLAllCollection residual)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                JSON.stringify({
+                  t: typeof document.all,
+                  eqU: document.all == undefined,
+                  bool: !!document.all
+                })
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["t"] == "undefined", rep
+    assert rep["eqU"] is True, rep
+    assert rep["bool"] is False, rep
+
+
+def test_storage_buckets_surface_open_callable():
+    """Q123: navigator.storageBuckets surface (codegen depth residual)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                JSON.stringify({
+                  sb: typeof navigator.storageBuckets,
+                  open: typeof (navigator.storageBuckets && navigator.storageBuckets.open),
+                  storage: typeof navigator.storage
+                })
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["sb"] == "object", rep
+    assert rep["open"] == "function", rep
 
 
 def test_high_signal_interfaces_are_non_constructable():
