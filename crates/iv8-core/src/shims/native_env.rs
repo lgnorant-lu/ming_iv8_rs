@@ -1844,16 +1844,83 @@ unsafe extern "C" fn nav_storage_buckets(info: *const v8::FunctionCallbackInfo) 
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let obj = v8::Object::new(scope);
         let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        // Q123: open(name) → Promise<StorageBucket-like> (not bare undefined).
         let open_fn = {
-            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            let tmpl = v8::FunctionTemplate::builder_raw(storage_buckets_open_cb).build(scope);
             tmpl.set_class_name(s("open"));
             tmpl.remove_prototype();
             crate::v8_utils::v8_fn(scope, &tmpl)
         };
         obj.set(scope, s("open").into(), open_fn.into());
+        let keys_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_empty_array).build(scope);
+            tmpl.set_class_name(s("keys"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("keys").into(), keys_fn.into());
+        let delete_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("delete"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("delete").into(), delete_fn.into());
         let ts = v8::Symbol::get_to_string_tag(scope);
         obj.set(scope, ts.into(), s("StorageBucketManager").into());
         rv.set(obj.into());
+    }));
+}
+
+/// StorageBucketManager.open(name) → Promise resolving to a shallow StorageBucket.
+unsafe extern "C" fn storage_buckets_open_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let name = if args.length() >= 1 {
+            args.get(0).to_rust_string_lossy(scope)
+        } else {
+            String::new()
+        };
+        let bucket = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let name_val = s(&name);
+        let _ = bucket.set(scope, s("name").into(), name_val.into());
+        let persist_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("persist"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        let _ = bucket.set(scope, s("persist").into(), persist_fn.into());
+        let persisted_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("persisted"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        let _ = bucket.set(scope, s("persisted").into(), persisted_fn.into());
+        let estimate_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(storage_estimate_cb).build(scope);
+            tmpl.set_class_name(s("estimate"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        let _ = bucket.set(scope, s("estimate").into(), estimate_fn.into());
+        let ts = v8::Symbol::get_to_string_tag(scope);
+        let tag = s("StorageBucket");
+        let _ = bucket.define_own_property(
+            scope,
+            ts.into(),
+            tag.into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+
+        let resolver = crate::v8_utils::v8_resolver(scope);
+        resolver.resolve(scope, bucket.into());
+        rv.set(resolver.get_promise(scope).into());
     }));
 }
 

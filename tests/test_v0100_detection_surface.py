@@ -475,26 +475,118 @@ def test_document_all_htmlallcollection_exotic_basics():
     assert rep["bool"] is False, rep
 
 
-def test_storage_buckets_surface_open_callable():
-    """Q123: navigator.storageBuckets surface (codegen depth residual)."""
+def test_document_all_item_nameditem_and_call():
+    """Q035 depth: item/namedItem/call-as-function on HTMLAllCollection."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load(
+            "<html><body><div id='a'>1</div><div id='b'>2</div></body></html>",
+            "https://ex.test/",
+        )
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var a = document.all;
+                  return JSON.stringify({
+                    t: typeof a,
+                    tag: Object.prototype.toString.call(a),
+                    inst: a instanceof HTMLAllCollection,
+                    len: a.length,
+                    item0: a.item(0) && a.item(0).nodeName,
+                    named: a.namedItem('a') && a.namedItem('a').id,
+                    call: a('a') && a('a').id,
+                    idx: a[0] && a[0].nodeName
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["t"] == "undefined", rep
+    assert "HTMLAllCollection" in rep["tag"], rep
+    assert rep["inst"] is True, rep
+    assert rep["len"] >= 2, rep
+    assert rep["named"] == "a" and rep["call"] == "a", rep
+    assert rep["item0"] in ("HTML", "BODY", "DIV", "HEAD"), rep
+
+
+def test_storage_buckets_open_resolves_named_bucket():
+    """Q123: storageBuckets.open(name) resolves StorageBucket-like object."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval_promise(
+                r"""
+                (async function(){
+                  var b = await navigator.storageBuckets.open('q123');
+                  return JSON.stringify({
+                    type: typeof b,
+                    name: b && b.name,
+                    tag: b && Object.prototype.toString.call(b),
+                    persist: b && typeof b.persist,
+                    estimate: b && typeof b.estimate,
+                    keys: typeof navigator.storageBuckets.keys
+                  });
+                })()
+                """,
+                200,
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["type"] == "object", rep
+    assert rep["name"] == "q123", rep
+    assert "StorageBucket" in (rep["tag"] or ""), rep
+    assert rep["persist"] == "function" and rep["estimate"] == "function", rep
+
+
+def test_high_signal_tojson_on_url_and_performance():
+    """Q137: URL/Performance toJSON present (Event residual)."""
 
     def body():
         ctx = iv8_rs.JSContext()
         return str(
             ctx.eval(
                 r"""
-                JSON.stringify({
-                  sb: typeof navigator.storageBuckets,
-                  open: typeof (navigator.storageBuckets && navigator.storageBuckets.open),
-                  storage: typeof navigator.storage
-                })
+                (function(){
+                  var u = new URL('https://ex.test/path?q=1');
+                  return JSON.stringify({
+                    url: typeof u.toJSON === 'function' ? u.toJSON() : null,
+                    perf: typeof performance.toJSON === 'function',
+                    event: typeof Event.prototype.toJSON
+                  });
+                })()
                 """
             )
         )
 
     rep = json.loads(_run(body))
-    assert rep["sb"] == "object", rep
-    assert rep["open"] == "function", rep
+    assert rep["url"] == "https://ex.test/path?q=1", rep
+    assert rep["perf"] is True, rep
+
+
+def test_high_signal_constructors_present_not_missing():
+    """Q054: high-signal constructors exist (not missing class)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                JSON.stringify(['OffscreenCanvas','SharedWorker','PaymentRequest','Worker','XMLHttpRequest'].map(function(n){
+                  return {n:n, t:typeof globalThis[n]};
+                }))
+                """
+            )
+        )
+
+    rows = json.loads(_run(body))
+    bad = [r for r in rows if r.get("t") != "function"]
+    assert bad == [], bad
 
 
 def test_high_signal_interfaces_are_non_constructable():
