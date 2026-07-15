@@ -126,14 +126,17 @@ impl StreamingHtmlParser {
         self.doc_rc.borrow_mut().rebuild_id_index();
     }
 
-    /// Finish parsing and take the Document (requires sole DocRc ownership).
+    /// Finish parsing and take the Document.
     pub fn finish(mut self) -> Document {
         self.drain_to_end();
         // Drop tokenizer/sink first so DocRc strong_count can go to 1.
         drop(self.tokenizer);
         match std::rc::Rc::try_unwrap(self.doc_rc) {
             Ok(cell) => cell.into_inner(),
-            Err(_) => Document::new(None),
+            Err(rc) => {
+                // Still shared (e.g. RuntimeState.document_shared): move tree out.
+                std::mem::replace(&mut *rc.borrow_mut(), Document::new(None))
+            }
         }
     }
 

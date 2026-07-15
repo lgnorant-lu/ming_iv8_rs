@@ -60,10 +60,7 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     let isolate: &v8::Isolate = &*scope;
     let state = RuntimeState::get(isolate);
 
-    let root_id = {
-        let doc = state.document.borrow();
-        doc.as_ref().map(|d| d.root_id())
-    };
+    let root_id = state.document_root_id();
 
     let mut used_internal_field = false;
     let doc_obj: v8::Local<v8::Object> = if let Some(root_id) = root_id {
@@ -160,7 +157,7 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     if !used_internal_field {
         let isolate: &v8::Isolate = scope;
         let state = RuntimeState::get(isolate);
-        let root_id_opt = state.document.borrow().as_ref().map(|doc| doc.root_id());
+        let root_id_opt = state.document_root_id();
         if let Some(root_id) = root_id_opt {
             let id_key = crate::v8_utils::v8_string(scope, "__nodeId__");
             let nz: std::num::NonZeroUsize = unsafe { std::mem::transmute(root_id) };
@@ -273,8 +270,7 @@ unsafe extern "C" fn document_all_call_handler(info: *const v8::FunctionCallback
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let nid = {
-            let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.get_element_by_id(&name))
+            state.with_document(|d| d.get_element_by_id(&name)).flatten()
         };
         if let Some(id) = nid {
             if let Some(obj) = crate::dom::template::create_node_object(scope, state, id) {
@@ -658,8 +654,7 @@ unsafe extern "C" fn document_all_named_item_cb(info: *const v8::FunctionCallbac
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let nid = {
-            let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.get_element_by_id(&name))
+            state.with_document(|d| d.get_element_by_id(&name)).flatten()
         };
         if let Some(id) = nid {
             if let Some(obj) = crate::dom::template::create_node_object(scope, state, id) {
@@ -2049,10 +2044,7 @@ unsafe extern "C" fn get_element_by_id(info: *const v8::FunctionCallbackInfo) {
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
 
-        let node_id = {
-            let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.get_element_by_id(&id_str))
-        };
+        let node_id = state.with_document(|d| d.get_element_by_id(&id_str)).flatten();
 
         if let Some(nid) = node_id {
             if let Some(obj) = node_to_v8_object(scope, state, nid) {

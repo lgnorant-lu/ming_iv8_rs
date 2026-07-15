@@ -2233,7 +2233,11 @@ pub(crate) fn bump_and_maybe_sweep(
         state.node_cache_ops.set(0);
         // With Global refs, we can't check liveness via is_empty.
         // Instead, prune entries whose NodeId no longer exists in the document.
-        if let Some(doc) = state.document.borrow().as_ref() {
+        // Layer C: prefer document_shared when streaming
+        if let Some(rc) = state.document_shared.borrow().as_ref() {
+            let doc = rc.borrow();
+            cache.retain(|nid, _| doc.get(*nid).is_some());
+        } else if let Some(doc) = state.document.borrow().as_ref() {
             cache.retain(|nid, _| doc.get(*nid).is_some());
         }
     }
@@ -2258,10 +2262,19 @@ pub fn create_node_object<'s>(
     let templates = state.dom_templates.borrow();
     let templates = templates.as_ref()?;
 
-    let doc = state.document.borrow();
-    let doc = doc.as_ref()?;
-    let node_ref = doc.get(node_id)?;
-    let data = node_ref.value();
+    // Layer C: shared stream doc takes precedence (same NodeId arena as parser).
+    let shared = state.document_shared.borrow().clone();
+    let owned = state.document.borrow();
+    let node_data = if let Some(ref rc) = shared {
+        let doc = rc.borrow();
+        let node_ref = doc.get(node_id)?;
+        node_ref.value().clone()
+    } else {
+        let doc = owned.as_ref()?;
+        let node_ref = doc.get(node_id)?;
+        node_ref.value().clone()
+    };
+    let data = &node_data;
 
     // Select template based on node type
     let tmpl_local = match data {

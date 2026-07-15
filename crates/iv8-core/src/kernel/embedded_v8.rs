@@ -280,8 +280,20 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
     document.write = function() {
         var html = Array.prototype.join.call(arguments, '');
         // Layer C: during StreamingHtmlParser page_load, inject into tokenizer input.
-        if (document.__iv8StreamParse && typeof __iv8StreamWrite === 'function') {
-            try { __iv8StreamWrite(html); return; } catch (es) {}
+        // Layer C: prefer native stream inject (MarkAsUndetectable-safe property access).
+        if (document.__iv8StreamParse) {
+            try {
+                if (typeof __iv8StreamWriteNative === 'function') {
+                    __iv8StreamWriteNative(html);
+                    return;
+                }
+            } catch (es0) {}
+            try {
+                if (typeof __iv8StreamWrite === 'function') {
+                    __iv8StreamWrite(html);
+                    return;
+                }
+            } catch (es) {}
         }
         // Deep open stream: buffer + progressive reparse (tokenizer-adjacent).
         // Each write re-parses the cumulative buffer so mid-stream DOM is visible,
@@ -3344,8 +3356,209 @@ impl EmbeddedV8Kernel {
         base_url: Option<&str>,
         headers: &[(String, String)],
     ) {
-        // 1. Parse HTML into DOM
-        let doc = crate::dom::parse_html(html, base_url);
+        // 1. Layer C: stream parse with Script pauses (shared DocRc via document_shared).
+        let mut stream = crate::dom::StreamingHtmlParser::new(base_url);
+        unsafe {
+            crate::dom::parser::set_active_stream(&mut stream as *mut _);
+        }
+        let mut pending = html;
+        let mut stream_ready = false;
+        let mut classic_ran_nids: Vec<crate::dom::NodeId> = Vec::new();
+        loop {
+            let result = if !pending.is_empty() {
+                let r = stream.feed(pending);
+                pending = "";
+                r
+            } else {
+                stream.resume()
+            };
+            match result {
+                crate::dom::StreamFeedResult::Script(script_nid) => {
+                    {
+                        let mut d = stream.document_mut();
+                        d.invalidate_tag_index();
+                        d.rebuild_id_index();
+                    }
+                    // Only classic (non-defer/async/module) scripts run at tokenizer pause.
+                    let skip_run = {
+                        let d = stream.document();
+                        let typ = d
+                            .get(script_nid)
+                            .and_then(|n| n.value().get_attr("type").map(|s| s.to_ascii_lowercase()))
+                            .unwrap_or_default();
+                        let is_mod = typ.contains("module") || typ.contains("importmap");
+                        let is_async = d
+                            .get(script_nid)
+                            .map(|n| n.value().get_attr("async").is_some())
+                            .unwrap_or(false);
+                        let is_defer = d
+                            .get(script_nid)
+                            .map(|n| n.value().get_attr("defer").is_some())
+                            .unwrap_or(false);
+                        is_mod || is_async || is_defer
+                    };
+                    if skip_run {
+                        continue;
+                    }
+                    let rc = stream.doc_rc();
+                    {
+                        let state = RuntimeState::get(&self.isolate);
+                        state.set_document_shared(rc);
+                    }
+                    if !stream_ready {
+                        if !self.worker_mode {
+                            self.with_global_scope(|scope, global| {
+                                crate::dom::binding::install_document_bindings(scope, global);
+                            });
+                        }
+                        self.eval(DOCUMENT_WRITE_SHIM, crate::kernel::EvalOpts::default())
+                            .ok();
+                        self.eval(
+                            crate::shims::document_props::DOCUMENT_PROPS_JS,
+                            crate::kernel::EvalOpts::default(),
+                        )
+                        .ok();
+                        self.eval(
+                            r#"(function(){ document.__iv8StreamParse = true; })()"#,
+                            crate::kernel::EvalOpts::default(),
+                        )
+                        .ok();
+                        self.install_stream_write_bridge();
+                        if let Some(url) = base_url {
+                            let url_literal =
+                                serde_json::to_string(url).unwrap_or_else(|_| "\"\"".into());
+                            let _ = self.eval(
+                                &format!(
+                                    r#"(function(){{try{{var u=new URL({u});location.href=u.href;}}catch(e){{location.href={u};}}}})()"#,
+                                    u = url_literal
+                                ),
+                                crate::kernel::EvalOpts::default(),
+                            );
+                        }
+                        self.eval(
+                            "try{document.readyState='loading';}catch(e){}",
+                            crate::kernel::EvalOpts::default(),
+                        )
+                        .ok();
+                        for (name, value) in headers {
+                            if name.eq_ignore_ascii_case("set-cookie") {
+                                let lit =
+                                    serde_json::to_string(value).unwrap_or_else(|_| "\"\"".into());
+                                let _ = self.eval(
+                                    &format!("try{{document.cookie={lit};}}catch(e){{}}"),
+                                    crate::kernel::EvalOpts::default(),
+                                );
+                            }
+                        }
+                        stream_ready = true;
+                    }
+                    let (code, src_attr) = {
+                        let state = RuntimeState::get(&self.isolate);
+                        state
+                            .with_document(|d| {
+                                let code = d.text_content_of(script_nid);
+                                let src = d.get(script_nid).and_then(|n| {
+                                    n.value().get_attr("src").map(|s| s.to_string())
+                                });
+                                (code, src)
+                            })
+                            .unwrap_or_default()
+                    };
+                    self.with_global_scope(|scope, _g| {
+                        let state = RuntimeState::get(&*scope);
+                        if let Some(obj) =
+                            crate::dom::template::create_node_object(scope, state, script_nid)
+                        {
+                            let ctx = scope.get_current_context();
+                            let g = ctx.global(scope);
+                            let doc_key = crate::v8_utils::v8_string(scope, "document");
+                            if let Some(dv) = g.get(scope, doc_key.into()) {
+                                if dv.is_object() {
+                                    let doc: v8::Local<v8::Object> =
+                                        unsafe { v8::Local::cast_unchecked(dv) };
+                                    let cs = crate::v8_utils::v8_string(scope, "currentScript");
+                                    let _ = doc.set(scope, cs.into(), obj.into());
+                                }
+                            }
+                        }
+                    });
+
+                    // Fallback: bind first unexecuted classic script element as currentScript
+                    let _ = self.eval(
+                        r#"(function(){
+                          var list = document.getElementsByTagName('script');
+                          for (var i = 0; i < list.length; i++) {
+                            var s = list[i];
+                            if (s.__iv8StreamRan) continue;
+                            var typ = (s.getAttribute && s.getAttribute('type')) || '';
+                            if (/module|importmap/i.test(typ)) continue;
+                            if (s.hasAttribute && (s.hasAttribute('defer') || s.hasAttribute('async'))) continue;
+                            try { document.currentScript = s; } catch (e) {}
+                            s.__iv8StreamRan = true;
+                            break;
+                          }
+                        })()"#,
+                        crate::kernel::EvalOpts::default(),
+                    );
+                    if let Some(ref src) = src_attr {
+                        let resolved = if src.starts_with("http://") || src.starts_with("https://")
+                        {
+                            src.clone()
+                        } else if let Some(base) = base_url {
+                            url::Url::parse(base)
+                                .ok()
+                                .and_then(|b| b.join(src).ok())
+                                .map(|u| u.to_string())
+                                .unwrap_or_else(|| src.clone())
+                        } else {
+                            src.clone()
+                        };
+                        let body = {
+                            let state = RuntimeState::get(&self.isolate);
+                            state
+                                .resource_bundle
+                                .borrow()
+                                .get(&resolved)
+                                .map(|r| String::from_utf8_lossy(&r.body).to_string())
+                        };
+                        if let Some(src_code) = body {
+                            let _ = self.eval(
+                                &src_code,
+                                crate::kernel::EvalOpts {
+                                    source_url: Some(resolved),
+                                    ..Default::default()
+                                },
+                            );
+                        }
+                    } else if !code.is_empty() {
+                        let _ = self.eval(
+                            &code,
+                            crate::kernel::EvalOpts {
+                                source_url: Some("stream-script".into()),
+                                ..Default::default()
+                            },
+                        );
+                    }
+                    let _ = self.eval(
+                        "try{document.currentScript=null;}catch(e){}",
+                        crate::kernel::EvalOpts::default(),
+                    );
+                    classic_ran_nids.push(script_nid);
+                }
+                crate::dom::StreamFeedResult::NeedMore => {
+                    if pending.is_empty() {
+                        break;
+                    }
+                }
+                crate::dom::StreamFeedResult::Done => break,
+            }
+        }
+        crate::dom::parser::clear_active_stream();
+        {
+            let state = RuntimeState::get(&self.isolate);
+            state.clear_document_shared();
+        }
+        let doc = stream.finish();
 
         // 2. Collect script info before storing document (Q081: classic / defer / async).
         struct ScriptInfo {
@@ -3659,7 +3872,11 @@ impl EmbeddedV8Kernel {
             if script.is_module || script.is_importmap {
                 continue;
             }
+            // Layer C: classic scripts already executed at tokenizer Script pauses.
             if !script.is_async && !script.is_defer {
+                if classic_ran_nids.iter().any(|&n| n == script.node_id) {
+                    continue;
+                }
                 run_one_script(self, i, script);
             }
         }
