@@ -807,7 +807,7 @@ fn worker_resolve_module_callback<'s>(
 fn worker_host_import_module_dynamically<'s>(
     scope: &mut v8::PinScope<'s, '_>,
     _host_defined_options: v8::Local<'s, v8::Data>,
-    _resource_name: v8::Local<'s, v8::Value>,
+    resource_name: v8::Local<'s, v8::Value>,
     specifier: v8::Local<'s, v8::String>,
     _import_attributes: v8::Local<'s, v8::FixedArray>,
 ) -> Option<v8::Local<'s, v8::Promise>> {
@@ -816,13 +816,29 @@ fn worker_host_import_module_dynamically<'s>(
     let promise = resolver.get_promise(scope);
     let isolate: &v8::Isolate = &*scope;
     let state = crate::state::RuntimeState::get(isolate);
+    // Referrer URL: resource_name from V8, else any recorded module URL.
+    let referrer = if resource_name.is_string() {
+        Some(resource_name.to_rust_string_lossy(scope))
+    } else {
+        state
+            .esm_module_urls
+            .borrow()
+            .values()
+            .next()
+            .cloned()
+    };
     let url = if spec.starts_with("http://")
         || spec.starts_with("https://")
         || spec.starts_with("data:")
     {
         spec.clone()
+    } else if let Some(ref r) = referrer {
+        url::Url::parse(r)
+            .ok()
+            .and_then(|b| b.join(&spec).ok())
+            .map(|u| u.to_string())
+            .unwrap_or(spec.clone())
     } else {
-        // Relative to about:blank worker — require absolute in bundle for phase-1.
         spec.clone()
     };
     let code = {

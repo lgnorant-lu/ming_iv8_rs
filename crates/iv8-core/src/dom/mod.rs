@@ -17,7 +17,8 @@ pub mod template;
 
 pub use node::{Document, NodeData, NodeId};
 pub use parser::{
-    parse_html, parse_html_with_script_pauses, StreamFeedResult, StreamingHtmlParser,
+    parse_html, parse_html_with_script_pauses, stream_write_active, StreamFeedResult,
+    StreamingHtmlParser,
 };
 pub use selector::Selector;
 

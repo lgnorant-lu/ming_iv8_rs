@@ -13,6 +13,7 @@ use html5ever::tree_builder::{ElementFlags, NodeOrText, QuirksMode, TreeSink};
 use html5ever::{parse_document, Attribute, ParseOpts, QualName};
 
 use super::node::{Document, NodeData, NodeId};
+use super::{doc_rc_new, DocRc};
 
 /// Parse an HTML string into a Document.
 pub fn parse_html(html: &str, base_url: Option<&str>) -> Document {
@@ -26,11 +27,16 @@ pub fn parse_html(html: &str, base_url: Option<&str>) -> Document {
 /// html5ever returns `TokenizerResult::Script` when a classic `</script>` is
 /// seen so the host can run the script and `document.write` into the **input
 /// stream** (`push_front`) before more tokens are produced.
+///
+/// Layer C LC-3/4: sink holds [`DocRc`] so RuntimeState can share the same tree
+/// without `mem::swap` (which invalidates TreeBuilder NodeIds).
 pub struct StreamingHtmlParser {
     tokenizer:
         html5ever::tokenizer::Tokenizer<html5ever::tree_builder::TreeBuilder<NodeId, EgoTreeSink>>,
     input_buffer: html5ever::buffer_queue::BufferQueue,
     finished: bool,
+    /// Shared document handle (same as sink.doc).
+    doc_rc: DocRc,
 }
 
 /// Outcome of feeding into the streaming parser.
@@ -46,7 +52,12 @@ pub enum StreamFeedResult {
 
 impl StreamingHtmlParser {
     pub fn new(base_url: Option<&str>) -> Self {
-        let sink = EgoTreeSink::new(base_url);
+        Self::from_doc_rc(doc_rc_new(Document::new(base_url)))
+    }
+
+    /// Layer C LC-4: build a stream over an existing shared document.
+    pub fn from_doc_rc(doc_rc: DocRc) -> Self {
+        let sink = EgoTreeSink::from_doc_rc(doc_rc.clone());
         let tb = html5ever::tree_builder::TreeBuilder::new(
             sink,
             html5ever::tree_builder::TreeBuilderOpts::default(),
@@ -57,7 +68,13 @@ impl StreamingHtmlParser {
             tokenizer: tok,
             input_buffer: html5ever::buffer_queue::BufferQueue::default(),
             finished: false,
+            doc_rc,
         }
+    }
+
+    /// Shared document handle (Layer C single-owner).
+    pub fn doc_rc(&self) -> DocRc {
+        self.doc_rc.clone()
     }
 
     /// Push a UTF-8 HTML chunk. May return [`StreamFeedResult::Script`].
@@ -96,36 +113,44 @@ impl StreamingHtmlParser {
         self.feed("")
     }
 
-    /// Finish parsing and take the Document.
-    pub fn finish(mut self) -> Document {
+    fn drain_to_end(&mut self) {
         loop {
             match self.tokenizer.feed(&self.input_buffer) {
-                html5ever::TokenizerResult::Script(_) => {
-                    // Unhandled script pause: skip (host should have run scripts).
-                    continue;
-                }
+                html5ever::TokenizerResult::Script(_) => continue,
                 html5ever::TokenizerResult::EncodingIndicator(_) => continue,
                 html5ever::TokenizerResult::Done => break,
             }
         }
         self.tokenizer.end();
         self.finished = true;
-        self.tokenizer.sink.sink.finish()
+        self.doc_rc.borrow_mut().rebuild_id_index();
+    }
+
+    /// Finish parsing and take the Document (requires sole DocRc ownership).
+    pub fn finish(mut self) -> Document {
+        self.drain_to_end();
+        // Drop tokenizer/sink first so DocRc strong_count can go to 1.
+        drop(self.tokenizer);
+        match std::rc::Rc::try_unwrap(self.doc_rc) {
+            Ok(cell) => cell.into_inner(),
+            Err(_) => Document::new(None),
+        }
+    }
+
+    /// Finish parsing and return the shared DocRc (Layer C — RuntimeState keeps same Rc).
+    pub fn finish_to_rc(mut self) -> DocRc {
+        self.drain_to_end();
+        drop(self.tokenizer);
+        self.doc_rc
     }
 
     /// In-progress document borrow.
     pub fn document(&self) -> std::cell::Ref<'_, Document> {
-        self.tokenizer.sink.sink.doc.borrow()
+        self.doc_rc.borrow()
     }
 
     pub fn document_mut(&self) -> std::cell::RefMut<'_, Document> {
-        self.tokenizer.sink.sink.doc.borrow_mut()
-    }
-
-    /// Swap the in-progress document with `other` (for publishing to RuntimeState
-    /// during script pauses without cloning the tree).
-    pub fn swap_document(&self, other: &mut Document) {
-        std::mem::swap(&mut *self.document_mut(), other);
+        self.doc_rc.borrow_mut()
     }
 }
 
@@ -243,10 +268,10 @@ fn collect_node_data(doc: &Document, node_id: NodeId, result: &mut Vec<NodeData>
 
 /// TreeSink implementation that builds an ego-tree based Document.
 ///
-/// Uses RefCell for interior mutability since TreeSink methods take &self.
+/// Uses DocRc (Rc<RefCell<Document>>) so TreeSink and RuntimeState can share one tree (Layer C).
 struct EgoTreeSink {
-    /// The document being built.
-    doc: RefCell<Document>,
+    /// The document being built (shared handle).
+    doc: DocRc,
     /// Template contents: template element NodeId → fragment NodeId.
     template_contents: RefCell<HashMap<NodeId, NodeId>>,
     /// MathML annotation-xml integration point flags.
@@ -255,8 +280,12 @@ struct EgoTreeSink {
 
 impl EgoTreeSink {
     fn new(base_url: Option<&str>) -> Self {
+        Self::from_doc_rc(doc_rc_new(Document::new(base_url)))
+    }
+
+    fn from_doc_rc(doc: DocRc) -> Self {
         Self {
-            doc: RefCell::new(Document::new(base_url)),
+            doc,
             template_contents: RefCell::new(HashMap::new()),
             mathml_flags: RefCell::new(HashMap::new()),
         }
@@ -358,11 +387,17 @@ impl TreeSink for EgoTreeSink {
     type ElemName<'a> = ExpandedNameRef;
 
     fn finish(self) -> Document {
-        let mut doc = self.doc.into_inner();
-        // Rebuild the id index after parsing is complete
-        // (ids get lost during the create-as-orphan-then-reparent dance)
-        doc.rebuild_id_index();
-        doc
+        self.doc.borrow_mut().rebuild_id_index();
+        // parse_document path: sink is sole DocRc owner → try_unwrap succeeds.
+        match std::rc::Rc::try_unwrap(self.doc) {
+            Ok(cell) => cell.into_inner(),
+            Err(rc) => {
+                // StreamingHtmlParser also holds DocRc — should use finish_to_rc.
+                // Fallback: leave shared tree intact; return empty to avoid double-free.
+                let _ = rc;
+                Document::new(None)
+            }
+        }
     }
 
     fn parse_error(&self, _msg: Cow<'static, str>) {
@@ -774,5 +809,16 @@ mod tests {
         );
         assert_eq!(count, 2);
         assert_eq!(doc.get_elements_by_tag_name("script").len(), 2);
+    }
+
+    #[test]
+    fn from_doc_rc_shares_tree_with_external_handle() {
+        // LC-3/4: external DocRc and stream see the same arena (no swap).
+        let rc = doc_rc_new(Document::new(Some("https://ex.test/")));
+        let mut stream = StreamingHtmlParser::from_doc_rc(rc.clone());
+        let _ = stream.feed("<!DOCTYPE html><html><body><p id='x'>X</p></body></html>");
+        let finished = stream.finish_to_rc();
+        assert!(std::rc::Rc::ptr_eq(&rc, &finished));
+        assert!(rc.borrow().get_element_by_id("x").is_some());
     }
 }
