@@ -23,6 +23,226 @@ def _run(fn):
     return box["out"]
 
 
+def test_cookie_httponly_not_visible_to_document_cookie():
+    """Q093: HttpOnly cookies are not reflected on document.cookie."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  document.cookie = 'vis=1; Path=/';
+                  document.cookie = 'http=1; Path=/; HttpOnly';
+                  return document.cookie;
+                })()
+                """
+            )
+        )
+
+    cookie = _run(body)
+    assert "vis=1" in cookie, cookie
+    assert "http=" not in cookie, cookie
+
+
+def test_page_load_sets_location_title_and_body():
+    """Q071/Q072: page_load populates DOM slots and syncs location.href."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load(
+            "<html><head><title>T</title></head><body><p id='p'>hi</p></body></html>",
+            "https://example.com/path?q=1",
+        )
+        return str(
+            ctx.eval(
+                r"""
+                JSON.stringify({
+                  href: location.href,
+                  title: document.title,
+                  p: !!document.getElementById('p'),
+                  head: !!document.head,
+                  body: !!document.body
+                })
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["href"] == "https://example.com/path?q=1", rep
+    assert rep["title"] == "T", rep
+    assert rep["p"] and rep["head"] and rep["body"], rep
+
+
+def test_get_computed_style_basic_prefs():
+    """Q073: getComputedStyle returns usable CSSStyleDeclaration values."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var el = document.createElement('div');
+                  document.body.appendChild(el);
+                  var cs = getComputedStyle(el);
+                  return JSON.stringify({
+                    display: cs.display,
+                    color: cs.color,
+                    fontSize: cs.fontSize,
+                    activeText: cs.getPropertyValue('ActiveText') || cs.ActiveText || null
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["display"] in ("block", "inline", "inline-block", ""), rep
+    assert isinstance(rep["color"], str) and len(rep["color"]) > 0, rep
+
+
+def test_treewalker_and_xpath_subset():
+    """Q075/Q076: XPath snapshot + TreeWalker basic walk."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load(
+            "<html><body><div id='a'><span>s</span></div></body></html>",
+            "https://ex.test/",
+        )
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var r = document.evaluate('//div', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                  var tw = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT);
+                  var names = [];
+                  var n = tw.currentNode;
+                  var i = 0;
+                  while (n && i++ < 8) { names.push(n.nodeName); n = tw.nextNode(); }
+                  return JSON.stringify({snap: r.snapshotLength, names: names});
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["snap"] >= 1, rep
+    assert "BODY" in rep["names"] or "DIV" in rep["names"], rep
+
+
+def test_select_options_html_options_collection():
+    """Q077: select.options is HTMLOptionsCollection with length/index access."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load(
+            "<html><body><select id='s'><option value='1'>a</option><option value='2'>b</option></select></body></html>",
+            "https://ex.test/",
+        )
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var o = document.getElementById('s').options;
+                  return JSON.stringify({
+                    ctor: o.constructor.name,
+                    len: o.length,
+                    o0: o[0] && o[0].value,
+                    o1: o[1] && o[1].value,
+                    tag: Object.prototype.toString.call(o)
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["ctor"] == "HTMLOptionsCollection", rep
+    assert rep["len"] == 2 and rep["o0"] == "1" and rep["o1"] == "2", rep
+
+
+def test_message_channel_structured_clone_roundtrip():
+    """Q079: MessageChannel postMessage structured-clone object/array."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval_promise(
+                r"""
+                new Promise(function(resolve){
+                  var ch = new MessageChannel();
+                  ch.port1.onmessage = function(e){ resolve(JSON.stringify(e.data)); };
+                  ch.port2.postMessage({a:1, b:[2,3]});
+                })
+                """,
+                100,
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep == {"a": 1, "b": [2, 3]}, rep
+
+
+def test_rsa_pkcs1_generate_key_and_p521_bound():
+    """Q095: RSASSA-PKCS1-v1_5 generateKey works; P-521 remains unsupported bound."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval_promise(
+                r"""
+                (async function(){
+                  var r = {};
+                  try {
+                    var k = await crypto.subtle.generateKey(
+                      {name:'RSASSA-PKCS1-v1_5', modulusLength:2048, publicExponent:new Uint8Array([1,0,1]), hash:'SHA-256'},
+                      true, ['sign','verify']
+                    );
+                    r.pkcs1 = !!(k && k.publicKey && k.privateKey);
+                  } catch(e) { r.pkcs1 = String(e.message||e).slice(0,80); }
+                  try {
+                    await crypto.subtle.generateKey(
+                      {name:'ECDSA', namedCurve:'P-521'}, true, ['sign','verify']
+                    );
+                    r.p521 = 'unexpected-ok';
+                  } catch(e) { r.p521 = String(e.message||e).slice(0,80); }
+                  return JSON.stringify(r);
+                })()
+                """,
+                800,
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["pkcs1"] is True, rep
+    assert "P-521" in rep["p521"] or "namedCurve" in rep["p521"] or "unsupported" in rep["p521"].lower(), rep
+
+
+def test_high_signal_interfaces_are_non_constructable():
+    """Q056: Navigator/Screen/History/Location throw on new."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  return JSON.stringify(['Navigator','Screen','History','Location'].map(function(n){
+                    try { new globalThis[n](); return {n:n, ok:false}; }
+                    catch(e){ return {n:n, ok: e.name === 'TypeError'}; }
+                  }));
+                })()
+                """
+            )
+        )
+
+    rows = json.loads(_run(body))
+    bad = [r for r in rows if not r.get("ok")]
+    assert bad == [], bad
+
+
 def test_xhr_readystate_sequence_1_2_3_4_with_handler():
     """Q090: async XHR readyState sequence with network handler + eval_promise drain."""
 
