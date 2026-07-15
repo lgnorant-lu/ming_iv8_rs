@@ -139,6 +139,9 @@ pub struct RuntimeState {
 
     /// K-ESM-LOADER: import map `imports` bare-specifier → absolute URL.
     pub esm_import_map: RefCell<std::collections::HashMap<String, String>>,
+    /// K-ESM-LOADER: import map scopes — scope URL prefix → (specifier → URL).
+    pub esm_import_scopes:
+        RefCell<std::collections::HashMap<String, std::collections::HashMap<String, String>>>,
     /// K-ESM-LOADER: V8 Module identity_hash → resolved module URL (for relative import).
     pub esm_module_urls: RefCell<std::collections::HashMap<i32, String>>,
 
@@ -267,6 +270,7 @@ impl RuntimeState {
             node_media: RefCell::new(std::collections::HashMap::new()),
             node_shadow: RefCell::new(std::collections::HashMap::new()),
             esm_import_map: RefCell::new(std::collections::HashMap::new()),
+            esm_import_scopes: RefCell::new(std::collections::HashMap::new()),
             esm_module_urls: RefCell::new(std::collections::HashMap::new()),
             plugins_array: RefCell::new(None),
             mime_types_array: RefCell::new(None),

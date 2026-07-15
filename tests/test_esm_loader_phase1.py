@@ -152,19 +152,15 @@ def test_importmap_bare_specifier_resolution():
 
 
 def test_network_handler_async_order_honesty_with_set_timeout():
-    """Q097 residual honesty: network_handler + setTimeout models delayed async order."""
+    """Q097 residual honesty: network_handler models delayed async without default outbound."""
 
     def body():
         ctx = iv8_rs.JSContext()
-        order = []
 
         def handler(url, method):
-            order.append(f"handler:{method}")
             return (200, b"delayed-body")
 
         ctx.set_network_handler(handler)
-        # Classic offline model: async scripts still sequential; delayed XHR via
-        # setTimeout simulates race-ish ordering without real outbound.
         return str(
             ctx.eval_promise(
                 r"""
@@ -190,3 +186,81 @@ def test_network_handler_async_order_honesty_with_set_timeout():
     rep = json.loads(_run(body))
     assert "start" in rep and "after-send" in rep, rep
     assert any(h.startswith("xhr:") for h in rep), rep
+
+
+def test_importmap_scopes_override_for_referrer_prefix():
+    """Import map scopes: referrer under /app/ uses scoped mapping."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.add_resource(
+            "https://ex.test/shared.js",
+            b"export const tag = 'global';",
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        ctx.add_resource(
+            "https://ex.test/app/shared.js",
+            b"export const tag = 'scoped';",
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        ctx.add_resource(
+            "https://ex.test/app/main.js",
+            b'import { tag } from "shared"; window.__scopeTag = tag;',
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        ctx.page_load(
+            """
+            <html><body>
+            <script type="importmap">{
+              "imports": {"shared": "https://ex.test/shared.js"},
+              "scopes": {
+                "https://ex.test/app/": {"shared": "https://ex.test/app/shared.js"}
+              }
+            }</script>
+            <script type="module" src="https://ex.test/app/main.js"></script>
+            </body></html>
+            """,
+            "https://ex.test/",
+        )
+        return str(ctx.eval("JSON.stringify({tag: window.__scopeTag})"))
+
+    rep = json.loads(_run(body))
+    assert rep["tag"] == "scoped", rep
+
+
+def test_hidden_intensive_floor_with_short_threshold_env():
+    """Q082 intensive: after_ms=10, intensive_min=50 via environment overrides."""
+
+    def body():
+        ctx = iv8_rs.JSContext(
+            environment={
+                "timers.hidden_min_interval_ms": 5,
+                "timers.hidden_intensive_after_ms": 10,
+                "timers.hidden_intensive_min_ms": 50,
+            }
+        )
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  document.hidden = true;
+                  // Advance past intensive threshold while hidden
+                  __iv8__.eventLoop.advance(15);
+                  var fired = -1;
+                  var t0 = performance.now();
+                  setTimeout(function(){ fired = performance.now() - t0; }, 0);
+                  __iv8__.eventLoop.advance(5);
+                  var early = fired;
+                  __iv8__.eventLoop.advance(50);
+                  return JSON.stringify({early: early, late: fired});
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["early"] < 0, rep
+    assert rep["late"] >= 49, rep

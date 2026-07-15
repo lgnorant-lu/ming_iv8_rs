@@ -99,7 +99,7 @@ def test_script_defer_runs_after_classic_before_dcl():
 
 
 def test_document_write_sequential_phase_a():
-    """Q070 phase A: sequential document.write appends into body."""
+    """Q070 deep: sequential document.write via html5ever insertAdjacentHTML."""
 
     def body():
         ctx = iv8_rs.JSContext()
@@ -124,6 +124,35 @@ def test_document_write_sequential_phase_a():
     rep = json.loads(_run(body))
     assert rep["a"] and rep["b"], rep
     assert rep["order"] == "b", rep
+
+
+def test_document_write_mixed_markup_and_script_via_parser():
+    """Q070: write mixed HTML+script — parser materializes both; script runs."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load("<html><body><p id='p'>P</p></body></html>", "https://ex.test/")
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  document.write('<div id="n">N</div><script id="ws">window.__w=8;<\/script>');
+                  return JSON.stringify({
+                    p: !!document.getElementById('p'),
+                    n: !!document.getElementById('n'),
+                    w: window.__w,
+                    scripts: document.scripts.length,
+                    ws: !!document.getElementById('ws')
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["p"] and rep["n"] and rep["ws"], rep
+    assert rep["w"] == 8, rep
+    assert rep["scripts"] >= 1, rep
 
 
 def test_document_write_executes_inline_script():

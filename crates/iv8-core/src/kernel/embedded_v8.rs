@@ -42,8 +42,9 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         return body;
     }
 
-    // Q070: insertAdjacentHTML drops <script> nodes in our DOM parser path.
-    // Materialize scripts via createElement so they enter the tree + execute.
+    // Q070 deep: html5ever via insertAdjacentHTML materializes full fragment
+    // (including <script> nodes). document.write then executes classic scripts
+    // (WHATWG dynamic markup — scripts run; insertAdjacentHTML alone would not).
     function resolveScriptUrl(src) {
         try {
             if (typeof location !== 'undefined' && location.href) {
@@ -70,13 +71,15 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
             try { document.currentScript = prev; } catch (e3) {}
         }
     }
-    function loadExternalScriptText(src) {
+    function loadAndRunExternalScript(src, scriptEl) {
         var url = resolveScriptUrl(src);
         try {
             var x = new XMLHttpRequest();
             x.open('GET', url, false);
             x.send();
-            if (x.status >= 200 && x.status < 400) return x.responseText;
+            if (x.status >= 200 && x.status < 400) {
+                runScriptCode(x.responseText, scriptEl);
+            }
         } catch (e) {
             try {
                 if (typeof console !== 'undefined' && console.error) {
@@ -84,86 +87,102 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
                 }
             } catch (e2) {}
         }
-        return null;
     }
-    function loadAndRunExternalScript(src, scriptEl) {
-        var code = loadExternalScriptText(src);
-        if (code != null) runScriptCode(code, scriptEl);
-    }
-    function parseAttrMap(attrStr) {
-        var map = {};
-        if (!attrStr) return map;
-        var re = /([^\s=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|(\S+)))?/g;
-        var m;
-        while ((m = re.exec(attrStr)) !== null) {
-            var k = m[1].toLowerCase();
-            if (k.charAt(0) === '/') continue;
-            map[k] = (m[2] != null ? m[2] : (m[3] != null ? m[3] : (m[4] != null ? m[4] : '')));
+    function runScriptElement(el) {
+        if (!el || el.__iv8Ran) return;
+        var typ = (el.getAttribute && el.getAttribute('type')) || '';
+        if (/module|importmap/i.test(typ)) {
+            if (typeof globalThis.__iv8EvalModule === 'function') {
+                try {
+                    globalThis.__iv8EvalModule(
+                        el.textContent || '',
+                        (el.getAttribute && el.getAttribute('src')) || ''
+                    );
+                    el.__iv8Ran = true;
+                } catch (e) {}
+            }
+            return;
         }
-        return map;
+        var src = el.getAttribute && el.getAttribute('src');
+        if (src) {
+            loadAndRunExternalScript(src, el);
+        } else {
+            runScriptCode(el.textContent || el.innerHTML || el.text || '', el);
+        }
+        el.__iv8Ran = true;
     }
-    function stripScripts(html) {
-        return String(html).replace(/<script(\s[^>]*)?>[\s\S]*?<\/script>/gi, '');
+    function runNewScripts(parent, beforeCount) {
+        if (!parent) return;
+        var list = parent.getElementsByTagName
+            ? parent.getElementsByTagName('script')
+            : document.getElementsByTagName('script');
+        for (var i = beforeCount; i < list.length; i++) {
+            runScriptElement(list[i]);
+        }
     }
-    function materializeAndRunScripts(html, parent) {
+    function countScripts(root) {
+        if (!root || !root.getElementsByTagName) {
+            return document.getElementsByTagName('script').length;
+        }
+        return root.getElementsByTagName('script').length;
+    }
+    // Fallback when insertAdjacentHTML drops script-only fragments (html5ever edge).
+    function materializeScriptsFallback(html, parent) {
         if (!html || !parent) return;
         var re = /<script(\s[^>]*)?>([\s\S]*?)<\/script>/gi;
         var m;
         while ((m = re.exec(html)) !== null) {
-            var attrs = parseAttrMap(m[1] || '');
-            var typ = attrs.type || '';
-            if (/module|importmap/i.test(typ)) continue;
+            var attrStr = m[1] || '';
             var el = document.createElement('script');
-            Object.keys(attrs).forEach(function(k) {
-                try {
-                    if (attrs[k] === '') el.setAttribute(k, '');
-                    else el.setAttribute(k, attrs[k]);
-                } catch (e) {}
-            });
-            var src = attrs.src;
-            if (src) {
-                parent.appendChild(el);
-                // appendChild hook may also run; guard double-exec via flag
-                if (!el.__iv8Ran) {
-                    loadAndRunExternalScript(src, el);
-                    el.__iv8Ran = true;
-                }
-            } else {
-                var code = m[2] || '';
-                try { el.textContent = code; } catch (e) {}
-                parent.appendChild(el);
-                if (!el.__iv8Ran) {
-                    runScriptCode(code, el);
-                    el.__iv8Ran = true;
-                }
+            var am;
+            var are = /([^\s=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|(\S+)))?/g;
+            while ((am = are.exec(attrStr)) !== null) {
+                var k = am[1].toLowerCase();
+                if (k.charAt(0) === '/') continue;
+                var val = am[2] != null ? am[2] : (am[3] != null ? am[3] : (am[4] != null ? am[4] : ''));
+                try { el.setAttribute(k, val); } catch (e) {}
             }
+            if (!(el.getAttribute && el.getAttribute('src'))) {
+                try { el.textContent = m[2] || ''; } catch (e2) {}
+            }
+            parent.appendChild(el);
+            // appendChild hook runs classic scripts
         }
     }
-    function insertHtmlFragment(html, insertFn) {
-        // Non-script markup via insertAdjacentHTML; scripts materialize separately.
-        var noScript = stripScripts(html);
-        if (noScript && noScript.replace(/\s+/g, '') !== '') {
-            try { insertFn(noScript); } catch (e) {}
+    function writeInto(parent, position, html) {
+        var before = countScripts(parent);
+        try {
+            parent.insertAdjacentHTML(position, html);
+        } catch (e) {
+            return false;
         }
+        var after = countScripts(parent);
+        if (after > before) {
+            runNewScripts(parent, before);
+        } else if (/<script[\s>]/i.test(html)) {
+            materializeScriptsFallback(html, parent);
+        }
+        return true;
     }
 
     function doWrite(html) {
-        // Case 1: We have a currentScript with a parent — insert after it
-        // and track the position via a sentinel comment so subsequent
-        // writes append after the previously written content.
+        // Case 1: after currentScript — sentinel tracks sequential writes
         if (__iv8_write_anchor === null) {
             var script = document.currentScript;
             if (script && script.parentNode) {
                 try {
-                    // Insert a sentinel comment after the script to act as
-                    // our tracking anchor. Content goes before the sentinel
-                    // so it appears in document order.
                     var sentinel = document.createComment('iv8-write');
                     script.parentNode.insertBefore(sentinel, script.nextSibling);
-                    insertHtmlFragment(html, function(ns) {
-                        sentinel.insertAdjacentHTML('beforebegin', ns);
-                    });
-                    materializeAndRunScripts(html, script.parentNode);
+                    var root1 = script.parentNode;
+                    var before1 = countScripts(root1);
+                    try {
+                        sentinel.insertAdjacentHTML('beforebegin', html);
+                    } catch (e0) {}
+                    if (countScripts(root1) <= before1 && /<script[\s>]/i.test(html)) {
+                        materializeScriptsFallback(html, root1);
+                    } else {
+                        runNewScripts(root1, before1);
+                    }
                     __iv8_write_anchor = sentinel;
                     return;
                 } catch(e) {
@@ -172,38 +191,32 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
             }
         }
 
-        // Case 2: Subsequent write — append before the existing sentinel
+        // Case 2: subsequent write before sentinel
         if (__iv8_write_anchor && __iv8_write_anchor.parentNode) {
             try {
-                insertHtmlFragment(html, function(ns) {
-                    __iv8_write_anchor.insertAdjacentHTML('beforebegin', ns);
-                });
-                materializeAndRunScripts(html, __iv8_write_anchor.parentNode);
+                var root2 = __iv8_write_anchor.parentNode;
+                var before2 = countScripts(root2);
+                try {
+                    __iv8_write_anchor.insertAdjacentHTML('beforebegin', html);
+                } catch (e1) {}
+                if (countScripts(root2) <= before2 && /<script[\s>]/i.test(html)) {
+                    materializeScriptsFallback(html, root2);
+                } else {
+                    runNewScripts(root2, before2);
+                }
                 return;
             } catch(e) {
-                // Sentinel was detached, fall through to body path
                 __iv8_write_anchor = null;
             }
         }
 
-        // Case 3: Body path (primary fallback / post-load)
+        // Case 3: body append (post-load / no currentScript)
         var body = ensureBody();
-        try {
-            insertHtmlFragment(html, function(ns) {
-                body.insertAdjacentHTML('beforeend', ns);
-            });
-            materializeAndRunScripts(html, body);
-            return;
-        } catch(e) {}
+        if (writeInto(body, 'beforeend', html)) return;
 
-        // Case 4: Last resort — append to documentElement
+        // Case 4: documentElement
         if (document.documentElement) {
-            try {
-                insertHtmlFragment(html, function(ns) {
-                    document.documentElement.insertAdjacentHTML('beforeend', ns);
-                });
-                materializeAndRunScripts(html, document.documentElement);
-            } catch(e) {}
+            writeInto(document.documentElement, 'beforeend', html);
         }
     }
 
@@ -760,29 +773,51 @@ fn resolve_worker_script(isolate: &v8::Isolate, url: &str) -> String {
     String::new()
 }
 
-/// Resolve module specifier against import map, relative referrer URL, then bundle.
-fn resolve_esm_url(state: &RuntimeState, specifier: &str, referrer_url: Option<&str>) -> String {
-    // 1) import map bare / prefix (simple HTML importmap `imports` only)
-    {
-        let map = state.esm_import_map.borrow();
-        if let Some(mapped) = map.get(specifier) {
-            return mapped.clone();
+/// Resolve against a single import map table (imports or one scope table).
+fn map_lookup(map: &std::collections::HashMap<String, String>, specifier: &str) -> Option<String> {
+    if let Some(mapped) = map.get(specifier) {
+        return Some(mapped.clone());
+    }
+    let mut best: Option<(usize, String)> = None;
+    for (k, v) in map.iter() {
+        if k.ends_with('/') && specifier.starts_with(k.as_str()) {
+            let n = k.len();
+            if best.as_ref().map(|(bn, _)| n > *bn).unwrap_or(true) {
+                best = Some((n, format!("{}{}", v, &specifier[n..])));
+            }
         }
-        // longest prefix match: "foo/" →
-        let mut best: Option<(usize, String)> = None;
-        for (k, v) in map.iter() {
-            if k.ends_with('/') && specifier.starts_with(k.as_str()) {
-                let n = k.len();
-                if best.as_ref().map(|(bn, _)| n > *bn).unwrap_or(true) {
-                    best = Some((n, format!("{}{}", v, &specifier[n..])));
+    }
+    best.map(|(_, u)| u)
+}
+
+/// Resolve module specifier: scopes → imports → absolute → relative → as-is.
+fn resolve_esm_url(state: &RuntimeState, specifier: &str, referrer_url: Option<&str>) -> String {
+    // 1) scopes: longest matching scope prefix against referrer URL
+    if let Some(ref_url) = referrer_url {
+        let scopes = state.esm_import_scopes.borrow();
+        let mut best_scope: Option<(usize, &std::collections::HashMap<String, String>)> = None;
+        for (scope_url, table) in scopes.iter() {
+            if ref_url.starts_with(scope_url.as_str()) {
+                let n = scope_url.len();
+                if best_scope.as_ref().map(|(bn, _)| n > *bn).unwrap_or(true) {
+                    best_scope = Some((n, table));
                 }
             }
         }
-        if let Some((_, url)) = best {
-            return url;
+        if let Some((_, table)) = best_scope {
+            if let Some(u) = map_lookup(table, specifier) {
+                return u;
+            }
         }
     }
-    // 2) absolute / data / scheme
+    // 2) top-level imports
+    {
+        let map = state.esm_import_map.borrow();
+        if let Some(u) = map_lookup(&map, specifier) {
+            return u;
+        }
+    }
+    // 3) absolute / data / scheme
     if specifier.starts_with("http://")
         || specifier.starts_with("https://")
         || specifier.starts_with("data:")
@@ -790,7 +825,7 @@ fn resolve_esm_url(state: &RuntimeState, specifier: &str, referrer_url: Option<&
     {
         return specifier.to_string();
     }
-    // 3) relative to referrer
+    // 4) relative to referrer
     if let Some(ref_url) = referrer_url {
         if let Ok(base) = url::Url::parse(ref_url) {
             if let Ok(joined) = base.join(specifier) {
@@ -3197,6 +3232,7 @@ impl EmbeddedV8Kernel {
             state.style_cache.borrow_mut().clear();
             // Parse import maps from <script type="importmap"> before module load.
             state.esm_import_map.borrow_mut().clear();
+            state.esm_import_scopes.borrow_mut().clear();
             state.esm_module_urls.borrow_mut().clear();
             if let Some(ref d) = *state.document.borrow() {
                 for &nid in &d.get_elements_by_tag_name("script") {
@@ -3210,25 +3246,42 @@ impl EmbeddedV8Kernel {
                     }
                     let text = d.text_content_of(nid);
                     if let Ok(v) = serde_json::from_str::<serde_json::Value>(&text) {
+                        let abs_url = |s: &str| -> String {
+                            if s.starts_with("http://")
+                                || s.starts_with("https://")
+                                || s.starts_with("data:")
+                            {
+                                s.to_string()
+                            } else if let Some(base) = base_url {
+                                url::Url::parse(base)
+                                    .ok()
+                                    .and_then(|b| b.join(s).ok())
+                                    .map(|u| u.to_string())
+                                    .unwrap_or_else(|| s.to_string())
+                            } else {
+                                s.to_string()
+                            }
+                        };
                         if let Some(imports) = v.get("imports").and_then(|i| i.as_object()) {
                             let mut map = state.esm_import_map.borrow_mut();
                             for (k, val) in imports {
                                 if let Some(s) = val.as_str() {
-                                    let abs = if s.starts_with("http://")
-                                        || s.starts_with("https://")
-                                        || s.starts_with("data:")
-                                    {
-                                        s.to_string()
-                                    } else if let Some(base) = base_url {
-                                        url::Url::parse(base)
-                                            .ok()
-                                            .and_then(|b| b.join(s).ok())
-                                            .map(|u| u.to_string())
-                                            .unwrap_or_else(|| s.to_string())
-                                    } else {
-                                        s.to_string()
-                                    };
-                                    map.insert(k.clone(), abs);
+                                    map.insert(k.clone(), abs_url(s));
+                                }
+                            }
+                        }
+                        if let Some(scopes) = v.get("scopes").and_then(|s| s.as_object()) {
+                            let mut scope_map = state.esm_import_scopes.borrow_mut();
+                            for (scope_key, table_val) in scopes {
+                                let scope_abs = abs_url(scope_key);
+                                if let Some(table) = table_val.as_object() {
+                                    let mut inner = std::collections::HashMap::new();
+                                    for (k, val) in table {
+                                        if let Some(s) = val.as_str() {
+                                            inner.insert(k.clone(), abs_url(s));
+                                        }
+                                    }
+                                    scope_map.insert(scope_abs, inner);
                                 }
                             }
                         }
