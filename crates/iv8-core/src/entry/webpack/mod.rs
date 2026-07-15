@@ -852,15 +852,19 @@ pub fn ensure_chunk_bound_status(kernel: &mut EmbeddedV8Kernel) -> serde_json::V
         "    }",
         "  }",
         "} catch(e) {}",
-        "return {",
-        "  require_present: !!r,",
-        "  e_wrapped: !!(r && r.__iv8_e_wrapped),",
-        "  remote_fetch: false,",
-        "  ensure_calls_seen: log,",
-        "  policy: 'sync_resolve_after_preload_only'",
-        "};",
-        "})()"
-    );
+         "return {",
+         "  require_present: !!r,",
+         "  e_wrapped: !!(r && r.__iv8_e_wrapped),",
+         "  remote_fetch: false,",
+         "  ensure_calls_seen: log,",
+         "  policy: 'sync_resolve_after_preload_only',",
+         // Q163 honesty (v0.8.101): network is adapter-owned; core never fetches chunk URLs.
+         "  network_layer: 'adapter_or_caller',",
+         "  hint: 'supply missing chunk JS via preload/run_with_entry(chunks=[...]); no silent HTTP fetch',",
+         "  q163: 'remote ensureChunk = webpack URL load; IV8 bound offline'",
+         "};",
+         "})()"
+     );
     match kernel.eval_to_rust_value(js) {
         RustValue::Object(map) => {
             let mut out = serde_json::Map::new();

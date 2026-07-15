@@ -223,10 +223,58 @@ def test_instrument_source_env_targets_allowlist():
             "full": info_full.get("env_targets"),
             "nav_only": info_nav.get("env_targets"),
             "off": info_off.get("env_targets"),
+            "capture_env_off": info_off.get("capture_env"),
         }
 
     rep = _run(body)
     assert "screen" in (rep["full"] or []), rep
     assert rep["nav_only"] == ["navigator"], rep
-    # capture_env=false still reports the resolved list used for generation (empty wrap)
-    assert isinstance(rep["off"], list), rep
+    assert rep["off"] == [] or rep["capture_env_off"] is False, rep
+
+
+def test_instrument_source_expose_handlers_opt_in():
+    """v0.8.101 Tier B: expose_handlers assigns __iv8_vm_handlers__ in dispatch scope."""
+    import iv8_rs
+
+    def body():
+        src = _REF.read_text(encoding="utf-8", errors="replace")
+        env = {
+            "location": {
+                "href": "https://turing.captcha.qcloud.com/cap_union_new_show?sess=s0&sid=1",
+                "hostname": "turing.captcha.qcloud.com",
+                "protocol": "https:",
+                "origin": "https://turing.captcha.qcloud.com",
+            },
+            "window": {
+                "innerWidth": 360,
+                "innerHeight": 360,
+                "outerWidth": 1920,
+                "outerHeight": 1200,
+            },
+        }
+        patched, info = iv8_rs.instrument_source(src, expose_handlers=True)
+        ctx = iv8_rs.JSContext(environment=env)
+        ctx.eval(patched)
+        # After VM init + at least one dispatch, handlers may be exposed
+        ha_type = ctx.eval("typeof globalThis.__iv8_vm_handlers__")
+        set_t = ctx.eval("typeof TDC !== 'undefined' ? typeof TDC.setData : 'no'")
+        collect = ""
+        if ctx.eval("typeof TDC !== 'undefined' && typeof TDC.getData === 'function'"):
+            if set_t == "function":
+                ctx.eval("TDC.setData({ft:'tf'})")
+            collect = ctx.eval('decodeURIComponent(TDC.getData(true) || "")') or ""
+        return {
+            "expose_flag": info.get("expose_handlers"),
+            "handlers_type": ha_type,
+            "setData": set_t,
+            "collect_len": len(collect) if isinstance(collect, str) else -1,
+            "has_expose_in_src": "__iv8_vm_handlers__" in patched,
+        }
+
+    rep = _run(body)
+    assert rep["expose_flag"] is True, rep
+    assert rep["has_expose_in_src"] is True, rep
+    assert rep["setData"] == "function", rep
+    assert rep["collect_len"] > 100, rep
+    # handlers should be array/object after dispatch ran
+    assert rep["handlers_type"] in ("object", "function"), rep

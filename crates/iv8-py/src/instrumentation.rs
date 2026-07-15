@@ -39,6 +39,7 @@ use pyo3::types::{PyDict, PyList};
     stack_var = None,
     index_array = None,
     dispatch_pattern = None,
+    expose_handlers = false,
 ))]
 pub fn instrument_source(
     source: &str,
@@ -52,6 +53,7 @@ pub fn instrument_source(
     stack_var: Option<&str>,
     index_array: Option<&str>,
     dispatch_pattern: Option<&str>,
+    expose_handlers: bool,
     py: Python<'_>,
 ) -> PyResult<(String, PyObject)> {
     // Step 1: Detect or use manual overrides
@@ -125,7 +127,8 @@ pub fn instrument_source(
     let head_code = generate_head_code(capture_env, &targets_json, limit);
 
     // Step 3: Replace ALL dispatch sites (v0.8.101 robust) + fix offset==0 bug
-    let dispatch_replacement = generate_dispatch_replacement(&detection, capture_stack_depth);
+    let dispatch_replacement =
+        generate_dispatch_replacement(&detection, capture_stack_depth, expose_handlers);
     let (body, sites) = replace_all_dispatches(source, &detection, &dispatch_replacement);
     let patched = format!("{}{}", head_code, body);
 
@@ -160,12 +163,20 @@ pub fn instrument_source(
         },
     )?;
     info.set_item("capture_env", capture_env)?;
+    info.set_item("expose_handlers", expose_handlers)?;
     info.set_item(
         "env_proxy_note",
         "default env_targets = full list (navigator/screen/document/location/Math/crypto/performance); \
          override with env_targets=[...] allow-list, or capture_env=false to disable. \
          Proxies use Reflect.get/set(target, prop, target) for host-object brand safety.",
     )?;
+    if expose_handlers {
+        info.set_item(
+            "expose_handlers_note",
+            "on each dispatch, assigns globalThis.__iv8_vm_handlers__ = <handler_array> \
+             (in-scope local, no V8 closure hook). Default false (detection surface).",
+        )?;
+    }
 
     Ok((patched, info.into_any().unbind()))
 }
@@ -402,7 +413,15 @@ T.forEach(function(nm){{
 /// Generate the dispatch expression replacement.
 ///
 /// For ChaosVM `A[Q[U++]]()` → `(globalThis.__iv8i_pc__=U, log D entry with stack top values, A[Q[U++]]())`
-fn generate_dispatch_replacement(detection: &VmDetection, capture_stack_depth: u32) -> String {
+///
+/// When `expose_handlers` is true, also assigns
+/// `globalThis.__iv8_vm_handlers__ = <handler_array>` **inside the dispatch
+/// expression** (local is in scope) — no V8 closure hooks.
+fn generate_dispatch_replacement(
+    detection: &VmDetection,
+    capture_stack_depth: u32,
+    expose_handlers: bool,
+) -> String {
     let pc = &detection.pc_var;
     let stack = &detection.stack_var;
 
@@ -451,12 +470,19 @@ fn generate_dispatch_replacement(detection: &VmDetection, capture_stack_depth: u
             parts
         };
 
-        // Comma expression: (set_pc, log, original_dispatch)
+        let expose_prefix = if expose_handlers {
+            format!("globalThis.__iv8_vm_handlers__={ha},", ha = ha)
+        } else {
+            String::new()
+        };
+
+        // Comma expression: (optional expose, set_pc, log, original_dispatch)
         format!(
-            "(globalThis.__iv8i_pc__={pc},\
+            "({expose}globalThis.__iv8i_pc__={pc},\
              globalThis.__iv8i_log__.length<globalThis.__iv8i_lim__&&\
              globalThis.__iv8i_log__.push('D,'+{pc}+','+{ia}[{pc}]+',{stack_capture}),\
              {ha}[{ia}[{pc}++]]())",
+            expose = expose_prefix,
             pc = pc,
             ia = ia,
             stack_capture = stack_capture,
@@ -489,7 +515,7 @@ mod tests {
         // First site at offset 0 — old code skipped rewrite when offset==0
         let src = "B[g[D++]]();foo();B[g[D++]]();";
         let d = detect_chaosvm(src).expect("detect");
-        let rep = generate_dispatch_replacement(&d, 0);
+        let rep = generate_dispatch_replacement(&d, 0, false);
         let (body, sites) = replace_all_dispatches(src, &d, &rep);
         assert_eq!(sites.len(), 2, "expected two dispatch sites, got {:?}", sites);
         // Replacement still contains B[g[D++]]() as the real call; ensure logging wraps it.
@@ -510,5 +536,18 @@ mod tests {
         assert_eq!(sites.len(), 1);
         assert!(body.contains("X[g[D++]]()"));
         assert!(body.contains("/*patched*/"));
+    }
+
+    #[test]
+    fn expose_handlers_injects_global_assign() {
+        let src = "B[g[D++]]();";
+        let d = detect_chaosvm(src).expect("detect");
+        let rep = generate_dispatch_replacement(&d, 0, true);
+        assert!(
+            rep.contains("globalThis.__iv8_vm_handlers__=B"),
+            "expose rewrite missing: {rep}"
+        );
+        let rep_off = generate_dispatch_replacement(&d, 0, false);
+        assert!(!rep_off.contains("__iv8_vm_handlers__"));
     }
 }
