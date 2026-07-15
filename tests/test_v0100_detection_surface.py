@@ -569,6 +569,53 @@ def test_high_signal_tojson_on_url_and_performance():
     assert rep["perf"] is True, rep
 
 
+def test_high_signal_factory_return_types():
+    """Q057: high-signal factories return branded instances (not bare objects)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  function tag(v){ return Object.prototype.toString.call(v); }
+                  return JSON.stringify({
+                    div: tag(document.createElement('div')),
+                    text: tag(document.createTextNode('x')),
+                    comment: tag(document.createComment('c')),
+                    frag: tag(document.createDocumentFragment()),
+                    xhr: tag(new XMLHttpRequest()),
+                    url: tag(new URL('https://ex.test/'))
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert "HTMLDivElement" in rep["div"], rep
+    assert "Text" in rep["text"], rep
+    assert "Comment" in rep["comment"], rep
+    assert "DocumentFragment" in rep["frag"], rep
+    assert "XMLHttpRequest" in rep["xhr"], rep
+    assert "URL" in rep["url"], rep
+
+
+def test_default_location_is_about_blank():
+    """Q142: ConfigLocation default href about:blank until page_load."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        before = str(ctx.eval("location.href"))
+        ctx.page_load("<html><body>x</body></html>", "https://example.com/p")
+        after = str(ctx.eval("location.href"))
+        return json.dumps({"before": before, "after": after})
+
+    rep = json.loads(_run(body))
+    assert rep["before"] == "about:blank", rep
+    assert rep["after"] == "https://example.com/p", rep
+
+
 def test_high_signal_constructors_present_not_missing():
     """Q054: high-signal constructors exist (not missing class)."""
 
