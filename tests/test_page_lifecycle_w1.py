@@ -438,6 +438,42 @@ def test_worker_type_module_option_does_not_throw():
     assert rep.get("ok") is True, rep
 
 
+def test_worker_module_static_import_bundle_snapshot_constructs():
+    """Worker module entry with static import — bundle snapshot must resolve graph."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.add_resource(
+            "https://ex.test/dep.js",
+            b"export const n = 7;",
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        ctx.add_resource(
+            "https://ex.test/wentry.js",
+            b'import { n } from "https://ex.test/dep.js"; self.__n = n;',
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  try {
+                    var w = new Worker('https://ex.test/wentry.js', { type: 'module' });
+                    return JSON.stringify({ ok: typeof w.postMessage === 'function' });
+                  } catch (e) {
+                    return JSON.stringify({ ok: false, err: String(e).slice(0, 120) });
+                  }
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep.get("ok") is True, rep
+
+
 def test_type_module_inline_executes_via_eval_module():
     """K-ESM-LOADER: type=module inline runs after classic/defer (side effects)."""
 
