@@ -294,6 +294,20 @@ const CATALOG: &[EventSpec] = &[
         fields: &["phase", "error"],
     },
     EventSpec {
+        name: "kernel_lifecycle_wait",
+        category: "iv8.init",
+        level: "DEBUG",
+        safety: Safety::Safe,
+        fields: &["waited_ms", "timed_out"],
+    },
+    EventSpec {
+        name: "kernel_lifecycle_timeout",
+        category: "iv8.init",
+        level: "WARN",
+        safety: Safety::Diagnostic,
+        fields: &["waited_ms"],
+    },
+    EventSpec {
         name: "eval_complete",
         category: "iv8.eval",
         level: "DEBUG",
@@ -505,6 +519,27 @@ pub fn init_phase_failed(phase: &str, error: &str) {
         phase = phase,
         error = error,
         "init phase failed"
+    );
+}
+
+/// Full-kernel create waited for another thread to release its isolate.
+/// Safety: Safe
+pub fn kernel_lifecycle_wait(waited_ms: u64, timed_out: bool) {
+    tracing::debug!(
+        target: "iv8.init",
+        waited_ms = waited_ms,
+        timed_out = timed_out,
+        "kernel lifecycle wait for other full isolate"
+    );
+}
+
+/// Full-kernel create timed out waiting for other thread.
+/// Safety: Diagnostic
+pub fn kernel_lifecycle_timeout(waited_ms: u64) {
+    tracing::warn!(
+        target: "iv8.init",
+        waited_ms = waited_ms,
+        "kernel lifecycle wait timed out"
     );
 }
 

@@ -11,7 +11,107 @@ type ExposedCallback = Box<dyn Fn(&[String]) -> Result<String, String> + Send + 
 use crate::shims::browser_profile::DEFAULT_PROFILE;
 use crate::v8_init::ensure_v8_initialized;
 use iv8_profile::BehaviorConfig;
-use std::sync::Arc;
+use std::collections::HashMap;
+use std::sync::{Arc, Condvar, LazyLock, Mutex};
+use std::thread::ThreadId;
+use std::time::Duration;
+
+/// Process-wide lock for Isolate construct/dispose.
+/// Concurrent full template install + multi-threaded V8 platform can hang when
+/// a second isolate is created while another is mid-init or mid-dispose
+/// (Python: 2nd thread JSContext while first still alive, or after Drop races).
+/// Serialize construction and teardown only — not eval.
+/// Cross-ref: TODO-native K-ISOLATE-INIT-SERIAL.
+static KERNEL_LIFECYCLE_LOCK: Mutex<()> = Mutex::new(());
+
+/// Live full kernels by creator thread.
+/// A second *full* JSContext on another thread while any kernel is still alive
+/// can hang inside V8 shared RO-heap / FunctionTemplate install ( empirically
+/// 15–60s+ no return). Same-thread multi-kernel is OK. Worker isolates skip
+/// full surface install and are out of this map.
+/// Fail-fast with IV8Error instead of hanging (K-ISOLATE-INIT-SERIAL).
+static LIVE_FULL_KERNELS: LazyLock<(Mutex<HashMap<ThreadId, usize>>, Condvar)> =
+    LazyLock::new(|| (Mutex::new(HashMap::new()), Condvar::new()));
+
+/// Max wait for other threads to drop full kernels before create (avoid V8 hang).
+/// Cross-thread concurrent full-isolate install is unsafe; we serialize by waiting.
+/// 5s is enough for normal close(); longer means stuck owner (don't mask as hang).
+const LIVE_KERNEL_WAIT: Duration = Duration::from_secs(5);
+
+fn live_full_kernels_guard_begin() -> Result<(), IV8Error> {
+    let tid = std::thread::current().id();
+    let (lock, cv) = &*LIVE_FULL_KERNELS;
+    let mut map = lock.lock().unwrap_or_else(|e| e.into_inner());
+    let start = std::time::Instant::now();
+    let deadline = start + LIVE_KERNEL_WAIT;
+    let mut did_wait = false;
+    loop {
+        let other_live = map.iter().any(|(t, n)| *t != tid && *n > 0);
+        if !other_live {
+            *map.entry(tid).or_insert(0) += 1;
+            if did_wait {
+                crate::telemetry::kernel_lifecycle_wait(start.elapsed().as_millis() as u64, false);
+            }
+            return Ok(());
+        }
+        did_wait = true;
+        let now = std::time::Instant::now();
+        if now >= deadline {
+            let waited_ms = start.elapsed().as_millis() as u64;
+            crate::telemetry::kernel_lifecycle_timeout(waited_ms);
+            return Err(IV8Error::Internal(
+                "timed out waiting for another thread to release its full JSContext/kernel \
+                 before creating one on this thread (V8 multi-isolate + full template install \
+                 can hang if concurrent). Close()/drop other kernels first. \
+                 See TODO-native K-ISOLATE-INIT-SERIAL."
+                    .into(),
+            ));
+        }
+        let wait = deadline.saturating_duration_since(now);
+        let (m, _timeout_result) = cv
+            .wait_timeout(map, wait)
+            .unwrap_or_else(|e| e.into_inner());
+        map = m;
+    }
+}
+
+fn live_full_kernels_guard_end() {
+    let tid = std::thread::current().id();
+    let (lock, cv) = &*LIVE_FULL_KERNELS;
+    let mut map = lock.lock().unwrap_or_else(|e| e.into_inner());
+    if let Some(n) = map.get_mut(&tid) {
+        *n = n.saturating_sub(1);
+        if *n == 0 {
+            map.remove(&tid);
+        }
+    }
+    cv.notify_all();
+}
+
+/// Decrements LIVE_FULL_KERNELS only if init fails before kernel is returned.
+/// On success, `forget` so Drop of kernel owns the slot.
+struct LiveFullKernelInitSlot {
+    active: bool,
+}
+
+impl LiveFullKernelInitSlot {
+    fn acquire() -> Result<Self, IV8Error> {
+        live_full_kernels_guard_begin()?;
+        Ok(Self { active: true })
+    }
+
+    fn commit(mut self) {
+        self.active = false;
+    }
+}
+
+impl Drop for LiveFullKernelInitSlot {
+    fn drop(&mut self) {
+        if self.active {
+            live_full_kernels_guard_end();
+        }
+    }
+}
 
 /// document.write workaround shim (REQ-DOM-008).
 /// Replaces document.write with insertAdjacentHTML-based implementation.
@@ -1242,6 +1342,14 @@ impl EmbeddedV8Kernel {
         user_overrides: crate::user_overrides::UserOverrides,
         worker_mode: bool,
     ) -> Result<Self, IV8Error> {
+        // Wait for other threads' full kernels first — must NOT hold KERNEL_LIFECYCLE_LOCK
+        // or Drop of the other kernel deadlocks (Drop also takes that lock).
+        let live_slot = LiveFullKernelInitSlot::acquire()?;
+
+        let _lifecycle_guard = KERNEL_LIFECYCLE_LOCK
+            .lock()
+            .unwrap_or_else(|e| e.into_inner());
+
         // Install panic hook once — ensures panics are logged via telemetry
         // before PyO3's catch_unwind converts them to PanicException.
         static PANIC_HOOK_INSTALLED: std::sync::Once = std::sync::Once::new();
@@ -1464,6 +1572,8 @@ impl EmbeddedV8Kernel {
             kernel.isolate.exit();
         }
 
+        // Transfer LIVE_FULL_KERNELS ownership to EmbeddedV8Kernel::Drop.
+        live_slot.commit();
         Ok(kernel)
     }
 
@@ -4754,6 +4864,9 @@ impl EmbeddedV8Kernel {
 
 impl Drop for EmbeddedV8Kernel {
     fn drop(&mut self) {
+        let _lifecycle_guard = KERNEL_LIFECYCLE_LOCK
+            .lock()
+            .unwrap_or_else(|e| e.into_inner());
         // Flush localStorage before isolate disposal.
         self.flush_local_storage();
         // Re-enter the isolate before drop — OwnedIsolate expects to be entered
@@ -4762,6 +4875,7 @@ impl Drop for EmbeddedV8Kernel {
             self.isolate.enter();
         }
         // OwnedIsolate::drop will exit and dispose
+        live_full_kernels_guard_end();
     }
 }
 

@@ -166,6 +166,72 @@ unsafe extern "C" fn response_constructor(info: *const v8::FunctionCallbackInfo)
 
         let (status, status_text) = parse_response_options(scope, &args);
         set_response_state(scope, this, status, &status_text);
+
+        // Fetch API: new Response(body, init). Body must back text()/json()/arrayBuffer().
+        // fetch() path sets __body__/__arrayBuffer__ in network/fetch.rs; constructor must
+        // do the same (upstream iv8 0.1.4 #29 class of bug when body missing).
+        let body_bytes: Vec<u8> = if args.length() >= 1 {
+            let body = args.get(0);
+            if body.is_null_or_undefined() {
+                Vec::new()
+            } else if body.is_string() {
+                body.to_rust_string_lossy(scope).into_bytes()
+            } else if body.is_array_buffer() {
+                let ab: v8::Local<v8::ArrayBuffer> = unsafe { v8::Local::cast_unchecked(body) };
+                let len = ab.byte_length();
+                let mut buf = vec![0u8; len];
+                if len > 0 {
+                    let store = ab.get_backing_store();
+                    if let Some(data_ptr) = store.data() {
+                        let slice = unsafe {
+                            std::slice::from_raw_parts(data_ptr.as_ptr() as *const u8, len)
+                        };
+                        buf.copy_from_slice(slice);
+                    }
+                }
+                buf
+            } else if body.is_typed_array() {
+                let ta: v8::Local<v8::TypedArray> = unsafe { v8::Local::cast_unchecked(body) };
+                let len = ta.byte_length();
+                let mut buf = vec![0u8; len];
+                if len > 0 {
+                    ta.copy_contents(&mut buf);
+                }
+                buf
+            } else {
+                body.to_rust_string_lossy(scope).into_bytes()
+            }
+        } else {
+            Vec::new()
+        };
+        let body_str = String::from_utf8_lossy(&body_bytes).into_owned();
+
+        let body_key = crate::v8_utils::v8_string(scope, "__body__");
+        let _ = this.define_own_property(
+            scope,
+            body_key.into(),
+            crate::v8_utils::v8_string(scope, &body_str).into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+
+        let store = v8::ArrayBuffer::new_backing_store_from_vec(body_bytes);
+        let ab = v8::ArrayBuffer::with_backing_store(scope, &store.into());
+        let ab_key = crate::v8_utils::v8_string(scope, "__arrayBuffer__");
+        let _ = this.define_own_property(
+            scope,
+            ab_key.into(),
+            ab.into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+
+        // Keep bodyUsed flag keys aligned with getters (__consumed__ used by text/json).
+        let consumed_key = crate::v8_utils::v8_string(scope, "__consumed__");
+        let _ = this.define_own_property(
+            scope,
+            consumed_key.into(),
+            v8::Boolean::new(scope, false).into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
     }));
 }
 

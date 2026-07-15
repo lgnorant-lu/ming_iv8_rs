@@ -133,6 +133,7 @@ impl JSContext {
         worker_mode = false,
     ))]
     fn new(
+        py: Python<'_>,
         environment: Option<&Bound<'_, PyDict>>,
         config: Option<&Bound<'_, PyDict>>,
         time_mode: &str,
@@ -208,7 +209,12 @@ impl JSContext {
             worker_mode,
         };
 
-        let kernel = EmbeddedV8Kernel::new(kernel_config).map_err(error::iv8_error_to_pyerr)?;
+        // Release GIL during kernel init: may wait on LIVE_FULL_KERNELS Condvar while
+        // another thread still holds a full isolate (K-ISOLATE-INIT-SERIAL). Holding GIL
+        // would deadlock that thread's close()/drop.
+        let kernel = py
+            .allow_threads(|| EmbeddedV8Kernel::new(kernel_config))
+            .map_err(error::iv8_error_to_pyerr)?;
 
         Ok(Self {
             inner: Arc::new(JSContextInner {
@@ -298,12 +304,15 @@ impl JSContext {
     }
 
     /// Close the context and release V8 resources.
-    fn close(&self) -> PyResult<()> {
+    fn close(&self, py: Python<'_>) -> PyResult<()> {
         self.assert_creator_thread()?;
         if self.inner.disposed.swap(true, Ordering::SeqCst) {
             return Ok(());
         }
-        self.inner.kernel.close();
+        // Drop kernel off-GIL so waiters on LIVE_FULL_KERNELS can proceed.
+        py.allow_threads(|| {
+            self.inner.kernel.close();
+        });
         self.inner.free_exposed_callbacks();
         Ok(())
     }
@@ -317,11 +326,12 @@ impl JSContext {
     #[pyo3(signature = (_exc_type=None, _exc_val=None, _exc_tb=None))]
     fn __exit__(
         &self,
+        py: Python<'_>,
         _exc_type: Option<&pyo3::Bound<'_, pyo3::PyAny>>,
         _exc_val: Option<&pyo3::Bound<'_, pyo3::PyAny>>,
         _exc_tb: Option<&pyo3::Bound<'_, pyo3::PyAny>>,
     ) -> PyResult<bool> {
-        self.close()?;
+        self.close(py)?;
         Ok(false) // don't suppress exceptions
     }
 
