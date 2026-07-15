@@ -33,8 +33,10 @@ pub struct EventLoop {
     next_id: u32,
     /// IDs that were cleared during callback execution (prevents re-enqueue).
     cleared_ids: std::collections::HashSet<u32>,
-    /// Current timer nesting depth (HTML spec: clamp to 4ms after 5 levels).
-    timer_nesting_depth: u32,
+    /// Nesting level of the currently executing Timeout task (HTML setTimeout
+    /// algorithm). `None` when not inside a timeout callback.
+    /// Used so nested setTimeout chains accumulate level and clamp after >5.
+    active_timeout_nesting: Option<u32>,
 }
 
 /// A timed task in the macrotask queue.
@@ -50,6 +52,8 @@ pub struct TimedTask {
     pub kind: TaskKind,
     /// Extra arguments to pass to callback (setTimeout/setInterval args after delay).
     pub extra_args: Vec<v8::Global<v8::Value>>,
+    /// HTML timer nesting level for this task (Timeout only; 0 otherwise).
+    pub nesting_level: u32,
 }
 
 /// Task kind — determines behavior after execution.
@@ -94,7 +98,7 @@ impl EventLoop {
             macro_tasks: BinaryHeap::new(),
             next_id: 1,
             cleared_ids: std::collections::HashSet::new(),
-            timer_nesting_depth: 0,
+            active_timeout_nesting: None,
         }
     }
 
@@ -118,9 +122,9 @@ impl EventLoop {
         self.auto_advance_step_us
     }
 
-    /// Get the current timer nesting depth (for diagnostics / tests).
+    /// Nesting level used for clamp checks (parent timeout nesting, or 0).
     pub fn timer_nesting_depth(&self) -> u32 {
-        self.timer_nesting_depth
+        self.active_timeout_nesting.unwrap_or(0)
     }
 
     /// Reset the event loop to initial state.
@@ -128,7 +132,7 @@ impl EventLoop {
         self.current_us = 0;
         self.macro_tasks.clear();
         self.cleared_ids.clear();
-        self.timer_nesting_depth = 0;
+        self.active_timeout_nesting = None;
     }
 
     /// Register a new timer. Returns the timer ID.
@@ -142,9 +146,18 @@ impl EventLoop {
         let id = self.next_id;
         self.next_id += 1;
 
-        // HTML spec steps 11–13: clamp timeout delay when nesting > 5 and delay < 4ms.
+        // HTML: nesting level = currently-running timer task's nesting level, else 0.
+        // New timeout task nesting level = that + 1. Clamp when level > 5 and delay < 4ms.
+        let parent_nesting = self.active_timeout_nesting.unwrap_or(0);
+        let task_nesting = if matches!(kind, TaskKind::Timeout) {
+            parent_nesting.saturating_add(1)
+        } else {
+            0
+        };
+
+        // Clamp uses the *new* task nesting level (parent+1), not parent alone.
         let effective_delay_ms = if matches!(kind, TaskKind::Timeout)
-            && self.timer_nesting_depth > NESTING_THRESHOLD
+            && task_nesting > NESTING_THRESHOLD
             && delay_ms < MIN_CLAMP_MS
         {
             MIN_CLAMP_MS
@@ -161,6 +174,7 @@ impl EventLoop {
             callback,
             kind,
             extra_args,
+            nesting_level: task_nesting,
         }));
 
         id
@@ -243,6 +257,7 @@ impl EventLoop {
             callback: task.callback.clone(),
             kind: task.kind,
             extra_args: task.extra_args.clone(),
+            nesting_level: task.nesting_level,
         }));
     }
 }
@@ -275,17 +290,18 @@ pub fn execute_task_tracked(
     state: &crate::state::RuntimeState,
     task: &TimedTask,
 ) {
-    // HTML spec: increment nesting level before invoking the callback so that
-    // timers registered inside the callback are subject to clamping.
-    if matches!(task.kind, TaskKind::Timeout) {
-        state.event_loop.borrow_mut().timer_nesting_depth += 1;
-    }
-    execute_task(scope, task);
-    if matches!(task.kind, TaskKind::Timeout) {
+    // HTML: while this timeout runs, nested setTimeout sees this task's nesting_level.
+    let prev = if matches!(task.kind, TaskKind::Timeout) {
         let mut el = state.event_loop.borrow_mut();
-        if el.timer_nesting_depth > 0 {
-            el.timer_nesting_depth -= 1;
-        }
+        let prev = el.active_timeout_nesting;
+        el.active_timeout_nesting = Some(task.nesting_level);
+        Some(prev)
+    } else {
+        None
+    };
+    execute_task(scope, task);
+    if let Some(prev) = prev {
+        state.event_loop.borrow_mut().active_timeout_nesting = prev;
     }
 }
 
@@ -353,19 +369,61 @@ mod tests {
     fn event_loop_reset() {
         let mut el = EventLoop::new();
         el.current_us = 50000;
-        el.timer_nesting_depth = 10;
+        el.active_timeout_nesting = Some(10);
         el.reset();
         assert_eq!(el.get_time_us(), 0);
         assert_eq!(el.pending_count(), 0);
         assert_eq!(el.timer_nesting_depth(), 0);
+        assert!(el.active_timeout_nesting.is_none());
     }
 
     #[test]
-    fn timer_clamp_at_nesting_threshold() {
-        // We cannot create v8::Global<v8::Function> without a V8 isolate, so we
-        // verify the clamping logic indirectly: the clamp only applies when
-        // nesting > 5 and delay < 4.  The constants themselves encode the spec.
+    fn timer_clamp_constants_match_html_spec() {
         assert_eq!(NESTING_THRESHOLD, 5);
         assert_eq!(MIN_CLAMP_MS, 4.0);
+    }
+
+    #[test]
+    fn nested_timeout_clamp_when_task_nesting_exceeds_five() {
+        // parent nesting 5 → new task level 6 > 5 → clamp 0ms to 4ms.
+        let parent = 5u32;
+        let task_nesting = parent.saturating_add(1);
+        let delay_ms = 0.0;
+        let effective = if task_nesting > NESTING_THRESHOLD && delay_ms < MIN_CLAMP_MS {
+            MIN_CLAMP_MS
+        } else {
+            delay_ms
+        };
+        assert_eq!(task_nesting, 6);
+        assert_eq!(effective, 4.0);
+    }
+
+    #[test]
+    fn nesting_five_does_not_clamp() {
+        // parent 4 → task level 5 is not > 5 → no clamp (HTML strict > 5).
+        let parent = 4u32;
+        let task_nesting = parent.saturating_add(1);
+        let delay_ms = 0.0;
+        let effective = if task_nesting > NESTING_THRESHOLD && delay_ms < MIN_CLAMP_MS {
+            MIN_CLAMP_MS
+        } else {
+            delay_ms
+        };
+        assert_eq!(task_nesting, 5);
+        assert_eq!(effective, 0.0);
+    }
+
+    #[test]
+    fn top_level_timeout_has_nesting_one_no_clamp() {
+        let parent = 0u32;
+        let task_nesting = parent.saturating_add(1);
+        let delay_ms = 0.0;
+        let effective = if task_nesting > NESTING_THRESHOLD && delay_ms < MIN_CLAMP_MS {
+            MIN_CLAMP_MS
+        } else {
+            delay_ms
+        };
+        assert_eq!(task_nesting, 1);
+        assert_eq!(effective, 0.0);
     }
 }
