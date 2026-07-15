@@ -153,3 +153,52 @@ def test_instrument_source_multi_site_synthetic():
     assert rep["wrap_count"] == 2, rep
     assert rep["log_sites"] >= 2, rep
     assert isinstance(rep["offsets"], list) and len(rep["offsets"]) == 2, rep
+
+
+def test_tdc_instrument_source_preserves_setdata_and_collect():
+    """v0.8.101: default env Proxies must not drop TDC.setData (screen was the culprit)."""
+    import iv8_rs
+
+    def body():
+        src = _REF.read_text(encoding="utf-8", errors="replace")
+        env = {
+            "location": {
+                "href": "https://turing.captcha.qcloud.com/cap_union_new_show?sess=s0&sid=1",
+                "hostname": "turing.captcha.qcloud.com",
+                "protocol": "https:",
+                "origin": "https://turing.captcha.qcloud.com",
+            },
+            "window": {
+                "innerWidth": 360,
+                "innerHeight": 360,
+                "outerWidth": 1920,
+                "outerHeight": 1200,
+            },
+        }
+        patched, info = iv8_rs.instrument_source(src)
+        ctx = iv8_rs.JSContext(environment=env)
+        ctx.eval(patched)
+        set_t = ctx.eval("typeof TDC !== 'undefined' ? typeof TDC.setData : 'no'")
+        get_t = ctx.eval("typeof TDC !== 'undefined' ? typeof TDC.getData : 'no'")
+        if set_t == "function":
+            ctx.eval("TDC.setData({ft:'tf'})")
+        collect = ctx.eval('decodeURIComponent(TDC.getData(true) || "")') or ""
+        ut = ctx.get_unified_trace() or []
+        d_n = sum(1 for x in ut if str(x).startswith("D,"))
+        targets = info.get("env_targets") or []
+        return {
+            "setData": set_t,
+            "getData": get_t,
+            "collect_len": len(collect) if isinstance(collect, str) else -1,
+            "d_n": d_n,
+            "has_screen_proxy": "screen" in targets,
+            "env_note": bool(info.get("env_proxy_note")),
+        }
+
+    rep = _run(body)
+    assert rep["setData"] == "function", rep
+    assert rep["getData"] == "function", rep
+    assert rep["collect_len"] > 100, rep
+    assert rep["d_n"] > 100, rep
+    assert rep["has_screen_proxy"] is False, rep
+    assert rep["env_note"] is True, rep

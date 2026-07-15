@@ -104,10 +104,13 @@ pub fn instrument_source(
     };
 
     // Step 2: Generate source-head Proxy code (for env tracking)
+    // Default env Proxy targets (v0.8.101): omit `screen`.
+    // TDC ChaosVM: Proxy(screen) alone drops TDC.setData after init while getData
+    // remains (proven 2026-07-15 A/B). Users can still pass env_targets including
+    // "screen" when they need screen read traces and accept API surface risk.
     let targets = env_targets.unwrap_or_else(|| {
         vec![
             "navigator".into(),
-            "screen".into(),
             "document".into(),
             "location".into(),
             "Math".into(),
@@ -145,6 +148,12 @@ pub fn instrument_source(
         "q165_note",
         "path A: source rewrite works for closure-scoped handlers; \
          instrument_chaosvm requires global handler table",
+    )?;
+    info.set_item("env_targets", targets.clone())?;
+    info.set_item(
+        "env_proxy_note",
+        "default env Proxies omit screen (TDC setData breaks if screen is proxied); \
+         pass env_targets=[...,'screen'] to opt in",
     )?;
 
     Ok((patched, info.into_any().unbind()))
