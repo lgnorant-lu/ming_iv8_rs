@@ -42,27 +42,57 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         return body;
     }
 
-    // Q070 phase A+: document.write executes classic inline scripts (WHATWG
-    // dynamic markup). insertAdjacentHTML alone does not run scripts.
-    function extractAndRunInlineScripts(html) {
+    // Q070 phase A+: document.write runs classic scripts (inline + sync src via
+    // ResourceBundle/XHR). insertAdjacentHTML alone does not run scripts.
+    function resolveScriptUrl(src) {
+        try {
+            if (typeof location !== 'undefined' && location.href) {
+                return new URL(src, location.href).href;
+            }
+        } catch (e) {}
+        return src;
+    }
+    function runScriptCode(code) {
+        if (!code) return;
+        try { (0, eval)(code); } catch (e) {
+            try {
+                if (typeof console !== 'undefined' && console.error) {
+                    console.error('document.write script error', e);
+                }
+            } catch (e2) {}
+        }
+    }
+    function loadAndRunExternalScript(src) {
+        var url = resolveScriptUrl(src);
+        try {
+            var x = new XMLHttpRequest();
+            x.open('GET', url, false);
+            x.send();
+            if (x.status >= 200 && x.status < 400) {
+                runScriptCode(x.responseText);
+            }
+        } catch (e) {
+            try {
+                if (typeof console !== 'undefined' && console.error) {
+                    console.error('document.write external script error', e);
+                }
+            } catch (e2) {}
+        }
+    }
+    function extractAndRunScripts(html) {
         if (!html) return;
         var re = /<script(\s[^>]*)?>([\s\S]*?)<\/script>/gi;
         var m;
         while ((m = re.exec(html)) !== null) {
             var attrs = m[1] || '';
-            if (/\ssrc\s*=/i.test(attrs)) continue; // external: ResourceBundle path residual
             if (/\stype\s*=\s*["']?(module|importmap)/i.test(attrs)) continue;
-            var code = m[2];
-            if (!code) continue;
-            try {
-                (0, eval)(code);
-            } catch (e) {
-                try {
-                    if (typeof console !== 'undefined' && console.error) {
-                        console.error('document.write script error', e);
-                    }
-                } catch (e2) {}
+            var srcM = attrs.match(/\ssrc\s*=\s*["']([^"']+)["']/i)
+                || attrs.match(/\ssrc\s*=\s*([^\s>]+)/i);
+            if (srcM) {
+                loadAndRunExternalScript(srcM[1]);
+                continue;
             }
+            runScriptCode(m[2]);
         }
     }
 
@@ -81,7 +111,7 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
                     script.parentNode.insertBefore(sentinel, script.nextSibling);
                     sentinel.insertAdjacentHTML('beforebegin', html);
                     __iv8_write_anchor = sentinel;
-                    extractAndRunInlineScripts(html);
+                    extractAndRunScripts(html);
                     return;
                 } catch(e) {
                     __iv8_write_anchor = null;
@@ -93,7 +123,7 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         if (__iv8_write_anchor && __iv8_write_anchor.parentNode) {
             try {
                 __iv8_write_anchor.insertAdjacentHTML('beforebegin', html);
-                extractAndRunInlineScripts(html);
+                extractAndRunScripts(html);
                 return;
             } catch(e) {
                 // Sentinel was detached, fall through to body path
@@ -105,7 +135,7 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         var body = ensureBody();
         try {
             body.insertAdjacentHTML('beforeend', html);
-            extractAndRunInlineScripts(html);
+            extractAndRunScripts(html);
             return;
         } catch(e) {}
 
@@ -113,7 +143,7 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         if (document.documentElement) {
             try {
                 document.documentElement.insertAdjacentHTML('beforeend', html);
-                extractAndRunInlineScripts(html);
+                extractAndRunScripts(html);
             } catch(e) {}
         }
     }
@@ -127,12 +157,55 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         document.write(args.join(' ') + '\n');
     };
     document.open = function() {
-        // Q070 phase A: reset write insertion point (not full parser re-open).
+        // Q070: reset write anchor and clear document children (shallow open).
         __iv8_write_anchor = null;
+        try {
+            while (document.firstChild) {
+                document.removeChild(document.firstChild);
+            }
+        } catch (e) {
+            try {
+                if (document.documentElement) {
+                    document.documentElement.innerHTML = '';
+                }
+            } catch (e2) {}
+        }
+        try { document.readyState = 'loading'; } catch (e3) {}
         return document;
     };
-    // close() is a no-op for the insertion model; full stream end is page_load lifecycle.
-    document.close = function() {};
+    document.close = function() {
+        try {
+            if (document.readyState === 'loading') {
+                document.readyState = 'complete';
+            }
+        } catch (e) {}
+    };
+
+    // createElement('script') + appendChild should run classic inline scripts.
+    try {
+        if (typeof Node !== 'undefined' && Node.prototype && Node.prototype.appendChild
+            && !Node.prototype.appendChild.__iv8ScriptExec) {
+            var _origAC = Node.prototype.appendChild;
+            Node.prototype.appendChild = function(child) {
+                var r = _origAC.call(this, child);
+                try {
+                    if (child && child.nodeName === 'SCRIPT') {
+                        var typ = (child.getAttribute && child.getAttribute('type')) || '';
+                        if (/module|importmap/i.test(typ)) return r;
+                        var src = child.getAttribute && child.getAttribute('src');
+                        if (src) {
+                            loadAndRunExternalScript(src);
+                        } else {
+                            var code = child.textContent || child.innerHTML || child.text || '';
+                            runScriptCode(code);
+                        }
+                    }
+                } catch (e) {}
+                return r;
+            };
+            try { Node.prototype.appendChild.__iv8ScriptExec = true; } catch (e) {}
+        }
+    } catch (e) {}
 })();
 "#;
 
@@ -2814,6 +2887,8 @@ impl EmbeddedV8Kernel {
             src: Option<String>,
             is_async: bool,
             is_defer: bool,
+            /// type=module / importmap — not executed in offline classic model.
+            skip: bool,
         }
         let scripts: Vec<ScriptInfo> = doc
             .get_elements_by_tag_name("script")
@@ -2824,6 +2899,11 @@ impl EmbeddedV8Kernel {
                 let src = node
                     .and_then(|n| n.value().get_attr("src"))
                     .map(|s| s.to_string());
+                let type_attr = node
+                    .and_then(|n| n.value().get_attr("type"))
+                    .map(|s| s.to_ascii_lowercase())
+                    .unwrap_or_default();
+                let skip = type_attr.contains("module") || type_attr.contains("importmap");
                 let is_async = node
                     .map(|n| n.value().get_attr("async").is_some())
                     .unwrap_or(false);
@@ -2841,6 +2921,7 @@ impl EmbeddedV8Kernel {
                     src,
                     is_async,
                     is_defer,
+                    skip,
                 }
             })
             .collect();
@@ -3006,11 +3087,17 @@ impl EmbeddedV8Kernel {
         };
 
         for (i, script) in scripts.iter().enumerate() {
+            if script.skip {
+                continue;
+            }
             if !script.is_async && !script.is_defer {
                 run_one_script(self, i, script);
             }
         }
         for (i, script) in scripts.iter().enumerate() {
+            if script.skip {
+                continue;
+            }
             if script.is_async {
                 run_one_script(self, i, script);
             }
@@ -3032,6 +3119,9 @@ impl EmbeddedV8Kernel {
 
         // 6b. deferred scripts (document order) before DOMContentLoaded
         for (i, script) in scripts.iter().enumerate() {
+            if script.skip {
+                continue;
+            }
             if script.is_defer {
                 run_one_script(self, i, script);
             }

@@ -147,6 +147,86 @@ def test_document_write_executes_inline_script():
     assert rep["v"] == 7, rep
 
 
+def test_document_write_external_script_from_resource_bundle():
+    """Q070: write('<script src=...>') loads sync via ResourceBundle/XHR."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.add_resource(
+            "https://ex.test/w.js",
+            b"window.__extFromWrite=42;",
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        ctx.page_load("<html><body></body></html>", "https://ex.test/")
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  document.write('<script src="https://ex.test/w.js"><\/script>');
+                  return JSON.stringify({v: window.__extFromWrite});
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["v"] == 42, rep
+
+
+def test_document_open_clears_content():
+    """Q070: document.open() clears children and resets write anchor."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load("<html><body><div id='old'>O</div></body></html>", "https://ex.test/")
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  document.write('<div id="mid">M</div>');
+                  document.open();
+                  var afterOpen = document.getElementById('old') || document.getElementById('mid');
+                  document.write('<div id="new">N</div>');
+                  document.close();
+                  return JSON.stringify({
+                    cleared: !afterOpen,
+                    hasNew: !!document.getElementById('new'),
+                    rs: document.readyState
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["cleared"] is True, rep
+    assert rep["hasNew"] is True, rep
+
+
+def test_create_element_script_append_runs_inline():
+    """W1 gap: createElement('script')+appendChild runs classic inline code."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load("<html><body></body></html>", "https://ex.test/")
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var s = document.createElement('script');
+                  s.textContent = 'window.__dynScript=3';
+                  document.body.appendChild(s);
+                  return JSON.stringify({v: window.__dynScript});
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["v"] == 3, rep
+
+
 def test_hidden_document_timer_floor():
     """Q082 residual: document.hidden applies timers.hidden_min_interval_ms floor."""
 
@@ -183,3 +263,28 @@ def test_blank_context_readystate_complete():
         return str(ctx.eval("document.readyState"))
 
     assert _run(body) == "complete"
+
+
+def test_type_module_script_not_executed_in_offline_page_load():
+    """W1 honesty: type=module scripts are not run (no ESM loader)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load(
+            """
+            <html><body>
+            <script type="module">window.__mod=1</script>
+            <script>window.__classic=1</script>
+            </body></html>
+            """,
+            "https://ex.test/",
+        )
+        return str(
+            ctx.eval(
+                "JSON.stringify({mod: window.__mod, classic: window.__classic})"
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep.get("classic") == 1, rep
+    assert rep.get("mod") is None, rep
