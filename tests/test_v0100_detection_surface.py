@@ -23,6 +23,73 @@ def _run(fn):
     return box["out"]
 
 
+def test_xhr_readystate_sequence_1_2_3_4_with_handler():
+    """Q090: async XHR readyState sequence with network handler + eval_promise drain."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.set_network_handler(lambda url, method: (200, b"ok"))
+        ctx.add_resource("/q090", b"ok", 200, {"Content-Type": "text/plain"})
+        return str(
+            ctx.eval_promise(
+                r"""
+                new Promise(function(resolve){
+                  var states = [];
+                  var x = new XMLHttpRequest();
+                  x.onreadystatechange = function(){
+                    states.push(x.readyState);
+                    if (x.readyState === 4) {
+                      resolve(JSON.stringify({states: states, status: x.status, text: x.responseText}));
+                    }
+                  };
+                  x.open('GET', '/q090');
+                  x.send();
+                })
+                """,
+                200,
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["states"] == [1, 2, 3, 4], rep
+    assert rep["status"] == 200, rep
+    assert rep["text"] == "ok", rep
+
+
+def test_websocket_open_close_lifecycle_stub():
+    """Q092: WebSocket constructor + readyState transitions (stub path)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  if (typeof WebSocket === 'undefined') return JSON.stringify({missing:true});
+                  var ws = new WebSocket('wss://example.invalid/q092');
+                  var openState = ws.readyState;
+                  var closed = false;
+                  try { ws.close(); closed = true; } catch(e) {}
+                  return JSON.stringify({
+                    openState: openState,
+                    afterClose: ws.readyState,
+                    closed: closed,
+                    CONNECTING: WebSocket.CONNECTING,
+                    OPEN: WebSocket.OPEN,
+                    CLOSING: WebSocket.CLOSING,
+                    CLOSED: WebSocket.CLOSED
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep.get("missing") is not True, rep
+    assert rep["CONNECTING"] == 0 and rep["OPEN"] == 1, rep
+    assert rep["closed"] is True, rep
+
+
 def test_window_and_location_getter_names_use_get_prefix():
     """Q012: high-signal accessor getters named get <prop>."""
 
