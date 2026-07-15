@@ -500,15 +500,18 @@ unsafe extern "C" fn method_arg_guard(info: *const v8::FunctionCallbackInfo) {
         let ext: v8::Local<v8::External> = unsafe { v8::Local::cast_unchecked(data) };
         let guard = unsafe { &*(ext.value() as *const MethodGuardData) };
 
-        // Brand first (same policy as run_callback_strict): DOM node OR globalThis.
+        // Brand first: DOM node (NodeId field), DOM collection (NodeList etc.
+        // with internal fields), or globalThis. NodeList/HTMLCollection use
+        // internal fields for payload, not NodeId — require field_count > 0.
         let this = args.this();
         let has_node = extract_node_id_from_internal(scope, this).is_some();
+        let has_dom_brand = this.internal_field_count() > 0;
         let is_global = {
             let ctx = scope.get_current_context();
             let global = ctx.global(scope);
             this.strict_equals(global.into())
         };
-        if !has_node && !is_global {
+        if !has_node && !has_dom_brand && !is_global {
             let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
             let exc = v8::Exception::type_error(scope, msg);
             scope.throw_exception(exc);
@@ -1424,6 +1427,16 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     {
         let proto = node_list.prototype_template(scope);
         install_proto_method_sig_with_length(scope, node_list, proto, "item", node_list_item_cb, 1);
+        install_proto_method_sig_with_length(scope, node_list, proto, "forEach", node_list_foreach_cb, 1);
+        install_proto_method_sig(scope, node_list, proto, "entries", node_list_entries_cb);
+        install_proto_method_sig(scope, node_list, proto, "keys", node_list_keys_cb);
+        install_proto_method_sig(scope, node_list, proto, "values", node_list_values_cb);
+        // Chrome: NodeList.prototype[Symbol.iterator] === values (iterable for for-of / spread).
+        {
+            let values_tmpl = v8::FunctionTemplate::builder_raw(node_list_values_cb).build(scope);
+            let iter_sym = v8::Symbol::get_iterator(scope);
+            proto.set(iter_sym.into(), values_tmpl.into());
+        }
         install_proto_accessor(scope, proto, "length", node_list_length_getter, None);
         set_to_string_tag(scope, proto, "NodeList");
     }
@@ -2398,6 +2411,20 @@ pub fn create_node_object<'s>(
     // SAFETY: we only read this back as a usize, never dereference it
     let external = v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
     obj.set_internal_field(NODE_ID_FIELD as usize, external.into());
+
+    // WebIDL Node.ownerDocument: codegen reads hidden __iv8OwnerDocument.
+    // Document nodes themselves report null; all others point at global document.
+    if !matches!(data, NodeData::Document) {
+        let ctx = scope.get_current_context();
+        let global = ctx.global(scope);
+        let doc_key = crate::v8_utils::v8_string(scope, "document");
+        if let Some(doc_val) = global.get(scope, doc_key.into()) {
+            if !doc_val.is_null_or_undefined() {
+                let od_key = crate::v8_utils::v8_string(scope, "__iv8OwnerDocument");
+                let _ = obj.set(scope, od_key.into(), doc_val);
+            }
+        }
+    }
 
     // Cache as Global reference (strong — prevents GC of cached nodes)
     let global_obj = v8::Global::new(scope, obj);
@@ -4453,9 +4480,17 @@ unsafe extern "C" fn node_list_item_cb(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        // Do not use check_receiver(NodeList): FT prototype may differ from
+        // global NodeList.prototype after install; internal-field brand is enough.
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
+        if this.internal_field_count() == 0 {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
 
         if let Some(idx_val) = args.get(0).uint32_value(scope) {
             let idx = idx_val as usize;
@@ -4491,12 +4526,15 @@ unsafe extern "C" fn node_list_length_getter(info: *const v8::FunctionCallbackIn
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
-        if !crate::shims::native_env::check_receiver(&scope, info_ref, "NodeList") {
-            return;
-        }
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
+        if this.internal_field_count() == 0 {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
 
         let field = this.get_internal_field(scope, 1);
         if let Some(field) = field {
@@ -4512,6 +4550,185 @@ unsafe extern "C" fn node_list_length_getter(info: *const v8::FunctionCallbackIn
             }
         }
         rv.set(v8::Integer::new(scope, 0).into());
+    }));
+}
+
+fn node_list_len_from_this(scope: &v8::PinScope<'_, '_>, this: v8::Local<v8::Object>) -> usize {
+    if this.internal_field_count() > 0 {
+        if let Some(field) = this.get_internal_field(scope, 1) {
+            let value: v8::Local<v8::Value> = unsafe { v8::Local::cast_unchecked(field) };
+            if value.is_external() {
+                let external: v8::Local<v8::External> = unsafe { v8::Local::cast_unchecked(value) };
+                let vec_ptr = external.value() as *const Vec<usize>;
+                if !vec_ptr.is_null() {
+                    return unsafe { &*vec_ptr }.len();
+                }
+            }
+        }
+    }
+    let len_key = crate::v8_utils::v8_string(scope, "length");
+    this.get(scope, len_key.into())
+        .and_then(|v| v.uint32_value(scope))
+        .unwrap_or(0) as usize
+}
+
+fn node_list_to_array<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    this: v8::Local<v8::Object>,
+) -> v8::Local<'s, v8::Array> {
+    let len = node_list_len_from_this(scope, this);
+    let arr = v8::Array::new(scope, len as i32);
+    for i in 0..len {
+        if let Some(v) = this.get_index(scope, i as u32) {
+            arr.set_index(scope, i as u32, v);
+        }
+    }
+    arr
+}
+
+unsafe extern "C" fn node_list_foreach_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        if this.internal_field_count() == 0 {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        if args.length() < 1 || !args.get(0).is_function() {
+            let msg = crate::v8_utils::v8_string(scope, "Failed to execute 'forEach' on 'NodeList'");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let cb: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(args.get(0)) };
+        let this_arg = if args.length() >= 2 {
+            args.get(1)
+        } else {
+            v8::undefined(scope).into()
+        };
+        let len = node_list_len_from_this(scope, this);
+        for i in 0..len {
+            let node_val = this
+                .get_index(scope, i as u32)
+                .unwrap_or_else(|| v8::undefined(scope).into());
+            let idx_val = v8::Integer::new(scope, i as i32);
+            let _ = cb.call(
+                scope,
+                this_arg,
+                &[node_val, idx_val.into(), this.into()],
+            );
+        }
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn node_list_entries_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        if this.internal_field_count() == 0 {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let len = node_list_len_from_this(scope, this);
+        let arr = v8::Array::new(scope, len as i32);
+        for i in 0..len {
+            let pair = v8::Array::new(scope, 2);
+            pair.set_index(scope, 0, v8::Integer::new(scope, i as i32).into());
+            if let Some(v) = this.get_index(scope, i as u32) {
+                pair.set_index(scope, 1, v);
+            }
+            arr.set_index(scope, i as u32, pair.into());
+        }
+        if let Some(values_fn) = arr.get(scope, crate::v8_utils::v8_string(scope, "values").into()) {
+            if values_fn.is_function() {
+                let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(values_fn) };
+                if let Some(iter) = func.call(scope, arr.into(), &[]) {
+                    rv.set(iter);
+                    return;
+                }
+            }
+        }
+        rv.set(arr.into());
+    }));
+}
+
+unsafe extern "C" fn node_list_keys_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        if this.internal_field_count() == 0 {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let len = node_list_len_from_this(scope, this);
+        let arr = v8::Array::new(scope, len as i32);
+        for i in 0..len {
+            arr.set_index(scope, i as u32, v8::Integer::new(scope, i as i32).into());
+        }
+        if let Some(values_fn) = arr.get(scope, crate::v8_utils::v8_string(scope, "values").into()) {
+            if values_fn.is_function() {
+                let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(values_fn) };
+                if let Some(iter) = func.call(scope, arr.into(), &[]) {
+                    rv.set(iter);
+                    return;
+                }
+            }
+        }
+        rv.set(arr.into());
+    }));
+}
+
+unsafe extern "C" fn node_list_values_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        if this.internal_field_count() == 0 {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let arr = node_list_to_array(scope, this);
+        if let Some(values_fn) = arr.get(scope, crate::v8_utils::v8_string(scope, "values").into()) {
+            if values_fn.is_function() {
+                let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(values_fn) };
+                if let Some(iter) = func.call(scope, arr.into(), &[]) {
+                    rv.set(iter);
+                    return;
+                }
+            }
+        }
+        // Fallback: Array.prototype[Symbol.iterator]
+        let iter_sym = v8::Symbol::get_iterator(scope);
+        if let Some(iter_fn) = arr.get(scope, iter_sym.into()) {
+            if iter_fn.is_function() {
+                let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(iter_fn) };
+                if let Some(iter) = func.call(scope, arr.into(), &[]) {
+                    rv.set(iter);
+                    return;
+                }
+            }
+        }
+        rv.set(arr.into());
     }));
 }
 

@@ -27,6 +27,7 @@ develop-eggs/
 # ── Python virtual environments ─────────────────────────────────────────────
 .venv/
 .venv-probe/
+.venv-upstream-iv8/
 venv/
 env/
 ENV/

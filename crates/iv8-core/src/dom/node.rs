@@ -249,8 +249,21 @@ impl Document {
     }
 
     /// Get all elements with a given tag name.
+    ///
+    /// `*` returns every element in tree order (HTMLCollection wildcard).
     pub fn get_elements_by_tag_name(&self, tag: &str) -> Vec<NodeId> {
         let tag_lower = tag.to_ascii_lowercase();
+
+        // Wildcard: all elements in tree order (not a tag-index key).
+        if tag_lower == "*" {
+            let mut out = Vec::new();
+            for node_ref in self.tree.root().descendants() {
+                if matches!(node_ref.value(), NodeData::Element { .. }) {
+                    out.push(node_ref.id());
+                }
+            }
+            return out;
+        }
 
         // Try cached index first
         {
@@ -877,6 +890,10 @@ mod tests {
 
         let ps = doc.get_elements_by_tag_name("p");
         assert_eq!(ps.len(), 0);
+
+        // Wildcard must return every element (html + 2 div + span = 4)
+        let all = doc.get_elements_by_tag_name("*");
+        assert_eq!(all.len(), 4);
     }
 
     #[test]

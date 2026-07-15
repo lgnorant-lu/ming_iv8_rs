@@ -337,6 +337,56 @@ pub const FREEZE_SHIM_PROTOTYPES_JS: &str = r#"
 /// 4. Sets FileReader → EventTarget prototype chain
 /// 5. Moves ScreenOrientation methods to prototype
 pub const FREEZE_ALL_JS: &str = r#"
+    // Iterable collections before preventExtensions (for-of / spread / Array.from edge).
+    // Chrome NodeList/HTMLCollection expose values + Symbol.iterator; missing iterator
+    // aborts VMP install after getElementsByTagName('*').
+    (function() {
+        function installCollectionIterable(proto) {
+            if (!proto || !Object.isExtensible(proto)) return;
+            if (typeof proto.forEach !== 'function') {
+                try {
+                    Object.defineProperty(proto, 'forEach', {
+                        value: function forEach(cb, thisArg) {
+                            if (typeof cb !== 'function') throw new TypeError('callback is not a function');
+                            for (var i = 0; i < this.length; i++) {
+                                cb.call(thisArg, this[i], i, this);
+                            }
+                        },
+                        writable: true, configurable: true, enumerable: true
+                    });
+                } catch(e) {}
+            }
+            if (typeof proto.values !== 'function') {
+                try {
+                    Object.defineProperty(proto, 'values', {
+                        value: function values() {
+                            var i = 0, self = this;
+                            return {
+                                next: function() {
+                                    if (i < self.length) return { value: self[i++], done: false };
+                                    return { value: undefined, done: true };
+                                },
+                                [Symbol.iterator]: function() { return this; }
+                            };
+                        },
+                        writable: true, configurable: true, enumerable: true
+                    });
+                } catch(e) {}
+            }
+            if (typeof Symbol !== 'undefined' && Symbol.iterator && typeof proto[Symbol.iterator] !== 'function') {
+                try {
+                    Object.defineProperty(proto, Symbol.iterator, {
+                        value: proto.values,
+                        writable: true, configurable: true, enumerable: false
+                    });
+                } catch(e) {}
+            }
+        }
+        try { installCollectionIterable(typeof NodeList !== 'undefined' && NodeList.prototype); } catch(e) {}
+        try { installCollectionIterable(typeof HTMLCollection !== 'undefined' && HTMLCollection.prototype); } catch(e) {}
+        try { installCollectionIterable(typeof HTMLOptionsCollection !== 'undefined' && HTMLOptionsCollection.prototype); } catch(e) {}
+        try { installCollectionIterable(typeof HTMLAllCollection !== 'undefined' && HTMLAllCollection.prototype); } catch(e) {}
+    })();
     (function() {
         var names = Object.getOwnPropertyNames(globalThis);
         for (var i = 0; i < names.length; i++) {
