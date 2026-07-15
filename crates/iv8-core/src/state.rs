@@ -223,6 +223,24 @@ pub enum TimeMode {
 }
 
 impl RuntimeState {
+    /// Layer C LC-2 helper: install document (single path for page_load / set_document).
+    pub fn set_document(&self, doc: Document) {
+        *self.document.borrow_mut() = Some(doc);
+    }
+
+    /// Layer C: take document out (for streaming finish handoff). Prefer set_document.
+    pub fn take_document(&self) -> Option<Document> {
+        self.document.borrow_mut().take()
+    }
+
+    /// Layer C LC-2: view as DocRc only when needed (clones tree — temporary until
+    /// full Option<DocRc> migration). Prefer borrowing `document` for hot paths.
+    pub fn document_as_rc(&self) -> Option<crate::dom::DocRc> {
+        // Document is not Clone; full DocRc ownership is LC-2 complete migration.
+        // Until then StreamingHtmlParser owns its own tree (Layer B).
+        None
+    }
+
     /// Create a new RuntimeState with the given configuration.
     pub fn new(
         strict_compat: bool,

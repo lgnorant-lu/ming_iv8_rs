@@ -149,7 +149,7 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
             }
 
             // Store document
-            *state.document.borrow_mut() = Some(doc);
+            state.set_document(doc);
             state.node_cache.borrow_mut().clear();
             state.attr_cache.borrow_mut().clear();
             state.style_cache.borrow_mut().clear();

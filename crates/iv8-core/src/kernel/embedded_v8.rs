@@ -3290,7 +3290,7 @@ impl EmbeddedV8Kernel {
         // Store in RuntimeState
         {
             let state = RuntimeState::get(&self.isolate);
-            *state.document.borrow_mut() = Some(doc);
+            state.set_document(doc);
             state.node_cache.borrow_mut().clear();
             state.attr_cache.borrow_mut().clear();
             state.style_cache.borrow_mut().clear();
@@ -3403,7 +3403,7 @@ impl EmbeddedV8Kernel {
         // 3. Store document in RuntimeState
         {
             let state = RuntimeState::get(&self.isolate);
-            *state.document.borrow_mut() = Some(doc);
+            state.set_document(doc);
             state.node_cache.borrow_mut().clear();
             state.attr_cache.borrow_mut().clear();
             state.style_cache.borrow_mut().clear();
