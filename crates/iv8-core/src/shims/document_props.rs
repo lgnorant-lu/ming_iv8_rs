@@ -91,18 +91,28 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             return parts.join('; ');
         },
         set: function(val) {
-            var str = String(val);
+            // Sites may overwrite global String; avoid .trim on non-strings.
+            function _s(x) {
+                if (typeof x === 'string') return x;
+                if (x == null) return '';
+                try { return '' + x; } catch (e) { return ''; }
+            }
+            function _t(x) {
+                return _s(x).replace(/^\s+|\s+$/g, '');
+            }
+            var str = _s(val);
             var parts = str.split(';');
-            var kv = parts[0].split('=');
-            if (kv.length < 2) return;
-            var name = kv[0].trim();
-            var value = kv.slice(1).join('=').trim();
+            var head = _s(parts[0]);
+            var eq = head.indexOf('=');
+            if (eq < 0) return;
+            var name = _t(head.substring(0, eq));
+            var value = _t(head.substring(eq + 1));
 
             // Parse attributes from remaining segments
             var attrs = {};
             var hasAttrs = false;
             for (var i = 1; i < parts.length; i++) {
-                var attr = parts[i].trim();
+                var attr = _t(parts[i]);
                 var lower = attr.toLowerCase();
                 if (lower === 'secure')        { attrs.secure = true; hasAttrs = true; }
                 else if (lower === 'httponly') { attrs.httpOnly = true; hasAttrs = true; }
@@ -1617,16 +1627,26 @@ pub const COOKIE_REINSTALL_JS: &str = r#"
             return parts.join('; ');
         },
         set: function(val) {
-            var str = String(val);
+            // Sites may overwrite global String; avoid .trim on non-strings.
+            function _s(x) {
+                if (typeof x === 'string') return x;
+                if (x == null) return '';
+                try { return '' + x; } catch (e) { return ''; }
+            }
+            function _t(x) {
+                return _s(x).replace(/^\s+|\s+$/g, '');
+            }
+            var str = _s(val);
             var parts = str.split(';');
-            var kv = parts[0].split('=');
-            if (kv.length < 2) return;
-            var name = kv[0].trim();
-            var value = kv.slice(1).join('=').trim();
+            var head = _s(parts[0]);
+            var eq = head.indexOf('=');
+            if (eq < 0) return;
+            var name = _t(head.substring(0, eq));
+            var value = _t(head.substring(eq + 1));
             var attrs = {};
             var hasAttrs = false;
             for (var i = 1; i < parts.length; i++) {
-                var attr = parts[i].trim();
+                var attr = _t(parts[i]);
                 var lower = attr.toLowerCase();
                 if (lower === 'secure') { attrs.secure = true; hasAttrs = true; }
                 else if (lower === 'httponly') { attrs.httpOnly = true; hasAttrs = true; }
