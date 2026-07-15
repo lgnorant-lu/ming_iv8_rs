@@ -71,8 +71,12 @@ impl StreamingHtmlParser {
         }
         match self.tokenizer.feed(&self.input_buffer) {
             html5ever::TokenizerResult::Script(node) => StreamFeedResult::Script(node),
-            // html5ever 0.39+: encoding label from meta; UTF-8 host may ignore.
-            html5ever::TokenizerResult::EncodingIndicator(_) => StreamFeedResult::NeedMore,
+            // html5ever 0.39+: encoding label from meta; UTF-8 host logs + continues.
+            html5ever::TokenizerResult::EncodingIndicator(label) => {
+                let s = label.to_string();
+                crate::telemetry::html_encoding_indicator(&s);
+                StreamFeedResult::NeedMore
+            }
             html5ever::TokenizerResult::Done => StreamFeedResult::NeedMore,
         }
     }

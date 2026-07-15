@@ -299,6 +299,8 @@ fn worker_thread_main(
         v8::CreateParams::default().heap_limits(0, 2048 * 1024 * 1024),
     );
     isolate.set_microtasks_policy(v8::MicrotasksPolicy::Explicit);
+    // Worker dynamic import() — same ResourceBundle snapshot as static resolve.
+    isolate.set_host_import_module_dynamically_callback(worker_host_import_module_dynamically);
 
     let isolate_handle = isolate.thread_safe_handle();
     let _ = handle_tx.send(isolate_handle);
@@ -799,4 +801,102 @@ fn worker_resolve_module_callback<'s>(
     let hash = module.get_identity_hash().get();
     state.esm_module_urls.borrow_mut().insert(hash, url);
     Some(module)
+}
+
+/// Dynamic import() in worker modules (uses worker isolate ResourceBundle).
+fn worker_host_import_module_dynamically<'s>(
+    scope: &mut v8::PinScope<'s, '_>,
+    _host_defined_options: v8::Local<'s, v8::Data>,
+    _resource_name: v8::Local<'s, v8::Value>,
+    specifier: v8::Local<'s, v8::String>,
+    _import_attributes: v8::Local<'s, v8::FixedArray>,
+) -> Option<v8::Local<'s, v8::Promise>> {
+    let spec = specifier.to_rust_string_lossy(scope);
+    let resolver = v8::PromiseResolver::new(scope)?;
+    let promise = resolver.get_promise(scope);
+    let isolate: &v8::Isolate = &*scope;
+    let state = crate::state::RuntimeState::get(isolate);
+    let url = if spec.starts_with("http://")
+        || spec.starts_with("https://")
+        || spec.starts_with("data:")
+    {
+        spec.clone()
+    } else {
+        // Relative to about:blank worker — require absolute in bundle for phase-1.
+        spec.clone()
+    };
+    let code = {
+        let bundle = state.resource_bundle.borrow();
+        if let Some(rest) = url.strip_prefix("data:text/javascript,") {
+            Some(rest.to_string())
+        } else {
+            bundle
+                .get(&url)
+                .map(|r| String::from_utf8_lossy(&r.body).to_string())
+        }
+    };
+    let Some(code) = code else {
+        let msg = crate::v8_utils::v8_string(
+            scope,
+            &format!("Worker import() failed to resolve '{spec}'"),
+        );
+        let exc = v8::Exception::type_error(scope, msg);
+        let _ = resolver.reject(scope, exc);
+        return Some(promise);
+    };
+    let source_str = match v8::String::new(scope, &code) {
+        Some(s) => s,
+        None => {
+            let msg = crate::v8_utils::v8_string(scope, "module source too long");
+            let exc = v8::Exception::error(scope, msg);
+            let _ = resolver.reject(scope, exc);
+            return Some(promise);
+        }
+    };
+    let name = v8::String::new(scope, &url).unwrap_or_else(|| crate::v8_utils::v8_string(scope, "<import>"));
+    let origin = v8::ScriptOrigin::new(
+        scope,
+        name.into(),
+        0,
+        0,
+        false,
+        0,
+        None,
+        false,
+        false,
+        true,
+        None,
+    );
+    let mut sc_source = v8::script_compiler::Source::new(source_str, Some(&origin));
+    let module = match v8::script_compiler::compile_module(scope, &mut sc_source) {
+        Some(m) => m,
+        None => {
+            let m = crate::v8_utils::v8_string(scope, "worker module compile failed");
+            let exc = v8::Exception::syntax_error(scope, m);
+            let _ = resolver.reject(scope, exc);
+            return Some(promise);
+        }
+    };
+    {
+        let hash = module.get_identity_hash().get();
+        state.esm_module_urls.borrow_mut().insert(hash, url);
+    }
+    if module.instantiate_module(scope, worker_resolve_module_callback) != Some(true) {
+        let msg = crate::v8_utils::v8_string(scope, "worker module instantiate failed");
+        let exc = v8::Exception::type_error(scope, msg);
+        let _ = resolver.reject(scope, exc);
+        return Some(promise);
+    }
+    match module.evaluate(scope) {
+        Some(_) => {
+            let ns = module.get_module_namespace();
+            let _ = resolver.resolve(scope, ns);
+        }
+        None => {
+            let msg = crate::v8_utils::v8_string(scope, "worker module evaluate failed");
+            let exc = v8::Exception::error(scope, msg);
+            let _ = resolver.reject(scope, exc);
+        }
+    }
+    Some(promise)
 }

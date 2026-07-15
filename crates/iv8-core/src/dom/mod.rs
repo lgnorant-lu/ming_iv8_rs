@@ -20,3 +20,13 @@ pub use parser::{
     parse_html, parse_html_with_script_pauses, StreamFeedResult, StreamingHtmlParser,
 };
 pub use selector::Selector;
+
+/// Layer C LC-1: shared ownership handle for the live document tree.
+/// Product path still stores `Option<Document>` in RuntimeState; migration to
+/// `Option<DocRc>` is tracked in `docs/todo/TODO-layer-c.md`.
+pub type DocRc = std::rc::Rc<std::cell::RefCell<Document>>;
+
+/// Create a new shared document handle (Layer C scaffold).
+pub fn doc_rc_new(doc: Document) -> DocRc {
+    std::rc::Rc::new(std::cell::RefCell::new(doc))
+}

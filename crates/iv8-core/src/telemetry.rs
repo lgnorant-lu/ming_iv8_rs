@@ -440,6 +440,11 @@ pub fn v8_fatal_error(file: &str, line: i32, message: &str) {
 
 /// V8 out-of-memory error.
 /// Safety: Safe (location and heap flag only)
+/// html5ever 0.39+ meta charset / encoding label during streaming parse.
+pub fn html_encoding_indicator(label: &str) {
+    tracing::debug!(target: "iv8.dom", label = %label, "html encoding indicator (UTF-8 host continues)");
+}
+
 pub fn v8_oom(location: &str, is_heap_oom: bool) {
     tracing::error!(
         target: "iv8.callback",
