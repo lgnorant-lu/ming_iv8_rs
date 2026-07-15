@@ -103,14 +103,16 @@ pub fn instrument_source(
         })?
     };
 
-    // Step 2: Generate source-head Proxy code (for env tracking)
-    // Default env Proxy targets (v0.8.101): omit `screen`.
-    // TDC ChaosVM: Proxy(screen) alone drops TDC.setData after init while getData
-    // remains (proven 2026-07-15 A/B). Users can still pass env_targets including
-    // "screen" when they need screen read traces and accept API surface risk.
+    // Step 2: Generate source-head Proxy code (for env tracking).
+    // Default = full common surface list. Control via:
+    //   - capture_env=false  → no env Proxies
+    //   - env_targets=[...]  → exact allow-list of global names to wrap
+    // Host-object safe: Reflect.get(target, prop, target) so brand-checked
+    // getters (screen.width, navigator.userAgent, …) do not Illegal invocation.
     let targets = env_targets.unwrap_or_else(|| {
         vec![
             "navigator".into(),
+            "screen".into(),
             "document".into(),
             "location".into(),
             "Math".into(),
@@ -149,11 +151,20 @@ pub fn instrument_source(
         "path A: source rewrite works for closure-scoped handlers; \
          instrument_chaosvm requires global handler table",
     )?;
-    info.set_item("env_targets", targets.clone())?;
+    info.set_item(
+        "env_targets",
+        if capture_env {
+            targets.clone()
+        } else {
+            Vec::<String>::new()
+        },
+    )?;
+    info.set_item("capture_env", capture_env)?;
     info.set_item(
         "env_proxy_note",
-        "default env Proxies omit screen (TDC setData breaks if screen is proxied); \
-         pass env_targets=[...,'screen'] to opt in",
+        "default env_targets = full list (navigator/screen/document/location/Math/crypto/performance); \
+         override with env_targets=[...] allow-list, or capture_env=false to disable. \
+         Proxies use Reflect.get/set(target, prop, target) for host-object brand safety.",
     )?;
 
     Ok((patched, info.into_any().unbind()))
@@ -346,30 +357,35 @@ fn generate_head_code(capture_env: bool, env_targets_json: &str, limit: u32) -> 
     ));
 
     if capture_env {
+        // Reflect.get/set use **target** as receiver (not the Proxy). Native host
+        // getters (Screen/Navigator/Location/…) brand-check `this`; using the Proxy
+        // as receiver throws Illegal invocation and can break init (e.g. TDC setData).
         code.push_str(&format!(r#";(function(){{
 var L=globalThis.__iv8i_log__,M=globalThis.__iv8i_lim__;
 var T={targets};
 T.forEach(function(nm){{
   var obj=globalThis[nm];
-  if(!obj||typeof obj!=='object')return;
+  if(!obj||(typeof obj!=='object'&&typeof obj!=='function'))return;
   try{{
     globalThis[nm]=new Proxy(obj,{{
-      get:function(t,p,r){{
-        var v=Reflect.get(t,p,r);
+      get:function(t,p,_r){{
+        var v;
+        try{{ v=Reflect.get(t,p,t); }}catch(_e){{ try{{ v=t[p]; }}catch(_e2){{ return; }} }}
         if(typeof p==='symbol'||p==='then'||p==='toJSON'||p==='constructor')return v;
         if(typeof v==='function'){{
           return function(){{
-            var res=v.apply(t,arguments);
-            if(L.length<M)L.push('C,'+globalThis.__iv8i_pc__+','+nm+'.'+p+','+String(res).slice(0,50));
+            var res;
+            try{{ res=v.apply(t,arguments); }}catch(_e){{ res=v.apply(this,arguments); }}
+            if(L.length<M)L.push('C,'+globalThis.__iv8i_pc__+','+nm+'.'+String(p)+','+String(res).slice(0,50));
             return res;
           }};
         }}
-        if(L.length<M)L.push('R,'+globalThis.__iv8i_pc__+','+nm+'.'+p+','+String(v).slice(0,50));
+        if(L.length<M)L.push('R,'+globalThis.__iv8i_pc__+','+nm+'.'+String(p)+','+String(v).slice(0,50));
         return v;
       }},
-      set:function(t,p,v,r){{
-        if(L.length<M)L.push('W,'+globalThis.__iv8i_pc__+','+nm+'.'+p+','+String(v).slice(0,50));
-        return Reflect.set(t,p,v,r);
+      set:function(t,p,v,_r){{
+        if(L.length<M)L.push('W,'+globalThis.__iv8i_pc__+','+nm+'.'+String(p)+','+String(v).slice(0,50));
+        try{{ return Reflect.set(t,p,v,t); }}catch(_e){{ try{{ t[p]=v; return true; }}catch(_e2){{ return false; }} }}
       }}
     }});
   }}catch(e){{}}

@@ -156,7 +156,7 @@ def test_instrument_source_multi_site_synthetic():
 
 
 def test_tdc_instrument_source_preserves_setdata_and_collect():
-    """v0.8.101: default env Proxies must not drop TDC.setData (screen was the culprit)."""
+    """v0.8.101: host-safe env Proxies (incl. screen) must keep TDC.setData + collect."""
     import iv8_rs
 
     def body():
@@ -175,11 +175,13 @@ def test_tdc_instrument_source_preserves_setdata_and_collect():
                 "outerHeight": 1200,
             },
         }
+        # Default full targets (includes screen) after host-safe Reflect fix
         patched, info = iv8_rs.instrument_source(src)
         ctx = iv8_rs.JSContext(environment=env)
         ctx.eval(patched)
         set_t = ctx.eval("typeof TDC !== 'undefined' ? typeof TDC.setData : 'no'")
         get_t = ctx.eval("typeof TDC !== 'undefined' ? typeof TDC.getData : 'no'")
+        sw = ctx.eval("typeof screen !== 'undefined' ? screen.width : null")
         if set_t == "function":
             ctx.eval("TDC.setData({ft:'tf'})")
         collect = ctx.eval('decodeURIComponent(TDC.getData(true) || "")') or ""
@@ -192,6 +194,7 @@ def test_tdc_instrument_source_preserves_setdata_and_collect():
             "collect_len": len(collect) if isinstance(collect, str) else -1,
             "d_n": d_n,
             "has_screen_proxy": "screen" in targets,
+            "screen_width": sw,
             "env_note": bool(info.get("env_proxy_note")),
         }
 
@@ -200,5 +203,30 @@ def test_tdc_instrument_source_preserves_setdata_and_collect():
     assert rep["getData"] == "function", rep
     assert rep["collect_len"] > 100, rep
     assert rep["d_n"] > 100, rep
-    assert rep["has_screen_proxy"] is False, rep
+    assert rep["has_screen_proxy"] is True, rep  # default full list
+    assert rep["screen_width"] is not None, rep
     assert rep["env_note"] is True, rep
+
+
+def test_instrument_source_env_targets_allowlist():
+    """v0.8.101: env_targets controls which globals get Proxies; capture_env=false disables."""
+    import iv8_rs
+
+    def body():
+        src = "B[g[D++]]();"
+        _, info_full = iv8_rs.instrument_source(src, mode="chaosvm")
+        _, info_nav = iv8_rs.instrument_source(
+            src, mode="chaosvm", env_targets=["navigator"]
+        )
+        _, info_off = iv8_rs.instrument_source(src, mode="chaosvm", capture_env=False)
+        return {
+            "full": info_full.get("env_targets"),
+            "nav_only": info_nav.get("env_targets"),
+            "off": info_off.get("env_targets"),
+        }
+
+    rep = _run(body)
+    assert "screen" in (rep["full"] or []), rep
+    assert rep["nav_only"] == ["navigator"], rep
+    # capture_env=false still reports the resolved list used for generation (empty wrap)
+    assert isinstance(rep["off"], list), rep
