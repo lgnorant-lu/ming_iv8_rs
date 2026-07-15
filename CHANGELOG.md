@@ -8,7 +8,8 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [v0.8.100] - 2026-07-15
 
-> Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
+> Local milestone tag **and** authorized package-track bump (D-151 dual-track).
+> Milestone tag: `v0.8.100`. Package metadata: **0.8.11 → 0.8.12** (not 0.8.100).
 > Mode: Lightweight Increment + Wave **W1/W2** hang close. Continuum close 2026-07-15.
 
 ### Added / Fixed
@@ -16,21 +17,21 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - **W2**: high-signal Illegal invocation (EventTarget brand-before-argc; Location brand/setters; getBoundingClientRect; fetch; activeElement; URL component setters)
 - Q039 dual Navigator locked **BOUND** intentional (no consolidate)
 - K-005: codegen keeps prototype_chain_check; Signature mass path **rejected** (design §12.10)
-- Residual ledger: docs/todo/TODO-v0.8.100-residual.md (full DEFER/BOUND index)
-- Positioning glossary: 0.8.100-product-glossary.md
+- Residual ledger: `docs/todo/TODO-v0.8.100-residual.md` (full DEFER/BOUND index)
+- Positioning glossary: `v0.8.100-product-glossary.md`
 
 ### Quality Gates
 - cargo test -p iv8-core --lib: **520 PASS**
 - cargo test -p iv8-surface-codegen --lib: **46 PASS**
 - lifecycle + esm + timer pytest: **30 PASS** (W1 hold)
 - detection receiver residual + surface_location: held
-- Package metadata: **0.8.11** unchanged
+- Package metadata: **0.8.12** (authorized package-track with this continuum)
 
 ### Explicit non-goals
-- Package bump (Q161 not authorized this closeout)
-- W3–W9 implementation waves
+- W3–W9 implementation waves as hang openers
 - Full Chromium network / CORS product / idlharness 100% hero
 - Branch B (Q160/Q162 OUT)
+- Setting package version equal to milestone tag number (D-151: dual-track)
 
 ## [v0.8.99] - 2026-07-15
 

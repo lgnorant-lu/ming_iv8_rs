@@ -3,10 +3,11 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.99 closed continuum (S7 multi-bundler Branch A + sample-track param parity; package 0.8.11 D-151) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.100 closed continuum (W1 Layer C + W2 receiver high-signal; residual DEFER/BOUND walls; package **0.8.12** D-151) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
+- **v0.8.100 W1/W2 hang close**: Layer C DocRc streaming `page_load`; Q070/Q080/Q081/Q082 lifecycle/timer/write; html5ever 0.39; Worker module static+dynamic import; high-signal Illegal invocation (EventTarget brand-first, Location, fetch, gBR, activeElement, URL setters); Q039 dual Nav BOUND; residual ledger `docs/todo/TODO-v0.8.100-residual.md`
 - **v0.8.99 S7 bundler**: BDMS minified detect; factory install; edges/cycles/chunk_id; named webpackChunk*; preload; AMD subset; VLQ; L0–L2 fixtures
 - **v0.8.98 S6 plane+probes**: hybrid exists-all IDL pack; Event isTrusted/Worker.length/HTMLAll brand-check; high-signal consistency tests; coverage matrix
 - **v0.8.97 S5 canvas+storage residual**: CanvasGradient.prototype link; WebGL D-111 UNMASKED_*; OfflineAudio oncomplete; localStorage singleton getters + own setItem + soft quota
@@ -74,7 +75,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Diagnostic-to-Substrate Bridge M2 (v0.8.41)**: before/after delta contract and repair candidate ledger; 1469 Python PASS.
 - **Runtime Repair Harness M1 (v0.8.42)**: repair brief, evidence bundle manifest, validation plan, and readiness classification; 1481 Python PASS.
 - **L3 P0 Navigator/Profile Runtime Batch M1 (v0.8.43)**: first evidence-driven Rust runtime mutation; Navigator value projection from v0.8.42 repair briefs with before/after delta validation; 1490 Python PASS.
-Current `0.8.11` package release scope. v0.8.12-v0.8.78 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked pending M7 gate audit.
+Current package metadata: **0.8.12** (authorized package-track bump with v0.8.100 continuum closeout; D-151 dual-track). Milestone tags `v0.8.12`–`v0.8.100` remain local milestones; package version need not match every tag number. v0.9 holding track blocked pending M7 gate audit.
 
 ## Install
 
