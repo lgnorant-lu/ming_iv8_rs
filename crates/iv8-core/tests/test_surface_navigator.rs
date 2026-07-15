@@ -299,36 +299,34 @@ fn test_conditional_share_visible_on_mobile() {
 }
 
 // ── v0.8.70 Slice 0: WorkerNavigator Runtime Preflight ──────────
+// WorkerNavigator is worker-only: Window mode deletes it via WORKER_ONLY_DELETE_JS
+// (Chrome parity). Preflight must use worker_mode kernels.
+
+#[test]
+fn test_worker_navigator_absent_in_window_mode() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "typeof WorkerNavigator", "undefined");
+}
 
 #[test]
 fn test_worker_navigator_typeof() {
-    let mut k = common::make_kernel();
-    // Generated skeleton should install WorkerNavigator constructor
-    common::assert_js_str(
-        &mut k,
-        "typeof WorkerNavigator",
-        "function",
-    );
+    let mut k = common::make_kernel_worker();
+    common::assert_js_str(&mut k, "typeof WorkerNavigator", "function");
 }
 
 #[test]
 fn test_worker_navigator_prototype_exists() {
-    let mut k = common::make_kernel();
-    // WorkerNavigator.prototype must be an object
-    common::assert_js_str(
-        &mut k,
-        "typeof WorkerNavigator.prototype",
-        "object",
-    );
+    let mut k = common::make_kernel_worker();
+    common::assert_js_str(&mut k, "typeof WorkerNavigator.prototype", "object");
 }
 
 #[test]
 fn test_worker_navigator_constructor_throws() {
-    let mut k = common::make_kernel();
+    let mut k = common::make_kernel_worker();
     // new WorkerNavigator() should throw TypeError (Illegal constructor)
     let result = k.eval_to_rust_value(
         "'use strict'; try { new WorkerNavigator(); 'ok' } \
-         catch(e) { e.constructor.name }"
+         catch(e) { e.constructor.name }",
     );
     assert_eq!(
         common::to_str(&result),
@@ -339,8 +337,7 @@ fn test_worker_navigator_constructor_throws() {
 
 #[test]
 fn test_worker_navigator_not_enumerable() {
-    let mut k = common::make_kernel();
-    // WorkerNavigator constructor should be DONT_ENUM on global
+    let mut k = common::make_kernel_worker();
     common::assert_js_str(
         &mut k,
         "Object.prototype.propertyIsEnumerable\
