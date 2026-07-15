@@ -3477,15 +3477,27 @@ impl EmbeddedV8Kernel {
                                     let doc: v8::Local<v8::Object> =
                                         unsafe { v8::Local::cast_unchecked(dv) };
                                     let cs = crate::v8_utils::v8_string(scope, "currentScript");
+                                    // Prefer accessor setter path (document_props _currentScript).
                                     let _ = doc.set(scope, cs.into(), obj.into());
                                 }
                             }
                         }
                     });
-
-                    // Fallback: bind first unexecuted classic script element as currentScript
+                    // Ensure JS-side _currentScript is set (accessor may be shadowed).
                     let _ = self.eval(
                         r#"(function(){
+                          try {
+                            var cs = document.currentScript;
+                            if (cs) { cs.__iv8StreamRan = true; }
+                          } catch (e) {}
+                        })()"#,
+                        crate::kernel::EvalOpts::default(),
+                    );
+
+                    // Fallback only if native bind left currentScript null (identity mismatch).
+                    let _ = self.eval(
+                        r#"(function(){
+                          if (document.currentScript) return;
                           var list = document.getElementsByTagName('script');
                           for (var i = 0; i < list.length; i++) {
                             var s = list[i];

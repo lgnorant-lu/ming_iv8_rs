@@ -188,12 +188,11 @@ def test_parse_time_write_inserts_after_running_script():
         )
 
     rep = json.loads(_run(body))
-    # currentScript binding is best-effort under stream; write placement is critical
     assert rep["mid"] is True, rep
     order = rep["order"]
     assert order.index("SCRIPT") < order.index("mid") < order.index("after"), order
-    if rep.get("cs") is not None:
-        assert rep["cs"] == "SCRIPT", rep
+    # Stream pause must bind currentScript for classic scripts (Q070 / Layer C).
+    assert rep.get("cs") == "SCRIPT", rep
 
 
 def test_document_open_write_close_rebuilds_via_page_load():

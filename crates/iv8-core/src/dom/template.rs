@@ -6833,12 +6833,14 @@ unsafe extern "C" fn option_selected_getter(info: *const v8::FunctionCallbackInf
     run_accessor(info, |scope, rv, state, node_id| {
         let selected = {
             let _drc = state.document.borrow().clone();
-            _drc.as_ref().map(|rc| {
-                let d = rc.borrow();
-                d.get(node_id)
-                    .and_then(|n| n.value().get_attr("selected"))
-                    .is_some()
-            }).is_some()
+            _drc.as_ref()
+                .map(|rc| {
+                    let d = rc.borrow();
+                    d.get(node_id)
+                        .and_then(|n| n.value().get_attr("selected"))
+                        .is_some()
+                })
+                .unwrap_or(false)
         };
         rv.set(v8::Boolean::new(scope, selected).into());
     });
