@@ -165,25 +165,50 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         return true;
     }
 
+    function insertAdjacentFromNode(node, position, html) {
+        // Comment nodes may lack insertAdjacentHTML; use Element.prototype.
+        var fn = null;
+        try {
+            if (node && typeof node.insertAdjacentHTML === 'function') {
+                fn = node.insertAdjacentHTML;
+            }
+        } catch (e) {}
+        if (!fn && typeof Element !== 'undefined' && Element.prototype.insertAdjacentHTML) {
+            fn = Element.prototype.insertAdjacentHTML;
+        }
+        if (!fn) throw new TypeError('insertAdjacentHTML unavailable');
+        return fn.call(node, position, html);
+    }
+
     function doWrite(html) {
-        // Case 1: after currentScript — sentinel tracks sequential writes
+        // Case 1: after currentScript — use Element.afterend (Comment has no IAH).
+        // Track last written element via a marker element for sequential writes.
         if (__iv8_write_anchor === null) {
             var script = document.currentScript;
             if (script && script.parentNode) {
                 try {
-                    var sentinel = document.createComment('iv8-write');
-                    script.parentNode.insertBefore(sentinel, script.nextSibling);
                     var root1 = script.parentNode;
                     var before1 = countScripts(root1);
+                    // Marker element (not comment) so insertAdjacentHTML works.
+                    var marker = document.createElement('span');
+                    marker.setAttribute('data-iv8-write', '1');
+                    marker.style && (marker.style.display = 'none');
+                    if (script.nextSibling) {
+                        root1.insertBefore(marker, script.nextSibling);
+                    } else {
+                        root1.appendChild(marker);
+                    }
                     try {
-                        sentinel.insertAdjacentHTML('beforebegin', html);
-                    } catch (e0) {}
+                        marker.insertAdjacentHTML('beforebegin', html);
+                    } catch (e0) {
+                        try { script.insertAdjacentHTML('afterend', html); } catch (e00) {}
+                    }
                     if (countScripts(root1) <= before1 && /<script[\s>]/i.test(html)) {
                         materializeScriptsFallback(html, root1);
                     } else {
                         runNewScripts(root1, before1);
                     }
-                    __iv8_write_anchor = sentinel;
+                    __iv8_write_anchor = marker;
                     return;
                 } catch(e) {
                     __iv8_write_anchor = null;
@@ -191,14 +216,18 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
             }
         }
 
-        // Case 2: subsequent write before sentinel
+        // Case 2: subsequent write before marker
         if (__iv8_write_anchor && __iv8_write_anchor.parentNode) {
             try {
                 var root2 = __iv8_write_anchor.parentNode;
                 var before2 = countScripts(root2);
                 try {
                     __iv8_write_anchor.insertAdjacentHTML('beforebegin', html);
-                } catch (e1) {}
+                } catch (e1) {
+                    try {
+                        insertAdjacentFromNode(__iv8_write_anchor, 'beforebegin', html);
+                    } catch (e2) {}
+                }
                 if (countScripts(root2) <= before2 && /<script[\s>]/i.test(html)) {
                     materializeScriptsFallback(html, root2);
                 } else {
@@ -222,6 +251,11 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
 
     document.write = function() {
         var html = Array.prototype.join.call(arguments, '');
+        // Deep open stream: buffer until close() for full document rebuild.
+        if (document.__iv8OpenStream) {
+            document.__iv8OpenBuf = (document.__iv8OpenBuf || '') + html;
+            return;
+        }
         doWrite(html);
     };
     document.writeln = function() {
@@ -229,7 +263,7 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         document.write(args.join(' ') + '\n');
     };
     document.open = function() {
-        // Q070: reset write anchor and clear document children (shallow open).
+        // Q070 deep open: reset write stream; clear tree; enter loading.
         __iv8_write_anchor = null;
         try {
             while (document.firstChild) {
@@ -243,14 +277,50 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
             } catch (e2) {}
         }
         try { document.readyState = 'loading'; } catch (e3) {}
+        // Marker: next write(s) until close rebuild a full document via parse.
+        document.__iv8OpenStream = true;
+        document.__iv8OpenBuf = '';
         return document;
     };
     document.close = function() {
+        try {
+            if (document.__iv8OpenStream && document.__iv8OpenBuf) {
+                var html = String(document.__iv8OpenBuf);
+                document.__iv8OpenStream = false;
+                document.__iv8OpenBuf = '';
+                __iv8_write_anchor = null;
+                // Rebuild via full html5ever parse (deep open/write/close).
+                // __iv8__ is MarkAsUndetectable: typeof undefined, boolean-false, but
+                // property access (__iv8__.page.load) still works — never truthiness-test it.
+                var loaded = false;
+                try {
+                    var href = (typeof location !== 'undefined' && location.href) ? location.href : '';
+                    __iv8__.page.load({ baseURL: href, html: html });
+                    loaded = true;
+                } catch (el) {}
+                if (loaded) {
+                    try {
+                        var te = document.querySelector('title');
+                        if (te && te.textContent) {
+                            try { document.title = te.textContent; } catch (et) {}
+                        }
+                    } catch (et2) {}
+                    return;
+                }
+                // Fallback: body path
+                var body = ensureBody();
+                body.insertAdjacentHTML('beforeend', html);
+            }
+        } catch (e0) {}
         try {
             if (document.readyState === 'loading') {
                 document.readyState = 'complete';
             }
         } catch (e) {}
+        try {
+            document.__iv8OpenStream = false;
+            document.__iv8OpenBuf = '';
+        } catch (e2) {}
     };
 
     // createElement('script') + appendChild should run classic inline scripts.
@@ -3174,6 +3244,7 @@ impl EmbeddedV8Kernel {
 
         // 2. Collect script info before storing document (Q081: classic / defer / async).
         struct ScriptInfo {
+            node_id: crate::dom::NodeId,
             inline: Option<String>,
             src: Option<String>,
             is_async: bool,
@@ -3209,6 +3280,7 @@ impl EmbeddedV8Kernel {
                         .map(|n| n.value().get_attr("defer").is_some())
                         .unwrap_or(false);
                 ScriptInfo {
+                    node_id: nid,
                     inline: if inline.is_empty() {
                         None
                     } else {
@@ -3389,7 +3461,34 @@ impl EmbeddedV8Kernel {
 
         // 5. Execute scripts (Q081 offline model after full parse):
         //    classic → async (doc order) → interactive → defer → DCL → complete → load.
+        // Bind document.currentScript so parse-time document.write inserts after the
+        // running script element (WHATWG-ish insertion point).
+        let bind_current_script = |kernel: &mut Self, node_id: crate::dom::NodeId| {
+            kernel.with_global_scope(|scope, _global| {
+                let state = RuntimeState::get(&*scope);
+                if let Some(obj) = crate::dom::template::create_node_object(scope, state, node_id) {
+                    let ctx = scope.get_current_context();
+                    let g = ctx.global(scope);
+                    let doc_key = crate::v8_utils::v8_string(scope, "document");
+                    if let Some(doc_val) = g.get(scope, doc_key.into()) {
+                        if doc_val.is_object() {
+                            let doc: v8::Local<v8::Object> =
+                                unsafe { v8::Local::cast_unchecked(doc_val) };
+                            let cs_key = crate::v8_utils::v8_string(scope, "currentScript");
+                            let _ = doc.set(scope, cs_key.into(), obj.into());
+                        }
+                    }
+                }
+            });
+        };
+        let clear_current_script = |kernel: &mut Self| {
+            let _ = kernel.eval(
+                "try { document.currentScript = null; } catch(e) {}",
+                crate::kernel::EvalOpts::default(),
+            );
+        };
         let run_one_script = |kernel: &mut Self, i: usize, script: &ScriptInfo| {
+            bind_current_script(kernel, script.node_id);
             if let Some(ref src) = script.src {
                 let resolved_url = if src.starts_with("http://") || src.starts_with("https://") {
                     src.clone()
@@ -3439,6 +3538,7 @@ impl EmbeddedV8Kernel {
                     crate::telemetry::eval_error(&format!("inline script {} error: {:?}", i, e));
                 }
             }
+            clear_current_script(kernel);
         };
 
         // K-ESM-LOADER: type=module scripts after classic? HTML: modules deferred-like.

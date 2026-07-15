@@ -155,6 +155,84 @@ def test_document_write_mixed_markup_and_script_via_parser():
     assert rep["scripts"] >= 1, rep
 
 
+def test_parse_time_write_inserts_after_running_script():
+    """Q070 parse-time: page_load sets currentScript; write inserts after SCRIPT."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load(
+            """
+            <html><body>
+            <div id="before">B</div>
+            <script>
+              window.__cs = document.currentScript && document.currentScript.tagName;
+              document.write('<div id="mid">M</div>');
+            </script>
+            <div id="after">A</div>
+            </body></html>
+            """,
+            "https://ex.test/",
+        )
+        return str(
+            ctx.eval(
+                r"""
+                JSON.stringify({
+                  cs: window.__cs,
+                  mid: !!document.getElementById('mid'),
+                  order: Array.from(document.body.children).map(function(n){
+                    return n.id || n.tagName;
+                  })
+                })
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["cs"] == "SCRIPT", rep
+    assert rep["mid"] is True, rep
+    # mid appears after SCRIPT (parse-time insertion point), not only at body end
+    order = rep["order"]
+    assert "mid" in order and "SCRIPT" in order, order
+    assert order.index("SCRIPT") < order.index("mid"), order
+
+
+def test_document_open_write_close_rebuilds_via_page_load():
+    """Q070 deep open: buffer writes until close → full html5ever rebuild."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load(
+            "<html><head><title>T1</title></head><body><p>1</p></body></html>",
+            "https://ex.test/a",
+        )
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  document.open();
+                  document.write('<html><head><title>T2</title></head><body>'
+                    + '<p id="p2">2</p><script>window.__o=1;<\/script></body></html>');
+                  document.close();
+                  return JSON.stringify({
+                    title: document.title,
+                    p2: !!document.getElementById('p2'),
+                    o: window.__o,
+                    rs: document.readyState,
+                    href: location.href
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["title"] == "T2", rep
+    assert rep["p2"] is True, rep
+    assert rep["o"] == 1, rep
+    assert rep["rs"] == "complete", rep
+    assert "ex.test" in rep["href"], rep
+
+
 def test_document_write_executes_inline_script():
     """Q070 phase A+: write('<script>…') runs classic inline script."""
 
