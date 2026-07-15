@@ -220,6 +220,109 @@ def test_rsa_pkcs1_generate_key_and_p521_bound():
     assert "P-521" in rep["p521"] or "namedCurve" in rep["p521"] or "unsupported" in rep["p521"].lower(), rep
 
 
+def test_idlharness_inheritance_chain_high_signal():
+    """Q053/Q058: HTMLDivElement -> ... -> EventTarget chain complete."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var d = document.createElement('div');
+                  var chain = [];
+                  var p = Object.getPrototypeOf(d);
+                  for (var i = 0; i < 8 && p; i++) {
+                    chain.push(p.constructor && p.constructor.name);
+                    p = Object.getPrototypeOf(p);
+                  }
+                  return JSON.stringify(chain);
+                })()
+                """
+            )
+        )
+
+    chain = json.loads(_run(body))
+    for name in ("HTMLDivElement", "HTMLElement", "Element", "Node", "EventTarget"):
+        assert name in chain, chain
+
+
+def test_idlharness_writable_method_on_event_target():
+    """Q052: EventTarget.prototype.addEventListener is writable data property."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var d = Object.getOwnPropertyDescriptor(EventTarget.prototype, 'addEventListener');
+                  return JSON.stringify({
+                    type: typeof (d && d.value),
+                    writable: !!(d && d.writable),
+                    configurable: !!(d && d.configurable)
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["type"] == "function" and rep["writable"] is True, rep
+
+
+def test_canvas_gradient_paint_style_roundtrip():
+    """Q110: createLinearGradient + addColorStop + fillStyle assignment."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var c = document.createElement('canvas');
+                  var g = c.getContext('2d');
+                  var lg = g.createLinearGradient(0, 0, 1, 1);
+                  lg.addColorStop(0, '#000');
+                  lg.addColorStop(1, '#fff');
+                  g.fillStyle = lg;
+                  return JSON.stringify({
+                    tag: Object.prototype.toString.call(lg),
+                    fill: Object.prototype.toString.call(g.fillStyle)
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert "CanvasGradient" in rep["tag"] and "CanvasGradient" in rep["fill"], rep
+
+
+def test_storage_persist_and_load_roundtrip():
+    """Q120: persist_storage/load_storage optional file path."""
+
+    import os
+    import tempfile
+
+    def body():
+        ctx = iv8_rs.JSContext()
+            ctx.eval("localStorage.setItem('q120', 'v');")
+            path = os.path.join(tempfile.gettempdir(), "iv8_q120_storage.json")
+            try:
+                ctx.persist_storage(path)
+                ctx2 = iv8_rs.JSContext()
+                ctx2.load_storage(path)
+                return str(ctx2.eval("localStorage.getItem('q120')"))
+            finally:
+                try:
+                    os.remove(path)
+                except OSError:
+                    pass
+
+    assert _run(body) == "v"
+
+
 def test_window_global_props_own_not_on_window_prototype():
     """Q055: navigator/document/location are own Window properties (not Window.prototype)."""
 
