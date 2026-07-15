@@ -799,9 +799,25 @@ unsafe extern "C" fn worker_constructor_cb(info: *const v8::FunctionCallbackInfo
         } else {
             script_source
         };
+        // Snapshot ResourceBundle entries for worker module static import graph.
+        let module_sources: Vec<(String, String)> = if worker_type_module {
+            let bundle = state.resource_bundle.borrow();
+            bundle
+                .iter()
+                .map(|(url, res)| (url.clone(), res.body_text()))
+                .collect()
+        } else {
+            Vec::new()
+        };
         let profile = state.profile.unwrap_or(&DEFAULT_PROFILE);
         let worker_id = state.workers.borrow().len() as u64;
-        let handle = crate::shims::worker::spawn_worker(script_source, script_url, profile, worker_id);
+        let handle = crate::shims::worker::spawn_worker_with_modules(
+            script_source,
+            script_url,
+            profile,
+            worker_id,
+            module_sources,
+        );
         let worker_obj = v8::Object::new(scope);
         let new_target = args.new_target();
         if new_target.is_object() {

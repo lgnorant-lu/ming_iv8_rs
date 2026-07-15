@@ -38,7 +38,7 @@ serde_json = "1"
 
 # DOM
 ego-tree = "=0.10.0"
-html5ever = "0.31"
+html5ever = "0.39"
 selectors = "0.26"
 cssparser = "0.34"
 

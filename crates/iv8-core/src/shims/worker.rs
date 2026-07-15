@@ -231,6 +231,18 @@ pub fn spawn_worker(
     profile: &'static BrowserProfile,
     worker_id: u64,
 ) -> WorkerHandle {
+    spawn_worker_with_modules(script_source, script_url, profile, worker_id, Vec::new())
+}
+
+/// Spawn worker with optional preloaded module sources for static import graph
+/// (URL → source text), typically snapshotted from the main isolate ResourceBundle.
+pub fn spawn_worker_with_modules(
+    script_source: String,
+    script_url: String,
+    profile: &'static BrowserProfile,
+    worker_id: u64,
+    module_sources: Vec<(String, String)>,
+) -> WorkerHandle {
     let (main_tx, main_rx) = std::sync::mpsc::channel::<Vec<u8>>();
     let (worker_tx, worker_rx) = std::sync::mpsc::channel::<WorkerMessage>();
     let profile_json = build_profile_json(profile, &script_url);
@@ -252,6 +264,7 @@ pub fn spawn_worker(
                 worker_rx,
                 main_tx,
                 handle_tx,
+                module_sources,
             );
         })
         .expect("failed to spawn worker thread");
@@ -278,6 +291,7 @@ fn worker_thread_main(
     worker_rx: Receiver<WorkerMessage>,
     main_tx: Sender<Vec<u8>>,
     handle_tx: Sender<v8::IsolateHandle>,
+    module_sources: Vec<(String, String)>,
 ) {
     ensure_v8_initialized();
 
@@ -380,10 +394,32 @@ fn worker_thread_main(
 
         v8::tc_scope!(tc, scope);
         if is_module {
+            // Seed module graph from main-thread ResourceBundle snapshot.
+            {
+                let isolate: &v8::Isolate = &*tc;
+                if let Some(state) = isolate.get_slot::<crate::state::RuntimeState>() {
+                    let mut bundle = state.resource_bundle.borrow_mut();
+                    for (url, body) in &module_sources {
+                        bundle.add_raw(url, body.as_bytes().to_vec(), 200, None);
+                    }
+                    // Record root module URL for relative resolve.
+                    // identity hash filled after compile.
+                }
+            }
             let mut sc_source = v8::script_compiler::Source::new(source_str, Some(&origin));
             if let Some(module) = v8::script_compiler::compile_module(tc, &mut sc_source) {
-                // Worker modules: no static import graph in phase-1 (null resolve).
-                let ok = module.instantiate_module(tc, |_, _, _, _| None);
+                {
+                    let isolate: &v8::Isolate = &*tc;
+                    if let Some(state) = isolate.get_slot::<crate::state::RuntimeState>() {
+                        let hash = module.get_identity_hash().get();
+                        state
+                            .esm_module_urls
+                            .borrow_mut()
+                            .insert(hash, script_url.clone());
+                    }
+                }
+                // Resolve static imports via ResourceBundle (same rules as main world).
+                let ok = module.instantiate_module(tc, worker_resolve_module_callback);
                 if ok == Some(true) {
                     let _ = module.evaluate(tc);
                 }
@@ -694,4 +730,73 @@ fn create_message_event<'s>(
     let _ = event.set(scope, tag_sym.into(), tag_val.into());
 
     event
+}
+
+/// Resolve worker module static imports from the worker isolate ResourceBundle.
+fn worker_resolve_module_callback<'s>(
+    context: v8::Local<'s, v8::Context>,
+    specifier: v8::Local<'s, v8::String>,
+    _import_assertions: v8::Local<'s, v8::FixedArray>,
+    referrer: v8::Local<'s, v8::Module>,
+) -> Option<v8::Local<'s, v8::Module>> {
+    use std::pin::pin;
+    let scope = pin!(unsafe { v8::CallbackScope::new(context) });
+    let mut scope = scope.init();
+    let spec = specifier.to_rust_string_lossy(&scope);
+    let isolate: &v8::Isolate = &*scope;
+    let state = crate::state::RuntimeState::get(isolate);
+    let ref_url = {
+        let hash = referrer.get_identity_hash().get();
+        state.esm_module_urls.borrow().get(&hash).cloned()
+    };
+    let url = if spec.starts_with("http://")
+        || spec.starts_with("https://")
+        || spec.starts_with("data:")
+    {
+        spec.clone()
+    } else if let Some(ref r) = ref_url {
+        url::Url::parse(r)
+            .ok()
+            .and_then(|b| b.join(&spec).ok())
+            .map(|u| u.to_string())
+            .unwrap_or(spec.clone())
+    } else {
+        spec.clone()
+    };
+    let code = {
+        let bundle = state.resource_bundle.borrow();
+        bundle
+            .get(&url)
+            .map(|r| String::from_utf8_lossy(&r.body).to_string())
+            .unwrap_or_default()
+    };
+    if code.is_empty() {
+        let msg = crate::v8_utils::v8_string(
+            &scope,
+            &format!("Worker cannot resolve module '{spec}' -> '{url}'"),
+        );
+        let exc = v8::Exception::type_error(&scope, msg);
+        scope.throw_exception(exc);
+        return None;
+    }
+    let source_str = v8::String::new(&scope, &code)?;
+    let name = v8::String::new(&scope, &url)?;
+    let origin = v8::ScriptOrigin::new(
+        &scope,
+        name.into(),
+        0,
+        0,
+        false,
+        0,
+        None,
+        false,
+        false,
+        true,
+        None,
+    );
+    let mut sc_source = v8::script_compiler::Source::new(source_str, Some(&origin));
+    let module = v8::script_compiler::compile_module(&scope, &mut sc_source)?;
+    let hash = module.get_identity_hash().get();
+    state.esm_module_urls.borrow_mut().insert(hash, url);
+    Some(module)
 }

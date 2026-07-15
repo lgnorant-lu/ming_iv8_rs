@@ -132,6 +132,11 @@ impl ResourceBundle {
     }
 
     /// Clear all resources.
+    /// Iterate (url, resource) pairs (for worker module graph snapshot).
+    pub fn iter(&self) -> impl Iterator<Item = (&String, &Resource)> {
+        self.resources.iter()
+    }
+
     pub fn clear(&mut self) {
         self.resources.clear();
     }
