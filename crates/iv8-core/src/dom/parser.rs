@@ -114,6 +114,56 @@ impl StreamingHtmlParser {
     pub fn document_mut(&self) -> std::cell::RefMut<'_, Document> {
         self.tokenizer.sink.sink.doc.borrow_mut()
     }
+
+    /// Swap the in-progress document with `other` (for publishing to RuntimeState
+    /// during script pauses without cloning the tree).
+    pub fn swap_document(&self, other: &mut Document) {
+        std::mem::swap(&mut *self.document_mut(), other);
+    }
+}
+
+thread_local! {
+    /// Active streaming parser for document.write re-entry (Layer C).
+    /// Set only for the duration of a streaming page_load on this thread.
+    static ACTIVE_STREAM: std::cell::RefCell<Option<*mut StreamingHtmlParser>> =
+        const { std::cell::RefCell::new(None) };
+}
+
+/// Install / clear the thread-local stream pointer for write re-entry.
+///
+/// # Safety
+/// `ptr` must remain valid until [`clear_active_stream`] is called.
+pub unsafe fn set_active_stream(ptr: *mut StreamingHtmlParser) {
+    ACTIVE_STREAM.with(|c| *c.borrow_mut() = Some(ptr));
+}
+
+pub fn clear_active_stream() {
+    ACTIVE_STREAM.with(|c| *c.borrow_mut() = None);
+}
+
+/// document.write during streaming parse: inject into tokenizer input (push_front).
+/// Returns true if a stream was active and injection was attempted.
+pub fn stream_write_active(html: &str) -> bool {
+    ACTIVE_STREAM.with(|c| {
+        let mut slot = c.borrow_mut();
+        let Some(ptr) = *slot else {
+            return false;
+        };
+        // SAFETY: set_active_stream guarantees ptr is valid for this thread.
+        let stream = unsafe { &mut *ptr };
+        let mut r = stream.write_at_insertion_point(html);
+        // Drain nested script pauses without host JS (written scripts run after finish
+        // or via subsequent Script pauses when host loops).
+        let mut guard = 0;
+        while let StreamFeedResult::Script(_) = r {
+            guard += 1;
+            if guard > 64 {
+                break;
+            }
+            r = stream.resume();
+        }
+        true
+    })
 }
 
 /// Parse HTML with script-pause callbacks (tokenizer re-entry host).

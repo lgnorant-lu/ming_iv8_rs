@@ -279,6 +279,10 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
 
     document.write = function() {
         var html = Array.prototype.join.call(arguments, '');
+        // Layer C: during StreamingHtmlParser page_load, inject into tokenizer input.
+        if (document.__iv8StreamParse && typeof __iv8StreamWrite === 'function') {
+            try { __iv8StreamWrite(html); return; } catch (es) {}
+        }
         // Deep open stream: buffer + progressive reparse (tokenizer-adjacent).
         // Each write re-parses the cumulative buffer so mid-stream DOM is visible,
         // approximating HTML parser re-entry after document.open().
@@ -1822,6 +1826,29 @@ impl EmbeddedV8Kernel {
         result
     }
 
+    /// Layer C: expose `__iv8StreamWriteNative(html)` → tokenizer `push_front`.
+    fn install_stream_write_bridge(&mut self) {
+        unsafe extern "C" fn stream_write_native_cb(info: *const v8::FunctionCallbackInfo) {
+            let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let info_ref = unsafe { &*info };
+                v8::callback_scope!(unsafe scope, info_ref);
+                let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+                let html = if args.length() >= 1 {
+                    args.get(0).to_rust_string_lossy(scope)
+                } else {
+                    String::new()
+                };
+                let _ = crate::dom::parser::stream_write_active(&html);
+            }));
+        }
+        self.with_global_scope(|scope, global| {
+            let tmpl = v8::FunctionTemplate::builder_raw(stream_write_native_cb).build(scope);
+            let f = crate::v8_utils::v8_fn(scope, &tmpl);
+            let key = crate::v8_utils::v8_string(scope, "__iv8StreamWriteNative");
+            let _ = global.set(scope, key.into(), f.into());
+        });
+    }
+
     /// Install the Worker constructor on the global object.
     /// Set the global object's __proto__ to DedicatedWorkerGlobalScope.prototype.
     /// Called when worker_mode=true, after install_browser_surface_init
@@ -3290,6 +3317,11 @@ impl EmbeddedV8Kernel {
 
     /// Load HTML with response headers (for Set-Cookie processing).
     /// headers: slice of (name, value) pairs.
+    ///
+    /// **Layer C**: classic scripts are driven by
+    /// [`crate::dom::StreamingHtmlParser`] (tokenizer Script pause). During a
+    /// pause, `document.write` injects into the input stream via
+    /// [`crate::dom::stream_write_active`].
     pub fn page_load_with_headers(
         &mut self,
         html: &str,
