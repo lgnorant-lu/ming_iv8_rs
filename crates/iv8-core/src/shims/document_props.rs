@@ -168,6 +168,17 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         _hidden = h;
         _visibilityState = vs;
         try {
+            if (h) {
+                var t = (typeof performance !== 'undefined' && performance.now)
+                    ? performance.now() : Date.now();
+                globalThis.__iv8HiddenSinceMs = t;
+            } else {
+                try { delete globalThis.__iv8HiddenSinceMs; } catch (e0) {
+                    globalThis.__iv8HiddenSinceMs = undefined;
+                }
+            }
+        } catch (e1) {}
+        try {
             var ev = new Event('visibilitychange');
             document.dispatchEvent(ev);
         } catch (e) {}
@@ -371,7 +382,22 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // installs them, so guards are dead code. Always install to ensure
     // the shim is the single source of truth.
     Object.defineProperty(document, 'scrollingElement', { get: function() { return document.body || null; }, configurable: true });
-    Object.defineProperty(document, 'currentScript', { get: function() { return null; }, configurable: true });
+    // currentScript is set while classic scripts run (DOCUMENT_WRITE_SHIM / appendChild).
+    var _currentScript = null;
+    Object.defineProperty(document, 'currentScript', {
+        get: function() { return _currentScript; },
+        set: function(v) { _currentScript = v || null; },
+        configurable: true,
+        enumerable: true,
+    });
+    // document.scripts — live collection of script elements (codegen stub may be empty).
+    try {
+        Object.defineProperty(document, 'scripts', {
+            get: function() { return document.getElementsByTagName('script'); },
+            configurable: true,
+            enumerable: true,
+        });
+    } catch (e) {}
     // Override Document.prototype.createRange/createEvent (not document own)
     // so instance and prototype share one Function (MF-4 dual-path cleanup).
     if (typeof Document !== 'undefined' && Document.prototype) {

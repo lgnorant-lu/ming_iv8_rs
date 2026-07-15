@@ -126,6 +126,9 @@ unsafe extern "C" fn set_interval(info: *const v8::FunctionCallbackInfo) {
 }
 
 /// If `document.hidden` is true, enforce a minimum delay for timers.
+/// Optional intensive floor: `timers.hidden_intensive_min_ms` (default 60000)
+/// when logical time since hide exceeds `timers.hidden_intensive_after_ms`
+/// (default 300000 = 5 minutes, Chrome-inspired).
 fn apply_hidden_timer_floor(
     scope: &v8::PinScope<'_, '_>,
     state: &RuntimeState,
@@ -152,11 +155,32 @@ fn apply_hidden_timer_floor(
     let Some(hidden_val) = doc.get(scope, hidden_key.into()) else {
         return delay_ms;
     };
-    if hidden_val.is_true() || hidden_val.boolean_value(scope) {
-        delay_ms.max(floor)
-    } else {
-        delay_ms
+    if !(hidden_val.is_true() || hidden_val.boolean_value(scope)) {
+        return delay_ms;
     }
+    // Intensive throttle: if page has been hidden past threshold (tracked via
+    // globalThis.__iv8HiddenSinceMs set by document.hidden setter), use larger floor.
+    let mut effective_floor = floor;
+    let since_key = crate::v8_utils::v8_string(scope, "__iv8HiddenSinceMs");
+    if let Some(since_val) = global.get(scope, since_key.into()) {
+        if let Some(since) = since_val.number_value(scope) {
+            let now = state.event_loop.borrow().get_time_ms();
+            let after = state
+                .environment
+                .get_f64("timers.hidden_intensive_after_ms")
+                .unwrap_or(300_000.0);
+            if after > 0.0 && now - since >= after {
+                let intensive = state
+                    .environment
+                    .get_f64("timers.hidden_intensive_min_ms")
+                    .unwrap_or(60_000.0);
+                if intensive > effective_floor {
+                    effective_floor = intensive;
+                }
+            }
+        }
+    }
+    delay_ms.max(effective_floor)
 }
 
 /// clearTimeout(id) / clearInterval(id)

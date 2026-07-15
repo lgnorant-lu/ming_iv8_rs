@@ -136,8 +136,13 @@ def test_document_write_executes_inline_script():
             ctx.eval(
                 r"""
                 (function(){
-                  document.write('<script>window.__fromWrite=7;<\/script>');
-                  return JSON.stringify({v: window.__fromWrite});
+                  document.write('<script>window.__fromWrite=7;window.__cs=document.currentScript&&document.currentScript.tagName;<\/script>');
+                  return JSON.stringify({
+                    v: window.__fromWrite,
+                    cs: window.__cs,
+                    scripts: document.scripts.length,
+                    byTag: document.getElementsByTagName('script').length
+                  });
                 })()
                 """
             )
@@ -145,6 +150,8 @@ def test_document_write_executes_inline_script():
 
     rep = json.loads(_run(body))
     assert rep["v"] == 7, rep
+    assert rep["cs"] == "SCRIPT", rep
+    assert rep["scripts"] >= 1 and rep["byTag"] >= 1, rep
 
 
 def test_document_write_external_script_from_resource_bundle():
@@ -265,29 +272,32 @@ def test_blank_context_readystate_complete():
     assert _run(body) == "complete"
 
 
-def test_type_module_script_not_executed_in_offline_page_load():
-    """W1 honesty: type=module scripts are not run (no ESM loader)."""
+def test_type_module_inline_executes_via_eval_module():
+    """K-ESM-LOADER: type=module inline runs after classic/defer (side effects)."""
 
     def body():
         ctx = iv8_rs.JSContext()
         ctx.page_load(
             """
             <html><body>
-            <script type="module">window.__mod=1</script>
-            <script>window.__classic=1</script>
+            <script>window.__classic=1; window.__ord=[]; window.__ord.push('c');</script>
+            <script type="module">window.__mod=1; window.__ord.push('m');</script>
+            <script defer>window.__ord.push('d');</script>
             </body></html>
             """,
             "https://ex.test/",
         )
         return str(
             ctx.eval(
-                "JSON.stringify({mod: window.__mod, classic: window.__classic})"
+                "JSON.stringify({mod: window.__mod, classic: window.__classic, ord: window.__ord})"
             )
         )
 
     rep = json.loads(_run(body))
     assert rep.get("classic") == 1, rep
-    assert rep.get("mod") is None, rep
+    assert rep.get("mod") == 1, rep
+    # classic then defer then module (offline model)
+    assert rep["ord"] == ["c", "d", "m"], rep
 
 
 def test_document_onreadystatechange_property_fires():

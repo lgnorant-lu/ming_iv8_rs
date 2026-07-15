@@ -42,8 +42,8 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         return body;
     }
 
-    // Q070 phase A+: document.write runs classic scripts (inline + sync src via
-    // ResourceBundle/XHR). insertAdjacentHTML alone does not run scripts.
+    // Q070: insertAdjacentHTML drops <script> nodes in our DOM parser path.
+    // Materialize scripts via createElement so they enter the tree + execute.
     function resolveScriptUrl(src) {
         try {
             if (typeof location !== 'undefined' && location.href) {
@@ -52,25 +52,31 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         } catch (e) {}
         return src;
     }
-    function runScriptCode(code) {
+    function runScriptCode(code, scriptEl) {
         if (!code) return;
-        try { (0, eval)(code); } catch (e) {
+        var prev = document.currentScript;
+        try {
+            if (scriptEl) {
+                try { document.currentScript = scriptEl; } catch (e0) {}
+            }
+            (0, eval)(code);
+        } catch (e) {
             try {
                 if (typeof console !== 'undefined' && console.error) {
                     console.error('document.write script error', e);
                 }
             } catch (e2) {}
+        } finally {
+            try { document.currentScript = prev; } catch (e3) {}
         }
     }
-    function loadAndRunExternalScript(src) {
+    function loadExternalScriptText(src) {
         var url = resolveScriptUrl(src);
         try {
             var x = new XMLHttpRequest();
             x.open('GET', url, false);
             x.send();
-            if (x.status >= 200 && x.status < 400) {
-                runScriptCode(x.responseText);
-            }
+            if (x.status >= 200 && x.status < 400) return x.responseText;
         } catch (e) {
             try {
                 if (typeof console !== 'undefined' && console.error) {
@@ -78,21 +84,66 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
                 }
             } catch (e2) {}
         }
+        return null;
     }
-    function extractAndRunScripts(html) {
-        if (!html) return;
+    function loadAndRunExternalScript(src, scriptEl) {
+        var code = loadExternalScriptText(src);
+        if (code != null) runScriptCode(code, scriptEl);
+    }
+    function parseAttrMap(attrStr) {
+        var map = {};
+        if (!attrStr) return map;
+        var re = /([^\s=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|(\S+)))?/g;
+        var m;
+        while ((m = re.exec(attrStr)) !== null) {
+            var k = m[1].toLowerCase();
+            if (k.charAt(0) === '/') continue;
+            map[k] = (m[2] != null ? m[2] : (m[3] != null ? m[3] : (m[4] != null ? m[4] : '')));
+        }
+        return map;
+    }
+    function stripScripts(html) {
+        return String(html).replace(/<script(\s[^>]*)?>[\s\S]*?<\/script>/gi, '');
+    }
+    function materializeAndRunScripts(html, parent) {
+        if (!html || !parent) return;
         var re = /<script(\s[^>]*)?>([\s\S]*?)<\/script>/gi;
         var m;
         while ((m = re.exec(html)) !== null) {
-            var attrs = m[1] || '';
-            if (/\stype\s*=\s*["']?(module|importmap)/i.test(attrs)) continue;
-            var srcM = attrs.match(/\ssrc\s*=\s*["']([^"']+)["']/i)
-                || attrs.match(/\ssrc\s*=\s*([^\s>]+)/i);
-            if (srcM) {
-                loadAndRunExternalScript(srcM[1]);
-                continue;
+            var attrs = parseAttrMap(m[1] || '');
+            var typ = attrs.type || '';
+            if (/module|importmap/i.test(typ)) continue;
+            var el = document.createElement('script');
+            Object.keys(attrs).forEach(function(k) {
+                try {
+                    if (attrs[k] === '') el.setAttribute(k, '');
+                    else el.setAttribute(k, attrs[k]);
+                } catch (e) {}
+            });
+            var src = attrs.src;
+            if (src) {
+                parent.appendChild(el);
+                // appendChild hook may also run; guard double-exec via flag
+                if (!el.__iv8Ran) {
+                    loadAndRunExternalScript(src, el);
+                    el.__iv8Ran = true;
+                }
+            } else {
+                var code = m[2] || '';
+                try { el.textContent = code; } catch (e) {}
+                parent.appendChild(el);
+                if (!el.__iv8Ran) {
+                    runScriptCode(code, el);
+                    el.__iv8Ran = true;
+                }
             }
-            runScriptCode(m[2]);
+        }
+    }
+    function insertHtmlFragment(html, insertFn) {
+        // Non-script markup via insertAdjacentHTML; scripts materialize separately.
+        var noScript = stripScripts(html);
+        if (noScript && noScript.replace(/\s+/g, '') !== '') {
+            try { insertFn(noScript); } catch (e) {}
         }
     }
 
@@ -109,9 +160,11 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
                     // so it appears in document order.
                     var sentinel = document.createComment('iv8-write');
                     script.parentNode.insertBefore(sentinel, script.nextSibling);
-                    sentinel.insertAdjacentHTML('beforebegin', html);
+                    insertHtmlFragment(html, function(ns) {
+                        sentinel.insertAdjacentHTML('beforebegin', ns);
+                    });
+                    materializeAndRunScripts(html, script.parentNode);
                     __iv8_write_anchor = sentinel;
-                    extractAndRunScripts(html);
                     return;
                 } catch(e) {
                     __iv8_write_anchor = null;
@@ -122,8 +175,10 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         // Case 2: Subsequent write — append before the existing sentinel
         if (__iv8_write_anchor && __iv8_write_anchor.parentNode) {
             try {
-                __iv8_write_anchor.insertAdjacentHTML('beforebegin', html);
-                extractAndRunScripts(html);
+                insertHtmlFragment(html, function(ns) {
+                    __iv8_write_anchor.insertAdjacentHTML('beforebegin', ns);
+                });
+                materializeAndRunScripts(html, __iv8_write_anchor.parentNode);
                 return;
             } catch(e) {
                 // Sentinel was detached, fall through to body path
@@ -134,16 +189,20 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         // Case 3: Body path (primary fallback / post-load)
         var body = ensureBody();
         try {
-            body.insertAdjacentHTML('beforeend', html);
-            extractAndRunScripts(html);
+            insertHtmlFragment(html, function(ns) {
+                body.insertAdjacentHTML('beforeend', ns);
+            });
+            materializeAndRunScripts(html, body);
             return;
         } catch(e) {}
 
         // Case 4: Last resort — append to documentElement
         if (document.documentElement) {
             try {
-                document.documentElement.insertAdjacentHTML('beforeend', html);
-                extractAndRunScripts(html);
+                insertHtmlFragment(html, function(ns) {
+                    document.documentElement.insertAdjacentHTML('beforeend', ns);
+                });
+                materializeAndRunScripts(html, document.documentElement);
             } catch(e) {}
         }
     }
@@ -189,16 +248,28 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
             Node.prototype.appendChild = function(child) {
                 var r = _origAC.call(this, child);
                 try {
-                    if (child && child.nodeName === 'SCRIPT') {
+                    if (child && child.nodeName === 'SCRIPT' && !child.__iv8Ran) {
                         var typ = (child.getAttribute && child.getAttribute('type')) || '';
-                        if (/module|importmap/i.test(typ)) return r;
+                        if (/module|importmap/i.test(typ)) {
+                            // ESM: host may evaluate via __iv8EvalModule if present.
+                            if (typeof globalThis.__iv8EvalModule === 'function') {
+                                var msrc = child.getAttribute && child.getAttribute('src');
+                                var mcode = child.textContent || child.innerHTML || '';
+                                try {
+                                    globalThis.__iv8EvalModule(mcode, msrc || '');
+                                    child.__iv8Ran = true;
+                                } catch (em) {}
+                            }
+                            return r;
+                        }
                         var src = child.getAttribute && child.getAttribute('src');
                         if (src) {
-                            loadAndRunExternalScript(src);
+                            loadAndRunExternalScript(src, child);
                         } else {
                             var code = child.textContent || child.innerHTML || child.text || '';
-                            runScriptCode(code);
+                            runScriptCode(code, child);
                         }
+                        child.__iv8Ran = true;
                     }
                 } catch (e) {}
                 return r;
@@ -689,6 +760,146 @@ fn resolve_worker_script(isolate: &v8::Isolate, url: &str) -> String {
     String::new()
 }
 
+/// Resolve static `import` dependencies for ESM (ResourceBundle URL exact match).
+fn resolve_module_callback<'s>(
+    context: v8::Local<'s, v8::Context>,
+    specifier: v8::Local<'s, v8::String>,
+    _import_assertions: v8::Local<'s, v8::FixedArray>,
+    _referrer: v8::Local<'s, v8::Module>,
+) -> Option<v8::Local<'s, v8::Module>> {
+    use std::pin::pin;
+    let scope = pin!(unsafe { v8::CallbackScope::new(context) });
+    let mut scope = scope.init();
+    let spec = specifier.to_rust_string_lossy(&scope);
+    let isolate: &v8::Isolate = &*scope;
+    let state = RuntimeState::get(isolate);
+    let code = {
+        let bundle = state.resource_bundle.borrow();
+        bundle
+            .get(&spec)
+            .map(|r| String::from_utf8_lossy(&r.body).to_string())
+            .unwrap_or_default()
+    };
+    if code.is_empty() {
+        let msg =
+            crate::v8_utils::v8_string(&scope, &format!("Cannot resolve module '{spec}'"));
+        let exc = v8::Exception::type_error(&scope, msg);
+        scope.throw_exception(exc);
+        return None;
+    }
+    let source_str = v8::String::new(&scope, &code)?;
+    let name = v8::String::new(&scope, &spec)?;
+    let origin = v8::ScriptOrigin::new(
+        &scope,
+        name.into(),
+        0,
+        0,
+        false,
+        0,
+        None,
+        false,
+        false,
+        true,
+        None,
+    );
+    let mut sc_source = v8::script_compiler::Source::new(source_str, Some(&origin));
+    v8::script_compiler::compile_module(&scope, &mut sc_source)
+}
+
+/// Dynamic `import()` host callback — resolve specifier from ResourceBundle / data: URL.
+fn host_import_module_dynamically<'s>(
+    scope: &mut v8::PinScope<'s, '_>,
+    _host_defined_options: v8::Local<'s, v8::Data>,
+    _resource_name: v8::Local<'s, v8::Value>,
+    specifier: v8::Local<'s, v8::String>,
+    _import_attributes: v8::Local<'s, v8::FixedArray>,
+) -> Option<v8::Local<'s, v8::Promise>> {
+    let spec = specifier.to_rust_string_lossy(scope);
+    let resolver = v8::PromiseResolver::new(scope)?;
+    let promise = resolver.get_promise(scope);
+
+    let code = if let Some(rest) = spec.strip_prefix("data:text/javascript,") {
+        Some(percent_decode(rest))
+    } else {
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let bundle = state.resource_bundle.borrow();
+        bundle
+            .get(&spec)
+            .map(|r| String::from_utf8_lossy(&r.body).to_string())
+    };
+
+    let Some(code) = code else {
+        let msg = crate::v8_utils::v8_string(
+            scope,
+            &format!("Failed to resolve module specifier '{spec}'"),
+        );
+        let exc = v8::Exception::type_error(scope, msg);
+        let _ = resolver.reject(scope, exc);
+        return Some(promise);
+    };
+
+    let source_str = match v8::String::new(scope, &code) {
+        Some(s) => s,
+        None => {
+            let msg = crate::v8_utils::v8_string(scope, "module source too long");
+            let exc = v8::Exception::error(scope, msg);
+            let _ = resolver.reject(scope, exc);
+            return Some(promise);
+        }
+    };
+    let name = v8::String::new(scope, &spec).unwrap_or_else(|| crate::v8_utils::v8_string(scope, "<import>"));
+    let origin = v8::ScriptOrigin::new(
+        scope,
+        name.into(),
+        0,
+        0,
+        false,
+        0,
+        None,
+        false,
+        false,
+        true,
+        None,
+    );
+    let mut sc_source = v8::script_compiler::Source::new(source_str, Some(&origin));
+    let module = match v8::script_compiler::compile_module(scope, &mut sc_source) {
+        Some(m) => m,
+        None => {
+            let msg = if let Some(exc) = {
+                // compile errors may already be pending
+                None::<v8::Local<v8::Value>>
+            } {
+                exc
+            } else {
+                let m = crate::v8_utils::v8_string(scope, "module compile failed");
+                v8::Exception::syntax_error(scope, m)
+            };
+            let _ = resolver.reject(scope, msg);
+            return Some(promise);
+        }
+    };
+
+    if module.instantiate_module(scope, resolve_module_callback) != Some(true) {
+        let msg = crate::v8_utils::v8_string(scope, "module instantiate failed");
+        let exc = v8::Exception::type_error(scope, msg);
+        let _ = resolver.reject(scope, exc);
+        return Some(promise);
+    }
+    match module.evaluate(scope) {
+        Some(_) => {
+            let ns = module.get_module_namespace();
+            let _ = resolver.resolve(scope, ns);
+        }
+        None => {
+            let msg = crate::v8_utils::v8_string(scope, "module evaluate failed");
+            let exc = v8::Exception::error(scope, msg);
+            let _ = resolver.reject(scope, exc);
+        }
+    }
+    Some(promise)
+}
+
 fn percent_decode(input: &str) -> String {
     let mut result = Vec::with_capacity(input.len());
     let bytes = input.as_bytes();
@@ -838,6 +1049,9 @@ impl EmbeddedV8Kernel {
             crate::telemetry::v8_oom(loc, details.is_heap_oom);
         }
         isolate.set_oom_error_handler(oom_handler);
+
+        // K-ESM-LOADER: dynamic import() host hook (ResourceBundle / data: only).
+        isolate.set_host_import_module_dynamically_callback(host_import_module_dynamically);
 
         // Install RuntimeState (with environment reference for V8 callbacks)
         RuntimeState::install(
@@ -3086,6 +3300,8 @@ impl EmbeddedV8Kernel {
             }
         };
 
+        // K-ESM-LOADER: type=module scripts after classic? HTML: modules deferred-like.
+        // Offline model: classic → async → interactive → defer → modules → DCL.
         for (i, script) in scripts.iter().enumerate() {
             if script.skip {
                 continue;
@@ -3124,6 +3340,42 @@ impl EmbeddedV8Kernel {
             }
             if script.is_defer {
                 run_one_script(self, i, script);
+            }
+        }
+
+        // 6c. ES modules (type=module) via eval_module — after defer, before DCL.
+        for (i, script) in scripts.iter().enumerate() {
+            if !script.skip {
+                continue;
+            }
+            let code = if let Some(ref src) = script.src {
+                let resolved_url = if src.starts_with("http://") || src.starts_with("https://") {
+                    src.clone()
+                } else if let Some(base) = base_url {
+                    url::Url::parse(base)
+                        .ok()
+                        .and_then(|b| b.join(src).ok())
+                        .map(|u| u.to_string())
+                        .unwrap_or_else(|| src.clone())
+                } else {
+                    src.clone()
+                };
+                let state = RuntimeState::get(&self.isolate);
+                let bundle = state.resource_bundle.borrow();
+                bundle
+                    .get(&resolved_url)
+                    .map(|r| String::from_utf8_lossy(&r.body).to_string())
+            } else {
+                script.inline.clone()
+            };
+            if let Some(code) = code {
+                let name = script
+                    .src
+                    .clone()
+                    .unwrap_or_else(|| format!("inline-module-{}", i));
+                if let Err(e) = self.eval_module(&code, Some(&name), EvalOpts::default()) {
+                    crate::telemetry::eval_error(&format!("module script {} error: {:?}", i, e));
+                }
             }
         }
 
@@ -3628,10 +3880,10 @@ impl EmbeddedV8Kernel {
             let module = v8::script_compiler::compile_module(scope, &mut source)
                 .ok_or_else(|| IV8Error::Internal("module compilation failed".into()))?;
 
-            let instantiated =
-                module.instantiate_module(scope, |_context, _specifier, _referrer, _module| None);
+            // K-ESM-LOADER: resolve static imports from ResourceBundle (exact URL).
+            let instantiated = module.instantiate_module(scope, resolve_module_callback);
 
-            if instantiated.is_none() {
+            if instantiated != Some(true) {
                 return Err(IV8Error::Internal("module instantiation failed".into()));
             }
 
@@ -3639,7 +3891,9 @@ impl EmbeddedV8Kernel {
                 .evaluate(scope)
                 .ok_or_else(|| IV8Error::Internal("module evaluation failed".into()))?;
 
-            Ok(v8::Global::new(scope, result))
+            // Prefer namespace for ESM consumers (matches import() resolution).
+            let ns = module.get_module_namespace();
+            Ok(v8::Global::new(scope, ns))
         })();
 
         // Microtask checkpoint after scope exit (avoids double borrow)
