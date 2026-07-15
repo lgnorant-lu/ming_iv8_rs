@@ -1050,59 +1050,169 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // [LegacyUnforgeable] attributes are own properties of the location
     // instance, not Location.prototype. idlharness uses
     // assert_own_property(window.location, name) for these.
+    // W2: own getters must brand-check (Illegal invocation) and writable
+    // fields must update href — never install set:undefined for protocol/host.
     try {
         var _locObj = (typeof location !== 'undefined') ? location : null;
-        var _locProto = (typeof Location !== 'undefined' && Location.prototype) ? Location.prototype : null;
-        var _locTarget = _locObj;  // Use instance, not prototype
+        var _locTarget = _locObj;
         if (_locTarget) {
-            var _locProps = {
-                origin: function() {
-                    var h = this.href || '';
-                    return h.split('/').slice(0,3).join('/');
+            function _locBrand() {
+                if (typeof Location === 'undefined' || !(this instanceof Location)) {
+                    throw new TypeError('Illegal invocation');
+                }
+            }
+            function _locHref() {
+                try { return String(this.href || ''); } catch (e) { return ''; }
+            }
+            function _locSetPart(part, value) {
+                _locBrand.call(this);
+                try {
+                    // Manual parse — IV8 URL component setters are not fully live.
+                    var h = _locHref.call(this) || 'about:blank';
+                    var hash = '';
+                    var search = '';
+                    var hi = h.indexOf('#');
+                    if (hi >= 0) { hash = h.slice(hi); h = h.slice(0, hi); }
+                    var si = h.indexOf('?');
+                    if (si >= 0) { search = h.slice(si); h = h.slice(0, si); }
+                    var protocol = 'https:';
+                    var rest = h;
+                    var ci = h.indexOf(':');
+                    if (ci > 0) {
+                        protocol = h.slice(0, ci + 1);
+                        rest = h.slice(ci + 1);
+                    }
+                    if (rest.indexOf('//') === 0) rest = rest.slice(2);
+                    else if (rest.charAt(0) === '/') rest = rest.slice(1);
+                    var path = '';
+                    var hostport = rest;
+                    var pi = rest.indexOf('/');
+                    if (pi >= 0) {
+                        hostport = rest.slice(0, pi);
+                        path = rest.slice(pi);
+                    }
+                    if (!path) path = '/';
+                    var hostname = hostport;
+                    var port = '';
+                    var coli = hostport.lastIndexOf(':');
+                    if (coli > 0) {
+                        hostname = hostport.slice(0, coli);
+                        port = hostport.slice(coli + 1);
+                    }
+                    if (!hostname || /^about$/i.test(protocol.replace(':', ''))) {
+                        hostname = 'localhost';
+                        if (protocol === 'about:') protocol = 'https:';
+                    }
+                    var v = String(value);
+                    if (part === 'protocol') {
+                        protocol = v.charAt(v.length - 1) === ':' ? v : (v + ':');
+                    } else if (part === 'hostname') {
+                        hostname = v;
+                    } else if (part === 'host') {
+                        hostport = v;
+                        coli = hostport.lastIndexOf(':');
+                        if (coli > 0) {
+                            hostname = hostport.slice(0, coli);
+                            port = hostport.slice(coli + 1);
+                        } else {
+                            hostname = hostport;
+                            port = '';
+                        }
+                    } else if (part === 'port') {
+                        port = v;
+                    } else if (part === 'pathname') {
+                        path = v.charAt(0) === '/' ? v : ('/' + v);
+                    } else if (part === 'search') {
+                        search = !v ? '' : (v.charAt(0) === '?' ? v : ('?' + v));
+                    } else if (part === 'hash') {
+                        hash = !v ? '' : (v.charAt(0) === '#' ? v : ('#' + v));
+                    }
+                    var auth = hostname + (port ? (':' + port) : '');
+                    this.href = protocol + '//' + auth + path + search + hash;
+                } catch (e) {
+                    // keep prior value on parse failure
+                }
+            }
+            var _locDefs = {
+                origin: {
+                    get: function() {
+                        _locBrand.call(this);
+                        var h = _locHref.call(this);
+                        return h.split('/').slice(0, 3).join('/');
+                    }
                 },
-                protocol: function() {
-                    var h = this.href || '';
-                    return h.split(':')[0] + ':';
+                protocol: {
+                    get: function() {
+                        _locBrand.call(this);
+                        var h = _locHref.call(this);
+                        return h.split(':')[0] + ':';
+                    },
+                    set: function(v) { _locSetPart.call(this, 'protocol', v); }
                 },
-                host: function() {
-                    var h = this.href || '';
-                    return h.split('/')[2] || '';
+                host: {
+                    get: function() {
+                        _locBrand.call(this);
+                        var h = _locHref.call(this);
+                        return h.split('/')[2] || '';
+                    },
+                    set: function(v) { _locSetPart.call(this, 'host', v); }
                 },
-                hostname: function() {
-                    var h = this.href || '';
-                    return (h.split('/')[2] || '').split(':')[0];
+                hostname: {
+                    get: function() {
+                        _locBrand.call(this);
+                        var h = _locHref.call(this);
+                        return (h.split('/')[2] || '').split(':')[0];
+                    },
+                    set: function(v) { _locSetPart.call(this, 'hostname', v); }
                 },
-                port: function() {
-                    var h = this.href || '';
-                    var p = (h.split('/')[2] || '').split(':')[1];
-                    return p || '';
+                port: {
+                    get: function() {
+                        _locBrand.call(this);
+                        var h = _locHref.call(this);
+                        var p = (h.split('/')[2] || '').split(':')[1];
+                        return p || '';
+                    },
+                    set: function(v) { _locSetPart.call(this, 'port', v); }
                 },
-                pathname: function() {
-                    var h = this.href || '';
-                    var p = h.split('?')[0].split('#')[0];
-                    return p.split('/').slice(3).join('/') ? '/' + p.split('/').slice(3).join('/') : '/';
+                pathname: {
+                    get: function() {
+                        _locBrand.call(this);
+                        var h = _locHref.call(this);
+                        var p = h.split('?')[0].split('#')[0];
+                        return p.split('/').slice(3).join('/') ? '/' + p.split('/').slice(3).join('/') : '/';
+                    },
+                    set: function(v) { _locSetPart.call(this, 'pathname', v); }
                 },
-                search: function() {
-                    var h = this.href || '';
-                    var q = h.split('?')[1];
-                    return q ? '?' + q.split('#')[0] : '';
+                search: {
+                    get: function() {
+                        _locBrand.call(this);
+                        var h = _locHref.call(this);
+                        var q = h.split('?')[1];
+                        return q ? '?' + q.split('#')[0] : '';
+                    },
+                    set: function(v) { _locSetPart.call(this, 'search', v); }
                 },
-                hash: function() {
-                    var h = this.href || '';
-                    var f = h.split('#')[1];
-                    return f ? '#' + f : '';
+                hash: {
+                    get: function() {
+                        _locBrand.call(this);
+                        var h = _locHref.call(this);
+                        var f = h.split('#')[1];
+                        return f ? '#' + f : '';
+                    },
+                    set: function(v) { _locSetPart.call(this, 'hash', v); }
                 }
             };
-            for (var _lp in _locProps) {
-                if (!Object.getOwnPropertyDescriptor(_locTarget, _lp)) {
-                    (function(prop, fn) {
-                        Object.defineProperty(_locTarget, prop, {
-                            get: function() { return fn.call(this); },
-                            set: prop === 'hash' || prop === 'pathname' || prop === 'search' ? function(v) {} : undefined,
-                            enumerable: true, configurable: true
-                        });
-                    })(_lp, _locProps[_lp]);
-                }
+            for (var _lp in _locDefs) {
+                if (!Object.prototype.hasOwnProperty.call(_locDefs, _lp)) continue;
+                // Always reinstall: prior own getter-only shadows broke protocol/host sets.
+                (function(prop, def) {
+                    Object.defineProperty(_locTarget, prop, {
+                        get: def.get,
+                        set: def.set,
+                        enumerable: true,
+                        configurable: true
+                    });
+                })(_lp, _locDefs[_lp]);
             }
         }
     } catch(e) {}

@@ -419,9 +419,12 @@ struct MethodGuardData {
     min_args: i32,
 }
 
-/// Generic arg-count guard for DOM template methods. Retrieves the original
-/// callback and min_args from V8 External data, checks arg count, and
-/// either throws TypeError or forwards to the real callback.
+/// Generic arg-count guard for DOM template methods.
+///
+/// W2 / D-W2-2: when no V8 Signature is attached (EventTarget must accept
+/// globalThis), enforce **receiver brand before argc** so
+/// `EventTarget.prototype.addEventListener.call({})` throws Illegal invocation
+/// rather than "N argument(s) required".
 unsafe extern "C" fn method_arg_guard(info: *const v8::FunctionCallbackInfo) {
     let info_ref = unsafe { &*info };
     v8::callback_scope!(unsafe scope, info_ref);
@@ -430,6 +433,22 @@ unsafe extern "C" fn method_arg_guard(info: *const v8::FunctionCallbackInfo) {
     if data.is_external() {
         let ext: v8::Local<v8::External> = unsafe { v8::Local::cast_unchecked(data) };
         let guard = unsafe { &*(ext.value() as *const MethodGuardData) };
+
+        // Brand first (same policy as run_callback_strict): DOM node OR globalThis.
+        let this = args.this();
+        let has_node = extract_node_id_from_internal(scope, this).is_some();
+        let is_global = {
+            let ctx = scope.get_current_context();
+            let global = ctx.global(scope);
+            this.strict_equals(global.into())
+        };
+        if !has_node && !is_global {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+
         if (args.length() as i32) < guard.min_args {
             let msg = format!(
                 "{} argument(s) required, but only {} present",

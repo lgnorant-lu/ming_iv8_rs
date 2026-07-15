@@ -243,6 +243,25 @@ fn env_str(scope: &v8::PinScope<'_, '_>, key: &str, default: &str) -> String {
 
 // ── Getter / setter macros ──
 
+/// Location brand check: `this` must be a Location instance.
+fn location_receiver_ok(scope: &v8::PinScope<'_, '_>, this: v8::Local<v8::Value>) -> bool {
+    if !this.is_object() {
+        return false;
+    }
+    let this_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(this) };
+    let ctx = scope.get_current_context();
+    let global = ctx.global(scope);
+    let loc_key = crate::v8_utils::v8_string(scope, "Location");
+    let Some(ctor_val) = global.get(scope, loc_key.into()) else {
+        return false;
+    };
+    if !ctor_val.is_object() {
+        return false;
+    }
+    let ctor_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+    this_obj.instance_of(scope, ctor_obj).unwrap_or(false)
+}
+
 macro_rules! loc_getter {
     ($name:ident, $key:expr, $default:expr) => {
         unsafe extern "C" fn $name(info: *const v8::FunctionCallbackInfo) {
@@ -251,8 +270,15 @@ macro_rules! loc_getter {
                 v8::callback_scope!(unsafe scope, info_ref);
                 let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
                 let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-                // Check hidden property first (set by setter), then environment
                 let this = args.this();
+                // W2: brand before value (Illegal invocation on wrong this)
+                if !location_receiver_ok(scope, this.into()) {
+                    let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+                    let exc = v8::Exception::type_error(scope, msg);
+                    scope.throw_exception(exc);
+                    return;
+                }
+                // Check hidden property first (set by setter), then environment
                 if this.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe {
                         v8::Local::cast_unchecked(this)
@@ -284,10 +310,16 @@ macro_rules! loc_setter {
                 let info_ref = unsafe { &*info };
                 v8::callback_scope!(unsafe scope, info_ref);
                 let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+                let this = args.this();
+                if !location_receiver_ok(scope, this.into()) {
+                    let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+                    let exc = v8::Exception::type_error(scope, msg);
+                    scope.throw_exception(exc);
+                    return;
+                }
                 if args.length() > 0 {
                     if let Some(val) = args.get(0).to_string(scope) {
                         let s = val.to_rust_string_lossy(scope);
-                        let this = args.this();
                         if this.is_object() {
                             let obj: v8::Local<v8::Object> = unsafe {
                                 v8::Local::cast_unchecked(this)
@@ -327,8 +359,14 @@ unsafe extern "C" fn loc_to_string(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        // Check hidden property first (set by setter), then environment
         let this = args.this();
+        if !location_receiver_ok(scope, this.into()) {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        // Check hidden property first (set by setter), then environment
         if this.is_object() {
             let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(this) };
             let hidden_key = crate::v8_utils::v8_string(scope, "__loc_location.href");

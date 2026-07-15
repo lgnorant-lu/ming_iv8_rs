@@ -1042,6 +1042,66 @@ def test_high_signal_methods_throw_illegal_invocation_on_wrong_this():
     assert bad == [], bad
 
 
+
+
+def test_eventtarget_brand_before_argc_on_wrong_this():
+    """W2/Q061: EventTarget methods brand-check before argc (D-W2-2)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  function t(label, fn) {
+                    try { fn.call({}); return {label:label, ok:false, msg:'no-throw'}; }
+                    catch(e) {
+                      var ok = e.name === 'TypeError' && /Illegal invocation/i.test(String(e.message));
+                      return {label:label, ok:ok, msg:String(e.message).slice(0,80)};
+                    }
+                  }
+                  return JSON.stringify([
+                    t('ael0', EventTarget.prototype.addEventListener),
+                    t('rel0', EventTarget.prototype.removeEventListener),
+                    t('de0', EventTarget.prototype.dispatchEvent)
+                  ]);
+                })()
+                """
+            )
+        )
+
+    rows = json.loads(_run(body))
+    bad = [r for r in rows if not r.get("ok")]
+    assert bad == [], bad
+
+
+def test_location_href_getter_illegal_invocation_on_wrong_this():
+    """W2/Q061: Location.prototype.href getter rejects wrong this."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var g = Object.getOwnPropertyDescriptor(Location.prototype, 'href').get;
+                  var ok = g.call(location);
+                  try { g.call({}); return JSON.stringify({ok:ok, wrong:'no-throw'}); }
+                  catch(e){
+                    return JSON.stringify({
+                      ok:ok,
+                      wrong: e.name === 'TypeError' && /Illegal invocation/i.test(String(e.message))
+                    });
+                  }
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert isinstance(rep["ok"], str) and len(rep["ok"]) > 0, rep
+    assert rep["wrong"] is True, rep
+
 def test_user_agent_data_proto_shape_and_grease_brands():
     """Q030/Q031: brands GREASE + NavigatorUAData prototype accessors."""
 
