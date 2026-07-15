@@ -12,6 +12,8 @@ cc = "1.2"
 
 [dependencies]
 v8 = { workspace = true }
+# 16-byte-aligned include for ICU common data (required by v8::icu::set_common_data_77)
+align-data = "0.1"
 tracing = { workspace = true }
 thiserror = { workspace = true }
 bytes = { workspace = true }

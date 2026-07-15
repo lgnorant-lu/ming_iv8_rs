@@ -6,6 +6,12 @@ import threading
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+# ICU data for V8 Intl (must be set before first JSContext / V8::Initialize).
+# Chromium/d8/ref-iv8 pattern: icudtl.dat side-by-side with the native extension.
+_ICUDTL = Path(__file__).resolve().parent / "icudtl.dat"
+if _ICUDTL.is_file() and "IV8_ICUDTL_PATH" not in os.environ:
+    os.environ["IV8_ICUDTL_PATH"] = str(_ICUDTL)
+
 from iv8_rs._iv8 import (
     Debugger,
     JSCompileError,

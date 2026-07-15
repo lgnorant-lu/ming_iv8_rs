@@ -2585,7 +2585,23 @@ impl EmbeddedV8Kernel {
         // 16b removed — browser_apis.js archived in v0.8.27.
         // 1284 IDL templates + navigator_extras.js cover all API existence stubs.
 
-        // 17. Install timezone shim (override Intl.DateTimeFormat default timezone)
+        // 17. Timezone presentation: DO NOT replace Intl.DateTimeFormat constructor.
+        //
+        // Root cause (2026-07-16): wrapping `Intl.DateTimeFormat` with a JS function
+        // that calls `new _origDTF(...)` / `Reflect.construct` fatally re-enters on
+        // this V8 embed (scavenge ~26MB loop reported as "OOM"). Bare
+        // `new Date().toLocaleString()` and `new Intl.DateTimeFormat()` both die.
+        // H5guard.init() and any site using locale Date/Intl hits the same path.
+        //
+        // Deep-robust approach:
+        // 1) Prefer V8 isolate DateTimeConfigurationChangeNotification when we can
+        //    set host TZ (future: wire env timezone → ICU default).
+        // 2) For now: only patch `resolvedOptions` on the *native* prototype to
+        //    fill missing timeZone — never replace the constructor.
+        // 3) Date.prototype.toLocale* stay native (they need a working DTF).
+        //
+        // External refs: happy-dom/jsdom timer-OOM classes; Vitest "real browser
+        // for Intl" guidance; Deno uses V8 ICU defaults rather than JS DTF wrap.
         {
             let tz = {
                 let state = crate::state::RuntimeState::get(&self.isolate);
@@ -2595,45 +2611,37 @@ impl EmbeddedV8Kernel {
                     .unwrap_or("UTC")
                     .to_string()
             };
+            let tz_esc = tz.replace('\\', "\\\\").replace('\'', "\\'");
             let tz_shim = format!(
                 r#"
 (function() {{
-    var _tz = '{}';
-    if (typeof Intl !== 'undefined' && Intl.DateTimeFormat) {{
-        var _origDTF = Intl.DateTimeFormat;
-        var _origProto = _origDTF.prototype;
-        var _origResolvedOptions = _origProto.resolvedOptions;
-        var _tz_val = _tz;
-        // Override resolvedOptions to inject timezone
-        _origProto.resolvedOptions = function() {{
-            var opts = _origResolvedOptions.call(this);
-            if (!opts.timeZone) opts.timeZone = _tz_val;
-            return opts;
-        }};
-        // Wrap constructor to inject default timezone
-        // Guard against re-entrancy: use a flag on the original constructor
-        // to prevent re-wrapping if this shim is evaluated multiple times.
-        if (_origDTF.__iv8_tz_wrapped) {{
-            return;
+    var _tz = '{tz}';
+    if (typeof Intl === 'undefined' || typeof Intl.DateTimeFormat !== 'function') return;
+    // If a previous broken wrap is installed, restore native if we stashed it.
+    try {{
+        if (Intl.DateTimeFormat.__iv8_tz_native) {{
+            var _n = Intl.DateTimeFormat.__iv8_tz_native;
+            Object.defineProperty(Intl, 'DateTimeFormat', {{
+                value: _n, writable: true, enumerable: false, configurable: true
+            }});
         }}
-        var _wrappedDTF = function(locales, options) {{
-            if (!options) options = {{}};
-            if (!options.timeZone) options.timeZone = _tz_val;
-            if (this instanceof _wrappedDTF) {{
-                return new _origDTF(locales, options);
-            }}
-            return _origDTF(locales, options);
-        }};
-        _wrappedDTF.prototype = _origProto;
-        _wrappedDTF.supportedLocalesOf = _origDTF.supportedLocalesOf;
-        try {{
-            _origDTF.__iv8_tz_wrapped = true;
-            Intl.DateTimeFormat = _wrappedDTF;
-        }} catch(e) {{}}
-    }}
+    }} catch (e) {{}}
+    var _DTF = Intl.DateTimeFormat;
+    var _proto = _DTF.prototype;
+    if (_proto.__iv8_tz_resolved_v3) return;
+    var _origResolved = _proto.resolvedOptions;
+    if (typeof _origResolved !== 'function') return;
+    _proto.resolvedOptions = function() {{
+        var opts = _origResolved.call(this);
+        if (opts && (opts.timeZone == null || opts.timeZone === '')) {{
+            opts.timeZone = _tz;
+        }}
+        return opts;
+    }};
+    try {{ _proto.__iv8_tz_resolved_v3 = true; }} catch (e) {{}}
 }})();
 "#,
-                tz
+                tz = tz_esc
             );
             self.eval(&tz_shim, crate::kernel::EvalOpts::default()).ok();
         }

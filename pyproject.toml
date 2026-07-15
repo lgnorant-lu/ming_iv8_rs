@@ -29,6 +29,8 @@ python-source = "python"
 module-name = "iv8_rs._iv8"
 features = ["pyo3/extension-module"]
 profile = "release"
+# Chromium ICU common data for Intl (V8::InitializeICU path)
+include = ["python/iv8_rs/icudtl.dat"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

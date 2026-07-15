@@ -20,6 +20,27 @@ unsafe extern "C" {
         callback: v8::FunctionCallback,
         data_or_null: *const v8::Value,
     );
+    fn iv8__V8__InitializeICU(icu_data_file: *const std::os::raw::c_char) -> i32;
+    fn iv8__ICU__SetFileAccessOnlyPackages() -> i32;
+}
+
+/// Load ICU via Chromium's `V8::InitializeICU(path)` (file-based).
+/// Prefer this over `set_common_data_77` when the prebuilt V8 expects
+/// external icudtl.dat (same as ref iv8 / d8).
+#[inline]
+pub fn initialize_icu_from_file(path: &std::path::Path) -> bool {
+    use std::ffi::CString;
+    let Ok(c) = CString::new(path.to_string_lossy().as_bytes()) else {
+        return false;
+    };
+    unsafe { iv8__V8__InitializeICU(c.as_ptr()) != 0 }
+}
+
+/// After `set_common_data`, restrict ICU to package data only (Chromium
+/// `icu_util.cc` sequence). Returns true if ICU reported U_ZERO_ERROR.
+#[inline]
+pub fn icu_set_file_access_only_packages() -> bool {
+    unsafe { iv8__ICU__SetFileAccessOnlyPackages() != 0 }
 }
 
 /// Marks instances created from this `ObjectTemplate` as undetectable.

@@ -51,4 +51,37 @@ void v8__ObjectTemplate__SetCallAsFunctionHandler(
       callback, ptr_to_local(data_or_null));
 }
 
+// Chromium/d8 path: load ICU from an external icudtl.dat file before
+// V8::Initialize. Returns 1 on success, 0 on failure.
+// See v8::V8::InitializeICU in v8-initialization.h.
+int iv8__V8__InitializeICU(const char* icu_data_file) {
+  if (icu_data_file == nullptr || icu_data_file[0] == '\0') {
+    return v8::V8::InitializeICU(nullptr) ? 1 : 0;
+  }
+  return v8::V8::InitializeICU(icu_data_file) ? 1 : 0;
+}
+
+// Match Chromium icu_util.cc after udata_setCommonData:
+//   udata_setFileAccess(UDATA_ONLY_PACKAGES, &err);
+// Without this, ICU may still search filesystem and fail lookups even when
+// common data was registered. Returns 1 if err==U_ZERO_ERROR.
+//
+// UDataFileAccess enum (unicode/udata.h):
+//   UDATA_FILES_FIRST=0, UDATA_ONLY_PACKAGES=1, UDATA_PACKAGES_FIRST=2,
+//   UDATA_NO_FILES=3, UDATA_DEFAULT_ACCESS=0
+int iv8__ICU__SetFileAccessOnlyPackages() {
+  // rusty_v8 / ICU 77 exports versioned symbol udata_setFileAccess_77
+  // (see rusty_v8.lib dumpbin). Chromium icu_util.cc calls the unversioned
+  // name via headers; we must use the versioned export that is actually linked.
+  // UDataFileAccess: UDATA_ONLY_PACKAGES = 1
+  // UDATA_NO_FILES=3 is stronger than ONLY_PACKAGES=1 and matches
+  // "never try to load ICU data from files" intent in Chromium after package load.
+  extern void udata_setFileAccess_77(int access, int* status);
+  int err = 0;
+  // UDATA_ONLY_PACKAGES=1 (Chromium icu_util.cc). UDATA_NO_FILES=3 can hang
+  // when package is incomplete; ONLY_PACKAGES matches Chromium after load.
+  udata_setFileAccess_77(1, &err);
+  return err == 0 ? 1 : 0;
+}
+
 }  // extern "C"
