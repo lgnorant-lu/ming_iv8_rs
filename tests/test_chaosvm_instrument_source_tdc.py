@@ -104,3 +104,52 @@ def test_instrument_chaosvm_errors_with_instrument_source_hint():
     rep = _run(body)
     assert rep["ok"] is False, rep
     assert rep["hint"] is True, rep
+
+
+def test_instrument_source_reports_dispatch_count_and_recommended_api():
+    """v0.8.101 Q165: info dict includes multi-site metadata."""
+    import iv8_rs
+
+    def body():
+        src = _REF.read_text(encoding="utf-8", errors="replace")
+        patched, info = iv8_rs.instrument_source(src)
+        return {
+            "mode": info.get("mode"),
+            "dispatch_count": info.get("dispatch_count"),
+            "recommended": info.get("recommended_api"),
+            "has_q165": bool(info.get("q165_note")),
+            "has_log": "__iv8i_log__" in patched,
+            "wrapped": "(globalThis.__iv8i_pc__=" in patched,
+        }
+
+    rep = _run(body)
+    assert rep["mode"] == "chaosvm", rep
+    assert rep["recommended"] == "instrument_source", rep
+    assert rep["has_q165"] is True, rep
+    assert isinstance(rep["dispatch_count"], int) and rep["dispatch_count"] >= 1, rep
+    assert rep["has_log"] is True and rep["wrapped"] is True, rep
+
+
+def test_instrument_source_multi_site_synthetic():
+    """v0.8.101: all H[I[P++]]() sites rewritten (including offset 0)."""
+    import iv8_rs
+
+    def body():
+        # Minimal chaosvm-like body: two dispatches, first at offset 0 of body
+        # after our head is prepended.
+        src = "B[g[D++]]();var x=1;B[g[D++]]();"
+        patched, info = iv8_rs.instrument_source(src, mode="chaosvm")
+        return {
+            "dispatch_count": info.get("dispatch_count"),
+            "wrap_count": patched.count("(globalThis.__iv8i_pc__="),
+            "log_sites": patched.count("__iv8i_log__"),
+            "handler": info.get("handler_array"),
+            "offsets": info.get("dispatch_offsets"),
+        }
+
+    rep = _run(body)
+    assert rep["handler"] == "B", rep
+    assert rep["dispatch_count"] == 2, rep
+    assert rep["wrap_count"] == 2, rep
+    assert rep["log_sites"] >= 2, rep
+    assert isinstance(rep["offsets"], list) and len(rep["offsets"]) == 2, rep

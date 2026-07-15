@@ -1,23 +1,31 @@
 //! Source code instrumentation for JSVMP (ChaosVM / switch-VM) tracing.
 //!
-//! Strategy (validated by TDC real-world testing):
-//! 1. **Dispatch expression replacement**: Replace `A[Q[U++]]()` with
-//!    `(log_push, A[Q[U++]]())` — captures EVERY iteration including recursive calls.
-//! 2. **Source-head Proxy injection**: Prepend global object Proxies at the very
-//!    start of source (before ChaosVM IIFE captures references).
+//! Strategy (validated by TDC real-world testing; v0.8.101 Q165 path A robust):
+//! 1. **Dispatch expression replacement** (all sites): rewrite every
+//!    `H[I[P++]]()` (and whitespace variants) with a logging wrapper so each
+//!    VM iteration is traced — works for **closure-scoped** handler tables
+//!    without needing a global Proxy (unlike `instrument_chaosvm`).
+//! 2. **Source-head Proxy injection**: Prepend global object Proxies at the
+//!    very start of source (before ChaosVM IIFE captures references).
 //!
 //! Output format: "TYPE,PC,target,value" where TYPE is D/R/C/W.
+//!
+//! Why not V8 internal closure hooks: high cost / fragile / detection surface;
+//! path A already captures dispatch without attaching to closed-over locals.
 
 use pyo3::prelude::*;
-use pyo3::types::PyDict;
+use pyo3::types::{PyDict, PyList};
 
 /// Detect JSVMP pattern and inject unified tracing code.
 ///
 /// Strategy:
-/// - Replaces the dispatch expression (e.g. `A[Q[U++]]()`) with a logging wrapper
+/// - Replaces **all** matching dispatch expressions with a logging wrapper
 /// - Prepends global object Proxies at source start (captures env reads with PC)
 ///
 /// Returns (patched_source, vm_info_dict) or raises RuntimeError if detection fails.
+///
+/// Recommended product path for TDC/ChaosVM (Q165 path A). Prefer this over
+/// `JSContext.instrument_chaosvm` when the handler table is closure-scoped.
 #[pyfunction]
 #[pyo3(signature = (
     source,
@@ -49,18 +57,35 @@ pub fn instrument_source(
     // Step 1: Detect or use manual overrides
     let detection = if let (Some(ha), Some(pc), Some(sv)) = (handler_array, pc_var, stack_var) {
         let ia = index_array.unwrap_or("");
-        // Find dispatch pattern in source
         let pattern = dispatch_pattern
             .map(|s| s.to_string())
-            .unwrap_or_else(|| format!("{}[{}[{}++]]()", ha, ia, pc));
-        let dispatch_offset = source.find(&pattern).unwrap_or(0);
+            .unwrap_or_else(|| {
+                if ia.is_empty() {
+                    format!("{}[{}++]", ha, pc)
+                } else {
+                    format!("{}[{}[{}++]]()", ha, ia, pc)
+                }
+            });
+        // Prefer exact find; if missing, fall back to regex first match for offsets
+        let (dispatch_offset, dispatch_pattern) =
+            if let Some(off) = source.find(&pattern) {
+                (off, pattern)
+            } else if let Some(d) = detect_chaosvm(source) {
+                (d.dispatch_offset, d.dispatch_pattern)
+            } else {
+                (0, pattern)
+            };
         VmDetection {
             handler_array: ha.to_string(),
             index_array: ia.to_string(),
             pc_var: pc.to_string(),
             stack_var: sv.to_string(),
-            mode: mode.to_string(),
-            dispatch_pattern: pattern,
+            mode: if mode == "auto" {
+                "chaosvm".to_string()
+            } else {
+                mode.to_string()
+            },
+            dispatch_pattern,
             dispatch_offset,
         }
     } else {
@@ -94,17 +119,10 @@ pub fn instrument_source(
 
     let head_code = generate_head_code(capture_env, &targets_json, limit);
 
-    // Step 3: Replace dispatch expression with logging wrapper
+    // Step 3: Replace ALL dispatch sites (v0.8.101 robust) + fix offset==0 bug
     let dispatch_replacement = generate_dispatch_replacement(&detection, capture_stack_depth);
-
-    let patched = if detection.dispatch_offset > 0 {
-        let before = &source[..detection.dispatch_offset];
-        let after = &source[detection.dispatch_offset + detection.dispatch_pattern.len()..];
-        format!("{}{}{}{}", head_code, before, dispatch_replacement, after)
-    } else {
-        // Fallback: just prepend head code (no dispatch replacement)
-        format!("{}{}", head_code, source)
-    };
+    let (body, sites) = replace_all_dispatches(source, &detection, &dispatch_replacement);
+    let patched = format!("{}{}", head_code, body);
 
     // Step 4: Build vm_info dict
     let info = PyDict::new(py);
@@ -115,9 +133,100 @@ pub fn instrument_source(
     info.set_item("mode", &detection.mode)?;
     info.set_item("dispatch_pattern", &detection.dispatch_pattern)?;
     info.set_item("dispatch_offset", detection.dispatch_offset)?;
+    info.set_item("dispatch_count", sites.len())?;
+    let offsets = PyList::empty(py);
+    for off in &sites {
+        offsets.append(*off)?;
+    }
+    info.set_item("dispatch_offsets", offsets)?;
     info.set_item("head_code_length", head_code.len())?;
+    info.set_item("recommended_api", "instrument_source")?;
+    info.set_item(
+        "q165_note",
+        "path A: source rewrite works for closure-scoped handlers; \
+         instrument_chaosvm requires global handler table",
+    )?;
 
     Ok((patched, info.into_any().unbind()))
+}
+
+/// Replace every ChaosVM (or exact) dispatch occurrence. Returns (body, offsets).
+fn replace_all_dispatches(
+    source: &str,
+    detection: &VmDetection,
+    replacement: &str,
+) -> (String, Vec<usize>) {
+    let mut sites: Vec<(usize, usize)> = Vec::new();
+
+    if detection.mode == "chaosvm" {
+        // Primary: standard H[I[P++]]()
+        if let Ok(re) = regex_lite::Regex::new(
+            r"([A-Za-z_$][A-Za-z0-9_$]*)\[([A-Za-z_$][A-Za-z0-9_$]*)\[([A-Za-z_$][A-Za-z0-9_$]*)\+\+\]\]\(\)",
+        ) {
+            for m in re.find_iter(source) {
+                // Only rewrite sites matching detected handler/index/pc when possible
+                if let Some(caps) = re.captures(m.as_str()) {
+                    let ha = caps.get(1).map(|x| x.as_str()).unwrap_or("");
+                    let ia = caps.get(2).map(|x| x.as_str()).unwrap_or("");
+                    let pc = caps.get(3).map(|x| x.as_str()).unwrap_or("");
+                    if ha == detection.handler_array
+                        && (detection.index_array.is_empty() || ia == detection.index_array)
+                        && pc == detection.pc_var
+                    {
+                        sites.push((m.start(), m.end()));
+                    }
+                }
+            }
+        }
+        // Whitespace-tolerant variant: H [ I [ P ++ ] ] ( )
+        if sites.is_empty() {
+            if let Ok(re) = regex_lite::Regex::new(
+                r"([A-Za-z_$][A-Za-z0-9_$]*)\s*\[\s*([A-Za-z_$][A-Za-z0-9_$]*)\s*\[\s*([A-Za-z_$][A-Za-z0-9_$]*)\s*\+\+\s*\]\s*\]\s*\(\s*\)",
+            ) {
+                for m in re.find_iter(source) {
+                    if let Some(caps) = re.captures(m.as_str()) {
+                        let ha = caps.get(1).map(|x| x.as_str()).unwrap_or("");
+                        let ia = caps.get(2).map(|x| x.as_str()).unwrap_or("");
+                        let pc = caps.get(3).map(|x| x.as_str()).unwrap_or("");
+                        if ha == detection.handler_array
+                            && (detection.index_array.is_empty() || ia == detection.index_array)
+                            && pc == detection.pc_var
+                        {
+                            sites.push((m.start(), m.end()));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Exact substring fallback (manual pattern / switch leave-as-is)
+    if sites.is_empty() && !detection.dispatch_pattern.is_empty() {
+        let pat = &detection.dispatch_pattern;
+        let mut start = 0;
+        while let Some(rel) = source[start..].find(pat) {
+            let abs = start + rel;
+            sites.push((abs, abs + pat.len()));
+            start = abs + pat.len();
+        }
+    }
+
+    if sites.is_empty() {
+        return (source.to_string(), Vec::new());
+    }
+
+    // Rebuild from left to right
+    let mut out = String::with_capacity(source.len() + replacement.len() * sites.len());
+    let mut last = 0;
+    let mut offsets = Vec::with_capacity(sites.len());
+    for (s, e) in &sites {
+        out.push_str(&source[last..*s]);
+        offsets.push(out.len()); // offset in patched body (before head)
+        out.push_str(replacement);
+        last = *e;
+    }
+    out.push_str(&source[last..]);
+    (out, offsets)
 }
 
 // ─── Internal types ──────────────────────────────────────────────────────────
@@ -332,5 +441,49 @@ fn generate_dispatch_replacement(detection: &VmDetection, capture_stack_depth: u
         // switch_vm: can't easily replace switch expression, just prepend log
         // For switch VMs, the head code + manual hook is more appropriate
         detection.dispatch_pattern.clone()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn detect_chaosvm_standard_pattern() {
+        let src = "function run(){ while(1){ B[g[D++]](); } }";
+        let d = detect_chaosvm(src).expect("detect");
+        assert_eq!(d.handler_array, "B");
+        assert_eq!(d.index_array, "g");
+        assert_eq!(d.pc_var, "D");
+        assert_eq!(d.mode, "chaosvm");
+        assert!(src[d.dispatch_offset..].starts_with("B[g[D++]]()"));
+    }
+
+    #[test]
+    fn replace_all_dispatches_multi_site_and_offset_zero() {
+        // First site at offset 0 — old code skipped rewrite when offset==0
+        let src = "B[g[D++]]();foo();B[g[D++]]();";
+        let d = detect_chaosvm(src).expect("detect");
+        let rep = generate_dispatch_replacement(&d, 0);
+        let (body, sites) = replace_all_dispatches(src, &d, &rep);
+        assert_eq!(sites.len(), 2, "expected two dispatch sites, got {:?}", sites);
+        // Replacement still contains B[g[D++]]() as the real call; ensure logging wraps it.
+        assert!(body.contains("__iv8i_log__"), "replacement should log");
+        // each site injects multiple __iv8i_log__ refs (length check + push)
+        assert!(body.matches("__iv8i_log__").count() >= 2);
+        assert!(body.starts_with("(globalThis.__iv8i_pc__="), "offset-0 site rewritten");
+        assert!(body.contains(";foo();(globalThis.__iv8i_pc__="), "second site rewritten");
+    }
+
+    #[test]
+    fn replace_ignores_other_handler_names() {
+        let src = "B[g[D++]]();X[g[D++]]();";
+        let d = detect_chaosvm(src).expect("detect");
+        assert_eq!(d.handler_array, "B");
+        let rep = "/*patched*/";
+        let (body, sites) = replace_all_dispatches(src, &d, rep);
+        assert_eq!(sites.len(), 1);
+        assert!(body.contains("X[g[D++]]()"));
+        assert!(body.contains("/*patched*/"));
     }
 }
