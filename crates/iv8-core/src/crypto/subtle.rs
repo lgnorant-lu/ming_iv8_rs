@@ -468,7 +468,7 @@ unsafe extern "C" fn subtle_digest(info: *const v8::FunctionCallbackInfo) {
             }
         };
 
-        let result = match algo.to_uppercase().replace("-", "").as_str() {
+        let result = match algo.to_uppercase().replace("-", "").replace("_", "").as_str() {
             "SHA1" => {
                 let mut hasher = Sha1::new();
                 hasher.update(&data);
@@ -554,7 +554,7 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
             None
         };
 
-        let algo_upper = algo.to_uppercase().replace("-", "");
+        let algo_upper = algo.to_uppercase().replace("-", "").replace("_", "");
 
         // Handle JWK format specially
         if format == "jwk" {
@@ -1016,7 +1016,7 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
             }
         };
 
-        let algo_upper = algo.to_uppercase().replace("-", "");
+        let algo_upper = algo.to_uppercase().replace("-", "").replace("_", "");
 
         // Try to get KeyMeta first (new path)
         if let Some(meta) = extract_key_meta(scope, args.get(1)) {
@@ -1206,7 +1206,7 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
         let hash_algo_from_arg = get_hash_from_algo(scope, algo_arg);
         let signature = extract_bytes(scope, args.get(2)).unwrap_or_default();
         let data = extract_bytes(scope, args.get(3)).unwrap_or_default();
-        let algo_upper = algo.to_uppercase().replace("-", "");
+        let algo_upper = algo.to_uppercase().replace("-", "").replace("_", "");
 
         // Try KeyMeta path first
         if let Some(meta) = extract_key_meta(scope, args.get(1)) {
@@ -1312,7 +1312,7 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
 
 /// HMAC sign with the specified hash algorithm.
 fn hmac_sign(hash_algo: &str, key: &[u8], data: &[u8]) -> Option<Vec<u8>> {
-    match hash_algo.to_uppercase().replace("-", "").as_str() {
+    match hash_algo.to_uppercase().replace("-", "").replace("_", "").as_str() {
         "SHA1" => {
             let mut mac = <Hmac<Sha1> as Mac>::new_from_slice(key).ok()?;
             mac.update(data);
@@ -1377,7 +1377,7 @@ unsafe extern "C" fn subtle_encrypt(info: *const v8::FunctionCallbackInfo) {
         let algo_arg = args.get(0);
         let algo = get_algorithm_name(scope, algo_arg);
         let iv = get_iv(scope, algo_arg);
-        let algo_upper = algo.to_uppercase().replace("-", "");
+        let algo_upper = algo.to_uppercase().replace("-", "").replace("_", "");
 
         // Extract key bytes (for symmetric algorithms)
         let key_arg = args.get(1);
@@ -1512,7 +1512,7 @@ unsafe extern "C" fn subtle_decrypt(info: *const v8::FunctionCallbackInfo) {
         let algo_arg = args.get(0);
         let algo = get_algorithm_name(scope, algo_arg);
         let iv = get_iv(scope, algo_arg);
-        let algo_upper = algo.to_uppercase().replace("-", "");
+        let algo_upper = algo.to_uppercase().replace("-", "").replace("_", "");
 
         let key_arg = args.get(1);
         let key_bytes_opt = if key_arg.is_object() {
@@ -1694,7 +1694,7 @@ unsafe extern "C" fn subtle_derive_bits(info: *const v8::FunctionCallbackInfo) {
         let algo = get_algorithm_name(scope, algo_arg);
         let length_bits = args.get(2).number_value(scope).unwrap_or(256.0) as usize;
         let length_bytes = length_bits / 8;
-        let algo_upper = algo.to_uppercase().replace("-", "");
+        let algo_upper = algo.to_uppercase().replace("-", "").replace("_", "");
 
         let result = match algo_upper.as_str() {
             "PBKDF2" => {
@@ -1882,7 +1882,7 @@ fn pbkdf2_derive(
 ) -> Result<Vec<u8>, String> {
     let mut output = vec![0u8; length];
 
-    match hash.to_uppercase().replace("-", "").as_str() {
+    match hash.to_uppercase().replace("-", "").replace("_", "").as_str() {
         "SHA256" => pbkdf2_sha256(password, salt, iterations, &mut output),
         "SHA1" => pbkdf2_sha1(password, salt, iterations, &mut output),
         _ => return Err(format!("PBKDF2: unsupported hash '{}'", hash)),
@@ -1944,7 +1944,7 @@ fn hkdf_derive(
     length: usize,
 ) -> Result<Vec<u8>, String> {
     use hkdf::Hkdf;
-    match hash.to_uppercase().replace("-", "").as_str() {
+    match hash.to_uppercase().replace("-", "").replace("_", "").as_str() {
         "SHA256" => {
             let hk = Hkdf::<Sha256>::new(if salt.is_empty() { None } else { Some(salt) }, ikm);
             let mut okm = vec![0u8; length];
@@ -2120,7 +2120,11 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
         };
 
         let hash = get_hash_from_algo(scope, algo_arg);
-        let algo_upper = algo.to_uppercase().replace("-", "");
+        // Strip '-' and '_' so RSASSA-PKCS1-v1_5 normalizes to RSASSAPKCS1V15 (Q095).
+        let algo_upper = algo
+            .to_uppercase()
+            .replace('-', "")
+            .replace('_', "");
 
         match algo_upper.as_str() {
             // Symmetric key generation
@@ -2457,7 +2461,7 @@ unsafe extern "C" fn subtle_export_key(info: *const v8::FunctionCallbackInfo) {
                 return;
             }
 
-            let algo_upper = meta.algo.to_uppercase().replace("-", "");
+            let algo_upper = meta.algo.to_uppercase().replace("-", "").replace("_", "");
 
             match format.as_str() {
                 "raw" => {
@@ -2670,7 +2674,7 @@ unsafe extern "C" fn subtle_derive_key(info: *const v8::FunctionCallbackInfo) {
             256
         };
 
-        let algo_upper = algo.to_uppercase().replace("-", "");
+        let algo_upper = algo.to_uppercase().replace("-", "").replace("_", "");
 
         // Derive bits first, then wrap as key
         let derived_bits = match algo_upper.as_str() {
@@ -2883,7 +2887,7 @@ unsafe extern "C" fn subtle_wrap_key(info: *const v8::FunctionCallbackInfo) {
             }
         };
 
-        let result = match wrap_algo.to_uppercase().replace("-", "").as_str() {
+        let result = match wrap_algo.to_uppercase().replace("-", "").replace("_", "").as_str() {
             "AESGCM" => {
                 let iv = iv.unwrap_or_else(|| vec![0u8; 12]);
                 aes_gcm_encrypt(&wrap_key_bytes, &iv, &key_bytes)
@@ -2962,7 +2966,7 @@ unsafe extern "C" fn subtle_unwrap_key(info: *const v8::FunctionCallbackInfo) {
             }
         };
 
-        let decrypted = match unwrap_algo.to_uppercase().replace("-", "").as_str() {
+        let decrypted = match unwrap_algo.to_uppercase().replace("-", "").replace("_", "").as_str() {
             "AESGCM" => {
                 let iv = iv.unwrap_or_else(|| vec![0u8; 12]);
                 aes_gcm_decrypt(&unwrap_key_bytes, &iv, &wrapped_key_bytes)
