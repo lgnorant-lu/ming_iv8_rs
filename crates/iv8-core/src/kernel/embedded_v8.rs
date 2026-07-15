@@ -99,10 +99,11 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         document.write(args.join(' ') + '\n');
     };
     document.open = function() {
-        // Reset the insertion point on explicit open()
+        // Q070 phase A: reset write insertion point (not full parser re-open).
         __iv8_write_anchor = null;
         return document;
     };
+    // close() is a no-op for the insertion model; full stream end is page_load lifecycle.
     document.close = function() {};
 })();
 "#;
@@ -2779,20 +2780,30 @@ impl EmbeddedV8Kernel {
         // 1. Parse HTML into DOM
         let doc = crate::dom::parse_html(html, base_url);
 
-        // 2. Collect script info (inline content + external src) before storing document
+        // 2. Collect script info before storing document (Q081: classic / defer / async).
         struct ScriptInfo {
             inline: Option<String>,
             src: Option<String>,
+            is_async: bool,
+            is_defer: bool,
         }
         let scripts: Vec<ScriptInfo> = doc
             .get_elements_by_tag_name("script")
             .iter()
             .map(|&nid| {
                 let inline = doc.text_content_of(nid);
-                let src = doc
-                    .get(nid)
+                let node = doc.get(nid);
+                let src = node
                     .and_then(|n| n.value().get_attr("src"))
                     .map(|s| s.to_string());
+                let is_async = node
+                    .map(|n| n.value().get_attr("async").is_some())
+                    .unwrap_or(false);
+                // HTML: async wins over defer when both present on classic scripts.
+                let is_defer = !is_async
+                    && node
+                        .map(|n| n.value().get_attr("defer").is_some())
+                        .unwrap_or(false);
                 ScriptInfo {
                     inline: if inline.is_empty() {
                         None
@@ -2800,6 +2811,8 @@ impl EmbeddedV8Kernel {
                         Some(inline)
                     },
                     src,
+                    is_async,
+                    is_defer,
                 }
             })
             .collect();
@@ -2896,15 +2909,27 @@ impl EmbeddedV8Kernel {
                 .ok();
         }
 
-        // 5. Execute scripts in order (inline first, then external)
-        for (i, script) in scripts.iter().enumerate() {
-            // Handle external script (src attribute)
+        // 4f. Q080: enter loading before script execution (blank doc starts complete).
+        {
+            let state = RuntimeState::get(&self.isolate);
+            let doc = state.document.borrow();
+            if let Some(ref doc) = *doc {
+                doc.set_ready_state(crate::dom::node::DocumentReadyState::Loading);
+            }
+        }
+        self.eval(
+            "try { document.readyState = 'loading'; } catch(e) {}",
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
+        // 5. Execute scripts (Q081 offline model after full parse):
+        //    classic → async (doc order) → interactive → defer → DCL → complete → load.
+        let run_one_script = |kernel: &mut Self, i: usize, script: &ScriptInfo| {
             if let Some(ref src) = script.src {
-                // Resolve URL relative to base_url
                 let resolved_url = if src.starts_with("http://") || src.starts_with("https://") {
                     src.clone()
                 } else if let Some(base) = base_url {
-                    // Simple URL resolution: join base + src
                     if let Ok(base_url_parsed) = url::Url::parse(base) {
                         base_url_parsed
                             .join(src)
@@ -2917,9 +2942,8 @@ impl EmbeddedV8Kernel {
                     src.clone()
                 };
 
-                // Look up in ResourceBundle
                 let script_src = {
-                    let state = RuntimeState::get(&self.isolate);
+                    let state = RuntimeState::get(&kernel.isolate);
                     let bundle = state.resource_bundle.borrow();
                     bundle
                         .get(&resolved_url)
@@ -2932,71 +2956,39 @@ impl EmbeddedV8Kernel {
                         line_offset: 0,
                         column_offset: 0,
                     };
-                    if let Err(e) = self.eval(&src_code, opts) {
-                        crate::telemetry::eval_error(&format!("external script {} error: {:?}", i, e));
-                    }
-                }
-
-                #[test]
-                fn screen_profile_runtime_batch_v044() {
-                    use crate::convert::RustValue;
-                    let source = iv8_profile::defaults::default_profile_source();
-                    let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
-                    let config = KernelConfig::default().with_profile_matrix(&matrix);
-                    let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
-
-                    assert_eq!(
-                        kernel.eval_to_rust_value("screen.width"),
-                        RustValue::Int(source.display.screen.width as i64)
-                    );
-                    assert_eq!(
-                        kernel.eval_to_rust_value("screen.height"),
-                        RustValue::Int(source.display.screen.height as i64)
-                    );
-                    assert_eq!(
-                        kernel.eval_to_rust_value("screen.availWidth"),
-                        RustValue::Int(source.display.screen.avail_width as i64)
-                    );
-                    assert_eq!(
-                        kernel.eval_to_rust_value("screen.availHeight"),
-                        RustValue::Int(source.display.screen.avail_height as i64)
-                    );
-                    assert_eq!(
-                        kernel.eval_to_rust_value("screen.colorDepth"),
-                        RustValue::Int(source.display.screen.color_depth as i64)
-                    );
-                    assert_eq!(
-                        kernel.eval_to_rust_value("screen.pixelDepth"),
-                        RustValue::Int(source.display.screen.color_depth as i64)
-                    );
-
-                    let dpr = kernel.eval_to_rust_value("window.devicePixelRatio");
-                    match dpr {
-                        RustValue::Int(v) => {
-                            assert_eq!(v as f64, source.display.window.device_pixel_ratio)
-                        }
-                        RustValue::Float(v) => assert!(
-                            (v - source.display.window.device_pixel_ratio).abs() < f64::EPSILON
-                        ),
-                        other => panic!("expected numeric devicePixelRatio, got {:?}", other),
+                    if let Err(e) = kernel.eval(&src_code, opts) {
+                        crate::telemetry::eval_error(&format!(
+                            "external script {} error: {:?}",
+                            i, e
+                        ));
                     }
                 }
             }
 
-            // Handle inline script
             if let Some(ref inline_src) = script.inline {
                 let opts = crate::kernel::EvalOpts {
                     source_url: Some(format!("inline-script-{}", i)),
                     line_offset: 0,
                     column_offset: 0,
                 };
-                if let Err(e) = self.eval(inline_src, opts) {
+                if let Err(e) = kernel.eval(inline_src, opts) {
                     crate::telemetry::eval_error(&format!("inline script {} error: {:?}", i, e));
                 }
             }
+        };
+
+        for (i, script) in scripts.iter().enumerate() {
+            if !script.is_async && !script.is_defer {
+                run_one_script(self, i, script);
+            }
+        }
+        for (i, script) in scripts.iter().enumerate() {
+            if script.is_async {
+                run_one_script(self, i, script);
+            }
         }
 
-        // 6. Set readyState to interactive (update JS-side too)
+        // 6. readyState → interactive (+ readystatechange via JS setter)
         {
             let state = RuntimeState::get(&self.isolate);
             let doc = state.document.borrow();
@@ -3004,14 +2996,20 @@ impl EmbeddedV8Kernel {
                 doc.set_ready_state(crate::dom::node::DocumentReadyState::Interactive);
             }
         }
-        // Update JS-side readyState
         self.eval(
             "try { document.readyState = 'interactive'; } catch(e) {}",
             crate::kernel::EvalOpts::default(),
         )
         .ok();
 
-        // 7. Dispatch DOMContentLoaded event on document root
+        // 6b. deferred scripts (document order) before DOMContentLoaded
+        for (i, script) in scripts.iter().enumerate() {
+            if script.is_defer {
+                run_one_script(self, i, script);
+            }
+        }
+
+        // 7. DOMContentLoaded on document
         self.with_global_scope(|scope, _global| {
             let state = RuntimeState::get(&*scope);
             let doc = state.document.borrow();
@@ -3029,7 +3027,7 @@ impl EmbeddedV8Kernel {
             }
         });
 
-        // 8. Set readyState to complete (Rust + JS side)
+        // 8. readyState → complete
         {
             let state = RuntimeState::get(&self.isolate);
             let doc = state.document.borrow();
@@ -3043,7 +3041,7 @@ impl EmbeddedV8Kernel {
         )
         .ok();
 
-        // 9. Dispatch load event on document root
+        // 9. load on document root and window (Q080)
         self.with_global_scope(|scope, _global| {
             let state = RuntimeState::get(&*scope);
             let doc = state.document.borrow();
@@ -3060,6 +3058,16 @@ impl EmbeddedV8Kernel {
                 );
             }
         });
+        self.eval(
+            r#"(function(){
+              try {
+                var ev = new Event('load');
+                window.dispatchEvent(ev);
+              } catch(e) {}
+            })()"#,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 9b. Re-install cookie accessor after all scripts executed.
         // Inline scripts may have interfered with the cookie accessor via

@@ -174,10 +174,21 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         configurable: true,
     });
 
-    // document.readyState
+    // document.readyState — mutable for page_load lifecycle (Q080).
+    // Initial blank context is complete; page_load sets loading→interactive→complete.
+    var _readyState = 'complete';
     Object.defineProperty(document, 'readyState', {
-        get: function() { return 'complete'; },
-        set: undefined,
+        get: function() { return _readyState; },
+        set: function(v) {
+            var nv = String(v);
+            if (nv !== 'loading' && nv !== 'interactive' && nv !== 'complete') return;
+            if (nv === _readyState) return;
+            _readyState = nv;
+            try {
+                var ev = new Event('readystatechange');
+                document.dispatchEvent(ev);
+            } catch (e) {}
+        },
         enumerable: true,
         configurable: true,
     });
