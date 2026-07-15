@@ -6,6 +6,32 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.100] - 2026-07-15
+
+> Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
+> Mode: Lightweight Increment + Wave **W1/W2** hang close. Continuum close 2026-07-15.
+
+### Added / Fixed
+- **W1**: Layer C single-owner DocRc streaming page_load; Q070/Q080/Q081/Q082; html5ever **0.39**; Worker module static+dynamic import; currentScript stream harden
+- **W2**: high-signal Illegal invocation (EventTarget brand-before-argc; Location brand/setters; getBoundingClientRect; fetch; activeElement; URL component setters)
+- Q039 dual Navigator locked **BOUND** intentional (no consolidate)
+- K-005: codegen keeps prototype_chain_check; Signature mass path **rejected** (design §12.10)
+- Residual ledger: docs/todo/TODO-v0.8.100-residual.md (full DEFER/BOUND index)
+- Positioning glossary: 0.8.100-product-glossary.md
+
+### Quality Gates
+- cargo test -p iv8-core --lib: **520 PASS**
+- cargo test -p iv8-surface-codegen --lib: **46 PASS**
+- lifecycle + esm + timer pytest: **30 PASS** (W1 hold)
+- detection receiver residual + surface_location: held
+- Package metadata: **0.8.11** unchanged
+
+### Explicit non-goals
+- Package bump (Q161 not authorized this closeout)
+- W3–W9 implementation waves
+- Full Chromium network / CORS product / idlharness 100% hero
+- Branch B (Q160/Q162 OUT)
+
 ## [v0.8.99] - 2026-07-15
 
 > Local milestone tag (not a package release). Package metadata remains **0.8.11** (D-151 dual-track).
