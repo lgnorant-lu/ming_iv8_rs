@@ -475,6 +475,82 @@ def test_worker_module_static_import_bundle_snapshot_constructs():
     assert rep.get("ok") is True, rep
 
 
+def test_worker_module_relative_import_postmessage_value():
+    """Worker module relative ./dep.js + postMessage result (static import graph)."""
+
+    def body():
+        import time
+
+        ctx = iv8_rs.JSContext()
+        ctx.add_resource(
+            "https://ex.test/dep.js",
+            b"export const n = 7;",
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        ctx.add_resource(
+            "https://ex.test/wentry.js",
+            b'import { n } from "./dep.js"; self.postMessage(n);',
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        ctx.eval(
+            r"""
+            globalThis.__wm = [];
+            var w = new Worker('https://ex.test/wentry.js', { type: 'module' });
+            w.onmessage = function(e){ globalThis.__wm.push(e.data); };
+            """
+        )
+        for _ in range(40):
+            ctx.eval("void 0")
+            raw = str(ctx.eval("JSON.stringify(globalThis.__wm)"))
+            if raw != "[]":
+                return raw
+            time.sleep(0.05)
+        return "[]"
+
+    msgs = json.loads(_run(body))
+    assert msgs == [7], msgs
+
+
+def test_worker_module_dynamic_import_postmessage():
+    """Worker module dynamic import() from bundle snapshot."""
+
+    def body():
+        import time
+
+        ctx = iv8_rs.JSContext()
+        ctx.add_resource(
+            "https://ex.test/dyn.js",
+            b"export const v = 9;",
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        ctx.add_resource(
+            "https://ex.test/wdyn.js",
+            b'import("https://ex.test/dyn.js").then(m => self.postMessage(m.v));',
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        ctx.eval(
+            r"""
+            globalThis.__wd = [];
+            var w = new Worker('https://ex.test/wdyn.js', { type: 'module' });
+            w.onmessage = function(e){ globalThis.__wd.push(e.data); };
+            """
+        )
+        for _ in range(40):
+            ctx.eval("void 0")
+            raw = str(ctx.eval("JSON.stringify(globalThis.__wd)"))
+            if raw != "[]":
+                return raw
+            time.sleep(0.05)
+        return "[]"
+
+    msgs = json.loads(_run(body))
+    assert msgs == [9], msgs
+
+
 def test_type_module_inline_executes_via_eval_module():
     """K-ESM-LOADER: type=module inline runs after classic/defer (side effects)."""
 

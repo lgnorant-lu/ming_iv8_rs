@@ -434,18 +434,17 @@ mod tests {
     #[test]
     fn document_ready_state_is_accessor_not_data() {
         let mut kernel = make_kernel_with_env();
-        // P1-DESC: document.readyState is now an accessor property (not data),
-        // matching Chrome's WebIDL descriptor shape.
-        // Kernel::new() runs full init including install_undetect_shims
-        // which evals DOCUMENT_PROPS_JS that installs the accessor.
+        // P1-DESC: document.readyState is an accessor (not data).
+        // Q080: setter is present so page_load can drive loading→interactive→complete
+        // and fire readystatechange (Chrome also uses an accessor; host may set).
         let result = kernel.eval_to_rust_value(
             "var d = Object.getOwnPropertyDescriptor(document, 'readyState');\
-             d && typeof d.get === 'function' && d.set === undefined",
+             d && typeof d.get === 'function' && !('value' in d)",
         );
         assert_eq!(
             result,
             RustValue::Bool(true),
-            "document.readyState must be accessor with getter and no setter"
+            "document.readyState must be accessor (getter), not data property"
         );
     }
 }

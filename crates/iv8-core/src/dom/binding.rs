@@ -910,8 +910,7 @@ unsafe extern "C" fn doc_document_element(info: *const v8::FunctionCallbackInfo)
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let node_id = {
-            let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.document_element())
+state.with_document(|d| d.document_element()).flatten()
         };
         if let Some(nid) = node_id {
             if let Some(obj) = crate::dom::template::create_node_object(scope, state, nid) {
@@ -991,8 +990,7 @@ unsafe extern "C" fn doc_body(info: *const v8::FunctionCallbackInfo) {
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let node_id = {
-            let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.body())
+state.with_document(|d| d.body()).flatten()
         };
         if let Some(nid) = node_id {
             if let Some(obj) = crate::dom::template::create_node_object(scope, state, nid) {
@@ -1018,8 +1016,7 @@ unsafe extern "C" fn doc_head(info: *const v8::FunctionCallbackInfo) {
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let node_id = {
-            let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.head())
+state.with_document(|d| d.head()).flatten()
         };
         if let Some(nid) = node_id {
             if let Some(obj) = crate::dom::template::create_node_object(scope, state, nid) {
@@ -2083,14 +2080,9 @@ unsafe extern "C" fn query_selector(info: *const v8::FunctionCallbackInfo) {
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
-        let node_id = {
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
-                doc.query_selector(&sel_str).ok().flatten()
-            } else {
-                None
-            }
-        };
+        let node_id = state
+            .with_document(|doc| doc.query_selector(&sel_str).ok().flatten())
+            .flatten();
 
         if let Some(nid) = node_id {
             if let Some(obj) = node_to_v8_object(scope, state, nid) {
@@ -2127,14 +2119,9 @@ unsafe extern "C" fn query_selector_all(info: *const v8::FunctionCallbackInfo) {
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
-        let node_ids = {
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
-                doc.query_selector_all(&sel_str).unwrap_or_default()
-            } else {
-                vec![]
-            }
-        };
+        let node_ids = state
+            .with_document(|doc| doc.query_selector_all(&sel_str).unwrap_or_default())
+            .unwrap_or_default();
 
         let list = crate::dom::template::create_node_list_instance(scope, state, &node_ids)
             .unwrap_or_else(|| v8::Array::new(scope, 0).into());
@@ -2167,14 +2154,7 @@ unsafe extern "C" fn get_elements_by_tag_name(info: *const v8::FunctionCallbackI
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
-        let node_ids = {
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
-                doc.get_elements_by_tag_name(&tag_str)
-            } else {
-                vec![]
-            }
-        };
+        let node_ids = state.with_document(|doc| doc.get_elements_by_tag_name(&tag_str)).unwrap_or_default();
 
         let list = crate::dom::template::create_node_list_instance(scope, state, &node_ids)
             .unwrap_or_else(|| v8::Array::new(scope, 0).into());
@@ -2207,11 +2187,8 @@ unsafe extern "C" fn get_elements_by_class_name(info: *const v8::FunctionCallbac
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
-        let node_ids = {
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
-                // Direct class matching — avoid CSS selector injection
-                // Split input by whitespace (multiple classes = AND match)
+        let node_ids = state
+            .with_document(|doc| {
                 let target_classes: Vec<&str> = class_str.split_whitespace().collect();
                 if target_classes.is_empty() {
                     vec![]
@@ -2228,10 +2205,8 @@ unsafe extern "C" fn get_elements_by_class_name(info: *const v8::FunctionCallbac
                     }
                     results
                 }
-            } else {
-                vec![]
-            }
-        };
+            })
+            .unwrap_or_default();
 
         let list = crate::dom::template::create_node_list_instance(scope, state, &node_ids)
             .unwrap_or_else(|| v8::Array::new(scope, 0).into());
