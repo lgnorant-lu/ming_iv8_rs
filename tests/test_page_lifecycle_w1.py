@@ -190,10 +190,9 @@ def test_parse_time_write_inserts_after_running_script():
     rep = json.loads(_run(body))
     assert rep["cs"] == "SCRIPT", rep
     assert rep["mid"] is True, rep
-    # mid appears after SCRIPT (parse-time insertion point), not only at body end
+    # mid appears after SCRIPT and before following siblings (parse-time insertion)
     order = rep["order"]
-    assert "mid" in order and "SCRIPT" in order, order
-    assert order.index("SCRIPT") < order.index("mid"), order
+    assert order.index("SCRIPT") < order.index("mid") < order.index("after"), order
 
 
 def test_document_open_write_close_rebuilds_via_page_load():
@@ -231,6 +230,36 @@ def test_document_open_write_close_rebuilds_via_page_load():
     assert rep["o"] == 1, rep
     assert rep["rs"] == "complete", rep
     assert "ex.test" in rep["href"], rep
+
+
+def test_document_open_progressive_reparse_between_writes():
+    """Q070 tokenizer-adjacent: mid-stream write visible before close."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.page_load("<html><body></body></html>", "https://ex.test/")
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  document.open();
+                  document.write('<html><body><div id="a">A</div>');
+                  var mid = !!document.getElementById('a');
+                  document.write('<div id="b">B</div></body></html>');
+                  document.close();
+                  return JSON.stringify({
+                    mid: mid,
+                    a: !!document.getElementById('a'),
+                    b: !!document.getElementById('b')
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["mid"] is True, rep
+    assert rep["a"] and rep["b"], rep
 
 
 def test_document_write_executes_inline_script():

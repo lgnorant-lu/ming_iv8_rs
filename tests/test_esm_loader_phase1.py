@@ -231,6 +231,28 @@ def test_importmap_scopes_override_for_referrer_prefix():
     assert rep["tag"] == "scoped", rep
 
 
+def test_import_cross_origin_without_cors_headers_still_loads_from_bundle():
+    """Honesty: offline ResourceBundle has no CORS gate (document residual)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.add_resource(
+            "https://other.test/x.js",
+            b"export const x = 3;",
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        return str(
+            ctx.eval_promise(
+                "import('https://other.test/x.js').then(m => JSON.stringify({x: m.x}))",
+                200,
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["x"] == 3, rep
+
+
 def test_hidden_intensive_floor_with_short_threshold_env():
     """Q082 intensive: after_ms=10, intensive_min=50 via environment overrides."""
 

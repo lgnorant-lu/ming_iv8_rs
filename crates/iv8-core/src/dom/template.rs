@@ -4055,13 +4055,26 @@ unsafe extern "C" fn insert_adjacent_html_cb(info: *const v8::FunctionCallbackIn
                         }
                     }
                     "afterend" => {
-                        if let Some(parent_id) =
-                            doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id())
-                        {
+                        // Insert each fragment child after `nid` in order (not append to parent end).
+                        if doc.tree.get(nid).and_then(|n| n.parent()).is_some() {
+                            let mut anchor = nid;
                             for (frag_id, _) in &frag_children {
-                                crate::dom::binding::append_node_recursive(
-                                    doc, parent_id, &fragment, *frag_id,
-                                );
+                                let data = fragment.tree.get(*frag_id).map(|n| n.value().clone());
+                                if let Some(d) = data {
+                                    let new_id = doc.insert_after(anchor, d);
+                                    // copy subtree of fragment node
+                                    let child_ids: Vec<_> = fragment
+                                        .tree
+                                        .get(*frag_id)
+                                        .map(|n| n.children().map(|c| c.id()).collect())
+                                        .unwrap_or_default();
+                                    for cid in child_ids {
+                                        crate::dom::binding::append_node_recursive(
+                                            doc, new_id, &fragment, cid,
+                                        );
+                                    }
+                                    anchor = new_id;
+                                }
                             }
                         }
                     }

@@ -180,35 +180,53 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
         return fn.call(node, position, html);
     }
 
+    function lastElementChildOf(parent) {
+        if (!parent) return null;
+        if (parent.lastElementChild) return parent.lastElementChild;
+        var n = parent.lastChild;
+        while (n && n.nodeType !== 1) n = n.previousSibling;
+        return n;
+    }
+    function cleanupWriteMarkers(root) {
+        try {
+            var marks = (root || document).querySelectorAll
+                ? (root || document).querySelectorAll('[data-iv8-write]')
+                : [];
+            for (var i = marks.length - 1; i >= 0; i--) {
+                var m = marks[i];
+                if (m && m.parentNode) m.parentNode.removeChild(m);
+            }
+        } catch (e) {}
+    }
+
     function doWrite(html) {
-        // Case 1: after currentScript — use Element.afterend (Comment has no IAH).
-        // Track last written element via a marker element for sequential writes.
+        // Case 1: parse-time / currentScript — insert afterend SCRIPT (correct insertion point).
+        // Sequential writes: afterend of previous write anchor (last inserted element).
         if (__iv8_write_anchor === null) {
             var script = document.currentScript;
             if (script && script.parentNode) {
                 try {
                     var root1 = script.parentNode;
                     var before1 = countScripts(root1);
-                    // Marker element (not comment) so insertAdjacentHTML works.
-                    var marker = document.createElement('span');
-                    marker.setAttribute('data-iv8-write', '1');
-                    marker.style && (marker.style.display = 'none');
-                    if (script.nextSibling) {
-                        root1.insertBefore(marker, script.nextSibling);
-                    } else {
-                        root1.appendChild(marker);
-                    }
+                    var nextBefore = script.nextSibling;
                     try {
-                        marker.insertAdjacentHTML('beforebegin', html);
+                        script.insertAdjacentHTML('afterend', html);
                     } catch (e0) {
-                        try { script.insertAdjacentHTML('afterend', html); } catch (e00) {}
+                        try { insertAdjacentFromNode(script, 'afterend', html); } catch (e00) {}
                     }
                     if (countScripts(root1) <= before1 && /<script[\s>]/i.test(html)) {
                         materializeScriptsFallback(html, root1);
                     } else {
                         runNewScripts(root1, before1);
                     }
-                    __iv8_write_anchor = marker;
+                    // Anchor = last new element between script and former next sibling
+                    var walk = script.nextSibling;
+                    var lastEl = null;
+                    while (walk && walk !== nextBefore) {
+                        if (walk.nodeType === 1) lastEl = walk;
+                        walk = walk.nextSibling;
+                    }
+                    __iv8_write_anchor = lastEl || script;
                     return;
                 } catch(e) {
                     __iv8_write_anchor = null;
@@ -216,23 +234,29 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
             }
         }
 
-        // Case 2: subsequent write before marker
+        // Case 2: subsequent write after previous anchor
         if (__iv8_write_anchor && __iv8_write_anchor.parentNode) {
             try {
                 var root2 = __iv8_write_anchor.parentNode;
                 var before2 = countScripts(root2);
+                var next2 = __iv8_write_anchor.nextSibling;
                 try {
-                    __iv8_write_anchor.insertAdjacentHTML('beforebegin', html);
+                    __iv8_write_anchor.insertAdjacentHTML('afterend', html);
                 } catch (e1) {
-                    try {
-                        insertAdjacentFromNode(__iv8_write_anchor, 'beforebegin', html);
-                    } catch (e2) {}
+                    try { insertAdjacentFromNode(__iv8_write_anchor, 'afterend', html); } catch (e2) {}
                 }
                 if (countScripts(root2) <= before2 && /<script[\s>]/i.test(html)) {
                     materializeScriptsFallback(html, root2);
                 } else {
                     runNewScripts(root2, before2);
                 }
+                var w2 = __iv8_write_anchor.nextSibling;
+                var last2 = null;
+                while (w2 && w2 !== next2) {
+                    if (w2.nodeType === 1) last2 = w2;
+                    w2 = w2.nextSibling;
+                }
+                if (last2) __iv8_write_anchor = last2;
                 return;
             } catch(e) {
                 __iv8_write_anchor = null;
@@ -241,19 +265,34 @@ pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
 
         // Case 3: body append (post-load / no currentScript)
         var body = ensureBody();
-        if (writeInto(body, 'beforeend', html)) return;
+        if (writeInto(body, 'beforeend', html)) {
+            __iv8_write_anchor = lastElementChildOf(body);
+            return;
+        }
 
         // Case 4: documentElement
         if (document.documentElement) {
             writeInto(document.documentElement, 'beforeend', html);
+            __iv8_write_anchor = lastElementChildOf(document.documentElement);
         }
     }
 
     document.write = function() {
         var html = Array.prototype.join.call(arguments, '');
-        // Deep open stream: buffer until close() for full document rebuild.
+        // Deep open stream: buffer + progressive reparse (tokenizer-adjacent).
+        // Each write re-parses the cumulative buffer so mid-stream DOM is visible,
+        // approximating HTML parser re-entry after document.open().
         if (document.__iv8OpenStream) {
             document.__iv8OpenBuf = (document.__iv8OpenBuf || '') + html;
+            try {
+                var href = (typeof location !== 'undefined' && location.href) ? location.href : '';
+                var buf = document.__iv8OpenBuf;
+                // Progressive: rebuild now; keep stream flags after load.
+                __iv8__.page.load({ baseURL: href, html: buf || '<html><body></body></html>' });
+                document.__iv8OpenStream = true;
+                document.__iv8OpenBuf = buf;
+                try { document.readyState = 'loading'; } catch (e0) {}
+            } catch (e1) {}
             return;
         }
         doWrite(html);
@@ -3483,7 +3522,14 @@ impl EmbeddedV8Kernel {
         };
         let clear_current_script = |kernel: &mut Self| {
             let _ = kernel.eval(
-                "try { document.currentScript = null; } catch(e) {}",
+                r#"try {
+                  document.currentScript = null;
+                  // Remove any residual write markers from this script turn
+                  var marks = document.querySelectorAll('[data-iv8-write]');
+                  for (var i = marks.length - 1; i >= 0; i--) {
+                    if (marks[i].parentNode) marks[i].parentNode.removeChild(marks[i]);
+                  }
+                } catch(e) {}"#,
                 crate::kernel::EvalOpts::default(),
             );
         };
