@@ -543,11 +543,10 @@ fn generate_callbacks(def: &Definition, fn_name: &str, enum_names: &std::collect
     // 3. If this === prototype → throw TypeError (prototype is not its own instance)
     // 4. Walk this.__proto__ chain; if prototype found → PASS; else → throw TypeError
     //
-    // This approach is required because rusty-v8 does not expose:
-    // - FunctionCallbackInfo::Holder()
-    // - FunctionTemplate::HasInstance()
-    // - Object::instance_of()
-    // - Signature on AccessorConfiguration (FFI omits signature param)
+    // Product path (K-005 CLOSED 2026-07-15): keep prototype_chain_check.
+    // V8 Signature for all codegen methods was REJECTED (needs dual-template
+    // .inherit() architecture). See codegen-null-this-design.md §12.10.
+    // Note: instance_of() exists in hand-written paths; Signature mass still not used.
     //
     // See: docs/roadmap/v0.8/analysis/codegen-null-this-design.md Section 12
     let prototype_chain_check = format!(
