@@ -127,8 +127,25 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
 
     // Document properties that RS VMP and other samples may access
     if (typeof document !== 'undefined') {
-        if (document.activeElement === undefined) {
-            Object.defineProperty(document, 'activeElement', { get: function() { return document.body || null; }, configurable: true });
+        // activeElement on Document.prototype (brand-checked); also ensure instance.
+        try {
+            if (typeof Document !== 'undefined' && Document.prototype) {
+                Object.defineProperty(Document.prototype, 'activeElement', {
+                    get: function activeElement() {
+                        if (this == null || typeof this !== 'object' || !(this instanceof Document)) {
+                            throw new TypeError('Illegal invocation');
+                        }
+                        return this.body || null;
+                    },
+                    enumerable: true, configurable: true
+                });
+            }
+        } catch (e) {}
+        if (document && !Object.getOwnPropertyDescriptor(document, 'activeElement')) {
+            Object.defineProperty(document, 'activeElement', {
+                get: function() { return document.body || null; },
+                configurable: true, enumerable: true
+            });
         }
         if (document.styleSheets === undefined) {
             document.styleSheets = [];

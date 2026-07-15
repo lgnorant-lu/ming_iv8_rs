@@ -436,6 +436,9 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
         });
         Object.defineProperty(Element.prototype, 'getBoundingClientRect', {
             value: function getBoundingClientRect() {
+                if (this == null || typeof this !== 'object' || !(this instanceof Element)) {
+                    throw new TypeError('Illegal invocation');
+                }
                 var r = _iv8LookupElementRect(this);
                 var x = (r && r.x !== undefined) ? Number(r.x) : 0;
                 var y = (r && r.y !== undefined) ? Number(r.y) : 0;

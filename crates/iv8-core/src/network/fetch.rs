@@ -170,6 +170,34 @@ unsafe extern "C" fn fetch_callback(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
+        // W2 residual: brand — Window / globalThis only (not arbitrary {}).
+        let this = args.this();
+        let ctx = scope.get_current_context();
+        let global = ctx.global(scope);
+        let is_global = this.strict_equals(global.into());
+        let is_window = {
+            let win_key = crate::v8_utils::v8_string(scope, "Window");
+            if let Some(ctor_val) = global.get(scope, win_key.into()) {
+                if ctor_val.is_object() && this.is_object() {
+                    let this_obj: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(this) };
+                    let ctor_obj: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(ctor_val) };
+                    this_obj.instance_of(scope, ctor_obj).unwrap_or(false)
+                } else {
+                    false
+                }
+            } else {
+                false
+            }
+        };
+        if !is_global && !is_window {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+
         // Create a Promise resolver
         let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);

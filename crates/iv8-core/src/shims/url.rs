@@ -154,32 +154,140 @@ pub const URL_SHIM_JS: &str = r#"
             throw new TypeError("Failed to construct 'URL': Invalid URL");
         }
 
-        this.protocol = match[1] || '';
-        this.hostname = match[2] || '';
-        this.port = match[3] || '';
-        this.pathname = match[4] || '/';
-        this.search = match[5] || '';
-        this.hash = match[6] || '';
-        this.host = this.hostname + (this.port ? ':' + this.port : '');
-        this._origin = this.protocol + '//' + this.host;
-        this.href = this._origin + this.pathname + this.search + this.hash;
-        this._searchParams = new URLSearchParams(this.search);
-        this.username = '';
-        this.password = '';
+        this._protocol = match[1] || '';
+        this._hostname = match[2] || '';
+        this._port = match[3] || '';
+        this._pathname = match[4] || '/';
+        this._search = match[5] || '';
+        this._hash = match[6] || '';
+        this._username = '';
+        this._password = '';
+        this._searchParams = new URLSearchParams(this._search);
+        this._rebuild();
     }
 
     function _urlThis(self) {
-        if (self == null || typeof self !== 'object' || !('href' in self)) {
+        if (self == null || typeof self !== 'object' || !(self instanceof URL)) {
             throw new TypeError('Illegal invocation');
         }
         return self;
     }
+
+    URL.prototype._rebuild = function _rebuild() {
+        var host = this._hostname + (this._port ? (':' + this._port) : '');
+        this._host = host;
+        this._origin = this._protocol + '//' + host;
+        this._href = this._origin + this._pathname + this._search + this._hash;
+        if (this._searchParams) {
+            // keep searchParams in sync when search string changes externally
+            try {
+                var sp = this._searchParams.toString();
+                var want = this._search ? this._search.replace(/^\?/, '') : '';
+                if (sp !== want) {
+                    this._searchParams = new URLSearchParams(this._search);
+                }
+            } catch (e) {}
+        }
+    };
+
+    function _defUrlAcc(name, getKey, setFn) {
+        Object.defineProperty(URL.prototype, name, {
+            get: function() {
+                var s = _urlThis(this);
+                return s[getKey];
+            },
+            set: setFn ? function(v) {
+                var s = _urlThis(this);
+                setFn.call(s, v);
+                s._rebuild();
+            } : undefined,
+            enumerable: true, configurable: true
+        });
+    }
+
+    _defUrlAcc('protocol', '_protocol', function(v) {
+        var p = String(v);
+        if (p.charAt(p.length - 1) !== ':') p += ':';
+        this._protocol = p;
+    });
+    _defUrlAcc('hostname', '_hostname', function(v) {
+        this._hostname = String(v);
+    });
+    _defUrlAcc('port', '_port', function(v) {
+        this._port = String(v);
+    });
+    _defUrlAcc('pathname', '_pathname', function(v) {
+        var p = String(v);
+        this._pathname = p.charAt(0) === '/' ? p : ('/' + p);
+    });
+    _defUrlAcc('search', '_search', function(v) {
+        var s = String(v);
+        this._search = !s ? '' : (s.charAt(0) === '?' ? s : ('?' + s));
+        this._searchParams = new URLSearchParams(this._search);
+    });
+    _defUrlAcc('hash', '_hash', function(v) {
+        var h = String(v);
+        this._hash = !h ? '' : (h.charAt(0) === '#' ? h : ('#' + h));
+    });
+    Object.defineProperty(URL.prototype, 'host', {
+        get: function() {
+            var s = _urlThis(this);
+            return s._hostname + (s._port ? (':' + s._port) : '');
+        },
+        set: function(v) {
+            var s = _urlThis(this);
+            var str = String(v);
+            var coli = str.lastIndexOf(':');
+            if (coli > 0) {
+                s._hostname = str.slice(0, coli);
+                s._port = str.slice(coli + 1);
+            } else {
+                s._hostname = str;
+                s._port = '';
+            }
+            s._rebuild();
+        },
+        enumerable: true, configurable: true
+    });
+    Object.defineProperty(URL.prototype, 'href', {
+        get: function() { return _urlThis(this)._href; },
+        set: function(v) {
+            var s = _urlThis(this);
+            var fullUrl = String(v);
+            var match = fullUrl.match(/^(https?:)\/\/([^:\/\?#]+)(?::(\d+))?(\/[^\?#]*)?(\?[^#]*)?(#.*)?$/);
+            if (!match) {
+                match = fullUrl.match(/^([a-z]+:)\/\/([^:\/\?#]+)(?::(\d+))?(\/[^\?#]*)?(\?[^#]*)?(#.*)?$/);
+            }
+            if (!match) {
+                throw new TypeError("Failed to set 'href' on 'URL': Invalid URL");
+            }
+            s._protocol = match[1] || '';
+            s._hostname = match[2] || '';
+            s._port = match[3] || '';
+            s._pathname = match[4] || '/';
+            s._search = match[5] || '';
+            s._hash = match[6] || '';
+            s._searchParams = new URLSearchParams(s._search);
+            s._rebuild();
+        },
+        enumerable: true, configurable: true
+    });
     Object.defineProperty(URL.prototype, 'origin', {
         get: function() { return _urlThis(this)._origin; },
         enumerable: true, configurable: true
     });
     Object.defineProperty(URL.prototype, 'searchParams', {
         get: function() { return _urlThis(this)._searchParams; },
+        enumerable: true, configurable: true
+    });
+    Object.defineProperty(URL.prototype, 'username', {
+        get: function() { return _urlThis(this)._username; },
+        set: function(v) { _urlThis(this)._username = String(v); },
+        enumerable: true, configurable: true
+    });
+    Object.defineProperty(URL.prototype, 'password', {
+        get: function() { return _urlThis(this)._password; },
+        set: function(v) { _urlThis(this)._password = String(v); },
         enumerable: true, configurable: true
     });
 

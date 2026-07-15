@@ -1102,6 +1102,113 @@ def test_location_href_getter_illegal_invocation_on_wrong_this():
     assert isinstance(rep["ok"], str) and len(rep["ok"]) > 0, rep
     assert rep["wrong"] is True, rep
 
+
+
+def test_getboundingclientrect_and_fetch_illegal_invocation():
+    """W2 residual: Element.getBoundingClientRect + fetch wrong-this."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  function t(label, fn) {
+                    try { fn.call({}); return {label:label, ok:false, msg:'no-throw'}; }
+                    catch(e) {
+                      return {
+                        label:label,
+                        ok: e.name==='TypeError' && /Illegal invocation/i.test(String(e.message)),
+                        msg: String(e.message).slice(0,60)
+                      };
+                    }
+                  }
+                  return JSON.stringify([
+                    t('gbr', Element.prototype.getBoundingClientRect),
+                    t('fetch', fetch)
+                  ]);
+                })()
+                """
+            )
+        )
+
+    rows = json.loads(_run(body))
+    bad = [r for r in rows if not r.get("ok")]
+    assert bad == [], bad
+
+
+def test_document_active_element_on_prototype_and_brand():
+    """W2 residual: Document.prototype.activeElement exists + wrong-this."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var d = Object.getOwnPropertyDescriptor(Document.prototype, 'activeElement');
+                  var okVal = document.activeElement;
+                  var wrong;
+                  try { d.get.call({}); wrong='no-throw'; }
+                  catch(e){ wrong = (e.name==='TypeError' && /Illegal invocation/i.test(String(e.message))); }
+                  return JSON.stringify({
+                    hasGet: !!(d && d.get),
+                    okType: okVal === null || (okVal && okVal.nodeType === 1),
+                    wrong: wrong
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["hasGet"] is True, rep
+    assert rep["okType"] is True, rep
+    assert rep["wrong"] is True, rep
+
+
+def test_url_component_setters_update_href():
+    """W2 residual: URL hostname/protocol/port/pathname setters rebuild href."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var u = new URL('https://localhost/path');
+                  u.hostname = 'example.com';
+                  u.protocol = 'http:';
+                  u.port = '8080';
+                  u.pathname = '/x';
+                  var wrong;
+                  try {
+                    Object.getOwnPropertyDescriptor(URL.prototype, 'hostname').get.call({});
+                    wrong = 'no-throw';
+                  } catch(e) {
+                    wrong = (e.name==='TypeError' && /Illegal invocation/i.test(String(e.message)));
+                  }
+                  return JSON.stringify({
+                    hostname: u.hostname,
+                    protocol: u.protocol,
+                    port: u.port,
+                    pathname: u.pathname,
+                    href: u.href,
+                    wrong: wrong
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["hostname"] == "example.com", rep
+    assert rep["protocol"] == "http:", rep
+    assert rep["port"] == "8080", rep
+    assert rep["pathname"] == "/x", rep
+    assert "example.com:8080" in rep["href"] and rep["href"].startswith("http:"), rep
+    assert rep["wrong"] is True, rep
+
 def test_user_agent_data_proto_shape_and_grease_brands():
     """Q030/Q031: brands GREASE + NavigatorUAData prototype accessors."""
 
