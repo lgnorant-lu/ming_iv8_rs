@@ -361,6 +361,7 @@ fn worker_thread_main(
             None => return,
         };
 
+        let is_module = script_source.starts_with("/*__iv8_worker_module*/");
         let origin = v8::ScriptOrigin::new(
             scope,
             v8::String::new(scope, &script_url)
@@ -373,12 +374,21 @@ fn worker_thread_main(
             None,
             false,
             false,
-            false,
+            is_module,
             None,
         );
 
         v8::tc_scope!(tc, scope);
-        if let Some(script) = v8::Script::compile(tc, source_str, Some(&origin)) {
+        if is_module {
+            let mut sc_source = v8::script_compiler::Source::new(source_str, Some(&origin));
+            if let Some(module) = v8::script_compiler::compile_module(tc, &mut sc_source) {
+                // Worker modules: no static import graph in phase-1 (null resolve).
+                let ok = module.instantiate_module(tc, |_, _, _, _| None);
+                if ok == Some(true) {
+                    let _ = module.evaluate(tc);
+                }
+            }
+        } else if let Some(script) = v8::Script::compile(tc, source_str, Some(&origin)) {
             let _ = script.run(tc);
         }
         if tc.has_caught() {

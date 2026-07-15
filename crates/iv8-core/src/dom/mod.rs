@@ -16,5 +16,7 @@ pub mod serialize;
 pub mod template;
 
 pub use node::{Document, NodeData, NodeId};
-pub use parser::parse_html;
+pub use parser::{
+    parse_html, parse_html_with_script_pauses, StreamFeedResult, StreamingHtmlParser,
+};
 pub use selector::Selector;

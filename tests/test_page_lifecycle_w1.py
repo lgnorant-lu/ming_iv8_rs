@@ -408,6 +408,36 @@ def test_blank_context_readystate_complete():
     assert _run(body) == "complete"
 
 
+def test_worker_type_module_option_does_not_throw():
+    """Worker options.type=module accepted; module source may be empty/export-less."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        ctx.add_resource(
+            "https://ex.test/wmod.js",
+            b"self.__wmod = 1;",
+            200,
+            {"Content-Type": "text/javascript"},
+        )
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  try {
+                    var w = new Worker('https://ex.test/wmod.js', { type: 'module' });
+                    return JSON.stringify({ ok: typeof w.postMessage === 'function' });
+                  } catch (e) {
+                    return JSON.stringify({ ok: false, err: String(e).slice(0, 80) });
+                  }
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep.get("ok") is True, rep
+
+
 def test_type_module_inline_executes_via_eval_module():
     """K-ESM-LOADER: type=module inline runs after classic/defer (side effects)."""
 

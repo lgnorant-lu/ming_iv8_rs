@@ -185,7 +185,16 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
                 update_location(scope, url_str);
             }
 
-            // Execute inline scripts
+            // 4f. loading before scripts (align with JSContext.page_load Q080)
+            {
+                let doc_ref = state.document.borrow();
+                if let Some(ref doc) = *doc_ref {
+                    doc.set_ready_state(crate::dom::node::DocumentReadyState::Loading);
+                }
+            }
+            eval_js!(scope, "try { document.readyState = 'loading'; } catch(e) {}");
+
+            // Execute scripts (currentScript bind uses separate eval to avoid borrow conflicts)
             for script_src in scripts.iter() {
                 v8::tc_scope!(tc, scope);
                 if let Some(src_str) = v8::String::new(tc, script_src) {
@@ -232,7 +241,7 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
             }
             eval_js!(scope, "try { document.readyState = 'complete'; } catch(e) {}");
 
-            // 9. Dispatch load event on document root
+            // 9. Dispatch load on document + window (align Q080)
             {
                 let doc_ref = state.document.borrow();
                 if let Some(ref document) = *doc_ref {
@@ -248,6 +257,10 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
                     );
                 }
             }
+            eval_js!(
+                scope,
+                r#"(function(){ try { window.dispatchEvent(new Event('load')); } catch(e) {} })()"#
+            );
 
             // 9b. Re-install cookie accessor after all scripts executed.
             // Inline scripts may have interfered with the cookie accessor via

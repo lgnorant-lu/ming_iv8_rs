@@ -21,6 +21,144 @@ pub fn parse_html(html: &str, base_url: Option<&str>) -> Document {
     parser.one(html)
 }
 
+/// Streaming HTML parse session (tokenizer + tree builder).
+///
+/// html5ever returns `TokenizerResult::Script` when a classic `</script>` is
+/// seen so the host can run the script and `document.write` into the **input
+/// stream** (`push_front`) before more tokens are produced.
+pub struct StreamingHtmlParser {
+    tokenizer:
+        html5ever::tokenizer::Tokenizer<html5ever::tree_builder::TreeBuilder<NodeId, EgoTreeSink>>,
+    input_buffer: html5ever::buffer_queue::BufferQueue,
+    finished: bool,
+}
+
+/// Outcome of feeding into the streaming parser.
+#[derive(Debug)]
+pub enum StreamFeedResult {
+    /// Need more input (or idle between scripts).
+    NeedMore,
+    /// A classic `<script>` finished; run it, optional write, then [`StreamingHtmlParser::resume`].
+    Script(NodeId),
+    /// Document complete after [`StreamingHtmlParser::finish`].
+    Done,
+}
+
+impl StreamingHtmlParser {
+    pub fn new(base_url: Option<&str>) -> Self {
+        let sink = EgoTreeSink::new(base_url);
+        let tb = html5ever::tree_builder::TreeBuilder::new(
+            sink,
+            html5ever::tree_builder::TreeBuilderOpts::default(),
+        );
+        let tok =
+            html5ever::tokenizer::Tokenizer::new(tb, html5ever::tokenizer::TokenizerOpts::default());
+        Self {
+            tokenizer: tok,
+            input_buffer: html5ever::buffer_queue::BufferQueue::default(),
+            finished: false,
+        }
+    }
+
+    /// Push a UTF-8 HTML chunk. May return [`StreamFeedResult::Script`].
+    pub fn feed(&mut self, chunk: &str) -> StreamFeedResult {
+        if self.finished {
+            return StreamFeedResult::Done;
+        }
+        if !chunk.is_empty() {
+            self.input_buffer
+                .push_back(html5ever::tendril::StrTendril::from(chunk));
+        }
+        match self.tokenizer.feed(&self.input_buffer) {
+            html5ever::TokenizerResult::Script(node) => StreamFeedResult::Script(node),
+            html5ever::TokenizerResult::Done => StreamFeedResult::NeedMore,
+        }
+    }
+
+    /// Continue after handling a Script pause (and any document.write injection).
+    pub fn resume(&mut self) -> StreamFeedResult {
+        self.feed("")
+    }
+
+    /// Inject markup at the **current insertion point** (document.write during parse).
+    /// Uses `BufferQueue::push_front` so written HTML is tokenized before remaining input.
+    pub fn write_at_insertion_point(&mut self, html: &str) -> StreamFeedResult {
+        if !html.is_empty() {
+            self.input_buffer
+                .push_front(html5ever::tendril::StrTendril::from(html));
+        }
+        self.feed("")
+    }
+
+    /// Finish parsing and take the Document.
+    pub fn finish(mut self) -> Document {
+        loop {
+            match self.tokenizer.feed(&self.input_buffer) {
+                html5ever::TokenizerResult::Script(_) => {
+                    // Unhandled script pause: skip (host should have run scripts).
+                    continue;
+                }
+                html5ever::TokenizerResult::Done => break,
+            }
+        }
+        self.tokenizer.end();
+        self.finished = true;
+        self.tokenizer.sink.sink.finish()
+    }
+
+    /// In-progress document borrow.
+    pub fn document(&self) -> std::cell::Ref<'_, Document> {
+        self.tokenizer.sink.sink.doc.borrow()
+    }
+
+    pub fn document_mut(&self) -> std::cell::RefMut<'_, Document> {
+        self.tokenizer.sink.sink.doc.borrow_mut()
+    }
+}
+
+/// Parse HTML with script-pause callbacks (tokenizer re-entry host).
+///
+/// `on_script(doc, script_node_id)` runs when a classic script is closed; it may
+/// call into JS that uses document.write, which should inject via the returned
+/// write channel — for offline page_load the host re-runs write through the
+/// existing DOCUMENT_WRITE_SHIM after partial tree is published.
+pub fn parse_html_with_script_pauses<F>(html: &str, base_url: Option<&str>, mut on_script: F) -> Document
+where
+    F: FnMut(&Document, NodeId),
+{
+    let mut stream = StreamingHtmlParser::new(base_url);
+    let mut pending = html;
+    loop {
+        // Feed remaining input in one shot; Script pauses break the feed.
+        let result = if !pending.is_empty() {
+            let r = stream.feed(pending);
+            pending = "";
+            r
+        } else {
+            stream.resume()
+        };
+        match result {
+            StreamFeedResult::Script(nid) => {
+                // Publish indices so getElementById works during script.
+                {
+                    let mut doc = stream.document_mut();
+                    doc.invalidate_tag_index();
+                    doc.rebuild_id_index();
+                }
+                on_script(&stream.document(), nid);
+                // Continue tokenizer after script (and any write_at_insertion_point calls).
+            }
+            StreamFeedResult::NeedMore => {
+                if pending.is_empty() {
+                    break;
+                }
+            }
+            StreamFeedResult::Done => break,
+        }
+    }
+    stream.finish()
+}
+
 /// Parse an HTML fragment string and return a flat list of NodeData.
 /// Used by innerHTML setter to replace children.
 /// This is a simplified implementation that parses the fragment as a full document
@@ -534,5 +672,50 @@ mod tests {
     fn parse_with_base_url() {
         let doc = parse_html("<html></html>", Some("https://example.com/page"));
         assert_eq!(doc.base_url().unwrap().as_str(), "https://example.com/page");
+    }
+
+    #[test]
+    fn streaming_script_pause_and_write_front() {
+        // Feed HTML that ends a script; host injects markup via push_front.
+        let mut stream = StreamingHtmlParser::new(None);
+        let html = "<!DOCTYPE html><html><body><script>/*host runs*/</script><p id='after'>A</p></body></html>";
+        let mut saw_script = false;
+        let mut r = stream.feed(html);
+        loop {
+            match r {
+                StreamFeedResult::Script(nid) => {
+                    saw_script = true;
+                    // document.write during parse → front of input stream
+                    r = stream.write_at_insertion_point("<div id='mid'>M</div>");
+                    let _ = nid;
+                }
+                StreamFeedResult::NeedMore => break,
+                StreamFeedResult::Done => break,
+            }
+        }
+        assert!(saw_script, "tokenizer should pause on script");
+        let doc = stream.finish();
+        assert!(
+            doc.get_element_by_id("mid").is_some(),
+            "write_at_insertion_point should insert mid"
+        );
+        assert!(
+            doc.get_element_by_id("after").is_some(),
+            "rest of document should still parse"
+        );
+    }
+
+    #[test]
+    fn parse_html_with_script_pauses_invokes_callback() {
+        let mut count = 0;
+        let doc = parse_html_with_script_pauses(
+            "<body><script>1</script><script>2</script></body>",
+            None,
+            |_d, _nid| {
+                count += 1;
+            },
+        );
+        assert_eq!(count, 2);
+        assert_eq!(doc.get_elements_by_tag_name("script").len(), 2);
     }
 }

@@ -776,7 +776,25 @@ unsafe extern "C" fn worker_constructor_cb(info: *const v8::FunctionCallbackInfo
             return;
         }
         let script_url = args.get(0).to_rust_string_lossy(scope);
+        // Worker options: { type: "module" | "classic" } — module uses eval_module path later.
+        let mut worker_type_module = false;
+        if args.length() >= 2 && args.get(1).is_object() {
+            let opts: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(args.get(1)) };
+            let type_key = crate::v8_utils::v8_string(scope, "type");
+            if let Some(tv) = opts.get(scope, type_key.into()) {
+                let ts = tv.to_rust_string_lossy(scope);
+                if ts.eq_ignore_ascii_case("module") {
+                    worker_type_module = true;
+                }
+            }
+        }
         let script_source = resolve_worker_script(isolate, &script_url);
+        // Prefix a marker the worker bootstrap can detect for module evaluation.
+        let script_source = if worker_type_module {
+            format!("/*__iv8_worker_module*/\n{script_source}")
+        } else {
+            script_source
+        };
         let profile = state.profile.unwrap_or(&DEFAULT_PROFILE);
         let worker_id = state.workers.borrow().len() as u64;
         let handle = crate::shims::worker::spawn_worker(script_source, script_url, profile, worker_id);
