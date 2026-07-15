@@ -288,3 +288,27 @@ def test_type_module_script_not_executed_in_offline_page_load():
     rep = json.loads(_run(body))
     assert rep.get("classic") == 1, rep
     assert rep.get("mod") is None, rep
+
+
+def test_document_onreadystatechange_property_fires():
+    """Q080 gap: document.onreadystatechange property (not only addEventListener)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var hits = [];
+                  document.onreadystatechange = function(){ hits.push(document.readyState); };
+                  document.readyState = 'loading';
+                  document.readyState = 'interactive';
+                  document.readyState = 'complete';
+                  return JSON.stringify(hits);
+                })()
+                """
+            )
+        )
+
+    hits = json.loads(_run(body))
+    assert hits == ["loading", "interactive", "complete"], hits

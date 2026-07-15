@@ -191,6 +191,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // document.readyState — mutable for page_load lifecycle (Q080).
     // Initial blank context is complete; page_load sets loading→interactive→complete.
     var _readyState = 'complete';
+    var _onreadystatechange = null;
     Object.defineProperty(document, 'readyState', {
         get: function() { return _readyState; },
         set: function(v) {
@@ -200,8 +201,19 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             _readyState = nv;
             try {
                 var ev = new Event('readystatechange');
+                if (typeof _onreadystatechange === 'function') {
+                    try { _onreadystatechange.call(document, ev); } catch (e0) {}
+                }
                 document.dispatchEvent(ev);
             } catch (e) {}
+        },
+        enumerable: true,
+        configurable: true,
+    });
+    Object.defineProperty(document, 'onreadystatechange', {
+        get: function() { return _onreadystatechange; },
+        set: function(fn) {
+            _onreadystatechange = (typeof fn === 'function' || fn === null) ? fn : null;
         },
         enumerable: true,
         configurable: true,
