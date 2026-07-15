@@ -760,12 +760,63 @@ fn resolve_worker_script(isolate: &v8::Isolate, url: &str) -> String {
     String::new()
 }
 
-/// Resolve static `import` dependencies for ESM (ResourceBundle URL exact match).
+/// Resolve module specifier against import map, relative referrer URL, then bundle.
+fn resolve_esm_url(state: &RuntimeState, specifier: &str, referrer_url: Option<&str>) -> String {
+    // 1) import map bare / prefix (simple HTML importmap `imports` only)
+    {
+        let map = state.esm_import_map.borrow();
+        if let Some(mapped) = map.get(specifier) {
+            return mapped.clone();
+        }
+        // longest prefix match: "foo/" →
+        let mut best: Option<(usize, String)> = None;
+        for (k, v) in map.iter() {
+            if k.ends_with('/') && specifier.starts_with(k.as_str()) {
+                let n = k.len();
+                if best.as_ref().map(|(bn, _)| n > *bn).unwrap_or(true) {
+                    best = Some((n, format!("{}{}", v, &specifier[n..])));
+                }
+            }
+        }
+        if let Some((_, url)) = best {
+            return url;
+        }
+    }
+    // 2) absolute / data / scheme
+    if specifier.starts_with("http://")
+        || specifier.starts_with("https://")
+        || specifier.starts_with("data:")
+        || specifier.starts_with("blob:")
+    {
+        return specifier.to_string();
+    }
+    // 3) relative to referrer
+    if let Some(ref_url) = referrer_url {
+        if let Ok(base) = url::Url::parse(ref_url) {
+            if let Ok(joined) = base.join(specifier) {
+                return joined.to_string();
+            }
+        }
+    }
+    specifier.to_string()
+}
+
+fn load_module_source(state: &RuntimeState, url: &str) -> Option<String> {
+    if let Some(rest) = url.strip_prefix("data:text/javascript,") {
+        return Some(percent_decode(rest));
+    }
+    let bundle = state.resource_bundle.borrow();
+    bundle
+        .get(url)
+        .map(|r| String::from_utf8_lossy(&r.body).to_string())
+}
+
+/// Resolve static `import` dependencies for ESM.
 fn resolve_module_callback<'s>(
     context: v8::Local<'s, v8::Context>,
     specifier: v8::Local<'s, v8::String>,
     _import_assertions: v8::Local<'s, v8::FixedArray>,
-    _referrer: v8::Local<'s, v8::Module>,
+    referrer: v8::Local<'s, v8::Module>,
 ) -> Option<v8::Local<'s, v8::Module>> {
     use std::pin::pin;
     let scope = pin!(unsafe { v8::CallbackScope::new(context) });
@@ -773,22 +824,21 @@ fn resolve_module_callback<'s>(
     let spec = specifier.to_rust_string_lossy(&scope);
     let isolate: &v8::Isolate = &*scope;
     let state = RuntimeState::get(isolate);
-    let code = {
-        let bundle = state.resource_bundle.borrow();
-        bundle
-            .get(&spec)
-            .map(|r| String::from_utf8_lossy(&r.body).to_string())
-            .unwrap_or_default()
+    let ref_url = {
+        let hash = referrer.get_identity_hash().get();
+        state.esm_module_urls.borrow().get(&hash).cloned()
     };
+    let url = resolve_esm_url(state, &spec, ref_url.as_deref());
+    let code = load_module_source(state, &url).unwrap_or_default();
     if code.is_empty() {
         let msg =
-            crate::v8_utils::v8_string(&scope, &format!("Cannot resolve module '{spec}'"));
+            crate::v8_utils::v8_string(&scope, &format!("Cannot resolve module '{spec}' → '{url}'"));
         let exc = v8::Exception::type_error(&scope, msg);
         scope.throw_exception(exc);
         return None;
     }
     let source_str = v8::String::new(&scope, &code)?;
-    let name = v8::String::new(&scope, &spec)?;
+    let name = v8::String::new(&scope, &url)?;
     let origin = v8::ScriptOrigin::new(
         &scope,
         name.into(),
@@ -803,7 +853,10 @@ fn resolve_module_callback<'s>(
         None,
     );
     let mut sc_source = v8::script_compiler::Source::new(source_str, Some(&origin));
-    v8::script_compiler::compile_module(&scope, &mut sc_source)
+    let module = v8::script_compiler::compile_module(&scope, &mut sc_source)?;
+    let hash = module.get_identity_hash().get();
+    state.esm_module_urls.borrow_mut().insert(hash, url);
+    Some(module)
 }
 
 /// Dynamic `import()` host callback — resolve specifier from ResourceBundle / data: URL.
@@ -818,21 +871,13 @@ fn host_import_module_dynamically<'s>(
     let resolver = v8::PromiseResolver::new(scope)?;
     let promise = resolver.get_promise(scope);
 
-    let code = if let Some(rest) = spec.strip_prefix("data:text/javascript,") {
-        Some(percent_decode(rest))
-    } else {
-        let isolate: &v8::Isolate = &*scope;
-        let state = RuntimeState::get(isolate);
-        let bundle = state.resource_bundle.borrow();
-        bundle
-            .get(&spec)
-            .map(|r| String::from_utf8_lossy(&r.body).to_string())
-    };
-
-    let Some(code) = code else {
+    let isolate: &v8::Isolate = &*scope;
+    let state = RuntimeState::get(isolate);
+    let url = resolve_esm_url(state, &spec, None);
+    let Some(code) = load_module_source(state, &url) else {
         let msg = crate::v8_utils::v8_string(
             scope,
-            &format!("Failed to resolve module specifier '{spec}'"),
+            &format!("Failed to resolve module specifier '{spec}' → '{url}'"),
         );
         let exc = v8::Exception::type_error(scope, msg);
         let _ = resolver.reject(scope, exc);
@@ -848,7 +893,7 @@ fn host_import_module_dynamically<'s>(
             return Some(promise);
         }
     };
-    let name = v8::String::new(scope, &spec).unwrap_or_else(|| crate::v8_utils::v8_string(scope, "<import>"));
+    let name = v8::String::new(scope, &url).unwrap_or_else(|| crate::v8_utils::v8_string(scope, "<import>"));
     let origin = v8::ScriptOrigin::new(
         scope,
         name.into(),
@@ -866,19 +911,16 @@ fn host_import_module_dynamically<'s>(
     let module = match v8::script_compiler::compile_module(scope, &mut sc_source) {
         Some(m) => m,
         None => {
-            let msg = if let Some(exc) = {
-                // compile errors may already be pending
-                None::<v8::Local<v8::Value>>
-            } {
-                exc
-            } else {
-                let m = crate::v8_utils::v8_string(scope, "module compile failed");
-                v8::Exception::syntax_error(scope, m)
-            };
-            let _ = resolver.reject(scope, msg);
+            let m = crate::v8_utils::v8_string(scope, "module compile failed");
+            let exc = v8::Exception::syntax_error(scope, m);
+            let _ = resolver.reject(scope, exc);
             return Some(promise);
         }
     };
+    {
+        let hash = module.get_identity_hash().get();
+        state.esm_module_urls.borrow_mut().insert(hash, url);
+    }
 
     if module.instantiate_module(scope, resolve_module_callback) != Some(true) {
         let msg = crate::v8_utils::v8_string(scope, "module instantiate failed");
@@ -3101,8 +3143,10 @@ impl EmbeddedV8Kernel {
             src: Option<String>,
             is_async: bool,
             is_defer: bool,
-            /// type=module / importmap — not executed in offline classic model.
-            skip: bool,
+            /// type=module — run via eval_module after defer.
+            is_module: bool,
+            /// type=importmap — parsed into esm_import_map, never eval as JS.
+            is_importmap: bool,
         }
         let scripts: Vec<ScriptInfo> = doc
             .get_elements_by_tag_name("script")
@@ -3117,12 +3161,15 @@ impl EmbeddedV8Kernel {
                     .and_then(|n| n.value().get_attr("type"))
                     .map(|s| s.to_ascii_lowercase())
                     .unwrap_or_default();
-                let skip = type_attr.contains("module") || type_attr.contains("importmap");
+                let is_importmap = type_attr.contains("importmap");
+                let is_module = !is_importmap && type_attr.contains("module");
                 let is_async = node
                     .map(|n| n.value().get_attr("async").is_some())
                     .unwrap_or(false);
                 // HTML: async wins over defer when both present on classic scripts.
                 let is_defer = !is_async
+                    && !is_module
+                    && !is_importmap
                     && node
                         .map(|n| n.value().get_attr("defer").is_some())
                         .unwrap_or(false);
@@ -3135,7 +3182,8 @@ impl EmbeddedV8Kernel {
                     src,
                     is_async,
                     is_defer,
-                    skip,
+                    is_module,
+                    is_importmap,
                 }
             })
             .collect();
@@ -3147,6 +3195,46 @@ impl EmbeddedV8Kernel {
             state.node_cache.borrow_mut().clear();
             state.attr_cache.borrow_mut().clear();
             state.style_cache.borrow_mut().clear();
+            // Parse import maps from <script type="importmap"> before module load.
+            state.esm_import_map.borrow_mut().clear();
+            state.esm_module_urls.borrow_mut().clear();
+            if let Some(ref d) = *state.document.borrow() {
+                for &nid in &d.get_elements_by_tag_name("script") {
+                    let is_map = d
+                        .get(nid)
+                        .and_then(|n| n.value().get_attr("type"))
+                        .map(|t| t.eq_ignore_ascii_case("importmap"))
+                        .unwrap_or(false);
+                    if !is_map {
+                        continue;
+                    }
+                    let text = d.text_content_of(nid);
+                    if let Ok(v) = serde_json::from_str::<serde_json::Value>(&text) {
+                        if let Some(imports) = v.get("imports").and_then(|i| i.as_object()) {
+                            let mut map = state.esm_import_map.borrow_mut();
+                            for (k, val) in imports {
+                                if let Some(s) = val.as_str() {
+                                    let abs = if s.starts_with("http://")
+                                        || s.starts_with("https://")
+                                        || s.starts_with("data:")
+                                    {
+                                        s.to_string()
+                                    } else if let Some(base) = base_url {
+                                        url::Url::parse(base)
+                                            .ok()
+                                            .and_then(|b| b.join(s).ok())
+                                            .map(|u| u.to_string())
+                                            .unwrap_or_else(|| s.to_string())
+                                    } else {
+                                        s.to_string()
+                                    };
+                                    map.insert(k.clone(), abs);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         // 4. Install DOM V8 bindings
@@ -3303,7 +3391,7 @@ impl EmbeddedV8Kernel {
         // K-ESM-LOADER: type=module scripts after classic? HTML: modules deferred-like.
         // Offline model: classic → async → interactive → defer → modules → DCL.
         for (i, script) in scripts.iter().enumerate() {
-            if script.skip {
+            if script.is_module || script.is_importmap {
                 continue;
             }
             if !script.is_async && !script.is_defer {
@@ -3311,7 +3399,7 @@ impl EmbeddedV8Kernel {
             }
         }
         for (i, script) in scripts.iter().enumerate() {
-            if script.skip {
+            if script.is_module || script.is_importmap {
                 continue;
             }
             if script.is_async {
@@ -3335,7 +3423,7 @@ impl EmbeddedV8Kernel {
 
         // 6b. deferred scripts (document order) before DOMContentLoaded
         for (i, script) in scripts.iter().enumerate() {
-            if script.skip {
+            if script.is_module || script.is_importmap {
                 continue;
             }
             if script.is_defer {
@@ -3345,7 +3433,7 @@ impl EmbeddedV8Kernel {
 
         // 6c. ES modules (type=module) via eval_module — after defer, before DCL.
         for (i, script) in scripts.iter().enumerate() {
-            if !script.skip {
+            if !script.is_module {
                 continue;
             }
             let code = if let Some(ref src) = script.src {
@@ -3880,14 +3968,23 @@ impl EmbeddedV8Kernel {
             let module = v8::script_compiler::compile_module(scope, &mut source)
                 .ok_or_else(|| IV8Error::Internal("module compilation failed".into()))?;
 
-            // K-ESM-LOADER: resolve static imports from ResourceBundle (exact URL).
+            {
+                let state = RuntimeState::get(&*scope);
+                let hash = module.get_identity_hash().get();
+                state
+                    .esm_module_urls
+                    .borrow_mut()
+                    .insert(hash, name.to_string());
+            }
+
+            // K-ESM-LOADER: relative + importmap + ResourceBundle resolve.
             let instantiated = module.instantiate_module(scope, resolve_module_callback);
 
             if instantiated != Some(true) {
                 return Err(IV8Error::Internal("module instantiation failed".into()));
             }
 
-            let result = module
+            let _result = module
                 .evaluate(scope)
                 .ok_or_else(|| IV8Error::Internal("module evaluation failed".into()))?;
 

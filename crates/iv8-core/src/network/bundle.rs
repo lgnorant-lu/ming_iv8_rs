@@ -89,9 +89,26 @@ impl ResourceBundle {
         self.add(url, Resource::new(body, status, headers));
     }
 
-    /// Look up a resource by URL (exact match).
+    /// Look up a resource by URL (exact match, then common path aliases).
     pub fn get(&self, url: &str) -> Option<&Resource> {
-        self.resources.get(url)
+        if let Some(r) = self.resources.get(url) {
+            return Some(r);
+        }
+        // Alias: absolute URL may have been registered as path-only.
+        if let Ok(u) = url::Url::parse(url) {
+            if let Some(r) = self.resources.get(u.path()) {
+                return Some(r);
+            }
+            let path_q = if u.query().is_some() {
+                format!("{}?{}", u.path(), u.query().unwrap_or(""))
+            } else {
+                u.path().to_string()
+            };
+            if let Some(r) = self.resources.get(&path_q) {
+                return Some(r);
+            }
+        }
+        None
     }
 
     /// Check if a URL is registered.

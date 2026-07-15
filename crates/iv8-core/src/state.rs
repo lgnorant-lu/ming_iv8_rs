@@ -137,6 +137,11 @@ pub struct RuntimeState {
     /// Element.attachShadow mode per node ("open"/"closed"); absence ⇒ shadowRoot null.
     pub node_shadow: RefCell<std::collections::HashMap<crate::dom::NodeId, String>>,
 
+    /// K-ESM-LOADER: import map `imports` bare-specifier → absolute URL.
+    pub esm_import_map: RefCell<std::collections::HashMap<String, String>>,
+    /// K-ESM-LOADER: V8 Module identity_hash → resolved module URL (for relative import).
+    pub esm_module_urls: RefCell<std::collections::HashMap<i32, String>>,
+
     /// Cached navigator.plugins / mimeTypes objects (SameObject).
     /// Without this, each getter access rebuilds a bare Array and drops length.
     pub plugins_array: RefCell<Option<v8::Global<v8::Object>>>,
@@ -261,6 +266,8 @@ impl RuntimeState {
             node_scroll: RefCell::new(std::collections::HashMap::new()),
             node_media: RefCell::new(std::collections::HashMap::new()),
             node_shadow: RefCell::new(std::collections::HashMap::new()),
+            esm_import_map: RefCell::new(std::collections::HashMap::new()),
+            esm_module_urls: RefCell::new(std::collections::HashMap::new()),
             plugins_array: RefCell::new(None),
             mime_types_array: RefCell::new(None),
         }
