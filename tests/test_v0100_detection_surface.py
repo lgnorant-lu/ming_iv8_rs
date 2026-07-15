@@ -307,18 +307,18 @@ def test_storage_persist_and_load_roundtrip():
 
     def body():
         ctx = iv8_rs.JSContext()
-            ctx.eval("localStorage.setItem('q120', 'v');")
-            path = os.path.join(tempfile.gettempdir(), "iv8_q120_storage.json")
+        ctx.eval("localStorage.setItem('q120', 'v');")
+        path = os.path.join(tempfile.gettempdir(), "iv8_q120_storage.json")
+        try:
+            ctx.persist_storage(path)
+            ctx2 = iv8_rs.JSContext()
+            ctx2.load_storage(path)
+            return str(ctx2.eval("localStorage.getItem('q120')"))
+        finally:
             try:
-                ctx.persist_storage(path)
-                ctx2 = iv8_rs.JSContext()
-                ctx2.load_storage(path)
-                return str(ctx2.eval("localStorage.getItem('q120')"))
-            finally:
-                try:
-                    os.remove(path)
-                except OSError:
-                    pass
+                os.remove(path)
+            except OSError:
+                pass
 
     assert _run(body) == "v"
 
