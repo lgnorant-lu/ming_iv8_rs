@@ -3299,7 +3299,7 @@ impl EmbeddedV8Kernel {
     pub fn set_document(&mut self, html: &str, base_url: Option<&str>) {
         let doc = crate::dom::parse_html(html, base_url);
 
-        // Store in RuntimeState
+        // Store in RuntimeState as DocRc
         {
             let state = RuntimeState::get(&self.isolate);
             state.set_document(doc);
@@ -3554,11 +3554,13 @@ impl EmbeddedV8Kernel {
             }
         }
         crate::dom::parser::clear_active_stream();
+        // LC-2: keep same DocRc; finish_to_rc rebuilds indices in place.
+        let doc_rc = stream.finish_to_rc();
         {
             let state = RuntimeState::get(&self.isolate);
-            state.clear_document_shared();
+            state.set_document_rc(doc_rc.clone());
         }
-        let doc = stream.finish();
+        let doc = doc_rc.borrow();
 
         // 2. Collect script info before storing document (Q081: classic / defer / async).
         struct ScriptInfo {
@@ -3613,10 +3615,9 @@ impl EmbeddedV8Kernel {
             })
             .collect();
 
-        // 3. Store document in RuntimeState
+        // 3. DocRc already installed via set_document_rc (stream path)
         {
             let state = RuntimeState::get(&self.isolate);
-            state.set_document(doc);
             state.node_cache.borrow_mut().clear();
             state.attr_cache.borrow_mut().clear();
             state.style_cache.borrow_mut().clear();
@@ -3624,7 +3625,9 @@ impl EmbeddedV8Kernel {
             state.esm_import_map.borrow_mut().clear();
             state.esm_import_scopes.borrow_mut().clear();
             state.esm_module_urls.borrow_mut().clear();
-            if let Some(ref d) = *state.document.borrow() {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let d = rc.borrow();
                 for &nid in &d.get_elements_by_tag_name("script") {
                     let is_map = d
                         .get(nid)
@@ -3766,8 +3769,9 @@ impl EmbeddedV8Kernel {
         // 4f. Q080: enter loading before script execution (blank doc starts complete).
         {
             let state = RuntimeState::get(&self.isolate);
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let doc = rc.borrow();
                 doc.set_ready_state(crate::dom::node::DocumentReadyState::Loading);
             }
         }
@@ -3892,8 +3896,9 @@ impl EmbeddedV8Kernel {
         // 6. readyState → interactive (+ readystatechange via JS setter)
         {
             let state = RuntimeState::get(&self.isolate);
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let doc = rc.borrow();
                 doc.set_ready_state(crate::dom::node::DocumentReadyState::Interactive);
             }
         }
@@ -3952,14 +3957,15 @@ impl EmbeddedV8Kernel {
         // 7. DOMContentLoaded on document
         self.with_global_scope(|scope, _global| {
             let state = RuntimeState::get(&*scope);
-            let doc = state.document.borrow();
-            if let Some(ref document) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let document = rc.borrow();
                 let root_id = document.root_id();
                 let registry = &state.event_listeners;
                 crate::events::target::dispatch_event(
                     scope,
                     registry,
-                    document,
+                    &*document,
                     root_id,
                     "DOMContentLoaded",
                     false,
@@ -3970,8 +3976,9 @@ impl EmbeddedV8Kernel {
         // 8. readyState → complete
         {
             let state = RuntimeState::get(&self.isolate);
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let doc = rc.borrow();
                 doc.set_ready_state(crate::dom::node::DocumentReadyState::Complete);
             }
         }
@@ -3984,14 +3991,15 @@ impl EmbeddedV8Kernel {
         // 9. load on document root and window (Q080)
         self.with_global_scope(|scope, _global| {
             let state = RuntimeState::get(&*scope);
-            let doc = state.document.borrow();
-            if let Some(ref document) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let document = rc.borrow();
                 let root_id = document.root_id();
                 let registry = &state.event_listeners;
                 crate::events::target::dispatch_event(
                     scope,
                     registry,
-                    document,
+                    &*document,
                     root_id,
                     "load",
                     false,

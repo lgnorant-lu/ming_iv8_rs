@@ -134,7 +134,7 @@ impl StreamingHtmlParser {
         match std::rc::Rc::try_unwrap(self.doc_rc) {
             Ok(cell) => cell.into_inner(),
             Err(rc) => {
-                // Still shared (e.g. RuntimeState.document_shared): move tree out.
+                // Still shared (e.g. RuntimeState.document DocRc): move tree out.
                 std::mem::replace(&mut *rc.borrow_mut(), Document::new(None))
             }
         }

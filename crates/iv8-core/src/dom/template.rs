@@ -2233,11 +2233,8 @@ pub(crate) fn bump_and_maybe_sweep(
         state.node_cache_ops.set(0);
         // With Global refs, we can't check liveness via is_empty.
         // Instead, prune entries whose NodeId no longer exists in the document.
-        // Layer C: prefer document_shared when streaming
-        if let Some(rc) = state.document_shared.borrow().as_ref() {
+        if let Some(rc) = state.document.borrow().as_ref() {
             let doc = rc.borrow();
-            cache.retain(|nid, _| doc.get(*nid).is_some());
-        } else if let Some(doc) = state.document.borrow().as_ref() {
             cache.retain(|nid, _| doc.get(*nid).is_some());
         }
     }
@@ -2262,17 +2259,10 @@ pub fn create_node_object<'s>(
     let templates = state.dom_templates.borrow();
     let templates = templates.as_ref()?;
 
-    // Layer C: shared stream doc takes precedence (same NodeId arena as parser).
-    let shared = state.document_shared.borrow().clone();
-    let owned = state.document.borrow();
-    let node_data = if let Some(ref rc) = shared {
+    let node_data = {
+        let rc = state.document.borrow().clone()?;
         let doc = rc.borrow();
-        let node_ref = doc.get(node_id)?;
-        node_ref.value().clone()
-    } else {
-        let doc = owned.as_ref()?;
-        let node_ref = doc.get(node_id)?;
-        node_ref.value().clone()
+        doc.get(node_id)?.value().clone()
     };
     let data = &node_data;
 
@@ -2494,8 +2484,9 @@ where
 
 unsafe extern "C" fn node_type_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let doc = state.document.borrow();
-        if let Some(ref doc) = *doc {
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let doc = rc.borrow();
             if let Some(node_ref) = doc.get(node_id) {
                 rv.set(v8::Integer::new(scope, node_ref.value().node_type() as i32).into());
             }
@@ -2505,8 +2496,9 @@ unsafe extern "C" fn node_type_getter(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn node_name_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let doc = state.document.borrow();
-        if let Some(ref doc) = *doc {
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let doc = rc.borrow();
             if let Some(node_ref) = doc.get(node_id) {
                 let name = match node_ref.value() {
                     NodeData::Element { tag_name, .. } => tag_name.to_ascii_uppercase(),
@@ -2522,8 +2514,9 @@ unsafe extern "C" fn node_name_getter(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn text_content_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let doc = state.document.borrow();
-        if let Some(ref doc) = *doc {
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let doc = rc.borrow();
             let text = doc.text_content_of(node_id);
             if let Some(s) = v8::String::new(scope, &text) {
                 rv.set(s.into());
@@ -2537,8 +2530,9 @@ unsafe extern "C" fn text_content_setter(info: *const v8::FunctionCallbackInfo) 
         if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let val = args.get(0).to_rust_string_lossy(scope);
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut doc = rc.borrow_mut();
                     let children: Vec<_> = doc
                         .tree
                         .get(nid)
@@ -2569,8 +2563,9 @@ unsafe extern "C" fn inner_text_setter(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn data_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let doc = state.document.borrow();
-        if let Some(ref doc) = *doc {
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let doc = rc.borrow();
             if let Some(node_ref) = doc.get(node_id) {
                 let data = match node_ref.value() {
                     NodeData::Text(s) => s.as_str(),
@@ -2590,8 +2585,9 @@ unsafe extern "C" fn data_setter(info: *const v8::FunctionCallbackInfo) {
         if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let val = args.get(0).to_rust_string_lossy(scope);
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut doc = rc.borrow_mut();
                     if let Some(mut node_ref) = doc.tree.get_mut(nid) {
                         match node_ref.value() {
                             NodeData::Text(ref mut s) => *s = val,
@@ -2608,8 +2604,9 @@ unsafe extern "C" fn data_setter(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn char_data_length_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let doc = state.document.borrow();
-        if let Some(ref doc) = *doc {
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let doc = rc.borrow();
             if let Some(node_ref) = doc.get(node_id) {
                 let len = match node_ref.value() {
                     NodeData::Text(s) => s.chars().count(),
@@ -2627,8 +2624,9 @@ unsafe extern "C" fn substring_data_cb(info: *const v8::FunctionCallbackInfo) {
         if let Some(nid) = node_id {
             let offset = args.get(0).int32_value(scope).unwrap_or(0) as usize;
             let count = args.get(1).int32_value(scope).unwrap_or(0) as usize;
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let doc = rc.borrow();
                 if let Some(node_ref) = doc.get(nid) {
                     let data = match node_ref.value() {
                         NodeData::Text(s) => s.as_str(),
@@ -2656,8 +2654,9 @@ unsafe extern "C" fn append_data_cb(info: *const v8::FunctionCallbackInfo) {
         if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let val = args.get(0).to_rust_string_lossy(scope);
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut doc = rc.borrow_mut();
                     if let Some(mut node_ref) = doc.tree.get_mut(nid) {
                         match node_ref.value() {
                             NodeData::Text(ref mut s) => s.push_str(&val),
@@ -2678,8 +2677,9 @@ unsafe extern "C" fn insert_data_cb(info: *const v8::FunctionCallbackInfo) {
             if args.length() >= 2 {
                 let offset = args.get(0).int32_value(scope).unwrap_or(0) as usize;
                 let val = args.get(1).to_rust_string_lossy(scope);
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut doc = rc.borrow_mut();
                     if let Some(mut node_ref) = doc.tree.get_mut(nid) {
                         match node_ref.value() {
                             NodeData::Text(ref mut s) => {
@@ -2710,8 +2710,9 @@ unsafe extern "C" fn delete_data_cb(info: *const v8::FunctionCallbackInfo) {
             if args.length() >= 2 {
                 let offset = args.get(0).int32_value(scope).unwrap_or(0) as usize;
                 let count = args.get(1).int32_value(scope).unwrap_or(0) as usize;
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut doc = rc.borrow_mut();
                     if let Some(mut node_ref) = doc.tree.get_mut(nid) {
                         match node_ref.value() {
                             NodeData::Text(ref mut s) => {
@@ -2747,8 +2748,9 @@ unsafe extern "C" fn replace_data_cb(info: *const v8::FunctionCallbackInfo) {
                 let offset = args.get(0).int32_value(scope).unwrap_or(0) as usize;
                 let count = args.get(1).int32_value(scope).unwrap_or(0) as usize;
                 let val = args.get(2).to_rust_string_lossy(scope);
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut doc = rc.borrow_mut();
                     if let Some(mut node_ref) = doc.tree.get_mut(nid) {
                         match node_ref.value() {
                             NodeData::Text(ref mut s) => {
@@ -2786,9 +2788,9 @@ unsafe extern "C" fn split_text_cb(info: *const v8::FunctionCallbackInfo) {
         if let Some(nid) = node_id {
             let offset = args.get(0).int32_value(scope).unwrap_or(0) as usize;
             let (text_before, text_after) = {
-                let doc = state.document.borrow();
-                let doc = doc.as_ref();
-                if let Some(doc) = doc {
+                let _drc = state.document.borrow().clone();
+                if let Some(rc) = _drc.as_ref() {
+                    let doc = rc.borrow();
                     if let Some(node_ref) = doc.get(nid) {
                         match node_ref.value() {
                             NodeData::Text(s) => {
@@ -2803,8 +2805,9 @@ unsafe extern "C" fn split_text_cb(info: *const v8::FunctionCallbackInfo) {
                     } else { return; }
                 } else { return; }
             };
-            let mut doc = state.document.borrow_mut();
-            if let Some(ref mut doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let mut doc = rc.borrow_mut();
                 if let Some(mut node_ref) = doc.tree.get_mut(nid) {
                     if let NodeData::Text(ref mut s) = node_ref.value() {
                         *s = text_before;
@@ -2823,8 +2826,9 @@ unsafe extern "C" fn split_text_cb(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn whole_text_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let doc = state.document.borrow();
-        if let Some(ref doc) = *doc {
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let doc = rc.borrow();
             if let Some(node_ref) = doc.get(node_id) {
                 let text = match node_ref.value() {
                     NodeData::Text(s) => s.clone(),
@@ -2843,11 +2847,13 @@ unsafe extern "C" fn whole_text_getter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn parent_node_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let parent_id = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.parent())
-                .map(|p| p.id())
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.parent())
+                    .map(|p| p.id())
+            })
         };
         if let Some(pid) = parent_id {
             if let Some(obj) = create_node_object(scope, state, pid) {
@@ -2862,12 +2868,14 @@ unsafe extern "C" fn parent_node_getter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn parent_element_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let parent_id = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.parent())
-                .filter(|p| p.value().is_element())
-                .map(|p| p.id())
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.parent())
+                    .filter(|p| p.value().is_element())
+                    .map(|p| p.id())
+            })
         };
         if let Some(pid) = parent_id {
             if let Some(obj) = create_node_object(scope, state, pid) {
@@ -2882,11 +2890,13 @@ unsafe extern "C" fn parent_element_getter(info: *const v8::FunctionCallbackInfo
 unsafe extern "C" fn first_child_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let cid = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.first_child())
-                .map(|c| c.id())
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.first_child())
+                    .map(|c| c.id())
+            })
         };
         if let Some(cid) = cid {
             if let Some(obj) = create_node_object(scope, state, cid) {
@@ -2901,11 +2911,13 @@ unsafe extern "C" fn first_child_getter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn last_child_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let cid = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.last_child())
-                .map(|c| c.id())
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.last_child())
+                    .map(|c| c.id())
+            })
         };
         if let Some(cid) = cid {
             if let Some(obj) = create_node_object(scope, state, cid) {
@@ -2920,11 +2932,13 @@ unsafe extern "C" fn last_child_getter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn next_sibling_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let sid = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.next_sibling())
-                .map(|s| s.id())
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.next_sibling())
+                    .map(|s| s.id())
+            })
         };
         if let Some(sid) = sid {
             if let Some(obj) = create_node_object(scope, state, sid) {
@@ -2939,11 +2953,13 @@ unsafe extern "C" fn next_sibling_getter(info: *const v8::FunctionCallbackInfo) 
 unsafe extern "C" fn prev_sibling_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let sid = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.prev_sibling())
-                .map(|s| s.id())
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.prev_sibling())
+                    .map(|s| s.id())
+            })
         };
         if let Some(sid) = sid {
             if let Some(obj) = create_node_object(scope, state, sid) {
@@ -2958,11 +2974,12 @@ unsafe extern "C" fn prev_sibling_getter(info: *const v8::FunctionCallbackInfo) 
 unsafe extern "C" fn child_nodes_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let child_ids: Vec<NodeId> = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| n.children().map(|c| c.id()).collect())
-                .unwrap_or_default()
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .map(|n| n.children().map(|c| c.id()).collect())
+            }).unwrap_or_default()
         };
         let ctx = scope.get_current_context();
         let global = ctx.global(scope);
@@ -2994,8 +3011,9 @@ unsafe extern "C" fn child_nodes_getter(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn tag_name_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let doc = state.document.borrow();
-        if let Some(ref doc) = *doc {
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let doc = rc.borrow();
             if let Some(node_ref) = doc.get(node_id) {
                 if let NodeData::Element { tag_name, .. } = node_ref.value() {
                     if let Some(s) = v8::String::new(scope, &tag_name.to_ascii_uppercase()) {
@@ -3009,8 +3027,9 @@ unsafe extern "C" fn tag_name_getter(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn id_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let doc = state.document.borrow();
-        if let Some(ref doc) = *doc {
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let doc = rc.borrow();
             if let Some(node_ref) = doc.get(node_id) {
                 let id_val = node_ref.value().get_attr("id").unwrap_or("");
                 if let Some(s) = v8::String::new(scope, id_val) {
@@ -3026,8 +3045,9 @@ unsafe extern "C" fn id_setter(info: *const v8::FunctionCallbackInfo) {
         if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let val = args.get(0).to_rust_string_lossy(_scope);
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut doc = rc.borrow_mut();
                     if let Some(mut node) = doc.tree.get_mut(nid) {
                         if let NodeData::Element {
                             ref mut attrs,
@@ -3052,8 +3072,9 @@ unsafe extern "C" fn id_setter(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn class_name_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let doc = state.document.borrow();
-        if let Some(ref doc) = *doc {
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let doc = rc.borrow();
             if let Some(node_ref) = doc.get(node_id) {
                 let cls = node_ref.value().get_attr("class").unwrap_or("");
                 if let Some(s) = v8::String::new(scope, cls) {
@@ -3069,8 +3090,9 @@ unsafe extern "C" fn class_name_setter(info: *const v8::FunctionCallbackInfo) {
         if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let val = args.get(0).to_rust_string_lossy(scope);
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut doc = rc.borrow_mut();
                     if let Some(mut node) = doc.tree.get_mut(nid) {
                         if let NodeData::Element {
                             ref mut attrs,
@@ -3139,11 +3161,12 @@ where
             let isolate: &v8::Isolate = &*scope;
             let state = RuntimeState::get(isolate);
             let classes: Vec<String> = {
-                let doc = state.document.borrow();
-                doc.as_ref()
-                    .and_then(|d| d.get(node_id))
-                    .map(|n| n.value().class_list().to_vec())
-                    .unwrap_or_default()
+                let _drc = state.document.borrow().clone();
+                _drc.as_ref().and_then(|rc| {
+                    let d = rc.borrow();
+                    d.get(node_id)
+                        .map(|n| n.value().class_list().to_vec())
+                }).unwrap_or_default()
             };
             f(scope, &mut rv, &classes);
         } else {
@@ -3168,8 +3191,9 @@ where
         if let Some(node_id) = extract_classlist_node_id(scope, this) {
             let isolate: &v8::Isolate = &*scope;
             let state = RuntimeState::get(isolate);
-            let mut doc = state.document.borrow_mut();
-            if let Some(ref mut doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let mut doc = rc.borrow_mut();
                 if let Some(mut node) = doc.tree.get_mut(node_id) {
                     if let NodeData::Element {
                         ref mut attrs,
@@ -3277,8 +3301,9 @@ unsafe extern "C" fn domtokenlist_toggle_cb(info: *const v8::FunctionCallbackInf
         if let Some(node_id) = extract_classlist_node_id(scope, this) {
             let isolate: &v8::Isolate = &*scope;
             let state = RuntimeState::get(isolate);
-            let mut doc = state.document.borrow_mut();
-            if let Some(ref mut doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let mut doc = rc.borrow_mut();
                 if let Some(mut node) = doc.tree.get_mut(node_id) {
                     if let NodeData::Element {
                         ref mut attrs,
@@ -3457,10 +3482,11 @@ unsafe extern "C" fn domtokenlist_value_setter(info: *const v8::FunctionCallback
 unsafe extern "C" fn inner_html_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let html = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| d.inner_html(node_id))
-                .unwrap_or_default()
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                d.inner_html(node_id)
+            }).unwrap_or_default()
         };
         if let Some(s) = v8::String::new(scope, &html) {
             rv.set(s.into());
@@ -3473,8 +3499,9 @@ unsafe extern "C" fn inner_html_setter(info: *const v8::FunctionCallbackInfo) {
         if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let html = args.get(0).to_rust_string_lossy(scope);
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut doc = rc.borrow_mut();
                     // Remove existing children
                     let children: Vec<_> = doc
                         .tree
@@ -3498,7 +3525,7 @@ unsafe extern "C" fn inner_html_setter(info: *const v8::FunctionCallbackInfo) {
 
                     // Recursively copy nodes from fragment to target
                     for child_id in child_ids {
-                        append_node_recursive_from_fragment(doc, nid, &fragment, child_id);
+                        append_node_recursive_from_fragment(&mut *doc, nid, &fragment, child_id);
                     }
 
                     doc.invalidate_tag_index();
@@ -3523,7 +3550,7 @@ fn append_node_recursive_from_fragment(
         let new_id = doc.append_child(parent_id, data);
         let child_ids: Vec<NodeId> = source_node.children().map(|c| c.id()).collect();
         for child_id in child_ids {
-            append_node_recursive_from_fragment(doc, new_id, source, child_id);
+            append_node_recursive_from_fragment(&mut *doc, new_id, source, child_id);
         }
     }
 }
@@ -3531,10 +3558,11 @@ fn append_node_recursive_from_fragment(
 unsafe extern "C" fn outer_html_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let html = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| d.outer_html(node_id))
-                .unwrap_or_default()
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                d.outer_html(node_id)
+            }).unwrap_or_default()
         };
         if let Some(s) = v8::String::new(scope, &html) {
             rv.set(s.into());
@@ -3547,16 +3575,17 @@ unsafe extern "C" fn outer_html_getter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn children_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let child_ids: Vec<NodeId> = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| {
-                    n.children()
-                        .filter(|c| c.value().is_element())
-                        .map(|c| c.id())
-                        .collect()
-                })
-                .unwrap_or_default()
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .map(|n| {
+                        n.children()
+                            .filter(|c| c.value().is_element())
+                            .map(|c| c.id())
+                            .collect()
+                    })
+            }).unwrap_or_default()
         };
         let arr = v8::Array::new(scope, child_ids.len() as i32);
         for (i, cid) in child_ids.iter().enumerate() {
@@ -3571,11 +3600,12 @@ unsafe extern "C" fn children_getter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn child_element_count_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let count = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| n.children().filter(|c| c.value().is_element()).count())
-                .unwrap_or(0)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .map(|n| n.children().filter(|c| c.value().is_element()).count())
+            }).unwrap_or(0)
         };
         rv.set(v8::Integer::new(scope, count as i32).into());
     });
@@ -3584,11 +3614,13 @@ unsafe extern "C" fn child_element_count_getter(info: *const v8::FunctionCallbac
 unsafe extern "C" fn first_element_child_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let cid = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.children().find(|c| c.value().is_element()))
-                .map(|c| c.id())
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.children().find(|c| c.value().is_element()))
+                    .map(|c| c.id())
+            })
         };
         if let Some(cid) = cid {
             if let Some(obj) = create_node_object(scope, state, cid) {
@@ -3603,11 +3635,13 @@ unsafe extern "C" fn first_element_child_getter(info: *const v8::FunctionCallbac
 unsafe extern "C" fn last_element_child_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let cid = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.children().rfind(|c| c.value().is_element()))
-                .map(|c| c.id())
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.children().rfind(|c| c.value().is_element()))
+                    .map(|c| c.id())
+            })
         };
         if let Some(cid) = cid {
             if let Some(obj) = create_node_object(scope, state, cid) {
@@ -3622,8 +3656,9 @@ unsafe extern "C" fn last_element_child_getter(info: *const v8::FunctionCallback
 unsafe extern "C" fn next_element_sibling_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let sib_id = {
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let doc = rc.borrow();
                 if let Some(node_ref) = doc.get(node_id) {
                     let mut sib = node_ref.next_sibling();
                     loop {
@@ -3653,8 +3688,9 @@ unsafe extern "C" fn next_element_sibling_getter(info: *const v8::FunctionCallba
 unsafe extern "C" fn prev_element_sibling_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let sib_id = {
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let doc = rc.borrow();
                 if let Some(node_ref) = doc.get(node_id) {
                     let mut sib = node_ref.prev_sibling();
                     loop {
@@ -3688,8 +3724,9 @@ unsafe extern "C" fn get_attribute_cb(info: *const v8::FunctionCallbackInfo) {
         if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let attr_name = args.get(0).to_rust_string_lossy(scope);
-                let doc = state.document.borrow();
-                if let Some(ref doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let doc = rc.borrow();
                     if let Some(node_ref) = doc.get(nid) {
                         if let Some(val) = node_ref.value().get_attr(&attr_name) {
                             if let Some(s) = v8::String::new(scope, val) {
@@ -3711,8 +3748,9 @@ unsafe extern "C" fn set_attribute_cb(info: *const v8::FunctionCallbackInfo) {
             if args.length() >= 2 {
                 let name = args.get(0).to_rust_string_lossy(scope);
                 let value = args.get(1).to_rust_string_lossy(scope);
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut doc = rc.borrow_mut();
                     if let Some(mut node) = doc.tree.get_mut(nid) {
                         if let NodeData::Element {
                             ref mut attrs,
@@ -3768,11 +3806,13 @@ unsafe extern "C" fn get_attribute_ns_cb(info: *const v8::FunctionCallbackInfo) 
                 if val.is_empty() {
                     // Distinguish missing vs empty: check presence
                     let present = {
-                        let doc = state.document.borrow();
-                        doc.as_ref()
-                            .and_then(|d| d.get(nid))
-                            .and_then(|n| n.value().get_attr(local))
-                            .is_some()
+                        let _drc = state.document.borrow().clone();
+                        _drc.as_ref().map(|rc| {
+                            let d = rc.borrow();
+                            d.get(nid)
+                                .and_then(|n| n.value().get_attr(local))
+                                .is_some()
+                        }).unwrap_or(false)
                     };
                     if !present {
                         rv.set(v8::null(scope).into());
@@ -3795,8 +3835,9 @@ unsafe extern "C" fn remove_attribute_ns_cb(info: *const v8::FunctionCallbackInf
             if args.length() >= 2 {
                 let qname = args.get(1).to_rust_string_lossy(scope);
                 let local = qname.rsplit(':').next().unwrap_or(&qname).to_string();
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut d) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut d = rc.borrow_mut();
                     if let Some(mut node) = d.tree.get_mut(nid) {
                         if let NodeData::Element { ref mut attrs, .. } = node.value() {
                             attrs.retain(|(k, _)| k != &local);
@@ -3814,11 +3855,13 @@ unsafe extern "C" fn has_attribute_ns_cb(info: *const v8::FunctionCallbackInfo) 
             if args.length() >= 2 {
                 let qname = args.get(1).to_rust_string_lossy(scope);
                 let local = qname.rsplit(':').next().unwrap_or(&qname);
-                let doc = state.document.borrow();
-                doc.as_ref()
-                    .and_then(|d| d.get(nid))
-                    .and_then(|n| n.value().get_attr(local))
-                    .is_some()
+                let _drc = state.document.borrow().clone();
+                _drc.as_ref().map(|rc| {
+                    let d = rc.borrow();
+                    d.get(nid)
+                        .and_then(|n| n.value().get_attr(local))
+                        .is_some()
+                }).unwrap_or(false)
             } else {
                 false
             }
@@ -3834,8 +3877,9 @@ unsafe extern "C" fn remove_attribute_cb(info: *const v8::FunctionCallbackInfo) 
         if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let name = args.get(0).to_rust_string_lossy(scope);
-                let mut doc = state.document.borrow_mut();
-                if let Some(ref mut doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let mut doc = rc.borrow_mut();
                     if let Some(mut node) = doc.tree.get_mut(nid) {
                         if let NodeData::Element {
                             ref mut attrs,
@@ -3864,11 +3908,12 @@ unsafe extern "C" fn has_attribute_cb(info: *const v8::FunctionCallbackInfo) {
         let result = if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let name = args.get(0).to_rust_string_lossy(scope);
-                let doc = state.document.borrow();
-                doc.as_ref()
-                    .and_then(|d| d.get(nid))
-                    .map(|n| n.value().get_attr(&name).is_some())
-                    .unwrap_or(false)
+                let _drc = state.document.borrow().clone();
+                _drc.as_ref().and_then(|rc| {
+                    let d = rc.borrow();
+                    d.get(nid)
+                        .map(|n| n.value().get_attr(&name).is_some())
+                }).unwrap_or(false)
             } else {
                 false
             }
@@ -3882,11 +3927,12 @@ unsafe extern "C" fn has_attribute_cb(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn get_attribute_names_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, _args, rv, state, node_id| {
         let names: Vec<String> = if let Some(nid) = node_id {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(nid))
-                .map(|n| n.value().attrs().iter().map(|(k, _)| k.clone()).collect())
-                .unwrap_or_default()
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(nid)
+                    .map(|n| n.value().attrs().iter().map(|(k, _)| k.clone()).collect())
+            }).unwrap_or_default()
         } else {
             vec![]
         };
@@ -3946,8 +3992,9 @@ unsafe extern "C" fn replace_child_cb(info: *const v8::FunctionCallbackInfo) {
             rv.set(old_arg);
             return;
         }
-        let mut doc = state.document.borrow_mut();
-        if let Some(ref mut doc) = *doc {
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let mut doc = rc.borrow_mut();
             doc.detach(nid);
             if let Some(mut old_node) = doc.tree.get_mut(oid) {
                 old_node.insert_id_before(nid);
@@ -3988,8 +4035,9 @@ unsafe extern "C" fn insert_before_cb(info: *const v8::FunctionCallbackInfo) {
                             rv.set(new_node_arg);
                             return;
                         }
-                        let mut doc = state.document.borrow_mut();
-                        if let Some(ref mut doc) = *doc {
+                        let _doc_rc = state.document.borrow().clone();
+                        if let Some(rc) = _doc_rc {
+                            let mut doc = rc.borrow_mut();
                             doc.detach(new_id);
                             if let Some(ref_node_id) = ref_id {
                                 if let Some(mut ref_node) = doc.tree.get_mut(ref_node_id) {
@@ -4019,8 +4067,9 @@ unsafe extern "C" fn insert_adjacent_html_cb(info: *const v8::FunctionCallbackIn
         let position = args.get(0).to_rust_string_lossy(scope).to_lowercase();
         let html_str = args.get(1).to_rust_string_lossy(scope);
         if let Some(nid) = node_id {
-            let mut doc = state.document.borrow_mut();
-            if let Some(ref mut doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let mut doc = rc.borrow_mut();
                 let fragment = crate::dom::parse_html(&html_str, None);
                 let body_id = fragment.body().unwrap_or(fragment.root_id());
                 let frag_children: Vec<(crate::dom::NodeId, crate::dom::NodeData)> = {
@@ -4033,7 +4082,7 @@ unsafe extern "C" fn insert_adjacent_html_cb(info: *const v8::FunctionCallbackIn
                 match position.as_str() {
                     "beforeend" => {
                         for (frag_id, _) in &frag_children {
-                            crate::dom::binding::append_node_recursive(
+                            crate::dom::binding::append_node_recursive(&mut *
                                 doc, nid, &fragment, *frag_id,
                             );
                         }
@@ -4082,7 +4131,7 @@ unsafe extern "C" fn insert_adjacent_html_cb(info: *const v8::FunctionCallbackIn
                                         .map(|n| n.children().map(|c| c.id()).collect())
                                         .unwrap_or_default();
                                     for cid in child_ids {
-                                        crate::dom::binding::append_node_recursive(
+                                        crate::dom::binding::append_node_recursive(&mut *
                                             doc, new_id, &fragment, cid,
                                         );
                                     }
@@ -4114,8 +4163,9 @@ unsafe extern "C" fn insert_adjacent_text_cb(info: *const v8::FunctionCallbackIn
         let position = args.get(0).to_rust_string_lossy(scope).to_lowercase();
         let text = args.get(1).to_rust_string_lossy(scope);
         if let Some(nid) = node_id {
-            let mut doc = state.document.borrow_mut();
-            if let Some(ref mut doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let mut doc = rc.borrow_mut();
                 let text_data = crate::dom::NodeData::text(&text);
                 match position.as_str() {
                     "beforeend" => {
@@ -4147,25 +4197,29 @@ unsafe extern "C" fn clone_node_cb(info: *const v8::FunctionCallbackInfo) {
             // Phase 1: collect data while holding borrow
             let new_id = {
                 let data = {
-                    let doc = state.document.borrow();
-                    doc.as_ref()
-                        .and_then(|d| d.get(nid))
-                        .map(|n| n.value().clone())
+                    let _drc = state.document.borrow().clone();
+                    _drc.as_ref().and_then(|rc| {
+                        let d = rc.borrow();
+                        d.get(nid)
+                            .map(|n| n.value().clone())
+                    })
                 };
                 if let Some(d) = data {
                     let children: Vec<crate::dom::NodeData> = if deep {
-                        let doc = state.document.borrow();
-                        doc.as_ref()
-                            .and_then(|d| d.get(nid))
-                            .map(|n| n.children().map(|c| c.value().clone()).collect())
-                            .unwrap_or_default()
+                        let _drc = state.document.borrow().clone();
+                        _drc.as_ref().and_then(|rc| {
+                            let d = rc.borrow();
+                            d.get(nid)
+                                .map(|n| n.children().map(|c| c.value().clone()).collect())
+                        }).unwrap_or_default()
                     } else {
                         vec![]
                     };
 
                     // Phase 2: mutate while holding mut borrow
-                    let mut doc_guard = state.document.borrow_mut();
-                    if let Some(ref mut doc) = *doc_guard {
+                    let _doc_rc = state.document.borrow().clone();
+                    if let Some(rc) = _doc_rc {
+                        let mut doc = rc.borrow_mut();
                         let root_id = doc.root_id();
                         let new_id = doc.append_child(root_id, d);
                         doc.detach(new_id);
@@ -4206,8 +4260,9 @@ unsafe extern "C" fn contains_cb(info: *const v8::FunctionCallbackInfo) {
         let other_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(args.get(0)) };
         let other_id = extract_node_id_from_internal(scope, other_obj);
         let result = if let (Some(nid), Some(oid)) = (node_id, other_id) {
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let doc = rc.borrow();
                 // Check if oid is a descendant of nid
                 doc.tree
                     .get(nid)
@@ -4229,9 +4284,11 @@ unsafe extern "C" fn query_selector_cb(info: *const v8::FunctionCallbackInfo) {
             if args.length() >= 1 {
                 let sel = args.get(0).to_rust_string_lossy(scope);
                 let result_id = {
-                    let doc = state.document.borrow();
-                    doc.as_ref()
-                        .and_then(|d| d.query_selector_from(&sel, nid).ok().flatten())
+                    let _drc = state.document.borrow().clone();
+                    _drc.as_ref().and_then(|rc| {
+                        let d = rc.borrow();
+                        d.query_selector_from(&sel, nid).ok().flatten()
+                    })
                 };
                 if let Some(rid) = result_id {
                     if let Some(obj) = create_node_object(scope, state, rid) {
@@ -4250,10 +4307,11 @@ unsafe extern "C" fn query_selector_all_cb(info: *const v8::FunctionCallbackInfo
         let ids: Vec<NodeId> = if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let sel = args.get(0).to_rust_string_lossy(scope);
-                let doc = state.document.borrow();
-                doc.as_ref()
-                    .and_then(|d| d.query_selector_all_from(&sel, nid).ok())
-                    .unwrap_or_default()
+                let _drc = state.document.borrow().clone();
+                _drc.as_ref().and_then(|rc| {
+                    let d = rc.borrow();
+                    d.query_selector_all_from(&sel, nid).ok()
+                }).unwrap_or_default()
             } else {
                 vec![]
             }
@@ -4377,10 +4435,11 @@ unsafe extern "C" fn get_elements_by_tag_name_cb(info: *const v8::FunctionCallba
         let ids: Vec<NodeId> = if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let tag = args.get(0).to_rust_string_lossy(scope);
-                let doc = state.document.borrow();
-                doc.as_ref()
-                    .map(|d| d.get_elements_by_tag_name_from(&tag, nid))
-                    .unwrap_or_default()
+                let _drc = state.document.borrow().clone();
+                _drc.as_ref().map(|rc| {
+                    let d = rc.borrow();
+                    d.get_elements_by_tag_name_from(&tag, nid)
+                }).unwrap_or_default()
             } else {
                 vec![]
             }
@@ -4402,8 +4461,9 @@ unsafe extern "C" fn get_elements_by_class_name_cb(info: *const v8::FunctionCall
                 let cls = args.get(0).to_rust_string_lossy(scope);
                 let target_classes: Vec<String> =
                     cls.split_whitespace().map(|s| s.to_string()).collect();
-                let doc = state.document.borrow();
-                if let Some(ref doc) = *doc {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let doc = rc.borrow();
                     if let Some(node_ref) = doc.get(nid) {
                         node_ref
                             .descendants()
@@ -4440,10 +4500,11 @@ unsafe extern "C" fn matches_cb(info: *const v8::FunctionCallbackInfo) {
         let result = if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let sel = args.get(0).to_rust_string_lossy(scope);
-                let doc = state.document.borrow();
-                doc.as_ref()
-                    .map(|d| d.element_matches(nid, &sel))
-                    .unwrap_or(false)
+                let _drc = state.document.borrow().clone();
+                _drc.as_ref().map(|rc| {
+                    let d = rc.borrow();
+                    d.element_matches(nid, &sel)
+                }).unwrap_or(false)
             } else {
                 false
             }
@@ -4460,8 +4521,7 @@ unsafe extern "C" fn closest_cb(info: *const v8::FunctionCallbackInfo) {
             if args.length() >= 1 {
                 let sel = args.get(0).to_rust_string_lossy(scope);
                 let result_id = {
-                    let doc = state.document.borrow();
-                    doc.as_ref().and_then(|d| d.closest(nid, &sel))
+                    state.with_document(|d| d.closest(nid, &sel)).flatten()
                 };
                 if let Some(rid) = result_id {
                     if let Some(obj) = create_node_object(scope, state, rid) {
@@ -4486,8 +4546,9 @@ unsafe extern "C" fn append_child_cb(info: *const v8::FunctionCallbackInfo) {
                     let child_obj: v8::Local<v8::Object> =
                         unsafe { v8::Local::cast_unchecked(child_arg) };
                     if let Some(child_id) = extract_node_id_from_internal(scope, child_obj) {
-                        let mut doc = state.document.borrow_mut();
-                        if let Some(ref mut doc) = *doc {
+                        let _doc_rc = state.document.borrow().clone();
+                        if let Some(rc) = _doc_rc {
+                            let mut doc = rc.borrow_mut();
                             // DocumentFragment transfer: DOM spec requires all
                             // children of the fragment to be moved to the new
                             // parent, leaving the fragment empty.
@@ -4530,8 +4591,9 @@ unsafe extern "C" fn remove_child_cb(info: *const v8::FunctionCallbackInfo) {
                 let child_obj: v8::Local<v8::Object> =
                     unsafe { v8::Local::cast_unchecked(child_arg) };
                 if let Some(child_id) = extract_node_id_from_internal(scope, child_obj) {
-                    let mut doc = state.document.borrow_mut();
-                    if let Some(ref mut doc) = *doc {
+                    let _doc_rc = state.document.borrow().clone();
+                    if let Some(rc) = _doc_rc {
+                        let mut doc = rc.borrow_mut();
                         doc.detach(child_id);
                     }
                 }
@@ -4544,11 +4606,12 @@ unsafe extern "C" fn remove_child_cb(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn has_child_nodes_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, _args, rv, state, node_id| {
         let result = if let Some(nid) = node_id {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(nid))
-                .map(|n| n.first_child().is_some())
-                .unwrap_or(false)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(nid)
+                    .map(|n| n.first_child().is_some())
+            }).unwrap_or(false)
         } else {
             false
         };
@@ -4722,11 +4785,12 @@ unsafe extern "C" fn attr_value_getter(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let this = args.this();
         let name = attr_name_of(scope, this).unwrap_or_default();
-        let doc = state.document.borrow();
-        let val = doc
-            .as_ref()
-            .and_then(|d| d.get(owner_id))
-            .and_then(|n| n.value().get_attr(&name).map(|s| s.to_string()))
+        let val = state
+            .with_document(|d| {
+                d.get(owner_id)
+                    .and_then(|n| n.value().get_attr(&name).map(|s| s.to_string()))
+            })
+            .flatten()
             .unwrap_or_default();
         if let Some(s) = v8::String::new(scope, &val) {
             rv.set(s.into());
@@ -4743,8 +4807,9 @@ unsafe extern "C" fn attr_value_setter(info: *const v8::FunctionCallbackInfo) {
             let this = args.this();
             let Some(name) = attr_name_of(scope, this) else { return };
             let value = args.get(0).to_rust_string_lossy(scope);
-            let mut doc = state.document.borrow_mut();
-            if let Some(ref mut doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let mut doc = rc.borrow_mut();
                 if let Some(mut node) = doc.tree.get_mut(oid) {
                     if let NodeData::Element {
                         ref mut attrs,
@@ -4808,11 +4873,13 @@ unsafe extern "C" fn get_attribute_node_cb(info: *const v8::FunctionCallbackInfo
             if args.length() >= 1 {
                 let name = args.get(0).to_rust_string_lossy(scope);
                 let has = {
-                    let doc = state.document.borrow();
-                    doc.as_ref()
-                        .and_then(|d| d.get(nid))
-                        .and_then(|n| n.value().get_attr(&name))
-                        .is_some()
+                    let _drc = state.document.borrow().clone();
+                    _drc.as_ref().map(|rc| {
+                        let d = rc.borrow();
+                        d.get(nid)
+                            .and_then(|n| n.value().get_attr(&name))
+                            .is_some()
+                    }).unwrap_or(false)
                 };
                 if has {
                     if let Some(attr) = create_attr_object(scope, state, nid, &name) {
@@ -4837,11 +4904,13 @@ unsafe extern "C" fn get_attribute_node_ns_cb(info: *const v8::FunctionCallbackI
                     || (ns.is_string() && ns.to_rust_string_lossy(scope).is_empty());
                 if ns_null {
                     let has = {
-                        let doc = state.document.borrow();
-                        doc.as_ref()
-                            .and_then(|d| d.get(nid))
-                            .and_then(|n| n.value().get_attr(&local))
-                            .is_some()
+                        let _drc = state.document.borrow().clone();
+                        _drc.as_ref().map(|rc| {
+                            let d = rc.borrow();
+                            d.get(nid)
+                                .and_then(|n| n.value().get_attr(&local))
+                                .is_some()
+                        }).unwrap_or(false)
                     };
                     if has {
                         if let Some(attr) = create_attr_object(scope, state, nid, &local) {
@@ -4871,11 +4940,8 @@ unsafe extern "C" fn set_attribute_node_cb(info: *const v8::FunctionCallbackInfo
                             .unwrap_or_default()
                     };
                     let old_had = {
-                        let doc = state.document.borrow();
-                        doc.as_ref()
-                            .and_then(|d| d.get(nid))
-                            .and_then(|n| n.value().get_attr(&name))
-                            .is_some()
+                        let _drc = state.document.borrow().clone();
+                        _drc.as_ref().map(|rc| { let d = rc.borrow(); d.get(nid).and_then(|n| n.value().get_attr(&name)).is_some() }).unwrap_or(false)
                     };
                     let old_attr = if old_had {
                         create_attr_object(scope, state, nid, &name)
@@ -4883,8 +4949,9 @@ unsafe extern "C" fn set_attribute_node_cb(info: *const v8::FunctionCallbackInfo
                         None
                     };
                     {
-                        let mut doc = state.document.borrow_mut();
-                        if let Some(ref mut doc) = *doc {
+                        let _doc_rc = state.document.borrow().clone();
+                        if let Some(rc) = _doc_rc {
+                            let mut doc = rc.borrow_mut();
                             if let Some(mut node) = doc.tree.get_mut(nid) {
                                 if let NodeData::Element {
                                     ref mut attrs,
@@ -5147,12 +5214,13 @@ unsafe extern "C" fn dispatch_event_cb(info: *const v8::FunctionCallbackInfo) {
         };
 
         let result = {
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let doc = rc.borrow();
                 crate::events::target::dispatch_event(
                     scope,
                     &state.event_listeners,
-                    doc,
+                    &*doc,
                     nid,
                     &event_type,
                     bubbles,
@@ -5283,8 +5351,9 @@ where
         if let Some(node_id) = extract_style_node_id(scope, args.this()) {
             let isolate: &v8::Isolate = &*scope;
             let state = RuntimeState::get(isolate);
-            let doc = state.document.borrow();
-            if let Some(ref doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let doc = rc.borrow();
                 if let Some(node_ref) = doc.get(node_id) {
                     if let NodeData::Element { ref style_map, .. } = node_ref.value() {
                         f(scope, &mut rv, style_map);
@@ -5320,8 +5389,9 @@ where
         if let Some(node_id) = extract_style_node_id(scope, args.this()) {
             let isolate: &v8::Isolate = &*scope;
             let state = RuntimeState::get(isolate);
-            let mut doc = state.document.borrow_mut();
-            if let Some(ref mut doc) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let mut doc = rc.borrow_mut();
                 if let Some(mut node) = doc.tree.get_mut(node_id) {
                     if let NodeData::Element {
                         ref mut style_map, ..
@@ -5449,11 +5519,12 @@ unsafe extern "C" fn dataset_getter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn hidden_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| n.value().get_attr("hidden").is_some())
-                .unwrap_or(false)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .map(|n| n.value().get_attr("hidden").is_some())
+            }).unwrap_or(false)
         };
         rv.set(v8::Boolean::new(scope, val).into());
     });
@@ -5471,12 +5542,13 @@ unsafe extern "C" fn hidden_setter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn tab_index_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.value().get_attr("tabindex"))
-                .and_then(|v| v.parse::<i32>().ok())
-                .unwrap_or(-1)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.value().get_attr("tabindex"))
+                    .and_then(|v| v.parse::<i32>().ok())
+            }).unwrap_or(-1)
         };
         rv.set(v8::Integer::new(scope, val).into());
     });
@@ -5494,17 +5566,20 @@ unsafe extern "C" fn tab_index_setter(info: *const v8::FunctionCallbackInfo) {
 
 // Generic attribute-backed accessor helper
 fn get_attr_str(state: &RuntimeState, node_id: NodeId, attr: &str) -> String {
-    let doc = state.document.borrow();
-    doc.as_ref()
-        .and_then(|d| d.get(node_id))
-        .and_then(|n| n.value().get_attr(attr))
-        .unwrap_or("")
-        .to_string()
+    let _drc = state.document.borrow().clone();
+    _drc.as_ref()
+        .and_then(|rc| {
+            let d = rc.borrow();
+            d.get(node_id)
+                .and_then(|n| n.value().get_attr(attr).map(|s| s.to_string()))
+        })
+        .unwrap_or_default()
 }
 
 fn set_attr_str(state: &RuntimeState, node_id: NodeId, attr: &str, value: String) {
-    let mut doc = state.document.borrow_mut();
-    if let Some(ref mut doc) = *doc {
+    let _doc_rc = state.document.borrow().clone();
+    if let Some(rc) = _doc_rc {
+        let mut doc = rc.borrow_mut();
         if let Some(mut node) = doc.tree.get_mut(node_id) {
             if let NodeData::Element { ref mut attrs, .. } = node.value() {
                 if let Some(e) = attrs.iter_mut().find(|(k, _)| k == attr) {
@@ -5714,8 +5789,9 @@ attr_rw!(alt_getter, alt_setter, "alt");
 unsafe extern "C" fn value_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            if let Some(ref d) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let d = rc.borrow();
                 if let Some(n) = d.get(node_id) {
                     if let Some(v) = n.value().get_attr("value") {
                         v.to_string()
@@ -5839,11 +5915,12 @@ unsafe extern "C" fn rowspan_setter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn nowrap_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| n.value().get_attr("nowrap").is_some())
-                .unwrap_or(false)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .map(|n| n.value().get_attr("nowrap").is_some())
+            }).unwrap_or(false)
         };
         rv.set(v8::Boolean::new(scope, val).into());
     });
@@ -5860,11 +5937,12 @@ unsafe extern "C" fn nowrap_setter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn dialog_open_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| n.value().get_attr("open").is_some())
-                .unwrap_or(false)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .map(|n| n.value().get_attr("open").is_some())
+            }).unwrap_or(false)
         };
         rv.set(v8::Boolean::new(scope, val).into());
     });
@@ -5970,8 +6048,9 @@ fn table_row_indices(doc: &crate::dom::Document, row_id: NodeId) -> (i32, i32) {
 unsafe extern "C" fn table_row_cells_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let cells: Vec<NodeId> = {
-            let doc = state.document.borrow();
-            if let Some(ref d) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let d = rc.borrow();
                 if let Some(row) = d.get(node_id) {
                     row.children()
                         .filter_map(|c| {
@@ -6003,10 +6082,11 @@ unsafe extern "C" fn table_row_cells_getter(info: *const v8::FunctionCallbackInf
 unsafe extern "C" fn table_row_index_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let idx = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| table_row_indices(d, node_id).0)
-                .unwrap_or(-1)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                table_row_indices(&*d, node_id).0
+            }).unwrap_or(-1)
         };
         rv.set(v8::Integer::new(scope, idx).into());
     });
@@ -6014,10 +6094,11 @@ unsafe extern "C" fn table_row_index_getter(info: *const v8::FunctionCallbackInf
 unsafe extern "C" fn table_section_row_index_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let idx = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| table_row_indices(d, node_id).1)
-                .unwrap_or(-1)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                table_row_indices(&*d, node_id).1
+            }).unwrap_or(-1)
         };
         rv.set(v8::Integer::new(scope, idx).into());
     });
@@ -6026,9 +6107,9 @@ unsafe extern "C" fn table_section_row_index_getter(info: *const v8::FunctionCal
 unsafe extern "C" fn table_cell_index_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let idx = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| {
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
                     if let Some(parent) = d.get(node_id).and_then(|n| n.parent()) {
                         let mut i = 0i32;
                         for child in parent.children() {
@@ -6043,7 +6124,7 @@ unsafe extern "C" fn table_cell_index_getter(info: *const v8::FunctionCallbackIn
                         }
                     }
                     -1i32
-                })
+                            })
                 .unwrap_or(-1)
         };
         rv.set(v8::Integer::new(scope, idx).into());
@@ -6053,12 +6134,13 @@ unsafe extern "C" fn table_cell_index_getter(info: *const v8::FunctionCallbackIn
 unsafe extern "C" fn input_type_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.value().get_attr("type"))
-                .unwrap_or("text")
-                .to_string()
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.value().get_attr("type").map(|s| s.to_string()))
+                    .unwrap_or_else(|| "text".to_string())
+            }).unwrap_or_else(|| "text".to_string())
         };
         if let Some(s) = v8::String::new(scope, &val) {
             rv.set(s.into());
@@ -6078,19 +6160,21 @@ unsafe extern "C" fn input_type_setter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn checked_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| n.value().get_attr("checked").is_some())
-                .unwrap_or(false)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .map(|n| n.value().get_attr("checked").is_some())
+            }).unwrap_or(false)
         };
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
 /// Reflect boolean IDL attribute to presence of content attribute.
 fn set_bool_attr(state: &RuntimeState, node_id: NodeId, attr: &str, on: bool) {
-    let mut doc = state.document.borrow_mut();
-    if let Some(ref mut d) = *doc {
+    let _doc_rc = state.document.borrow().clone();
+    if let Some(rc) = _doc_rc {
+        let mut d = rc.borrow_mut();
         if let Some(mut node) = d.tree.get_mut(node_id) {
             if let NodeData::Element { ref mut attrs, .. } = node.value() {
                 attrs.retain(|(k, _)| !k.eq_ignore_ascii_case(attr));
@@ -6118,11 +6202,12 @@ unsafe extern "C" fn checked_setter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn disabled_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| n.value().get_attr("disabled").is_some())
-                .unwrap_or(false)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .map(|n| n.value().get_attr("disabled").is_some())
+            }).unwrap_or(false)
         };
         rv.set(v8::Boolean::new(scope, val).into());
     });
@@ -6139,12 +6224,13 @@ unsafe extern "C" fn disabled_setter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn draggable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.value().get_attr("draggable"))
-                .map(|v| v == "true")
-                .unwrap_or(false)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.value().get_attr("draggable"))
+                    .map(|v| v == "true")
+            }).unwrap_or(false)
         };
         rv.set(v8::Boolean::new(scope, val).into());
     });
@@ -6165,12 +6251,13 @@ unsafe extern "C" fn draggable_setter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn content_editable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.value().get_attr("contenteditable"))
-                .unwrap_or("false")
-                .to_string()
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.value().get_attr("contenteditable").map(|s| s.to_string()))
+                    .unwrap_or_else(|| "false".to_string())
+            }).unwrap_or_else(|| "false".to_string())
         };
         if let Some(s) = v8::String::new(scope, &val) {
             rv.set(s.into());
@@ -6191,12 +6278,13 @@ unsafe extern "C" fn content_editable_setter(info: *const v8::FunctionCallbackIn
 unsafe extern "C" fn is_content_editable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.value().get_attr("contenteditable"))
-                .map(|v| v == "true")
-                .unwrap_or(false)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.value().get_attr("contenteditable"))
+                    .map(|v| v == "true")
+            }).unwrap_or(false)
         };
         rv.set(v8::Boolean::new(scope, val).into());
     });
@@ -6207,12 +6295,13 @@ unsafe extern "C" fn is_content_editable_getter(info: *const v8::FunctionCallbac
 unsafe extern "C" fn canvas_width_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.value().get_attr("width"))
-                .and_then(|v| v.parse::<f64>().ok())
-                .unwrap_or(300.0)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.value().get_attr("width"))
+                    .and_then(|v| v.parse::<f64>().ok())
+            }).unwrap_or(300.0)
         };
         rv.set(v8::Number::new(scope, val).into());
     });
@@ -6231,12 +6320,13 @@ unsafe extern "C" fn canvas_width_setter(info: *const v8::FunctionCallbackInfo) 
 unsafe extern "C" fn canvas_height_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.value().get_attr("height"))
-                .and_then(|v| v.parse::<f64>().ok())
-                .unwrap_or(150.0)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.value().get_attr("height"))
+                    .and_then(|v| v.parse::<f64>().ok())
+            }).unwrap_or(150.0)
         };
         rv.set(v8::Number::new(scope, val).into());
     });
@@ -6378,11 +6468,12 @@ unsafe extern "C" fn img_complete_getter(info: *const v8::FunctionCallbackInfo) 
 unsafe extern "C" fn async_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| n.value().get_attr("async").is_some())
-                .unwrap_or(false)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .map(|n| n.value().get_attr("async").is_some())
+            }).unwrap_or(false)
         };
         rv.set(v8::Boolean::new(scope, val).into());
     });
@@ -6399,11 +6490,12 @@ unsafe extern "C" fn async_setter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn defer_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| n.value().get_attr("defer").is_some())
-                .unwrap_or(false)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .map(|n| n.value().get_attr("defer").is_some())
+            }).unwrap_or(false)
         };
         rv.set(v8::Boolean::new(scope, val).into());
     });
@@ -6740,11 +6832,13 @@ unsafe extern "C" fn iframe_readonly_noop_setter(info: *const v8::FunctionCallba
 unsafe extern "C" fn option_selected_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let selected = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .and_then(|n| n.value().get_attr("selected"))
-                .is_some()
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .and_then(|n| n.value().get_attr("selected"))
+                    .is_some()
+            }).is_some()
         };
         rv.set(v8::Boolean::new(scope, selected).into());
     });
@@ -6758,8 +6852,9 @@ unsafe extern "C" fn option_selected_setter(info: *const v8::FunctionCallbackInf
             } else {
                 false
             };
-            let mut doc = state.document.borrow_mut();
-            if let Some(ref mut d) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let mut d = rc.borrow_mut();
                 if let Some(mut node) = d.tree.get_mut(nid) {
                     if let NodeData::Element { ref mut attrs, .. } = node.value() {
                         attrs.retain(|(k, _)| !k.eq_ignore_ascii_case("selected"));
@@ -6776,8 +6871,9 @@ unsafe extern "C" fn option_selected_setter(info: *const v8::FunctionCallbackInf
 unsafe extern "C" fn option_label_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            if let Some(ref d) = *doc {
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let d = rc.borrow();
                 if let Some(n) = d.get(node_id) {
                     if let Some(v) = n.value().get_attr("label") {
                         v.to_string()
@@ -6810,10 +6906,11 @@ unsafe extern "C" fn option_label_setter(info: *const v8::FunctionCallbackInfo) 
 unsafe extern "C" fn option_text_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| d.text_content_of(node_id))
-                .unwrap_or_default()
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                d.text_content_of(node_id)
+            }).unwrap_or_default()
         };
         if let Some(s) = v8::String::new(scope, &val) {
             rv.set(s.into());
@@ -6829,9 +6926,10 @@ unsafe extern "C" fn option_text_setter(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn option_index_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let idx = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| {
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref()
+                .and_then(|rc| {
+                    let d = rc.borrow();
                     let parent = d.parent_id(node_id)?;
                     // parent may be select or optgroup
                     let select_id = {
@@ -6851,7 +6949,7 @@ unsafe extern "C" fn option_index_getter(info: *const v8::FunctionCallbackInfo) 
                             return None;
                         }
                     };
-                    let opts = collect_select_options(d, select_id);
+                    let opts = collect_select_options(&*d, select_id);
                     opts.iter().position(|&id| id == node_id).map(|i| i as i32)
                 })
                 .unwrap_or(0)
@@ -6863,10 +6961,10 @@ unsafe extern "C" fn option_index_getter(info: *const v8::FunctionCallbackInfo) 
 unsafe extern "C" fn selected_index_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let idx = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| {
-                    let opts = collect_select_options(d, node_id);
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                    let opts = collect_select_options(&*d, node_id);
                     if opts.is_empty() {
                         return -1i32;
                     }
@@ -6881,7 +6979,7 @@ unsafe extern "C" fn selected_index_getter(info: *const v8::FunctionCallbackInfo
                     // HTML: if none selected, default is first option (index 0)
                     // for single-select; keep -1 only when empty (handled above).
                     if found < 0 { 0 } else { found }
-                })
+                            })
                 .unwrap_or(-1)
         };
         rv.set(v8::Integer::new(scope, idx).into());
@@ -6895,9 +6993,10 @@ unsafe extern "C" fn selected_index_setter(info: *const v8::FunctionCallbackInfo
                 return;
             }
             let idx = args.get(0).number_value(scope).unwrap_or(-1.0) as i64;
-            let mut doc = state.document.borrow_mut();
-            if let Some(ref mut d) = *doc {
-                let opts = collect_select_options(d, nid);
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let mut d = rc.borrow_mut();
+                let opts = collect_select_options(&*d, nid);
                 for (i, oid) in opts.iter().enumerate() {
                     if let Some(mut n) = d.tree.get_mut(*oid) {
                         if let NodeData::Element { attrs, .. } = n.value() {
@@ -6916,16 +7015,17 @@ unsafe extern "C" fn selected_index_setter(info: *const v8::FunctionCallbackInfo
 unsafe extern "C" fn select_options_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let opts = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| collect_select_options(d, node_id))
-                .unwrap_or_default()
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                collect_select_options(&*d, node_id)
+            }).unwrap_or_default()
         };
         let selected_idx = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| {
-                    let opts = collect_select_options(d, node_id);
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                    let opts = collect_select_options(&*d, node_id);
                     if opts.is_empty() {
                         return -1i32;
                     }
@@ -6942,7 +7042,7 @@ unsafe extern "C" fn select_options_getter(info: *const v8::FunctionCallbackInfo
                     } else {
                         found
                     }
-                })
+                            })
                 .unwrap_or(-1)
         };
 
@@ -7163,10 +7263,11 @@ unsafe extern "C" fn html_options_length_get_cb(info: *const v8::FunctionCallbac
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let n = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| collect_select_options(d, select_id).len() as i32)
-                .unwrap_or(0)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                collect_select_options(&*d, select_id).len() as i32
+            }).unwrap_or(0)
         };
         rv.set(v8::Integer::new(scope, n).into());
     }));
@@ -7189,10 +7290,10 @@ unsafe extern "C" fn html_options_selected_index_get_cb(info: *const v8::Functio
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let idx = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| {
-                    let opts = collect_select_options(d, select_id);
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                    let opts = collect_select_options(&*d, select_id);
                     if opts.is_empty() {
                         return -1i32;
                     }
@@ -7209,7 +7310,7 @@ unsafe extern "C" fn html_options_selected_index_get_cb(info: *const v8::Functio
                     } else {
                         found
                     }
-                })
+                            })
                 .unwrap_or(-1)
         };
         rv.set(v8::Integer::new(scope, idx).into());
@@ -7238,9 +7339,10 @@ unsafe extern "C" fn html_options_selected_index_set_cb(info: *const v8::Functio
             .unwrap_or(-1);
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
-        let mut doc = state.document.borrow_mut();
-        if let Some(ref mut d) = *doc {
-            let opts = collect_select_options(d, select_id);
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let mut d = rc.borrow_mut();
+            let opts = collect_select_options(&*d, select_id);
             for (i, oid) in opts.iter().enumerate() {
                 if let Some(mut n) = d.get_mut(*oid) {
                     if let NodeData::Element { ref mut attrs, .. } = n.value() {
@@ -7294,8 +7396,9 @@ unsafe extern "C" fn html_options_add_cb(info: *const v8::FunctionCallbackInfo) 
         };
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
-        let mut doc = state.document.borrow_mut();
-        if let Some(ref mut d) = *doc {
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let mut d = rc.borrow_mut();
             let _ = d.append_child(
                 select_id,
                 NodeData::element("option", "http://www.w3.org/1999/xhtml", vec![]),
@@ -7338,9 +7441,10 @@ unsafe extern "C" fn html_options_remove_cb(info: *const v8::FunctionCallbackInf
         }
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
-        let mut doc = state.document.borrow_mut();
-        if let Some(ref mut d) = *doc {
-            let opts = collect_select_options(d, select_id);
+        let _doc_rc = state.document.borrow().clone();
+        if let Some(rc) = _doc_rc {
+            let mut d = rc.borrow_mut();
+            let opts = collect_select_options(&*d, select_id);
             if let Some(&oid) = opts.get(idx as usize) {
                 d.detach(oid);
             }
@@ -7351,10 +7455,11 @@ unsafe extern "C" fn html_options_remove_cb(info: *const v8::FunctionCallbackInf
 unsafe extern "C" fn select_length_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let n = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .map(|d| collect_select_options(d, node_id).len() as i32)
-                .unwrap_or(0)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().map(|rc| {
+                let d = rc.borrow();
+                collect_select_options(&*d, node_id).len() as i32
+            }).unwrap_or(0)
         };
         rv.set(v8::Integer::new(scope, n).into());
     });
@@ -7372,9 +7477,10 @@ unsafe extern "C" fn select_length_setter(info: *const v8::FunctionCallbackInfo)
                 .number_value(scope)
                 .map(|n| if n.is_nan() { 0.0 } else { n.trunc().max(0.0) })
                 .unwrap_or(0.0) as usize;
-            let mut doc = state.document.borrow_mut();
-            if let Some(ref mut d) = *doc {
-                let mut opts = collect_select_options(d, nid);
+            let _doc_rc = state.document.borrow().clone();
+            if let Some(rc) = _doc_rc {
+                let mut d = rc.borrow_mut();
+                let mut opts = collect_select_options(&*d, nid);
                 while opts.len() > target {
                     if let Some(oid) = opts.pop() {
                         d.detach(oid);
@@ -7395,11 +7501,12 @@ unsafe extern "C" fn select_length_setter(info: *const v8::FunctionCallbackInfo)
 unsafe extern "C" fn multiple_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let val = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| n.value().get_attr("multiple").is_some())
-                .unwrap_or(false)
+            let _drc = state.document.borrow().clone();
+            _drc.as_ref().and_then(|rc| {
+                let d = rc.borrow();
+                d.get(node_id)
+                    .map(|n| n.value().get_attr("multiple").is_some())
+            }).unwrap_or(false)
         };
         rv.set(v8::Boolean::new(scope, val).into());
     });
@@ -7440,11 +7547,12 @@ unsafe extern "C" fn select_item_cb(info: *const v8::FunctionCallbackInfo) {
                 let idx = args.get(0).number_value(scope).unwrap_or(-1.0) as i64;
                 if idx >= 0 {
                     let opt_id = {
-                        let doc = state.document.borrow();
-                        doc.as_ref().and_then(|d| {
-                            let opts = collect_select_options(d, nid);
-                            opts.get(idx as usize).copied()
-                        })
+                        state
+                            .with_document(|d| {
+                                let opts = collect_select_options(&*d, nid);
+                                opts.get(idx as usize).copied()
+                            })
+                            .flatten()
                     };
                     if let Some(oid) = opt_id {
                         if let Some(obj) = create_node_object(scope, state, oid) {
@@ -7465,24 +7573,20 @@ unsafe extern "C" fn select_named_item_cb(info: *const v8::FunctionCallbackInfo)
             if args.length() >= 1 {
                 let name = args.get(0).to_rust_string_lossy(scope);
                 let opt_id = {
-                    let doc = state.document.borrow();
-                    doc.as_ref().and_then(|d| {
-                        for oid in collect_select_options(d, nid) {
-                            if let Some(n) = d.get(oid) {
-                                if let Some(v) = n.value().get_attr("id") {
-                                    if v == name {
-                                        return Some(oid);
-                                    }
-                                }
-                                if let Some(v) = n.value().get_attr("name") {
-                                    if v == name {
-                                        return Some(oid);
+                    state
+                        .with_document(|d| {
+                            for oid in collect_select_options(&*d, nid) {
+                                if let Some(n) = d.get(oid) {
+                                    if let Some(v) = n.value().get_attr("id") {
+                                        if v == name {
+                                            return Some(oid);
+                                        }
                                     }
                                 }
                             }
-                        }
-                        None
-                    })
+                            None
+                        })
+                        .flatten()
                 };
                 if let Some(oid) = opt_id {
                     if let Some(obj) = create_node_object(scope, state, oid) {

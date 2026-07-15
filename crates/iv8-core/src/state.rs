@@ -41,11 +41,8 @@ pub struct RuntimeState {
     pub eval_count: RefCell<u64>,
     pub disposed: RefCell<bool>,
 
-    /// DOM document (populated by page.load or set_document)
-    pub document: RefCell<Option<Document>>,
-    /// Layer C: when streaming parse is active, DOM APIs read/write this shared tree
-    /// (same DocRc as StreamingHtmlParser). Takes precedence over `document`.
-    pub document_shared: RefCell<Option<crate::dom::DocRc>>,
+    /// DOM document as shared DocRc (Layer C unified ownership).
+    pub document: RefCell<Option<crate::dom::DocRc>>,
 
     /// Event loop (macrotask queue + logical time)
     pub event_loop: RefCell<EventLoop>,
@@ -226,47 +223,43 @@ pub enum TimeMode {
 }
 
 impl RuntimeState {
-    /// Install document (clears streaming shared handle).
+    /// Install document as DocRc.
     pub fn set_document(&self, doc: Document) {
-        *self.document_shared.borrow_mut() = None;
-        *self.document.borrow_mut() = Some(doc);
+        *self.document.borrow_mut() = Some(crate::dom::doc_rc_new(doc));
     }
 
-    /// Layer C: bind RuntimeState DOM access to the stream's DocRc (no swap).
+    pub fn set_document_rc(&self, rc: crate::dom::DocRc) {
+        *self.document.borrow_mut() = Some(rc);
+    }
+
+    /// Stream bind alias (same field after LC-2 unification).
     pub fn set_document_shared(&self, rc: crate::dom::DocRc) {
-        *self.document.borrow_mut() = None;
-        *self.document_shared.borrow_mut() = Some(rc);
+        self.set_document_rc(rc);
     }
 
-    pub fn clear_document_shared(&self) {
-        *self.document_shared.borrow_mut() = None;
-    }
+    /// Compatibility no-op: document remains the same DocRc after stream ends.
+    pub fn clear_document_shared(&self) {}
 
-    pub fn take_document(&self) -> Option<Document> {
-        self.document_shared.borrow_mut().take();
+    pub fn take_document_rc(&self) -> Option<crate::dom::DocRc> {
         self.document.borrow_mut().take()
     }
 
-    pub fn document_as_rc(&self) -> Option<crate::dom::DocRc> {
-        self.document_shared.borrow().clone()
+    pub fn document_rc(&self) -> Option<crate::dom::DocRc> {
+        self.document.borrow().clone()
     }
 
-    /// Prefer shared stream doc, else owned document.
+    pub fn document_as_rc(&self) -> Option<crate::dom::DocRc> {
+        self.document_rc()
+    }
+
     pub fn with_document<R>(&self, f: impl FnOnce(&Document) -> R) -> Option<R> {
-        if let Some(rc) = self.document_shared.borrow().clone() {
-            return Some(f(&rc.borrow()));
-        }
-        self.document.borrow().as_ref().map(f)
+        self.document.borrow().as_ref().map(|rc| f(&rc.borrow()))
     }
 
     pub fn with_document_mut<R>(&self, f: impl FnOnce(&mut Document) -> R) -> Option<R> {
-        if let Some(rc) = self.document_shared.borrow().clone() {
-            return Some(f(&mut rc.borrow_mut()));
-        }
-        self.document.borrow_mut().as_mut().map(f)
+        self.document.borrow().as_ref().map(|rc| f(&mut rc.borrow_mut()))
     }
 
-    /// Root NodeId from shared or owned document.
     pub fn document_root_id(&self) -> Option<crate::dom::NodeId> {
         self.with_document(|d| d.root_id())
     }
@@ -290,7 +283,6 @@ impl RuntimeState {
             eval_count: RefCell::new(0),
             disposed: RefCell::new(false),
             document: RefCell::new(None),
-            document_shared: RefCell::new(None),
             event_loop: RefCell::new(EventLoop::new()),
             event_listeners: RefCell::new(EventListenerRegistry::new()),
             resource_bundle: RefCell::new(ResourceBundle::new()),

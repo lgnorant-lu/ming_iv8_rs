@@ -187,8 +187,9 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
 
             // 4f. loading before scripts (align with JSContext.page_load Q080)
             {
-                let doc_ref = state.document.borrow();
-                if let Some(ref doc) = *doc_ref {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let doc = rc.borrow();
                     doc.set_ready_state(crate::dom::node::DocumentReadyState::Loading);
                 }
             }
@@ -206,24 +207,25 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
 
             // 6. Set readyState to interactive (Rust + JS side)
             {
-                let doc_ref = state.document.borrow();
-                if let Some(ref doc) = *doc_ref {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let doc = rc.borrow();
                     doc.set_ready_state(crate::dom::node::DocumentReadyState::Interactive);
                 }
-                drop(doc_ref);
             }
             eval_js!(scope, "try { document.readyState = 'interactive'; } catch(e) {}");
 
             // 7. Dispatch DOMContentLoaded event on document root
             {
-                let doc_ref = state.document.borrow();
-                if let Some(ref document) = *doc_ref {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let document = rc.borrow();
                     let root_id = document.root_id();
                     let registry = &state.event_listeners;
                     crate::events::target::dispatch_event(
                         scope,
                         registry,
-                        document,
+                        &*document,
                         root_id,
                         "DOMContentLoaded",
                         false,
@@ -233,24 +235,25 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
 
             // 8. Set readyState to complete (Rust + JS side)
             {
-                let doc_ref = state.document.borrow();
-                if let Some(ref doc) = *doc_ref {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let doc = rc.borrow();
                     doc.set_ready_state(crate::dom::node::DocumentReadyState::Complete);
                 }
-                drop(doc_ref);
             }
             eval_js!(scope, "try { document.readyState = 'complete'; } catch(e) {}");
 
             // 9. Dispatch load on document + window (align Q080)
             {
-                let doc_ref = state.document.borrow();
-                if let Some(ref document) = *doc_ref {
+                let _doc_rc = state.document.borrow().clone();
+                if let Some(rc) = _doc_rc {
+                    let document = rc.borrow();
                     let root_id = document.root_id();
                     let registry = &state.event_listeners;
                     crate::events::target::dispatch_event(
                         scope,
                         registry,
-                        document,
+                        &*document,
                         root_id,
                         "load",
                         false,
