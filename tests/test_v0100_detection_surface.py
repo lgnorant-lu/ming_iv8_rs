@@ -220,6 +220,86 @@ def test_rsa_pkcs1_generate_key_and_p521_bound():
     assert "P-521" in rep["p521"] or "namedCurve" in rep["p521"] or "unsupported" in rep["p521"].lower(), rep
 
 
+def test_window_global_props_own_not_on_window_prototype():
+    """Q055: navigator/document/location are own Window properties (not Window.prototype)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  function place(name){
+                    var own = Object.getOwnPropertyDescriptor(window, name);
+                    var onProto = Object.getOwnPropertyDescriptor(Window.prototype, name);
+                    return {name:name, own:!!own, onProto:!!onProto};
+                  }
+                  return JSON.stringify(['navigator','document','location'].map(place));
+                })()
+                """
+            )
+        )
+
+    rows = json.loads(_run(body))
+    for r in rows:
+        assert r["own"] is True and r["onProto"] is False, r
+
+
+def test_navigator_user_agent_getter_call_illegal_invocation():
+    """Q063: wrong-this on Navigator.prototype.userAgent getter throws Illegal invocation."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var g = Object.getOwnPropertyDescriptor(Navigator.prototype, 'userAgent').get;
+                  var ok = g.call(navigator);
+                  try { g.call({}); return JSON.stringify({ok:ok, wrong:'no-throw'}); }
+                  catch(e){
+                    return JSON.stringify({
+                      ok:ok,
+                      wrong: e.name === 'TypeError' && /Illegal invocation/i.test(String(e.message))
+                    });
+                  }
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert isinstance(rep["ok"], str) and len(rep["ok"]) > 10, rep
+    assert rep["wrong"] is True, rep
+
+
+def test_worker_constructor_and_postmessage_surface():
+    """Q100/Q102: Worker constructor + postMessage surface (navigator FT residual)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  if (typeof Worker !== 'function') return JSON.stringify({missing:true});
+                  var w = new Worker('data:text/javascript,0');
+                  return JSON.stringify({
+                    type: typeof w,
+                    post: typeof w.postMessage,
+                    terminate: typeof w.terminate,
+                    onmessage: 'onmessage' in w
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep.get("missing") is not True, rep
+    assert rep["type"] == "object" and rep["post"] == "function", rep
+
+
 def test_high_signal_interfaces_are_non_constructable():
     """Q056: Navigator/Screen/History/Location throw on new."""
 
