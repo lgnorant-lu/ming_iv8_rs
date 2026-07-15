@@ -759,7 +759,9 @@ impl EmbeddedV8Kernel {
                 ($name:literal, $cb:ident) => {
                     let getter = v8::FunctionTemplate::builder_raw($cb).build(handle_scope);
                     let key = v8::String::new(handle_scope, $name).unwrap();
-                    getter.set_class_name(key);
+                    // Chrome: accessor getter name is "get <prop>" (Q012).
+                    let gname = v8::String::new(handle_scope, concat!("get ", $name)).unwrap();
+                    getter.set_class_name(gname);
                     getter.remove_prototype();
                     global_tmpl.set_accessor_property(
                         key.into(),

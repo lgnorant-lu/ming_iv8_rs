@@ -15,10 +15,10 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
     macro_rules! loc_accessor {
         ($name:literal, $getter:ident, $setter:ident) => {
             let getter = v8::FunctionTemplate::builder_raw($getter).build(scope);
-            getter.set_class_name(crate::v8_utils::v8_string(scope, $name));
+            getter.set_class_name(crate::v8_utils::v8_string(scope, concat!("get ", $name)));
             getter.remove_prototype();
             let setter = v8::FunctionTemplate::builder_raw($setter).build(scope);
-            setter.set_class_name(crate::v8_utils::v8_string(scope, $name));
+            setter.set_class_name(crate::v8_utils::v8_string(scope, concat!("set ", $name)));
             setter.remove_prototype();
             let name = crate::v8_utils::v8_string(scope, $name);
             loc_tmpl.prototype_template(scope).set_accessor_property(
@@ -30,7 +30,7 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
         };
         ($name:literal, $getter:ident) => {
             let getter = v8::FunctionTemplate::builder_raw($getter).build(scope);
-            getter.set_class_name(crate::v8_utils::v8_string(scope, $name));
+            getter.set_class_name(crate::v8_utils::v8_string(scope, concat!("get ", $name)));
             getter.remove_prototype();
             let name = crate::v8_utils::v8_string(scope, $name);
             loc_tmpl.prototype_template(scope).set_accessor_property(
@@ -202,7 +202,8 @@ fn install_loc_getters_on_proto(
     for (name, getter_cb, setter_opt) in accessors {
         let getter_tmpl = v8::FunctionTemplate::builder_raw(*getter_cb).build(scope);
         let name_str = crate::v8_utils::v8_string(scope, name);
-        getter_tmpl.set_class_name(name_str);
+        let get_name = crate::v8_utils::v8_string(scope, &format!("get {name}"));
+        getter_tmpl.set_class_name(get_name);
         getter_tmpl.remove_prototype();
         let getter_fn = match getter_tmpl.get_function(scope) {
             Some(f) => f,
@@ -212,7 +213,8 @@ fn install_loc_getters_on_proto(
         let _ = desc.set(scope, get_key.into(), getter_fn.into());
         if let Some(setter_cb) = setter_opt {
             let setter_tmpl = v8::FunctionTemplate::builder_raw(*setter_cb).build(scope);
-            setter_tmpl.set_class_name(name_str);
+            let set_name = crate::v8_utils::v8_string(scope, &format!("set {name}"));
+            setter_tmpl.set_class_name(set_name);
             setter_tmpl.remove_prototype();
             if let Some(setter_fn) = setter_tmpl.get_function(scope) {
                 let _ = desc.set(scope, set_key.into(), setter_fn.into());

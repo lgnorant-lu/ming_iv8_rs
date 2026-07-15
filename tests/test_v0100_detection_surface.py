@@ -23,6 +23,160 @@ def _run(fn):
     return box["out"]
 
 
+def test_window_and_location_getter_names_use_get_prefix():
+    """Q012: high-signal accessor getters named get <prop>."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                JSON.stringify({
+                  innerWidth: Object.getOwnPropertyDescriptor(window, 'innerWidth').get.name,
+                  href: Object.getOwnPropertyDescriptor(Location.prototype, 'href').get.name,
+                  userAgent: Object.getOwnPropertyDescriptor(Navigator.prototype, 'userAgent').get.name
+                })
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["innerWidth"] == "get innerWidth", rep
+    assert rep["href"] == "get href", rep
+    assert rep["userAgent"] == "get userAgent", rep
+
+
+def test_mutation_observer_fires_on_attribute_and_childlist():
+    """Q074: shallow MutationObserver delivers records for observed nodes."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var seen = 0;
+                  var types = [];
+                  var mo = new MutationObserver(function(recs){
+                    seen += recs.length;
+                    recs.forEach(function(r){ types.push(r.type); });
+                  });
+                  var el = document.createElement('div');
+                  document.body.appendChild(el);
+                  mo.observe(el, {attributes: true, childList: true});
+                  el.setAttribute('data-q', '1');
+                  el.appendChild(document.createTextNode('t'));
+                  return JSON.stringify({seen: seen, types: types});
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["seen"] >= 2, rep
+    assert "attributes" in rep["types"] and "childList" in rep["types"], rep
+
+
+def test_url_search_params_basic():
+    """Q122: URLSearchParams get/has basics."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var u = new URL('https://ex.test/p?a=1&b=2');
+                  var sp = u.searchParams;
+                  return JSON.stringify({a: sp.get('a'), hasB: sp.has('b'), s: String(sp)});
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["a"] == "1", rep
+    assert rep["hasB"] is True, rep
+
+
+def test_document_cookie_set_get_roundtrip():
+    """Q093: document.cookie set/get basic path (attribute storage residual)."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  document.cookie = 'q093=v; Path=/; SameSite=Lax';
+                  return document.cookie;
+                })()
+                """
+            )
+        )
+
+    cookie = _run(body)
+    assert "q093=v" in cookie, cookie
+
+
+def test_event_istrusted_on_dispatch():
+    """Q078: isTrusted true for dispatchEvent, false for new Event."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var e = new Event('x');
+                  var trusted = null;
+                  document.addEventListener('q078', function(ev){ trusted = ev.isTrusted; });
+                  document.dispatchEvent(new Event('q078'));
+                  var d = Object.getOwnPropertyDescriptor(Event.prototype, 'isTrusted');
+                  return JSON.stringify({
+                    constructed: e.isTrusted,
+                    dispatched: trusted,
+                    isAccessor: !!(d && d.get)
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["constructed"] is False, rep
+    assert rep["dispatched"] is True, rep
+    assert rep["isAccessor"] is True, rep
+
+
+def test_xpath_history_storage_basics():
+    """Q060: XPathResult + history + storage basic surface."""
+
+    def body():
+        ctx = iv8_rs.JSContext()
+        return str(
+            ctx.eval(
+                r"""
+                (function(){
+                  var r = document.evaluate('//div', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                  localStorage.setItem('q060', '1');
+                  return JSON.stringify({
+                    xpathCtor: r && r.constructor && r.constructor.name,
+                    snap: r && r.snapshotLength,
+                    historyPush: typeof history.pushState,
+                    ls: localStorage.getItem('q060')
+                  });
+                })()
+                """
+            )
+        )
+
+    rep = json.loads(_run(body))
+    assert rep["xpathCtor"] == "XPathResult", rep
+    assert rep["historyPush"] == "function", rep
+    assert rep["ls"] == "1", rep
+
+
 def test_postmessage_and_scroll_receiver_and_argc():
     """Q059: postMessage argc + scrollTo/scrollBy wrong-this Illegal invocation."""
 

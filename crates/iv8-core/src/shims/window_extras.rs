@@ -382,24 +382,115 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         };
     }
 
-    // MutationObserver stub
-    if (typeof MutationObserver === 'undefined') {
-        globalThis.MutationObserver = function MutationObserver(callback) {
-            this._callback = callback;
-            this._targets = [];
-        };
+    // MutationObserver shallow delivery (Q074): on observe(), instrument the
+    // target node's setAttribute/appendChild so callbacks fire for that node.
+    // Synchronous delivery (no host timer drain). Not full MO (no subtree/characterData).
+    (function() {
+        if (globalThis.__iv8MoInstalled) return;
+        globalThis.__iv8MoInstalled = true;
         function _moThis(self) {
-            if (self == null || typeof self !== 'object' || !('_targets' in self)) {
+            if (self == null || typeof self !== 'object' || !self._iv8MO) {
                 throw new TypeError('Illegal invocation');
             }
             return self;
         }
-        MutationObserver.prototype.observe = function(target, options) {
-            _moThis(this)._targets.push({ target: target, options: options });
+        function _moFire(obs, type, target, attributeName) {
+            if (typeof obs._callback !== 'function') return;
+            try {
+                obs._callback.call(obs, [{
+                    type: type,
+                    target: target,
+                    attributeName: attributeName || null,
+                    addedNodes: [],
+                    removedNodes: [],
+                    previousSibling: null,
+                    nextSibling: null,
+                    oldValue: null
+                }], obs);
+            } catch(e) {}
+        }
+        function _moInstrument(target, obs, options) {
+            if (!target || typeof target !== 'object') return;
+            var opt = options || {};
+            var wantAttr = opt.attributes === true;
+            var wantChild = opt.childList === true;
+            if (!wantAttr && !wantChild) {
+                // Chrome requires at least one; for stub, default to both.
+                wantAttr = true;
+                wantChild = true;
+            }
+            if (wantAttr && !target.__iv8MoAttr) {
+                var baseSA = null;
+                try { baseSA = Element.prototype.setAttribute; } catch(e) {}
+                if (typeof baseSA === 'function') {
+                    var wrappedSA = function setAttribute(name, value) {
+                        var r = baseSA.call(this, name, value);
+                        try { _moFire(obs, 'attributes', this, String(name)); } catch(e) {}
+                        return r;
+                    };
+                    try {
+                        Object.defineProperty(target, 'setAttribute', {
+                            configurable: true, enumerable: false, writable: true, value: wrappedSA
+                        });
+                    } catch(e) {
+                        try { target.setAttribute = wrappedSA; } catch(e2) {}
+                    }
+                    try { target.__iv8MoAttr = true; } catch(e) {}
+                }
+            }
+            if (wantChild && !target.__iv8MoChild) {
+                var baseAC = null;
+                try { baseAC = Node.prototype.appendChild; } catch(e) {}
+                if (typeof baseAC === 'function') {
+                    var wrappedAC = function appendChild(node) {
+                        var r = baseAC.call(this, node);
+                        try { _moFire(obs, 'childList', this, null); } catch(e) {}
+                        return r;
+                    };
+                    try {
+                        Object.defineProperty(target, 'appendChild', {
+                            configurable: true, enumerable: false, writable: true, value: wrappedAC
+                        });
+                    } catch(e) {
+                        try { target.appendChild = wrappedAC; } catch(e2) {}
+                    }
+                    try { target.__iv8MoChild = true; } catch(e) {}
+                }
+            }
+        }
+        function MutationObserverImpl(callback) {
+            this._callback = callback;
+            this._targets = [];
+            this._iv8MO = true;
+        }
+        // Not on prototype: RECEIVER_SHIM re-wraps MutationObserver.prototype and may
+        // capture the wrong function. Own methods avoid that path for observe.
+        MutationObserverImpl.prototype.observe = function observe(target, options) {
+            if (this == null || typeof this !== 'object' || !this._iv8MO) {
+                throw new TypeError('Illegal invocation');
+            }
+            if (!target) throw new TypeError('Failed to execute \'observe\' on \'MutationObserver\': parameter 1 is not of type \'Node\'.');
+            var opt = options || {};
+            this._targets.push({ target: target, options: opt });
+            _moInstrument(target, this, opt);
         };
-        MutationObserver.prototype.disconnect = function() { _moThis(this)._targets = []; };
-        MutationObserver.prototype.takeRecords = function takeRecords() { _moThis(this); return []; };
-    }
+        MutationObserverImpl.prototype.disconnect = function() {
+            _moThis(this)._targets = [];
+        };
+        MutationObserverImpl.prototype.takeRecords = function takeRecords() { _moThis(this); return []; };
+        try { Object.defineProperty(MutationObserverImpl, 'name', { value: 'MutationObserver' }); } catch(e) {}
+        // Force-replace codegen skeleton MutationObserver (may be non-writable).
+        try {
+            Object.defineProperty(globalThis, 'MutationObserver', {
+                configurable: true,
+                enumerable: false,
+                writable: true,
+                value: MutationObserverImpl
+            });
+        } catch(e) {
+            try { globalThis.MutationObserver = MutationObserverImpl; } catch(e2) {}
+        }
+    })();
 
     // IntersectionObserver stub
     if (typeof IntersectionObserver === 'undefined') {
@@ -636,7 +727,8 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     _patchObserver(IntersectionObserver);
     _patchObserver(ResizeObserver);
     _patchObserver(ReportingObserver);
-    _patchObserver(MutationObserver);
+    // MutationObserver: full shallow delivery installed above (Q074) — do not
+    // overwrite observe/disconnect with the bounded no-op patcher.
     _patchObserver(PerformanceObserver);
 
     // performance.getEntries / getEntriesByName / getEntriesByType stubs
