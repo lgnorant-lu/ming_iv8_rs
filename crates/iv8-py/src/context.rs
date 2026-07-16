@@ -242,6 +242,9 @@ impl JSContext {
     /// Set globalThis.__proto__ to DedicatedWorkerGlobalScope.prototype.
     /// Called after Worker interfaces are installed via JS eval.
     /// Uses V8 API to bypass JS immutable prototype restriction.
+    ///
+    /// Raises:
+    ///     RuntimeError: Wrong thread or context closed.
     fn set_worker_prototype(&self, py: Python<'_>) -> PyResult<()> {
         self.assert_thread()?;
         py.allow_threads(|| {
@@ -252,6 +255,26 @@ impl JSContext {
     }
 
     /// Evaluate JavaScript source code and return the result as a Python object.
+    ///
+    /// The result is deep-converted to Python types. null/undefined becomes None,
+    /// Array becomes list, Object becomes dict, ArrayBuffer becomes bytes.
+    /// BigInt becomes None (or int when strict_compat is False).
+    ///
+    /// Args:
+    ///     source: JavaScript source string to evaluate.
+    ///     name: Optional source URL for stack traces.
+    ///     line: Line offset for error reporting. Default: -1.
+    ///     col: Column offset for error reporting. Default: -1.
+    ///     to_py: Ignored (always deep-converts).
+    ///     devtools: Ignored (handled by with_devtools).
+    ///
+    /// Returns:
+    ///     Python object converted from the JS result.
+    ///
+    /// Raises:
+    ///     JSCompileError: Syntax error in source.
+    ///     JSError: JavaScript runtime exception.
+    ///     RuntimeError: Context already closed or wrong thread.
     #[pyo3(signature = (source, /, name=None, line=-1, col=-1, to_py=false, devtools=true))]
     fn eval(        &self,
         py: Python<'_>,
@@ -292,7 +315,10 @@ impl JSContext {
         rust_value_to_py(py, &rust_value)
     }
 
-    /// Return the 393 default environment entries as a dict.
+    /// Return the built-in default environment entries as a dict.
+    ///
+    /// Returns:
+    ///     dict with ~393 dot-path keys representing a baseline browser environment.
     #[classmethod]
     fn get_defaults(_cls: &Bound<'_, pyo3::types::PyType>, py: Python<'_>) -> PyResult<PyObject> {
         let env = iv8_core::EnvironmentMap::defaults();
@@ -304,6 +330,11 @@ impl JSContext {
     }
 
     /// Close the context and release V8 resources.
+    ///
+    /// Safe to call multiple times (subsequent calls are no-ops).
+    ///
+    /// Raises:
+    ///     RuntimeError: Called from a different thread.
     fn close(&self, py: Python<'_>) -> PyResult<()> {
         self.assert_creator_thread()?;
         if self.inner.disposed.swap(true, Ordering::SeqCst) {
@@ -335,15 +366,26 @@ impl JSContext {
         Ok(false) // don't suppress exceptions
     }
 
-    /// Expose a Python callable as a global JS function, OR store data at __iv8__.data.name.
+    /// Expose a Python callable as a global JS function, or store data.
     ///
     /// Two modes:
-    /// 1. callable: expose(name, callable) — registers a JS function
-    /// 2. data: expose(data_dict, name) — stores data at __iv8__.data.name
     ///
-    /// The data mode is used by iv8 examples:
-    ///   ctx.expose({"html": "...", "resources": {...}}, "s1")
-    ///   ctx.eval("__iv8__.page.load(__iv8__.data.s1)")
+    /// 1. Callable mode: expose(name, callable) - registers a JS function.
+    /// 2. Data mode: expose(data_dict, name) - stores data at __iv8__.data.name.
+    ///
+    /// Args:
+    ///     name_or_data: In mode 1, the JS function name (str).
+    ///         In mode 2, the Python data to expose.
+    ///     callable_or_name: In mode 1, the Python callable.
+    ///         In mode 2, the storage key name (str).
+    ///
+    /// Raises:
+    ///     TypeError: Invalid mode combination or non-callable.
+    ///     RuntimeError: Context closed or wrong thread.
+    ///
+    /// Example:
+    ///     ctx.expose("add", lambda a, b: a + b)
+    ///     ctx.eval("add(1, 2)")  # -> 3
     #[pyo3(signature = (name_or_data, callable_or_name=None))]
     fn expose(
         &self,
@@ -461,6 +503,9 @@ impl JSContext {
     }
 
     /// Check if the context has been disposed.
+    ///
+    /// Returns:
+    ///     True if close() has been called.
     fn is_disposed(&self) -> bool {
         self.inner.disposed.load(Ordering::SeqCst)
     }
@@ -585,6 +630,9 @@ impl JSContext {
     }
 
     /// Get the DevTools URL for the current inspector session.
+    ///
+    /// Returns:
+    ///     URL string, or None if devtools not started.
     fn get_devtools_url(&self) -> PyResult<Option<String>> {
         self.assert_thread()?;
         let kernel = self.inner.kernel.lock();
@@ -594,6 +642,9 @@ impl JSContext {
     }
 
     /// Process pending CDP messages (call periodically when debugging).
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed or wrong thread.
     fn process_inspector_messages(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -631,6 +682,12 @@ impl JSContext {
     }
 
     /// Remove a breakpoint by id.
+    ///
+    /// Args:
+    ///     breakpoint_id: ID returned from cdp_set_breakpoint.
+    ///
+    /// Raises:
+    ///     RuntimeError: DevTools not started or context closed.
     fn cdp_remove_breakpoint(&self, breakpoint_id: &str) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -657,6 +714,9 @@ impl JSContext {
     }
 
     /// Resume execution after a breakpoint pause.
+    ///
+    /// Raises:
+    ///     RuntimeError: DevTools not started or context closed.
     fn cdp_resume(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -666,6 +726,9 @@ impl JSContext {
     }
 
     /// Step over (next statement, skip function calls).
+    ///
+    /// Raises:
+    ///     RuntimeError: DevTools not started or context closed.
     fn cdp_step_over(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -675,6 +738,9 @@ impl JSContext {
     }
 
     /// Step into (enter function calls).
+    ///
+    /// Raises:
+    ///     RuntimeError: DevTools not started or context closed.
     fn cdp_step_into(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -684,6 +750,9 @@ impl JSContext {
     }
 
     /// Step out (exit current function, return to caller).
+    ///
+    /// Raises:
+    ///     RuntimeError: DevTools not started or context closed.
     fn cdp_step_out(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -735,7 +804,12 @@ impl JSContext {
     }
 
     /// Process CDP events (check if execution paused at breakpoint).
-    /// Returns True if a Debugger.paused event was received.
+    ///
+    /// Returns:
+    ///     True if a Debugger.paused event was received.
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed or wrong thread.
     fn cdp_process_events(&self) -> PyResult<bool> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -744,29 +818,23 @@ impl JSContext {
 
     // ─── Trace Mode (v0.3 M16) ───────────────────────────────────────────────
 
-    /// Set a trace point: a conditional breakpoint that doesn't pause execution
-    /// but records data via a side-effect expression.
+    /// Set a trace point: a conditional breakpoint that records data.
     ///
-    /// Internally sets a CDP breakpoint with condition:
-    ///   `(__iv8_trace__.push(<expression>), false)`
-    ///
-    /// The expression should evaluate to a JSON-serializable value (e.g.
-    /// `JSON.stringify({pc:pc, op:H[pc], s:stack.slice(0,3)})`).
-    ///
-    /// Call `get_trace_log()` after execution to retrieve all recorded entries.
+    /// Internally sets a CDP breakpoint whose condition evaluates an expression
+    /// and pushes the result to a trace array without pausing.
     ///
     /// Args:
-    ///     url: Script URL to set trace point in
-    ///     line: Line number (0-based)
-    ///     column: Column number (0-based, optional)
-    ///     expression: JS expression to evaluate and record each time the line is hit
+    ///     url: Script URL to set trace point in.
+    ///     line: Line number (0-based).
+    ///     column: Column number (0-based, optional).
+    ///     expression: JS expression. Result is recorded and returned by get_trace_log.
     ///
     /// Returns:
-    ///     trace_point_id (str) for later removal via remove_trace_point()
+    ///     trace_point_id (str) for later removal.
     ///
-    /// Example:
-    ///     tp = ctx.set_trace_point("tdc.js", 1234, None,
-    ///         "JSON.stringify({pc:pc, op:H[pc]})")
+    /// Example::
+    ///
+    ///     tp = ctx.set_trace_point("tdc.js", 1234, column=None, expression="JSON.stringify({pc:pc, op:H[pc]})")
     ///     ctx.eval("TDC.getData(true)")
     ///     trace = ctx.get_trace_log()
     #[pyo3(signature = (url, line, column=None, expression="'hit'"))]
@@ -806,6 +874,12 @@ impl JSContext {
     }
 
     /// Remove a trace point by id (returned by set_trace_point).
+    ///
+    /// Args:
+    ///     trace_point_id: ID returned from set_trace_point.
+    ///
+    /// Raises:
+    ///     RuntimeError: DevTools not started or context closed.
     fn remove_trace_point(&self, trace_point_id: &str) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -817,7 +891,10 @@ impl JSContext {
     /// Get the trace log: all entries recorded by trace points since last clear.
     ///
     /// Returns:
-    ///     list of values (whatever the trace point expressions produced)
+    ///     list of values (whatever the trace point expressions produced).
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed or wrong thread.
     fn get_trace_log(&self, py: Python<'_>) -> PyResult<PyObject> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -832,6 +909,9 @@ impl JSContext {
     }
 
     /// Clear the trace log.
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed or wrong thread.
     fn clear_trace_log(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -929,26 +1009,31 @@ impl JSContext {
         Ok(None)
     }
 
-    /// Instrument a ChaosVM/JSVMP **global** handler array for tracing.
+    /// Instrument a ChaosVM/JSVMP global handler array for tracing.
     ///
-    /// Wraps `globalThis[handler_array]` with a Proxy that records every
+    /// Wraps ``globalThis[handler_array]`` with a Proxy that records every
     /// dispatch. Requires the handler table to be a **global** binding.
     ///
-    /// For real TDC/ChaosVM samples the handler table is usually an **IIFE
-    /// local** (closure-scoped). In that case this API raises
-    /// `ReferenceError: <name> is not defined`. Use module-level
-    /// `iv8_rs.instrument_source(src)` instead: it rewrites the dispatch
+    /// For TDC/ChaosVM samples the handler table is usually an IIFE
+    /// local (closure-scoped). In that case this API raises
+    /// ``ReferenceError: <name> is not defined``. Use module-level
+    /// :py:func:`iv8_rs.instrument_source` instead: it rewrites the dispatch
     /// expression in source text and works without a global handler name
-    /// (Q165 / K-CHAOSVM-CLOSURE). Then `eval(patched)` + `get_unified_trace()`.
+    /// (Q165 / K-CHAOSVM-CLOSURE). Then ``eval(patched)`` + ``get_unified_trace()``.
     ///
     /// Args:
-    ///     handler_array: Global variable name of the handler array (e.g. "A")
-    ///     pc_var: Global program counter name (e.g. "U")
-    ///     stack_var: Global stack name (e.g. "S")
-    ///     capture_stack_depth: Stack tops to capture (default 3)
-    ///     limit: Maximum trace entries (default 100000)
+    ///     handler_array: Global variable name of the handler array (e.g. ``A``).
+    ///     pc_var: Global program counter name (e.g. ``U``).
+    ///     stack_var: Global stack name (e.g. ``S``).
+    ///     capture_stack_depth: Stack tops to capture (default 3).
+    ///     limit: Maximum trace entries (default 100000).
     ///
-    /// After calling this, execute JS normally. Then call get_vm_trace().
+    /// Returns:
+    ///     ``None``. After calling, run JS normally, then call :py:meth:`get_vm_trace`.
+    ///
+    /// Raises:
+    ///     ReferenceError: Handler name not found in global scope.
+    ///     RuntimeError: Context closed or wrong thread.
     #[pyo3(signature = (handler_array, pc_var, stack_var, capture_stack_depth=3, limit=100000))]
     fn instrument_chaosvm(
         &self,
@@ -1035,8 +1120,8 @@ impl JSContext {
     /// Get the VM trace log (after instrument_chaosvm + execution).
     ///
     /// Returns:
-    ///     list of trace entry strings. Each entry: "pc,opcode,stack0,stack1,..."
-    ///     Parse with: pc, op, *stack = entry.split(',')
+    ///     ``list[str]``. Each entry format: ``pc,opcode,stack0,stack1,...``
+    ///     Parsing example: ``pc, op, *stack = entry.split(",")``
     fn get_vm_trace(&self, py: Python<'_>) -> PyResult<PyObject> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -1051,6 +1136,9 @@ impl JSContext {
     }
 
     /// Clear the VM trace log.
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed or wrong thread.
     fn clear_vm_trace(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -1064,6 +1152,12 @@ impl JSContext {
     }
 
     /// Restore original handler array (undo instrument_chaosvm).
+    ///
+    /// Args:
+    ///     handler_array: Same name passed to instrument_chaosvm.
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed or wrong thread.
     fn uninstrument_chaosvm(&self, handler_array: &str) -> PyResult<()> {
         self.assert_thread()?;
         let js = format!(
@@ -1079,11 +1173,15 @@ impl JSContext {
 
     /// Get the unified trace log (from instrument_source injection).
     ///
-    /// Returns entries in format: "TYPE,PC,target,value"
-    /// - D,pc,opcode,stack_depth — VM dispatch
-    /// - R,pc,obj.prop,value — Environment read
-    /// - C,pc,obj.method,result — Function call
-    /// - W,pc,obj.prop,value — Property write
+    /// Each entry format: ``TYPE,PC,target,value``.
+    /// Types: ``D`` (VM dispatch), ``R`` (environment read),
+    /// ``C`` (function call), ``W`` (property write).
+    ///
+    /// Returns:
+    ///     list of trace entry strings.
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed or wrong thread.
     fn get_unified_trace(&self, py: Python<'_>) -> PyResult<PyObject> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -1098,6 +1196,9 @@ impl JSContext {
     }
 
     /// Clear the unified trace log.
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed or wrong thread.
     fn clear_unified_trace(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -1256,8 +1357,11 @@ impl JSContext {
 
     /// Start V8 CPU Profiler (function-level call graph).
     ///
-    /// Requires with_devtools(wait=False) to have been called.
-    /// After execution, call stop_profiler() to get the profile.
+    /// Requires ``with_devtools(wait=False)`` to have been called first.
+    /// After execution, call :py:meth:`stop_profiler` to retrieve the profile.
+    ///
+    /// Raises:
+    ///     RuntimeError: DevTools not started or already running.
     fn start_profiler(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
@@ -1309,7 +1413,11 @@ impl JSContext {
 
     /// Start precise code coverage collection.
     ///
-    /// Requires with_devtools(wait=False).
+    /// Requires ``with_devtools(wait=False)`` to have been called first.
+    /// After execution, call :py:meth:`stop_coverage` to retrieve results.
+    ///
+    /// Raises:
+    ///     RuntimeError: DevTools not started or already running.
     fn start_coverage(&self) -> PyResult<()> {
         self.assert_thread()?;
         let kernel = self.inner.kernel.lock();
@@ -1560,27 +1668,21 @@ impl JSContext {
     /// Set a Python network handler for fetch/XHR fallback.
     ///
     /// The handler runs as the second tier in the three-layer chain:
+    /// ResourceBundle, Python handler (this), NetworkError.
+    /// Called when a URL is not in the offline bundle.
     ///
-    ///   1. ResourceBundle (pre-registered offline responses)
-    ///   2. Python handler (this) — always called when a URL is not in the bundle
-    ///   3. NetworkError (offline default when handler returns None)
+    /// Both fetch() and synchronous XMLHttpRequest use the handler.
+    /// For async XHR, invoked when the event loop drains the timer queue.
     ///
-    /// The handler is invoked regardless of `strict_compat` mode. It receives
-    /// `(url: str, method: str)` and should return:
+    /// The handler callable receives (url, method) and returns
+    /// (status, body) to provide a response, or None for fallthrough.
     ///
-    ///   - `(status: int, body: str | bytes)` to provide a response
-    ///   - `None` to fall through to NetworkError
+    /// Args:
+    ///     handler: Python callable.
     ///
-    /// Both `fetch()` and synchronous XMLHttpRequest call the handler. For
-    /// asynchronous XHR, the handler is invoked when the event loop drains
-    /// the timer queue.
+    /// Example::
     ///
-    /// Example:
-    ///     def handler(url, method):
-    ///         if 'api.example.com' in url:
-    ///             return (200, '{"ok": true}')
-    ///         return None
-    ///     ctx.set_network_handler(handler)
+    ///     ctx.set_network_handler(lambda u, m: (200, '{"ok": true}') if "api" in u else None)
     #[pyo3(signature = (handler))]
     fn set_network_handler(&self, handler: PyObject, py: Python<'_>) -> PyResult<()> {
         self.assert_thread()?;
@@ -1623,6 +1725,9 @@ impl JSContext {
     }
 
     /// Clear the network handler (revert to offline-only mode).
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed or wrong thread.
     fn clear_network_handler(&self) -> PyResult<()> {
         self.assert_thread()?;
         let kernel = self.inner.kernel.lock();
@@ -1698,8 +1803,12 @@ impl JSContext {
 
     /// Get all console messages captured since context creation.
     ///
-    /// Returns a list of dicts with 'level' and 'text' keys.
-    /// Levels: 'log', 'info', 'warn', 'error', 'debug', 'trace', 'assert'
+    /// Returns:
+    ///     list of dicts with ``level`` and ``text`` keys.
+    ///     Levels: ``log``, ``info``, ``warn``, ``error``, ``debug``, ``trace``, ``assert``.
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed or wrong thread.
     fn get_console_messages(&self, py: Python<'_>) -> PyResult<PyObject> {
         self.assert_thread()?;
         let kernel = self.inner.kernel.lock();
@@ -1716,6 +1825,9 @@ impl JSContext {
     }
 
     /// Clear all captured console messages.
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed or wrong thread.
     fn clear_console_messages(&self) -> PyResult<()> {
         self.assert_thread()?;
         let kernel = self.inner.kernel.lock();
