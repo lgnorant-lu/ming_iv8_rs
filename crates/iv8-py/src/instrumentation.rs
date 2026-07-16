@@ -18,14 +18,31 @@ use pyo3::types::{PyDict, PyList};
 
 /// Detect JSVMP pattern and inject unified tracing code.
 ///
-/// Strategy:
-/// - Replaces **all** matching dispatch expressions with a logging wrapper
-/// - Prepends global object Proxies at source start (captures env reads with PC)
+/// Replaces all matching dispatch expressions with a logging wrapper and
+/// optionally prepends global Proxies for environment observation.
+/// Preferred product path for TDC/ChaosVM (Q165 path A) when the handler
+/// table is closure-scoped (prefer over JSContext.instrument_chaosvm).
 ///
-/// Returns (patched_source, vm_info_dict) or raises RuntimeError if detection fails.
+/// Args:
+///     source: JavaScript source to instrument.
+///     mode: Detection mode: auto, chaosvm, or switch_vm. Default: auto.
+///     capture_stack_depth: Stack tops to capture per dispatch. Default: 3.
+///     capture_env: Inject environment Proxies. Default: True.
+///     env_targets: Global roots to proxy. Default: curated list.
+///     limit: Max trace entries. Default: 100000.
+///     handler_array: Manual handler array name override.
+///     pc_var: Manual program counter name override.
+///     stack_var: Manual stack name override.
+///     index_array: Manual index/bytecode array name override.
+///     dispatch_pattern: Manual dispatch expression override.
+///     expose_handlers: If True, assign handler table to globalThis.
 ///
-/// Recommended product path for TDC/ChaosVM (Q165 path A). Prefer this over
-/// `JSContext.instrument_chaosvm` when the handler table is closure-scoped.
+/// Returns:
+///     Tuple of (patched_source, info_dict). info_dict includes mode,
+///     handler_array, pc_var, stack_var, dispatch_offset, and related fields.
+///
+/// Raises:
+///     RuntimeError: No dispatch pattern detected and no manual overrides.
 #[pyfunction]
 #[pyo3(signature = (
     source,

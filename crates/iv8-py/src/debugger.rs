@@ -51,7 +51,13 @@ impl Debugger {
     /// Installs a hookNative interceptor that records every call.
     ///
     /// Args:
-    ///     api_path: Dot-path like 'Math.random', 'document.getElementById'
+    ///     api_path: Dot-path like Math.random or document.getElementById.
+    ///
+    /// Returns:
+    ///     None.
+    ///
+    /// Raises:
+    ///     RuntimeError: Underlying context closed or eval failed.
     fn trace_api(&mut self, api_path: &str, py: Python<'_>) -> PyResult<()> {
         let log_var = self.call_log_var.clone();
         let script = format!(
@@ -95,6 +101,15 @@ impl Debugger {
     }
 
     /// Trace multiple APIs at once.
+    ///
+    /// Args:
+    ///     api_paths: List of API dot-paths to trace.
+    ///
+    /// Returns:
+    ///     None.
+    ///
+    /// Raises:
+    ///     RuntimeError: Underlying context closed or eval failed.
     fn trace_apis(&mut self, api_paths: Vec<String>, py: Python<'_>) -> PyResult<()> {
         for path in api_paths {
             self.trace_api(&path, py)?;
@@ -104,7 +119,11 @@ impl Debugger {
 
     /// Get the call log as a list of dicts.
     ///
-    /// Each entry has: api, args, result, timestamp
+    /// Returns:
+    ///     list of dicts with keys api, args, result, timestamp.
+    ///
+    /// Raises:
+    ///     RuntimeError: Underlying context closed or eval failed.
     fn get_call_log(&self, py: Python<'_>) -> PyResult<PyObject> {
         let script = format!("JSON.stringify(globalThis.{})", self.call_log_var);
         let json_str: String = ctx_eval(&self.ctx, &script, py)?.extract(py)?;
@@ -125,6 +144,12 @@ impl Debugger {
     }
 
     /// Clear the call log.
+    ///
+    /// Returns:
+    ///     None.
+    ///
+    /// Raises:
+    ///     RuntimeError: Underlying context closed or eval failed.
     fn clear_call_log(&self, py: Python<'_>) -> PyResult<()> {
         // Use splice(0) to clear in-place, preserving references held by hooks
         let script = format!("globalThis.{}.splice(0);", self.call_log_var);
@@ -133,13 +158,27 @@ impl Debugger {
     }
 
     /// Get the list of currently traced APIs.
+    ///
+    /// Returns:
+    ///     list of API path strings currently being traced.
+    ///
+    /// Raises:
+    ///     None (pure Rust state read).
     fn get_traced_apis(&self) -> Vec<String> {
         self.traced_apis.clone()
     }
 
     /// Evaluate JS and return both the result and the call log.
     ///
-    /// Returns: (result, call_log_entries)
+    /// Args:
+    ///     source: JavaScript source to evaluate.
+    ///
+    /// Returns:
+    ///     Tuple of (result, call_log_entries).
+    ///
+    /// Raises:
+    ///     JSError: JavaScript runtime exception.
+    ///     RuntimeError: Context closed or wrong thread.
     fn eval_traced(&self, source: &str, py: Python<'_>) -> PyResult<(PyObject, PyObject)> {
         self.clear_call_log(py)?;
         let result = ctx_eval(&self.ctx, source, py)?;
@@ -148,6 +187,12 @@ impl Debugger {
     }
 
     /// Get a snapshot of the current environment (navigator, screen, etc.).
+    ///
+    /// Returns:
+    ///     dict of selected host properties (userAgent, screen, chrome flags, ...).
+    ///
+    /// Raises:
+    ///     RuntimeError: Underlying context closed or eval failed.
     fn snapshot(&self, py: Python<'_>) -> PyResult<PyObject> {
         let script = r#"JSON.stringify((function() {
     var s = {};
@@ -192,12 +237,18 @@ impl Debugger {
         Ok(dict.into_any().into())
     }
 
-    /// Install a watch on a property — logs every read/write.
+    /// Install a watch on a property; logs every read/write.
     ///
     /// Args:
-    ///     obj_path: Path to the object (e.g. 'navigator', 'document')
-    ///     prop: Property name to watch (e.g. 'userAgent', 'cookie')
-    ///     mode: 'read', 'write', or 'both' (default 'both')
+    ///     obj_path: Path to the object (e.g. navigator, document).
+    ///     prop: Property name to watch (e.g. userAgent, cookie).
+    ///     mode: read, write, or both. Default: both.
+    ///
+    /// Returns:
+    ///     None.
+    ///
+    /// Raises:
+    ///     RuntimeError: Underlying context closed or eval failed.
     #[pyo3(signature = (obj_path, prop, mode="both"))]
     fn watch_property(
         &mut self,
@@ -311,6 +362,12 @@ impl Debugger {
     }
 
     /// Get a summary of call counts per API.
+    ///
+    /// Returns:
+    ///     dict mapping API path to call count.
+    ///
+    /// Raises:
+    ///     RuntimeError: Underlying context closed or eval failed.
     fn get_call_summary(&self, py: Python<'_>) -> PyResult<PyObject> {
         let script = format!(
             r#"JSON.stringify((function() {{
@@ -339,6 +396,12 @@ impl Debugger {
     }
 
     /// Schedule a pause on the next JS statement (requires DevTools connected).
+    ///
+    /// Returns:
+    ///     None.
+    ///
+    /// Raises:
+    ///     RuntimeError: Context closed; pause may be a no-op without DevTools.
     fn schedule_pause(&self, py: Python<'_>) -> PyResult<()> {
         ctx_eval(&self.ctx, "vdebugger", py).ok();
         Ok(())
