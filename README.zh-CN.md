@@ -1,24 +1,35 @@
 # iv8-rs
 
 高保真 **类浏览器 JS 运行时** Python 扩展（V8 + Rust + PyO3）。  
-面向：Web JS 逆向、可控复现执行、反爬 / 指纹 **宿主** 模拟。
+面向：Web JS 逆向、可控复现执行、反爬 / 指纹 **宿主** 模拟，以及 ChaosVM 类脚本的插桩与分析。
 
 **当前**：里程碑 continuum 至 **v0.8.102** · 包版本 **0.8.12**（D-151 双轨）— [CHANGELOG](CHANGELOG.md)  
-英文主文档：[README.md](README.md) · API 契约：[docs/api/](docs/api/)
+English：[README.md](README.md) · API 契约：[docs/api/](docs/api/) · 覆盖审计：[docs/api/COVERAGE.md](docs/api/COVERAGE.md)
 
-## 为什么是 iv8-rs
+## 缘起：为什么做 iv8-rs
 
-| 路径 | 缺口 |
+初见，看到了 **[iv8](https://github.com/jofpin/iv8)**（PyPI 上的 `iv8` 0.1.2 一脉）：把 V8 嵌进 Python、用环境字典驱动浏览器面——这条路对 Web 逆向很对味。我们想要的是**同类能力**，但再往下挖一层：
+
+- **更稳的宿主面**：不只是“能 eval”，还要 brand、getter、Worker、Intl、DOM 集合经得起高信号检测；
+- **更可控的复现**：离线 ResourceBundle、确定性种子、逻辑时钟，方便 CI 与双引擎对照；
+- **插桩 + 分析二位一体**：一边在宿主里跑脚本，一边用 `instrument_source` / CDP / 统一 trace 把 ChaosVM、TDC 一类路径拆开看——左脚踩右脚有点夸张，但方向就是**运行时执行 + 观测分析**绑在一起。
+
+设计上参考了 iv8 的产品直觉（Python 友好、环境可注入、离线优先），内核则选了 **Rust + PyO3 + 大面积 codegen/native 浏览器面**，把性能、类型边界和长期维护压在同一条链路上。  
+**同类项目没有必要踩。** 本仓库与 PyPI 包 `iv8` 0.1.x 是**相关谱系 / 双引擎 oracle**，产品名是 **iv8-rs**——不是“取代谁”，是“从同一灵感走得更深”。
+
+## 为什么是这条技术路线
+
+| 路径 | 常见缺口 |
 |---|---|
-| 纯 Node / 纯 Python | 浏览器面薄弱；`instanceof`、getter、Worker、Intl 常不对 |
+| 纯 Node / 纯 Python | 浏览器面薄；`instanceof`、getter、Worker、Intl 常不对 |
 | 仅完整 CDP 浏览器 | 重、难做离线 VM 插桩、CI 难确定性 |
 | 薄 stub | 过不了 brand check、canvas/WebGL/crypto、DOM 集合 |
 
-**iv8-rs** 嵌入 V8，提供大面积原生浏览器面、离线 ResourceBundle 网络、确定性种子、ChaosVM/`instrument_source` Path A、多 bundler 入口平面，以及 **诊断向** 环境工具链——单进程、同线程 isolate，边界诚实（**不是**完整 Chrome）。
+**iv8-rs** 嵌入 V8，提供大面积原生浏览器面、离线 ResourceBundle 网络、确定性种子、ChaosVM / `instrument_source` Path A、多 bundler 入口平面，以及 **诊断向** 环境工具链——单进程、同线程 isolate，边界诚实（**不是**完整 Chrome）。
 
 ## 能力（按能力域，不按版本流水）
 
-版本细节见 [CHANGELOG](CHANGELOG.md)。稳定契约见 [docs/api/](docs/api/)。
+版本细节见 [CHANGELOG](CHANGELOG.md)。稳定调用契约见 [docs/api/](docs/api/)。
 
 ### 运行时宿主
 
@@ -55,7 +66,7 @@
 - wrapNative / hookNative / `window.chrome` / MarkAsUndetectable
 - toString / toStringTag / prototype brand 卫生（持续演进）
 - 高信号 Illegal invocation 修复
-- **不**承诺“过所有检测器”
+- **不**承诺“过所有检测器”——只承诺宿主保真 + 边界写清楚
 
 ### 插桩与可观测
 
@@ -112,6 +123,8 @@ uv run maturin develop --release
 
 **栈：** `import iv8_rs` 后创建 `JSContext`（模块已设 `threading.stack_size(128MB)`）。完整内核 Rust 测试：`RUST_MIN_STACK=134217728`。
 
+可选：cargo / maturin 使用独立 `--target-dir`，避免与 IDE 争用 `target/`。
+
 ## 快速开始
 
 ```python
@@ -143,23 +156,34 @@ ctx.close()
 
 | 文档 | 用途 |
 |---|---|
-| **[docs/api/](docs/api/)** | 稳定 API 契约（分层） |
+| **[docs/api/](docs/api/)** | 稳定 API 契约（分层；公仓向） |
 | **[docs/GUIDE.md](docs/GUIDE.md)** | 长教程、演进说明 |
 | **[CHANGELOG.md](CHANGELOG.md)** | 版本增量 |
 | **[docs/quality-harness/](docs/quality-harness/)** | 质量门禁定义 |
+| **[docs/conventions/](docs/conventions/)** | 命名 / 测试 / 文档 / docstring 规范 |
 | **[README.md](README.md)** | English README |
 | **[CONTRIBUTING.md](CONTRIBUTING.md)** | 提交约定 |
 
-## 架构
+验收 / roadmap 树默认 **私仓** 材料，不视为公仓产品 API。
+
+## 架构（鸟瞰）
 
 ```text
 Python (iv8_rs)
     │  PyO3
     ▼
 iv8-py  ──►  iv8-core (V8 isolate, DOM, crypto, canvas, network, inspector)
-                ├── iv8-undetect
-                ├── iv8-surface / codegen
-                └── iv8-profile
+                ├── iv8-undetect   (wrap / hook / chrome 原语)
+                ├── iv8-surface    (IDL 模板 / codegen)
+                └── iv8-profile    (profile 矩阵)
+```
+
+```text
+iv8-rs/
+├── crates/          # Rust workspace
+├── python/iv8_rs/   # 包表面、profiles、analysis、toolchain
+├── tests/           # Python 集成
+└── docs/            # GUIDE、api/、quality-harness、roadmap（公/私混合）
 ```
 
 ## 开发
@@ -170,8 +194,14 @@ cargo test -p iv8-core --lib
 uv run python -m pytest tests -q
 ```
 
-公有远程 / 包版本 bump / Release 需显式授权。
+提交格式、栈大小、非授权项见 [CONTRIBUTING.md](CONTRIBUTING.md) 与仓库内 agent 说明。  
+公有远程 / 包版本 bump / Release **需显式授权**。
+
+## 致谢
+
+- **[iv8](https://github.com/jofpin/iv8)** — 同类 Python↔V8 宿主思路的重要灵感与对照谱系  
+- V8 / PyO3 / maturin / html5ever 等上游生态
 
 ## License
 
-MIT
+[Apache License 2.0](LICENSE)

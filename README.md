@@ -1,20 +1,31 @@
 # iv8-rs
 
 High-fidelity **browser-like JS runtime** for Python (V8 + Rust + PyO3).  
-Target use: Web JS reverse engineering, controlled re-execution, anti-bot / fingerprint **host** simulation.
+Built for Web JS reverse engineering, controlled re-execution, anti-bot / fingerprint **host** simulation, and ChaosVM-class instrumentation / analysis.
 
 **Current**: milestone continuum through **v0.8.102** · package **0.8.12** (D-151 dual-track) — [CHANGELOG](CHANGELOG.md)  
 中文版：[README.zh-CN.md](README.zh-CN.md) · API contracts：[docs/api/](docs/api/) · Coverage audit：[docs/api/COVERAGE.md](docs/api/COVERAGE.md)
 
-## Why iv8-rs
+## Origin: why iv8-rs exists
 
-| Approach | Gap |
+We first met **[iv8](https://github.com/jofpin/iv8)** (the PyPI `iv8` 0.1.x line): V8 inside Python, environment-driven browser surface — a shape that fits Web reverse work. We wanted **the same product category**, dug one layer deeper:
+
+- **Sturdier host surface** — not only “can eval”, but brand checks, getters, Workers, Intl, DOM collections under high-signal probes;
+- **Reproducible runs** — offline ResourceBundle, deterministic seeds, logical clocks for CI and dual-engine compare;
+- **Execution + observation together** — run the script in a host while `instrument_source` / CDP / unified traces open ChaosVM / TDC-style paths. A bit “left foot on right foot”, but the intent is real: **runtime host + analysis plane** on one stack.
+
+Product intuition borrows from iv8 (Python-friendly, injectable environment, offline-first). The kernel choice is **Rust + PyO3 + large codegen/native browser surface** for performance, type boundaries, and long-term maintenance.  
+**No need to dunk on peers.** This repo and PyPI `iv8` 0.1.x are **related lineage / dual-engine oracle**. The product name here is **iv8-rs** — not “replace X”, but “same spark, deeper dig”.
+
+## Why this technical path
+
+| Approach | Common gap |
 |---|---|
-| Pure Node / pure Python | Weak browser surface; `instanceof`, getters, workers, Intl often wrong |
+| Pure Node / pure Python | Thin browser surface; `instanceof`, getters, workers, Intl often wrong |
 | Full CDP browser only | Heavy, hard to instrument VMs offline, non-deterministic for CI |
 | Thin stubs | Fail brand checks, canvas/WebGL/crypto fingerprints, DOM collections |
 
-**iv8-rs** embeds V8 with a large native browser surface, offline ResourceBundle networking, deterministic seeds, ChaosVM/`instrument_source` path A, multi-bundler entry plane, and a **diagnostic** environment toolchain — one Python process, same-thread isolate, honest bounds (not full Chrome).
+**iv8-rs** embeds V8 with a large native browser surface, offline ResourceBundle networking, deterministic seeds, ChaosVM / `instrument_source` path A, multi-bundler entry plane, and a **diagnostic** environment toolchain — one Python process, same-thread isolate, honest bounds (not full Chrome).
 
 ## Capabilities
 
@@ -80,7 +91,7 @@ Organized by **domain**, not version waterfall. Version deltas live in [CHANGELO
 ### Workers
 
 - Dedicated isolate + OS thread + structured clone (方案 A)
-- WorkerNavigator / import static+dynamic paths; honest residual gaps documented in residual ledgers
+- WorkerNavigator / import static+dynamic paths; residual gaps in residual ledgers
 
 ## Non-goals / honest bounds
 
@@ -110,9 +121,9 @@ uv run maturin develop --target-dir target-maturin --strip --profile dev
 uv run maturin develop --release
 ```
 
-**Stack:** prefer creating `JSContext` after `import iv8_rs` (module sets `threading.stack_size(128MB)`). Rust tests that build full kernels: `RUST_MIN_STACK=134217728`.
+**Stack:** create `JSContext` after `import iv8_rs` (module sets `threading.stack_size(128MB)`). Full-kernel Rust tests: `RUST_MIN_STACK=134217728`.
 
-Optional: cargo/maturin `--target-dir` on a fast local cache path to avoid IDE contention.
+Optional: cargo/maturin `--target-dir` on a fast local cache path to avoid IDE contention on `target/`.
 
 ## Quick start
 
@@ -154,16 +165,17 @@ Instrumentation: [docs/api/instrumentation/](docs/api/instrumentation/).
 
 | Doc | Role |
 |---|---|
-| **[docs/api/](docs/api/)** | Stable API contracts (layered) |
+| **[docs/api/](docs/api/)** | Stable API contracts (layered; public-oriented) |
 | **[docs/GUIDE.md](docs/GUIDE.md)** | Long tutorials, evolution notes |
 | **[CHANGELOG.md](CHANGELOG.md)** | Per-version deltas |
 | **[docs/quality-harness/](docs/quality-harness/)** | Quality gate definitions |
+| **[docs/conventions/](docs/conventions/)** | Naming / testing / docs / docstring standards |
 | **[CONTRIBUTING.md](CONTRIBUTING.md)** | Commit / scope conventions |
 | **[docs/PROGRESS.md](docs/PROGRESS.md)** | Internal progress (private-oriented) |
 
 Do not treat acceptance/roadmap trees as public product API.
 
-## Architecture
+## Architecture (bird's-eye)
 
 ```text
 Python (iv8_rs)
@@ -196,8 +208,13 @@ cargo clippy --workspace --all-targets -- -D warnings
 uv run python -m pytest tests -q
 ```
 
-See CONTRIBUTING.md and AGENTS.md for commit format, stack size, and non-authorization rules (no public push / package bump without explicit request).
+See CONTRIBUTING.md and in-repo agent notes for commit format, stack size, and non-authorization rules (no public push / package bump without explicit request).
+
+## Acknowledgments
+
+- **[iv8](https://github.com/jofpin/iv8)** — major inspiration and dual-engine reference lineage for Python↔V8 hosting  
+- Upstream: V8, PyO3, maturin, html5ever, and the wider ecosystem
 
 ## License
 
-MIT
+[Apache License 2.0](LICENSE)
