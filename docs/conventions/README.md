@@ -20,6 +20,7 @@ breaking existing cross-references), but they are all indexed here.
 | 1 | Execution Protocol | `docs/roadmap/v0.8/shared/v0.8-continuous-execution-protocol.md` | Version lifecycle, version modes (standard planning set vs patch aggregation), planning set requirements, commit discipline, review flow, closeout process, cross-version invariants |
 | 2 | Naming Conventions | `docs/conventions/naming-conventions.md` | Python module/class/function names, test file names, schema version strings, documentation file names |
 | 3 | Docs Conventions | `docs/conventions/docs-conventions.md` | docs/ directory structure, file naming, active-vs-legacy policy, cross-reference format |
+| 3b | API Documentation Conventions | `docs/conventions/api-documentation-conventions.md` | Tier A/B/C contracts, measurable metrics D1–D6, production workflow, anti-subjective scoring |
 | 4 | Commit Conventions | `CONTRIBUTING.md` | Subject format (English, ≤72 chars, scoped), body structure (实施内容/本提交不授权/已执行审阅), scope prefixes |
 | 5 | Testing Conventions | `docs/conventions/testing-conventions.md` | Test layers, naming, assertion patterns, harness design, coverage targets, file organization |
 | 6 | Python Testing Conventions | `docs/conventions/python-testing-conventions.md` | Python test naming, fixtures, pytest patterns, contract tests, hypothesis, import safety |

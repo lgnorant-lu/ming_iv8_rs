@@ -10,12 +10,14 @@
 docs/
   README.md                ← 文档总入口 (Quick Start + 目录地图)
   GUIDE.md                 ← 用户 API 指南
+  api/                     ← 稳定 API 契约 (分层; 见 api-documentation-conventions)
   PROGRESS.md              ← 里程碑进度表
 
   conventions/             ← 项目级规范文档
     README.md              ← 规范索引 + 层级
     naming-conventions.md  ← 命名规范 (模块/类/函数/测试/文档)
     testing-conventions.md ← 测试规范 (层/断言/harness/覆盖)
+    api-documentation-conventions.md ← API 文档层级/度量/产出流程
     docs-conventions.md    ← 本文档 (docs/ 自身结构规范)
 
   roadmap/                 ← 路线规划 (按版本组织)
