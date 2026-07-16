@@ -106,7 +106,7 @@ def main():
 
     if not Path(args.golden).exists():
         print(f"ERROR: Golden file not found: {args.golden}")
-        print("Run scripts/sample_chrome_surface.py to generate golden data.")
+        print("Generate golden CDP samples offline (private sampler; not in public keep).")
         sys.exit(2)
     if not Path(args.actual).exists():
         print(f"ERROR: Actual file not found: {args.actual}")

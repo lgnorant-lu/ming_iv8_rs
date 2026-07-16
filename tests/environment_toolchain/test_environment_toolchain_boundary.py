@@ -171,7 +171,7 @@ def test_boundary_blocks_rollback_artifact_raw_local_path():
         "target": "navigator.language",
         "scope": "ephemeral_report",
         "redacted_ref": "profile.json",
-        "source_path": "C:\\Users\\Lenovo\\secret\\profile.json",
+        "source_path": "C:\\Users\\Public\\example\\profile.json",
     }
 
     decision = validate_bypass_boundary(payload)

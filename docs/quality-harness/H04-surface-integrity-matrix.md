@@ -580,7 +580,7 @@ python scripts/evaluate_surface_integrity.py --cell Navigator.userAgent.L1
 | S1 bcd-collector | Chrome 新版本发布 | ~6 周 | 自动下载 | 文件名含 Chrome 版本号 |
 | S2 Chromium IDL | Chrome 新版本发布 | ~6 周 | sparse checkout by tag | git tag |
 | S3 @webref/idl | 规范更新 | 6 小时 | NPM 拉取 | NPM 版本号 |
-| S4 CDP 采样 | 手动触发 / Chrome 大版本 | 按需 | `scripts/sample_chrome_surface.py` | golden/chrome{ver}_{os}_{gpu}.json |
+| S4 CDP 采样 | 手动触发 / Chrome 大版本 | 按需 | private CDP sampler (not public keep) | golden/chrome{ver}_{os}_{gpu}.json |
 | S5 CreepJS | 仓库更新 | 活跃 | git submodule | git commit hash |
 | S6 FP-Inconsistent 规则 | 一次性提取 | 论文(2025-01) | 手动提取逻辑 | 固定规则集 |
 | S7 runtime_enabled_features.json5 | Chrome 新版本发布 | ~6 周 | 随 S2 sparse checkout | git tag |
@@ -759,7 +759,7 @@ CI 从 `overall` 和 `exit_code` 字段判定通过/阻断。
 
 | 任务 | 产出 | 依赖 |
 |---|---|---|
-| 扩展 Chrome CDP 采样脚本 | `scripts/sample_chrome_surface.py` | S4 (Chrome 环境) |
+| 扩展 Chrome CDP 采样脚本 | private CDP sampler (not public keep) | S4 (Chrome 环境) |
 | 扩展 IV8 采样脚本 | `scripts/sample_iv8_surface.py` (升级) | IV8 runtime |
 | 编写值 diff 脚本 | `scripts/value_diff.py` | CDP golden + IV8 sample |
 | 编写描述符 diff 脚本 | `scripts/descriptor_diff.py` | CDP golden + IV8 sample |
