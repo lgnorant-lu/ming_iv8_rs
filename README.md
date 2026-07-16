@@ -1,218 +1,202 @@
 # iv8-rs
 
-High-fidelity browser runtime Python extension, built on V8 + Rust.
-For Web JS reverse engineering / anti-bot environment simulation.
+High-fidelity **browser-like JS runtime** for Python (V8 + Rust + PyO3).  
+Target use: Web JS reverse engineering, controlled re-execution, anti-bot / fingerprint **host** simulation.
 
-**Current**: v0.8.102 closed continuum (ICU Intl host + DOM NodeList/`*` + sample Path A; package **0.8.12** D-151). Prior: v0.8.101 sample/instrument; v0.8.100 W1/W2. — [Progress](docs/PROGRESS.md)
+**Current**: milestone continuum through **v0.8.102** · package **0.8.12** (D-151 dual-track) — [CHANGELOG](CHANGELOG.md)  
+中文版：[README.zh-CN.md](README.zh-CN.md) · API contracts：[docs/api/](docs/api/) · Coverage audit：[docs/api/COVERAGE.md](docs/api/COVERAGE.md)
 
-## Features
+## Why iv8-rs
 
-- **v0.8.102 host + sample + publish-prep**: ICU 77 data load (H5guard/Intl); TZ Redetect; `getElementsByTagName('*')` + NodeList iterable; sample Path A docs; dual-repo/public-paths drafts (private only)
-- **v0.8.101 sample-driven hardening**: ChaosVM `instrument_source` path A; Response ctor body; isolate init serial; cookie setter coerce; TDC/a_bogus/DataDome dual notes
-- **v0.8.100 W1/W2 hang close**: Layer C DocRc streaming `page_load`; Q070/Q080/Q081/Q082 lifecycle/timer/write; html5ever 0.39; Worker module static+dynamic import; high-signal Illegal invocation (EventTarget brand-first, Location, fetch, gBR, activeElement, URL setters); Q039 dual Nav BOUND; residual ledger `docs/todo/TODO-v0.8.100-residual.md`
-- **v0.8.99 S7 bundler**: BDMS minified detect; factory install; edges/cycles/chunk_id; named webpackChunk*; preload; AMD subset; VLQ; L0–L2 fixtures
-- **v0.8.98 S6 plane+probes**: hybrid exists-all IDL pack; Event isTrusted/Worker.length/HTMLAll brand-check; high-signal consistency tests; coverage matrix
-- **v0.8.97 S5 canvas+storage residual**: CanvasGradient.prototype link; WebGL D-111 UNMASKED_*; OfflineAudio oncomplete; localStorage singleton getters + own setItem + soft quota
-- **v0.8.96 S4 network+crypto**: XHR readyState split; WebSocket lifecycle; fetch dual hidden status keys; X25519 deriveBits; AES-KW tests
-- **v0.8.95 S3 DOM/Worker residual**: sequential document.write tests; Worker navigator prototype chain; page/scroll alias paths; H05/H06/WPT hold
-- **v0.8.94 S2 surface fidelity**: screenX/Y/scroll/pageOffset native global accessors; WINDOW_EXTRAS dual-data removed; dual Nav / UAData / AD-2 honest bounds documented
-- **v0.8.93 S1 install+profile**: D-111 window/languages/UAData platform coherence; env_inject skip expansion; override-order tests; D-151 dual-track package policy; dead post-hoc no-op delete; Kaspersky build-script GUIDE
-- **v0.8.92 dual-path + composition**: DOM FT ownership, EXCLUDED_OPERATIONS/GLOBALS, HTMLOptionsCollection/HTMLAllCollection structure, plugins SameObject, Track C before/after (MISSING 0), H06b worker navigator 5/5, post-hoc PLUGINS/REQUEST/CHROME no longer eval'd
-- **Broad browser-like surface**: navigator / screen / window / document / location / history / performance
-- **BrowserProfile**: 40-field centralized browser identity struct with runtime injection (v0.8.55/0.8.57)
-- **Layer5 Window/Screen/DPR consistency**: native `global_template` accessors for window dimensions and `devicePixelRatio`, profile/env fallback, and Chrome-compatible descriptors (v0.8.65)
-- **Codegen stability and bounded surface audit**: `iv8-surface-codegen` golden snapshots, 1284/1284 current IR templates generated+installed, Image/Option/Audio named constructor aliases, and explicit non-claim boundary for Chrome/Web Platform parity (v0.8.67)
-- **Bundler refinement (M5)**: Parcel detection + bridge (`$parcel$`/`parcelRequire`); Vite ESM G5-G8 minimal support (import.meta, dynamic import, TLA); Browserify bridge quality fixes (string-key deps, span fallback) (v0.8.68)
-- **Infrastructure convergence**: CI Rust toolchain pinned to 1.96.0; env_inject skips 26 direct keys already covered by native accessors (v0.8.69)
-- **Browser surface coverage baseline**: curated priority probe matrix (30 tests, 9 dimensions); tiered T1-T5 coverage statistics; timeOrigin fix (no longer hardcoded 0) (v0.8.71)
-- **Stateful runtime substrate**: localStorage cross-kernel persistence + Drop flush; cookie security attribute parsing/filtering (Path prefix-match, Secure context); Headers comma-join duplicates + constructor array init; structured ProbeRecord JSON schema with collect_probe_records (v0.8.72)
-- **Debug / automation / geometry closure**: inspector step_out wiring (kernel cdp_step_out + Python binding); Python inventory auto-update generator; layout/geometry basic model (Rust callback reads this.__iv8Rect__; __iv8SetElementRect fixture hook); bridge vocabulary glossary (16 terms) (v0.8.73)
-- **Substrate debt sweep**: codegen warning cleanup (67→4 + heck removal); ledger sweep (VERSION_SCOPE_MAP mid-range, CAPABILITY_INDEX v0.8.45-47, stale decision register entries); metadata policy decision (keep 0.8.11 frozen); crypto/env_inject audit (paths confirmed unified/complete); CI/config hygiene (rust-toolchain 1.96.0, .gitignore cleanup) (v0.8.74)
-- **Build speed + cookie + anti-detection**: 3-layer build bug fix (308s→2.4s); page_api.rs full parity with 7 shims + events + Set-Cookie; 16 anti-detection fixes (toString tags, prototype chains, constructor names, createElement dispatch, DOMException, BatteryManager, permissions); codegen inheritance overrides; runtime audit 98/98 OK; 1215 Rust + 2058 Python tests (v0.8.77)
-- **instanceof fidelity**: navigator/screen/location/window instanceof checks match real browser (v0.8.78)
-- **Environment hardening**: matchMedia (20+ features), WebGL 49 params, Permissions 28+ items, getComputedStyle 41 props + style fallback, GPC, speechSynthesis, PerformanceObserver, Range/CustomElements/CookieStore stubs, AES-CTR, RTCPeerConnection methods, Chromium Feature Flags, 28 audit items delivered (v0.8.79)
-- **M7 gate audit**: TODO recount (grep-verified 316 items); detection surface reclassification (11+2 categories, ~92% avg); residual risk register (21 items R01-R21); v0.9 entry gate OPEN with conditions (v0.8 精装≈100%; ~8 v0.8.76 patch items identified) (v0.8.75)
-- **M7 residual patch aggregation**: R01-R21 closure (8 closed, 13 deferred); TODO-infra recount 36/85; stale entry cleanup (v0.8.76)
-- **Navigator consistency + WorkerNavigator**: 10 new integration tests for Navigator cross-property coherence and WorkerNavigator runtime shape; WorkerNavigator illegal_constructor fix (v0.8.70)
-- **Profile-driven environment deepening**: Permissions profile 接入 (28+ HashMap); MediaQueries 16 fields; Intl OOM fix; GPU RTX 4060; Canvas toDataURL consistency; AudioContext fingerprint injection; Font metrics from profile; H02 env consistency harness (v0.8.80)
-- **Verification infrastructure**: H02 runtime 接入 (16/16 real PASS); bcd-collector 13615 entries; IDL 覆盖率审计 (72.8%); Hypothesis PBT 框架; mutation testing 10/10 KILLED; performance.memory 量化; illegal_constructor 审计; POST 三轮调研 D-095~D-108 (v0.8.82)
-- **Behavior truth + verification expansion**: illegal_constructor 167→1; D1/D5 114/117; idlharness 2922/10222; BrowserForge 229/229 98%; MR43 38+7SKIP 36/36; CDP diff 1059 MATCHED; FP-Inconsistent 25 D-rules; D-109 交叉验证; D-110 Worker 属 v0.8 (v0.8.83)
-- **Web Worker execution environment**: 独立 V8 isolate + 独立 OS 线程 + ValueSerializer structured clone (方案A); 5 源交叉验证; MR-CTX 7/7 PASS; codegen construct_only + read_only_prototype + set_length + IDL constants; Chrome 147 profile 统一; Navigator 23 + Screen 7 + AudioContext 9 缺失属性补全; Development Principles 规范 (v0.8.84)
-- **Generated Navigator skeletons**: 46 IDL properties via codegen + native template unification (v0.8.58/0.8.60)
-- **Native Navigator stubs**: connection, getBattery, sendBeacon, geolocation, clipboard, credentials (v0.8.55); getGamepads, requestMediaKeySystemAccess, requestMIDIAccess (v0.8.61)
-- **DOM**: html5ever parsing + ego-tree + selectors CSS Level 4 + EventTarget 3-phase dispatch
-- **SubtleCrypto**: AES-GCM/CBC, RSA-OAEP/PSS, ECDSA/ECDH(P-256/P-384), HMAC, HKDF, PBKDF2
-- **Canvas 2D**: tiny-skia real rendering + deterministic noise + fixed fingerprint fallback
-- **WebGL**: 49 environment-configurable parameters + `__iv8__.gl.callLog`
-- **Anti-detection**: wrapNative / hookNative / window.chrome / MarkAsUndetectable
-- **CDP Inspector**: V8Inspector + WebSocket server + programmatic Python API
-- **Observability (v0.3)**: trace mode / deterministic mode / VM instrumentation / recording / profiler / coverage / instrument_source / trace_diff
-- **Environment Precision (v0.4)**: NavigatorUAData / Profile System / Diff Analysis / browser API stubs
-- **Analysis (v0.5)**: StructuredTrace / CFG reconstruction / Taint Tracking / 4-layer Crypto Detection / VM handler diff / Module Isolation / CDP Scope API / Environment Probe / Quality Harness
-- **Network**: ResourceBundle -> Python callback -> NetworkError (3-layer fallback)
-- **Event loop**: logical / system dual time mode, advance / sleep / tick / drain
-- **Entry Plane Solidification (v0.7)**: WebpackBridge (flavor detection, require/module table capture), Dispatch Generalization (zero-arg, multi-arg, switch loop, indirect handler map), SourceAst Pipeline (transform join points, transform report), and Corpus Runner CLI
-- **Runtime Report Models (v0.8.0)**: schema-backed experimental report carriers for Environment Toolchain, Deobf Registry / Validation, String Array, VM Analysis / Handler, and IR Node reports
-- **Environment Toolchain Runtime Foundation (v0.8.1)**: bounded `fingerprint.m1` probe runner, generic gap classification, reviewed `runtime_safe` candidate mapping, explicit safe rerun, profile suggestions, and no-write typed reports
-- **Environment Custom Asset Foundation (v0.8.2)**: custom probe/candidate packs, schema and bypass-boundary validation, provenance diagnostics, and diagnostic-only `descriptor.m1` probes
-- **Environment Iterative Adaptation (v0.8.3)**: explicit bounded `runtime_safe` adaptation with fresh-context reruns, stop reasons, regression/no-progress handling, and adaptation diagnostics
-- **Environment Profile Coherence (v0.8.4)**: diagnostic-only profile coherence groups, local overlay boundary diagnostics, and generic family pressure taxonomy summaries
-- **Environment Coherence Expansion (v0.8.5)**: diagnostic-only `ua_platform`, `network_info`, `timezone_locale`, and native-substrate review diagnostics
-- **Environment Substrate Scaffolding (v0.8.6)**: report-only substrate coverage, scaffold gap, dry-run planning, rollback, and candidate metadata diagnostics with expanded negative gates
-- **Environment Pressure Harness (v0.8.7)**: diagnostic-only pressure taxonomy, in-memory pressure manifest summaries, default-off toolchain pressure capture, and staged Environment Toolchain decomposition
-- **Environment Toolchain Decomposition (v0.8.8-v0.8.10)**: diagnostic builder, boundary, asset model/loading, and candidate mapping modules split from the runtime while preserving public behavior
-- **Environment Pressure-To-Plan Bridge (v0.8.11)**: diagnostic-only pressure plan summaries/items that connect explicit pressure harness output to review-only dry-run planning routes
-- **Environment Mainline Audits And Governance (v0.8.12-v0.8.15)**: continuity audit, debt taxonomy, probe/bridge boundaries, external ecosystem reference, evidence boundary, bridge contract helpers, pressure route bridge context, stage map, governance closeout, and bridge vocabulary cleanup (deferred)
-- **Environment Pressure-Aware Adaptation (v0.8.16)**: diagnostic-only pressure adaptation attempt model, candidate query bridge, and fresh-context attempt execution harness; single reusable module; no apply / no writes / no adapters
-- **Native Substrate Mainline (v0.8.17-v0.8.31)**: Navigator/Screen FT migration, IDL toolchain, codegen + iv8-surface (1284 interfaces), P0/P1 deep stubs, infrastructure optimization, Feature Flag removal (v0.8.24), BCR upgrade (v0.8.25), GC fix (v0.8.26), Phase C + archive (v0.8.27), verification + BCR Step A (v0.8.28), BCR Step B + L2 MVP (v0.8.29), L3 100% BCR 15/15 dispatch hub (v0.8.30), use_old_chain retirement + L2 architecture foundation (v0.8.31). 255 lib + 81 Phase C + 1296 Python + 23/23 samples PASS.
-- **L2 Profile-To-Environment Verification Foundation (v0.8.32)**: `iv8-profile` crate, `KernelConfig::with_profile_matrix()` certified runtime path, strict Python convergence checker, manifest/report schemas; 289 Rust lib + 1305 Python PASS.
-- **L2 IDL Probe Automation + Report-Only MAPE-K (v0.8.33)**: IDL probe compiler (4 interfaces, 43 probes), L3 witness reports (BCR/BrowserSurface/undetectable), Python MAPE-K phases (Monitor/Analyze/Plan/Execute/Knowledge, report-only, dry-run); 1349 Python PASS.
-- **L2 Convergence Event + Reproducible Snapshot (v0.8.34)**: `tools/convergence/` event/snapshot/delta/knowledge-index helpers, source report adapters, additive MAPE-K snapshot/delta integration; final strict audit pass; 1367 Python PASS.
-- **L2 Probe Coverage Expansion M1 (v0.8.35)**: IDL probe compiler expands to 51 curated interfaces and 1,125 diagnostic probes with descriptor/prototype layers and coverage gap reporting; 1400 Python PASS.
-- **L2 Data-Flow Connectivity M1 (v0.8.36)**: profile-aware probe expectations, audited constructor allowlist, witness-to-convergence routing, and expanded 105-vector coverage map; 1415 Python PASS.
-- **L2 Data-Flow Depth M1 (v0.8.37)**: Navigator/NavigatorUAData supplementary IR probes and report-only Probe/Witness cross-source correlation with R2 hardening; 1427 Python PASS.
-- **L2 Signal Completion M1 (v0.8.38)**: coverage map completion, in-memory profile auto-fill, and conservative constructor allowlist expansion; 1445 Python PASS.
-- **L2 Analyze Depth M1 (v0.8.39)**: enriched MAPE-K Analyze/Plan with gap taxonomy, severity weighting, and cross-source correlation consumption; 1454 Python PASS.
-- **Diagnostic-to-Substrate Bridge M1 (v0.8.40)**: repair ticket schema, knowledge-to-ticket projection, L3 owner routing table, and evidence referencing; 1464 Python PASS.
-- **Diagnostic-to-Substrate Bridge M2 (v0.8.41)**: before/after delta contract and repair candidate ledger; 1469 Python PASS.
-- **Runtime Repair Harness M1 (v0.8.42)**: repair brief, evidence bundle manifest, validation plan, and readiness classification; 1481 Python PASS.
-- **L3 P0 Navigator/Profile Runtime Batch M1 (v0.8.43)**: first evidence-driven Rust runtime mutation; Navigator value projection from v0.8.42 repair briefs with before/after delta validation; 1490 Python PASS.
-Current package metadata: **0.8.12** (authorized package-track bump with v0.8.100 continuum closeout; D-151 dual-track). Milestone tags `v0.8.12`–`v0.8.100` remain local milestones; package version need not match every tag number. v0.9 holding track blocked pending M7 gate audit.
+| Approach | Gap |
+|---|---|
+| Pure Node / pure Python | Weak browser surface; `instanceof`, getters, workers, Intl often wrong |
+| Full CDP browser only | Heavy, hard to instrument VMs offline, non-deterministic for CI |
+| Thin stubs | Fail brand checks, canvas/WebGL/crypto fingerprints, DOM collections |
+
+**iv8-rs** embeds V8 with a large native browser surface, offline ResourceBundle networking, deterministic seeds, ChaosVM/`instrument_source` path A, multi-bundler entry plane, and a **diagnostic** environment toolchain — one Python process, same-thread isolate, honest bounds (not full Chrome).
+
+## Capabilities
+
+Organized by **domain**, not version waterfall. Version deltas live in [CHANGELOG](CHANGELOG.md). Contracts: [docs/api/](docs/api/).
+
+### Runtime host
+
+- `JSContext` factory with `environment` / `profile` / defaults merge; context manager; `close` / dispose
+- Same-thread isolate affinity; 128MB Python thread stack at import (mixin-scale templates)
+- `time_mode` `logical` | `system`; `random_seed` / `crypto_seed` / `time_freeze`
+- `config`: `timezone`, `locale`, `storage_path`; TZ → process `TZ` + V8 Redetect (ICU 77 data)
+- Dual-track versioning: milestone tags vs package number ([docs/api/versioning.md](docs/api/versioning.md))
+
+### Browser surface & DOM
+
+- Window / Navigator / Screen / Location / History / Performance / document APIs (codegen + native)
+- html5ever parse, ego-tree, CSS Level 4 selectors, EventTarget 3-phase dispatch
+- `page_load` / `page_load_with_headers`; NodeList iterable; `getElementsByTagName('*')`
+- Collections / plugins / HTMLAll / Options structure; Worker + WorkerNavigator paths
+- Profile-driven identity (Chrome-line default profile; flat dot-path environment)
+
+### Crypto / Canvas / WebGL / Audio
+
+- SubtleCrypto: AES-GCM/CBC/CTR, RSA-OAEP/PSS, ECDSA/ECDH, HMAC, HKDF, PBKDF2, X25519/AES-KW paths
+- Canvas 2D (tiny-skia + deterministic noise / fixed fingerprint modes)
+- WebGL parameter surface + environment UNMASKED_* / call log hooks
+- AudioContext / OfflineAudio completion paths; font metrics from profile where wired
+
+### Network & event loop
+
+- 3-layer network: ResourceBundle → Python `set_network_handler` → error (no silent open-web crawl)
+- `add_resource` offline bodies; XHR / fetch / WebSocket lifecycle surfaces
+- Logical vs system timers; advance / sleep / tick / drain patterns (see GUIDE)
+- Cookie / Headers / storage persist-load helpers on context
+
+### Anti-detection primitives
+
+- wrapNative / hookNative / `window.chrome` / MarkAsUndetectable paths
+- Function toString / toStringTag / prototype brand hygiene (ongoing fidelity work)
+- High-signal Illegal invocation fixes on brand-sensitive APIs
+- Not a “pass every detector” product guarantee — host fidelity + explicit bounds
+
+### Instrumentation & observability
+
+- Module `instrument_source` (ChaosVM path A, closure-scoped handlers, e.g. TDC)
+- Instance `instrument_chaosvm` for **global** handler tables only
+- Unified / VM traces; `trace_diff`; trace points; recording / profiler / coverage
+- CDP Inspector: `with_devtools`, breakpoints, step, scope, programmatic API
+- `Debugger` class: `trace_api`, `watch_property`, `eval_traced`, snapshots
+
+### Entry / multi-bundler
+
+- `prepare_entry` / `run_with_entry` / `plan_multi_entry`
+- Webpack / Parcel / Browserify / Vite-adjacent bridges; chunk supply is **caller-owned**
+- Corpus runner CLI helpers for offline multi-case runs
+
+### Environment toolchain (diagnostic plane)
+
+- Probe / gap / candidate / pressure / MAPE-K-style reports
+- **Report-only / no automatic apply / no silent profile write** by default
+- Not a one-click site bypass kit; sample adapters are separate and non-API
+
+### Workers
+
+- Dedicated isolate + OS thread + structured clone (方案 A)
+- WorkerNavigator / import static+dynamic paths; honest residual gaps documented in residual ledgers
+
+## Non-goals / honest bounds
+
+| Not claimed | Reality |
+|---|---|
+| Full Chromium / Blink | Large IDL + intentional stubs; parity is continuous work |
+| Auto-fetch all bundler chunks | Offline-first; you supply chunk text |
+| Silent live network product | ResourceBundle-first |
+| Environment toolchain auto-fixes hosts | Diagnostic reports only unless you authorize mutation elsewhere |
+| Identity with PyPI package `iv8` 0.1.x | Related lineage / dual-engine oracle; **this product is iv8-rs** |
+| Full layout engine / deep fingerprint luxury | Deferred (v0.9+ / residual) |
+
+Global bounds: [docs/api/overview.md](docs/api/overview.md).
 
 ## Install
 
+Requires **Rust toolchain**, **Python 3.13+**, and ICU **77** data (`icudtl.dat` ships with the package; override with `IV8_ICUDTL_PATH`).
+
 ```bash
-# From source (requires Rust toolchain + Python 3.13+)
 git clone <repo>
 cd iv8-rs
 
-# Local development (fast: ~10s per file change)
+# Local development (fast iteration)
 uv run maturin develop --target-dir target-maturin --strip --profile dev
 
-# Distribution build (slow: LTO optimization, 5-10 min)
+# Distribution build (LTO, slow)
 uv run maturin develop --release
 ```
 
-## Quick Start
+**Stack:** prefer creating `JSContext` after `import iv8_rs` (module sets `threading.stack_size(128MB)`). Rust tests that build full kernels: `RUST_MIN_STACK=134217728`.
+
+Optional: cargo/maturin `--target-dir` on a fast local cache path to avoid IDE contention.
+
+## Quick start
 
 ```python
 import iv8_rs
 
-# Basic eval
-ctx = iv8_rs.JSContext()
-print(ctx.eval("navigator.userAgent"))  # Mozilla/5.0 ...
+with iv8_rs.JSContext() as ctx:
+    print(ctx.eval("navigator.userAgent"))
+
+# Profile + overrides (environment wins over profile)
+ctx = iv8_rs.JSContext(
+    profile="default",
+    environment={
+        "timezone": "Asia/Shanghai",
+        "navigator.userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ...",
+        "screen.width": 1920,
+        "screen.height": 1080,
+    },
+    time_mode="system",
+    config={"timezone": "Asia/Shanghai"},
+)
+print(ctx.eval("Intl.DateTimeFormat().resolvedOptions().timeZone"))
 ctx.close()
 
-# Context manager
-with iv8_rs.JSContext() as ctx:
-    result = ctx.eval("1 + 1")  # 2
-
-# Custom environment (fingerprint)
-ctx = iv8_rs.JSContext(environment={
-    "navigator.userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ...",
-    "navigator.platform": "Win32",
-    "screen.width": 1920,
-    "screen.height": 1080,
-})
+# Offline resource + eval
+ctx = iv8_rs.JSContext()
+ctx.add_resource("https://example.com/app.js", "window.__ok = 1", status=200)
+ctx.page_load("<html><body></body></html>", base_url="https://example.com/")
+# ChaosVM / TDC-style: prefer instrument_source, then eval patched source
+# patched, info = iv8_rs.instrument_source(source)
+# ctx.eval(patched)
+ctx.close()
 ```
 
-## Core API
+Full method surface: [docs/api/runtime/jscontext.md](docs/api/runtime/jscontext.md).  
+Instrumentation: [docs/api/instrumentation/](docs/api/instrumentation/).
 
-```python
-ctx = iv8_rs.JSContext(
-    environment=None,       # Browser fingerprint overrides
-    config=None,            # Framework config (timezone, locale)
-    time_mode="logical",    # "logical" (virtual clock) | "system" (real clock)
-    js_api="__iv8__",       # Tool object name
-    strict_compat=True,     # True = align with iv8 0.1.2 behavior
-    random_seed=None,       # Deterministic Math.random (v0.3)
-    crypto_seed=None,       # Deterministic crypto.getRandomValues (v0.3)
-    time_freeze=None,       # Frozen Date.now() timestamp in ms (v0.3)
-)
+## Documentation map
 
-ctx.eval("1 + 1")                                    # Execute JS
-ctx.page_load("<html>...</html>", base_url="...")     # Load HTML page
-ctx.add_resource("https://...", body, status=200)     # Register offline resource
-ctx.set_network_handler(handler)                      # Python network callback
-ctx.expose("myFunc", lambda x: x * 2)                # Expose Python to JS
-```
+| Doc | Role |
+|---|---|
+| **[docs/api/](docs/api/)** | Stable API contracts (layered) |
+| **[docs/GUIDE.md](docs/GUIDE.md)** | Long tutorials, evolution notes |
+| **[CHANGELOG.md](CHANGELOG.md)** | Per-version deltas |
+| **[docs/quality-harness/](docs/quality-harness/)** | Quality gate definitions |
+| **[CONTRIBUTING.md](CONTRIBUTING.md)** | Commit / scope conventions |
+| **[docs/PROGRESS.md](docs/PROGRESS.md)** | Internal progress (private-oriented) |
 
-## Observability (v0.3)
-
-```python
-# Deterministic mode
-ctx = iv8_rs.JSContext(random_seed=42, time_freeze=1700000000000)
-
-# VM instrumentation (ChaosVM / JSVMP)
-patched, info = iv8_rs.instrument_source(tdc_js)
-ctx.eval(patched)
-trace = ctx.get_unified_trace()  # D/R/C/W entries with PC
-
-# Trace diff
-diff = iv8_rs.trace_diff(trace_a, trace_b)
-
-# CDP programmatic control
-ctx.with_devtools(port=9229, wait=False)
-bp = ctx.cdp_set_breakpoint("script.js", 100)
-ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
-```
-
-## Documentation
-
-- **Usage Guide**: [docs/GUIDE.md](docs/GUIDE.md) (comprehensive guide)
-- **Conventions**: [docs/conventions/](docs/conventions/) (execution protocol, naming, commit, testing, harness charter)
-- **Progress**: [docs/PROGRESS.md](docs/PROGRESS.md)
-- **v0.6 Baseline**: [docs/baseline/v0.6-dev-baseline.md](docs/baseline/v0.6-dev-baseline.md)
-- **Architecture Philosophy**: [docs/_legacy/early-design/IV8_RUST_ARCHITECTURE_PHILOSOPHY.md](docs/_legacy/early-design/IV8_RUST_ARCHITECTURE_PHILOSOPHY.md)
-- **Post-v0.6.0 Roadmap**: [docs/_legacy/early-design/POST_V0.6_ROADMAP.md](docs/_legacy/early-design/POST_V0.6_ROADMAP.md)
-- **Roadmap Workspace**: [docs/roadmap/post-v0.6/](docs/roadmap/post-v0.6/)
-- **v0.8 Runtime Report API Guide**: [docs/roadmap/post-v0.6/runtime-report-api-guide.md](docs/roadmap/post-v0.6/runtime-report-api-guide.md)
-- **v0.8 Runtime API Acceptance**: [docs/acceptance/v0.8.0-runtime-api-acceptance.md](docs/acceptance/v0.8.0-runtime-api-acceptance.md)
-- **v0.8.1 Environment Runtime Acceptance**: [docs/acceptance/v0.8.1-environment-runtime-acceptance.md](docs/acceptance/v0.8.1-environment-runtime-acceptance.md)
-- **v0.8.2 Environment Runtime Acceptance**: [docs/acceptance/v0.8.2-environment-runtime-acceptance.md](docs/acceptance/v0.8.2-environment-runtime-acceptance.md)
-- **v0.8.3 Environment Runtime Acceptance**: [docs/acceptance/v0.8.3-environment-runtime-acceptance.md](docs/acceptance/v0.8.3-environment-runtime-acceptance.md)
-- **v0.8.4 Environment Runtime Acceptance**: [docs/acceptance/v0.8.4-environment-runtime-acceptance.md](docs/acceptance/v0.8.4-environment-runtime-acceptance.md)
-- **v0.8.5 Environment Runtime Acceptance**: [docs/acceptance/v0.8.5-environment-runtime-acceptance.md](docs/acceptance/v0.8.5-environment-runtime-acceptance.md)
-- **v0.8.6 Environment Runtime Acceptance**: [docs/acceptance/v0.8.6-environment-runtime-acceptance.md](docs/acceptance/v0.8.6-environment-runtime-acceptance.md)
-- **v0.8.7 Environment Pressure Harness Acceptance**: [docs/acceptance/v0.8.7-environment-pressure-harness-acceptance.md](docs/acceptance/v0.8.7-environment-pressure-harness-acceptance.md)
-- **v0.8.8 Environment Decomposition Acceptance**: [docs/acceptance/v0.8.8-environment-toolchain-decomposition-acceptance.md](docs/acceptance/v0.8.8-environment-toolchain-decomposition-acceptance.md)
-- **v0.8.9 Environment Asset Boundary Acceptance**: [docs/acceptance/v0.8.9-environment-toolchain-asset-boundary-acceptance.md](docs/acceptance/v0.8.9-environment-toolchain-asset-boundary-acceptance.md)
-- **v0.8.10 Environment Candidate Mapping Acceptance**: [docs/acceptance/v0.8.10-environment-toolchain-candidate-mapping-acceptance.md](docs/acceptance/v0.8.10-environment-toolchain-candidate-mapping-acceptance.md)
-- **v0.8.11 Environment Pressure-To-Plan Acceptance**: [docs/acceptance/v0.8.11-environment-pressure-to-plan-bridge-acceptance.md](docs/acceptance/v0.8.11-environment-pressure-to-plan-bridge-acceptance.md)
-- **v0.6 Stabilization Plan**: [docs/_legacy/early-design/V0.6_STABILIZATION_PLAN.md](docs/_legacy/early-design/V0.6_STABILIZATION_PLAN.md)
-- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
-- **TDC Testing Guide**: [docs/tdc-testing-guide.md](docs/tdc-testing-guide.md)
-- **Quality Harness**: [docs/quality-harness/HARNESS-CHARTER.md](docs/quality-harness/HARNESS-CHARTER.md)
-- **Research**: [docs/research/](docs/research/) (28 documents)
-
-## Tests
-
-```bash
-# Current Python release gate:
-uv run python -m pytest tests -q
-
-# Rust tests
-cargo test --workspace
-
-# Rust release lint gate
-cargo clippy --workspace --all-targets -- -D warnings
-
-# Benchmark
-cargo bench --bench iv8_bench
-```
+Do not treat acceptance/roadmap trees as public product API.
 
 ## Architecture
 
+```text
+Python (iv8_rs)
+    │  PyO3
+    ▼
+iv8-py  ──►  iv8-core (V8 isolate, DOM, crypto, canvas, network, inspector)
+                │
+                ├── iv8-undetect (wrap/hook/chrome primitives)
+                ├── iv8-surface / codegen (IDL templates)
+                └── iv8-profile (profile matrix helpers)
 ```
+
+```text
 iv8-rs/
-├── crates/
-│   ├── iv8-core/     # Rust core (V8 + DOM + Crypto + Canvas + Network + Inspector)
-│   ├── iv8-undetect/ # Anti-detection (wrapNative / hookNative / window.chrome)
-│   └── iv8-py/       # PyO3 Python binding
-├── python/iv8_rs/    # Python package (runtime APIs, analysis helpers, report models + type stubs)
-├── tests/            # Python integration tests, environment_toolchain/, helpers/
-└── docs/             # Design docs + research + quality-harness
+├── crates/          # Rust workspace (core, py, undetect, surface, …)
+├── python/iv8_rs/   # Package surface, profiles, analysis, toolchain
+├── tests/           # Python integration
+└── docs/            # GUIDE, api/, quality-harness, roadmap (mixed public/private)
 ```
+
+## Development
+
+```bash
+# Rust
+cargo test --workspace
+cargo test -p iv8-core --lib
+cargo clippy --workspace --all-targets -- -D warnings
+
+# Python release-style gate
+uv run python -m pytest tests -q
+```
+
+See CONTRIBUTING.md and AGENTS.md for commit format, stack size, and non-authorization rules (no public push / package bump without explicit request).
 
 ## License
 
