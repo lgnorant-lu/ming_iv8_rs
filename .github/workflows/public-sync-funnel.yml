@@ -1,0 +1,99 @@
+# Private -> public funnel: path-filter export, force-push to public main.
+# ONLY intended to run on the private repo (_ming_iv8_rs).
+# Requires secret PUBLIC_SYNC_TOKEN (PAT or fine-grained) with contents:write on public ming_iv8_rs.
+name: Public Sync Funnel
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "If true, filter + LEAK only; do not push public"
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: public-sync-funnel
+  cancel-in-progress: true
+
+jobs:
+  funnel:
+    name: Filter and push public
+    runs-on: ubuntu-latest
+    # Safety: never run funnel push logic on the public mirror itself
+    if: github.repository == 'lgnorant-lu/_ming_iv8_rs'
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Setup Python
+        run: uv python install 3.13
+
+      - name: Build keep path list
+        run: |
+          uv run python scripts/public_sync/build_keep_paths.py --print-stats \
+            -o scripts/public_sync/generated/keep-paths.txt
+
+      - name: Clone, filter-repo, LEAK scan
+        id: filter
+        run: |
+          set -euo pipefail
+          WORK="${RUNNER_TEMP}/funnel"
+          CLONE="$WORK/filtered-repo"
+          REPORT="$WORK/report"
+          mkdir -p "$REPORT"
+          git clone --no-local "$GITHUB_WORKSPACE" "$CLONE"
+          cd "$CLONE"
+          git remote remove origin || true
+          uv run --with git-filter-repo python -m git_filter_repo --force \
+            --paths-from-file "$GITHUB_WORKSPACE/scripts/public_sync/generated/keep-paths.txt"
+          git ls-files > "$REPORT/filtered-ls-files.txt"
+          git log --oneline -20 > "$REPORT/filtered-log-head.txt"
+          FILE_COUNT=$(wc -l < "$REPORT/filtered-ls-files.txt")
+          echo "filtered_files=$FILE_COUNT" >> "$GITHUB_STEP_SUMMARY"
+          echo "file_count=$FILE_COUNT" >> "$GITHUB_OUTPUT"
+          uv run python "$GITHUB_WORKSPACE/scripts/public_sync/leak_scan.py" \
+            --root "$CLONE" \
+            --paths-file "$GITHUB_WORKSPACE/scripts/public_sync/generated/keep-paths.txt" \
+            --report "$REPORT/leak-scan.md"
+          mkdir -p "$GITHUB_WORKSPACE/scripts/public_sync/generated"
+          cp -r "$REPORT" "$GITHUB_WORKSPACE/scripts/public_sync/generated/last-funnel-report"
+          echo "CLONE=$CLONE" >> "$GITHUB_ENV"
+
+      - name: Upload funnel report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-sync-funnel-report
+          path: scripts/public_sync/generated/last-funnel-report/
+          if-no-files-found: warn
+
+      - name: Push filtered tree to public ming_iv8_rs
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.dry_run != true)
+        env:
+          PUBLIC_SYNC_TOKEN: ${{ secrets.PUBLIC_SYNC_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${PUBLIC_SYNC_TOKEN:-}" ]; then
+            echo "::error::PUBLIC_SYNC_TOKEN secret missing. Add a PAT with contents:write on lgnorant-lu/ming_iv8_rs."
+            exit 1
+          fi
+          cd "$CLONE"
+          git remote remove public 2>/dev/null || true
+          git remote add public "https://x-access-token:${PUBLIC_SYNC_TOKEN}@github.com/lgnorant-lu/ming_iv8_rs.git"
+          git push --force public HEAD:main
+          echo "Pushed filtered main to lgnorant-lu/ming_iv8_rs" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Dry-run notice
+        if: github.event_name == 'workflow_dispatch' && inputs.dry_run == true
+        run: echo "Dry-run only; public remote not updated." >> "$GITHUB_STEP_SUMMARY"

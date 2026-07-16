@@ -5,13 +5,11 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - "docs/roadmap/v0.8/analysis/public-paths-*.txt"
       - "scripts/public_sync/**"
       - ".github/workflows/public-sync-dry-run.yml"
   push:
     branches: [main]
     paths:
-      - "docs/roadmap/v0.8/analysis/public-paths-*.txt"
       - "scripts/public_sync/**"
       - ".github/workflows/public-sync-dry-run.yml"
 

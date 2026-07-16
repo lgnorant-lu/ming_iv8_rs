@@ -54,22 +54,25 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Cache cargo
+      - name: Cache cargo + cibuildwheel
         uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
             ~/.cargo/.rusty_v8
+            ~/cache/cibuildwheel
             target
-          key: ${{ runner.os }}-${{ matrix.platform.arch }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-${{ matrix.platform.arch }}-cibw-${{ hashFiles('**/Cargo.lock', 'pyproject.toml') }}
           restore-keys: |
+            ${{ runner.os }}-${{ matrix.platform.arch }}-cibw-
             ${{ runner.os }}-${{ matrix.platform.arch }}-cargo-
 
       - name: Install Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+          cache: pip
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.21.3
@@ -77,6 +80,7 @@ jobs:
           CIBW_ARCHS: ${{ matrix.platform.cibw_archs }}
           CIBW_BUILD: "cp313-* cp313t-*"
           CIBW_SKIP: "*-musllinux_*"
+          CIBW_CACHE_PATH: ~/cache/cibuildwheel
           CIBW_BEFORE_ALL_LINUX: >
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y &&
             source $HOME/.cargo/env
