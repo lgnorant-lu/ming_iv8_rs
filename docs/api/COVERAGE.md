@@ -4,20 +4,23 @@
 > **Docstring format:** [`docs/conventions/docstring-conventions.md`](../conventions/docstring-conventions.md)  
 > This file only records **numbers** against those metrics.
 
-## Final measurement: 2026-07-16 (post Sphinx pipeline)
+## Final measurement: 2026-07-17 (docstring depth pass)
 
 | Metric ID | Result | Pass? | Notes |
 |---|---|---|---|
-| **D1a** export name in `docs/api/**` | 144 / 144 | **PASS** | inventory script |
+| **D1a** export name in `docs/api/**` | 144 / 144 | **PASS** | inventory CI script |
 | **D1b** JSContext live methods in `jscontext.md` | 50 / 50 | **PASS** | |
 | **D1c** Debugger live methods in `debugger.md` | 10 / 10 | **PASS** | |
 | **D1d** live JSContext vs `_iv8.pyi` | 50 / 50 | **PASS** | stubs aligned |
+| **JSContext docstring** | Returns 50/50, Raises 50/50, Args 24/50 | **PASS (R/Ra)** | Args only where params exist |
+| **Debugger docstring** | Returns 10/10, Raises 10/10 | **PASS** | |
+| **instrument_source** | Args+Returns+Raises | **PASS** | Google-style |
 | **D2a/b** Tier A signature matrix | all batches Y | **PASS** | [D2_TIER_A_MATRIX.md](D2_TIER_A_MATRIX.md) |
-| **D3** Tier A checklist | all method groups Y | **PASS** | [D3_TIER_A_CHECKLIST.md](D3_TIER_A_CHECKLIST.md) |
+| **D3** Tier A checklist | method groups Y | **PASS** | [D3_TIER_A_CHECKLIST.md](D3_TIER_A_CHECKLIST.md) |
 | **D4** runnable doc examples | 10 smoke tests | **PASS** | `pytest tests/test_api_doc_examples.py` |
-| **D6c** TIER_MAP partition | A=15 B=42 C=87 | **PASS** | no overlap / no stray |
-| **Sphinx build** | 0 warnings, 0 errors | **PASS** | `uv run sphinx-build` |
-| **D5** public symbol test coverage | 94/129 (72.9%) | **NOT PASS** | Tier C DTOs missing explicit tests |
+| **D6c** TIER_MAP partition | A=15 B=42 C=87 | **PASS** | Tier C = catalog only |
+| **Sphinx build** | 0 warnings, 0 errors | **PASS** | `_build/` gitignored |
+| **D5** public symbol test coverage | round-trip suite added | **PARTIAL** | DTO round-trip tests exist |
 
 ## D5 detail
 

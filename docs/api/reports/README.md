@@ -3,6 +3,10 @@
 These carriers serialize analysis/toolchain outputs with versioned schemas.  
 **Policy:** reports are **data**, not execution engines. Pin schema version fields when persisting.
 
+**Doc depth (honest):** **Tier C catalog** — one-line roles + serde helpers.
+Not a full field-by-field IDL for every nested type; use the Python types /
+`*_from_dict` schemas as machine SoT.
+
 ## Experimental
 
 | Symbol | Role |

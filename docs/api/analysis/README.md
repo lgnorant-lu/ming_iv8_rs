@@ -2,6 +2,11 @@
 
 These are **first-class library modules**. Deep algorithms: GUIDE.
 
+**Doc depth (honest):** symbols here are mostly **Tier B** (behavioral) or
+**Tier C** (DTO / report carriers). This page is a **catalog + role index**,
+not Google-level full contracts for every DTO field. For Tier A host APIs see
+[../runtime/](../runtime/) and [../instrumentation/](../instrumentation/).
+
 ## Trace
 
 | Symbol | Role |

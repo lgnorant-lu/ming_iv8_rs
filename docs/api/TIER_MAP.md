@@ -2,8 +2,10 @@
 
 > SoT: [`docs/conventions/api-documentation-conventions.md`](../conventions/api-documentation-conventions.md) §3  
 > **A=15 · B=42 · C=87 · total=144** (= `len(iv8_rs.__all__)`)  
-> Updated: 2026-07-16  
-> Check: `uv run python scripts/_api_doc_inventory.py`
+> Updated: 2026-07-17  
+> Check: `uv run python scripts/_api_doc_inventory_ci.py`  
+> **Depth rule:** Tier A = full Google-style contracts; Tier B = purpose + signature
+> (docs/api index OK); Tier C = **catalog only** (one-liner + serde), not full field IDL.
 
 ## Tier A (15) — full contract required
 
