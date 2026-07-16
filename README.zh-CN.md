@@ -4,6 +4,7 @@
 面向：Web JS 逆向、可控复现执行、反爬 / 指纹 **宿主** 模拟，以及 ChaosVM 类脚本的插桩与分析。
 
 **当前**：里程碑 continuum 至 **v0.8.102** · 包版本 **0.8.12**（D-151 双轨）— [CHANGELOG](CHANGELOG.md)  
+**PyPI 包名（规划）：** `ming_iv8_rs` · **import：** `import iv8_rs`（模块名暂不改）  
 English：[README.md](README.md) · API 契约：[docs/api/](docs/api/) · 覆盖审计：[docs/api/COVERAGE.md](docs/api/COVERAGE.md)
 
 ## 缘起：为什么做 iv8-rs

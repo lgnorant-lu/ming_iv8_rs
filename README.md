@@ -4,6 +4,7 @@ High-fidelity **browser-like JS runtime** for Python (V8 + Rust + PyO3).
 Built for Web JS reverse engineering, controlled re-execution, anti-bot / fingerprint **host** simulation, and ChaosVM-class instrumentation / analysis.
 
 **Current**: milestone continuum through **v0.8.102** · package **0.8.12** (D-151 dual-track) — [CHANGELOG](CHANGELOG.md)  
+**PyPI name (planned):** `ming_iv8_rs` · **import:** `import iv8_rs` (module name unchanged for now)  
 中文版：[README.zh-CN.md](README.zh-CN.md) · API contracts：[docs/api/](docs/api/) · Coverage audit：[docs/api/COVERAGE.md](docs/api/COVERAGE.md)
 
 ## Origin: why iv8-rs exists
