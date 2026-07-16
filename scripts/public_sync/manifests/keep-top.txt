@@ -24,4 +24,6 @@ docs/quality-harness/
 docs/api/
 docs/conventions/
 docs/source/
+# Compile-time embed (include_str in crates/iv8-core/src/config.rs)
+docs/_legacy/early-research/iv8-defaults.json
 # Full docs/GUIDE.md stays private (version waterfall + roadmap links).
