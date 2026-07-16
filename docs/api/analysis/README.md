@@ -75,6 +75,10 @@ not Google-level full contracts for every DTO field. For Tier A host APIs see
 
 Schema-backed reports (deobf, string-array, VM, IR, experimental): [../reports/README.md](../reports/README.md).
 
+## Signature index
+
+Tier B signatures (inspect-based): **[signatures.md](signatures.md)**.
+
 ## Related
 
 - [../instrumentation/README.md](../instrumentation/README.md)  

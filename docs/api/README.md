@@ -1,18 +1,27 @@
 # iv8-rs API Documentation
 
-> Status: **living contract** (structure complete; pages filled incrementally)  
+> Status: **living contract** (Tier A host contracts strong; Tier B/C catalog + selected signatures)  
 > Package: **0.8.12** · Milestone continuum through **v0.8.102**  
 > Principle: **complete surface, clear layers** — not a single mega-file, not a dumbed-down subset.
 
-## How to read
+## How to read (dual track — intentional)
+
+| Track | Artifact | Use for |
+|---|---|---|
+| **Contracts (read first)** | **This tree** (`docs/api/`) | Stable calling contracts, host bounds, offline/network honesty, tiers |
+| **Generated reference** | Sphinx (`docs/source/` → local `sphinx-build`) | Browsable pages from live `__doc__` after `maturin develop` |
+| **Types** | `python/iv8_rs/_iv8.pyi` | IDE / typecheck shape |
+| **Tutorials** | [../GUIDE.md](../GUIDE.md) | Long narrative (full GUIDE may stay private-oriented; see public cut) |
+
+Sphinx HTML under `docs/source/_build/` is **generated** (gitignored). Do not treat build output as SoT.
 
 | If you need… | Go to |
 |---|---|
-| Install + 30-second mental model | [../GUIDE.md](../GUIDE.md) §1–2, root [README](../../README.md) |
-| **Stable calling contracts** | This tree (`docs/api/`) |
+| Install + 30-second mental model | root [README](../../README.md), [../GUIDE.md](../GUIDE.md) §1–2 |
+| **Stable calling contracts** | This tree |
 | Version-to-version deltas | [../../CHANGELOG.md](../../CHANGELOG.md) |
 | Quality gates / matrices | [../quality-harness/](../quality-harness/) |
-| Long tutorials / evolution notes | [../GUIDE.md](../GUIDE.md) |
+| Toolchain choice (Sphinx vs MkDocs) | [../conventions/docs-toolchain-selection.md](../conventions/docs-toolchain-selection.md) |
 
 ## Layer map
 
@@ -62,6 +71,8 @@
 | [instrumentation/README.md](instrumentation/README.md) | ChaosVM / `instrument_source` contracts |
 | [entry/README.md](entry/README.md) | Multi-entry / bundler offline contracts |
 | [analysis/README.md](analysis/README.md) | Trace, CFG, taint, patterns, VM diff |
+| [analysis/signatures.md](analysis/signatures.md) | Tier B analysis signatures |
+| [environment/signatures.md](environment/signatures.md) | Tier B environment signatures |
 
 ### L4 Environment toolchain
 

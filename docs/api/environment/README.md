@@ -18,6 +18,7 @@
 
 ## Subpages
 
+- [signatures.md](signatures.md) — Tier B signature index  
 - [toolchain.md](toolchain.md) — full toolchain report surface  
 - [pressure.md](pressure.md) — pressure harness  
 

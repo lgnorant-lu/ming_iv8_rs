@@ -144,9 +144,20 @@ Full exception map: [exceptions.md](exceptions.md).
 | `cdp_get_scope_properties` | `(object_id, own_properties=True)` | Scope props |
 | `cdp_process_events` | `() -> bool` | Events; paused? |
 
-**Programmatic CDP:** 必须先调 `with_devtools(wait=False)`。  
-**Raises:** 未调 `with_devtools` 或 devtools 未启动 → `RuntimeError`。JS 执行期间触发断点 → 正常返回，不抛异常（paused 状态需通过 `cdp_process_events` / `cdp_get_call_frames` 读取）。  
-**Thread:** 和 JSContext 同一线程。
+**Programmatic CDP:** call `with_devtools(wait=False)` first.
+
+**Raises (precision, from native binding):**
+
+| Condition | Exception |
+|---|---|
+| Wrong thread / closed context | `RuntimeError` via `assert_thread` |
+| CDP op fails (no inspector session, bad id, not paused, …) | `RuntimeError` (`PyRuntimeError` from kernel `map_err`) |
+| JS eval errors inside CDP evaluate | may surface as `JSError` family depending on path |
+
+Paused-at-breakpoint is **not** an exception: use `cdp_process_events` / `cdp_get_call_frames`.  
+**Thread:** same creator thread as the context.
+
+English note: Chinese prose removed here for public contract consistency; see README.zh-CN for product narrative.
 
 ---
 
