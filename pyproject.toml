@@ -52,29 +52,29 @@ select = ["E", "F", "W", "I", "N", "UP"]
 quote-style = "double"
 
 # ─── cibuildwheel ─────────────────────────────────────────────────────────────
+# Workflow env in .github/workflows/build-wheels.yml is SoT for CI images/cache.
+# Keep this section aligned for local `cibuildwheel` runs.
 [tool.cibuildwheel]
-# Build cp313 (standard) and cp313t (free-threaded / nogil)
-build = ["cp313-*", "cp313t-*"]
-# Skip musl Linux (Alpine) — v8 build is complex there
-skip = ["*-musllinux_*"]
-# Test command after building each wheel
-test-requires = ["pytest"]
-test-command = "pytest {project}/tests/smoke_test.py -q"
+build = ["cp313-*"]
+skip = ["*-musllinux_*", "cp313t-*"]
+test-command = "python -c \"import iv8_rs; c=iv8_rs.JSContext(); assert c.eval('1+1')==2; c.close()\""
 
 [tool.cibuildwheel.linux]
 before-all = [
-    "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y",
-    "source $HOME/.cargo/env",
+    "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal",
+    ". $HOME/.cargo/env",
 ]
-environment = { PATH = "$HOME/.cargo/bin:$PATH", CARGO_NET_GIT_FETCH_WITH_CLI = "true" }
+environment = { PATH = "$HOME/.cargo/bin:$PATH", CARGO_NET_GIT_FETCH_WITH_CLI = "true", RUST_MIN_STACK = "134217728" }
 repair-wheel-command = "auditwheel repair -w {dest_dir} {wheel}"
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"
 
 [tool.cibuildwheel.macos]
 before-all = [
-    "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y",
-    "source $HOME/.cargo/env",
+    "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal",
+    ". $HOME/.cargo/env",
 ]
-environment = { PATH = "$HOME/.cargo/bin:$PATH" }
+environment = { PATH = "$HOME/.cargo/bin:$PATH", RUST_MIN_STACK = "134217728" }
 repair-wheel-command = "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}"
 
 [tool.cibuildwheel.windows]

@@ -6,6 +6,8 @@
 //! Uses OS random (getrandom crate) by default.
 //! v0.2+ will support seeded PRNG for deterministic output.
 
+use std::io::Read;
+
 /// Check if `this` has Crypto.prototype in its prototype chain.
 fn check_crypto_receiver(scope: &v8::PinScope<'_, '_>, this: v8::Local<v8::Value>) -> bool {
     let crypto_key = crate::v8_utils::v8_string(scope, "Crypto");

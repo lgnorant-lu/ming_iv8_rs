@@ -1,3 +1,6 @@
 [toolchain]
 channel = "1.96.0"
-components = ["rustfmt", "clippy"]
+# rustfmt only — clippy in components breaks maturin/cibuildwheel on some
+# runners (rustup "detected conflict: bin/cargo-clippy"). Install clippy
+# locally / in CI lint jobs with: rustup component add clippy
+components = ["rustfmt"]
