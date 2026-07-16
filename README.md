@@ -18,6 +18,74 @@ We first met **[iv8](https://github.com/jofpin/iv8)** (the PyPI `iv8` 0.1.x line
 Product intuition borrows from iv8 (Python-friendly, injectable environment, offline-first). The kernel choice is **Rust + PyO3 + large codegen/native browser surface** for performance, type boundaries, and long-term maintenance.  
 **No need to dunk on peers.** This repo and PyPI `iv8` 0.1.x are **related lineage / dual-engine oracle**. The product name here is **iv8-rs** — not “replace X”, but “same spark, deeper dig”.
 
+## Design philosophy: two branches, one loop
+
+iv8-rs is not “only a browser stub” and not “only a decompiler”. The core bet is a **dual-branch product**:
+
+| Branch | Name | Question it answers |
+|---|---|---|
+| **A** | **Runtime host** | Can this script **run** under a controlled, browser-like host? |
+| **B** | **Runtime analysis** | Can we **observe, structure, and reason about** what that run did? |
+
+They are meant to **feed each other**: a better host produces cleaner traces and fewer Illegal-invocation lies; better analysis points back at missing host surface, wrong brands, or incomplete network. Informally: **left foot on right foot** — host fidelity and analysis depth climb together, not as two disconnected tools.
+
+What ships today is a **strong Branch A** plus a **usable Branch B spine** (instrumentation, unified trace, entry plane, diagnostics). Deeper IR / SSA / full decompile pipelines are an **explicit desired state** on Branch B — not vaporware branding, not “everything unfinished,” but a north-star map of where analysis is going while Branch A remains the production weight.
+
+### Branch A — runtime environment (host)
+
+The script must believe it lives in something like a page: same-thread V8 isolate, large browser surface, offline-first I/O, deterministic knobs for CI.
+
+| Layer | Includes (illustrative, not exhaustive) |
+|---|---|
+| **Kernel** | V8 isolate, stack/thread affinity, ICU/Intl + timezone redetect, logical vs system time, seeds |
+| **Browser surface** | Window / Navigator / Screen / Location / DOM parse & query, events, collections, Workers |
+| **Media & crypto** | Canvas, WebGL params, Audio paths, SubtleCrypto |
+| **Network** | ResourceBundle → optional Python handler → error (no silent open crawl) |
+| **Identity** | Profiles, flat environment overrides, storage, cookies/headers helpers |
+| **Anti-detect building blocks** | wrap/hook natives, chrome object, toString / brand hygiene (fidelity, not “pass all detectors”) |
+| **Product honesty** | Explicit non-goals: not full Chromium, not layout luxury, not one-click bypass |
+
+Branch A is what makes **controlled re-execution** possible: same inputs, same seeds, offline chunks, dual-engine compare.
+
+### Branch B — runtime analysis (observe & structure)
+
+Once the host can run the payload, Branch B turns the run into **evidence**: traces, diffs, entry plans, diagnostic reports — and, as the desired state deepens, richer intermediate forms.
+
+| Layer | Today (shipping spine) | Desired state (north star, not a claim of full completion) |
+|---|---|---|
+| **Instrumentation** | `instrument_source` / ChaosVM path A, global `instrument_chaosvm`, env Proxies | Broader VM families, lower false Illegal-invocation, optional expose_handlers policies |
+| **Trace plane** | Unified D/R/C/W lines, VM trace, `trace_diff`, recording / profiler / coverage | Stable schemas, streaming, multi-run corpora as first-class |
+| **Debugger / CDP** | DevTools attach, breakpoints, step, `Debugger` helpers | Deeper scope/object UX, CI-friendly programmatic sessions |
+| **Entry / bundlers** | `prepare_entry` / `run_with_entry` / multi-entry plans; caller-owned chunks | Richer bundler graphs without silent network fetch |
+| **Structure & reasoning** | CFG / taint / pattern / crypto detectors, report models, environment plane (diagnostic) | **IR / SSA-style** views, opcode/handler IR, string-array & deobf reports as a coherent pipeline, cross-version VM diff as default workflow |
+| **Formats & adapters** | Schema-versioned reports, corpus manifests | More intermediate formats, dual-oracle packs, export for external RE tools |
+
+Branch B must stay **honest**: default environment toolchain is **report-only**; analysis is not a “site bypass kit.” Deeper IR/SSA language in the table is **design intent** — pieces exist or are scaffolded; the **full pipeline** remains the climb, not a checkbox of “already done.”
+
+### How A and B reinforce each other
+
+```text
+        +------------------+
+        |  JS under test   |
+        +--------+---------+
+                 |
+        +--------v---------+
+        |  Branch A: host  |  run / freeze / offline / brand
+        +--------+---------+
+                 |  traces, events, gaps
+        +--------v---------+
+        |  Branch B: analyze |  instrument, CFG, plan, report
+        +--------+---------+
+                 |  missing surface, wrong values, entry fixes
+                 +-----> back into Branch A (profiles, shims, network)
+```
+
+1. **A → B:** Without a faithful host, traces are noise and Illegal invocation masks real logic.  
+2. **B → A:** Diffs and probes show which getters, plugins, or network edges still lie.  
+3. **Loop:** Each milestone should either harden the host, deepen observation, or tighten the contract between them.
+
+That is the product thesis: **one Python process, two complementary branches**, not a pile of unrelated scripts.
+
 ## Why this technical path
 
 | Approach | Common gap |
