@@ -1,0 +1,26 @@
+# tools/ paths to KEEP in public (relative to repo root)
+# DROP: node_modules, tmp, output dumps, diagnostic_bridge, convergence, etc.
+
+tools/iv8-surface-codegen/
+tools/idl_probe/
+tools/wpt/
+tools/generate_worker_js_stub.py
+tools/idl/package.json
+tools/idl/package-lock.json
+tools/idl/README.md
+tools/idl/fetch-webref.js
+tools/idl/generate-ir.js
+tools/idl/merge-tool.js
+tools/idl/normalize-ast.js
+tools/idl/parse-chromium-idl.js
+tools/idl/type-mapper.js
+tools/idl/validate.js
+tools/idl/chrome-manual/
+tools/idl/.gitignore
+# DROP (tracked stubs / private planes; not product public surface):
+# tools/convergence/
+# tools/cross_reference/
+# tools/diagnostic_bridge/
+# tools/feedback_loop/
+# tools/witness_reports/
+# Aligned 2026-07-17: git ls-files tools vs keep prefixes

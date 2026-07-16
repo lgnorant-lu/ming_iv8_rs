@@ -1,0 +1,27 @@
+# Public keep whitelist v3 — top-level (filter-repo style)
+# Strip lines starting with # before use if needed.
+
+crates/
+python/
+tests/
+.github/
+.cargo/
+Cargo.toml
+Cargo.lock
+pyproject.toml
+uv.lock
+rust-toolchain.toml
+rustfmt.toml
+.editorconfig
+.gitignore
+README.md
+README.zh-CN.md
+LICENSE
+CHANGELOG.md
+CONTRIBUTING.md
+docs/GUIDE.public.md
+docs/quality-harness/
+docs/api/
+docs/conventions/
+docs/source/
+# Full docs/GUIDE.md stays private (version waterfall + roadmap links).

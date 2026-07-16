@@ -17,9 +17,21 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-KEEP_TOP = ROOT / "docs/roadmap/v0.8/analysis/public-paths-keep.txt"
-KEEP_SCRIPTS = ROOT / "docs/roadmap/v0.8/analysis/public-paths-scripts-keep.txt"
-KEEP_TOOLS = ROOT / "docs/roadmap/v0.8/analysis/public-paths-tools-keep.txt"
+# Prefer public-kept manifests (dual-repo). Fall back to private analysis paths.
+_MANIFEST = ROOT / "scripts/public_sync/manifests"
+_ANALYSIS = ROOT / "docs/roadmap/v0.8/analysis"
+
+
+def _keep_file(public_name: str, private_name: str) -> Path:
+    p = _MANIFEST / public_name
+    if p.is_file():
+        return p
+    return _ANALYSIS / private_name
+
+
+KEEP_TOP = _keep_file("keep-top.txt", "public-paths-keep.txt")
+KEEP_SCRIPTS = _keep_file("keep-scripts.txt", "public-paths-scripts-keep.txt")
+KEEP_TOOLS = _keep_file("keep-tools.txt", "public-paths-tools-keep.txt")
 
 # Explicit drops even if under a kept prefix (defense in depth)
 EXPLICIT_DROP = {

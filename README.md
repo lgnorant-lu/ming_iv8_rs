@@ -216,6 +216,49 @@ See CONTRIBUTING.md and in-repo agent notes for commit format, stack size, and n
 - **[iv8](https://github.com/jofpin/iv8)** — major inspiration and dual-engine reference lineage for Python↔V8 hosting  
 - Upstream: V8, PyO3, maturin, html5ever, and the wider ecosystem
 
+## Disclaimer and terms of use (read carefully)
+
+This software is provided for **research, education, interoperability testing,
+debugging, and legitimate software engineering** only.
+
+**No warranty.** The software is provided **AS IS**, without warranty of any
+kind, express or implied, including but not limited to merchantability, fitness
+for a particular purpose, non-infringement, accuracy of browser emulation, or
+undetectability. See the [Apache License 2.0](LICENSE).
+
+**You are solely responsible** for how you use this software and for compliance
+with all applicable laws, regulations, website/service terms of use, and third-
+party rights in your jurisdiction.
+
+**Prohibited / out of scope (non-exhaustive):**
+
+- Unauthorized access, fraud, credential stuffing, account takeover
+- Bypassing security, anti-bot, CAPTCHA, or access controls **without permission**
+- Targeting production systems or users in ways that violate law or terms of service
+- Distributing malware, phishing kits, or “one-click site bypass” packs built on this engine
+- Misrepresenting this project as a full Chromium browser or as guaranteed anti-detect
+
+**Not a bypass product.** Environment tooling is **diagnostic / report-oriented**
+by design. Sample-specific reverse notes and site overlays are **not** product
+API and are not provided as attack recipes.
+
+**Fingerprint / anti-bot.** Any anti-detection primitives are **host-fidelity
+building blocks**, not a promise to pass every detector or to evade any named
+vendor.
+
+**Dual-engine / lineage.** Mentions of related packages (e.g. PyPI `iv8` 0.1.x)
+are for technical comparison only. This product is **iv8-rs** / **ming_iv8_rs**.
+
+**Export and dual-repo.** Public trees are path-filtered views of a private
+development history. Commit messages may still reflect development narrative;
+do not treat the public git log as a complete private process record.
+
+**Indemnity.** To the maximum extent permitted by law, authors and contributors
+shall not be liable for any claim, damages, or other liability arising from use
+or inability to use the software, including legal costs arising from your misuse.
+
+By cloning, installing, or using this software, you acknowledge this disclaimer.
+
 ## License
 
 [Apache License 2.0](LICENSE)

@@ -11,11 +11,14 @@ Private → public **path filter** tooling. Default mode is **dry-run only** (no
 | `dry_run.ps1` / `dry_run.sh` | Clone → `git filter-repo` → LEAK report |
 | `generated/` | Local outputs (gitignored) |
 
-Keep manifests (SoT):
+Keep manifests (public SoT under this tree):
 
-- `docs/roadmap/v0.8/analysis/public-paths-keep.txt`
-- `docs/roadmap/v0.8/analysis/public-paths-scripts-keep.txt`
-- `docs/roadmap/v0.8/analysis/public-paths-tools-keep.txt`
+- `manifests/keep-top.txt`
+- `manifests/keep-scripts.txt`
+- `manifests/keep-tools.txt`
+
+Private analysis copies may still exist under `docs/roadmap/...`; `build_keep_paths.py`
+prefers `manifests/`.
 
 ## Local dry-run (Windows)
 

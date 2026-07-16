@@ -1,0 +1,51 @@
+# scripts/ files to KEEP in public (relative to repo root)
+# DROP: site reverse (yy/ctrip/vmp), ghidra, chrome absolute-path sampler, pycache
+
+scripts/evaluate_detection.py
+scripts/evaluate_env_consistency.py
+scripts/evaluate_h05_getter.py
+scripts/evaluate_h05b_setter.py
+scripts/evaluate_h05c_method.py
+scripts/evaluate_h05d_constructor.py
+scripts/evaluate_h05e_exception.py
+scripts/evaluate_h05f_tostring.py
+scripts/evaluate_h06_window_iframe.py
+scripts/evaluate_h06b_window_worker.py
+scripts/evaluate_harness_mutation.py
+scripts/evaluate_surface_accuracy.py
+scripts/evaluate_surface_integrity.py
+scripts/run_wpt.py
+scripts/run_wpt_worker.py
+scripts/run_creepjs_lies.py
+scripts/verify_crypto_data_integrity.py
+scripts/browserforge_adapter.py
+scripts/idl_coverage_audit.py
+scripts/descriptor_diff.py
+scripts/mr_strategies.py
+scripts/fp_inconsistent_rules.py
+scripts/sample_iv8_surface.py
+scripts/sample_surface_values.py
+scripts/download_bcd_results.py
+scripts/download_chromium_idl.py
+scripts/parse_runtime_features.py
+scripts/parse_runtime_enabled_features.py
+scripts/export_browser_fingerprint.js
+scripts/update_python_test_inventory.py
+scripts/check_coverage.py
+scripts/check_emoji.py
+scripts/check_yaml.py
+scripts/audit_false_positives.py
+scripts/audit_illegal_constructors.py
+scripts/audit_m27_realworld.py
+scripts/_cargo_test_serial.ps1
+# Force-tracked underscore scripts (gitignore scripts/_*.py; harness only):
+scripts/_browserforge_adapter.py
+scripts/_metamorphic.py
+scripts/_fp_inconsistent_mutation.py
+scripts/_detection_vector_registry.py
+scripts/_d1_d5_behavior.py
+scripts/_api_doc_inventory_ci.py
+scripts/public_sync/
+# DROP from public (tracked but not keep):
+# scripts/sample_chrome_surface.py  — local Chrome path sampler; abs-path example
+# gitignored (not in history): probe-iv8*, activate-env, ghidra_*
