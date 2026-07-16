@@ -63,10 +63,11 @@ jobs:
 
       - name: LEAK scan (fail on HIGH only)
         run: |
-          # Medium hits (e.g. CHANGELOG cross-links to private docs) are reported
-          # but do not fail CI until scrubbed. HIGH always fails.
+          # Prefer scanning tracked keep paths only (not clone-local .venv noise).
+          # Medium hits (roadmap/todo cross-links) are reported; HIGH fails.
           uv run python scripts/public_sync/leak_scan.py \
             --root "$CLONE" \
+            --paths-file "$GITHUB_WORKSPACE/scripts/public_sync/generated/keep-paths.txt" \
             --report scripts/public_sync/generated/last-dry-run-report/leak-scan.md
 
       - name: Upload dry-run report

@@ -60,10 +60,11 @@ finally {
     Pop-Location
 }
 
-Write-Host "== LEAK scan on filtered tree =="
+Write-Host "== LEAK scan on filtered tree (keep paths only) =="
 $leakArgs = @(
     "run", "python", "scripts/public_sync/leak_scan.py",
     "--root", $CloneDir,
+    "--paths-file", $KeepList,
     "--report", (Join-Path $ReportDir "leak-scan.md")
 )
 if ($StrictLeak) { $leakArgs += "--strict" }

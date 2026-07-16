@@ -25,21 +25,32 @@ RULES: list[tuple[str, re.Pattern[str], str]] = [
     ("github_pat", re.compile(r"ghp_[A-Za-z0-9]{20,}"), "high"),
     ("openai_sk", re.compile(r"sk-[A-Za-z0-9]{20,}"), "high"),
     ("aws_akia", re.compile(r"AKIA[0-9A-Z]{16}"), "high"),
-    ("site_xhs", re.compile(r"xiaohongshu|小红书", re.I), "medium"),
-    ("site_meituan", re.compile(r"meituan|美团", re.I), "medium"),
+    ("site_xhs", re.compile(r"xiaohongshu|\u5c0f\u7ea2\u4e66", re.I), "medium"),
+    ("site_meituan", re.compile(r"meituan|\u7f8e\u56e2", re.I), "medium"),
     ("site_tcaptcha", re.compile(r"tcaptcha|TCaptcha", re.I), "medium"),
     ("cdp_local_9223", re.compile(r"127\.0\.0\.1:9223"), "medium"),
     ("sample_chrome_script", re.compile(r"sample_chrome_surface"), "high"),
     ("opencode_temp", re.compile(r"AppData\\\\Local\\\\Temp\\\\opencode", re.I), "medium"),
-    # Cross-links to private docs are medium (common in CHANGELOG); fail only with --strict
     ("roadmap_private", re.compile(r"docs/roadmap/v0\.8/(analysis|native-substrate)/"), "medium"),
     ("todo_private", re.compile(r"docs/todo/TODO-"), "medium"),
 ]
 
-# Paths that may mention private doc paths without being a leak of secrets
+# Medium cross-links allowed in product changelog
 ALLOW_MEDIUM_IN_PREFIX = (
     "CHANGELOG.md",
 )
+
+# Do not scan these path segments (binary/tool noise)
+SKIP_DIR_NAMES = {
+    ".git",
+    ".venv",
+    "venv",
+    "node_modules",
+    "target",
+    "target-maturin",
+    "__pycache__",
+    ".uv",
+}
 
 SKIP_SUFFIXES = {
     ".png",
@@ -59,7 +70,18 @@ SKIP_SUFFIXES = {
     ".dll",
     ".exe",
     ".lock",
+    ".bin",
+    ".whl",
 }
+
+# Scanner / pipeline self-docs mention denylist patterns by design
+SELF_PATH_PREFIXES = (
+    "scripts/public_sync/",
+)
+
+
+def _is_self_path(rel: str) -> bool:
+    return any(rel == p.rstrip("/") or rel.startswith(p) for p in SELF_PATH_PREFIXES)
 
 
 def _iter_files(root: Path, paths_file: Path | None) -> list[Path]:
@@ -74,9 +96,15 @@ def _iter_files(root: Path, paths_file: Path | None) -> list[Path]:
     for p in root.rglob("*"):
         if not p.is_file():
             continue
-        if ".git" in p.parts:
+        if any(part in SKIP_DIR_NAMES for part in p.parts):
             continue
         if p.suffix.lower() in SKIP_SUFFIXES:
+            continue
+        # skip extensionless binaries under .venv already covered; also skip large files
+        try:
+            if p.stat().st_size > 2_000_000:
+                continue
+        except OSError:
             continue
         out.append(p)
     return out
@@ -91,6 +119,8 @@ def scan(root: Path, paths_file: Path | None) -> list[tuple[str, str, str, int]]
         except OSError:
             continue
         rel = str(fp.relative_to(root)).replace("\\", "/")
+        if _is_self_path(rel):
+            continue
         for i, line in enumerate(text.splitlines(), 1):
             for name, pat, sev in RULES:
                 if pat.search(line):
@@ -129,21 +159,21 @@ def main() -> int:
     medium = [h for h in hits if h[0] == "medium"]
 
     lines = [
-        f"# LEAK scan report",
-        f"",
+        "# LEAK scan report",
+        "",
         f"- root: `{root}`",
         f"- high: {len(high)}",
         f"- medium: {len(medium)}",
-        f"",
+        "",
     ]
     if high:
         lines.append("## HIGH")
-        for sev, name, path, ln in high[:200]:
+        for _sev, name, path, ln in high[:200]:
             lines.append(f"- `{path}:{ln}` [{name}]")
         lines.append("")
     if medium:
         lines.append("## MEDIUM")
-        for sev, name, path, ln in medium[:200]:
+        for _sev, name, path, ln in medium[:200]:
             lines.append(f"- `{path}:{ln}` [{name}]")
         lines.append("")
 

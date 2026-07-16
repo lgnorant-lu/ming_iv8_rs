@@ -23,10 +23,11 @@ uv run --with git-filter-repo python -m git_filter_repo --force --paths-from-fil
 git ls-files > "$REPORT_DIR/filtered-ls-files.txt"
 git log --oneline -20 > "$REPORT_DIR/filtered-log-head.txt"
 
-echo "== LEAK scan =="
+echo "== LEAK scan (keep paths only) =="
 set +e
 uv run python "$REPO_ROOT/scripts/public_sync/leak_scan.py" \
   --root "$CLONE_DIR" \
+  --paths-file "$KEEP_LIST" \
   --report "$REPORT_DIR/leak-scan.md"
 LEAK=$?
 set -e
