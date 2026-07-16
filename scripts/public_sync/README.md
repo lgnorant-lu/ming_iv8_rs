@@ -20,8 +20,7 @@ Keep manifests (SoT):
 ## Local dry-run (Windows)
 
 ```powershell
-# from repo root
-uv pip install git-filter-repo   # once
+# from repo root (git-filter-repo pulled ephemerally via uv --with)
 pwsh -File scripts/public_sync/dry_run.ps1
 ```
 

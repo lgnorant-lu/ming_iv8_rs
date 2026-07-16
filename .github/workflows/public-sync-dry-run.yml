@@ -36,9 +36,6 @@ jobs:
       - name: Setup Python
         run: uv python install 3.13
 
-      - name: Install git-filter-repo into project env
-        run: uv pip install git-filter-repo
-
       - name: Build keep path list
         run: |
           uv run python scripts/public_sync/build_keep_paths.py --print-stats \
@@ -54,8 +51,8 @@ jobs:
           git clone --no-local "$GITHUB_WORKSPACE" "$CLONE"
           cd "$CLONE"
           git remote remove origin || true
-          # Run filter-repo via the checked-out project's uv env (not clone .venv)
-          uv run --project "$GITHUB_WORKSPACE" python -m git_filter_repo --force \
+          # --with installs git-filter-repo into an ephemeral uv env (no project venv required)
+          uv run --with git-filter-repo python -m git_filter_repo --force \
             --paths-from-file "$GITHUB_WORKSPACE/scripts/public_sync/generated/keep-paths.txt"
           git ls-files > "$REPORT/filtered-ls-files.txt"
           git log --oneline -30 > "$REPORT/filtered-log-head.txt"

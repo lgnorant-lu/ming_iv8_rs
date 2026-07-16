@@ -31,12 +31,7 @@ Write-Host "== build keep paths =="
 & uv run python scripts/public_sync/build_keep_paths.py --print-stats -o $KeepList
 if ($LASTEXITCODE -ne 0) { throw "build_keep_paths failed" }
 
-Write-Host "== ensure git-filter-repo =="
-& uv run python -c "import git_filter_repo" 2>$null
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "installing git-filter-repo into uv env..."
-    & uv pip install git-filter-repo
-}
+Write-Host "== git-filter-repo via uv --with (ephemeral) =="
 
 Write-Host "== clone (local, no remotes push) =="
 if (Test-Path $CloneDir) {
@@ -52,10 +47,8 @@ try {
     # Remove origin so nobody can push by accident from clone
     & git remote remove origin 2>$null
 
-    # Use the source repo's uv project so git-filter-repo is available
-    # (uv run inside the clone would create an empty .venv without the package).
     $keepAbs = (Resolve-Path $KeepList).Path
-    & uv run --project $RepoRoot python -m git_filter_repo --force --paths-from-file $keepAbs
+    & uv run --with git-filter-repo python -m git_filter_repo --force --paths-from-file $keepAbs
     if ($LASTEXITCODE -ne 0) { throw "git-filter-repo failed" }
 
     $fileCount = (git ls-files | Measure-Object).Count

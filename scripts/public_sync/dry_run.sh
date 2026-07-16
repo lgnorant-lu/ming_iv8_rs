@@ -12,18 +12,14 @@ mkdir -p "$WORK_ROOT" "$REPORT_DIR"
 echo "== build keep paths =="
 uv run python scripts/public_sync/build_keep_paths.py --print-stats -o "$KEEP_LIST"
 
-echo "== ensure git-filter-repo =="
-uv run python -c "import git_filter_repo" 2>/dev/null || uv pip install git-filter-repo
-
 echo "== clone =="
 rm -rf "$CLONE_DIR"
 git clone --no-local "$REPO_ROOT" "$CLONE_DIR"
 cd "$CLONE_DIR"
 git remote remove origin 2>/dev/null || true
 
-echo "== filter-repo =="
-# Use monorepo uv project so git-filter-repo is resolvable (not the clone's empty venv)
-uv run --project "$REPO_ROOT" python -m git_filter_repo --force --paths-from-file "$KEEP_LIST"
+echo "== filter-repo (uv --with git-filter-repo) =="
+uv run --with git-filter-repo python -m git_filter_repo --force --paths-from-file "$KEEP_LIST"
 git ls-files > "$REPORT_DIR/filtered-ls-files.txt"
 git log --oneline -20 > "$REPORT_DIR/filtered-log-head.txt"
 
