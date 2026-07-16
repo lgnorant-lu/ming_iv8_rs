@@ -129,6 +129,14 @@ jobs:
       - name: Run Python tests (exclude e2e)
         run: uv run --with pytest pytest tests -q --tb=short -m "not e2e"
 
+      - name: Check API docs inventory
+        run: uv run python scripts/_api_doc_inventory_ci.py
+
+      - name: Build Sphinx docs
+        run: |
+          uv pip install sphinx sphinx-rtd-theme
+          uv run sphinx-build -b html docs/source docs/source/_build/html
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -180,6 +188,14 @@ jobs:
       - name: Run Python tests (exclude e2e)
         run: uv run --with pytest pytest tests -q --tb=short -m "not e2e"
 
+      - name: Check API docs inventory
+        run: uv run python scripts/_api_doc_inventory_ci.py
+
+      - name: Build Sphinx docs
+        run: |
+          uv pip install sphinx sphinx-rtd-theme
+          uv run sphinx-build -b html docs/source docs/source/_build/html
+
   # ─── Python Tests (Windows x64) ─────────────────────────────────────────────
   python-test-windows:
     name: Python Tests (Windows x64)
@@ -221,6 +237,14 @@ jobs:
 
       - name: Run Python tests (exclude e2e)
         run: uv run --with pytest pytest tests -q --tb=short -m "not e2e"
+
+      - name: Check API docs inventory
+        run: uv run python scripts/_api_doc_inventory_ci.py
+
+      - name: Build Sphinx docs
+        run: |
+          uv pip install sphinx sphinx-rtd-theme
+          uv run sphinx-build -b html docs/source docs/source/_build/html
 
   # ─── Build Wheels (cibuildwheel) ────────────────────────────────────────────
   # Only runs on release or manual trigger

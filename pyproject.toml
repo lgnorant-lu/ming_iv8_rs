@@ -38,6 +38,7 @@ pythonpath = ["python"]
 markers = [
     "e2e: end-to-end tests (slow)",
     "bench: benchmark tests",
+    "slow: slow tests (round-trip DTO, etc.)",
 ]
 
 [tool.ruff]
