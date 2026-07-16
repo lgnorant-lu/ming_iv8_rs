@@ -1,12 +1,24 @@
-# icudtl.dat (ICU 77 common package)
+# icudtl.dat — ICU 77 common data for V8 Intl
 
-Required for V8 Intl. Must match rusty_v8 / V8 14.7 ICU **major 77**
-(symbols `*_77`). Chrome 149 ships icudt78 — **incompatible**.
+## Provenance (official-class)
 
-Loaded by `v8_init.rs` via `IV8_ICUDTL_PATH` (set in `python/iv8_rs/__init__.py`)
-using `v8::icu::set_common_data_77` + `udata_setFileAccess_77(ONLY_PACKAGES)`.
+| Field | Value |
+|---|---|
+| ICU major | **77** (must match rusty_v8 / V8 14.7 `*_77` symbols) |
+| Source class | Chromium ICU common package (`icudt77`) |
+| Obtained from | Deno CLI **v2.9.3** Windows x64 embed (same ICU major as rusty_v8 147) |
+| Size | 10876560 bytes |
+| NOT compatible | Chrome 149 `icudt78`, ref-iv8 package `icudt73` |
 
-Refresh: extract from Deno/Chromium build matching V8 14.7 ICU 77, or
-rusty_v8 release assets when they publish `third_party/icu/common/icudtl.dat`.
+## Load path
 
-Do not substitute random Chrome icudtl without checking `icudtNN` tag inside the file.
+1. Python: `IV8_ICUDTL_PATH` → this file (see `__init__.py`)
+2. Rust: `v8::icu::set_common_data_77` + `udata_setFileAccess_77(ONLY_PACKAGES)`
+3. Optional embed fallback: `crates/iv8-core/data/icudtl.dat`
+
+## Refresh
+
+When upgrading V8 major, re-extract ICU data matching that major from:
+- Deno release for the same V8 line, or
+- Chromium `third_party/icu/common/icudtl.dat` at the ICU revision used by that V8,
+  **after verifying** the `icudtNN` tag inside the file matches `U_ICU_VERSION_MAJOR`.

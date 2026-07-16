@@ -1371,9 +1371,24 @@ impl EmbeddedV8Kernel {
             v8::V8::set_fatal_error_handler(fatal_handler);
         });
 
+        // Profile timezone → process TZ (Deno/Chromium model). Must run before
+        // isolate Date/Intl caches host zone. Multi-context different TZ in one
+        // process is not supported; last writer wins (document in profile contract).
+        if let Some(tz) = environment.get_str("timezone") {
+            if !tz.is_empty() {
+                // SAFETY: process-global TZ for ICU DefaultTimeZone; intentional.
+                unsafe {
+                    std::env::set_var("TZ", tz);
+                }
+            }
+        }
+
         let mut isolate = v8::Isolate::new(
             v8::CreateParams::default().heap_limits(512 * 1024 * 1024, 4 * 1024 * 1024 * 1024),
         );
+
+        // Reload host timezone into V8 Date/Intl caches after TZ env set.
+        isolate.date_time_configuration_change_notification(v8::TimeZoneDetection::Redetect);
 
         // Set microtask policy to Explicit (we drive microtasks manually)
         isolate.set_microtasks_policy(v8::MicrotasksPolicy::Explicit);
@@ -2585,23 +2600,9 @@ impl EmbeddedV8Kernel {
         // 16b removed — browser_apis.js archived in v0.8.27.
         // 1284 IDL templates + navigator_extras.js cover all API existence stubs.
 
-        // 17. Timezone presentation: DO NOT replace Intl.DateTimeFormat constructor.
-        //
-        // Root cause (2026-07-16): wrapping `Intl.DateTimeFormat` with a JS function
-        // that calls `new _origDTF(...)` / `Reflect.construct` fatally re-enters on
-        // this V8 embed (scavenge ~26MB loop reported as "OOM"). Bare
-        // `new Date().toLocaleString()` and `new Intl.DateTimeFormat()` both die.
-        // H5guard.init() and any site using locale Date/Intl hits the same path.
-        //
-        // Deep-robust approach:
-        // 1) Prefer V8 isolate DateTimeConfigurationChangeNotification when we can
-        //    set host TZ (future: wire env timezone → ICU default).
-        // 2) For now: only patch `resolvedOptions` on the *native* prototype to
-        //    fill missing timeZone — never replace the constructor.
-        // 3) Date.prototype.toLocale* stay native (they need a working DTF).
-        //
-        // External refs: happy-dom/jsdom timer-OOM classes; Vitest "real browser
-        // for Intl" guidance; Deno uses V8 ICU defaults rather than JS DTF wrap.
+        // 17. Timezone: process TZ + isolate Redetect (see init_kernel). No JS
+        // DateTimeFormat constructor wrap (re-entrancy fatal). Optional
+        // resolvedOptions fill only if ICU left timeZone empty.
         {
             let tz = {
                 let state = crate::state::RuntimeState::get(&self.isolate);
@@ -2617,17 +2618,7 @@ impl EmbeddedV8Kernel {
 (function() {{
     var _tz = '{tz}';
     if (typeof Intl === 'undefined' || typeof Intl.DateTimeFormat !== 'function') return;
-    // If a previous broken wrap is installed, restore native if we stashed it.
-    try {{
-        if (Intl.DateTimeFormat.__iv8_tz_native) {{
-            var _n = Intl.DateTimeFormat.__iv8_tz_native;
-            Object.defineProperty(Intl, 'DateTimeFormat', {{
-                value: _n, writable: true, enumerable: false, configurable: true
-            }});
-        }}
-    }} catch (e) {{}}
-    var _DTF = Intl.DateTimeFormat;
-    var _proto = _DTF.prototype;
+    var _proto = Intl.DateTimeFormat.prototype;
     if (_proto.__iv8_tz_resolved_v3) return;
     var _origResolved = _proto.resolvedOptions;
     if (typeof _origResolved !== 'function') return;
