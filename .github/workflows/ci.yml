@@ -322,28 +322,28 @@ jobs:
         uses: pypa/cibuildwheel@v2.21.3
         env:
           CIBW_ARCHS: ${{ matrix.platform.cibw_archs }}
-          # Build cp313 and cp313t (free-threaded)
-          CIBW_BUILD: "cp313-* cp313t-*"
-          CIBW_SKIP: "*-musllinux_*"
-          # Install Rust in Linux containers
+          CIBW_BUILD: "cp313-*"
+          CIBW_SKIP: "*-musllinux_* cp313t-*"
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_BEFORE_ALL_LINUX: >
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y &&
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 &&
             source $HOME/.cargo/env
           CIBW_ENVIRONMENT_LINUX: >
             PATH="$HOME/.cargo/bin:$PATH"
             CARGO_NET_GIT_FETCH_WITH_CLI=true
-          # macOS: ensure Rust is available
+            RUST_MIN_STACK=134217728
           CIBW_BEFORE_ALL_MACOS: >
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y &&
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 &&
             source $HOME/.cargo/env
           CIBW_ENVIRONMENT_MACOS: >
             PATH="$HOME/.cargo/bin:$PATH"
-          # Build command: use maturin
-          CIBW_BUILD_FRONTEND: "build[uv]"
-          # Test the wheel
+            RUST_MIN_STACK=134217728
+          CIBW_ENVIRONMENT_WINDOWS: >
+            RUST_MIN_STACK=134217728
+          CIBW_BUILD_FRONTEND: "build"
           CIBW_TEST_REQUIRES: "pytest"
           CIBW_TEST_COMMAND: "pytest {project}/tests/smoke_test.py -q"
-          # Repair wheels
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
             auditwheel repair -w {dest_dir} {wheel}
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >

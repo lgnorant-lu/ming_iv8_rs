@@ -52,7 +52,9 @@ jobs:
           platforms: arm64
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.96.0"
 
       - name: Cache cargo + cibuildwheel
         uses: actions/cache@v4
@@ -63,10 +65,10 @@ jobs:
             ~/.cargo/.rusty_v8
             ~/cache/cibuildwheel
             target
-          key: ${{ runner.os }}-${{ matrix.platform.arch }}-cibw-${{ hashFiles('**/Cargo.lock', 'pyproject.toml') }}
+          key: ${{ runner.os }}-${{ matrix.platform.arch }}-cibw2-${{ hashFiles('**/Cargo.lock', 'pyproject.toml') }}
           restore-keys: |
+            ${{ runner.os }}-${{ matrix.platform.arch }}-cibw2-
             ${{ runner.os }}-${{ matrix.platform.arch }}-cibw-
-            ${{ runner.os }}-${{ matrix.platform.arch }}-cargo-
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -78,21 +80,29 @@ jobs:
         uses: pypa/cibuildwheel@v2.21.3
         env:
           CIBW_ARCHS: ${{ matrix.platform.cibw_archs }}
-          CIBW_BUILD: "cp313-* cp313t-*"
-          CIBW_SKIP: "*-musllinux_*"
+          # V8 147 needs C++20 / manylinux_2_28 (not manylinux2014)
+          CIBW_BUILD: "cp313-*"
+          CIBW_SKIP: "*-musllinux_* cp313t-*"
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_CACHE_PATH: ~/cache/cibuildwheel
           CIBW_BEFORE_ALL_LINUX: >
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y &&
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 &&
             source $HOME/.cargo/env
           CIBW_ENVIRONMENT_LINUX: >
             PATH="$HOME/.cargo/bin:$PATH"
             CARGO_NET_GIT_FETCH_WITH_CLI=true
+            RUST_MIN_STACK=134217728
           CIBW_BEFORE_ALL_MACOS: >
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y &&
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 &&
             source $HOME/.cargo/env
           CIBW_ENVIRONMENT_MACOS: >
             PATH="$HOME/.cargo/bin:$PATH"
-          CIBW_BUILD_FRONTEND: "build[uv]"
+            RUST_MIN_STACK=134217728
+          CIBW_ENVIRONMENT_WINDOWS: >
+            RUST_MIN_STACK=134217728
+          # Avoid build[uv] host uv requirement; maturin via pep517 still works
+          CIBW_BUILD_FRONTEND: "build"
           CIBW_TEST_REQUIRES: "pytest"
           CIBW_TEST_COMMAND: "pytest {project}/tests/smoke_test.py -q"
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
