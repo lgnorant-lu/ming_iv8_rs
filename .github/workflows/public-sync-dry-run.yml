@@ -1,0 +1,86 @@
+# Public dual-repo path-filter dry-run. NEVER pushes to a public remote.
+name: Public Sync Dry-Run
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "docs/roadmap/v0.8/analysis/public-paths-*.txt"
+      - "scripts/public_sync/**"
+      - ".github/workflows/public-sync-dry-run.yml"
+  push:
+    branches: [main]
+    paths:
+      - "docs/roadmap/v0.8/analysis/public-paths-*.txt"
+      - "scripts/public_sync/**"
+      - ".github/workflows/public-sync-dry-run.yml"
+
+concurrency:
+  group: public-sync-dry-run-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dry-run:
+    name: Filter dry-run + LEAK scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Setup Python
+        run: uv python install 3.13
+
+      - name: Install git-filter-repo into project env
+        run: uv pip install git-filter-repo
+
+      - name: Build keep path list
+        run: |
+          uv run python scripts/public_sync/build_keep_paths.py --print-stats \
+            -o scripts/public_sync/generated/keep-paths.txt
+
+      - name: Clone and filter (local only)
+        run: |
+          set -euo pipefail
+          WORK="${RUNNER_TEMP}/public-dry-run"
+          CLONE="$WORK/filtered-repo"
+          REPORT="$WORK/report"
+          mkdir -p "$REPORT"
+          git clone --no-local "$GITHUB_WORKSPACE" "$CLONE"
+          cd "$CLONE"
+          git remote remove origin || true
+          # Run filter-repo via the checked-out project's uv env (not clone .venv)
+          uv run --project "$GITHUB_WORKSPACE" python -m git_filter_repo --force \
+            --paths-from-file "$GITHUB_WORKSPACE/scripts/public_sync/generated/keep-paths.txt"
+          git ls-files > "$REPORT/filtered-ls-files.txt"
+          git log --oneline -30 > "$REPORT/filtered-log-head.txt"
+          echo "filtered_files=$(wc -l < "$REPORT/filtered-ls-files.txt")" >> "$GITHUB_STEP_SUMMARY"
+          mkdir -p "$GITHUB_WORKSPACE/scripts/public_sync/generated"
+          cp -r "$REPORT" "$GITHUB_WORKSPACE/scripts/public_sync/generated/last-dry-run-report"
+          echo "CLONE=$CLONE" >> "$GITHUB_ENV"
+
+      - name: LEAK scan (fail on HIGH only)
+        run: |
+          # Medium hits (e.g. CHANGELOG cross-links to private docs) are reported
+          # but do not fail CI until scrubbed. HIGH always fails.
+          uv run python scripts/public_sync/leak_scan.py \
+            --root "$CLONE" \
+            --report scripts/public_sync/generated/last-dry-run-report/leak-scan.md
+
+      - name: Upload dry-run report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-sync-dry-run-report
+          path: scripts/public_sync/generated/last-dry-run-report/
+          if-no-files-found: warn
+
+      - name: Guard — no public push secrets required
+        run: |
+          echo "This job never pushes to a public remote."
+          echo "Authorize a separate release workflow for public create/push."

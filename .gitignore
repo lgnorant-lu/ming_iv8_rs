@@ -165,3 +165,6 @@ data/wpt-report-v088*.json
 # Sphinx generated HTML (do not treat as SoT)
 docs/source/_build/
 
+# Public dual-repo dry-run outputs (local only)
+scripts/public_sync/generated/
+
