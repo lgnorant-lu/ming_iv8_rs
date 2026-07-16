@@ -157,7 +157,7 @@ ctx.close()
 | 文档 | 用途 |
 |---|---|
 | **[docs/api/](docs/api/)** | 稳定 API 契约（分层；公仓向） |
-| **[docs/GUIDE.md](docs/GUIDE.md)** | 长教程、演进说明 |
+| **[docs/GUIDE.public.md](docs/GUIDE.public.md)** | 公仓教程裁剪（§1–16）；完整 GUIDE 偏私仓演进日记 |
 | **[CHANGELOG.md](CHANGELOG.md)** | 版本增量 |
 | **[docs/quality-harness/](docs/quality-harness/)** | 质量门禁定义 |
 | **[docs/conventions/](docs/conventions/)** | 命名 / 测试 / 文档 / docstring 规范 |

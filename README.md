@@ -166,7 +166,7 @@ Instrumentation: [docs/api/instrumentation/](docs/api/instrumentation/).
 | Doc | Role |
 |---|---|
 | **[docs/api/](docs/api/)** | Stable API contracts (layered; public-oriented) |
-| **[docs/GUIDE.md](docs/GUIDE.md)** | Long tutorials, evolution notes |
+| **[docs/GUIDE.public.md](docs/GUIDE.public.md)** | Public tutorial cut (§1–16); full GUIDE is private-oriented |
 | **[CHANGELOG.md](CHANGELOG.md)** | Per-version deltas |
 | **[docs/quality-harness/](docs/quality-harness/)** | Quality gate definitions |
 | **[docs/conventions/](docs/conventions/)** | Naming / testing / docs / docstring standards |

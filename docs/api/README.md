@@ -11,13 +11,14 @@
 | **Contracts (read first)** | **This tree** (`docs/api/`) | Stable calling contracts, host bounds, offline/network honesty, tiers |
 | **Generated reference** | Sphinx (`docs/source/` → local `sphinx-build`) | Browsable pages from live `__doc__` after `maturin develop` |
 | **Types** | `python/iv8_rs/_iv8.pyi` | IDE / typecheck shape |
-| **Tutorials** | [../GUIDE.md](../GUIDE.md) | Long narrative (full GUIDE may stay private-oriented; see public cut) |
+| **Tutorials (public)** | [../GUIDE.public.md](../GUIDE.public.md) | Public cut §1–16 |
+| **Tutorials (full / private-oriented)** | [../GUIDE.md](../GUIDE.md) | Includes version waterfall; not on public keep list |
 
 Sphinx HTML under `docs/source/_build/` is **generated** (gitignored). Do not treat build output as SoT.
 
 | If you need… | Go to |
 |---|---|
-| Install + 30-second mental model | root [README](../../README.md), [../GUIDE.md](../GUIDE.md) §1–2 |
+| Install + 30-second mental model | root [README](../../README.md), [../GUIDE.public.md](../GUIDE.public.md) |
 | **Stable calling contracts** | This tree |
 | Version-to-version deltas | [../../CHANGELOG.md](../../CHANGELOG.md) |
 | Quality gates / matrices | [../quality-harness/](../quality-harness/) |
