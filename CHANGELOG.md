@@ -6,6 +6,46 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.102] - 2026-07-16
+
+> Local milestone tag (not a package release). Package metadata remains **0.8.12** (D-151 dual-track).
+> Mode: Lightweight Increment. Continuum close 2026-07-16.
+
+### Added / Fixed
+- **ICU 77 host data**: `set_common_data_77` + `udata_setFileAccess_77`; package `icudtl.dat` / `IV8_ICUDTL_PATH`; H5guard.init / `Intl` / `Date.toLocaleString` no longer Icu-error/OOM
+- **Timezone**: `environment.timezone` → process `TZ` + isolate `TimeZoneDetection::Redetect`; removed fatal JS `DateTimeFormat` constructor wrap
+- **DOM**: `getElementsByTagName("*")` wildcard; NodeList `forEach`/`iterator`/`values` (K-NODELIST-ITER); FREEZE_ALL pre-install iterable
+- **Sample track (docs + local evidence)**: VM-017 XHS Path A; VM-018 GeeTest loader-only honesty; VM-019 mtgsig form dual
+- **Publish prep (private docs only)**: dual-repo strategy; public-paths keep/drop v3; dry-run LEAK_CHECK; no public remote
+
+### Quality Gates
+- `cargo test -p iv8-core --lib -- --test-threads=1`: **520 PASS**
+- Package metadata: **0.8.12** (unchanged)
+
+### Explicit non-goals
+- Package bump; public git push; zero-VM TDC production default; W3–W9 freestyle
+
+## [v0.8.101] - 2026-07-16
+
+> Local milestone tag (not a package release). Package metadata remains **0.8.12** (D-151 dual-track).
+> Mode: Lightweight Increment (scope-brief + robust-design). Continuum close 2026-07-16
+> (implementation primarily 2026-07-15; formal summary 2026-07-16).
+
+### Added / Fixed
+- **Q165 ChaosVM path A**: multi-site `instrument_source` dispatch rewrite; host-safe env Proxies; `expose_handlers` optional
+- **Response ctor body**: `new Response(body).text/json` via `__body__`
+- **K-ISOLATE-INIT-SERIAL**: kernel init wait+notify + GIL allow_threads; Snapshot full-kernel **P2-SEALED**
+- **K-COOKIE-SETTER-COERCE**: document.cookie force string under polluted String/trim
+- **Sample portfolio**: TDC pipeline dual; a_bogus dual; DataDome session helper; ctrip dual notes; yy vs QQyinyue identity
+- **Q163/Q164 honesty**: offline-first bundler bounds documented
+
+### Quality Gates
+- ChaosVM / TDC instrument tests held (see scope-brief G1–G5)
+- Package metadata: **0.8.12** (unchanged)
+
+### Explicit non-goals
+- Remote ensureChunk product; Branch B; idlharness 100%; W3–W9 freestyle
+
 ## [v0.8.100] - 2026-07-15
 
 > Local milestone tag **and** authorized package-track bump (D-151 dual-track).

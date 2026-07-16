@@ -3,10 +3,12 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.100 closed continuum (W1 Layer C + W2 receiver high-signal; residual DEFER/BOUND walls; package **0.8.12** D-151) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.102 closed continuum (ICU Intl host + DOM NodeList/`*` + sample Path A; package **0.8.12** D-151). Prior: v0.8.101 sample/instrument; v0.8.100 W1/W2. — [Progress](docs/PROGRESS.md)
 
 ## Features
 
+- **v0.8.102 host + sample + publish-prep**: ICU 77 data load (H5guard/Intl); TZ Redetect; `getElementsByTagName('*')` + NodeList iterable; sample Path A docs; dual-repo/public-paths drafts (private only)
+- **v0.8.101 sample-driven hardening**: ChaosVM `instrument_source` path A; Response ctor body; isolate init serial; cookie setter coerce; TDC/a_bogus/DataDome dual notes
 - **v0.8.100 W1/W2 hang close**: Layer C DocRc streaming `page_load`; Q070/Q080/Q081/Q082 lifecycle/timer/write; html5ever 0.39; Worker module static+dynamic import; high-signal Illegal invocation (EventTarget brand-first, Location, fetch, gBR, activeElement, URL setters); Q039 dual Nav BOUND; residual ledger `docs/todo/TODO-v0.8.100-residual.md`
 - **v0.8.99 S7 bundler**: BDMS minified detect; factory install; edges/cycles/chunk_id; named webpackChunk*; preload; AMD subset; VLQ; L0–L2 fixtures
 - **v0.8.98 S6 plane+probes**: hybrid exists-all IDL pack; Event isTrusted/Worker.length/HTMLAll brand-check; high-signal consistency tests; coverage matrix
