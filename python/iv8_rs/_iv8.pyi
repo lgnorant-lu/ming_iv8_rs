@@ -63,6 +63,7 @@ def instrument_source(
     stack_var: str | None = None,
     index_array: str | None = None,
     dispatch_pattern: str | None = None,
+    expose_handlers: bool = False,
 ) -> tuple[str, dict[str, Any]]:
     """
     Detect JSVMP pattern and inject unified tracing code.
@@ -86,14 +87,46 @@ def instrument_source(
         stack_var: Manual override for stack variable name.
         index_array: Manual override for index/bytecode array variable name.
         dispatch_pattern: Manual override for the dispatch expression string.
+        expose_handlers: If True, assign handler table to globalThis.__iv8_vm_handlers__.
 
     Returns:
         Tuple of (patched_source, vm_info_dict).
         vm_info_dict keys: handler_array, index_array, pc_var, stack_var,
-        mode, dispatch_pattern, dispatch_offset, head_code_length.
+        mode, dispatch_pattern, dispatch_offset, head_code_length, …
 
     Raises:
         RuntimeError: If no JSVMP dispatch pattern detected and no manual params given.
+    """
+    ...
+
+
+def prepare_entry(
+    source: str,
+    persona: str = "analysis",
+    entry_targets: list[str] | None = None,
+) -> dict[str, Any]:
+    """Plan a single-source entry (EntryPlan-shaped dict). persona: runtime|analysis."""
+    ...
+
+
+def plan_multi_entry(
+    sources: list[tuple[str, str]],
+    persona: str = "analysis",
+) -> dict[str, Any]:
+    """Plan multiple named sources. sources: list of (name, source_text)."""
+    ...
+
+
+def run_with_entry(
+    plan: dict[str, Any],
+    source: str,
+    chunks: list[str] | None = None,
+    entry_expr: str | None = None,
+) -> dict[str, Any]:
+    """
+    Execute a prepared entry plan.
+
+    chunks: ordered JS source strings evaluated before source (no URL fetch).
     """
     ...
 
@@ -147,6 +180,7 @@ class JSContext:
         random_seed: int | None = None,
         crypto_seed: int | None = None,
         time_freeze: float | None = None,
+        worker_mode: bool = False,
     ) -> None:
         """
         Create a new JSContext.
@@ -158,6 +192,7 @@ class JSContext:
             config: Additional configuration. Supported keys:
                 - timezone: IANA timezone string (e.g. "America/New_York")
                 - locale: BCP 47 locale string (e.g. "zh-CN")
+                - storage_path: optional path for storage persistence
             time_mode: "logical" (default, controlled clock) or "system" (real clock).
             js_api: Name of the internal tool object (default "__iv8__").
             strict_compat: If True (default), replicate iv8 0.1.2 behavior.
@@ -165,6 +200,7 @@ class JSContext:
             random_seed: Seed for deterministic Math.random() (v0.3).
             crypto_seed: Seed for deterministic crypto.getRandomValues() (v0.3).
             time_freeze: Frozen timestamp in ms for Date.now() (v0.3).
+            worker_mode: Worker-side construction path (native).
         """
         ...
 
@@ -258,6 +294,15 @@ class JSContext:
 
         After calling this, document.getElementById, querySelector, etc. work.
         """
+        ...
+
+    def page_load_with_headers(
+        self,
+        html: str,
+        base_url: str | None = None,
+        headers: dict[str, str] | None = None,
+    ) -> None:
+        """Load HTML with response header context (e.g. Set-Cookie)."""
         ...
 
     # --- Expose ---
@@ -362,6 +407,10 @@ class JSContext:
         """Step into (enter function calls)."""
         ...
 
+    def cdp_step_out(self) -> None:
+        """Step out of the current function."""
+        ...
+
     def cdp_get_call_frames(self) -> list[dict[str, Any]] | None:
         """
         Get call frames from the last breakpoint pause.
@@ -379,6 +428,14 @@ class JSContext:
         Returns:
             True if a Debugger.paused event was received.
         """
+        ...
+
+    def cdp_get_scope_properties(
+        self,
+        object_id: str,
+        own_properties: bool = True,
+    ) -> list[dict[str, Any]] | Any:
+        """Get scope / object properties while paused (CDP Runtime.getProperties)."""
         ...
 
     # --- Trace Mode (v0.3 M16) ---
@@ -635,6 +692,26 @@ class JSContext:
 
     def clear_console_messages(self) -> None:
         """Clear all captured console messages."""
+        ...
+
+    # --- Storage ---
+
+    def persist_storage(self, path: str) -> None:
+        """Persist storage state to path."""
+        ...
+
+    def load_storage(self, path: str) -> None:
+        """Load storage state from path."""
+        ...
+
+    # --- Worker internal ---
+
+    def set_worker_prototype(self) -> None:
+        """
+        Set globalThis.__proto__ to DedicatedWorkerGlobalScope.prototype.
+
+        Worker construction path; not a general application API.
+        """
         ...
 
     # --- Lifecycle ---
