@@ -5,3 +5,18 @@ incremental = true
 
 [env]
 RUST_MIN_STACK = "1342177128"
+
+# V8 static lib uses initial-exec TLS (g_current_isolate_). Linking into a
+# Python extension .so needs GNU bfd (not rust-lld) + -z notext, else:
+#   R_X86_64_TPOFF32 ... cannot be used with -shared
+[target.x86_64-unknown-linux-gnu]
+rustflags = [
+    "-C", "link-arg=-fuse-ld=bfd",
+    "-C", "link-arg=-Wl,-z,notext",
+]
+
+[target.aarch64-unknown-linux-gnu]
+rustflags = [
+    "-C", "link-arg=-fuse-ld=bfd",
+    "-C", "link-arg=-Wl,-z,notext",
+]
