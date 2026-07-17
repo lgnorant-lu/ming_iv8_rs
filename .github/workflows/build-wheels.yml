@@ -113,23 +113,12 @@ jobs:
           # CARGO_HOME under /project → rustup env is $CARGO_HOME/env not ~/.cargo.
           # Chromium clang (V8_FROM_SOURCE) needs host gcc runtime: crtbeginS.o, -lgcc_s.
           CIBW_BEFORE_ALL_LINUX: >
-            strings /lib64/libstdc++.so.6 | grep -q GLIBCXX_3.4.26 &&
-            (dnf install -y gcc gcc-c++ 2>&1 || yum install -y gcc gcc-c++ 2>&1) &&
-            CRT=$(find /usr -name crtbeginS.o 2>/dev/null | head -1) &&
-            if [ -z "$CRT" ]; then echo "FATAL: crtbeginS.o not found after gcc install" >&2; exit 1; fi &&
-            echo "Found CRT=$CRT" &&
-            GCCLIB=$(dirname "$CRT") &&
-            printf 'export LIBRARY_PATH=%s:/usr/lib64:/lib64\nexport LD_LIBRARY_PATH=%s:/usr/lib64:/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\nexport CFLAGS=-B%s\nexport CXXFLAGS=-B%s\n' "$GCCLIB" "$GCCLIB" "$GCCLIB" "$GCCLIB" > /project/.iv8-ld.env &&
-            cat /project/.iv8-ld.env &&
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
             export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH" &&
             (rustup component remove clippy 2>/dev/null || true)
-          CIBW_BEFORE_BUILD_LINUX: >
-            . /project/.iv8-ld.env &&
-            echo "LIBRARY_PATH=$LIBRARY_PATH"
-          # Linux cdylib + rusty_v8: git v8 + V8_FROM_SOURCE + monolithic TLS
-          # (prebuilt libv8.a has TPOFF32 / hidden g_current_isolate_).
+          # crates.io prebuilt libv8: Linux cdylib may still hit TPOFF32
+          # (rusty_v8#1706). Custom TLS-safe archive is a follow-up job.
           CIBW_ENVIRONMENT_LINUX: >
             PATH=/project/.cargo-cibw/bin:/root/.cargo/bin:$PATH
             CARGO_NET_GIT_FETCH_WITH_CLI=true
@@ -137,23 +126,17 @@ jobs:
             CARGO_TARGET_DIR=/project/target
             CARGO_HOME=/project/.cargo-cibw
             RUSTUP_HOME=/project/.rustup-cibw
-            V8_FROM_SOURCE=1
-            GN_ARGS="v8_monolithic=true v8_monolithic_for_shared_library=true"
           CIBW_BEFORE_ALL_MACOS: >
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
             export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH" &&
             (rustup component remove clippy 2>/dev/null || true)
-          # Git v8 needs RUSTY_V8_MIRROR to fetch src_binding_*.rs (crates.io
-          # package embeds gen/; bare git checkout does not).
           CIBW_ENVIRONMENT_MACOS: >
             PATH="$HOME/.cargo/bin:$PATH"
             RUST_MIN_STACK=134217728
             CARGO_TARGET_DIR=${{ github.workspace }}/target
-            RUSTY_V8_MIRROR=https://github.com/denoland/rusty_v8/releases/download
           CIBW_ENVIRONMENT_WINDOWS: >
             RUST_MIN_STACK=134217728
-            RUSTY_V8_MIRROR=https://github.com/denoland/rusty_v8/releases/download
           CIBW_BUILD_FRONTEND: "build"
           CIBW_TEST_REQUIRES: "pytest"
           # Avoid tests/conftest.py importorskip against half-imported package

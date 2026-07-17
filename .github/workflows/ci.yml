@@ -334,8 +334,7 @@ jobs:
             PATH="$HOME/.cargo/bin:$PATH"
             CARGO_NET_GIT_FETCH_WITH_CLI=true
             RUST_MIN_STACK=134217728
-            V8_FROM_SOURCE=1
-            GN_ARGS="v8_monolithic=true v8_monolithic_for_shared_library=true"
+
           CIBW_BEFORE_ALL_MACOS: >
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
