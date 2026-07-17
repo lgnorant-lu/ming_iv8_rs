@@ -115,11 +115,13 @@ jobs:
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
             export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH" &&
             (rustup component remove clippy 2>/dev/null || true)
-          # Linux cdylib + rusty_v8: default prebuilt libv8.a uses local-exec TLS
-          # (R_X86_64_TPOFF32 / hidden g_current_isolate_ → cannot link -shared).
-          # V8_FROM_SOURCE builds with V8_TLS_USED_IN_LIBRARY (see v8 build.rs).
-          # .cargo/config.toml still uses bfd + -z notext as belt-and-suspenders.
-          # Do not put multi-flag RUSTFLAGS in CIBW_ENVIRONMENT (space-split).
+          # Linux cdylib + rusty_v8: prebuilt libv8.a is local-exec TLS
+          # (TPOFF32 / hidden g_current_isolate_ → cannot link -shared).
+          # crates.io package cannot V8_FROM_SOURCE (vendor stripped).
+          # Workspace uses git denoland/rusty_v8@v147.4.0; FROM_SOURCE + GN:
+          #   v8_monolithic + v8_monolithic_for_shared_library → V8_TLS_USED_IN_LIBRARY
+          # (v147 build.rs extra_cflags= is a no-op declare_args warning).
+          # Quote GN_ARGS — CIBW_ENVIRONMENT splits unquoted spaces.
           CIBW_ENVIRONMENT_LINUX: >
             PATH="/project/.cargo-cibw/bin:$HOME/.cargo/bin:$PATH"
             CARGO_NET_GIT_FETCH_WITH_CLI=true
@@ -128,6 +130,7 @@ jobs:
             CARGO_HOME=/project/.cargo-cibw
             RUSTUP_HOME=/project/.rustup-cibw
             V8_FROM_SOURCE=1
+            GN_ARGS="v8_monolithic=true v8_monolithic_for_shared_library=true"
           CIBW_BEFORE_ALL_MACOS: >
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&

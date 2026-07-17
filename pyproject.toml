@@ -66,7 +66,7 @@ before-all = [
     ". \"${CARGO_HOME:-$HOME/.cargo}/env\"",
     "export PATH=\"${CARGO_HOME:-$HOME/.cargo}/bin:$PATH\"",
 ]
-environment = { PATH = "/project/.cargo-cibw/bin:$HOME/.cargo/bin:$PATH", CARGO_NET_GIT_FETCH_WITH_CLI = "true", RUST_MIN_STACK = "134217728", CARGO_HOME = "/project/.cargo-cibw", RUSTUP_HOME = "/project/.rustup-cibw", CARGO_TARGET_DIR = "/project/target", V8_FROM_SOURCE = "1" }
+environment = { PATH = "/project/.cargo-cibw/bin:$HOME/.cargo/bin:$PATH", CARGO_NET_GIT_FETCH_WITH_CLI = "true", RUST_MIN_STACK = "134217728", CARGO_HOME = "/project/.cargo-cibw", RUSTUP_HOME = "/project/.rustup-cibw", CARGO_TARGET_DIR = "/project/target", V8_FROM_SOURCE = "1", GN_ARGS = "v8_monolithic=true v8_monolithic_for_shared_library=true" }
 repair-wheel-command = "auditwheel repair -w {dest_dir} {wheel}"
 manylinux-x86_64-image = "manylinux_2_28"
 manylinux-aarch64-image = "manylinux_2_28"
