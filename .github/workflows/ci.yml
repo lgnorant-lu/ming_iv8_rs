@@ -319,7 +319,7 @@ jobs:
         run: pip install cibuildwheel==2.21.3
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.21.3
+        uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_ARCHS: ${{ matrix.platform.cibw_archs }}
           CIBW_BUILD: "cp313-*"

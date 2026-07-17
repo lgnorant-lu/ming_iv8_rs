@@ -95,15 +95,13 @@ jobs:
           cache: pip
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.21.3
+        # 2.21 looks for /opt/python/cp38 inside manylinux_2_34 (removed) → exit 127.
+        uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_ARCHS: ${{ matrix.platform.cibw_archs }}
           CIBW_BUILD: "cp313-*"
           CIBW_SKIP: "*-musllinux_* cp313t-*"
-          # manylinux_2_34 (Alma 9): base libstdc++ has GLIBCXX_3.4.26+ so
-          # Chromium rust-toolchain bindgen works without LD_PRELOAD hacks.
-          # 2_28 base /lib64 is too old; toolset libstdc++.so is a linker script.
-          # Full quay paths: cibuildwheel 2.21 short-name map may lack 2_34.
+          # manylinux_2_34: base GLIBCXX_3.4.26+ for Chromium bindgen (V8_FROM_SOURCE).
           CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux_2_34_x86_64
           CIBW_MANYLINUX_AARCH64_IMAGE: quay.io/pypa/manylinux_2_34_aarch64
           CIBW_CACHE_PATH: ~/cache/cibuildwheel
