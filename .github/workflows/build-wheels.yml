@@ -14,6 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # macOS + Windows: crates.io prebuilt libv8 (no TPOFF32 issue on those ABIs).
   build-wheels:
     name: Build (${{ matrix.platform.os }} / ${{ matrix.platform.arch }})
     runs-on: ${{ matrix.platform.runner }}
@@ -21,14 +22,6 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - runner: ubuntu-latest
-            os: linux
-            arch: x86_64
-            cibw_archs: x86_64
-          - runner: ubuntu-latest
-            os: linux
-            arch: aarch64
-            cibw_archs: aarch64
           - runner: macos-13
             os: macos
             arch: x86_64
@@ -45,20 +38,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up QEMU (Linux aarch64)
-        if: matrix.platform.os == 'linux' && matrix.platform.arch == 'aarch64'
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm64
-
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: "1.96.0"
           components: rustfmt
 
-      # Host-side caches: registry + target used when CARGO_* point into /project
-      # (Linux docker builds write target to mounted project dir for reuse).
       - name: Cache cargo registry and git
         uses: actions/cache@v4
         with:
@@ -95,37 +80,16 @@ jobs:
           cache: pip
 
       - name: Build wheels
-        # 2.21 looks for /opt/python/cp38 inside manylinux_2_34 (removed) → exit 127.
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_ARCHS: ${{ matrix.platform.cibw_archs }}
           CIBW_BUILD: "cp313-*"
           CIBW_SKIP: "*-musllinux_* cp313t-*"
-          # manylinux_2_34: base GLIBCXX_3.4.26+ for Chromium bindgen (V8_FROM_SOURCE).
-          CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux_2_34_x86_64
-          CIBW_MANYLINUX_AARCH64_IMAGE: quay.io/pypa/manylinux_2_34_aarch64
           CIBW_CACHE_PATH: ~/cache/cibuildwheel
           CIBW_ENVIRONMENT: >
             CARGO_TERM_COLOR=always
             RUST_MIN_STACK=134217728
             CARGO_INCREMENTAL=0
-          # BEFORE_ALL runs under sh: use `.` only, never bash `source`.
-          # CARGO_HOME under /project → rustup env is $CARGO_HOME/env not ~/.cargo.
-          # Chromium clang (V8_FROM_SOURCE) needs host gcc runtime: crtbeginS.o, -lgcc_s.
-          CIBW_BEFORE_ALL_LINUX: >
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
-            . "${CARGO_HOME:-$HOME/.cargo}/env" &&
-            export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH" &&
-            (rustup component remove clippy 2>/dev/null || true)
-          # crates.io prebuilt libv8: Linux cdylib may still hit TPOFF32
-          # (rusty_v8#1706). Custom TLS-safe archive is a follow-up job.
-          CIBW_ENVIRONMENT_LINUX: >
-            PATH=/project/.cargo-cibw/bin:/root/.cargo/bin:$PATH
-            CARGO_NET_GIT_FETCH_WITH_CLI=true
-            RUST_MIN_STACK=134217728
-            CARGO_TARGET_DIR=/project/target
-            CARGO_HOME=/project/.cargo-cibw
-            RUSTUP_HOME=/project/.rustup-cibw
           CIBW_BEFORE_ALL_MACOS: >
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
@@ -138,12 +102,8 @@ jobs:
           CIBW_ENVIRONMENT_WINDOWS: >
             RUST_MIN_STACK=134217728
           CIBW_BUILD_FRONTEND: "build"
-          CIBW_TEST_REQUIRES: "pytest"
-          # Avoid tests/conftest.py importorskip against half-imported package
           CIBW_TEST_COMMAND: >
             python -c "import iv8_rs; c=iv8_rs.JSContext(); assert c.eval('1+1')==2; c.close(); print('smoke_ok', iv8_rs.__version__)"
-          CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
-            auditwheel repair -w {dest_dir} {wheel}
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
             delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
 
@@ -156,11 +116,89 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
+  # Linux x86_64: host build (not manylinux) with V8_FROM_SOURCE.
+  # crates.io prebuilt libv8.a uses local-exec TLS → TPOFF32 when linking .so
+  # (denoland/rusty_v8#1706). Git tree + V8_FROM_SOURCE rebuilds with
+  # v8_monolithic_for_shared_library. Host Ubuntu has modern GLIBCXX/gcc.
+  # Wheel tag is linux_x86_64 (not manylinux) until a TLS-safe prebuilt exists.
+  build-linux-host:
+    name: Build (linux / x86_64 host FROM_SOURCE)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.96.0"
+          components: rustfmt
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git
+            ~/.cargo/.rusty_v8
+            target
+          key: linux-host-v8src-${{ hashFiles('**/Cargo.lock', 'pyproject.toml') }}
+          restore-keys: |
+            linux-host-v8src-
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config ninja-build
+
+      - name: Switch v8 dep to git for V8_FROM_SOURCE
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Cargo forbids dual sources by target; CI-only patch for Linux host.
+          sed -i 's|^v8 = "147"|v8 = { git = "https://github.com/denoland/rusty_v8", tag = "v147.4.0" }|' Cargo.toml
+          grep -n 'v8 =' Cargo.toml | head -5
+          cargo update -p v8
+
+      - name: Build wheel (maturin, V8_FROM_SOURCE)
+        env:
+          V8_FROM_SOURCE: "1"
+          GN_ARGS: "v8_monolithic=true v8_monolithic_for_shared_library=true"
+          RUST_MIN_STACK: "134217728"
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip maturin build
+          mkdir -p wheelhouse
+          maturin build --release --out wheelhouse --interpreter python3.13
+          ls -la wheelhouse/
+
+      - name: Smoke test
+        run: |
+          set -euo pipefail
+          python -m pip install wheelhouse/*.whl
+          python -c "import iv8_rs; c=iv8_rs.JSContext(); assert c.eval('1+1')==2; c.close(); print('smoke_ok', iv8_rs.__version__)"
+
+      - name: Upload wheels
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-linux-x86_64-host
+          path: wheelhouse/*.whl
+          retention-days: 30
+          if-no-files-found: error
+
   publish:
     name: Publish to PyPI
     runs-on: ubuntu-latest
     if: inputs.publish == 'true'
-    needs: [build-wheels]
+    needs: [build-wheels, build-linux-host]
     environment:
       name: pypi
       url: https://pypi.org/p/ming_iv8_rs
