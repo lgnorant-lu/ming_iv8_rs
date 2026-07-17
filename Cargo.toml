@@ -17,10 +17,10 @@ license = "Apache-2.0"
 
 [workspace.dependencies]
 # V8 engine (crates.io prebuilts).
-# Linux cdylib TLS (TPOFF32): needs custom prebuilt / FROM_SOURCE pipeline
-# (git dep pulls chromium.googlesource submodules — flaky on GHA).
-# Track: denoland/rusty_v8#1706; manylinux still fails link until TLS-safe .a.
-v8 = "147"
+# Path A probe: 150.x post-PR#1911 claims Linux prebuilts are shared-library-safe
+# TLS (cdylib). 147.4.0 still TPOFF32 on manylinux/host link of iv8-py .so.
+# If 150 still TPOFF32 → Path B (RUSTY_V8_ARCHIVE), not more manylinux env hacks.
+v8 = "150"
 
 # Python binding
 pyo3 = { version = "0.23", features = ["extension-module"] }

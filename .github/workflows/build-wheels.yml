@@ -116,13 +116,11 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
-  # Linux x86_64: host build (not manylinux) with V8_FROM_SOURCE.
-  # crates.io prebuilt libv8.a uses local-exec TLS → TPOFF32 when linking .so
-  # (denoland/rusty_v8#1706). Git tree + V8_FROM_SOURCE rebuilds with
-  # v8_monolithic_for_shared_library. Host Ubuntu has modern GLIBCXX/gcc.
-  # Wheel tag is linux_x86_64 (not manylinux) until a TLS-safe prebuilt exists.
-  build-linux-host:
-    name: Build (linux / x86_64 host FROM_SOURCE)
+  # Path A: Linux x86_64 host + crates.io prebuilt only (no V8_FROM_SOURCE).
+  # Sole question: does v8 150.x prebuilt link into cdylib without TPOFF32?
+  # PASS → restore manylinux later. FAIL → Path B (self-built RUSTY_V8_ARCHIVE).
+  build-linux-prebuilt:
+    name: Build (linux / x86_64 prebuilt Path A)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -142,9 +140,9 @@ jobs:
             ~/.cargo/git
             ~/.cargo/.rusty_v8
             target
-          key: linux-host-v8src-${{ hashFiles('**/Cargo.lock', 'pyproject.toml') }}
+          key: linux-prebuilt-v8-${{ hashFiles('**/Cargo.lock', 'pyproject.toml') }}
           restore-keys: |
-            linux-host-v8src-
+            linux-prebuilt-v8-
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -155,30 +153,32 @@ jobs:
       - name: Install build deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            build-essential pkg-config ninja-build \
-            libglib2.0-dev libglib2.0-0
+          sudo apt-get install -y build-essential pkg-config
 
-      - name: Switch v8 dep to git for V8_FROM_SOURCE
-        shell: bash
-        run: |
-          set -euo pipefail
-          # Cargo forbids dual sources by target; CI-only patch for Linux host.
-          sed -i 's|^v8 = "147"|v8 = { git = "https://github.com/denoland/rusty_v8", tag = "v147.4.0" }|' Cargo.toml
-          grep -n 'v8 =' Cargo.toml | head -5
-          cargo update -p v8
-
-      - name: Build wheel (maturin, V8_FROM_SOURCE)
+      - name: Build wheel (maturin, prebuilt libv8 only)
         env:
-          V8_FROM_SOURCE: "1"
-          GN_ARGS: "v8_monolithic=true v8_monolithic_for_shared_library=true"
           RUST_MIN_STACK: "134217728"
           CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+          # Explicitly unset — must use crates.io download, not FROM_SOURCE.
+          V8_FROM_SOURCE: ""
         run: |
           set -euo pipefail
-          python -m pip install -U pip maturin build
+          python -m pip install -U pip maturin
           mkdir -p wheelhouse
-          maturin build --release --out wheelhouse --interpreter python3.13
+          # Fail fast on the known TLS symptom
+          set +e
+          maturin build --release --out wheelhouse --interpreter python3.13 2>&1 | tee /tmp/maturin.log
+          code=${PIPESTATUS[0]}
+          set -e
+          if grep -q 'TPOFF32\|g_current_isolate_' /tmp/maturin.log; then
+            echo "PATH_A_RESULT=FAIL_TPOFF32"
+            exit 1
+          fi
+          if [ "$code" -ne 0 ]; then
+            echo "PATH_A_RESULT=FAIL_OTHER exit=$code"
+            exit "$code"
+          fi
+          echo "PATH_A_RESULT=LINK_OK"
           ls -la wheelhouse/
 
       - name: Smoke test
@@ -191,7 +191,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-linux-x86_64-host
+          name: wheels-linux-x86_64-prebuilt
           path: wheelhouse/*.whl
           retention-days: 30
           if-no-files-found: error
@@ -200,7 +200,7 @@ jobs:
     name: Publish to PyPI
     runs-on: ubuntu-latest
     if: inputs.publish == 'true'
-    needs: [build-wheels, build-linux-host]
+    needs: [build-wheels, build-linux-prebuilt]
     environment:
       name: pypi
       url: https://pypi.org/p/ming_iv8_rs
