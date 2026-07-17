@@ -14,7 +14,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # macOS + Windows: crates.io prebuilt libv8 (no TPOFF32 issue on those ABIs).
+  # macOS arm64 + Windows: crates.io prebuilt libv8.
+  # No macos-13 (Intel x86_64): GHA runner pool is scarce and stalls the whole
+  # run; short-term ship arm64 only for Mac (Apple Silicon).
   build-wheels:
     name: Build (${{ matrix.platform.os }} / ${{ matrix.platform.arch }})
     runs-on: ${{ matrix.platform.runner }}
@@ -22,10 +24,6 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - runner: macos-13
-            os: macos
-            arch: x86_64
-            cibw_archs: x86_64
           - runner: macos-latest
             os: macos
             arch: arm64
