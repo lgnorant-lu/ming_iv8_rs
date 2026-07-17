@@ -124,7 +124,7 @@ jobs:
             CARGO_TARGET_DIR=/project/target
             CARGO_HOME=/project/.cargo-cibw
             RUSTUP_HOME=/project/.rustup-cibw
-            RUSTFLAGS=-C link-arg=-Wl,-z,notext
+            RUSTFLAGS=-Clink-arg=-Wl,-z,notext
           CIBW_BEFORE_ALL_MACOS: >
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
