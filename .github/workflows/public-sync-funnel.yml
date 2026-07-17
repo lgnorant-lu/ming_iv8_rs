@@ -3,9 +3,9 @@
 # Requires secret PUBLIC_SYNC_TOKEN (PAT or fine-grained) with contents:write on public ming_iv8_rs.
 name: Public Sync Funnel
 
+# Free-tier: no push trigger (burns private minutes). Manual when needed;
+# day-to-day public sync = local dry_run + force-push (FUNNEL.md).
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
     inputs:
       dry_run:

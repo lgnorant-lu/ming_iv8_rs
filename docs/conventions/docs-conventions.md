@@ -17,8 +17,11 @@ docs/
     README.md              ← 规范索引 + 层级
     naming-conventions.md  ← 命名规范 (模块/类/函数/测试/文档)
     testing-conventions.md ← 测试规范 (层/断言/harness/覆盖)
+    git-hooks-conventions.md ← Git hooks + 双仓路径门禁 + 私/公仓 CI 策略
     api-documentation-conventions.md ← API 文档层级/度量/产出流程
     docs-conventions.md    ← 本文档 (docs/ 自身结构规范)
+
+  releases/                ← 包轨发布说明 (公仓 keep；如 pkg-0.8.12-notes.md)
 
   roadmap/                 ← 路线规划 (按版本组织)
     v0.8/                  ← v0.8 阶段所有文档

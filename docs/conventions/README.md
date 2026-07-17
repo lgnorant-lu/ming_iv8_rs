@@ -23,7 +23,8 @@ breaking existing cross-references), but they are all indexed here.
 | 3b | API Documentation Conventions | `docs/conventions/api-documentation-conventions.md` | Tier A/B/C contracts, measurable metrics D1–D6, production workflow, anti-subjective scoring |
 | 3c | Docstring Conventions | `docs/conventions/docstring-conventions.md` | Google-style `///` / Python docstrings for Sphinx Napoleon |
 | 3d | Docs Toolchain Selection | `docs/conventions/docs-toolchain-selection.md` | Sphinx vs MkDocs vs pdoc decision (keep Sphinx) |
-| 4 | Commit Conventions | `CONTRIBUTING.md` | Subject format (English, ≤72 chars, scoped), body structure (实施内容/本提交不授权/已执行审阅), scope prefixes |
+| 4 | Commit Conventions | `CONTRIBUTING.md` | Subject format (English, ≤72 chars, scoped), body structure (实施内容/本提交不授权/已执行审阅), scope prefixes, dual-repo path gates (§3.6) |
+| 4b | Git Hooks & Dual-Repo Gates | `docs/conventions/git-hooks-conventions.md` | pre-commit/pre-push design, check_staged_paths, dry-run policy, private=storage / public=attestation free-tier CI |
 | 5 | Testing Conventions | `docs/conventions/testing-conventions.md` | Test layers, naming, assertion patterns, harness design, coverage targets, file organization |
 | 6 | Python Testing Conventions | `docs/conventions/python-testing-conventions.md` | Python test naming, fixtures, pytest patterns, contract tests, hypothesis, import safety |
 | 7 | Harness Charter | `docs/quality-harness/HARNESS-CHARTER.md` | Formal Quality Harness (H<NN>) creation criteria, principles, lifecycle, registration |
@@ -38,6 +39,7 @@ breaking existing cross-references), but they are all indexed here.
 Execution Protocol (governs HOW versions are run)
   ├── Naming Conventions (governs WHAT things are called)
   ├── Commit Conventions (governs HOW changes are recorded)
+  │     └── Git Hooks & Dual-Repo Gates (local gates + free-tier CI policy)
   ├── Testing Conventions (governs HOW tests are written and organized)
   └── Harness Charter (governs WHEN and HOW formal harnesses are created)
 ```

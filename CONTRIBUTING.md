@@ -261,6 +261,9 @@ git config core.hooksPath .githooks
 
 **Agent 硬规则：** 改 README/docs/api/docs/releases/crates/… 后，**先** `check_staged_paths`，确认 KEEP 或更新 keep-top，**再** commit；推私仓前对公仓表面变更跑 dry-run（或依赖 pre-push）。
 
+完整规范（含 hooks 设计、为何 dry-run 不进 pre-commit、私/公仓 CI 策略）：
+`docs/conventions/git-hooks-conventions.md`。
+
 ### 3.4 修复历史的规则
 
 - **未推送**的本地 commit 可以用 `git commit --amend` / `git rebase -i` 修改

@@ -1,6 +1,7 @@
 # Public dual-repo path-filter dry-run. NEVER pushes to a public remote.
 name: Public Sync Dry-Run
 
+# Prefer local dry_run.ps1. On private, auto push-trigger wastes minutes.
 on:
   workflow_dispatch:
   pull_request:
@@ -21,6 +22,7 @@ jobs:
   dry-run:
     name: Filter dry-run + LEAK scan
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.repository == 'lgnorant-lu/ming_iv8_rs'
     steps:
       - uses: actions/checkout@v4
         with:

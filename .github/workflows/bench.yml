@@ -1,8 +1,8 @@
 name: Benchmarks
 
+# Free-tier: auto-bench only on public repo; private = workflow_dispatch only.
 on:
   workflow_dispatch:
-  # Run on main branch pushes to track performance over time
   push:
     branches: [main]
     paths:
@@ -17,6 +17,7 @@ jobs:
   bench:
     name: Benchmarks (Linux x64)
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.repository == 'lgnorant-lu/ming_iv8_rs'
     steps:
       - uses: actions/checkout@v4
 

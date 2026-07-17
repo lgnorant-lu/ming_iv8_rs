@@ -1,6 +1,9 @@
 name: CI
 
+# Free-tier policy: private repo is storage; public repo is attestation.
+# Auto CI only on public ming_iv8_rs. Private: workflow_dispatch only.
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
@@ -21,6 +24,7 @@ jobs:
   lint:
     name: Lint (Linux x64)
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.repository == 'lgnorant-lu/ming_iv8_rs'
     steps:
       - uses: actions/checkout@v4
 
@@ -53,6 +57,7 @@ jobs:
   rust-test:
     name: Rust Tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    if: github.event_name == 'workflow_dispatch' || github.repository == 'lgnorant-lu/ming_iv8_rs'
     strategy:
       fail-fast: false
       matrix:
@@ -88,6 +93,7 @@ jobs:
   python-test-linux:
     name: Python Tests (Linux x64)
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.repository == 'lgnorant-lu/ming_iv8_rs'
     needs: [lint, rust-test]
     steps:
       - uses: actions/checkout@v4
@@ -150,6 +156,7 @@ jobs:
   python-test-macos:
     name: Python Tests (macOS arm64)
     runs-on: macos-latest
+    if: github.event_name == 'workflow_dispatch' || github.repository == 'lgnorant-lu/ming_iv8_rs'
     needs: [lint, rust-test]
     steps:
       - uses: actions/checkout@v4
@@ -200,6 +207,7 @@ jobs:
   python-test-windows:
     name: Python Tests (Windows x64)
     runs-on: windows-latest
+    if: github.event_name == 'workflow_dispatch' || github.repository == 'lgnorant-lu/ming_iv8_rs'
     needs: [lint, rust-test]
     steps:
       - uses: actions/checkout@v4

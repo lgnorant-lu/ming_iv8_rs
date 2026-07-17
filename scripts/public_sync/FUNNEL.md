@@ -4,11 +4,15 @@
 
 ```
 _ming_iv8_rs (private, origin)  --filter keep-->  ming_iv8_rs (public)
-     push main / workflow_dispatch              force-push main
+     storage + history                         attestation + wheels + PyPI
+     local dry-run / manual funnel             Build Wheels = green source of truth
 ```
 
 - **Path filter only** (same as dry-run). Commit messages are rewritten SHAs but text not denylisted.
 - **Never** push unfiltered private history to public.
+- **Free-tier:** private does **not** auto-run CI/bench/funnel on every push
+  (see `docs/conventions/git-hooks-conventions.md` §Private vs public CI).
+  Funnel is `workflow_dispatch` or local dry-run + force-push.
 
 ## CI
 
