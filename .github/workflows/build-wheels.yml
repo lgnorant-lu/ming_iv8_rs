@@ -103,8 +103,9 @@ jobs:
           # manylinux_2_34 (Alma 9): base libstdc++ has GLIBCXX_3.4.26+ so
           # Chromium rust-toolchain bindgen works without LD_PRELOAD hacks.
           # 2_28 base /lib64 is too old; toolset libstdc++.so is a linker script.
-          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
-          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_34
+          # Full quay paths: cibuildwheel 2.21 short-name map may lack 2_34.
+          CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux_2_34_x86_64
+          CIBW_MANYLINUX_AARCH64_IMAGE: quay.io/pypa/manylinux_2_34_aarch64
           CIBW_CACHE_PATH: ~/cache/cibuildwheel
           CIBW_ENVIRONMENT: >
             CARGO_TERM_COLOR=always
