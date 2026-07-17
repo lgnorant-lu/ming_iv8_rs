@@ -110,10 +110,9 @@ jobs:
             CARGO_INCREMENTAL=0
           # CARGO_HOME is under /project for cache reuse; rustup then writes env there,
           # NOT $HOME/.cargo/env — source the CARGO_HOME path (POSIX `.`, not bash `source`).
-          # gcc-toolset: Chromium rust-toolchain bindgen needs GLIBCXX_3.4.26+
-          # (manylinux_2_28 base libstdc++ is too old for V8_FROM_SOURCE ninja).
+          # BEFORE_ALL runs under sh (not bash): use `.` only, never `source`.
+          # GLIBCXX for Chromium bindgen comes from LD_LIBRARY_PATH (gcc-toolset).
           CIBW_BEFORE_ALL_LINUX: >
-            (source /opt/rh/gcc-toolset-14/enable 2>/dev/null || source /opt/rh/gcc-toolset-13/enable 2>/dev/null || source /opt/rh/gcc-toolset-12/enable 2>/dev/null || true) &&
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
             export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH" &&
