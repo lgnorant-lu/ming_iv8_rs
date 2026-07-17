@@ -111,37 +111,36 @@ jobs:
           # CARGO_HOME is under /project for cache reuse; rustup then writes env there,
           # NOT $HOME/.cargo/env — source the CARGO_HOME path (POSIX `.`, not bash `source`).
           # BEFORE_ALL runs under sh (not bash): use `.` only, never `source`.
-          # Chromium bindgen needs GLIBCXX_3.4.26+; manylinux base /lib64 is older.
-          # gcc-toolset-12 is present on manylinux_2_28 but libstdc++ path is not
-          # always root/usr/lib64 — locate with find, write /project/.iv8-ld.env.
+          # r12: toolset ships libstdc++.so under lib/gcc/... (not libstdc++.so.6).
+          # Install full gcc-c++, resolve real .so, write /project/.iv8-ld.env.
           CIBW_BEFORE_ALL_LINUX: >
-            (yum install -y gcc-toolset-12-libstdc++-devel gcc-toolset-12-runtime 2>&1 ||
-             dnf install -y gcc-toolset-12-libstdc++-devel gcc-toolset-12-runtime 2>&1 ||
+            (yum install -y gcc-toolset-12-gcc-c++ gcc-toolset-12-libstdc++-devel gcc-toolset-12-runtime 2>&1 ||
+             dnf install -y gcc-toolset-12-gcc-c++ gcc-toolset-12-libstdc++-devel gcc-toolset-12-runtime 2>&1 ||
              true) &&
-            ls -laR /opt/rh/gcc-toolset-12 2>&1 | head -80 &&
-            LIBSTDCPP=$(find /opt/rh/gcc-toolset-12 -name 'libstdc++.so.6' -type f 2>/dev/null | head -1) &&
-            if [ -z "$LIBSTDCPP" ]; then LIBSTDCPP=$(find /opt/rh/gcc-toolset-12 -name 'libstdc++.so.6' 2>/dev/null | head -1); fi &&
-            if [ -z "$LIBSTDCPP" ]; then echo "FATAL: no libstdc++ under gcc-toolset-12" >&2; find /opt/rh -name 'libstdc++*' 2>/dev/null | head -40 >&2; exit 1; fi &&
+            find /opt/rh/gcc-toolset-12 -name 'libstdc++*' 2>/dev/null | head -40 &&
+            LIBSTDCPP=$(find /opt/rh/gcc-toolset-12 -name 'libstdc++.so.6' 2>/dev/null | head -1) &&
+            if [ -z "$LIBSTDCPP" ]; then LIBSTDCPP=$(find /opt/rh/gcc-toolset-12 -name 'libstdc++.so' 2>/dev/null | head -1); fi &&
+            if [ -z "$LIBSTDCPP" ]; then echo "FATAL: no libstdc++ under gcc-toolset-12" >&2; exit 1; fi &&
+            if [ -L "$LIBSTDCPP" ]; then LIBSTDCPP=$(readlink -f "$LIBSTDCPP" || true); fi &&
             echo "Using LIBSTDCPP=$LIBSTDCPP" &&
-            strings "$LIBSTDCPP" | grep GLIBCXX_3.4.26 >/dev/null &&
+            (strings "$LIBSTDCPP" 2>/dev/null | grep GLIBCXX_3.4.26 >/dev/null || echo "WARN: GLIBCXX_3.4.26 string not found in $LIBSTDCPP") &&
             LIBDIR=$(dirname "$LIBSTDCPP") &&
-            printf 'export LD_LIBRARY_PATH=%s${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\nexport LD_PRELOAD=%s\nexport PATH=%s/../bin:$PATH\n' "$LIBDIR" "$LIBSTDCPP" "$LIBDIR" > /project/.iv8-ld.env &&
+            printf 'export LD_LIBRARY_PATH=%s:/lib64\nexport LIBRARY_PATH=%s\nexport PATH=/opt/rh/gcc-toolset-12/root/usr/bin:$PATH\n' "$LIBDIR" "$LIBDIR" > /project/.iv8-ld.env &&
+            if [ -f "$LIBSTDCPP" ]; then printf 'export LD_PRELOAD=%s\n' "$LIBSTDCPP" >> /project/.iv8-ld.env; fi &&
             cat /project/.iv8-ld.env &&
+            . /project/.iv8-ld.env &&
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
             export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH" &&
             (rustup component remove clippy 2>/dev/null || true)
-          # Linux cdylib + rusty_v8: prebuilt libv8.a is local-exec TLS
-          # (TPOFF32 / hidden g_current_isolate_ → cannot link -shared).
-          # Workspace uses git denoland/rusty_v8@v147.4.0 + V8_FROM_SOURCE +
-          # v8_monolithic_for_shared_library for TLS-safe static lib.
-          # CIBW_BEFORE_BUILD reloads /project/.iv8-ld.env (paths discovered above).
+          # Linux cdylib + rusty_v8: git v8 + V8_FROM_SOURCE + monolithic TLS.
+          # BEFORE_BUILD reloads discovered libstdc++ paths for Chromium bindgen.
           CIBW_BEFORE_BUILD_LINUX: >
             . /project/.iv8-ld.env &&
             echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH LD_PRELOAD=$LD_PRELOAD" &&
-            ldd /opt/rh/gcc-toolset-12/root/usr/lib64/libstdc++.so.6 2>/dev/null || true
+            (ldd "$LD_PRELOAD" 2>/dev/null || true)
           CIBW_ENVIRONMENT_LINUX: >
-            PATH=/project/.cargo-cibw/bin:/root/.cargo/bin:$PATH
+            PATH=/opt/rh/gcc-toolset-12/root/usr/bin:/project/.cargo-cibw/bin:/root/.cargo/bin:$PATH
             CARGO_NET_GIT_FETCH_WITH_CLI=true
             RUST_MIN_STACK=134217728
             CARGO_TARGET_DIR=/project/target
