@@ -111,25 +111,33 @@ jobs:
           # CARGO_HOME is under /project for cache reuse; rustup then writes env there,
           # NOT $HOME/.cargo/env — source the CARGO_HOME path (POSIX `.`, not bash `source`).
           # BEFORE_ALL runs under sh (not bash): use `.` only, never `source`.
+          # Chromium bindgen needs GLIBCXX_3.4.26+; manylinux base /lib64 is older.
+          # Install gcc-toolset-12 if missing, then write LD paths for the build env
+          # via a file that CIBW cannot host-expand.
           CIBW_BEFORE_ALL_LINUX: >
-            test -e /opt/rh/gcc-toolset-12/root/usr/lib64/libstdc++.so.6 &&
-            strings /opt/rh/gcc-toolset-12/root/usr/lib64/libstdc++.so.6 | grep -q GLIBCXX_3.4.26 &&
+            (yum install -y gcc-toolset-12-libstdc++-devel gcc-toolset-12-runtime 2>/dev/null ||
+             dnf install -y gcc-toolset-12-libstdc++-devel gcc-toolset-12-runtime 2>/dev/null ||
+             true) &&
+            LIBSTDCPP="" &&
+            for d in /opt/rh/gcc-toolset-14/root/usr/lib64 /opt/rh/gcc-toolset-13/root/usr/lib64 /opt/rh/gcc-toolset-12/root/usr/lib64; do
+              if [ -e "$d/libstdc++.so.6" ]; then LIBSTDCPP="$d/libstdc++.so.6"; break; fi;
+            done &&
+            if [ -z "$LIBSTDCPP" ]; then echo "FATAL: no gcc-toolset libstdc++.so.6" >&2; ls -la /opt/rh 2>&2 || true; exit 1; fi &&
+            echo "Using LIBSTDCPP=$LIBSTDCPP" &&
+            strings "$LIBSTDCPP" | grep GLIBCXX_3.4.26 >/dev/null &&
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
             export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH" &&
             (rustup component remove clippy 2>/dev/null || true)
           # Linux cdylib + rusty_v8: prebuilt libv8.a is local-exec TLS
           # (TPOFF32 / hidden g_current_isolate_ → cannot link -shared).
-          # crates.io package cannot V8_FROM_SOURCE (vendor stripped).
-          # Workspace uses git denoland/rusty_v8@v147.4.0; FROM_SOURCE + GN:
-          #   v8_monolithic + v8_monolithic_for_shared_library → V8_TLS_USED_IN_LIBRARY
-          # (v147 build.rs extra_cflags= is a no-op declare_args warning).
-          # Quote GN_ARGS — CIBW_ENVIRONMENT splits unquoted spaces.
-          # Do not use ${LD_LIBRARY_PATH} here — cibuildwheel may expand it on the
-          # host. manylinux_2_28 ships gcc-toolset-12 with GLIBCXX_3.4.30+.
+          # Workspace uses git denoland/rusty_v8@v147.4.0 + V8_FROM_SOURCE +
+          # v8_monolithic_for_shared_library for TLS-safe static lib.
+          # LD_PRELOAD forces toolset libstdc++ for Chromium bindgen (RPATH-less).
           CIBW_ENVIRONMENT_LINUX: >
             PATH=/opt/rh/gcc-toolset-12/root/usr/bin:/project/.cargo-cibw/bin:/root/.cargo/bin:$PATH
             LD_LIBRARY_PATH=/opt/rh/gcc-toolset-12/root/usr/lib64
+            LD_PRELOAD=/opt/rh/gcc-toolset-12/root/usr/lib64/libstdc++.so.6
             CARGO_NET_GIT_FETCH_WITH_CLI=true
             RUST_MIN_STACK=134217728
             CARGO_TARGET_DIR=/project/target
