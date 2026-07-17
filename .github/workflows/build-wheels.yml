@@ -111,8 +111,9 @@ jobs:
           # CARGO_HOME is under /project for cache reuse; rustup then writes env there,
           # NOT $HOME/.cargo/env — source the CARGO_HOME path (POSIX `.`, not bash `source`).
           # BEFORE_ALL runs under sh (not bash): use `.` only, never `source`.
-          # GLIBCXX for Chromium bindgen comes from LD_LIBRARY_PATH (gcc-toolset).
           CIBW_BEFORE_ALL_LINUX: >
+            test -e /opt/rh/gcc-toolset-12/root/usr/lib64/libstdc++.so.6 &&
+            strings /opt/rh/gcc-toolset-12/root/usr/lib64/libstdc++.so.6 | grep -q GLIBCXX_3.4.26 &&
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
             export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH" &&
@@ -124,9 +125,11 @@ jobs:
           #   v8_monolithic + v8_monolithic_for_shared_library → V8_TLS_USED_IN_LIBRARY
           # (v147 build.rs extra_cflags= is a no-op declare_args warning).
           # Quote GN_ARGS — CIBW_ENVIRONMENT splits unquoted spaces.
+          # Do not use ${LD_LIBRARY_PATH} here — cibuildwheel may expand it on the
+          # host. manylinux_2_28 ships gcc-toolset-12 with GLIBCXX_3.4.30+.
           CIBW_ENVIRONMENT_LINUX: >
-            PATH="/opt/rh/gcc-toolset-14/root/usr/bin:/opt/rh/gcc-toolset-13/root/usr/bin:/opt/rh/gcc-toolset-12/root/usr/bin:/project/.cargo-cibw/bin:$HOME/.cargo/bin:$PATH"
-            LD_LIBRARY_PATH="/opt/rh/gcc-toolset-14/root/usr/lib64:/opt/rh/gcc-toolset-13/root/usr/lib64:/opt/rh/gcc-toolset-12/root/usr/lib64:${LD_LIBRARY_PATH}"
+            PATH=/opt/rh/gcc-toolset-12/root/usr/bin:/project/.cargo-cibw/bin:/root/.cargo/bin:$PATH
+            LD_LIBRARY_PATH=/opt/rh/gcc-toolset-12/root/usr/lib64
             CARGO_NET_GIT_FETCH_WITH_CLI=true
             RUST_MIN_STACK=134217728
             CARGO_TARGET_DIR=/project/target
