@@ -197,7 +197,8 @@ jobs:
   publish:
     name: Publish to PyPI
     runs-on: ubuntu-latest
-    if: inputs.publish == 'true'
+    # workflow_dispatch boolean may be true or "true" depending on client
+    if: ${{ inputs.publish == true || inputs.publish == 'true' }}
     needs: [build-wheels, build-linux-prebuilt]
     environment:
       name: pypi
