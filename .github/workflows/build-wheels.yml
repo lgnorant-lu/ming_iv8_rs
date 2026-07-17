@@ -144,12 +144,16 @@ jobs:
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
             export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH" &&
             (rustup component remove clippy 2>/dev/null || true)
+          # Git v8 needs RUSTY_V8_MIRROR to fetch src_binding_*.rs (crates.io
+          # package embeds gen/; bare git checkout does not).
           CIBW_ENVIRONMENT_MACOS: >
             PATH="$HOME/.cargo/bin:$PATH"
             RUST_MIN_STACK=134217728
             CARGO_TARGET_DIR=${{ github.workspace }}/target
+            RUSTY_V8_MIRROR=https://github.com/denoland/rusty_v8/releases/download
           CIBW_ENVIRONMENT_WINDOWS: >
             RUST_MIN_STACK=134217728
+            RUSTY_V8_MIRROR=https://github.com/denoland/rusty_v8/releases/download
           CIBW_BUILD_FRONTEND: "build"
           CIBW_TEST_REQUIRES: "pytest"
           # Avoid tests/conftest.py importorskip against half-imported package

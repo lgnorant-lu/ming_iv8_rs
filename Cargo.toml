@@ -16,12 +16,9 @@ rust-version = "1.80"
 license = "Apache-2.0"
 
 [workspace.dependencies]
-# V8 engine
-# crates.io v8 package is prebuilt-oriented; V8_FROM_SOURCE on crates.io is incomplete
-# (missing third_party/rust/chromium_crates_io vendor → ninja fail).
-# Git tree + V8_FROM_SOURCE on Linux is required so libv8 TLS is cdylib-safe
-# (denoland/rusty_v8#1706: R_X86_64_TPOFF32 / hidden g_current_isolate_).
-# macOS/Windows keep using prebuilts when V8_FROM_SOURCE is unset.
+# V8 engine (git tree — required for Linux V8_FROM_SOURCE / cdylib TLS).
+# Windows/mac: leave V8_FROM_SOURCE unset → denoland release prebuilts.
+# crates.io package cannot V8_FROM_SOURCE (vendor incomplete).
 v8 = { git = "https://github.com/denoland/rusty_v8", tag = "v147.4.0" }
 
 # Python binding
