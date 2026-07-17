@@ -155,7 +155,9 @@ jobs:
       - name: Install build deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential pkg-config ninja-build
+          sudo apt-get install -y \
+            build-essential pkg-config ninja-build \
+            libglib2.0-dev libglib2.0-0
 
       - name: Switch v8 dep to git for V8_FROM_SOURCE
         shell: bash
