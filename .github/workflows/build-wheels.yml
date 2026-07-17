@@ -111,12 +111,23 @@ jobs:
             CARGO_INCREMENTAL=0
           # BEFORE_ALL runs under sh: use `.` only, never bash `source`.
           # CARGO_HOME under /project → rustup env is $CARGO_HOME/env not ~/.cargo.
+          # Chromium clang (V8_FROM_SOURCE) needs host gcc runtime: crtbeginS.o, -lgcc_s.
           CIBW_BEFORE_ALL_LINUX: >
             strings /lib64/libstdc++.so.6 | grep -q GLIBCXX_3.4.26 &&
+            (dnf install -y gcc gcc-c++ 2>&1 || yum install -y gcc gcc-c++ 2>&1) &&
+            CRT=$(find /usr -name crtbeginS.o 2>/dev/null | head -1) &&
+            if [ -z "$CRT" ]; then echo "FATAL: crtbeginS.o not found after gcc install" >&2; exit 1; fi &&
+            echo "Found CRT=$CRT" &&
+            GCCLIB=$(dirname "$CRT") &&
+            printf 'export LIBRARY_PATH=%s:/usr/lib64:/lib64\nexport LD_LIBRARY_PATH=%s:/usr/lib64:/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\nexport CFLAGS=-B%s\nexport CXXFLAGS=-B%s\n' "$GCCLIB" "$GCCLIB" "$GCCLIB" "$GCCLIB" > /project/.iv8-ld.env &&
+            cat /project/.iv8-ld.env &&
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
             export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH" &&
             (rustup component remove clippy 2>/dev/null || true)
+          CIBW_BEFORE_BUILD_LINUX: >
+            . /project/.iv8-ld.env &&
+            echo "LIBRARY_PATH=$LIBRARY_PATH"
           # Linux cdylib + rusty_v8: git v8 + V8_FROM_SOURCE + monolithic TLS
           # (prebuilt libv8.a has TPOFF32 / hidden g_current_isolate_).
           CIBW_ENVIRONMENT_LINUX: >
