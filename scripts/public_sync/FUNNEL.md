@@ -29,6 +29,20 @@ On **private** repo `_ming_iv8_rs`:
 
 Without the secret, funnel jobs fail at the push step (filter/LEAK still run and upload artifacts).
 
+## Per-commit / per-push gates (agents + humans)
+
+Full filter-repo on **every commit** is too slow. Split:
+
+| When | Tool | Cost |
+|---|---|---|
+| Before **commit** | `uv run python scripts/public_sync/check_staged_paths.py` | seconds |
+| Before **push** (public-surface paths) | `dry_run.ps1` (or `.githooks/pre-push`) | minutes |
+| Private CI funnel | `public-sync-funnel.yml` | needs Actions minutes + `PUBLIC_SYNC_TOKEN` |
+
+If a new path must appear on the public repo: edit `manifests/keep-top.txt` (or keep-scripts / keep-tools), run `build_keep_paths.py`, re-check staged paths, then commit.
+
+Enable hooks once per clone: `git config core.hooksPath .githooks` (see `.githooks/README.md`).
+
 ## Manual one-shot (no secret)
 
 ```powershell

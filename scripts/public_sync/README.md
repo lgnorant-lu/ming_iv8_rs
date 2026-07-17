@@ -29,6 +29,21 @@ pwsh -File scripts/public_sync/dry_run.ps1
 
 Report under `%TEMP%\opencode\public-dry-run-*\report\SUMMARY.md`.
 
+## Fast path check (before every commit)
+
+```powershell
+uv run python scripts/public_sync/check_staged_paths.py
+# after editing keep manifests:
+uv run python scripts/public_sync/build_keep_paths.py
+```
+
+Classifies staged files as KEEP / DROP against keep rules. Use this so docs
+(e.g. `docs/releases/`) are not forgotten off the public tree.
+
+## Hooks
+
+See `.githooks/README.md`. Recommended: `git config core.hooksPath .githooks`.
+
 ## CI
 
 Workflow: `.github/workflows/public-sync-dry-run.yml`
