@@ -89,12 +89,27 @@ fn locate_v8_crate_dir() -> Result<PathBuf, Box<dyn std::error::Error>> {
         }
     }
 
-    // Fallback: walk up from OUT_DIR looking for registry/src
+    // Git dependencies land under CARGO_HOME/git/checkouts/<repo-hash>/<rev>/
+    // (workspace uses denoland/rusty_v8 git tag for Linux cdylib TLS rebuilds).
+    let git_checkouts = cargo_home.join("git").join("checkouts");
+    if git_checkouts.exists() {
+        if let Some(v8_dir) = find_v8_in_git_checkouts(&git_checkouts) {
+            return Ok(v8_dir);
+        }
+    }
+
+    // Fallback: walk up from OUT_DIR looking for registry/src or git/checkouts
     let mut current = out_dir.as_path();
     while let Some(parent) = current.parent() {
-        let candidate = parent.join("registry").join("src");
-        if candidate.exists() {
-            if let Some(v8_dir) = find_v8_in_registry(&candidate) {
+        let reg = parent.join("registry").join("src");
+        if reg.exists() {
+            if let Some(v8_dir) = find_v8_in_registry(&reg) {
+                return Ok(v8_dir);
+            }
+        }
+        let git = parent.join("git").join("checkouts");
+        if git.exists() {
+            if let Some(v8_dir) = find_v8_in_git_checkouts(&git) {
                 return Ok(v8_dir);
             }
         }
@@ -107,6 +122,10 @@ fn locate_v8_crate_dir() -> Result<PathBuf, Box<dyn std::error::Error>> {
          Set IV8_V8_CRATE_DIR environment variable to override.",
     )
     .into())
+}
+
+fn has_v8_include(dir: &std::path::Path) -> bool {
+    dir.join("v8").join("include").exists()
 }
 
 fn find_v8_in_registry(registry_src: &std::path::Path) -> Option<PathBuf> {
@@ -122,11 +141,35 @@ fn find_v8_in_registry(registry_src: &std::path::Path) -> Option<PathBuf> {
                     let name = crate_entry.file_name();
                     let name_str = name.to_string_lossy();
                     if name_str.starts_with("v8-") && crate_entry.path().is_dir() {
-                        // Verify it has the expected layout
                         let candidate = crate_entry.path();
-                        if candidate.join("v8").join("include").exists() {
+                        if has_v8_include(&candidate) {
                             return Some(candidate);
                         }
+                    }
+                }
+            }
+        }
+    }
+    None
+}
+
+fn find_v8_in_git_checkouts(checkouts: &std::path::Path) -> Option<PathBuf> {
+    // git/checkouts/rusty_v8-<hash>/<rev>/  (or any checkout with v8/include)
+    if let Ok(repos) = std::fs::read_dir(checkouts) {
+        for repo in repos.flatten() {
+            let repo_path = repo.path();
+            if !repo_path.is_dir() {
+                continue;
+            }
+            let name = repo.file_name().to_string_lossy().to_ascii_lowercase();
+            if !(name.contains("rusty_v8") || name.contains("v8-")) {
+                continue;
+            }
+            if let Ok(revs) = std::fs::read_dir(&repo_path) {
+                for rev in revs.flatten() {
+                    let candidate = rev.path();
+                    if candidate.is_dir() && has_v8_include(&candidate) {
+                        return Some(candidate);
                     }
                 }
             }
