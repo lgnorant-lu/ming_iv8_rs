@@ -4,7 +4,7 @@ High-fidelity **browser-like JS runtime** for Python (V8 + Rust + PyO3).
 Built for Web JS reverse engineering, controlled re-execution, anti-bot / fingerprint **host** simulation, and ChaosVM-class instrumentation / analysis.
 
 **Current**: milestone continuum through **v0.8.102** · package **0.8.12** (D-151 dual-track) — [CHANGELOG](CHANGELOG.md)  
-**PyPI name (planned):** `ming_iv8_rs` · **import:** `import iv8_rs` (module name unchanged for now)  
+**PyPI:** `ming_iv8_rs` · **import:** `import iv8_rs` · **package track:** `0.8.12` (D-151; not the same number as continuum tags `v0.8.10x`)  
 中文版：[README.zh-CN.md](README.zh-CN.md) · API contracts：[docs/api/](docs/api/) · Coverage audit：[docs/api/COVERAGE.md](docs/api/COVERAGE.md)
 
 ## Origin: why iv8-rs exists
@@ -177,11 +177,36 @@ Global bounds: [docs/api/overview.md](docs/api/overview.md).
 
 ## Install
 
-Requires **Rust toolchain**, **Python 3.13+**, and ICU **77** data (`icudtl.dat` ships with the package; override with `IV8_ICUDTL_PATH`).
+Requires **Python 3.13+**. ICU **77** data ships as `icudtl.dat` (override with `IV8_ICUDTL_PATH`).
+
+### Prebuilt wheels (PyPI / GitHub Release)
+
+When published, install from PyPI:
 
 ```bash
-git clone <repo>
-cd iv8-rs
+pip install ming_iv8_rs
+python -c "import iv8_rs; c=iv8_rs.JSContext(); print(c.eval('1+1')); c.close()"
+```
+
+**Supported wheel platforms (package track 0.8.12):**
+
+| Platform | Wheel tag (typical) | Notes |
+|---|---|---|
+| Windows x86_64 | `win_amd64` | Primary desktop |
+| Linux x86_64 | `manylinux_2_34_x86_64` | Prebuilt V8 150+ (cdylib TLS-safe) |
+| macOS Apple Silicon | `macosx_*_arm64` | arm64 only |
+
+**Not shipped in 0.8.12:** macOS Intel (`x86_64`), Linux aarch64. Build from source if needed.
+
+GitHub Release tag for binaries (when cut): **`pkg-0.8.12`** (package release; **not** continuum milestone `v0.8.12`).
+
+### Build from source
+
+Requires **Rust toolchain** (see `rust-version` in workspace) in addition to Python 3.13+.
+
+```bash
+git clone https://github.com/lgnorant-lu/ming_iv8_rs
+cd ming_iv8_rs
 
 # Local development (fast iteration)
 uv run maturin develop --target-dir target-maturin --strip --profile dev
