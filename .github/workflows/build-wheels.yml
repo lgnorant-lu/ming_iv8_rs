@@ -115,6 +115,8 @@ jobs:
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
             export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH" &&
             (rustup component remove clippy 2>/dev/null || true)
+          # V8 static lib has TLS (g_current_isolate_); linking into .so needs
+          # -Wl,-z,notext (allow text relocs). Without it: R_X86_64_TPOFF32 ... -shared.
           CIBW_ENVIRONMENT_LINUX: >
             PATH="/project/.cargo-cibw/bin:$HOME/.cargo/bin:$PATH"
             CARGO_NET_GIT_FETCH_WITH_CLI=true
@@ -122,6 +124,7 @@ jobs:
             CARGO_TARGET_DIR=/project/target
             CARGO_HOME=/project/.cargo-cibw
             RUSTUP_HOME=/project/.rustup-cibw
+            RUSTFLAGS=-C link-arg=-Wl,-z,notext
           CIBW_BEFORE_ALL_MACOS: >
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
             . "${CARGO_HOME:-$HOME/.cargo}/env" &&
