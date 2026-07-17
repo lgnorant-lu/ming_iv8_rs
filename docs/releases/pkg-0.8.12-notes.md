@@ -2,7 +2,8 @@
 
 > Package track **0.8.12** · Product **iv8-rs** · PyPI **`ming_iv8_rs`** · import **`iv8_rs`**  
 > Continuum context: through **v0.8.102** (D-151 dual-track; package number != milestone tag)  
-> Status: **release candidate notes** (fill publish date / URLs after upload)
+> Status: **GitHub Release cut 2026-07-17** · PyPI upload still requires separate `publish=true` authorization  
+> Wheel CI: https://github.com/lgnorant-lu/ming_iv8_rs/actions/runs/29578126623
 
 ## What this is
 
