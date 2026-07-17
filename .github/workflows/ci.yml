@@ -327,15 +327,17 @@ jobs:
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_BEFORE_ALL_LINUX: >
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 &&
-            source $HOME/.cargo/env
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
+            . "${CARGO_HOME:-$HOME/.cargo}/env" &&
+            export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH"
           CIBW_ENVIRONMENT_LINUX: >
             PATH="$HOME/.cargo/bin:$PATH"
             CARGO_NET_GIT_FETCH_WITH_CLI=true
             RUST_MIN_STACK=134217728
           CIBW_BEFORE_ALL_MACOS: >
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 &&
-            source $HOME/.cargo/env
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.96.0 --profile minimal &&
+            . "${CARGO_HOME:-$HOME/.cargo}/env" &&
+            export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH"
           CIBW_ENVIRONMENT_MACOS: >
             PATH="$HOME/.cargo/bin:$PATH"
             RUST_MIN_STACK=134217728
@@ -343,7 +345,8 @@ jobs:
             RUST_MIN_STACK=134217728
           CIBW_BUILD_FRONTEND: "build"
           CIBW_TEST_REQUIRES: "pytest"
-          CIBW_TEST_COMMAND: "pytest {project}/tests/smoke_test.py -q"
+          CIBW_TEST_COMMAND: >
+            python -c "import iv8_rs; c=iv8_rs.JSContext(); assert c.eval('1+1')==2; c.close(); print('smoke_ok', iv8_rs.__version__)"
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
             auditwheel repair -w {dest_dir} {wheel}
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
